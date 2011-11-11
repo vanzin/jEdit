@@ -260,6 +260,8 @@ page-setup.label=Pa$ge Setup...
 # Print selection not yet implemented
 #print-selection.label=Prin$t Selection...
 exit.label=E$xit
+exit.icon.small=16x16/actions/process-stop.png
+exit.icon.medium=22x22/actions/process-stop.png
 
 #{{{ Recent Files menu
 recent-files.code=new RecentFilesProvider();
@@ -563,6 +565,7 @@ new-view.label=New $View
 new-view.icon.small=16x16/actions/window-new.png
 new-plain-view.label=Ne$w Plain View
 close-view.label=$Close View
+close-view.tooltip=Closes main window, and exits jEdit if this is the only View
 close-view.icon.small=16x16/actions/document-close.png
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer

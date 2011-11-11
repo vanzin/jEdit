@@ -450,8 +450,10 @@
             
             <para> The top combobox allows you to <guilabel>Choose a Keymap</guilabel>,
             or a set of shortcuts. 
-            The "imported" keymap is automatically created and selected when jEdit needs to create a "keymaps" user settings folder. At this point, jEdit imports the existing
-            shortcuts and places them into "imported". This makes it easy to bring in shortcuts from properties files that were customized with jEdit 4.5 or earlier. </para>
+            The "imported" keymap is automatically created and selected when jEdit needs
+            to create a "keymaps" user settings folder. At this point, jEdit imports the existing
+            shortcuts and places them into "imported". This makes it easy to bring in shortcuts 
+            from properties files that were customized with jEdit 4.5 or earlier. </para>
             
             <para> If a keymap of the same name exists in the defaults and the user settings
             directory, the user version is the one that is used in favor of the default. 
@@ -460,10 +462,11 @@
             keymap. A copy of that keymap will be
             saved in the user settings <literal>keymaps</literal> directory. At this point,
             this keymap will be selected and will determine where new shortcut properties are
-            stored. To remove all customizations to a default keymap, click <guibutton>reset</guibutton>. </para>
+            stored. To remove all customizations and restore a default keymap,
+            click <guibutton>reset</guibutton>. </para>
             
             <para>The combo box below the keymap selector selects the
-            command set to edit. Command sets include the set of all built-in
+            command set to edit. Command sets exist for the set of all built-in
             commands, the commands of each plugin, and the set of macros.</para>
 
             <para>To change a shortcut, click the appropriate table entry and
