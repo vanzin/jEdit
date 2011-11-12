@@ -1912,7 +1912,6 @@ options.appearance.label=Appearance
 options.appearance.code=new AppearanceOptionPane();
 options.appearance.iconTheme=Icon Theme:
 options.appearance.fonts.antialias=Anti-alias Non-TextArea fonts
-options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
@@ -1967,6 +1966,7 @@ options.appearance.selectFramework.label=Docking framework:
 options.docking.autoSaveModeLayout.label=Automatically save mode-specific docking layout
 options.docking.autoLoadModeLayout.label=Automatically load mode-specific docking layout
 options.docking.selectSet.label=Dockable set:
+options.docking.system-change.note=(Experimental) Restart jEdit for changes to take effect
 #}}}
 
 #{{{ Editing pane

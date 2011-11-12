@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.options;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.ServiceManager;
+import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.util.StandardUtilities;
@@ -69,8 +72,11 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		setLayout(new BorderLayout());
+		
 		add(BorderLayout.NORTH,createDockingOptionsPanel());
 		add(BorderLayout.CENTER,createWindowTableScroller());
+		add(BorderLayout.SOUTH, createDockingFrameworkChooser());
+		
 		dockableSetSelection.setModel(
 			new DefaultComboBoxModel(windowModel.getDockableSets()));
 	} //}}}
@@ -80,12 +86,15 @@ public class DockingOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty(AUTO_LOAD_MODE_LAYOUT_PROP, autoLoadModeLayout.isSelected());
 		jEdit.setBooleanProperty(AUTO_SAVE_MODE_LAYOUT_PROP, autoSaveModeLayout.isSelected());
+		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
+			(String) dockingFramework.getSelectedItem());
 		windowModel.save();
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private JComboBox dockingFramework;
 	private JTable windowTable;
 	private WindowTableModel windowModel;
 	private JCheckBox autoLoadModeLayout;
@@ -98,6 +107,32 @@ public class DockingOptionPane extends AbstractOptionPane
 	private static final String AUTO_LOAD_MODE_LAYOUT_LABEL = AUTO_LOAD_MODE_LAYOUT_PROP + ".label";
 	public static final String AUTO_SAVE_MODE_LAYOUT_PROP = DOCKING_OPTIONS_PREFIX + "autoSaveModeLayout";
 	private static final String AUTO_SAVE_MODE_LAYOUT_LABEL = AUTO_SAVE_MODE_LAYOUT_PROP + ".label";
+	
+	private JPanel createDockingFrameworkChooser()
+	{	
+		String [] frameworks =
+			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
+		dockingFramework = new JComboBox(frameworks);
+		String framework = View.getDockingFrameworkName();
+		for (int i = 0; i < frameworks.length; i++)
+		{
+			if (frameworks[i].equals(framework))
+			{
+				dockingFramework.setSelectedIndex(i);
+				break;
+			}
+		}
+		dockingFramework.setToolTipText(jEdit.getProperty("options.docking.system-change.note"));
+		JPanel p = new JPanel();
+		p.setToolTipText(jEdit.getProperty("options.docking.system-change.note"));
+		p.setLayout(new FlowLayout());
+		p.add(new JLabel(jEdit.getProperty("options.appearance.selectFramework.label")));
+		p.add(dockingFramework);
+		
+		return p;
+		
+	}
+
 	
 	private JPanel createDockingOptionsPanel()
 	{

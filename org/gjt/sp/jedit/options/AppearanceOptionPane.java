@@ -81,7 +81,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
-		addDockingFrameworkChooser();
+		
 
 		/* Icon Theme */
 		String[] themes = IconTheme.builtInNames();
@@ -206,8 +206,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("systrayicon", systemTrayIcon.isSelected());
 		IconTheme.set(iconThemes.getSelectedItem().toString());
 
-		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
-			(String) dockingFramework.getSelectedItem());
 
 		/* AntiAlias nv = AntiAlias.appearance();
 		 int idx = antiAliasExtras.getSelectedIndex();
@@ -240,7 +238,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
 	private FontSelector helpViewerFont;
-	private JComboBox dockingFramework;
+	
 	private JTextField history;
 	private JTextField menuSpillover;
 	private JCheckBox showTips;
@@ -273,22 +271,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			secondaryFont.setEnabled(false);
 		}
 	} //}}}
-	private void addDockingFrameworkChooser()
-	{	
-		String [] frameworks =
-			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
-		dockingFramework = new JComboBox(frameworks);
-		String framework = View.getDockingFrameworkName();
-		for (int i = 0; i < frameworks.length; i++)
-		{
-			if (frameworks[i].equals(framework))
-			{
-				dockingFramework.setSelectedIndex(i);
-				break;
-			}
-		}
-		addComponent(new JLabel(jEdit.getProperty("options.appearance.selectFramework.label")), dockingFramework);
-	}
 
 	//}}}
 	
