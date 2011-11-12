@@ -77,8 +77,8 @@
         For example, the QuickNotepad example should have lines like this:
         </para>
         <programlisting>
-        textarea.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE);
-        textarea.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK);
+        textarea.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
+        textarea.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));
         </programlisting><para>
         This sets the foreground and background colors of QuickNotepad to be the same
         as those in the View.
