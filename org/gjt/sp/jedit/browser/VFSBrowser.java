@@ -1686,131 +1686,140 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	} //}}}
 
+	
+
+	@SuppressWarnings("serial")
+	static abstract class MenuButton extends RolloverButton implements KeyListener
+	{
+		JPopupMenu popup;
+		
+		//{{{ CommandsMenuButton constructor
+		MenuButton()
+		{
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
+			setHorizontalTextPosition(SwingConstants.LEADING);
+
+	//		setRequestFocusEnabled(false);
+			setMargin(new Insets(1,1,1,1));
+			addMouseListener(new MouseHandler());
+			addKeyListener(this);
+			if(OperatingSystem.isMacOSLF())
+				putClientProperty("JButton.buttonType","toolbar");
+		} //}}}
+
+		public void keyReleased(KeyEvent e) {}
+		public void keyTyped(KeyEvent e) {}		
+		public void keyPressed(KeyEvent e) {
+			if ((e.getKeyCode() == KeyEvent.VK_DOWN) ||
+			 (e.getKeyCode() == KeyEvent.VK_ENTER )) {
+				doPopup();
+				e.consume();
+				return;
+			}			
+		}
+		
+		abstract void doPopup();
+		
+		//{{{ MouseHandler class
+		class MouseHandler extends MouseAdapter
+		{
+			@Override
+			public void mousePressed(MouseEvent evt)
+			{
+				if (popup == null) {
+					Log.log(Log.ERROR, this, "No popup for " + getName());
+					return;
+				}
+
+				if(!popup.isVisible())
+				{
+					doPopup();
+				}
+				else
+				{
+					popup.setVisible(false);
+				}
+			}
+		} //}}}
+	} //}}}
+
+	
+	
 	//{{{ CommandsMenuButton class
-	class CommandsMenuButton extends RolloverButton
+	class CommandsMenuButton extends MenuButton
 	{
 		//{{{ CommandsMenuButton constructor
 		CommandsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
-			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
-			setHorizontalTextPosition(SwingConstants.LEADING);
-			setName("commands");
-			
-			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
-
-			CommandsMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(1,1,1,1));
-			CommandsMenuButton.this.addMouseListener(new MouseHandler());
-
-			if(OperatingSystem.isMacOSLF())
-				CommandsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
+			setName("commands");			
+			popup = new BrowserCommandsMenu(VFSBrowser.this, null);
 		} //}}}
 
-		BrowserCommandsMenu popup;
+		// BrowserCommandsMenu popup;
 
-		//{{{ MouseHandler class
-		class MouseHandler extends MouseAdapter
-		{
-			@Override
-			public void mousePressed(MouseEvent evt)
-			{
-				if(!popup.isVisible())
-				{
-					popup.update();
-
-					GUIUtilities.showPopupMenu(
-						popup,CommandsMenuButton.this,0,
-						CommandsMenuButton.this.getHeight(),
-						false);
-				}
-				else
-				{
-					popup.setVisible(false);
-				}
-			}
-		} //}}}
+		void doPopup() {
+			((BrowserCommandsMenu) popup).update();
+			GUIUtilities.showPopupMenu( popup, this, 0, getHeight(), false);
+		}		
 	} //}}}
 
 	//{{{ PluginsMenuButton class
-	class PluginsMenuButton extends RolloverButton
+	class PluginsMenuButton extends MenuButton
 	{
 		//{{{ PluginsMenuButton constructor
 		PluginsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
-			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
-			setHorizontalTextPosition(SwingConstants.LEADING);
+
 			setName("plugins");
 			
-			PluginsMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(1,1,1,1));
-			PluginsMenuButton.this.addMouseListener(new MouseHandler());
-
-			if(OperatingSystem.isMacOSLF())
-				PluginsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
+			popup = null;
+			createPopupMenu();
+			
 		} //}}}
 
-		JPopupMenu popup;
 
 		//{{{ updatePopupMenu() method
 		void updatePopupMenu()
 		{
 			popup = null;
+
 		} //}}}
 
+		void doPopup() {
+			if (popup == null) createPopupMenu();
+			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
+		}
+		
 		//{{{ createPopupMenu() method
 		private void createPopupMenu()
 		{
 			if(popup != null)
 				return;
-
 			popup = (JPopupMenu)createPluginsMenu(new JPopupMenu(),true);
+			
 		} //}}}
 
-		//{{{ MouseHandler class
-		class MouseHandler extends MouseAdapter
-		{
-			@Override
-			public void mousePressed(MouseEvent evt)
-			{
-				createPopupMenu();
-
-				if(!popup.isVisible())
-				{
-					GUIUtilities.showPopupMenu(
-						popup,PluginsMenuButton.this,0,
-						PluginsMenuButton.this.getHeight(),
-						false);
-				}
-				else
-				{
-					popup.setVisible(false);
-				}
-			}
-		} //}}}
 	} //}}}
 
 	//{{{ FavoritesMenuButton class
-	class FavoritesMenuButton extends RolloverButton
+	class FavoritesMenuButton extends MenuButton
 	{
 		//{{{ FavoritesMenuButton constructor
 		FavoritesMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
-			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
-			setHorizontalTextPosition(SwingConstants.LEADING);
 			setName("favorites");
+			createPopupMenu();
 			
-			FavoritesMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(1,1,1,1));
-			FavoritesMenuButton.this.addMouseListener(new MouseHandler());
-
-			if(OperatingSystem.isMacOSLF())
-				FavoritesMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
 		} //}}}
 
-		JPopupMenu popup;
+		void doPopup() {
+			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
+		}
+		
 
 		//{{{ createPopupMenu() method
 		void createPopupMenu()
@@ -1922,28 +1931,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						break;
 					}
 				}
-			}
-		} //}}}
-
-		//{{{ MouseHandler class
-		class MouseHandler extends MouseAdapter
-		{
-			@Override
-			public void mousePressed(MouseEvent evt)
-			{
-				if(popup != null && popup.isVisible())
-				{
-					popup.setVisible(false);
-					return;
-				}
-
-				if(popup == null)
-					createPopupMenu();
-
-				GUIUtilities.showPopupMenu(
-					popup,FavoritesMenuButton.this,0,
-					FavoritesMenuButton.this.getHeight(),
-					false);
 			}
 		} //}}}
 	} //}}}
