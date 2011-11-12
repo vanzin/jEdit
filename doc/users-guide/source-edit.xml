@@ -174,19 +174,19 @@
             current selection, or the entire buffer if nothing is
             selected.</para>
 	 </section>
-	
+
 	 <section id="elastic-tabstops">
             <title>Elastic Tabstops</title>
 
             <para>Elastic tabstops are an alternative way to handle tabstops.
-            Elastic tabstops differ from traditional fixed tabstops because 
-	     columns in lines above and below the "cell" that is being 
-            changed are always kept aligned. As the width of text before a tab 
-            character changes, the tabstops on adjacent lines are also 
+            Elastic tabstops differ from traditional fixed tabstops because
+	     columns in lines above and below the "cell" that is being
+            changed are always kept aligned. As the width of text before a tab
+            character changes, the tabstops on adjacent lines are also
             changed to fit the widest piece of text in that column. It provides
             certain explicit benefits like it saves time
-	     spent on arranging the code and works seemlessly with variable width 
-            fonts.But at the same time it can make the code look unorganized 
+	     spent on arranging the code and works seemlessly with variable width
+            fonts.But at the same time it can make the code look unorganized
             on editors that do not support elastic tabstops.</para>
 
             <para>This feature is known as <firstterm>elastic tabstops</firstterm>.
@@ -235,19 +235,20 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog. It can also be changed for a specific
             buffer using the <guimenuitem>Buffer Options</guimenuitem> dialog,
-            or with a <xref linkend="buffer-local">buffer-local property</xref>
+            or with a  buffer-local property. <xref linkend="buffer-local"/>
             </para>
-            
+
             <section id="autoindent-full">
                 <title>Automatic Indent Scheme: <quote>full</quote></title>
-                
+                <para>
                 In this default scheme, the amount of indentation inserted is
                 mode-specific. In most edit modes, the indent of the previous
                 line is simply copied over. However, in C-like languages (C,
                 C++, Java, JavaScript), curly brackets and language statements
                 are taken into account and indent is added and removed as
                 necessary.
-                
+                </para>
+                <para>
                 The automatic indentation can be triggered by: pressing
                 <keycap>ENTER</keycap> (this will by default only affect the
                 indentation of the new line), pressing <keycap>TAB</keycap> at
@@ -257,7 +258,7 @@
                 current edit mode (more details in
                 <xref linkend="mode-tag-props" />), or when causing a hard wrap
                 (see <xref linkend="word-wrap" />).
-                
+                </para>
                 <para>No matter what automatic indentation scheme is currently
                 active, <guimenu>Edit</guimenu> &gt;
                 <guisubmenu>Indent</guisubmenu> &gt; <guisubmenu>Indent Selected
@@ -265,26 +266,28 @@
                 selected lines, or the current line if there is no selection, as
                 if in the <quote>full</quote> scheme.</para>
             </section>
-            
+
             <section id="autoindent-simple">
                 <title>Automatic Indent Scheme: <quote>simple</quote></title>
+                <para>
                 In this simplified automatic-indentation scheme, only two
                 actions trigger an indentation: pressing <keycap>ENTER</keycap>,
                 or causing a hard wrap. Only the new line will be indented, and
                 the amount of indentation will be the same as the previously
-                line.
+                line.</para>
             </section>
-            
+
             <section id="autoindent-none">
                 <title>Automatic Indent Scheme: <quote>none</quote></title>
+                <para>
                 In this automatic indentation scheme, no actions in the text
                 area will trigger a reindentation, and all lines start
-                completely unindented.
+                completely unindented. </para>
             </section>
 
             <section id="autoindent-customizing">
                 <title>Further customization of automatic indentation</title>
-            
+
                 <para>The behavior of the <keycap>ENTER</keycap> and
                 <keycap>TAB</keycap> keys can be configured in the
                 <guibutton>Shortcuts</guibutton> pane of the
@@ -292,12 +295,12 @@
                 Options</guimenuitem> dialog. box, just as with any other key.
                 The <keycap>ENTER</keycap> key can be bound to one of the
                 following, or indeed any other command or macro:</para>
-    
+
                 <itemizedlist>
                     <listitem>
                         <para><guimenuitem>Insert Newline</guimenuitem>.</para>
                     </listitem>
-    
+
                     <listitem>
                         <para><guimenuitem>Insert Newline and
                         Indent</guimenuitem>, which is the default. This is
@@ -306,22 +309,22 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-    
+
                 <para>The <keycap>TAB</keycap> can be bound to one of the
                 following, or again, any other command or macro:</para>
-    
+
                 <itemizedlist>
                     <listitem>
                         <para><guimenuitem>Insert Tab</guimenuitem>.</para>
                     </listitem>
-    
+
                     <listitem>
                         <para><guimenuitem>Insert Tab or Indent</guimenuitem>,
                         which is the default. This is equivalent to
                         <guimenuitem>Insert Tab</guimenuitem> when not using the
                         <quote>full</quote> automatic indentation scheme.</para>
                     </listitem>
-    
+
                     <listitem>
                         <para><guimenuitem>Indent Selected Lines</guimenuitem>.
                         This binding will not respect the selected auto
@@ -329,9 +332,9 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-    
+
                 <para>See <xref linkend="shortcuts-pane" /> for details.</para>
-    
+
                 <para>To insert a literal tab or newline without performing
                 indentation, prefix the tab or newline with <keycap>C+e
                 v</keycap>. For example, to create a new line without any

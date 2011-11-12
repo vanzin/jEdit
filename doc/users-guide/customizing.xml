@@ -38,7 +38,7 @@
             <listitem>
                 <para>The fold mode (see <xref linkend="folding" />)</para>
             </listitem>
-            
+
             <listitem>
                 <para>The automatic indentation scheme
                 (see <xref linkend="autoindent" />)</para>
@@ -94,37 +94,35 @@
                 <thead>
                     <row>
                         <entry>Property name</entry>
-
                         <entry>Description</entry>
                     </row>
                 </thead>
-
                 <tbody>
                     <row>
                         <entry><varname>collapseFolds</varname></entry>
-
                         <entry>Folds with a level of this or higher will be
                         collapsed when the buffer is opened. If set to zero, all
                         folds will be expanded initially. See <xref
                         linkend="folding" />.</entry>
                     </row>
-
                     <row>
                         <entry><varname>deepIndent</varname></entry>
 
                         <entry>When set to <quote>true</quote>, multiple-line
                         expressions delimited by parentheses are aligned like
-                        so: <programlisting>retVal.x = (int)(horizontalOffset
-    + Chunk.offsetToX(info.chunks,
-                      offset));</programlisting> With this setting disabled, the
-                        text would look like so: <programlisting>retVal.x = (int)(horizontalOffset
-    + Chunk.offsetToX(info.chunks,
-    offset));</programlisting></entry>
+                        so: <programlisting>
+retVal.x = (int)(horizontalOffset + Chunk.offsetToX(info.chunks, offset));
+</programlisting> With this setting disabled, the
+                        text would look like so: <programlisting>
+retVal.x = (int)(horizontalOffset + Chunk.offsetToX(info.chunks, offset));
+</programlisting></entry>
                     </row>
 
                     <row><entry><varname>encoding</varname></entry>
                     <entry> The character encoding that should be used for this file
-                    (only works if at the top of file).
+                    (only works if <literal>buffer-local-properties</literal> detector
+                    is selected in encoding options, and the <literal>:encoding=XXX:</literal>
+                    line must appear at the top of the file).
                     See <xref linkend="encodings"/>. </entry></row>
 
                     <row>
@@ -199,7 +197,7 @@
                         <quote>soft</quote>, or <quote>hard</quote>. See <xref
                         linkend="word-wrap" />.</entry>
                     </row>
-                    
+
                     <row>
                         <entry><varname>autoIndent</varname></entry>
 
@@ -367,7 +365,8 @@
                 <literal>buffer-local-property</literal>:
                 detects same syntax described at <xref linkend="buffer-local" />
                 for property name "encoding". Note that unlike other buffer-local
-                properties, this one will not work unless it is at the top of the file.
+                properties, this one will not work unless it is at the top of the file,
+                and this appears in the list of encoding detectors.
               </para></listitem>
             </itemizedlist>
             Others can be defined in plugins as services and added to this
@@ -467,7 +466,8 @@
             or a set of shortcuts.
             The "imported" keymap is automatically created and selected when jEdit needs
             to initially create a "keymaps" user settings folder.
-            At this point, jEdit imports the existing shortcuts and places them into "imported". This makes it easy to bring in shortcuts
+            At this point, jEdit imports the existing shortcuts and places them into
+            "imported". This makes it easy to bring in shortcuts
             from properties files that were customized with jEdit 4.5 or earlier. </para>
 
             <para> If a keymap of the same name exists in the defaults and the user settings
@@ -496,13 +496,19 @@
         <section id="status-bar-pane">
             <title>The Status Bar Pane</title>
 
-            <para>The <guibutton>Status Bar</guibutton>, its API, and its corresponding option pane were redesigned in jEdit 4.3. Now, the pane contains settings to customize which widgets are in the status bar, their order, and what separators exist between them. Or, you can disable it completely, for regular and/or plain views. See <xref linkend="status-bar" />.</para>
+            <para>The <guibutton>Status Bar</guibutton>, its API, and its corresponding option
+            pane were redesigned in jEdit 4.3. Now, the pane contains settings to customize
+            which widgets are in the status bar, their order, and what separators exist
+            between them. Or, you can disable it completely, for regular and/or plain views.
+            See <xref linkend="status-bar" />.</para>
 
             <para> From the <literal>Options</literal> tab, you can
             customize information about the caret display in the lower
             left corner. </para>
 
-            <para> Selecting the <literal>Widgets</literal> tab of this option pane shows you what widgets on the right, and their order. You can add or remove widgets and separators/labels here. </para>
+            <para> Selecting the <literal>Widgets</literal> tab of this option pane shows
+            you what widgets on the right, and their order. You can add or remove widgets
+            and separators/labels here. </para>
 
         </section>
 

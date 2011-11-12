@@ -289,8 +289,9 @@
 
         <para>Note that there is no general way to auto-detect the encoding used
         by a file, however jEdit supports "encoding detectors", of which there
-        are 4 in the core, and others can be provided by plugins through the
-        services api. From the encodings option pane <xref linkend="encodings-pane"/>, you can customize which
+        are some provided in the core, and others may be provided by plugins
+        through the services api. From the encodings option pane
+        <xref linkend="encodings-pane"/>, you can customize which
         ones are used, and the order they are tried. Here are some of the
         encoding detectors recognized by jEdit: </para>
 
@@ -321,7 +322,13 @@
                 a file.</para>
                 <programlisting># -*- coding: utf-8 -*-                </programlisting>
             </listitem>
-
+            <listitem> <para> <emphasis role="bold">buffer-local-properties</emphasis>:
+                Enable buffer-local properties
+                (see <xref linkend="buffer-local" />)
+                at the top of the file to specify encoding. </para>
+                <programlisting>#  :encoding=ISO-8859-1:
+                </programlisting>
+            </listitem>
 
         </itemizedlist>
 
