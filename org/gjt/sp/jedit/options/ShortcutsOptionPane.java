@@ -88,7 +88,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		ComboBoxModel model = new KeymapsModel();
 		keymaps = new JComboBox(model);
-		keymaps.addKeyListener(new KeyEater(keymaps));
+		keymaps.addKeyListener(new ComboKeyListener(keymaps));
 		keymaps.setRenderer(new KeymapCellRenderer());
 		keymaps.setSelectedItem(keymapName);
 		duplicateKeymap.addActionListener(actionHandler);
@@ -110,7 +110,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		// combobox to choose action set
 		selectModel = new JComboBox(models);
-		selectModel.addKeyListener(new KeyEater(selectModel));
+		selectModel.addKeyListener(new ComboKeyListener(selectModel));
 		selectModel.addActionListener(actionHandler);
 		selectModel.setToolTipText(jEdit.getProperty("options.shortcuts.select.tooltip"));
 		Box north = Box.createHorizontalBox();
@@ -359,12 +359,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	//{{{ Inner classes
 
 	/** A class that consumes return and escape keys for JComboBox */
-	static class KeyEater implements KeyListener {
+	static class ComboKeyListener implements KeyListener {
 
 		ArrayList<Integer> yummyKeys;
 		JComboBox m_comboBox;
 		//[] =  { KeyEvent.VK_ESCAPE, KeyEvent.VK_ENTER };
-		KeyEater(JComboBox combobox) {
+		ComboKeyListener(JComboBox combobox) {
 			m_comboBox = combobox;
 			yummyKeys = new ArrayList<Integer>();
 			yummyKeys.add(KeyEvent.VK_ESCAPE);

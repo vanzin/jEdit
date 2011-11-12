@@ -126,7 +126,7 @@ public class DockingOptionPane extends AbstractOptionPane
 		JPanel p = new JPanel();
 		p.setToolTipText(jEdit.getProperty("options.docking.system-change.note"));
 		p.setLayout(new FlowLayout());
-		p.add(new JLabel(jEdit.getProperty("options.appearance.selectFramework.label")));
+		p.add(new JLabel(jEdit.getProperty("options.docking.selectFramework.label")));
 		p.add(dockingFramework);
 		
 		return p;
