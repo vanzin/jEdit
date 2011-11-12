@@ -130,6 +130,7 @@ public class ThreadUtilities
 			threadGroup = new ThreadGroup("jEdit Workers");
 		}
 
+		@Override
 		public Thread newThread(Runnable r)
 		{
 			Thread t = new Thread(threadGroup, r);
@@ -164,6 +165,7 @@ public class ThreadUtilities
 			this.runnable = runnable;
 		}
 
+		@Override
 		public void run()
 		{
 			runnable.run();
