@@ -41,6 +41,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
@@ -52,6 +54,7 @@ import java.util.List;
  * @author Slava Pestov
  * @version $Id$
  */
+@SuppressWarnings("serial")
 public class ShortcutsOptionPane extends AbstractOptionPane
 {
 	//{{{ ShortcutsOptionPane constructor
@@ -85,6 +88,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		ComboBoxModel model = new KeymapsModel();
 		keymaps = new JComboBox(model);
+		keymaps.addKeyListener(new KeyEater(keymaps));
 		keymaps.setRenderer(new KeymapCellRenderer());
 		keymaps.setSelectedItem(keymapName);
 		duplicateKeymap.addActionListener(actionHandler);
@@ -104,7 +108,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		keymapBox.add(deleteKeymap);
 		keymapBox.add(Box.createHorizontalGlue());
 
+		// combobox to choose action set
 		selectModel = new JComboBox(models);
+		selectModel.addKeyListener(new KeyEater(selectModel));
 		selectModel.addActionListener(actionHandler);
 		selectModel.setToolTipText(jEdit.getProperty("options.shortcuts.select.tooltip"));
 		Box north = Box.createHorizontalBox();
@@ -352,6 +358,48 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	//{{{ Inner classes
 
+	/** A class that consumes return and escape keys for JComboBox */
+	static class KeyEater implements KeyListener {
+
+		ArrayList<Integer> yummyKeys;
+		JComboBox m_comboBox;
+		//[] =  { KeyEvent.VK_ESCAPE, KeyEvent.VK_ENTER };
+		KeyEater(JComboBox combobox) {
+			m_comboBox = combobox;
+			yummyKeys = new ArrayList<Integer>();
+			yummyKeys.add(KeyEvent.VK_ESCAPE);
+			yummyKeys.add(KeyEvent.VK_ENTER);
+		}
+		
+		@Override
+		public void keyTyped(KeyEvent e)
+		{
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e)
+		{
+			Integer i = new Integer(e.getKeyCode());
+			if (yummyKeys.contains(i)) {
+				e.consume();
+				if (i.equals(KeyEvent.VK_ENTER) && !m_comboBox.isPopupVisible()) 
+					m_comboBox.showPopup();
+				else
+					m_comboBox.hidePopup();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	}
+	
 	//{{{ HeaderMouseHandler class
 	private class HeaderMouseHandler extends MouseAdapter
 	{
