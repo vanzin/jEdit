@@ -79,18 +79,23 @@ public class IndentWidgetFactory implements StatusWidgetFactory
 		public void update()
 		{
 			Buffer buffer = view.getBuffer();
-			boolean indent = buffer.getBooleanProperty("autoIndent");
+			String indent = buffer.getStringProperty("autoIndent");
 			this.indent.setToolTipText(jEdit.getProperty("view.status.indent-tooltip"));
 			
-			if (indent)
+			if ("full".equals(indent))
 			{
 				this.indent.setEnabled(true);
-				this.indent.setText("A");
+				this.indent.setText("F");
+			}
+			else if ("simple".equals(indent))
+			{
+				this.indent.setEnabled(true);
+				this.indent.setText("S");
 			}
 			else
 			{
 				this.indent.setEnabled(false);
-				this.indent.setText("a");
+				this.indent.setText("n");
 			}
 		}
 		

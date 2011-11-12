@@ -38,6 +38,11 @@
             <listitem>
                 <para>The fold mode (see <xref linkend="folding" />)</para>
             </listitem>
+            
+            <listitem>
+                <para>The automatic indentation scheme
+                (see <xref linkend="autoindent" />)</para>
+            </listitem>
 
             <listitem>
                 <para>The wrap mode and margin (see <xref
@@ -193,6 +198,15 @@
                         <entry>The word wrap mode; one of <quote>none</quote>,
                         <quote>soft</quote>, or <quote>hard</quote>. See <xref
                         linkend="word-wrap" />.</entry>
+                    </row>
+                    
+                    <row>
+                        <entry><varname>autoIndent</varname></entry>
+
+                        <entry>The automatic indentation scheme; one of
+                        <quote>none</quote>, <quote>full</quote>, or
+                        <quote>simple</quote>. See <xref linkend="autoindent" />.
+                        </entry>
                     </row>
                 </tbody>
             </tgroup>

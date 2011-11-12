@@ -227,71 +227,116 @@
             <title>Automatic Indent</title>
 
             <para>The auto indent feature inserts the appropriate number of tabs
-            or spaces at the beginning of a line by looking at program
-            structure.</para>
-
-            <para>In the default configuration, pressing <keycap>ENTER</keycap>
-            will create a new line with the appropriate amount of indent
-            automatically, and pressing <keycap>TAB</keycap> at the beginning
-            of, or inside the leading whitespace of a line will insert the
-            appropriate amount of indentation. Pressing it again will insert a
-            tab character.</para>
-
-            <para>The behavior of the <keycap>ENTER</keycap> and
-            <keycap>TAB</keycap> keys can be configured in the
-            <guibutton>Shortcuts</guibutton> pane of the
+            or spaces at the beginning of a line. There are three different
+            indentation schemes to choose from: <quote>full</quote>,
+            <quote>simple</quote>, and <quote>none</quote>. The scheme can be
+            chosen on a global or per-edit mode basis using the
+            <guibutton>Editing</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog. box, just as with any other key. The
-            <keycap>ENTER</keycap> key can be bound to one of the following, or
-            indeed any other command or macro:</para>
+            Options</guimenuitem> dialog. It can also be changed for a specific
+            buffer using the <guimenuitem>Buffer Options</guimenuitem> dialog,
+            or with a <xref linkend="buffer-local">buffer-local property</xref>
+            </para>
+            
+            <section id="autoindent-full">
+                <title>Automatic Indent Scheme: <quote>full</quote></title>
+                
+                In this default scheme, the amount of indentation inserted is
+                mode-specific. In most edit modes, the indent of the previous
+                line is simply copied over. However, in C-like languages (C,
+                C++, Java, JavaScript), curly brackets and language statements
+                are taken into account and indent is added and removed as
+                necessary.
+                
+                The automatic indentation can be triggered by: pressing
+                <keycap>ENTER</keycap> (this will by default only affect the
+                indentation of the new line), pressing <keycap>TAB</keycap> at
+                the beginning of, or inside the leading whitespace of a line,
+                entering one the bracket characters defined in the edit mode,
+                pressing one of the <varname>electricKeys</varname> for the
+                current edit mode (more details in
+                <xref linkend="mode-tag-props" />), or when causing a hard wrap
+                (see <xref linkend="word-wrap" />).
+                
+                <para>No matter what automatic indentation scheme is currently
+                active, <guimenu>Edit</guimenu> &gt;
+                <guisubmenu>Indent</guisubmenu> &gt; <guisubmenu>Indent Selected
+                Lines</guisubmenu> (shortcut: <keycap>C+i</keycap>) indents all
+                selected lines, or the current line if there is no selection, as
+                if in the <quote>full</quote> scheme.</para>
+            </section>
+            
+            <section id="autoindent-simple">
+                <title>Automatic Indent Scheme: <quote>simple</quote></title>
+                In this simplified automatic-indentation scheme, only two
+                actions trigger an indentation: pressing <keycap>ENTER</keycap>,
+                or causing a hard wrap. Only the new line will be indented, and
+                the amount of indentation will be the same as the previously
+                line.
+            </section>
+            
+            <section id="autoindent-none">
+                <title>Automatic Indent Scheme: <quote>none</quote></title>
+                In this automatic indentation scheme, no actions in the text
+                area will trigger a reindentation, and all lines start
+                completely unindented.
+            </section>
 
-            <itemizedlist>
-                <listitem>
-                    <para><guimenuitem>Insert Newline</guimenuitem>.</para>
-                </listitem>
-
-                <listitem>
-                    <para><guimenuitem>Insert Newline and Indent</guimenuitem>,
-                    which is the default.</para>
-                </listitem>
-            </itemizedlist>
-
-            <para>The <keycap>TAB</keycap> can be bound to one of the following,
-            or again, any other command or macro:</para>
-
-            <itemizedlist>
-                <listitem>
-                    <para><guimenuitem>Insert Tab</guimenuitem>.</para>
-                </listitem>
-
-                <listitem>
-                    <para><guimenuitem>Insert Tab or Indent</guimenuitem>, which
-                    is the default.</para>
-                </listitem>
-
-                <listitem>
-                    <para><guimenuitem>Indent Selected
-                    Lines</guimenuitem>.</para>
-                </listitem>
-            </itemizedlist>
-
-            <para>See <xref linkend="shortcuts-pane" /> for details.</para>
-
-            <para>Auto indent behavior is mode-specific. In most edit modes, the
-            indent of the previous line is simply copied over. However, in
-            C-like languages (C, C++, Java, JavaScript), curly brackets and
-            language statements are taken into account and indent is added and
-            removed as necessary.</para>
-
-            <para><guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Indent
-            Selected Lines</guisubmenu> (shortcut: <keycap>C+i</keycap>) indents
-            all selected lines, or the current line if there is no
-            selection.</para>
-
-            <para>To insert a literal tab or newline without performing
-            indentation, prefix the tab or newline with <keycap>C+e v</keycap>.
-            For example, to create a new line without any indentation, type
-            <keycap>C+e v ENTER</keycap>.</para>
+            <section id="autoindent-customizing">
+                <title>Further customization of automatic indentation</title>
+            
+                <para>The behavior of the <keycap>ENTER</keycap> and
+                <keycap>TAB</keycap> keys can be configured in the
+                <guibutton>Shortcuts</guibutton> pane of the
+                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+                Options</guimenuitem> dialog. box, just as with any other key.
+                The <keycap>ENTER</keycap> key can be bound to one of the
+                following, or indeed any other command or macro:</para>
+    
+                <itemizedlist>
+                    <listitem>
+                        <para><guimenuitem>Insert Newline</guimenuitem>.</para>
+                    </listitem>
+    
+                    <listitem>
+                        <para><guimenuitem>Insert Newline and
+                        Indent</guimenuitem>, which is the default. This is
+                        equivalent to <guimenuitem>Insert Newline</guimenuitem>
+                        when using the indentation scheme <quote>none</quote>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+    
+                <para>The <keycap>TAB</keycap> can be bound to one of the
+                following, or again, any other command or macro:</para>
+    
+                <itemizedlist>
+                    <listitem>
+                        <para><guimenuitem>Insert Tab</guimenuitem>.</para>
+                    </listitem>
+    
+                    <listitem>
+                        <para><guimenuitem>Insert Tab or Indent</guimenuitem>,
+                        which is the default. This is equivalent to
+                        <guimenuitem>Insert Tab</guimenuitem> when not using the
+                        <quote>full</quote> automatic indentation scheme.</para>
+                    </listitem>
+    
+                    <listitem>
+                        <para><guimenuitem>Indent Selected Lines</guimenuitem>.
+                        This binding will not respect the selected auto
+                        indentation scheme.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+    
+                <para>See <xref linkend="shortcuts-pane" /> for details.</para>
+    
+                <para>To insert a literal tab or newline without performing
+                indentation, prefix the tab or newline with <keycap>C+e
+                v</keycap>. For example, to create a new line without any
+                indentation, type <keycap>C+e v ENTER</keycap>.</para>
+            </section>
         </section>
     </section>
 

@@ -3376,7 +3376,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			break;
 		default:
 			boolean indent = buffer.isElectricKey(ch, caretLine) &&
-				buffer.getBooleanProperty("autoIndent");
+				"full".equals(buffer.getStringProperty("autoIndent"));
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
@@ -4433,8 +4433,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			boolean indent = buffer.getBooleanProperty("autoIndent");
-			if (indent && buffer.isElectricKey('\n', caretLine))
+			String autoIndent = buffer.getStringProperty("autoIndent");
+			if ("full".equals(autoIndent) && buffer.isElectricKey('\n', caretLine))
 			{
 				buffer.indentLine(caretLine, true);
 			}
@@ -4444,8 +4444,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
 				
-				if (indent)
-					buffer.indentLine(caretLine,true);
+				if ("full".equals(autoIndent))
+					buffer.indentLine(caretLine, true);
+				else if ("simple".equals(autoIndent))
+					buffer.simpleIndentLine(caretLine);
 			}
 			finally
 			{
@@ -4463,7 +4465,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		boolean indent = buffer.getBooleanProperty("autoIndent");
+		boolean indent = "full".equals(buffer.getStringProperty("autoIndent"));
 		if(indent && getSelectionCount() == 0)
 		{
 			// if caret is inside leading whitespace, indent.
@@ -5584,15 +5586,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			return false;
 
-		boolean indent = buffer.getBooleanProperty("autoIndent");
+		String indent = buffer.getStringProperty("autoIndent");
 		try
 		{
 			buffer.beginCompoundEdit();
 			buffer.insert(start + insertNewLineAt,"\n");
 			// caretLine would have been incremented
 			// since insertNewLineAt <= caretPos
-			if (indent)
+			if ("full".equals(indent))
 				buffer.indentLine(caretLine,true);
+			else if ("simple".equals(indent))
+				buffer.simpleIndentLine(caretLine);
 		}
 		finally
 		{

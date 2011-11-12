@@ -1028,12 +1028,18 @@ public class Buffer extends JEditBuffer
 	 */
 	public void toggleAutoIndent(View view)
 	{
-		boolean indent = getBooleanProperty("autoIndent");
-		setBooleanProperty("autoIndent", !indent);
+		String indent = getStringProperty("autoIndent");
+		if (indent.equals("none"))
+			indent = "simple";
+		else if (indent.equals("simple"))
+			indent = "full";
+		else if (indent.equals("full"))
+			indent = "none";
+		setProperty("autoIndent", indent);
 		
 		view.getStatus().setMessageAndClear(
 			jEdit.getProperty("view.status.autoindent-changed",
-			new Integer[] { !indent ? 1 : 0 }));
+				new String[] {indent}));
 	}
 			
 

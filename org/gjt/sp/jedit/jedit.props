@@ -161,7 +161,7 @@ buffer.tabSize=8
 buffer.indentSize=8
 
 # Automatic indentation
-buffer.autoIndent=true
+buffer.autoIndent=full
 
 # Soft tabs
 buffer.noTabs=false
