@@ -873,8 +873,9 @@ new Thread(r).start();</programlisting>
             activity log:</para>
 
             <informalexample>
-                <programlisting>Log.log(Log.DEBUG, BeanShell.class,
-    "counter = " + counter);</programlisting>
+            <programlisting>
+Log.log(Log.DEBUG, BeanShell.class, "counter = " + counter);
+            </programlisting>
             </informalexample>
 
             <para>The corresponding activity log entry might read as

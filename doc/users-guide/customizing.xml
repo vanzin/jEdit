@@ -110,11 +110,13 @@
 
                         <entry>When set to <quote>true</quote>, multiple-line
                         expressions delimited by parentheses are aligned like
-                        so: <programlisting>
-retVal.x = (int)(horizontalOffset + Chunk.offsetToX(info.chunks, offset));
+                        so: <programlisting>retVal.x = (int)(horizontalOffset
+    + Chunk.offsetToX(info.chunks,
+                      offset));
 </programlisting> With this setting disabled, the
-                        text would look like so: <programlisting>
-retVal.x = (int)(horizontalOffset + Chunk.offsetToX(info.chunks, offset));
+                        text would look like so: <programlisting>retVal.x = (int)(horizontalOffset
+    + Chunk.offsetToX(info.chunks,
+    offset));
 </programlisting></entry>
                     </row>
 
