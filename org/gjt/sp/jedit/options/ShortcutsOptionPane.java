@@ -241,6 +241,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private void reloadModels()
 	{
 		models.clear();
+		allBindings.clear();
 		List<KeyBinding[]> allBindings = new ArrayList<KeyBinding[]>();
 		Collection<String> knownBindings = new HashSet<String>();
 		ActionSet[] actionSets = jEdit.getActionSets();
