@@ -468,11 +468,9 @@ public class DockableWindowFactory
 			JComponent win = (JComponent)BeanShell.eval(view,nameSpace,code);
 
 			if (jEdit.getBooleanProperty("textColors")) {							
-				if (jEdit.getColorProperty("view.bgColor", Color.WHITE) != Color.WHITE) {
-					LookAndFeel laf = UIManager.getLookAndFeel();
-					if (!laf.getID().equals("Metal")) {
-						GUIUtilities.applyTextAreaColors(win);
-					}
+				LookAndFeel laf = UIManager.getLookAndFeel();
+				if (!laf.getID().equals("Metal")) {
+					GUIUtilities.applyTextAreaColors(win);
 				}
 			}
 			
