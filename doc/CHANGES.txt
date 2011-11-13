@@ -37,6 +37,9 @@ and Matthieu Casanova for contributing to this release.
 - Fixed keyboard handling of drop-down menus in File System Browser.
   (#1571578 - Alan Ezust)
 
+- Fixed "Use textarea colors" for dockables created in non-metal L&F.
+  (#1794400 - Alan Ezust)
+
 }}}
 {{{ Miscellaneous
 - jEdit support for keymaps (Matthieu Casanova)

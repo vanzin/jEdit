@@ -15,5 +15,13 @@
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
 
+    <itemizedlist>
+    <listitem><para> Keymaps - named collections of shortcuts. Example keymaps
+    for Emacs, Intellij and classic jEdit are provided.
+    </para></listitem>
+
+    </itemizedlist>
+
+
 <!-- :maxLineLen=80:wrap=hard: -->
 </article>
