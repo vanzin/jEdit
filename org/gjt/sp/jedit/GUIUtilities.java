@@ -1364,7 +1364,7 @@ public class GUIUtilities
 			if (child instanceof Container)
 				applyTextAreaColors((Container)child);
 		}
-	}
+	} //}}}
 	
 	//{{{ createMultilineLabel() method
 	/**

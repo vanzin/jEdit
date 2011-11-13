@@ -19,6 +19,8 @@
     <listitem><para> Keymaps - named collections of shortcuts. Example keymaps
     for Emacs, Intellij and classic jEdit are provided.
     </para></listitem>
+    <listitem><para> New Editing/Buffer option: Disable or simplified automatic
+    indentation. </para></listitem>
 
     </itemizedlist>
 

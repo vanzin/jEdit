@@ -105,7 +105,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		{
 			initialized = true;
 			_init();
-			ComboKeyListener.addRecursive(this);
+			// ComboKeyListener.addRecursive(this);
 		}
 	} //}}}
 

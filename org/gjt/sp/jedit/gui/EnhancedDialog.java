@@ -38,7 +38,7 @@ public abstract class EnhancedDialog extends JDialog
 		super(parent,title,modal);
 		_init();
 	}
-	
+
 	public EnhancedDialog(Dialog parent, String title, boolean modal)
 	{
 		super(parent,title,modal);
@@ -54,7 +54,7 @@ public abstract class EnhancedDialog extends JDialog
 	{
 		this.enterEnabled = enterEnabled;
 	}
-	
+
 	public abstract void ok();
 	public abstract void cancel();
 
@@ -65,16 +65,16 @@ public abstract class EnhancedDialog extends JDialog
 			new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
 
-		keyHandler = new KeyHandler();
-		addKeyListener(keyHandler);
+		//keyHandler = new KeyHandler();
+		//addKeyListener(keyHandler);
 		addWindowListener(new WindowHandler());
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
+
 		enterEnabled = true;
 	}
 	//}}}
-	
+
 	// protected members
 	protected KeyHandler keyHandler;
 	protected boolean enterEnabled;

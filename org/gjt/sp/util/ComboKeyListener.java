@@ -5,9 +5,9 @@ import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-
 import javax.swing.JComboBox;
 
+//{{{ ComboKeyListener class
 /** A class that consumes return and escape keys for JComboBox.
  *   Useful for Combo Boxes that are in OptionPanes, which need to
  *   to consume the "return" and "escape" keys, which for some reason,
@@ -59,8 +59,8 @@ public class ComboKeyListener implements KeyListener {
 			else if (child instanceof Container)
 				addRecursive((Container)child);
 		}
-	} //}}}
+	} 
 
 
 
-}
+} //}}}
