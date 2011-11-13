@@ -235,7 +235,7 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog. It can also be changed for a specific
             buffer using the <guimenuitem>Buffer Options</guimenuitem> dialog,
-            or with a  buffer-local property. <xref linkend="buffer-local"/>
+            or with a buffer-local property. (see <xref linkend="buffer-local"/>)
             </para>
 
             <section id="autoindent-full">
