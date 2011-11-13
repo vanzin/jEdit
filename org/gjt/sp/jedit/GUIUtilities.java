@@ -1351,19 +1351,19 @@ public class GUIUtilities
 
 	//{{{ applyTextAreaColors() method
 	/**
-	 * Applies the text area colors on a Component (such as a dockable window)
+	 * experimental - applies the text area colors on a Component 
+	 * (such as a dockable window) and its children. 
+	 * @since jEdit 5.0pre1
+	 * @author ezust
+	 * 
 	 */
 	public static void applyTextAreaColors(Container win) {
-
 		for (Component child: win.getComponents()) {
-			if (child instanceof JComponent) {
-				child.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
-				child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));			
-			}			
+			child.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
+			child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));			
 			if (child instanceof Container)
 				applyTextAreaColors((Container)child);
 		}
-		
 	}
 	
 	//{{{ createMultilineLabel() method
