@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.gui.PingPongList;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.util.Arrays.sort;
@@ -53,7 +54,7 @@ import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 //{{{ EncodingsOptionPane class
 /**
  * Encodings options.
- * 
+ *
  * @author Björn Kautler
  * @author Matthieu Casanova
  * @since jEdit 4.3pre6
@@ -82,12 +83,13 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	@Override
 	protected void _init()
 	{
-		
+
 		/* Line separator */
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
+		lineSeparator.addKeyListener(new ComboKeyListener(lineSeparator));
 		String lineSep = jEdit.getProperty("buffer."+ JEditBuffer.LINESEP,
 			System.getProperty("line.separator"));
 		if("\n".equals(lineSep))
@@ -99,7 +101,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.lineSeparator"),
 			lineSeparator);
 
-		
+
 		// Default file encoding
 		String[] encodings = getEncodings(true);
 		sort(encodings,new StandardUtilities.StringCompare<String>(true));
@@ -115,7 +117,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		encodingAutodetect.setSelected(jEdit.getBooleanProperty(
 			"buffer.encodingAutodetect"));
 		addComponent(encodingAutodetect,BOTH);
-		
+
 		// Encoding detectors
 		encodingDetectors = new JTextField(jEdit.getProperty(
 			"encodingDetectors",""));
@@ -151,7 +153,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		// Select All/None Buttons
 		Box buttonsBox = createHorizontalBox();
 		buttonsBox.add(createHorizontalStrut(12));
-		
+
 		ActionHandler actionHandler = new ActionHandler();
 		selectAllButton = new JButton(getProperty("options.encodings.selectAll"));
 		selectAllButton.addActionListener(actionHandler);
@@ -164,7 +166,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		selectNoneButton.setEnabled(pingPongList.getRightSize() != 0);
 		buttonsBox.add(selectNoneButton);
 		buttonsBox.add(createHorizontalStrut(12));
-		
+
 		addComponent(buttonsBox);
 	} //}}}
 
@@ -186,7 +188,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer."+ JEditBuffer.LINESEP,lineSep);
-		
+
 		jEdit.setProperty("buffer."+ JEditBuffer.ENCODING,(String)
 			defaultEncoding.getSelectedItem());
 		jEdit.setBooleanProperty("buffer.encodingAutodetect",
@@ -223,7 +225,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 			else if (source == selectNoneButton)
 			{
 				pingPongList.moveAllToLeft();
-			}      
+			}
 		}
 	} //}}}
 	//}}}

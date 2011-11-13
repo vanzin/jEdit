@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.SyntaxUtilities;
 
 public class GutterOptionPane extends AbstractOptionPane
@@ -304,6 +305,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	{
 		painters = ServiceManager.getServiceNames(JEditTextArea.FOLD_PAINTER_SERVICE);
 		foldPainter = new JComboBox();
+		foldPainter.addKeyListener(new ComboKeyListener(foldPainter));
 		String current = JEditTextArea.getFoldPainterName();
 		int selected = 0;
 		for (int i = 0; i < painters.length; i++)

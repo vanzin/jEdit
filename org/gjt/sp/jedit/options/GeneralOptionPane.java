@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.options;
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ComboKeyListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -86,6 +87,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.getProperty("options.general.checkModStatus.silentReload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
+		checkModStatus.addKeyListener(new ComboKeyListener(checkModStatus));
 		if(jEdit.getBooleanProperty("autoReload"))
 		{
 			if (jEdit.getBooleanProperty("autoReloadDialog"))
@@ -114,6 +116,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.getProperty("options.general.checkModStatusUpon.none")
 		};
 		checkModStatusUpon = new JComboBox(modCheckUponOptions);
+		checkModStatusUpon.addKeyListener(new ComboKeyListener(checkModStatusUpon));
 		checkModStatusUpon.setSelectedIndex(jEdit.getIntegerProperty("checkFileStatus"));
 		addComponent(jEdit.getProperty("options.general.checkModStatusUpon"),
 			checkModStatusUpon);

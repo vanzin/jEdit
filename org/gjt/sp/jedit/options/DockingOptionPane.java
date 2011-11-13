@@ -55,6 +55,7 @@ import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -113,6 +114,7 @@ public class DockingOptionPane extends AbstractOptionPane
 		String [] frameworks =
 			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
 		dockingFramework = new JComboBox(frameworks);
+		dockingFramework.addKeyListener(new ComboKeyListener(dockingFramework));
 		String framework = View.getDockingFrameworkName();
 		for (int i = 0; i < frameworks.length; i++)
 		{
@@ -165,6 +167,7 @@ public class DockingOptionPane extends AbstractOptionPane
 			"options.docking.selectSet.label")));
 		setSelection.add(Box.createHorizontalStrut(6));
 		dockableSetSelection = new JComboBox();
+		dockableSetSelection.addKeyListener(new ComboKeyListener(dockableSetSelection));
 		setSelection.add(dockableSetSelection);
 		dockableSetSelection.addItemListener(new ItemListener()
 		{
@@ -222,6 +225,7 @@ public class DockingOptionPane extends AbstractOptionPane
 				DockableWindowManager.RIGHT
 			});
 			DockPositionCellRenderer.this.setRequestFocusEnabled(false);
+			addKeyListener(new ComboKeyListener(this));
 		}
 
 		public Component getTableCellRendererComponent(JTable table,

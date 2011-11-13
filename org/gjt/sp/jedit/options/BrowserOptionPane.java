@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.ComboKeyListener;
 //}}}
 
 //{{{ BrowserOptionPane class
@@ -53,6 +54,7 @@ public class BrowserOptionPane extends AbstractOptionPane
 		};
 
 		defaultDirectory = new JComboBox(dirs);
+		defaultDirectory.addKeyListener(new ComboKeyListener(defaultDirectory));
 		String defaultDir = jEdit.getProperty("vfs.browser.defaultPath");
 		if("favorites".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(0);

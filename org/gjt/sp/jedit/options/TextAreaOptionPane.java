@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.gui.FontSelectorDialog;
 import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.gui.RolloverButton;
 //}}}
+import org.gjt.sp.util.ComboKeyListener;
 
 /**
  * @author Slava Pestov
@@ -75,6 +76,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 		/* Anti-aliasing */
 		antiAlias = new JComboBox(AntiAlias.comboChoices);
+		antiAlias.addKeyListener(new ComboKeyListener(antiAlias));
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
 		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		font.setAntiAliasEnabled(antiAliasValue.val()>0);

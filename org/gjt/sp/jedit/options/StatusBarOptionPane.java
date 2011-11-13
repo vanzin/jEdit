@@ -32,6 +32,7 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.ComboKeyListener;
 //}}}
 
 /**
@@ -448,6 +449,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 					widgets.add(widget);
 			}
 			widgetCombo = new JComboBox(widgets);
+			widgetCombo.addKeyListener(new ComboKeyListener(widgetCombo));
 			widgetCombo.setRenderer(new WidgetListCellRenderer());
 			ActionHandler actionHandler = new ActionHandler();
 			labelRadio.addActionListener(actionHandler);

@@ -34,6 +34,7 @@ import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -487,6 +488,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		}
 		Collections.sort(vec, new ActionSetCompare());
 		combo = new JComboBox(vec);
+		combo.addKeyListener(new ComboKeyListener(combo));
 		if (selectedItem != null)
 			combo.setSelectedItem(selectedItem);
 		else
@@ -516,6 +518,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		file.addActionListener(actionHandler);
 		iconPanel.add(BorderLayout.WEST,labelPanel);
 		builtinCombo = new JComboBox(iconListModel);
+		builtinCombo.addKeyListener(new ComboKeyListener(builtinCombo));
 		builtinCombo.setRenderer(new ToolBarOptionPane.IconCellRenderer());
 		compPanel.add(builtinCombo);
 

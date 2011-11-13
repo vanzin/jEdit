@@ -30,6 +30,7 @@ import java.awt.event.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.gui.NumericTextField;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
@@ -42,7 +43,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	 * Possible values of the jedit property 'icon-theme'
 	 */
 	public static final String[] builtInIconThemes = {"tango", "old"};
-	
+
 	//{{{ AppearanceOptionPane constructor
 	public AppearanceOptionPane()
 	{
@@ -68,6 +69,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		}
 
 		lookAndFeel = new JComboBox(names);
+		lookAndFeel.addKeyListener(new ComboKeyListener(lookAndFeel));
 		lookAndFeel.setSelectedIndex(index);
 		lookAndFeel.addActionListener(new ActionListener()
 		{
@@ -78,14 +80,15 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			}
 		});
 
-		
+
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
-		
+
 
 		/* Icon Theme */
 		String[] themes = IconTheme.builtInNames();
 		iconThemes = new JComboBox(themes);
+		iconThemes.addKeyListener(new ComboKeyListener(iconThemes));
 		addComponent(jEdit.getProperty("options.appearance.iconTheme"), iconThemes);
 		oldTheme = IconTheme.get();
 		for (int i=0; i<themes.length; ++i)
@@ -96,7 +99,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 				break;
 			}
 		}
-		
+
 		/* Primary Metal L&F font */
 		Font pf = jEdit.getFontProperty("metal.primary.font");
 		primaryFont = new FontSelector(pf);
@@ -108,13 +111,13 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"metal.secondary.font"));
 		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
 			secondaryFont);
-		
+
 		/* HelpViewer font */
 		helpViewerFont = new FontSelector(jEdit.getFontProperty(
 			"helpviewer.font", pf));
 		addComponent(jEdit.getProperty("options.appearance.helpViewerFont"),
 			helpViewerFont);
-		
+
 		/*
 		antiAliasExtras = new JComboBox(AntiAlias.comboChoices);
 		antiAliasExtras.setSelectedIndex(AntiAlias.appearance().val());
@@ -140,7 +143,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 					"options.general.systrayicon", "Show the systray icon"));
 		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
 		addComponent(systemTrayIcon);
-		
+
 		if (OperatingSystem.isMacOS())
 		{
 			String settingsDirectory = jEdit.getSettingsDirectory();
@@ -223,7 +226,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		{
 			setFileFlag("noquartz", !useQuartz.isSelected());
 		}
-		
+
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
 		jEdit.setBooleanProperty("decorate.dialogs",decorateDialogs.isSelected());
@@ -238,7 +241,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
 	private FontSelector helpViewerFont;
-	
+
 	private JTextField history;
 	private JTextField menuSpillover;
 	private JCheckBox showTips;
@@ -273,7 +276,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ setFileFlag() method
 	private void setFileFlag(String fileName, boolean present)
 	{

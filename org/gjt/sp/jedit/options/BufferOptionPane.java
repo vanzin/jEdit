@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 
 
@@ -82,6 +83,7 @@ public class BufferOptionPane extends AbstractOptionPane
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
+		lineSeparator.addKeyListener(new ComboKeyListener(lineSeparator));
 		String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
 		if(lineSep == null)
 			lineSep = System.getProperty("line.separator");
@@ -99,6 +101,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		String[] encodings = MiscUtilities.getEncodings(true);
 		Arrays.sort(encodings,new StandardUtilities.StringCompare<String>(true));
 		encoding = new JComboBox(encodings);
+		encoding.addKeyListener(new ComboKeyListener(encoding));
 		encoding.setEditable(true);
 		encoding.setSelectedItem(buffer.getStringProperty(JEditBuffer.ENCODING));
 		addComponent(jEdit.getProperty("buffer-options.encoding"),
@@ -121,6 +124,7 @@ public class BufferOptionPane extends AbstractOptionPane
 			jEdit.getProperty("options.general.checkModStatus.silentReload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
+		checkModStatus.addKeyListener(new ComboKeyListener(checkModStatus));
 		if(buffer.getAutoReload())
 		{
 			if(buffer.getAutoReloadDialog())
@@ -148,6 +152,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		modes = jEdit.getModes();
 		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
 		mode = new JComboBox(modes);
+		mode.addKeyListener(new ComboKeyListener(mode));
 		mode.setSelectedItem(buffer.getMode());
 		ActionHandler actionListener = new ActionHandler();
 		mode.addActionListener(actionListener);
@@ -158,6 +163,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		String[] foldModes = FoldHandler.getFoldModes();
 
 		folding = new JComboBox(foldModes);
+		folding.addKeyListener(new ComboKeyListener(folding));
 		folding.setSelectedItem(buffer.getStringProperty("folding"));
 		addComponent(jEdit.getProperty("options.editing.folding"),
 			folding);
@@ -166,10 +172,11 @@ public class BufferOptionPane extends AbstractOptionPane
 		//{{{ Automatic indentation
 		String[] indentModes = {"none", "simple", "full"};
 		autoIndent = new JComboBox(indentModes);
+		autoIndent.addKeyListener(new ComboKeyListener(autoIndent));
 		autoIndent.setSelectedItem(buffer.getStringProperty("autoIndent"));
 		addComponent(jEdit.getProperty("options.editing.autoIndent"), autoIndent);
 		//}}}
-		
+
 		//{{{ Wrap mode
 		String[] wrapModes = {
 			"none",
@@ -178,6 +185,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		};
 
 		wrap = new JComboBox(wrapModes);
+		wrap.addKeyListener(new ComboKeyListener(wrap));
 		wrap.setSelectedItem(buffer.getStringProperty("wrap"));
 		addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap);
@@ -187,6 +195,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		String[] lineLengths = { "0", "72", "76", "80" };
 
 		maxLineLen = new JComboBox(lineLengths);
+		maxLineLen.addKeyListener(new ComboKeyListener(maxLineLen));
 		maxLineLen.setEditable(true);
 		maxLineLen.setSelectedItem(buffer.getStringProperty("maxLineLen"));
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"),
@@ -196,6 +205,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		//{{{ Tab size
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
+		tabSize.addKeyListener(new ComboKeyListener(tabSize));
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(buffer.getStringProperty("tabSize"));
 		addComponent(jEdit.getProperty("options.editing.tabSize"),tabSize);
@@ -203,6 +213,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Indent size
 		indentSize = new JComboBox(tabSizes);
+		indentSize.addKeyListener(new ComboKeyListener(indentSize));
 		indentSize.setEditable(true);
 		indentSize.setSelectedItem(buffer.getStringProperty("indentSize"));
 		addComponent(jEdit.getProperty("options.editing.indentSize"),
@@ -215,7 +226,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
 		addComponent(noTabs);
 		//}}}
-		
+
 		//{{{ Elastic tabstops
 		elasticTabstops = new JCheckBox(jEdit.getProperty(
 			"options.editing.elasticTabstops"));
