@@ -129,11 +129,10 @@ public abstract class EnhancedDialog extends JDialog
 		{
 			if(evt.isConsumed())
 				return;
-
+			Component comp = getFocusOwner();
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER
 				&& enterEnabled)
 			{
-				Component comp = getFocusOwner();
 				while(comp != null)
 				{
 					if(comp instanceof JComboBox)
@@ -156,7 +155,13 @@ public abstract class EnhancedDialog extends JDialog
 			}
 			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
-				cancel();
+				if(comp instanceof JComboBox) {
+					JComboBox combo = (JComboBox)comp;
+					if (combo.isPopupVisible()) {
+						combo.setPopupVisible(false);
+					}
+				}
+				else cancel();
 				evt.consume();
 			}
 		}
