@@ -31,9 +31,9 @@ import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.GrabKeyDialog.KeyBinding;
 import org.gjt.sp.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.keymap.KeymapManager;
+import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -358,48 +358,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	//{{{ Inner classes
 
-	/** A class that consumes return and escape keys for JComboBox */
-	static class ComboKeyListener implements KeyListener {
-
-		ArrayList<Integer> yummyKeys;
-		JComboBox m_comboBox;
-		//[] =  { KeyEvent.VK_ESCAPE, KeyEvent.VK_ENTER };
-		ComboKeyListener(JComboBox combobox) {
-			m_comboBox = combobox;
-			yummyKeys = new ArrayList<Integer>();
-			yummyKeys.add(KeyEvent.VK_ESCAPE);
-			yummyKeys.add(KeyEvent.VK_ENTER);
-		}
 		
-		@Override
-		public void keyTyped(KeyEvent e)
-		{
-			
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			Integer i = new Integer(e.getKeyCode());
-			if (yummyKeys.contains(i)) {
-				e.consume();
-				if (i.equals(KeyEvent.VK_ENTER) && !m_comboBox.isPopupVisible()) 
-					m_comboBox.showPopup();
-				else
-					m_comboBox.hidePopup();
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
-	}
-	
 	//{{{ HeaderMouseHandler class
 	private class HeaderMouseHandler extends MouseAdapter
 	{
