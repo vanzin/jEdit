@@ -31,7 +31,6 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -95,7 +94,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		floatableToolbars.setSelected(jEdit.getBooleanProperty(
 			"view.toolbar.floatable"));
 		addComponent(floatableToolbars);
-		
+
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.view.showFullPath"));
@@ -134,7 +133,6 @@ public class ViewOptionPane extends AbstractOptionPane
 		bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
 
 		buffersetScope = new JComboBox();
-		buffersetScope.addKeyListener(new ComboKeyListener(buffersetScope));
 		buffersetScope.addItem(BufferSet.Scope.global);
 		buffersetScope.addItem(BufferSet.Scope.view);
 		buffersetScope.addItem(BufferSet.Scope.editpane);
@@ -205,7 +203,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
 		jEdit.setBooleanProperty("view.toolbar.floatable", floatableToolbars.isSelected());
-		
+
 		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
 			.isSelected());
 		jEdit.setBooleanProperty("search.beepOnSearchAutoWrap",beepOnSearchAutoWrap

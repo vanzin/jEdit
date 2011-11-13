@@ -36,7 +36,7 @@ import org.gjt.sp.jedit.gui.FontSelectorDialog;
 import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.gui.RolloverButton;
 //}}}
-import org.gjt.sp.util.ComboKeyListener;
+
 
 /**
  * @author Slava Pestov
@@ -76,7 +76,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 		/* Anti-aliasing */
 		antiAlias = new JComboBox(AntiAlias.comboChoices);
-		antiAlias.addKeyListener(new ComboKeyListener(antiAlias));
+
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
 		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		font.setAntiAliasEnabled(antiAliasValue.val()>0);
@@ -100,7 +100,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(fracFontMetrics);
 
 		/* Extra line spacing */
-		IntegerInputVerifier integerInputVerifier = new IntegerInputVerifier();		
+		IntegerInputVerifier integerInputVerifier = new IntegerInputVerifier();
 		JPanel lineSpacingPanel = new JPanel();
 		lineSpacing = new JTextField(String.valueOf(jEdit.getIntegerProperty("options.textarea.lineSpacing", 0)));
 		lineSpacing.setColumns(4);
@@ -111,7 +111,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(lineSpacingPanel);
 
 		addSeparator();
-		
+
 		/* Text color */
 		addComponent(jEdit.getProperty("options.textarea.foreground"),
 			foregroundColor = new ColorWellButton(
@@ -203,7 +203,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			GridBagConstraints.VERTICAL);
 
 		addSeparator();
-		
+
 		/* Electric borders */
 		electricBorders = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".electricBorders"));
@@ -270,7 +270,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 		jEdit.setBooleanProperty("completeFromAllBuffers", completeFromAllBuffers.isSelected());
-		jEdit.setIntegerProperty("options.textarea.lineSpacing", 
+		jEdit.setIntegerProperty("options.textarea.lineSpacing",
 					 Integer.valueOf(lineSpacing.getText()));
 	} //}}}
 

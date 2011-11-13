@@ -30,7 +30,7 @@ import java.awt.event.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.gui.NumericTextField;
-import org.gjt.sp.util.ComboKeyListener;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
@@ -69,7 +69,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		}
 
 		lookAndFeel = new JComboBox(names);
-		lookAndFeel.addKeyListener(new ComboKeyListener(lookAndFeel));
 		lookAndFeel.setSelectedIndex(index);
 		lookAndFeel.addActionListener(new ActionListener()
 		{
@@ -88,7 +87,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		/* Icon Theme */
 		String[] themes = IconTheme.builtInNames();
 		iconThemes = new JComboBox(themes);
-		iconThemes.addKeyListener(new ComboKeyListener(iconThemes));
 		addComponent(jEdit.getProperty("options.appearance.iconTheme"), iconThemes);
 		oldTheme = IconTheme.get();
 		for (int i=0; i<themes.length; ++i)

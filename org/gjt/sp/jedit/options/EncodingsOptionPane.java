@@ -38,7 +38,7 @@ import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.gui.PingPongList;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.util.ComboKeyListener;
+
 import org.gjt.sp.util.StandardUtilities;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.util.Arrays.sort;
@@ -89,7 +89,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
-		lineSeparator.addKeyListener(new ComboKeyListener(lineSeparator));
+
 		String lineSep = jEdit.getProperty("buffer."+ JEditBuffer.LINESEP,
 			System.getProperty("line.separator"));
 		if("\n".equals(lineSep))

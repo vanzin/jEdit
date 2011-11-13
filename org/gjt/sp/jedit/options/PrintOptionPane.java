@@ -27,7 +27,6 @@ import javax.swing.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
 //}}}
-import org.gjt.sp.util.ComboKeyListener;
 
 public class PrintOptionPane extends AbstractOptionPane
 {
@@ -71,7 +70,6 @@ public class PrintOptionPane extends AbstractOptionPane
 		/* Tab size */
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
-		tabSize.addKeyListener(new ComboKeyListener(tabSize));
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
 		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
@@ -82,7 +80,7 @@ public class PrintOptionPane extends AbstractOptionPane
 			+ ".folds"));
 		printFolds.setSelected(jEdit.getBooleanProperty("print.folds",true));
 		addComponent(printFolds);
-		
+
 		addSeparator("options.print.workarounds");
 
 		/* Spacing workaround */

@@ -55,7 +55,6 @@ import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -73,11 +72,11 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		setLayout(new BorderLayout());
-		
+
 		add(BorderLayout.NORTH,createDockingOptionsPanel());
 		add(BorderLayout.CENTER,createWindowTableScroller());
 		add(BorderLayout.SOUTH, createDockingFrameworkChooser());
-		
+
 		dockableSetSelection.setModel(
 			new DefaultComboBoxModel(windowModel.getDockableSets()));
 	} //}}}
@@ -108,13 +107,13 @@ public class DockingOptionPane extends AbstractOptionPane
 	private static final String AUTO_LOAD_MODE_LAYOUT_LABEL = AUTO_LOAD_MODE_LAYOUT_PROP + ".label";
 	public static final String AUTO_SAVE_MODE_LAYOUT_PROP = DOCKING_OPTIONS_PREFIX + "autoSaveModeLayout";
 	private static final String AUTO_SAVE_MODE_LAYOUT_LABEL = AUTO_SAVE_MODE_LAYOUT_PROP + ".label";
-	
+
 	private JPanel createDockingFrameworkChooser()
-	{	
+	{
 		String [] frameworks =
 			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
 		dockingFramework = new JComboBox(frameworks);
-		dockingFramework.addKeyListener(new ComboKeyListener(dockingFramework));
+
 		String framework = View.getDockingFrameworkName();
 		for (int i = 0; i < frameworks.length; i++)
 		{
@@ -130,12 +129,12 @@ public class DockingOptionPane extends AbstractOptionPane
 		p.setLayout(new FlowLayout());
 		p.add(new JLabel(jEdit.getProperty("options.docking.selectFramework.label")));
 		p.add(dockingFramework);
-		
+
 		return p;
-		
+
 	}
 
-	
+
 	private JPanel createDockingOptionsPanel()
 	{
 		JPanel p = new JPanel();
@@ -167,7 +166,6 @@ public class DockingOptionPane extends AbstractOptionPane
 			"options.docking.selectSet.label")));
 		setSelection.add(Box.createHorizontalStrut(6));
 		dockableSetSelection = new JComboBox();
-		dockableSetSelection.addKeyListener(new ComboKeyListener(dockableSetSelection));
 		setSelection.add(dockableSetSelection);
 		dockableSetSelection.addItemListener(new ItemListener()
 		{
@@ -225,7 +223,7 @@ public class DockingOptionPane extends AbstractOptionPane
 				DockableWindowManager.RIGHT
 			});
 			DockPositionCellRenderer.this.setRequestFocusEnabled(false);
-			addKeyListener(new ComboKeyListener(this));
+
 		}
 
 		public Component getTableCellRendererComponent(JTable table,
@@ -264,7 +262,7 @@ class WindowTableModel extends AbstractTableModel
 			if (plugin != null)
 				set = PLUGIN_SET_PREFIX + plugin;
 			else
-				set = CORE_DOCKABLE_SET; 
+				set = CORE_DOCKABLE_SET;
 			Vector<Entry> currentSetDockables = dockableSets.get(set);
 			if (currentSetDockables == null)
 			{

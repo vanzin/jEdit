@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -87,7 +86,6 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		}
 
 		setsComboBox = new JComboBox(sets);
-		setsComboBox.addKeyListener(new ComboKeyListener(setsComboBox));
 		ActionHandler actionHandler = new ActionHandler();
 		setsComboBox.addActionListener(actionHandler);
 		panel2.add(setsComboBox);

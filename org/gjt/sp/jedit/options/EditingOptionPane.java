@@ -30,7 +30,6 @@ import java.util.Arrays;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -66,7 +65,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		}
 
 		mode = new JComboBox(modeNames);
-		mode.addKeyListener(new ComboKeyListener(mode));
 		mode.addActionListener(new ActionHandler());
 
 		captionBox = new Box(BoxLayout.X_AXIS);
@@ -87,7 +85,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		String[] foldModes = FoldHandler.getFoldModes();
 		addComponent(jEdit.getProperty("options.editing.folding"),
 			folding = new JComboBox(foldModes));
-		folding.addKeyListener(new ComboKeyListener(folding));
 
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
 			collapseFolds = new JTextField());
@@ -99,15 +96,13 @@ public class EditingOptionPane extends AbstractOptionPane
 		};
 		addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap = new JComboBox(wrapModes));
-		wrap.addKeyListener(new ComboKeyListener(wrap));
 
 		String[] lineLens = { "0", "72", "76", "80" };
 		maxLineLen = new JComboBox(lineLens);
-		maxLineLen.addKeyListener(new ComboKeyListener(maxLineLen));
 		maxLineLen.setToolTipText(jEdit.getProperty("options.editing.maxLineLen.tooltip"));
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"), maxLineLen);
 		maxLineLen.setEditable(true);
-		
+
 		String[] indentModes = {
 			"none",
 			"simple",
@@ -116,21 +111,21 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.autoIndent"),
 			autoIndent = new JComboBox(indentModes));
 
-		autoIndent.addKeyListener(new ComboKeyListener(autoIndent));
+
 		String[] tabSizes = { "2", "4", "8" };
 		addComponent(jEdit.getProperty("options.editing.tabSize"),
 			tabSize = new JComboBox(tabSizes));
-		tabSize.addKeyListener(new ComboKeyListener(tabSize));
+
 		tabSize.setEditable(true);
 
 		addComponent(jEdit.getProperty("options.editing.indentSize"),
 			indentSize = new JComboBox(tabSizes));
 		indentSize.setEditable(true);
-		indentSize.addKeyListener(new ComboKeyListener(indentSize));
+
 
 		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs")));
-		
+
 		addComponent(elasticTabstops = new JCheckBox(jEdit.getProperty(
 		"options.editing.elasticTabstops")));
 
@@ -150,7 +145,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		addSeparator();
 
 		defaultMode = new JComboBox(modes);
-		defaultMode.addKeyListener(new ComboKeyListener(defaultMode));
+
 		defaultMode.setSelectedItem(jEdit.getMode(
 			jEdit.getProperty("buffer.defaultMode")));
 		addComponent(jEdit.getProperty("options.editing.defaultMode"),

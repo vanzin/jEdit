@@ -34,7 +34,6 @@ import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -73,7 +72,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 		listModel = new DefaultListModel();
 		reloadButtonList(jEdit.getProperty("view.toolbar"));
-		
+
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(new ListHandler());
@@ -111,7 +110,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		edit.addActionListener(actionHandler);
 		buttons.add(edit);
 		buttons.add(Box.createGlue());
-		
+
 		// add "reset to defaults" button
 		reset = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.reset.icon")));
 		reset.setToolTipText(jEdit.getProperty("options.toolbar.reset"));
@@ -175,13 +174,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
 		edit.setEnabled(index != -1);
 	} //}}}
-	
+
 	//{{{ reloadButtonList() method
 	private void reloadButtonList(String toolbar)
 	{
 		StringTokenizer st = new StringTokenizer(toolbar);
 		listModel.clear();
-		
+
 		while(st.hasMoreTokens())
 		{
 			String actionName = st.nextToken();
@@ -220,7 +219,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		}
 	}
 	//}}}
-	
+
 	//}}}
 
 	//{{{ Inner classes
@@ -396,19 +395,19 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				int result = GUIUtilities.confirm(list,dialogType,null,
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE);
-				
+
 				if(result == JOptionPane.YES_OPTION)
 				{
-					// the user should be able to cancel the options dialog 
+					// the user should be able to cancel the options dialog
 					// so we need to modify the list, not the actual property
-					// since the default value is not available, 
+					// since the default value is not available,
 					// we reset, fetch default value and re-set to original
 					String orgToolbar = jEdit.getProperty("view.toolbar");
 					jEdit.resetProperty("view.toolbar");
 					String defaultToolbar = jEdit.getProperty("view.toolbar");
 					jEdit.setProperty("view.toolbar", orgToolbar);
 					reloadButtonList(defaultToolbar);
-					
+
 					// reset selection if user had more buttons than default
 					list.setSelectedIndex(0);
 					list.ensureIndexIsVisible(0);
@@ -488,7 +487,6 @@ class ToolBarEditDialog extends EnhancedDialog
 		}
 		Collections.sort(vec, new ActionSetCompare());
 		combo = new JComboBox(vec);
-		combo.addKeyListener(new ComboKeyListener(combo));
 		if (selectedItem != null)
 			combo.setSelectedItem(selectedItem);
 		else
@@ -518,7 +516,6 @@ class ToolBarEditDialog extends EnhancedDialog
 		file.addActionListener(actionHandler);
 		iconPanel.add(BorderLayout.WEST,labelPanel);
 		builtinCombo = new JComboBox(iconListModel);
-		builtinCombo.addKeyListener(new ComboKeyListener(builtinCombo));
 		builtinCombo.setRenderer(new ToolBarOptionPane.IconCellRenderer());
 		compPanel.add(builtinCombo);
 
@@ -773,6 +770,6 @@ class ToolBarEditDialog extends EnhancedDialog
 		{
 			return StandardUtilities.compareStrings(o1.getLabel(), o2.getLabel(), false);
 		}
-		
+
 	}
 } //}}}

@@ -31,7 +31,6 @@ import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.GrabKeyDialog.KeyBinding;
 import org.gjt.sp.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.keymap.KeymapManager;
-import org.gjt.sp.util.ComboKeyListener;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import javax.swing.*;
@@ -86,7 +85,6 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		ComboBoxModel model = new KeymapsModel();
 		keymaps = new JComboBox(model);
-		keymaps.addKeyListener(new ComboKeyListener(keymaps));
 		keymaps.setRenderer(new KeymapCellRenderer());
 		keymaps.setSelectedItem(keymapName);
 		duplicateKeymap.addActionListener(actionHandler);
@@ -108,7 +106,6 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		// combobox to choose action set
 		selectModel = new JComboBox(models);
-		selectModel.addKeyListener(new ComboKeyListener(selectModel));
 		selectModel.addActionListener(actionHandler);
 		selectModel.setToolTipText(jEdit.getProperty("options.shortcuts.select.tooltip"));
 		Box north = Box.createHorizontalBox();
@@ -356,7 +353,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	//{{{ Inner classes
 
-		
+
 	//{{{ HeaderMouseHandler class
 	private class HeaderMouseHandler extends MouseAdapter
 	{
@@ -645,7 +642,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 	} //}}}
 
-	//{{{ KeymapsModel class 
+	//{{{ KeymapsModel class
 	private static class KeymapsModel extends AbstractListModel implements ComboBoxModel
 	{
 		private String[] keymaps;
@@ -712,7 +709,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		} //}}}
 	} //}}}
 
-	//{{{ KeymapsModel class 
+	//{{{ KeymapsModel class
 	private static class KeymapCellRenderer extends DefaultListCellRenderer
 	{
 		@Override
@@ -726,7 +723,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			return this;
 		}
 	} //}}}
-	
+
 	//}}}
 	//}}}
 }

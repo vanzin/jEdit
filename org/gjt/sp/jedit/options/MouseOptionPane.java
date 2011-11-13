@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.ComboKeyListener;
 //}}}
 
 public class MouseOptionPane extends AbstractOptionPane
@@ -93,7 +92,7 @@ public class MouseOptionPane extends AbstractOptionPane
 		for(int i = 0; i < c; i++)
 		{
 			JComboBox cb = new JComboBox(clickActionNames);
-			cb.addKeyListener(new ComboKeyListener(cb));
+
 			gutterClickActions[i] = cb;
 
 			String val = jEdit.getProperty("view.gutter."+clickModifierKeys[i]);
