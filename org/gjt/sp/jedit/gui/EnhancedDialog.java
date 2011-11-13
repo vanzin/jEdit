@@ -65,13 +65,13 @@ public abstract class EnhancedDialog extends JDialog
 			new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
 
-		//keyHandler = new KeyHandler();
-		//addKeyListener(keyHandler);
+		keyHandler = new KeyHandler();
+		addKeyListener(keyHandler);
 		addWindowListener(new WindowHandler());
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		enterEnabled = true;
+		enterEnabled = false;
 	}
 	//}}}
 

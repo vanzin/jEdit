@@ -27,7 +27,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 
-import org.gjt.sp.util.ComboKeyListener;
 //}}}
 
 /**
@@ -105,7 +104,6 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		{
 			initialized = true;
 			_init();
-			// ComboKeyListener.addRecursive(this);
 		}
 	} //}}}
 
