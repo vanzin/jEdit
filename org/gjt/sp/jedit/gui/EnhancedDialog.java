@@ -71,7 +71,7 @@ public abstract class EnhancedDialog extends JDialog
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		enterEnabled = false;
+		enterEnabled = true;
 	}
 	//}}}
 
@@ -127,11 +127,9 @@ public abstract class EnhancedDialog extends JDialog
 	{
 		public void keyPressed(KeyEvent evt)
 		{
-			if(evt.isConsumed())
-				return;
+			if(evt.isConsumed()) return;
 			Component comp = getFocusOwner();
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER
-				&& enterEnabled)
+			if(evt.getKeyCode() == KeyEvent.VK_ENTER && enterEnabled)
 			{
 				while(comp != null)
 				{
@@ -144,25 +142,32 @@ public abstract class EnhancedDialog extends JDialog
 							if(selected != null)
 								combo.setSelectedItem(selected);
 						}
-						break;
+						if(!combo.isPopupVisible())
+						{
+							evt.consume();
+							combo.setPopupVisible(true);
+						}
+						return;
 					}
-
+					// TODO: add other classes that need custom key handling here.
 					comp = comp.getParent();
 				}
-
-				ok();
 				evt.consume();
+				ok();
 			}
 			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
-				if(comp instanceof JComboBox) {
+				evt.consume();
+				if(comp instanceof JComboBox)
+				{
 					JComboBox combo = (JComboBox)comp;
-					if (combo.isPopupVisible()) {
+					if (combo.isPopupVisible())
+					{
 						combo.setPopupVisible(false);
 					}
+					else cancel();
 				}
 				else cancel();
-				evt.consume();
 			}
 		}
 	}
