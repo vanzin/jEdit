@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -32,10 +33,13 @@ import java.util.Map;
 import java.util.Stack;
 
 import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 
 import org.gjt.sp.jedit.ActionSet;
 import org.gjt.sp.jedit.BeanShell;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.View;
@@ -451,21 +455,27 @@ public class DockableWindowFactory
 				return null;
 			}
 
-			NameSpace nameSpace = new NameSpace(
-				BeanShell.getNameSpace(),
-				"DockableWindowManager.Factory"
-				+ ".createDockableWindow()");
+			NameSpace nameSpace = new NameSpace(BeanShell.getNameSpace(),
+				"DockableWindowManager.Factory.createDockableWindow()");
 			try
 			{
-				nameSpace.setVariable(
-					"position",position);
+				nameSpace.setVariable("position",position);
 			}
 			catch(UtilEvalError e)
 			{
 				Log.log(Log.ERROR,this,e);
 			}
-			JComponent win = (JComponent)BeanShell.eval(view,
-				nameSpace,code);
+			JComponent win = (JComponent)BeanShell.eval(view,nameSpace,code);
+
+			if (jEdit.getBooleanProperty("textColors")) {							
+				if (jEdit.getColorProperty("view.bgColor", Color.WHITE) != Color.WHITE) {
+					LookAndFeel laf = UIManager.getLookAndFeel();
+					if (!laf.getID().equals("Metal")) {
+						GUIUtilities.applyTextAreaColors(win);
+					}
+				}
+			}
+			
 			synchronized(this)
 			{
 				isBeingCreated = false;

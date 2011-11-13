@@ -1349,6 +1349,23 @@ public class GUIUtilities
 		}
 	} //}}}
 
+	//{{{ applyTextAreaColors() method
+	/**
+	 * Applies the text area colors on a Component (such as a dockable window)
+	 */
+	public static void applyTextAreaColors(Container win) {
+
+		for (Component child: win.getComponents()) {
+			if (child instanceof JComponent) {
+				child.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
+				child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));			
+			}			
+			if (child instanceof Container)
+				applyTextAreaColors((Container)child);
+		}
+		
+	}
+	
 	//{{{ createMultilineLabel() method
 	/**
 	 * Creates a component that displays a multiple line message. This
