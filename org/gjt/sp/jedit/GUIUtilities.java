@@ -60,9 +60,13 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 
 
 import java.awt.*;
@@ -1357,10 +1361,14 @@ public class GUIUtilities
 	 * @author ezust
 	 * 
 	 */
-	public static void applyTextAreaColors(Container win) {
-		for (Component child: win.getComponents()) {
+	public static void applyTextAreaColors(Container win) 
+	{		
+		for (Component child: win.getComponents()) 
+		{
 			child.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
-			child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));			
+			child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));
+			if (child instanceof JTextPane)  
+				((JTextPane)child).setUI(new javax.swing.plaf.basic.BasicEditorPaneUI());
 			if (child instanceof Container)
 				applyTextAreaColors((Container)child);
 		}
