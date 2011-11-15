@@ -211,6 +211,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		//{{{ Elastic tabstops
 		elasticTabstops = new JCheckBox(jEdit.getProperty(
 			"options.editing.elasticTabstops"));
+		elasticTabstops.setToolTipText(jEdit.getProperty("options.editing.elasticTabstops.tooltip"));
 		elasticTabstops.setSelected(buffer.getBooleanProperty("elasticTabstops"));
 		addComponent(elasticTabstops);
 		//}}}
