@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="updating-modes">
     <title>Updating Edit Modes</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <section id="currentmodeformat">

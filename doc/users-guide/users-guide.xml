@@ -2,34 +2,10 @@
 <!-- jEdit buffer-local properties: -->
 <!-- maxLineLen=0:wrap=soft:indentSize=1:noTabs=true: -->
 <!-- jEdit user's guide -->
-<!-- (C) 1999, 2004 Slava Pestov -->
-<!-- (C) 2001, 2002 John Gellene -->
-<!-- (C) 2005, 2011 Alan Ezust -->
 <book id="users-guide"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
     <bookinfo>
         <title>jEdit 5.0 User's Guide</title>
-
-        <copyright>
-            <year>1999</year>
-            <year>2004</year>
-
-            <holder>Slava Pestov</holder>
-        </copyright>
-
-        <copyright>
-            <year>2001</year>
-            <year>2002</year>
-
-            <holder>John Gellene</holder>
-        </copyright>
-
-        <copyright>
-            <year>2005</year>
-            <year>2011</year>
-
-            <holder>Alan Ezust</holder>
-        </copyright>
 
         <legalnotice>
             <title>Legal Notice</title>
@@ -43,6 +19,32 @@
             in the file <filename>COPYING.DOC.txt</filename> included with
             jEdit.</para>
         </legalnotice>
+        <author>
+           <othername> The jEdit all-volunteer developer team </othername>
+        </author>
+        
+        <revhistory>
+           <revision>
+                <revnumber>4.2</revnumber>
+                <date>1999-2004</date>
+                <author> <firstname>Slava</firstname> <surname>Pestov</surname> </author>
+                <revremark>Initial HTML document, maintainer up to jEdit 4.2</revremark>
+            </revision>
+            
+            <revision>
+               <revnumber>4.1</revnumber>
+               <date>2001-2002</date>
+               <author> <firstname>John</firstname><surname>Gellene</surname> </author>
+               <revremark> Initial docbook version. Maintainer from jEdit 4.0 - 4.1. Wrote initial versions of Plugin Guide and Macro Guide. </revremark>
+               </revision>
+            
+            <revision>
+              <revnumber>5.0</revnumber>
+              <date>2005-2012</date>
+              <author><firstname>Alan</firstname><surname>Ezust</surname></author>
+              <revremark> Maintainer from jEdit 4.3 to jEdit 5.0 </revremark>
+            </revision>
+        </revhistory>
     </bookinfo>
 
     <part id="using-jedit-part">
@@ -108,8 +110,6 @@
             illustrate additional macro writing techniques. Finally, we discuss
             several tips and techniques for writing and debugging macros.</para>
 
-            <para>This part of the user's guide was written by John Gellene
-            <email>jgellene@nyc.rr.com</email>.</para>
         </partintro>
 
         <xi:include href="macro-basics.xml" />
@@ -131,9 +131,6 @@
             are not required to be a Java wizard. If you can write a useful
             application of any size in Java, you can write a plugin.</para>
 
-            <para>This part of the user's guide was originally written by John
-            Gellene. As of jEdit 4.3, it is maintained by Alan Ezust with help
-            from others in the jEdit core development team.</para>
         </partintro>
 
         <xi:include href="plugin-intro.xml" />
