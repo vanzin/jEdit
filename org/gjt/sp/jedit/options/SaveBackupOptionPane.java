@@ -77,6 +77,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 
 		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.suppressNotSavedConfirmUntitled"));
+		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty(
+			"options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
 		suppressNotSavedConfirmUntitled.setSelected(
 			jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
 		addComponent(suppressNotSavedConfirmUntitled);
