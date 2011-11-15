@@ -128,7 +128,8 @@ public class EditingOptionPane extends AbstractOptionPane
 
 		addComponent(elasticTabstops = new JCheckBox(jEdit.getProperty(
 		"options.editing.elasticTabstops")));
-
+		elasticTabstops.setToolTipText(jEdit.getProperty("options.editing.elasticTabstops.tooltip"));
+		
 		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
 			"options.editing.deepIndent")));
 

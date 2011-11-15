@@ -1998,6 +1998,7 @@ options.editing.noWordSep=Extra word characters:
 options.editing.camelCasedWords=Separate "CamelCased" words
 options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.elasticTabstops=Indent using elastic tabstops
+options.editing.elasticTabstops.tooltip=(Experimental) - may cause instability in jEdit.
 options.editing.deepIndent=Deep indent
 options.editing.autoIndent=Automatic indentation
 #}}}
