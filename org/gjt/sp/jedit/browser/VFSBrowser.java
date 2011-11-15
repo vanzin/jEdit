@@ -49,7 +49,7 @@ import org.gjt.sp.jedit.menu.MenuItemTextComparator;
  * The main class of the VFS browser.
  * Used as dockable, and also embedded inside the
  * VFSFileChooserDialog.
- * 
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -173,7 +173,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		this.multipleSelection = multipleSelection;
 		this.view = view;
 
-		
+
 		currentEncoding = null;
 		autoDetectEncoding = jEdit.getBooleanProperty(
 			"buffer.encodingAutodetect");
@@ -212,7 +212,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
-		
+
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -258,7 +258,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			DockableWindowManager dwm = view.getDockableWindowManager();
 			KeyListener keyListener = dwm.closeListener(NAME);
-			filterCheckbox.addKeyListener(keyListener);	
+			filterCheckbox.addKeyListener(keyListener);
 			addKeyListener(keyListener);
 			filterEditor.addKeyListener(keyListener);
 			pathField.addKeyListener(keyListener);
@@ -395,18 +395,18 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	@Override
 	public void focusOnDefaultComponent()
 	{
-		// pathField.requestFocus();		
+		// pathField.requestFocus();
 		defaultFocusComponent.requestFocus();
 	} //}}}
 
 	// {{{ setDefaultFocusComponent()
 	/** Only used by VFSFileChooserDialog, since it embeds this in a dialog
 	 */
-	void setDefaultFocusComponent(JComponent c) 
+	void setDefaultFocusComponent(JComponent c)
 	{
 		defaultFocusComponent = c;
 	}// }}}
-	
+
 	//{{{ addNotify() method
 	@Override
 	public void addNotify()
@@ -577,7 +577,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	/**
 	 * @since jedit 4.3pre15
 	 */
-	public void previousDirectory() 
+	public void previousDirectory()
 	{
 		if (historyStack.size() > 1)
 		{
@@ -587,20 +587,20 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			historyStack.pop();
 		}
 	}
-	
-	
+
+
 	/**
 	 * @since jEdit 4.3pre15
 	 */
-	public void nextDirectory() 
+	public void nextDirectory()
 	{
 		if (!nextDirectoryStack.isEmpty())
 		{
 			setDirectory(nextDirectoryStack.pop());
 		}
 	}
-	// }}}	
-	
+	// }}}
+
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
@@ -680,7 +680,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		}
 
 		Object[] args = { buf.toString(), typeStr};
-		
+
 		int result = GUIUtilities.confirm(this,dialogType,args,
 			JOptionPane.YES_NO_OPTION,
 			JOptionPane.WARNING_MESSAGE);
@@ -918,8 +918,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	public void fileProperties(VFSFile[] files)
 	{
 		new FilePropertiesDialog(view, this, files);
-	} //}}} 		
-		
+	} //}}}
+
 	//{{{ searchInDirectory() method
 	/**
 	 * Opens a directory search in the current directory.
@@ -1219,12 +1219,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	{
 		if (mode == BROWSER)
 		{
-			view.getDockableWindowManager().hideDockableWindow(NAME);			
+			view.getDockableWindowManager().hideDockableWindow(NAME);
 		}
 		else
 		{
 			GUIUtilities.getParentDialog(this).dispose();
-		}	
+		}
 	}//}}}
 
 	//{{{ move() method
@@ -1244,7 +1244,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		topBox.add(toolbarBox, 0);
 		propertiesChanged();
 	} //}}}
-	
+
 	//{{{ Package-private members
 
 	// This can be null untill an user explicitly selects an encoding
@@ -1425,7 +1425,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	private boolean requestRunning;
 	private boolean maybeReloadRequestRunning;
-	
+
 	private final Stack<String> historyStack = new Stack<String>();
 	private final Stack<String> nextDirectoryStack = new Stack<String>();
 	//}}}
@@ -1603,7 +1603,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				updateFilterEnabled();
 
 				String p = pathField.getText();
-				
+
 				if(p != null)
 					setDirectory(p);
 				browserView.focusOnFileView();
@@ -1625,7 +1625,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					filterEditor.getItem());
 				filterField.setSelectedItem(
 					filterEditor.getItem());
-				// ### ugly: 
+				// ### ugly:
 				// itemStateChanged does not seem to get fired
 				itemStateChanged(new ItemEvent(filterField,
 					ItemEvent.ITEM_STATE_CHANGED,
@@ -1686,14 +1686,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	} //}}}
 
-	
 
+	// {{{ MenuButton (abstract class)
 	@SuppressWarnings("serial")
 	static abstract class MenuButton extends RolloverButton implements KeyListener
 	{
 		JPopupMenu popup;
-		
-		//{{{ CommandsMenuButton constructor
+
+		//{{{ MenuButton constructor
 		MenuButton()
 		{
 			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
@@ -1708,25 +1708,28 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		} //}}}
 
 		public void keyReleased(KeyEvent e) {}
-		public void keyTyped(KeyEvent e) {}		
-		public void keyPressed(KeyEvent e) {
+		public void keyTyped(KeyEvent e) {}
+		public void keyPressed(KeyEvent e)
+		{
 			if ((e.getKeyCode() == KeyEvent.VK_DOWN) ||
-			 (e.getKeyCode() == KeyEvent.VK_ENTER )) {
+			    (e.getKeyCode() == KeyEvent.VK_ENTER ))
+			{
 				doPopup();
 				e.consume();
 				return;
-			}			
+			}
 		}
-		
+
 		abstract void doPopup();
-		
+
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
 		{
 			@Override
 			public void mousePressed(MouseEvent evt)
 			{
-				if (popup == null) {
+				if (popup == null)
+				{
 					Log.log(Log.ERROR, this, "No popup for " + getName());
 					return;
 				}
@@ -1743,8 +1746,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		} //}}}
 	} //}}}
 
-	
-	
+
+
 	//{{{ CommandsMenuButton class
 	class CommandsMenuButton extends MenuButton
 	{
@@ -1752,16 +1755,17 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		CommandsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
-			setName("commands");			
+			setName("commands");
 			popup = new BrowserCommandsMenu(VFSBrowser.this, null);
 		} //}}}
 
 		// BrowserCommandsMenu popup;
 
-		void doPopup() {
+		void doPopup()
+		{
 			((BrowserCommandsMenu) popup).update();
 			GUIUtilities.showPopupMenu( popup, this, 0, getHeight(), false);
-		}		
+		}
 	} //}}}
 
 	//{{{ PluginsMenuButton class
@@ -1773,11 +1777,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
 
 			setName("plugins");
-			
+
 			setMargin(new Insets(1,1,1,1));
 			popup = null;
 			createPopupMenu();
-			
+
 		} //}}}
 
 
@@ -1792,14 +1796,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			if (popup == null) createPopupMenu();
 			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}
-		
+
 		//{{{ createPopupMenu() method
 		private void createPopupMenu()
 		{
 			if(popup != null)
 				return;
 			popup = (JPopupMenu)createPluginsMenu(new JPopupMenu(),true);
-			
+
 		} //}}}
 
 	} //}}}
@@ -1813,13 +1817,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
 			setName("favorites");
 			createPopupMenu();
-			
+
 		} //}}}
 
-		void doPopup() {
+		void doPopup()
+		{
 			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}
-		
+
 
 		//{{{ createPopupMenu() method
 		void createPopupMenu()
@@ -1827,18 +1832,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			popup = new JPopupMenu();
 			ActionHandler actionHandler = new ActionHandler();
 
-			JMenuItem mi = new JMenuItem(
-				jEdit.getProperty(
-				"vfs.browser.favorites"
-				+ ".add-to-favorites.label"));
+			JMenuItem mi = new JMenuItem( jEdit.getProperty(
+				"vfs.browser.favorites.add-to-favorites.label"));
 			mi.setActionCommand("add-to-favorites");
 			mi.addActionListener(actionHandler);
 			popup.add(mi);
 
-			mi = new JMenuItem(
-				jEdit.getProperty(
-				"vfs.browser.favorites"
-				+ ".edit-favorites.label"));
+			mi = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.favorites.edit-favorites.label"));
 			mi.setActionCommand("dir@favorites:");
 			mi.addActionListener(actionHandler);
 			popup.add(mi);
@@ -1848,30 +1849,24 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			VFSFile[] favorites = FavoritesVFS.getFavorites();
 			if(favorites.length == 0)
 			{
-				mi = new JMenuItem(
-					jEdit.getProperty(
-					"vfs.browser.favorites"
-					+ ".no-favorites.label"));
+				mi = new JMenuItem(jEdit.getProperty(
+					"vfs.browser.favorites.no-favorites.label"));
 				mi.setEnabled(false);
 				popup.add(mi);
 			}
 			else
 			{
-				Arrays.sort(favorites,
-					new VFS.DirectoryEntryCompare(
-					sortMixFilesAndDirs,
-					sortIgnoreCase));
+				Arrays.sort(favorites, new VFS.DirectoryEntryCompare(
+					sortMixFilesAndDirs, sortIgnoreCase));
 				for(int i = 0; i < favorites.length; i++)
 				{
 					FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) favorites[i];
 					mi = new JMenuItem(favorite.getLabel());
-					mi.setIcon(FileCellRenderer
-						.getIconForFile(
+					mi.setIcon(FileCellRenderer.getIconForFile(
 						favorite,false));
 					String cmd = (favorite.getType() ==
-						VFSFile.FILE
-						? "file@" : "dir@")
-						+ favorite.getPath();
+							VFSFile.FILE ? "file@" : "dir@")
+							+ favorite.getPath();
 					mi.setActionCommand(cmd);
 					mi.addActionListener(actionHandler);
 					popup.add(mi);
@@ -2069,7 +2064,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			// to happen, so ignore lost focus events.
 			if (e.getID() != FocusEvent.FOCUS_LOST)
 				super.processFocusEvent(e);
-			else 
+			else
 			{
 				setCaretPosition(0);
 				getCaret().setVisible(false);
