@@ -2121,6 +2121,7 @@ options.save-back.twoStageSave.tooltip=Stage 1: Create a temporary file and save
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers dirty.
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get lost out whenever a new one is created (it's a feature!) 
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
 options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
 #}}}
