@@ -142,11 +142,12 @@ public abstract class EnhancedDialog extends JDialog
 							if(selected != null)
 								combo.setSelectedItem(selected);
 						}
-						if(!combo.isPopupVisible())
+						
+						if(combo.isPopupVisible())
 						{
 							evt.consume();
-							combo.setPopupVisible(true);
-						}
+							combo.setPopupVisible(false);
+						} 
 						return;
 					}
 					// TODO: add other classes that need custom key handling here.
