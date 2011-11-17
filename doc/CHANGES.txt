@@ -24,6 +24,7 @@ and Matthieu Casanova for contributing to this release.
 
 }}}
 {{{ UI
+- jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
   (Bug #3415064 - Alan Ezust)

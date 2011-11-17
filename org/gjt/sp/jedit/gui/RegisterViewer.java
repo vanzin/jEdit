@@ -89,7 +89,6 @@ public class RegisterViewer extends JPanel implements ActionListener,
 			orientation = JSplitPane.VERTICAL_SPLIT;
 
 		add(BorderLayout.CENTER,splitPane = new JSplitPane(orientation,
-			jEdit.getBooleanProperty("appearance.continuousLayout"),
 			new JScrollPane(registerList),
 			new JScrollPane(contentTextArea)));
 
@@ -112,13 +111,6 @@ public class RegisterViewer extends JPanel implements ActionListener,
 	{
 		if (msg.getRegisterName() != '%')
 			refreshList();
-	} //}}}
-
-	//{{{ handlePropertiesChanged
-	@EBHandler
-	public void handlePropertiesChanged(PropertiesChanged msg)
-	{
-		GUIUtilities.initContinuousLayout(splitPane);
 	} //}}}
 
 	//{{{ addNotify() method

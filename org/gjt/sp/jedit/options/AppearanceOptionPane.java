@@ -132,11 +132,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		menuSpillover = new NumericTextField(jEdit.getProperty("menu.spillover"), true);
 		addComponent(jEdit.getProperty("options.appearance.menuSpillover"),menuSpillover);
 
-		continuousLayout = new JCheckBox(jEdit.getProperty(
-			"options.appearance.continuousLayout.label"));
-		continuousLayout.setSelected(jEdit.getBooleanProperty("appearance.continuousLayout"));
-		addComponent(continuousLayout);
-
 		systemTrayIcon = new JCheckBox(jEdit.getProperty(
 					"options.general.systrayicon", "Show the systray icon"));
 		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
@@ -203,7 +198,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
-		jEdit.setBooleanProperty("appearance.continuousLayout",continuousLayout.isSelected());
 		jEdit.setBooleanProperty("systrayicon", systemTrayIcon.isSelected());
 		IconTheme.set(iconThemes.getSelectedItem().toString());
 
@@ -243,7 +237,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JTextField history;
 	private JTextField menuSpillover;
 	private JCheckBox showTips;
-	private JCheckBox continuousLayout;
 	private JCheckBox showSplash;
 	private JCheckBox textColors;
 	private JCheckBox decorateFrames;

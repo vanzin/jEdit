@@ -1716,17 +1716,15 @@ public class GUIUtilities
 
 	//{{{ initContinuousLayout() method
 	/**
-	 * Init the continuous layout flag using the jEdit's property
-	 * appearance.continuousLayout
+	 * This method do nothing.
 	 *
 	 * @param split the split. It must never be null
 	 * @since jEdit 4.3pre9
+	 * @deprecated since jEdit 5.0 using or not continuous layout is not anymore an option.
 	 */
+	@Deprecated
 	public static void initContinuousLayout(JSplitPane split)
 	{
-		boolean continuousLayout = split.isContinuousLayout();
-		if (continuousLayout != jEdit.getBooleanProperty("appearance.continuousLayout"))
-			split.setContinuousLayout(!continuousLayout);
 	} //}}}
 
 	//{{{ Package-private members

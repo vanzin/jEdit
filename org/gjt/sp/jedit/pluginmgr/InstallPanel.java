@@ -88,8 +88,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 		setBorder(new EmptyBorder(12,12,12,12));
 
-		final JSplitPane split = new JSplitPane(
-			JSplitPane.VERTICAL_SPLIT, jEdit.getBooleanProperty("appearance.continuousLayout"));
+		final JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		split.setResizeWeight(0.75);
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());

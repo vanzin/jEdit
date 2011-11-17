@@ -49,6 +49,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
@@ -892,7 +893,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		bottom.sortDockables();
 		right.sortDockables();
 
-		continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
+		continuousLayout = UIManager.getBoolean("SplitPane.continuousLayout");
 		revalidate();
 		repaint();
 	} //}}}

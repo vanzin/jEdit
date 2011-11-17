@@ -78,7 +78,6 @@ class BrowserView extends JPanel
 		splitPane = new JSplitPane(
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
-			jEdit.getBooleanProperty("appearance.continuousLayout"),
 			parentScroller, tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
@@ -325,7 +324,6 @@ class BrowserView extends JPanel
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 		table.propertiesChanged();
-		GUIUtilities.initContinuousLayout(splitPane);
 		splitPane.setBorder(null);
 	} //}}}
 

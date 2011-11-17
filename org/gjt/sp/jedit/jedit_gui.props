@@ -1931,7 +1931,6 @@ options.appearance.textColors=Use jEdit text area colors in all text \
 	components
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
-options.appearance.continuousLayout.label=Use continuous layout in split panes
 #}}}
 
 #{{{ Context Menu pane

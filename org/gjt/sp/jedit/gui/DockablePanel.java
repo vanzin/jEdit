@@ -23,8 +23,6 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import org.gjt.sp.jedit.jEdit;
-
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -35,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 //}}}
 
@@ -152,7 +151,7 @@ class DockablePanel extends JPanel
 		{
 			if(canDrag)
 			{
-				continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
+				continuousLayout = UIManager.getBoolean("SplitPane.continuousLayout");
 				wm.setResizePos(panel.getDimension(),panel);
 				dragStart = evt.getPoint();
 			}

@@ -685,8 +685,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
-		final JSplitPane newSplitPane = new JSplitPane(orientation,
-							       jEdit.getBooleanProperty("appearance.continuousLayout"));
+		final JSplitPane newSplitPane = new JSplitPane(orientation);
 		newSplitPane.setOneTouchExpandable(true);
 		newSplitPane.setBorder(null);
 		newSplitPane.setMinimumSize(new Dimension(0,0));
@@ -1718,7 +1717,6 @@ public class View extends JFrame implements InputHandlerProvider
 		st.commentChar('!');
 		st.quoteChar('"');
 		st.eolIsSignificant(false);
-		boolean continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
 		List<Buffer> editPaneBuffers = new ArrayList<Buffer>();
 loop:		while (true)
 		{
@@ -1749,7 +1747,6 @@ loop:		while (true)
 					}
 					stack.push(splitPane = new JSplitPane(
 						orientation,
-						continuousLayout,
 						(Component)obj1,
 						(Component)obj2));
 					splitPane.setOneTouchExpandable(true);
@@ -1874,8 +1871,6 @@ loop:		while (true)
 
 		getRootPane().revalidate();
 
-		if (splitPane != null)
-			GUIUtilities.initContinuousLayout(splitPane);
 		//SwingUtilities.updateComponentTreeUI(getRootPane());
 
 		if (fullScreenMode)

@@ -947,6 +947,7 @@ public class jEdit
 		saveCaret = getBooleanProperty("saveCaret");
 
 		UIDefaults defaults = UIManager.getDefaults();
+		defaults.put("SplitPane.continuousLayout", true);
 
 		// give all text areas the same font
 		Font font = getFontProperty("view.font");

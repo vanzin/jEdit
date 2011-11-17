@@ -167,7 +167,6 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 		rightPanel.add(BorderLayout.CENTER,viewerScrollPane);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-					  jEdit.getBooleanProperty("appearance.continuousLayout"),
 					  tabs,
 					  rightPanel);
 		splitter.setBorder(null);
@@ -360,13 +359,6 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 					queuedTOCReload = true;
 				}
 			}
-	} //}}}
-
-	//{{{ handlePropertiesChanged() method
-	@EBHandler
-	public void handlePropertiesChanged(PropertiesChanged msg)
-	{
-		GUIUtilities.initContinuousLayout(splitter);
 	} //}}}
 
 	//{{{ getBaseURL() method

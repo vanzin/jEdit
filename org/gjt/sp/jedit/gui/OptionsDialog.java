@@ -322,7 +322,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 						       ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller.setMinimumSize(new Dimension(100, 0));
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-					  jEdit.getBooleanProperty("appearance.continuousLayout"),
 					  scroller,
 					  stage);
 		content.add(splitter, BorderLayout.CENTER);
