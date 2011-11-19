@@ -120,13 +120,6 @@
 </programlisting></entry>
                     </row>
 
-                    <row><entry><varname>encoding</varname></entry>
-                    <entry> The character encoding that should be used for this file
-                    (only works if <literal>buffer-local-properties</literal> detector
-                    is selected in encoding options, and the <literal>:encoding=XXX:</literal>
-                    line must appear at the top of the file).
-                    See <xref linkend="encodings"/>. </entry></row>
-
                     <row>
                         <entry><varname>folding</varname></entry>
 
@@ -211,6 +204,16 @@
                 </tbody>
             </tgroup>
         </informaltable>
+
+        <para> You may see <literal>:encoding=XXX:</literal> in a file
+        as it is a buffer-local property and specifying the character encoding
+        for the file. But it is not really a buffer-local property, and behaves
+        differently.
+        It is detected by <literal>buffer-local-properties</literal> detector
+        only if the detector is selected in encoding options. Thus, it works
+        only at loading, and it must appear near the top of the file.
+        See <xref linkend="encodings"/>. </para>
+
     </section>
 
     <section id="global-opts">

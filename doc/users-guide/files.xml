@@ -283,10 +283,6 @@
         <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu>
         menu.</para>
 
-        <para>It is also possible to override the encoding for a file in a
-        jEdit "buffer-local" property at the top of the file. See
-        <xref linkend="buffer-local" /> for more details. </para>
-
         <para>Note that there is no general way to auto-detect the encoding used
         by a file, however jEdit supports "encoding detectors", of which there
         are some provided in the core, and others may be provided by plugins
@@ -323,7 +319,7 @@
                 <programlisting># -*- coding: utf-8 -*-                </programlisting>
             </listitem>
             <listitem> <para> <emphasis role="bold">buffer-local-properties</emphasis>:
-                Enable buffer-local properties
+                Enable buffer-local properties' syntax
                 (see <xref linkend="buffer-local" />)
                 at the top of the file to specify encoding. </para>
                 <programlisting>#  :encoding=ISO-8859-1:
