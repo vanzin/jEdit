@@ -2827,12 +2827,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 				}
 				if(name != null)
 				{
-					// use the low-level property setting code
-					// so that if we have a buffer-local
-					// property with the same value as a default,
-					// later changes in the default don't affect
-					// the buffer-local property
-					properties.put(name,new PropValue(buf.toString(),false));
+					// encoding mustn't be set this way as it must
+					// be equal to encoding used to load or save the
+					// file.
+					if (!name.equals(ENCODING)) {
+						// use the low-level property setting code
+						// so that if we have a buffer-local
+						// property with the same value as a default,
+						// later changes in the default don't affect
+						// the buffer-local property
+						properties.put(name,new PropValue(buf.toString(),false));
+					}
 					name = null;
 				}
 				buf.setLength(0);

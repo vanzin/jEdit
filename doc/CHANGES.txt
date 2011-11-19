@@ -5,12 +5,16 @@ jEdit 5.0 version history
 {{{ Version 5.0pre1
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust,
-and Matthieu Casanova for contributing to this release.
+Matthieu Casanova, and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
 - Fixed #3163058: middle mouse button paste doesn't respect gutter selection.
   (Shlomy Reinstein)
+
+- ":encoding=...:" was treated as buffer local property and caused
+  confusion about what encoding was used at loading/saving the buffer.
+  (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
 
 }}}
 {{{ API Changes
