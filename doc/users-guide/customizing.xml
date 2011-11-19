@@ -118,7 +118,8 @@
                     </row>
 
                     <row><entry><varname>encoding</varname></entry>
-                    <entry> The character encoding that should be used for this file.
+                    <entry> The character encoding that should be used for this file
+                    (only works if at the top of file). 
                     See <xref linkend="encodings"/>. </entry></row>
 
                     <row>
