@@ -73,6 +73,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ API Changes
+
 - New method TextAreaPainter.getRenderingHints() expose the rendering
   hints (patch #2973861) (Anthony Keeley)
 
@@ -272,6 +273,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Editing
+
 - Added edit mode for vala language (patch #3407321) (kog13)
 
 - Improvement of filename glob for apacheconf mode to include more files
@@ -373,6 +375,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
 - Optimize performances of HistoryModel (patch #3185856) (Evan Wright)
 
 - Debian repository metadata is now generated during normal build procedure.
