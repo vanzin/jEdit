@@ -9,6 +9,9 @@ Matthieu Casanova, and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
+- Building offline was prevented by a bug in Ivy, this is workarounded
+  now in the Ivy settings for jEdit. (Bug #3437212 - Björn "Vampire" Kautler)
+
 - Fixed #3163058: middle mouse button paste doesn't respect gutter selection.
   (Shlomy Reinstein)
 
