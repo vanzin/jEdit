@@ -2878,6 +2878,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				}
 			default:
 				buf.append(c);
+				escape = false;
 				break;
 			}
 		}
