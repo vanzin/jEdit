@@ -49,6 +49,9 @@ Matthieu Casanova, and Jarek Czekalski for contributing to this release.
 {{{ Miscellaneous
 - jEdit support for keymaps (Matthieu Casanova)
 
+- Settings directory migrated to %APPDATA%/jEdit on Windows
+  (#2510763 - Alan Ezust)
+
 }}}
 
 }}}
