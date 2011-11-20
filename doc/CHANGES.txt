@@ -2,6 +2,29 @@ jEdit 4.5 version history
        (changes since jEdit 4.4.2)
 :encoding=UTF-8:
 
+{{{ Version 4.5pre2
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 4.5pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,

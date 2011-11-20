@@ -16,9 +16,9 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-		  value="4.5pre1"/>
+		  value="4.5pre2"/>
 	<property name="jedit.build.number"
-		  value="04.05.01.00"/>
+		  value="04.05.02.00"/>
 	<property name="jedit.version.final"
 		  value="false"/>
 
