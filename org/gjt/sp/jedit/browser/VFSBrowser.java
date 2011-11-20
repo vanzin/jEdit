@@ -1728,13 +1728,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			@Override
 			public void mousePressed(MouseEvent evt)
 			{
-				if (popup == null)
-				{
-					Log.log(Log.ERROR, this, "No popup for " + getName());
-					return;
-				}
-
-				if(!popup.isVisible())
+				if(popup == null || !popup.isVisible())
 				{
 					doPopup();
 				}
@@ -1821,7 +1815,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		} //}}}
 
 		void doPopup()
-		{
+		{	
+			if (popup==null) createPopupMenu();
 			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}
 
