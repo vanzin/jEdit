@@ -126,14 +126,13 @@ public class jEdit
 		if(OperatingSystem.isMacOS())
 			settingsDirectory = MiscUtilities.constructPath(
 				System.getProperty("user.home"), "Library/jEdit" );
-		else if (OperatingSystem.isWindows()) 
+		else if (OperatingSystem.isWindows())
 		{
-			ProcessBuilder pb = new ProcessBuilder("");				
-			String appData = pb.environment().get("APPDATA"); 
-			settingsDirectory = MiscUtilities.constructPath(
-				appData, "jEdit");
+			String appData = System.getenv("APPDATA");
+			if (appData != null)
+				settingsDirectory = MiscUtilities.constructPath(
+					appData, "jEdit");
 		}
-
 		// MacOS users expect the app to keep running after all windows
 		// are closed
 		background = OperatingSystem.isMacOS();
