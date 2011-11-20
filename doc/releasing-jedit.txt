@@ -102,11 +102,11 @@ Workflow
             - Default Download For: <none>
 
 9. Update the website in the following places and also update this state in SVN:
-    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/download.html e. g. in jEdit with installed FTP plugin and update the website for the new release, means the filenames, filesizes and amount of pages in the User's Guides
-    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/jEdit-version.txt e. g. in jEdit with installed FTP plugin and update the versions in the file, which is needed by the LatestVersion Plugin
-    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/CHANGES[major][minor].txt e. g. in jEdit with installed FTP plugin and copy the contents of [tag]/doc/CHANGES.txt to this file
-    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/index.php e. g. in jEdit with installed FTP plugin and update the version number and the Last Site Update date
-    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/devel.html e. g. in jEdit with installed FTP plugin and add a line for [version] in the Release Schedule
+    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/download.html e. g. in jEdit with installed FTP plugin and update the website for the new release, means the filenames, filesizes and amount of pages in the User's Guides
+    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/jEdit-version.txt e. g. in jEdit with installed FTP plugin and update the versions in the file, which is needed by the LatestVersion Plugin
+    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/CHANGES[major][minor].txt e. g. in jEdit with installed FTP plugin and copy the contents of [tag]/doc/CHANGES.txt to this file
+    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/index.php e. g. in jEdit with installed FTP plugin and update the version number and the Last Site Update date
+    - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/devel.html e. g. in jEdit with installed FTP plugin and add a line for [version] in the Release Schedule
 
 10. Update the plugin wizard
      - Go to http://plugins.jedit.org/wiz/release_add.php?package_id=24
