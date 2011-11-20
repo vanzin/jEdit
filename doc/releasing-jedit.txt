@@ -127,6 +127,7 @@ Workflow
      - On Twitter
      - On Google+
      - On Facebook
+     - On the jEdit Community page
      - Send a mail to the Community Growth Hacker of SourceForge for promotion of the release, currently this is Elizabeth Naramore <elizabethn@sourceforge.net>
      - Send a mail to Heise for inclusion in the weekly Heise Developer Snapshots at developer@ix.de
 
