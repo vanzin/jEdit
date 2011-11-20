@@ -519,23 +519,23 @@ public class JEditBuffer
 		{
 			readLock();
 
-			int start = (line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1)); 
+			int start = (line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1));
 			int end = lineMgr.getLineEndOffset(line);
 			if((start+relativeStartOffset)>end)
 			{
 				throw new IllegalArgumentException("This index is outside the line length (start+relativeOffset):"+start+" + "+relativeStartOffset+" > "+"endffset:"+end);
 			}
 			else
-			{	
+			{
 				getText(start+relativeStartOffset,end - start -relativeStartOffset- 1,segment);
-			}	
+			}
 		}
 		finally
 		{
 			readUnlock();
 		}
 	} //}}}
-	
+
 	//{{{ getLineSegment() method
 	/**
 	 * Returns the text on the specified line.
@@ -990,7 +990,7 @@ public class JEditBuffer
 			endCompoundEdit();
 		}
 	} //}}}
-	
+
 	//{{{ simpleIndentLine() method
 	/**
 	 * Simply indents the given line to the same level as the previous nonempty line
@@ -1001,11 +1001,11 @@ public class JEditBuffer
 	{
 		int[] whitespaceChars = new int[1];
 		int currentIndent = getCurrentIndentForLine(lineIndex, whitespaceChars);
-		
+
 		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
 		if (prevLineIndex == -1)
 			return;
-		
+
 		String indentString = StandardUtilities.getIndentString(
 			getLineText(prevLineIndex));
 
@@ -2760,7 +2760,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean io;
 	private final Map<Object, PropValue> properties;
 	private final Object propertyLock;
-	public boolean elasticTabstopsOn = false; 
+	public boolean elasticTabstopsOn = false;
 	private ColumnBlock columnBlock;
 
 	//{{{ getListener() method
@@ -2899,7 +2899,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void updateColumnBlocks(int startLine,int endLine,int startColumn, Node parent)
 	{
 		if (parent != null && startLine >= 0 && endLine >= 0 && startLine <= endLine)
-		{	
+		{
 			int currentLine = startLine;
 			int colBlockWidth=0;
 			Vector<ColumnBlockLine> columnBlockLines = new Vector<ColumnBlockLine>();
@@ -2956,7 +2956,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	}
 	//}}}
-	
+
 	//{{{ getTabStopPosition() method
 	public int getTabStopPosition(Segment seg )
 	{
@@ -2970,9 +2970,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return -5;
 	}
 	 //}}}
-	
+
 	public final Object columnBlockLock = new Object();
-	
+
 	//{{{ indentUsingElasticTabstops() method
 	public void indentUsingElasticTabstops()
 	{
@@ -2980,15 +2980,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			columnBlock = new ColumnBlock(this,0,getLineCount()-1);
 			updateColumnBlocks(0, lineMgr.getLineCount()-1, 0, columnBlock);
-		}	
+		}
 	}
 	 //}}}
-	
+
 	//{{{ getColumnBlock() method
 	public ColumnBlock getColumnBlock()
 	{
 		return columnBlock;
 	}
 	 //}}}
-//}}}	
+//}}}
 }
