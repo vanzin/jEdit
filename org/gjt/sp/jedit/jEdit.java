@@ -120,10 +120,19 @@ public class jEdit
 		// the main thread
 		mainThread = Thread.currentThread();
 
-		settingsDirectory = ".jedit";
+		settingsDirectory = MiscUtilities.constructPath(
+				System.getProperty("user.home"), ".jedit");
 		// On mac, different rules (should) apply
 		if(OperatingSystem.isMacOS())
-			settingsDirectory = "Library/jEdit";
+			settingsDirectory = MiscUtilities.constructPath(
+				System.getProperty("user.home"), "Library/jEdit" );
+		else if (OperatingSystem.isWindows()) 
+		{
+			ProcessBuilder pb = new ProcessBuilder("");				
+			String appData = pb.environment().get("APPDATA"); 
+			settingsDirectory = MiscUtilities.constructPath(
+				appData, "jEdit");
+		}
 
 		// MacOS users expect the app to keep running after all windows
 		// are closed
@@ -246,9 +255,6 @@ public class jEdit
 		//{{{ We need these initializations very early on
 		if(settingsDirectory != null)
 		{
-			settingsDirectory = MiscUtilities.constructPath(
-				System.getProperty("user.home"),
-				settingsDirectory);
 			settingsDirectory = MiscUtilities.resolveSymlinks(
 				settingsDirectory);
 		}
@@ -346,7 +352,7 @@ public class jEdit
 			GUIUtilities.showSplashScreen();
 
 		//{{{ Mac settings migration code. Should eventually be removed
-		if(OperatingSystem.isMacOS() && shouldRelocateSettings && settingsDirectory != null)
+		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows()) && shouldRelocateSettings && settingsDirectory != null)
 		{
 			relocateSettings();
 		}
