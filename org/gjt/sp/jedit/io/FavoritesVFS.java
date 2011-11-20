@@ -191,12 +191,14 @@ public class FavoritesVFS extends VFS
 			int i = 0;
 			for (Favorite favorite : favorites)
 			{
-				jEdit.setProperty("vfs.favorite." + i,
-					favorite.getPath());
-				jEdit.setProperty("vfs.favorite." + i
-					+ ".label", favorite.getLabel());
-				jEdit.setIntegerProperty("vfs.favorite." + i
-					+ ".type", favorite.getType());
+				String p = favorite.getPath();
+				String l = favorite.getLabel();
+				jEdit.setProperty("vfs.favorite." + i, p);
+				if (p.equals(l) || MiscUtilities.abbreviate(p).equals(l))
+					jEdit.unsetProperty("vfs.favorite." + i + ".label");
+				else 
+					jEdit.setProperty("vfs.favorite." + i + ".label", l);
+				jEdit.setIntegerProperty("vfs.favorite." + i + ".type", favorite.getType());
 
 				i++;
 			}
@@ -233,7 +235,7 @@ public class FavoritesVFS extends VFS
 		Favorite(String path, int type)
 		{
 			super(path,path,PROTOCOL + ':' + path,type, 0L,false);
-			this.label = path;
+			this.label = MiscUtilities.abbreviate(path);
 		}
 
 		public String getLabel()
