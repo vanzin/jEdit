@@ -350,8 +350,11 @@ public class jEdit
 		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
 			GUIUtilities.showSplashScreen();
 
-		//{{{ Mac settings migration code. Should eventually be removed
-		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows()) && shouldRelocateSettings && settingsDirectory != null)
+		//{{{ Settings migration code. 
+		// Windows check introduced in 5.0pre1. 
+		// MacOS check introduced in 4.3.
+		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows()) 
+			&& shouldRelocateSettings && settingsDirectory != null)
 		{
 			relocateSettings();
 		}
@@ -402,8 +405,7 @@ public class jEdit
 		else
 		{
 			stream = null;
-		} //}}}
-
+		} //}}}		
 		Log.setLogWriter(stream);
 
 		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
