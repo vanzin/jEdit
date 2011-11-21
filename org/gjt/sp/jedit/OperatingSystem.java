@@ -152,7 +152,7 @@ public class OperatingSystem
 
 	//{{{ isDOSDerived() method
 	/**
-	 * Returns if we're running Windows 95/98/ME/NT/2000/XP, or OS/2.
+	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7, or OS/2.
 	 */
 	public static boolean isDOSDerived()
 	{
@@ -161,7 +161,7 @@ public class OperatingSystem
 
 	//{{{ isWindows() method
 	/**
-	 * Returns if we're running Windows 95/98/ME/NT/2000/XP.
+	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7.
 	 */
 	public static boolean isWindows()
 	{
@@ -179,7 +179,7 @@ public class OperatingSystem
 
 	//{{{ isWindowsNT() method
 	/**
-	 * Returns if we're running Windows NT/2000/XP.
+	 * Returns if we're running Windows NT/2000/XP/Vista/Win7.
 	 */
 	public static boolean isWindowsNT()
 	{
@@ -266,6 +266,7 @@ public class OperatingSystem
 	/**
 	 * Returns if Java 2 version 1.6 is in use.
 	 * @since jEdit 4.3pre17
+	 * @deprecated obsolete, since we depend on Java 1.6 now
 	 */
 	public static boolean hasJava16()
 	{
