@@ -30,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.buffer.BufferAdapter;
 import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -882,6 +883,7 @@ public class Gutter extends JComponent implements SwingConstants
 		MouseActionsProvider mouseActions;
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
+		int selectionStart;
 		boolean selectLines;
 		int selAnchorLine;
 		GutterPopupHandler selectionPopupHandler;
@@ -945,9 +947,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 				if (e.getX() >= FOLD_MARKER_SIZE)
 				{
+					selectionStart = textArea.getLineStartOffset(line);
 					Selection s = new Selection.Range(
-						textArea.getLineStartOffset(line),
-						getFoldEndOffset(line));
+						selectionStart, getFoldEndOffset(line));
 					if(textArea.isMultipleSelectionEnabled())
 						textArea.addToSelection(s);
 					else
@@ -1122,6 +1124,12 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseReleased(e);
+			}
+			if (selectLines)
+			{
+				Selection sel = textArea.getSelectionAtOffset(selectionStart);
+				if(sel != null)
+					Registers.setRegister('%', textArea.getSelectedText(sel));
 			}
 
 			drag = false;

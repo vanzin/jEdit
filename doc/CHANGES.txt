@@ -4,10 +4,13 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre2
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Shlomy Reinstein, Alan Ezust, and Björn "Vampire" Kautler for 
+contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed #3163058: middle mouse button paste doesn't respect gutter selection.
+  (Shlomy Reinstein)
 
 }}}
 {{{ Miscellaneous
@@ -509,4 +512,4 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:folding=explicit:collapseFolds=2:
+:folding=explicit:collapseFolds=2:maxLineLen=80:wrap=hard:tabsize=4:
