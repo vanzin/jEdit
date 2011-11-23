@@ -22,6 +22,9 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 - ":encoding=...:" was treated as buffer local property and caused
   confusion about what encoding was used at loading/saving the buffer.
   (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
+  
+- Several message boxes were not being created on the EDT which would result in
+  tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
 }}}
 {{{ API Changes

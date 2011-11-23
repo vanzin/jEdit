@@ -34,7 +34,6 @@ import org.gjt.sp.util.StandardUtilities;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.Reader;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -149,13 +148,36 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * @param message The message
 	 * @since jEdit 2.7pre2
 	 */
-	public static void message(Component comp, String message)
+	public static void message(final Component comp, final String message)
 	{
-		GUIUtilities.hideSplashScreen();
-
-		JOptionPane.showMessageDialog(comp,message,
-			jEdit.getProperty("macro-message.title"),
-			JOptionPane.INFORMATION_MESSAGE);
+		if (EventQueue.isDispatchThread())
+		{
+			GUIUtilities.hideSplashScreen();
+	
+			JOptionPane.showMessageDialog(comp,message,
+				jEdit.getProperty("macro-message.title"),
+				JOptionPane.INFORMATION_MESSAGE);
+		}
+		else
+		{
+			try
+			{
+				EventQueue.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						message(comp, message);
+					}
+				});
+			}
+			catch (Exception e)
+			{
+				// ignored
+			}
+		}
+		
+		
 	} //}}}
 
 	//{{{ error() method
@@ -166,13 +188,34 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * @param message The message
 	 * @since jEdit 2.7pre2
 	 */
-	public static void error(Component comp, String message)
+	public static void error(final Component comp, final String message)
 	{
-		GUIUtilities.hideSplashScreen();
-
-		JOptionPane.showMessageDialog(comp,message,
-			jEdit.getProperty("macro-message.title"),
-			JOptionPane.ERROR_MESSAGE);
+		if (EventQueue.isDispatchThread())
+		{
+			GUIUtilities.hideSplashScreen();
+	
+			JOptionPane.showMessageDialog(comp,message,
+				jEdit.getProperty("macro-message.title"),
+				JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			try
+			{
+				EventQueue.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						message(comp, message);
+					}
+				});
+			}
+			catch (Exception e)
+			{
+				// ignored
+			}
+		}
 	} //}}}
 
 	//{{{ input() method
@@ -198,13 +241,33 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * @param prompt The prompt string
 	 * @since jEdit 3.1final
 	 */
-	public static String input(Component comp, String prompt, String defaultValue)
+	public static String input(final Component comp, final String prompt, final String defaultValue)
 	{
-		GUIUtilities.hideSplashScreen();
-
-		return (String)JOptionPane.showInputDialog(comp,prompt,
-			jEdit.getProperty("macro-input.title"),
-			JOptionPane.QUESTION_MESSAGE,null,null,defaultValue);
+		if (EventQueue.isDispatchThread())
+		{
+			GUIUtilities.hideSplashScreen();
+	
+			return (String)JOptionPane.showInputDialog(comp,prompt,
+				jEdit.getProperty("macro-input.title"),
+				JOptionPane.QUESTION_MESSAGE,null,null,defaultValue);
+		}
+		final String[] retValue = new String[1];
+		try
+		{
+			EventQueue.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					retValue[0] = input(comp, prompt, defaultValue);
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+		return retValue[0];
 	} //}}}
 
 	//{{{ confirm() method
@@ -217,13 +280,38 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * JOptionPane.YES_NO_CANCEL_OPTION
 	 * @since jEdit 4.0pre2
 	 */
-	public static int confirm(Component comp, String prompt, int buttons)
+	public static int confirm(final Component comp, final String prompt, final int buttons)
 	{
-		GUIUtilities.hideSplashScreen();
-
-		return JOptionPane.showConfirmDialog(comp,prompt,
-			jEdit.getProperty("macro-confirm.title"),buttons,
-			JOptionPane.QUESTION_MESSAGE);
+		if (EventQueue.isDispatchThread())
+		{
+			GUIUtilities.hideSplashScreen();
+	
+			return JOptionPane.showConfirmDialog(comp,prompt,
+				jEdit.getProperty("macro-confirm.title"),buttons,
+				JOptionPane.QUESTION_MESSAGE);
+			
+		}
+		final int [] retValue = new int[1];
+		try
+		{
+			EventQueue.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					retValue[0] = confirm(comp, prompt, buttons);
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			return JOptionPane.CANCEL_OPTION;
+		}
+		return retValue[0];
+		
+		
+		
+		
 	} //}}}
 
 	//{{{ confirm() method
@@ -237,12 +325,35 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * @param type The dialog type - for example,
 	 * JOptionPane.WARNING_MESSAGE
 	 */
-	public static int confirm(Component comp, String prompt, int buttons, int type)
+	public static int confirm(final Component comp, final String prompt, final int buttons, final int type)
 	{
-		GUIUtilities.hideSplashScreen();
-
-		return JOptionPane.showConfirmDialog(comp,prompt,
-			jEdit.getProperty("macro-confirm.title"),buttons,type);
+		if (EventQueue.isDispatchThread())
+		{
+			GUIUtilities.hideSplashScreen();
+	
+			return JOptionPane.showConfirmDialog(comp,prompt,
+				jEdit.getProperty("macro-confirm.title"),buttons,type);
+		}
+		final int [] retValue = new int[1];
+		try
+		{
+			EventQueue.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					retValue[0] = confirm(comp, prompt, buttons, type);
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			return JOptionPane.CANCEL_OPTION;
+		}
+		return retValue[0];
+		
+		
+		
 	} //}}}
 
 	//{{{ loadMacros() method
