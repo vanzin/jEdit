@@ -9,6 +9,10 @@ Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- When parsing buffer-local properties, there was a problem with escape
+  processing that prevented buffer-local properties to be read sometimes
+  (Bug #3438680 - Björn "Vampire" Kautler)
+
 - Building offline was prevented by a bug in Ivy, this is workarounded
   now in the Ivy settings for jEdit. (Bug #3437212 - Björn "Vampire" Kautler)
 
