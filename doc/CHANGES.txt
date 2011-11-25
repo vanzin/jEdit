@@ -12,16 +12,6 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 - When parsing buffer-local properties, there was a problem with escape
   processing that prevented buffer-local properties to be read sometimes
   (Bug #3438680 - Björn "Vampire" Kautler)
-
-- Building offline was prevented by a bug in Ivy, this is workarounded
-  now in the Ivy settings for jEdit. (Bug #3437212 - Björn "Vampire" Kautler)
-
-- Fixed #3163058: middle mouse button paste doesn't respect gutter selection.
-  (Shlomy Reinstein)
-
-- ":encoding=...:" was treated as buffer local property and caused
-  confusion about what encoding was used at loading/saving the buffer.
-  (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
   
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
