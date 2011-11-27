@@ -153,7 +153,9 @@ public class OperatingSystem
 	//{{{ isDOSDerived() method
 	/**
 	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7.
+	 * @deprecated use {@link #isWindows()}
 	 */
+	@Deprecated
 	public static boolean isDOSDerived()
 	{
 		return isWindows();
@@ -281,7 +283,7 @@ public class OperatingSystem
 	 */
 	public static boolean isCaseInsensitiveFS()
 	{
-		return isDOSDerived() || isMacOS();
+		return isWindows() || isMacOS();
 	} //}}}
 	
 	//{{{ Private members

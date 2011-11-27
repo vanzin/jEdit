@@ -623,7 +623,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	//{{{ getRootDirectory() method
 	public static String getRootDirectory()
 	{
-		if(OperatingSystem.isMacOS() || OperatingSystem.isDOSDerived())
+		if(OperatingSystem.isMacOS() || OperatingSystem.isWindows())
 			return FileRootsVFS.PROTOCOL + ':';
 		else
 			return "/";

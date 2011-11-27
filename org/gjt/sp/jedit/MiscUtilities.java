@@ -191,7 +191,7 @@ public class MiscUtilities
 
 		// 18 nov 2003: calling this on a drive letter on Windows causes
 		// drive access
-		if(OperatingSystem.isDOSDerived())
+		if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 || path.length() == 3)
 			{
@@ -222,7 +222,7 @@ public class MiscUtilities
 			return true;
 		else if ("-".equals(path))
 			return true;
-		else if(OperatingSystem.isDOSDerived())
+		else if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return true;
@@ -266,7 +266,7 @@ public class MiscUtilities
 
 		// have to handle this case specially on windows.
 		// insert \ between, eg A: and myfile.txt.
-		if(OperatingSystem.isDOSDerived())
+		if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return path;
@@ -301,7 +301,7 @@ public class MiscUtilities
 		if(path.length() == 0)
 			return parent;
 
-		if(OperatingSystem.isDOSDerived()
+		if(OperatingSystem.isWindows()
 			&& !isURL(parent)
 		&& path.charAt(0) == '\\')
 			parent = parent.substring(0,2);
@@ -1141,7 +1141,7 @@ loop:		for(;;)
 	{
 		if(path.startsWith("/"))
 			return 0;
-		else if(OperatingSystem.isDOSDerived()
+		else if(OperatingSystem.isWindows()
 			&& path.length() >= 3
 			&& path.charAt(1) == ':'
 			&& (path.charAt(2) == '/'

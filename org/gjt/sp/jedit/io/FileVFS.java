@@ -60,7 +60,7 @@ public class FileVFS extends VFS
 	@Override
 	public String getParentOfPath(String path)
 	{
-		if(OperatingSystem.isDOSDerived())
+		if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return FileRootsVFS.PROTOCOL + ':';

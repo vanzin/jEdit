@@ -25,6 +25,10 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 - OperatingSystem.isOS2() method is removed since OS2 cannot run jEdit since
   many years (Matthieu Casanova)
 
+- OperatingSystem.isDOSDerived() is now deprecated since OS2 do not exists anymore
+  Windows is the only DOS derived OS, so use OperatingSystem.isWindows() instead
+  (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
