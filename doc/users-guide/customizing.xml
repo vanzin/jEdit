@@ -677,7 +677,7 @@
 
             <listitem>
                 <para><filename>printspec</filename> - a binary file that stores
-                printing settings when running under Java 2 version 1.4.</para>
+                printing settings.</para>
             </listitem>
 
             <listitem>

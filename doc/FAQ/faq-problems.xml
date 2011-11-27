@@ -67,18 +67,15 @@
                     <bridgehead>But it worked before! It just stopped working
                     after an upgrade. What should I do?</bridgehead>
                     <para>If it used to work for an older version and no longer
-                    works, it could be that you have some old crud in your jEdit
-                    settings directory (<literal>$HOME/.jedit</literal>). You
-                    may want to try renaming the offending file/subdirectory to
-                    something else, and restarting jEdit with fresh settings.
-                    You can later copy the old settings back into the previous
-                    location if you find you are missing things. Many files in
-                    your settings directory directory are (or should be)
-                    human-readable/editable, so you are encouraged to examine
-                    them and see what is there. You can wipe out
-                    <literal>.jedit/jars-cache</literal> while jEdit is not
-                    actually running, and it will be rebuilt next time you start
-                    it.</para>
+                    works, it could be that you have some old crud (bad
+                    settings, unsupported plugins) in your jEdit
+                    settings directory (<literal>~/.jedit</literal> on Linux,
+                    <literal>%APPDATA%\jEdit</literal> on Windows, or
+                    <literal>~/Library/jEdit</literal> on MacOS).
+                    You may want to try renaming the offending directory
+                    to something else, and restarting jEdit with fresh settings.
+                    You can later copy things from your old settings back 
+                    if you find you are missing things. </para>
                     <para>If at this point you're still stuck, ask for help on
                     the jedit-users mailing list, the jEdit Community
                     <quote>Installation</quote> message board or on IRC. You're
@@ -121,25 +118,35 @@
                     prevent this?</para>
                 </question>
                 <answer>
+                	<para>The memory requirements of jEdit vary greatly
+                	depending on how many files are in use, and what plugins
+                	you are using. You can see how much it is using in the
+                	status bar. </para>
                     <para>One solution that often works is to set or increase
                     the allocation of memory to the heap for Java objects
                     created by the Java Virtual Machine in which jEdit is
-                    running. Add the command line option
-                    <userinput>-mxXXm</userinput> to the options passed to the
+                    running. Add a command line option
+                    <userinput>-Xmx640m</userinput> to the options passed to the
                     version of the Java application loader you are using (such
                     as <filename>java</filename>, <filename>java.exe</filename>
                     or <filename>javaw.exe</filename>). In place of the
-                    <userinput>XX</userinput> in the option, use a multiple of
-                    16 between 32 and 256. If you already are using the option,
-                    increase the numeric portion of the
-                    <userinput>-mxXXm</userinput> parameter in increments of
-                    64.</para>
+                    <userinput>640</userinput> in the option, use a number
+                    of megabytes you think is appropriate for the maximum heap
+                    size. If you already are using the option, try doubling it. 
+                    </para>
                     <para>If you are using the <userinput>-jar</userinput>
                     command line option with Java to run jEdit, remember that
                     the <userinput>-jar</userinput> parameter must be the last
                     Java option, followed immediately by the path to
                     <filename>jedit.jar</filename> and then any jEdit command
                     line options.</para>
+                    
+                    <para> On Windows, if you are using the <literal>jedit.exe</literal> launcher, you can add
+                    or change the JVM arguments by editing a file called <literal>jEdit.l4j.ini</literal> in the same directory
+                    as the <literal>jedit.exe</literal>. Place one 
+                    JVM argument (e.g. <literal>-Xmx512m</literal>) on each
+                    line by itself. </para> 
+                    
                     <para>If out of memory errors occur while running a build or
                     compilation operation from within jEdit, you can also have
                     the operation run in an external process rather than inside

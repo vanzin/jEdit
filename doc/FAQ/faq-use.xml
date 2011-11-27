@@ -605,12 +605,17 @@
             </qandaentry>
             <qandaentry>
                 <question id="antialiased-text-everywhere">
-                    <para>How can I get antialiased text everywhere? </para>
+                    <para>How can I get antialiased text everywhere, even dockables and menus? </para>
                 </question>
                 <answer>
                    <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. </para>
                    <para>For the dockables, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else.
-                   You can add these options to the batch file or shell script line that starts jEdit.</para>
+                   You can add these options to the batch file or shell script line that starts jEdit. </para>
+                   <para> On Windows with the .exe launcher, you create a file called <literal>jedit.l4j.ini</literal> in the same directory as the .exe file, 
+                   and place one line for each java argument you want to pass. For example:
+                   <programlisting>-Dawt.useSystemAAFontSettings=on
+-Dswing.aatext=true</programlisting>
+                   </para>
 			    </answer>
             </qandaentry>
             <qandaentry>
