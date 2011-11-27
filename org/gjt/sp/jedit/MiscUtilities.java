@@ -189,9 +189,6 @@ public class MiscUtilities
 		if(isURL(path))
 			return path;
 
-		// 2 aug 2003: OS/2 Java has a broken getCanonicalPath()
-		if(OperatingSystem.isOS2())
-			return path;
 		// 18 nov 2003: calling this on a drive letter on Windows causes
 		// drive access
 		if(OperatingSystem.isDOSDerived())

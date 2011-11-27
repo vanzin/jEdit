@@ -22,6 +22,9 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 - TextUtilities.join() now accept Collection<?> instead of Collection<String>
   (Matthieu Casanova)
 
+- OperatingSystem.isOS2() method is removed since OS2 cannot run jEdit since
+  many years (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
