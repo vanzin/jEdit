@@ -165,18 +165,30 @@ public class MiscUtilities
 		return arg;
 	} //}}}
 
-	//{{{ abbreviate() method
+	//{{{ abbreviate() methods
 	/** @return an abbreviated path, replacing values with variables, if a prefix exists.
+	 *          uses platform convention (%varname% on windows, $varname on other platforms)
 	 *  @see #expandVariables
 	 *  @since jEdit 4.3pre16
 	 */
 	public static String abbreviate(String path)
 	{
+		return abbreviate(path, false);
+	} 
+
+	/** @param path the original path to abbreviate 
+	  * @param crossPlatform if true, use $variable syntax on all platforms
+	  * @return an abbreviated path with variable prefix. 
+	  * @since jEdit 5.0pre1
+	*/
+	public static String abbreviate(String path, boolean crossPlatform)
+	{
 		if (svc == null)
 			svc = new VarCompressor();
-		return svc.compress(path);
+		return svc.compress(path, crossPlatform);
+	
 	} //}}}
-
+	
 	//{{{ resolveSymlinks() method
 	/**
 	 * Resolves any symbolic links in the path name specified
@@ -1227,7 +1239,12 @@ loop:		for(;;)
 		} //}}}
 
 		//{{{ compress() method
-		String compress(String path)
+		/**
+		  @param path the path to compress
+		  @param crossPlatform if true, will always use $variable syntax regardless of platform.
+		  @return a compressed pathname with variable prefix. 
+		*/
+		String compress(String path, boolean crossPlatform)
 		{
 			String original = path;
 			if (previous.containsKey(path))
@@ -1261,7 +1278,7 @@ loop:		for(;;)
 				String envvar = prefixMap.get(bestPrefix);
 				if (envvar.equals("~"))
 					path = envvar + remainder;
-				else if (OperatingSystem.isWindows())
+				else if (!crossPlatform && OperatingSystem.isWindows())
 					path = '%' + envvar.toUpperCase() + '%' + remainder;
 				else
 					path = '$' + envvar + remainder;

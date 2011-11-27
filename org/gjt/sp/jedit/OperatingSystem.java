@@ -257,7 +257,7 @@ public class OperatingSystem
 
 	//{{{ hasJava16() method
 	/**
-	 * Returns if Java 2 version 1.6 is in use.
+	 * Returns true always 
 	 * @since jEdit 4.3pre17
 	 * @deprecated obsolete, since we depend on Java 1.6 now
 	 */
@@ -266,7 +266,7 @@ public class OperatingSystem
 		return true;
 	} //}}}
 
-		//{{{ hasJava17() method
+	//{{{ hasJava17() method
 	/**
 	 * Returns if Java 2 version 1.7 is in use.
 	 * @since jEdit 5.0pre1
