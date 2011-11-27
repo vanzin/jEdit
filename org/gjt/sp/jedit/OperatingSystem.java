@@ -270,9 +270,20 @@ public class OperatingSystem
 	 */
 	public static boolean hasJava16()
 	{
-		return java16;
+		return true;
 	} //}}}
 
+		//{{{ hasJava17() method
+	/**
+	 * Returns if Java 2 version 1.7 is in use.
+	 * @since jEdit 5.0pre1
+	 */
+	public static boolean hasJava17()
+	{
+		return java17;
+	} //}}}
+
+	
 	//{{{ isCaseInsensitiveFS() method
 	/**
 	 * @since jEdit 4.3pre2
@@ -292,7 +303,7 @@ public class OperatingSystem
 	private static final int UNKNOWN = 0xBAD;
 
 	private static int os;
-	private static boolean java16;
+	private static boolean java17;
 	private static int hasScreenMenuBar = -1;
 
 	//{{{ Class initializer
@@ -341,7 +352,7 @@ public class OperatingSystem
 			javaVersion = System.getProperty("java.version");
 		if(javaVersion == null || javaVersion.length() == 0)
 			javaVersion = System.getProperty("java.runtime.version");
-		java16 = javaVersion.compareTo("1.6") >= 0;
+		java17 = javaVersion.compareTo("1.7") >= 0;
 	} //}}}
 
 	//}}}
