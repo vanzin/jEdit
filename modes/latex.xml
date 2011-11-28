@@ -18,18 +18,23 @@
     <PROPERTY NAME="noWordSep" VALUE="\@_-:*&lt;&gt;" />
     
     <!-- indenting -->
+     
     <PROPERTY NAME="deepIndent" VALUE="FALSE" />
     <PROPERTY NAME="doubleBracketIndent" VALUE="FALSE" />
     <PROPERTY NAME="lineUpClosingBrackets" VALUE="FALSE" />
+    <!-- Commented out due to # 3432974 
     <PROPERTY NAME="indentOpenBrackets" VALUE="{[" />
     <PROPERTY NAME="indentCloseBrackets" VALUE="]}" />
-    <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
-    <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
     <PROPERTY NAME="indentNextLines" VALUE="^.*(\\begin\s*\{.*)$" />
     <PROPERTY NAME="unindentThisLine" VALUE="^[ \t]*(\\item.*|\\end\s*\{.*)$" />
     <PROPERTY NAME="unindentNextLines" VALUE="^.*(\\end\s*\{.*)$" />
     <PROPERTY NAME="electricKeys"
-      VALUE="{abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+              VALUE="{abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+    -->
+    <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+    <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+    
+    
   </PROPS>
   
   <!-- default rules -->
