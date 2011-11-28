@@ -59,21 +59,16 @@ public class SearchDialog extends EnhancedDialog
 	//{{{ getSearchDialog() method
 	public static SearchDialog getSearchDialog(View view)
 	{
-		if(Debug.DISABLE_SEARCH_DIALOG_POOL)
-			return new SearchDialog(view);
-		else
+		SearchDialog searchDialog = viewHash.get(view);
+		if (searchDialog == null)
 		{
-
-			SearchDialog searchDialog = viewHash.get(view);
-			if (searchDialog == null)
-			{
-				searchDialog = new SearchDialog(view);
-				viewHash.put(view, searchDialog);
-			}
-			return searchDialog;
+			searchDialog = new SearchDialog(view);
+			viewHash.put(view, searchDialog);
 		}
+		
+		return searchDialog;
 	} //}}}
-
+	
 	//{{{ showSearchDialog() method
 	/**
 	 * Displays a search and replace dialog box, reusing an existing one
@@ -254,6 +249,17 @@ public class SearchDialog extends EnhancedDialog
 			load();
 	} //}}}
 
+	//{{{ setVisible() method
+	@Override
+	public void setVisible(boolean b)
+	{
+		super.setVisible(b);
+		if (!b && Debug.DISABLE_SEARCH_DIALOG_POOL)
+		{
+			dispose();
+		}
+	} //}}}
+	
 	//{{{ dispose() method
 	@Override
 	public void dispose()
