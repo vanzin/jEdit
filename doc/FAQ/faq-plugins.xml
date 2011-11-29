@@ -106,20 +106,20 @@
                     <para>The SVNPlugin supports Subversion browsing, diffing
                     (via JDiff) and other common operations.</para>
                     <para>With *NIX (or cygwin), the Console plugin
-                    documentation has some ideas on how to use jEdit as the
-                    <literal>VISUAL</literal> editor when called from the
+                    documentation has some ideas on how to set jEdit as the
+                    <literal>VISUAL</literal> and <literal>EDITOR</literal> tool  when called from the
                     cvs/svn/hg command-line tools, all of which can be run from
                     the Console dockable.</para>
                     <para>The ProjectViewer plugin has some support for reading
-                    the "entries" in your working directory, and will use that as a filter for importing. CVS/SVN support is built-in, and p4, bzr, git, and hg are also supported via plugins. </para>
-                    <para>The P4Plugin adds Perforce support to ProjectViewer,
-                    and has some other advanced features for working with
-                    Perforce repositories.</para>
+                    the "entries" in your working directory, and will use that as a filter for importing. CVS/SVN support is built-in, and p4, bzr, git, and hg are supported via plugins. </para>
+                    <para>The P4Plugin and SvnPlugin both add extensions to the ProjectViewer tree, and have some other features for working with repositories.</para>
+                    <para><literal>SourceControl</literal> plugin has some features to work with Microsoft Visual SourceSafe.
+                    </para>
+                    <para> <literal>ClearCasePlugin</literal> is used with Rational ClearCase. </para>
                     <para>You can use jEdit as your default editor from WinCVS:
                     specify <userinput>jedit.exe</userinput> as your default
                     viewer and editor to automate the opening of file.</para>
-                    <para>GruntSpud and jEditCvs are not maintained, but do
-                    offer CVS support on jEdit 4.2final.</para>
+                    <para>GruntSpud and jEditCvs plugins are no longer supported. </para> 
                 </answer>
             </qandaentry>
             <qandaentry>
