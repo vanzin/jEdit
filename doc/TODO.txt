@@ -8,9 +8,6 @@ items if they are not out of date.
 splitting messes up last physical line in the newly created text area
 
 + text area:
-TODO: something else.
-FIXME: blah di blah
-
   - click&drag breaks fast scroll
   - format: doesn't wrap right if selection starts in the middle of the
     line
