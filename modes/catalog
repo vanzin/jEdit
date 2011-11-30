@@ -462,6 +462,9 @@
 <MODE NAME="rtf"		FILE="rtf.xml"
 				FILE_NAME_GLOB="*.rtf" />
 
+<MODE NAME="rakefile"   FILE="ruby.xml" 
+				FILE_NAME_GLOB="*Rakefile" />
+				
 <MODE NAME="ruby"		FILE="ruby.xml"
 				FILE_NAME_GLOB="*.{rb,rbw}"
 				FIRST_LINE_GLOB="#!*/*ruby*" />
