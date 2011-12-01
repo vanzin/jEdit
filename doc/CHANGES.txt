@@ -8,7 +8,7 @@ Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust,
 Matthieu Casanova and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
-  
+
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
