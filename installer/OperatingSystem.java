@@ -108,8 +108,6 @@ public abstract class OperatingSystem
 			String osName = System.getProperty("os.name");
 			if(osName.indexOf("Windows") != -1)
 				os = new Windows();
-			else if(osName.indexOf("OS/2") != -1)
-				os = new HalfAnOS();
 			else if(osName.indexOf("VMS") != -1)
 				os = new VMS();
 			else
@@ -355,14 +353,6 @@ public abstract class OperatingSystem
 		public OSTask[] getOSTasks(Install installer)
 		{
 			return new OSTask[] { /* new JEditLauncherOSTask(installer) */ };
-		}
-	}
-
-	public static class HalfAnOS extends OperatingSystem
-	{
-		public String getInstallDirectory(String name, String version)
-		{
-			return "C:\\" + name + " " + version;
 		}
 	}
 

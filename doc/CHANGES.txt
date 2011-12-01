@@ -18,12 +18,12 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 - TextUtilities.join() now accept Collection<?> instead of Collection<String>
   (Matthieu Casanova)
 
-- OperatingSystem.isOS2() method is removed since OS2 cannot run jEdit since
+- OperatingSystem.isOS2() method is removed since OS/2 cannot run jEdit since
   many years (Matthieu Casanova)
 
-- OperatingSystem.isDOSDerived() is now deprecated since OS2 do not exists anymore
-  Windows is the only DOS derived OS, so use OperatingSystem.isWindows() instead
-  (Matthieu Casanova)
+- OperatingSystem.isDOSDerived() is now deprecated since OS/2 do not exists
+  anymore Windows is the only DOS derived OS, so use OperatingSystem.isWindows()
+  instead (Matthieu Casanova)
 
 }}}
 {{{ Editing
@@ -55,6 +55,10 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- OS/2 tasks were removed from the Java installer as OS/2 does not
+  have a working Java 6 implementation and probably never will have
+  (Björn "Vampire" Kautler)
 
 - jEdit support for keymaps (Matthieu Casanova)
 

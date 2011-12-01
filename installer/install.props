@@ -23,7 +23,7 @@ ostask.unix-man.manpage=jedit.1
 # Each component must have a name, a size, and a 'fileset'. The fileset is the
 # name of a resource, relative to the root of the JAR, where the list of files
 # is stored, newline delimited
-comp.count=6
+comp.count=5
 
 comp.0.name=jEdit text editor
 comp.0.disk-size=@jedit-program.disksize@
@@ -51,12 +51,6 @@ comp.4.disk-size=@jedit-mac.disksize@
 comp.4.real-size=@jedit-mac.realsize@
 comp.4.fileset=jedit-mac
 comp.4.os=MacOS
-
-comp.5.name=OS/2 start script
-comp.5.disk-size=@jedit-os2.disksize@
-comp.5.real-size=@jedit-os2.realsize@
-comp.5.fileset=jedit-os2
-comp.5.os=HalfAnOS
 
 dir.null=Empty directory: will NOT be installed
 dir.not-empty=Target directory exists and is not empty
