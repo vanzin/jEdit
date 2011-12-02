@@ -187,6 +187,12 @@ public class PluginJAR
 			for (String jarName: pluginLoadList)
 			{
 				String jarPath = findPlugin(jarName);
+				if (jarPath == null)
+				{
+					Log.log(Log.WARNING, PluginJAR.class, "Unable to load dependency " + jarName+
+								   " the plugin is not installed");
+					continue;
+				}
 				load(jarPath, true);
 			}
 		}
