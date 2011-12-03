@@ -555,8 +555,7 @@
 		description="run jEdit">
 		<java jar="${jar.location}/${jar.filename}"
 		      fork="true"
-		      spawn="true"
-		      maxmemory="192M">
+		      spawn="true">
 			<arg value="-settings=${build.dir}/settings"/>
 		</java>
 	</target>
@@ -566,8 +565,7 @@
 		description="run jEdit with debug listening enabled">
 		<java jar="${jar.location}/${jar.filename}"
 		      fork="true"
-		      spawn="true"
-		      maxmemory="192M">
+		      spawn="true">
 			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=localhost:5005,timeout=60000"/>
 			<arg value="-settings=${build.dir}/settings"/>
 		</java>

@@ -178,9 +178,6 @@ public abstract class OperatingSystem
 				out.write("# Runs jEdit - Programmer's Text Editor.\n");
 				out.write("#\n");
 				out.write("\n");
-				out.write("# Set jvm heap initial and maximum sizes (in megabytes).\n");
-				out.write("JAVA_HEAP_MAX_SIZE=192\n");
-				out.write("\n");
 				out.write("# Find a java installation.\n");
 				out.write("if [ -z \"${JAVA_HOME}\" ]; then\n");
 				out.write("	echo 'Warning: $JAVA_HOME environment variable not set! Consider setting it.'\n");
@@ -199,7 +196,7 @@ public abstract class OperatingSystem
 				out.write("\n");
 				out.write("# Launch application.\n");
 				out.write("\n");
-				out.write("exec \"${JAVA}\" -Xmx${JAVA_HEAP_MAX_SIZE}M -jar \""
+				out.write("exec \"${JAVA}\" -jar \""
 					  + installDir + File.separator
 					  + "jedit.jar\" -reuseview \"$@\"\n");
 				out.close();

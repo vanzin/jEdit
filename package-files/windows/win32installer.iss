@@ -55,7 +55,6 @@ Name: autostartserver; Description: {cm:AutostartJEditServer}; GroupDescription:
 [Files]
 Source: @jar.filename@; DestDir: {app}; Flags: ignoreversion sortfilesbyextension sortfilesbyname; Components: main
 Source: jedit.exe; DestDir: {app}; Flags: ignoreversion sortfilesbyextension sortfilesbyname; AfterInstall: updatePATHVariable; Components: main
-Source: classes\package-files\windows\jedit.l4j.ini; DestDir: {app}; Flags: ignoreversion sortfilesbyextension sortfilesbyname; Components: main
 Source: classes\package-files\windows\jEdit.url; DestDir: {app}; Flags: ignoreversion sortfilesbyextension sortfilesbyname; Components: main
 Source: doc\*; DestDir: {app}\doc; Excludes: \doc\api\*; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: doc\api\*; DestDir: {app}\doc\api; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: apidoc
