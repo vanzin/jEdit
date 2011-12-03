@@ -94,10 +94,12 @@
         <literal>VALUE</literal> attribute with the property's value.</para>
         <para>All buffer-local properties listed in <xref
         linkend="buffer-local" /> may be given values in edit modes.</para>
-	<para><literal>contextInsensitive</literal> - If true the property
-	indicate that a line can always be highlighted without taking care of
-	the previous line. If activated the syntax will be much faster.
-	</para>
+
+        <para><literal>contextInsensitive</literal> - If true, the property
+        indicates that a line can always be highlighted without taking care of
+        the previous line. If activated, the syntax parsing will be much faster.
+        </para>
+
         <para>The following mode properties specify commenting strings:</para>
         <itemizedlist>
             <listitem>

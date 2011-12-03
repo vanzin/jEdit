@@ -58,6 +58,9 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Removed 192mb heap size limit from startup scripts.
+  Removed jedit.l4j.ini from Windows package files because no options were left.
+
 - OS/2 tasks were removed from the Java installer as OS/2 does not
   have a working Java 6 implementation and probably never will have
   (Björn "Vampire" Kautler)

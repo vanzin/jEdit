@@ -16,7 +16,7 @@
     <note>
         <title>Inside XML files</title>
 
-        <para>Inside XML files (such as Jedit mode files), it is important that
+        <para>Inside XML files (such as jEdit mode files), it is important that
         you escape XML special characters, such as &amp;, &lt;, &gt;, etc. You
         can use the XML plugin's "characters to entities" to perform this
         mapping.</para>
