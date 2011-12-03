@@ -24,7 +24,9 @@ ChangesEnvironment=true
 DefaultDirName={pf}\jEdit
 DefaultGroupName=jEdit
 FlatComponentsList=false
-LicenseFile=@dist.dir.for.innosetup@\doc\COPYING.txt
+; Do not use LicenseFile here as the GPL does not require acceptance of
+; the license for running the program, but still show it as information
+InfoBeforeFile=@dist.dir.for.innosetup@\doc\COPYING.txt
 OutputBaseFilename=@win.filename@
 OutputDir=@dist.dir.for.innosetup@
 SetupIconFile=@base.dir.for.innosetup@\icons\jedit.ico
