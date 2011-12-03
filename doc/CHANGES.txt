@@ -4,10 +4,14 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre2
 
-Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski, and 
-Björn "Vampire" Kautler for contributing to this release.
+Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski,
+Matthieu Casanova, and Björn "Vampire" Kautler for
+contributing to this release.
 
 {{{ Bug Fixes
+
+- Fixed a NPE when trying to activate a plugin if one of it's dependencies is
+  missing (#2077205) (Matthieu Casanova)
 
 - When parsing buffer-local properties, there was a problem with escape
   processing that prevented buffer-local properties to be read sometimes
