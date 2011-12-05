@@ -358,6 +358,8 @@ public class FileVFS extends VFS
 		File directory = new File(path);
 		File[] list = null;
 		if(directory.exists())
+			if (fsView == null)
+				fsView = FileSystemView.getFileSystemView();
 			list = fsView.getFiles(directory,false);
 
 		if(list == null)
@@ -680,6 +682,6 @@ public class FileVFS extends VFS
 	//}}}
 
 	//{{{ Private members
-	private static final FileSystemView fsView = FileSystemView.getFileSystemView();
+	private static FileSystemView fsView = null;
 	//}}}
 }
