@@ -278,6 +278,8 @@ editpane.bufferset.default=view
 
 #{{{ Gutter
 
+view.gutter.lineNumbers=true
+
 # Gutter background color
 view.gutter.bgColor=#dbdbdb
 
@@ -490,7 +492,6 @@ server.brokenToFront=false
 
 # restore remote VFS files by default (new option)
 options.general.restore.remote=true
-
 mime2mode.text/html=html
 
 #{{{ Keymaps
