@@ -91,7 +91,9 @@
                     buttons) have a certain letter in their label underlined.
                     Pressing this letter in combination with the
                     <keycap>Alt</keycap> key activates the associated user
-                    interface widget. Note that this functionality is not
+                    interface widget. The "F10" key can also be pressed to put
+                    focus on the menu bar, it has the same functionality as the 
+                    Alt key in Windows. Note that this functionality is not
                     available on MacOS X with the <quote>MacOS Adaptive</quote>
                     look and feel. See <xref linkend="appearance-pane" /> for
                     information on changing the look and feel.</entry>
