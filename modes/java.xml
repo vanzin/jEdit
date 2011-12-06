@@ -51,7 +51,10 @@
 			<END>'</END>
 		</SPAN>
 
-		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
+		<!-- end of line comment is defined this way rather than using an
+		EOL_SPAN because using an EOL_SPAN causes such comments in jsp
+		files to highlight incorrectly -->
+		<SEQ_REGEXP TYPE="COMMENT2">[/][/](.*?)$</SEQ_REGEXP>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
@@ -59,7 +62,11 @@
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
-		<SEQ TYPE="OPERATOR">/</SEQ>
+		
+		<!-- division operator is defined this way so that the '//' at the
+		start of single line comments within java scriptlets in jsp files 
+		are not parsed as operators. -->
+		<SEQ_REGEXP TYPE="OPERATOR">/(?![/])</SEQ_REGEXP>
 
 		<!-- workaround to stop "*" from being colorized
 		     in import statements. -->
