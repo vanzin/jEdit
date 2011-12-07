@@ -84,12 +84,9 @@
             MATCH_TYPE="OPERATOR"
             TYPE="LABEL">:</MARK_PREVIOUS>
 
-        <!-- Function-like macro or function calls.
-            This can't work after SEQ for '('. -->
-        <MARK_PREVIOUS
-            TYPE="FUNCTION"
-            MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
-
+        <!-- Function-like macro or function calls. -->
+		<SEQ_REGEXP TYPE="FUNCTION">(?:(\s|^))(\S+)\s*(?=[(])</SEQ_REGEXP>
+        
         <SEQ TYPE="OPERATOR">=</SEQ>
         <SEQ TYPE="OPERATOR">!</SEQ>
         <SEQ TYPE="OPERATOR">+</SEQ>
@@ -110,6 +107,7 @@
         <SEQ TYPE="OPERATOR">[</SEQ>
         <SEQ TYPE="OPERATOR">]</SEQ>
         <SEQ TYPE="OPERATOR">)</SEQ>
+        <SEQ TYPE="OPERATOR">(</SEQ>
         <SEQ TYPE="OPERATOR">}</SEQ>
         <SEQ TYPE="OPERATOR">{</SEQ>
         <SEQ TYPE="OPERATOR">;</SEQ>
