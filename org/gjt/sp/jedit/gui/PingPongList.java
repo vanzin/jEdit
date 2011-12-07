@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2010 Matthieu Casanova
+ * Copyright (C) 2010, 2011 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
  */
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+//}}}
 
 /**
  * @author Matthieu Casanova
@@ -48,6 +50,7 @@ public class PingPongList<E> extends JSplitPane
 	private JPanel leftPanel;
 	private JPanel rightPanel;
 
+	//{{{ PingPongList constructors
 	public PingPongList(List<E> leftData, List<E> rightData)
 	{
 		this(JSplitPane.HORIZONTAL_SPLIT, leftData, rightData);
@@ -75,18 +78,21 @@ public class PingPongList<E> extends JSplitPane
 		left.setTransferHandler(myTransferHandler);
 		right.setTransferHandler(myTransferHandler);
 		setDividerLocation(0.5);
-	}
+	} //}}}
 
+	//{{{ setLeftTooltip() method
 	public void setLeftTooltip(String leftTooltip)
 	{
 		left.setToolTipText(leftTooltip);
-	}
+	} //}}}
 
+	//{{{ setRightTooltip() method
 	public void setRightTooltip(String rightTooltip)
 	{
 		right.setToolTipText(rightTooltip);
-	}
+	} //}}}
 
+	//{{{ setLeftTitle() method
 	public void setLeftTitle(String leftTitle)
 	{
 		if (leftTitle == null)
@@ -100,8 +106,9 @@ public class PingPongList<E> extends JSplitPane
 		}
 		leftLabel.setText(leftTitle);
 		leftPanel.add(leftLabel, BorderLayout.NORTH);
-	}
+	} //}}}
 
+	//{{{ setRightTitle() method
 	public void setRightTitle(String rightTitle)
 	{
 		if (rightTitle == null)
@@ -115,8 +122,9 @@ public class PingPongList<E> extends JSplitPane
 		}
 		rightLabel.setText(rightTitle);
 		rightPanel.add(rightLabel, BorderLayout.NORTH);
-	}
+	} //}}}
 
+	//{{{ removeLeftTitle() method
 	public void removeLeftTitle()
 	{
 		if (leftLabel != null)
@@ -124,8 +132,9 @@ public class PingPongList<E> extends JSplitPane
 			leftPanel.remove(leftLabel);
 			leftLabel = null;
 		}
-	}
+	} //}}}
 
+	//{{{ removeRightTitle() method
 	public void removeRightTitle()
 	{
 		if (rightLabel != null)
@@ -133,40 +142,47 @@ public class PingPongList<E> extends JSplitPane
 			rightPanel.remove(rightLabel);
 			rightLabel = null;
 		}
-	}
+	} //}}}
 
+	//{{{ getLeftSize() method
 	public int getLeftSize()
 	{
 		return leftModel.getSize();
-	}
+	} //}}}
 
+	//{{{ getRightSize() method
 	public int getRightSize()
 	{
 		return rightModel.getSize();
-	}
+	} //}}}
 
+	//{{{ getLeftDataIterator() method
 	public Iterator<E> getLeftDataIterator()
 	{
 		return leftModel.iterator();
-	}
+	} //}}}
 
+	//{{{ getRightDataIterator() method
 	public Iterator<E> getRightDataIterator()
 	{
 		return rightModel.iterator();
-	}
+	} //}}}
 
+	//{{{ moveAllToLeft() method
 	public void moveAllToLeft()
 	{
 		leftModel.addAll(rightModel.data);
 		rightModel.clear();
-	}
+	} //}}}
 
+	//{{{ moveAllToRight() method
 	public void moveAllToRight()
 	{
 		rightModel.addAll(leftModel.data);
 		leftModel.clear();
-	}
+	} //}}}
 
+	//{{{ MyListModel class
 	private static class MyListModel<E> extends AbstractListModel implements Iterable<E>
 	{
 		private List<E> data;
@@ -176,16 +192,19 @@ public class PingPongList<E> extends JSplitPane
 			this.data = data;
 		}
 
+		@Override
 		public int getSize()
 		{
 			return data.size();
 		}
 
+		@Override
 		public Object getElementAt(int index)
 		{
 			return data.get(index);
 		}
 
+		@Override
 		public Iterator<E> iterator()
 		{
 			return data.iterator();
@@ -221,8 +240,9 @@ public class PingPongList<E> extends JSplitPane
 
 			fireContentsChanged(this, pos, pos + addedDatas.length - 1);
 		}
-	}
+	} //}}}
 
+	//{{{ MyTransferHandler class
 	private class MyTransferHandler extends TransferHandler
 	{
 		private JList sourceList;
@@ -301,7 +321,7 @@ public class PingPongList<E> extends JSplitPane
 			sourceList = (JList) c;
 			indices = sourceList.getSelectedIndices();
 
-			@SuppressWarnings({"unchecked"})
+			@SuppressWarnings("unchecked")
 			E[] objects = (E[]) sourceList.getSelectedValues();
 			return new MyTransferable<E>(objects);
 		}
@@ -311,8 +331,9 @@ public class PingPongList<E> extends JSplitPane
 		{
 			return comp == left || comp == right;
 		}
-	}
+	} //}}}
 
+	//{{{ MyTransferable class
 	private static class MyTransferable<E> implements Transferable
 	{
 		public static final DataFlavor javaListFlavor = new DataFlavor(Collection.class, "java.util.Collection");
@@ -324,19 +345,22 @@ public class PingPongList<E> extends JSplitPane
 			this.data = data;
 		}
 
+		@Override
 		public DataFlavor[] getTransferDataFlavors()
 		{
 			return new DataFlavor[]{javaListFlavor};
 		}
 
+		@Override
 		public boolean isDataFlavorSupported(DataFlavor flavor)
 		{
 			return flavor.equals(javaListFlavor);
 		}
 
+		@Override
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 		{
 			return data;
 		}
-	}
+	} //}}}
 }
