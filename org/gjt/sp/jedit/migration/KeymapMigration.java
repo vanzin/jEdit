@@ -56,7 +56,7 @@ public class KeymapMigration implements MigrationService
 			if (key.endsWith(".shortcut") || key.endsWith(".shortcut2"))
 			{
 				imported.setShortcut(key, entry.getValue().toString());
-//				jEdit.resetProperty(key);
+				jEdit.resetProperty(key);
 			}
 		}
 		imported.save();
