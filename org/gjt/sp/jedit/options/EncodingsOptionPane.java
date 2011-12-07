@@ -24,13 +24,9 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -42,8 +38,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.util.Arrays.sort;
-import static javax.swing.Box.createHorizontalBox;
-import static javax.swing.Box.createHorizontalStrut;
 import static org.gjt.sp.jedit.jEdit.getBooleanProperty;
 import static org.gjt.sp.jedit.jEdit.getProperty;
 import static org.gjt.sp.jedit.jEdit.setBooleanProperty;
@@ -68,8 +62,6 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	private JTextField encodingDetectors;
 	private JTextField fallbackEncodings;
 	private JComboBox lineSeparator;
-	private JButton selectAllButton;
-	private JButton selectNoneButton;
 	private PingPongList<String> pingPongList;
 	//}}}
 
@@ -149,25 +141,6 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		pingPongList.setLeftTooltip(getProperty("options.encodings.available.tooltip"));
 		pingPongList.setRightTooltip(getProperty("options.encodings.selected.tooltip"));
 		addComponent(pingPongList,BOTH);
-
-		// Select All/None Buttons
-		Box buttonsBox = createHorizontalBox();
-		buttonsBox.add(createHorizontalStrut(12));
-
-		ActionHandler actionHandler = new ActionHandler();
-		selectAllButton = new JButton(getProperty("options.encodings.selectAll"));
-		selectAllButton.addActionListener(actionHandler);
-		selectAllButton.setEnabled(pingPongList.getLeftSize() != 0);
-		buttonsBox.add(selectAllButton);
-		buttonsBox.add(createHorizontalStrut(12));
-
-		selectNoneButton = new JButton(getProperty("options.encodings.selectNone"));
-		selectNoneButton.addActionListener(actionHandler);
-		selectNoneButton.setEnabled(pingPongList.getRightSize() != 0);
-		buttonsBox.add(selectNoneButton);
-		buttonsBox.add(createHorizontalStrut(12));
-
-		addComponent(buttonsBox);
 	} //}}}
 
 	//{{{ _save() method
@@ -210,24 +183,4 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		}
 	} //}}}
 
-	//{{{ Inner classes
-
-	//{{{ ActionHandler class
-	private class ActionHandler implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent ae)
-		{
-			Object source = ae.getSource();
-			if (source == selectAllButton)
-			{
-				pingPongList.moveAllToRight();
-			}
-			else if (source == selectNoneButton)
-			{
-				pingPongList.moveAllToLeft();
-			}
-		}
-	} //}}}
-	//}}}
 } //}}}

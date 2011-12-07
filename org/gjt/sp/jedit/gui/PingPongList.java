@@ -25,21 +25,29 @@ package org.gjt.sp.jedit.gui;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import static javax.swing.Box.createHorizontalBox;
+import static javax.swing.Box.createHorizontalStrut;
+import static org.gjt.sp.jedit.jEdit.getProperty;
 //}}}
 
 /**
  * @author Matthieu Casanova
  * @since jEdit 4.4pre1
  */
-public class PingPongList<E> extends JSplitPane
+public class PingPongList<E> extends JPanel
 {
 	private final MyListModel<E> leftModel;
 	private final MyListModel<E> rightModel;
@@ -49,6 +57,8 @@ public class PingPongList<E> extends JSplitPane
 	private JLabel rightLabel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JButton selectAllButton;
+	private JButton selectNoneButton;
 
 	//{{{ PingPongList constructors
 	public PingPongList(List<E> leftData, List<E> rightData)
@@ -58,7 +68,8 @@ public class PingPongList<E> extends JSplitPane
 
 	public PingPongList(int newOrientation, List<E> leftData, List<E> rightData)
 	{
-		super(newOrientation);
+		super(new BorderLayout());
+		JSplitPane splitPane = new JSplitPane(newOrientation);
 		leftModel = new MyListModel<E>(leftData);
 		left = new JList(leftModel);
 		rightModel = new MyListModel<E>(rightData);
@@ -69,15 +80,39 @@ public class PingPongList<E> extends JSplitPane
 		JScrollPane rightScroll = new JScrollPane(right);
 		leftPanel.add(leftScroll);
 		rightPanel.add(rightScroll);
-		setLeftComponent(leftPanel);
-		setRightComponent(rightPanel);
+		splitPane.setLeftComponent(leftPanel);
+		splitPane.setRightComponent(rightPanel);
 		left.setDragEnabled(true);
 		right.setDragEnabled(true);
 
 		MyTransferHandler myTransferHandler = new MyTransferHandler();
 		left.setTransferHandler(myTransferHandler);
 		right.setTransferHandler(myTransferHandler);
-		setDividerLocation(0.5);
+		splitPane.setDividerLocation(0.5);
+
+		// Select All/None Buttons
+		Box buttonsBox = createHorizontalBox();
+		buttonsBox.add(createHorizontalStrut(12));
+
+		ActionListener actionHandler = new ActionHandler();
+		selectAllButton = new JButton(getProperty("common.selectAll"));
+		selectAllButton.addActionListener(actionHandler);
+		selectAllButton.setEnabled(getLeftSize() != 0);
+		buttonsBox.add(selectAllButton);
+		buttonsBox.add(createHorizontalStrut(12));
+
+		selectNoneButton = new JButton(getProperty("common.selectNone"));
+		selectNoneButton.addActionListener(actionHandler);
+		selectNoneButton.setEnabled(getRightSize() != 0);
+		buttonsBox.add(selectNoneButton);
+		buttonsBox.add(createHorizontalStrut(12));
+
+		add(splitPane, BorderLayout.CENTER);
+		add(buttonsBox, BorderLayout.SOUTH);
+
+		ListDataListener listDataListener = new MyListDataListener();
+		leftModel.addListDataListener(listDataListener);
+		rightModel.addListDataListener(listDataListener);
 	} //}}}
 
 	//{{{ setLeftTooltip() method
@@ -181,6 +216,8 @@ public class PingPongList<E> extends JSplitPane
 		rightModel.addAll(leftModel.data);
 		leftModel.clear();
 	} //}}}
+
+	//{{{ Inner classes
 
 	//{{{ MyListModel class
 	private static class MyListModel<E> extends AbstractListModel implements Iterable<E>
@@ -363,4 +400,54 @@ public class PingPongList<E> extends JSplitPane
 			return data;
 		}
 	} //}}}
+
+	//{{{ ActionHandler class
+	private class ActionHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent ae)
+		{
+			Object source = ae.getSource();
+			if (source == selectAllButton)
+			{
+				moveAllToRight();
+				selectAllButton.setEnabled(false);
+				selectNoneButton.setEnabled(true);
+			}
+			else if (source == selectNoneButton)
+			{
+				moveAllToLeft();
+				selectAllButton.setEnabled(true);
+				selectNoneButton.setEnabled(false);
+			}
+		}
+	} //}}}
+
+	private class MyListDataListener implements ListDataListener
+	{
+		@Override
+		public void intervalAdded(ListDataEvent e)
+		{
+			dataUpdated(e);
+		}
+
+		@Override
+		public void intervalRemoved(ListDataEvent e)
+		{
+			dataUpdated(e);
+		}
+
+		@Override
+		public void contentsChanged(ListDataEvent e)
+		{
+			dataUpdated(e);
+		}
+		
+		private void dataUpdated(ListDataEvent e)
+		{
+			selectAllButton.setEnabled(getLeftSize() != 0);
+			selectNoneButton.setEnabled(getRightSize() != 0);
+		}
+	}
+	//}}}
 }

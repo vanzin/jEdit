@@ -38,6 +38,8 @@ common.moveDown=Move Down
 common.moveDown.icon=22x22/actions/go-down.png
 common.clearAll=Clear All
 common.clearAll.icon=22x22/actions/edit-clear.png
+common.selectAll=Select All
+common.selectNone=Select None
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
@@ -1053,7 +1055,7 @@ about.text=jEdit is brought to you by\n\
 	Bernhard Walle\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bj\u00f6rn "Vampire" Kautler\n\
+	Bj\u00F6rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1100,7 +1102,7 @@ about.text=jEdit is brought to you by\n\
 	Ian Maclean\n\
 	Igor Lesik\n\
 	Israel Olalla\n\
-	Jakub Rozto\u010dil\n\
+	Jakub Rozto\u010Dil\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jean-Francois Larvoire\n\
@@ -1111,7 +1113,7 @@ about.text=jEdit is brought to you by\n\
 	Jim Lawton\n\
 	Jim Morris\n\
 	Jim Wissner\n\
-	J\u00f6rg Spieler\n\
+	J\u00F6rg Spieler\n\
 	John Gellene\n\
 	John Perry\n\
 	Jonathan Revusky\n\
@@ -1221,7 +1223,7 @@ about.text=jEdit is brought to you by\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00f6pfer\n\
+	Wolfgang Chico-T\u00F6pfer\n\
 	\n\
 	I'd also like to thank the users for their\n\
 	comments, feedback and bug reports.
@@ -2012,8 +2014,6 @@ options.encodings.available.tooltip=<html>Encodings in this column will <b>not</
   Drag them to the right column to activate them</html>
 options.encodings.selected.tooltip=Encodings in this column be shown in encoding dialogs.\
   Drag them to the left column to hide them
-options.encodings.selectAll=Select All
-options.encodings.selectNone=Select None
 #}}}
 
 #{{{ Gutter pane

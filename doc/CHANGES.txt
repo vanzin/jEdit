@@ -9,8 +9,8 @@ Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to
 this release.
 
 {{{ Bug fixes
-- Fixed a NPE when trying to activate a plugin if one of it's dependencies is
-  missing (#2077205) (Matthieu Casanova)
+- Added select all and select none buttons to PingPongList fixing a bug in
+  EncodingsOptionPane (#3434850) (Matthieu Casanova)
 
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
