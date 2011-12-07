@@ -134,7 +134,7 @@ public class DisplayManager
 	 * Returns true if the display is narrowed and the specified line is
 	 * outside of the narrowing.
 	 * @param line A physical line index
-	 * @since jEdit 5.0
+	 * @since jEdit 4.5
 	 */
 	public boolean isOutsideNarrowing(int line)
 	{
@@ -374,7 +374,7 @@ public class DisplayManager
 	 * @param foldLevel The fold level
 	 * @param update If true, notify the text area of a fold level change. Since this will
 	 *   automatically move the caret if still inside a fold, this may not be what we want.
-	 * @since jEdit 5.0
+	 * @since jEdit 4.5
 	 */
 	public void expandFolds(int foldLevel, boolean update)
 	{
