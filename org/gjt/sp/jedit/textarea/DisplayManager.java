@@ -129,6 +129,44 @@ public class DisplayManager
 		return folds.search(line) % 2 == 0;
 	} //}}}
 
+	//{{{ isOutsideNarrowing() method
+	/**
+	 * Returns true if the display is narrowed and the specified line is
+	 * outside of the narrowing.
+	 * @param line A physical line index
+	 * @since jEdit 5.0
+	 */
+	public boolean isOutsideNarrowing(int line)
+	{
+		if (line < getFirstVisibleLine())
+			return true;
+		
+		// If the line is beyond the last visible line, it may still be within the narrowed
+		// display if the last visible line is a root for the fold containing the given
+		// line.
+		if (line > getLastVisibleLine())
+		{
+			int lastVisible = getLastVisibleLine();
+			int lastVisibleLevel = buffer.getFoldLevel(lastVisible);
+			if (buffer.getFoldLevel(line) <= lastVisibleLevel)
+				return true;
+			
+			// Any line between the last visible and the given line with a fold level
+			// <= that of the last visible will break the root-child relationship
+			for (int i = lastVisible + 1; i <= line; i++)
+			{
+				if (buffer.getFoldLevel(i) <= lastVisibleLevel)
+					return true;
+			}
+			
+			// If we get to this point, it means that the last visible line is a
+			// fold-level root for the given line
+			return false;
+		}
+		
+		return false;
+	} //}}}
+	
 	//{{{ getFirstVisibleLine() method
 	/**
 	 * Returns the physical line number of the first visible line.
@@ -334,9 +372,11 @@ public class DisplayManager
 	/**
 	 * Expands all folds with the specified fold level.
 	 * @param foldLevel The fold level
-	 * @since jEdit 4.2pre1
+	 * @param update If true, notify the text area of a fold level change. Since this will
+	 *   automatically move the caret if still inside a fold, this may not be what we want.
+	 * @since jEdit 5.0
 	 */
-	public void expandFolds(int foldLevel)
+	public void expandFolds(int foldLevel, boolean update)
 	{
 		if(buffer.getFoldHandler() instanceof IndentFoldHandler)
 			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
@@ -372,10 +412,21 @@ public class DisplayManager
 			hideLineRange(firstInvisible,buffer.getLineCount() - 1);
 
 		notifyScreenLineChanges();
-		if(textArea.getDisplayManager() == this)
+		if(update && textArea.getDisplayManager() == this)
 		{
 			textArea.foldStructureChanged();
 		}
+	} //}}}
+	
+	//{{{ expandFolds() method
+	/**
+	 * Expands all folds with the specified fold level.
+	 * @param foldLevel The fold level
+	 * @since jEdit 4.2pre1
+	 */
+	public void expandFolds(int foldLevel)
+	{
+		expandFolds(foldLevel, true);
 	} //}}}
 
 	//{{{ narrow() method
@@ -794,10 +845,6 @@ public class DisplayManager
 		int lineCount = buffer.getLineCount();
 		int end = lineCount - 1;
 
-		if (line == lineCount - 1)
-		{
-			return false;
-		}
 		while (!isLineVisible(line))
 		{
 			int prevLine = folds.lookup(folds.search(line)) - 1;
@@ -806,7 +853,7 @@ public class DisplayManager
 				return unfolded;
 			}
 			
-			// If any fold farther down was unfolded, then the text
+			// If any fold farther up was unfolded, then the text
 			// area needs to be updated
 			unfolded |= _expandFold(prevLine, fully, firstSubfold);
 			
@@ -815,7 +862,10 @@ public class DisplayManager
 				return unfolded;
 			}
 		}
-		if (isLineVisible(line+1) && !fully)
+		
+		// At this point, line is already visible, but if the fully flag is set, we may
+		// still need to look for and show its subfolds.
+		if (line == (lineCount - 1) || (isLineVisible(line + 1) && !fully))
 		{
 			return unfolded;
 		}

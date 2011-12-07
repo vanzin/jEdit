@@ -5052,16 +5052,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			caretTimer.restart();
 
 			if(!displayManager.isLineVisible(caretLine))
-			{
-				if(caretLine < displayManager.getFirstVisibleLine()
-					|| caretLine > displayManager.getLastVisibleLine())
+			{			
+				// If we've jumped outside of a narrowed display, just reset all
+				// folds to their default level, so that we don't get disconnected
+				// islands of visible lines.
+				if(displayManager.isOutsideNarrowing(caretLine))
 				{
 					int collapseFolds = buffer.getIntegerProperty(
 						"collapseFolds",0);
 					if(collapseFolds != 0)
 					{
-						displayManager.expandFolds(collapseFolds);
-						displayManager.expandFold(caretLine,false);
+						displayManager.expandFolds(collapseFolds, false);
+						displayManager.expandFold(caretLine, false);
+						foldStructureChanged();
 					}
 					else
 						displayManager.expandAllFolds();

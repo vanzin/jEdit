@@ -27,6 +27,8 @@ contributing to this release.
   confusion about what encoding was used at loading/saving the buffer.
   (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
 
+- Fixed #3434527: Jump to wrong line with folded target (Evan Wright)  
+  
 }}}
 {{{ Miscellaneous
 
