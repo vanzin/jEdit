@@ -5,7 +5,8 @@ jEdit 5.0 version history
 {{{ Version 5.0pre1
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust,
-Matthieu Casanova and Jarek Czekalski for contributing to this release.
+Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to 
+this release.
 
 {{{ Bug fixes
 - Fixed a NPE when trying to activate a plugin if one of it's dependencies is
@@ -34,7 +35,16 @@ Matthieu Casanova and Jarek Czekalski for contributing to this release.
 
 - Made it possible to disable automatic indentation by buffer or by edit
   mode, and created a status widget to toggle the setting (Evan Wright)
+  
+- Fix for tracker 2976661, script tag attributes not syntax highlighted.
+  (Dale Anson)
+  
+- Fix for tracker 3165177, method/function names not always highlighted.
+  (Dale Anson)
 
+- Fix for tracker 846913, jsp syntax highlighting for single line comments.
+  (Dale Anson)
+  
 }}}
 {{{ UI
 

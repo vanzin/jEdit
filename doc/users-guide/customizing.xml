@@ -574,8 +574,12 @@
         the settings directory still comes in handy in certain situations, for
         example when you want to copy jEdit settings between computers.</para>
 
-        <para>The location of the settings directory is system-specific; it is
-        printed to the activity log
+        <para>The location of the settings directory is system-specific
+        <footnote><para>
+           On Windows, you will find it in <literal>%APPDATA%\jEdit</literal>. 
+           On the Mac, it is <literal>~/Library/jEdit</literal>. 
+        </para></footnote>.
+        It is printed to the activity log
         (<guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity
         Log</guimenuitem>). For example:</para>
 
