@@ -215,6 +215,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	//{{{ ActionHandler class
 	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent ae)
 		{
 			Object source = ae.getSource();
