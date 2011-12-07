@@ -779,6 +779,7 @@
 
 <ACTION NAME="paste">
 	<CODE>
+		EditBus.send(new PositionChanging(editPane));
 		Registers.paste(textArea,'$',false);
 	</CODE>
 </ACTION>
