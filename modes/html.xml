@@ -16,10 +16,10 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="JAVASCRIPT">
-			<BEGIN>&lt;SCRIPT</BEGIN>
-			<END>&lt;/SCRIPT&gt;</END>
-		</SPAN>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="&lt;" DELEGATE="JAVASCRIPT">
+			<BEGIN>&lt;(?i)(script)</BEGIN>
+			<END>&lt;/$1&gt;</END>
+		</SPAN_REGEXP>
 
 		<!-- stylesheet -->
 		<SPAN TYPE="MARKUP" DELEGATE="CSS">
@@ -171,15 +171,7 @@
 	</RULES>
 
 	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP" IGNORE_CASE="TRUE">
-		<SEQ TYPE="MARKUP" DELEGATE="javascript::MAIN">&gt;</SEQ>
-		<!-- handle <SCRIPT SRC="..."> properly -->
-		<SEQ TYPE="MARKUP" DELEGATE="BACK_TO_HTML">SRC=</SEQ>
-
-		<!-- Inline CSS -->
- 		<SPAN_REGEXP TYPE="MARKUP" DELEGATE="css::PROPERTIES" HASH_CHAR="style">
-			<BEGIN>style\s*=\s*(["'])</BEGIN>
-			<END>$1</END>
-		</SPAN_REGEXP>
+		<IMPORT DELEGATE="javascript::MAIN"/>
 	</RULES>
 
 	<RULES SET="BACK_TO_HTML" DEFAULT="MARKUP">
