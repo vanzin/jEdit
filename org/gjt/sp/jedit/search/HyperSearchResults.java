@@ -131,6 +131,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
+	@Override
 	public void focusOnDefaultComponent()
 	{
 		resultTree.requestFocus();
@@ -272,8 +273,9 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		caption.setText(jEdit.getProperty("hypersearch-results.done",
 				new String [] { trimSearchString() }));
 
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if(!multiStatus)
@@ -338,7 +340,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	private void updateHighlightStatus()
 	{
 		String prop = jEdit.getProperty(HIGHLIGHT_PROP);
-		if (prop != null && prop.length() > 0)
+		if (prop != null && !prop.isEmpty())
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.highlight.icon")));
 		else
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.normal.icon")));
@@ -458,7 +460,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ trimSearchString() method
-	private String trimSearchString()
+	private static String trimSearchString()
 	{
 		String s = SearchAndReplace.getSearchString();
 		int length = jEdit.getIntegerProperty("hypersearch.displayQueryLength", 100);
@@ -492,6 +494,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ ActionHandler class
 	public class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -539,11 +542,11 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		private String prop;
 		private String styleTag;
 
-		public HighlightingTree(DefaultTreeModel model)
+		HighlightingTree(DefaultTreeModel model)
 		{
 			super(model);
 			prop = jEdit.getProperty(HIGHLIGHT_PROP);
-			if (prop != null && prop.length() > 0)
+			if (prop != null && !prop.isEmpty())
 			{
 				Font f = (resultTree != null) ? resultTree.getFont() :
 					UIManager.getFont("Tree.font");
@@ -558,11 +561,10 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			String s = super.convertValueToText(value, selected, expanded, leaf,
 				row, hasFocus);
 			String newProp = jEdit.getProperty(HIGHLIGHT_PROP);
-			if (newProp == null || newProp.length() == 0)
+			if (newProp == null || newProp.isEmpty())
 				return s;
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-			while ((node != null) &&
-				   (! (node.getUserObject() instanceof HyperSearchOperationNode)))
+			while (node != null && !(node.getUserObject() instanceof HyperSearchOperationNode))
 			{
 				node = (DefaultMutableTreeNode) node.getParent();
 			}
@@ -606,8 +608,9 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				goToSelectedNode(M_OPEN);
 
 				// fuck me dead
-				SwingUtilities.invokeLater(new Runnable()
+				EventQueue.invokeLater(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						resultTree.requestFocus();
@@ -721,6 +724,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.remove-node"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			removeSelectedNode();
@@ -735,6 +739,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.remove-all-nodes"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			removeAllNodes();
@@ -749,6 +754,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.new-search"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			TreePath path = resultTree.getSelectionPath();
@@ -773,6 +779,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.expand-child-nodes"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			TreePath path = resultTree.getSelectionPath();
@@ -789,6 +796,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.copy-to-clipboard"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			TreePath path = resultTree.getSelectionPath();
@@ -808,6 +816,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	{
 		StringBuilder nodesString = new StringBuilder();
 
+		@Override
 		public boolean processNode(DefaultMutableTreeNode node)
 		{
 			Object userObject = node.getUserObject();
@@ -834,6 +843,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(jEdit.getProperty("hypersearch-results.collapse-child-nodes"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			TreePath path = resultTree.getSelectionPath();
@@ -851,8 +861,8 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ RedoSearchAction class
 	class RedoSearchAction extends AbstractAction
 	{
-		private HyperSearchOperationNode hyperSearchOperationNode;
-		public RedoSearchAction(HyperSearchOperationNode hyperSearchOperationNode)
+		private final HyperSearchOperationNode hyperSearchOperationNode;
+		RedoSearchAction(HyperSearchOperationNode hyperSearchOperationNode)
 		{
 			super(jEdit.getProperty("hypersearch-results.redo"));
 			this.hyperSearchOperationNode = hyperSearchOperationNode;
@@ -861,6 +871,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		/**
 		 * Invoked when an action occurs.
 		 */
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			SearchAndReplace.setSearchString(hyperSearchOperationNode.getSearchString());
@@ -873,6 +884,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ TreeDisplayAction class
 	class TreeDisplayAction extends AbstractAction
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) evt.getSource();
@@ -941,6 +953,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			this.mode = mode;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			goToSelectedNode(mode);
@@ -1018,6 +1031,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		{
 			int bufferCount;
 			int resultCount;
+			@Override
 			public boolean processNode(DefaultMutableTreeNode node)
 			{
 				Object userObject = node.getUserObject();
@@ -1068,6 +1082,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ BufferLoadedVisitor class
 	static class BufferLoadedVisitor implements ResultVisitor
 	{
+		@Override
 		public void visit(Buffer buffer, HyperSearchResult result)
 		{
 			result.bufferOpened(buffer);
@@ -1077,6 +1092,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ BufferClosedVisitor class
 	static class BufferClosedVisitor implements ResultVisitor
 	{
+		@Override
 		public void visit(Buffer buffer, HyperSearchResult result)
 		{
 			result.bufferClosed();
@@ -1086,6 +1102,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ TreeNodeCallbackAdapter class
 	static class TreeNodeCallbackAdapter implements HyperSearchTreeNodeCallback
 	{
+		@Override
 		public boolean processNode(DefaultMutableTreeNode node)
 		{
 			return false;
