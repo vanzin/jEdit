@@ -13,7 +13,7 @@ copyLines()
 	selections = textArea.getSelectedLines();
 	
 	if(selections.length == 0)
-        {
+	{
 		selections = new int [] {textArea.getCaretLine()};
 	}
 	start = textArea.getLineStartOffset(selections[0]);
