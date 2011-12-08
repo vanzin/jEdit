@@ -8,15 +8,19 @@
 * $Id$
 */
 
-copyLines(){
+copyLines()
+{
 	selections = textArea.getSelectedLines();
 	
-	if(selections.length == 0){
+	if(selections.length == 0)
+
 		selections = new int [] {textArea.getCaretLine()};
 	}
 	start = textArea.getLineStartOffset(selections[0]);
 	stop = textArea.getLineEndOffset(selections[selections.length-1]);
-	Registers.getRegister('$').setValue(textArea.getText(start,stop-start+1));
+	String text = textArea.getText(start,stop-start);
+	java.awt.datatransfer.Transferable value = new java.awt.datatransfer.StringSelection(text);
+	Registers.getRegister('$').setTransferable(value);
 }
 
 copyLines();
