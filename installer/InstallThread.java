@@ -12,9 +12,14 @@
  */
 package installer;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.Vector;
-import java.net.*;
 
 /*
  * The thread that performs installation.
@@ -38,11 +43,11 @@ public class InstallThread extends Thread
 	public void run()
 	{
 		progress.setMaximum(size * 1024);
-		
+
 		//return value ignored : already signalled in ServerKiller
 		progress.message("stopping any jEdit server");
 		ServerKiller.quitjEditServer();
-		
+
 		try
 		{
 			// install user-selected packages
@@ -98,15 +103,28 @@ public class InstallThread extends Thread
 		TarInputStream tarInput = new TarInputStream(
 			new CBZip2InputStream(in));
 		TarEntry entry;
+		String fileName = null;
 		while((entry = tarInput.getNextEntry()) != null)
 		{
 			if(entry.isDirectory())
+			{
+				fileName = null;
 				continue;
-			String fileName = entry.getName();
+			}
+			if (fileName == null)
+			{
+				fileName = entry.getName();
+				if (fileName.equals("././@LongLink"))
+				{
+					fileName = new BufferedReader(new InputStreamReader(tarInput)).readLine();
+					continue;
+				}
+			}
 			//System.err.println(fileName);
 			String outfile = installDir + File.separatorChar
 				+ fileName.replace('/',File.separatorChar);
 			installer.copy(tarInput,outfile,progress);
+			fileName = null;
 		}
 
 		tarInput.close();

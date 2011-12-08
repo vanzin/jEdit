@@ -907,12 +907,14 @@
 		depends="init,setup,prepare-dist-files"
 		description="build the Java-installer">
 		<tar destfile="${dist.dir}/jedit-macros.tar.bz2"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset id="jedit-macros"
 				    dir="${dist.dir}"
 				    includes="macros/**"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-program.tar.bz2"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset id="jedit-program"
 				    dir="${dist.dir}"
@@ -927,18 +929,21 @@
 					      jars/MacOSX.jar"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-windows.tar.bz2"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset id="jedit-windows"
 				    dir="${dist.dir}"
 				    includes="jedit.exe"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-mac.tar.bz2"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset id="jedit-mac"
 				    dir="${dist.dir}"
 				    includes="jars/MacOSX.jar"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-api.tar.bz2"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset id="jedit-api"
 				    dir="${dist.dir}"
@@ -1059,6 +1064,7 @@
 		description="build the src-archive">
 		<mkdir dir="${dist.dir}"/>
 		<tar destfile="${dist.dir}/${src.archive.filename}"
+		     longfile="gnu"
 		     compression="bzip2">
 			<tarfileset dir="${basedir}"
 				    excludes="${config.lib.dir}/**
@@ -1218,6 +1224,7 @@
 			<contrib:else>
 				<tar destfile="${dist.dir}/jedit${jedit.version}-dist-mac-finish.tar.bz2"
 				     basedir="${basedir}"
+				     longfile="gnu"
 				     includes="build.xml
 					       ivy.xml
 					       ivysettings.xml
@@ -1358,6 +1365,7 @@
 		depends="init,setup,prepare-dist-files"
 		description="build the Slackware Package">
 		<tar destfile="${dist.dir}/jedit-${jedit.version}-noarch-1sao.tgz"
+		     longfile="gnu"
 		     compression="gzip">
 			<tarfileset file="${basedir}"
 				    username="root"
@@ -1912,6 +1920,7 @@ Press Return key to continue...
 			<contrib:else>
 				<tar destfile="${dist.dir}/jedit${jedit.version}-dist-win-finish.tar.bz2"
 				     basedir="${basedir}"
+				     longfile="gnu"
 				     includes="build.properties.sample
 					       build.xml
 					       ivy.xml

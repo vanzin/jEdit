@@ -5,10 +5,15 @@ jEdit 5.0 version history
 {{{ Version 5.0pre1
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust,
-Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to 
+Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to
 this release.
 
 {{{ Bug fixes
+
+- The Java based installer now correctly handles GNU style long filenames in
+  the installer package and thus does not corrupt the JavaDoc files anymore
+  (Bug #2327520 - Björn "Vampire" Kautler)
+
 - Added select all and select none buttons to PingPongList fixing a bug in
   EncodingsOptionPane (#3434850) (Matthieu Casanova)
 
@@ -35,16 +40,16 @@ this release.
 
 - Made it possible to disable automatic indentation by buffer or by edit
   mode, and created a status widget to toggle the setting (Evan Wright)
-  
+
 - Fix for tracker 2976661, script tag attributes not syntax highlighted.
   (Dale Anson)
-  
+
 - Fix for tracker 3165177, method/function names not always highlighted.
   (Dale Anson)
 
 - Fix for tracker 846913, jsp syntax highlighting for single line comments.
   (Dale Anson)
-  
+
 }}}
 {{{ UI
 
