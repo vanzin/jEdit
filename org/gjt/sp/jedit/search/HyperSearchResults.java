@@ -830,7 +830,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			}
 			else
 				nodesString.append(userObject.toString());
-			nodesString.append(System.getProperty("line.separator"));
+			nodesString.append('\n');
 			return true;
 		}
 	}//}}}
