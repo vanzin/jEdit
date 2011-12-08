@@ -9,6 +9,8 @@ Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to
 this release.
 
 {{{ Bug fixes
+- Fixed copy of Hypersearch results adding \r in the clipboard (#3142456)
+  (Matthieu Casanova)
 
 - The Java based installer now correctly handles GNU style long filenames in
   the installer package and thus does not corrupt the JavaDoc files anymore
