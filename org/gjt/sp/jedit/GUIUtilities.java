@@ -2056,24 +2056,26 @@ public class GUIUtilities
 	{	
 		StringBuilder out = new StringBuilder();
 		
+		// Show the list of modifiers in standard order
 		int endOfModifiers = label.indexOf('+');
-		for (int i = 0; i < endOfModifiers; i++)
+		if (endOfModifiers != -1)
 		{
-			char c = Character.toUpperCase(label.charAt(i));
-			switch (c)
+			String modifiers = label.substring(0, endOfModifiers).toUpperCase();
+			if (modifiers.indexOf('A') != -1)
 			{
-			case 'A':
 				out.append('\u2303');  // ctrl
-				break;
-			case 'C':
-				out.append('\u2318');  // cmd
-				break;
-			case 'M':
+			}
+			if (modifiers.indexOf('M') != -1)
+			{
 				out.append('\u2325');  // alt
-				break;
-			case 'S':
+			}
+			if (modifiers.indexOf('S') != -1)
+			{
 				out.append('\u21E7');  // shift
-				break;
+			}
+			if (modifiers.indexOf('C') != -1)
+			{
+				out.append('\u2318');  // cmd
 			}
 		}
 		
