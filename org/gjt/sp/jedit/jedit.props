@@ -28,6 +28,9 @@ metal.secondary.fontstyle=0
 decorate.frames=false
 decorate.dialogs=false
 
+# Draw multi-key shortcuts on screen menu bar? (OS X only)
+menu.multiShortcut=false
+
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
 firstTime=true

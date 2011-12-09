@@ -28,6 +28,8 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.gui.KeyEventTranslator;
+import org.gjt.sp.jedit.keymap.Keymap;
 //}}}
 
 /**
@@ -55,9 +57,23 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			setToolTipText(toolTip);
 		}
 		
-		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
+		if (OperatingSystem.hasScreenMenuBar() && shortcut != null)
 		{
-			setText(label + " ( " + shortcut + " )");
+			if (jEdit.getBooleanProperty("menu.multiShortcut", false))
+			{
+				setText(label + " ( " + shortcut + " )");
+			}
+			else
+			{
+				setText(label);
+				
+				Keymap keymap = jEdit.getKeymapManager().getKeymap();
+				String rawShortcut = keymap.getShortcut(action + ".shortcut");
+				
+				KeyStroke key = KeyEventTranslator.parseKeyStroke(rawShortcut);
+				if (key != null)
+					setAccelerator(key);
+			}
 			shortcut = null;
 		}
 		else
