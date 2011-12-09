@@ -114,7 +114,7 @@ public class Registers
 			textArea.getToolkit().beep();
 	} //}}}
 
-	//{{{ append() method
+	//{{{ append() methods
 	/**
 	 * Appends the text selected in the text area to the specified register,
 	 * with a newline between the old and new text.
@@ -124,9 +124,8 @@ public class Registers
 	public static void append(TextArea textArea, char register)
 	{
 		append(textArea,register,"\n",false);
-	} //}}}
+	}
 
-	//{{{ append() method
 	/**
 	 * Appends the text selected in the text area to the specified register.
 	 * @param textArea The text area
@@ -137,9 +136,8 @@ public class Registers
 		String separator)
 	{
 		append(textArea,register,separator,false);
-	} //}}}
+	}
 
-	//{{{ append() method
 	/**
 	 * Appends the text selected in the  text area to the specified register.
 	 * @param textArea The text area
@@ -212,7 +210,7 @@ public class Registers
 	 * Insets the contents of the specified register into the text area.
 	 * @param textArea The text area
 	 * @param register The register
-     * @param preferredDataFlavor the preferred dataflavor. If not available
+	 * @param preferredDataFlavor the preferred dataflavor. If not available
 	 * <tt>DataFlavor.stringFlavor</tt> will be used
 	 * @since jEdit 4.4pre1
 	 */
@@ -378,7 +376,7 @@ public class Registers
 		int i = mime.indexOf(';');
 		if (i != -1)
 		{
-			mime = mime.substring(0,i); 
+			mime = mime.substring(0,i);
 		}
 		String mode = jEdit.getProperty("mime2mode."+mime);
 		if (mode != null)
@@ -438,7 +436,8 @@ public class Registers
 
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
-	
+
+	//{{{ applyMode() method
 	private static void applyMode(Mode mode, JEditBuffer buffer)
 	{
 		if (mode != null &&
@@ -448,8 +447,9 @@ public class Registers
 		{
 			buffer.setMode(mode);
 		}
-	}
+	} //}}}
 
+	//{{{ getTextFromTransferable() method
 	private static String getTextFromTransferable(Transferable transferable, DataFlavor dataFlavor)
 	{
 		try
@@ -468,7 +468,7 @@ public class Registers
 			Log.log(Log.ERROR, Registers.class, e);
 		}
 		return null;
-	}
+	} //}}}
 
 	//{{{ getRegister() method
 	/**
@@ -489,7 +489,7 @@ public class Registers
 			return registers[name];
 	} //}}}
 
-	//{{{ setRegister() method
+	//{{{ setRegister() methods
 	/**
 	 * Sets the specified register.
 	 * @param name The name
@@ -511,9 +511,8 @@ public class Registers
 		registers[name] = newRegister;
 		if (listener != null)
 			listener.registerChanged(name);
-	} //}}}
+	}
 
-	//{{{ setRegister() method
 	/**
 	 * Sets the specified register.
 	 * @param name The name
@@ -522,9 +521,8 @@ public class Registers
 	public static void setRegister(char name, String value)
 	{
 		setRegister(name, new StringSelection(value));
-	} //}}}
+	}
 
-	//{{{ setRegister() method
 	/**
 	 * Sets the specified register.
 	 * @param name The name
