@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.awt.EventQueue;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -53,6 +54,7 @@ import org.gjt.sp.jedit.buffer.DummyFoldHandler;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.msg.PluginUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
@@ -324,7 +326,7 @@ public class PluginJAR
 				continue;
 			}
 
-			if(pluginDepends.what.equals("plugin"))
+			if("plugin".equals(pluginDepends.what))
 			{
 				int index2 = pluginDepends.arg.indexOf(' ');
 				if ( index2 == -1)
@@ -440,7 +442,7 @@ public class PluginJAR
 				continue;
 			}
 
-			if(pluginDepends.what.equals("jdk"))
+			if("jdk".equals(pluginDepends.what))
 			{
 				if(!pluginDepends.optional && StandardUtilities.compareStrings(
 					System.getProperty("java.version"),
@@ -452,7 +454,7 @@ public class PluginJAR
 					ok = false;
 				}
 			}
-			else if(pluginDepends.what.equals("jedit"))
+			else if("jedit".equals(pluginDepends.what))
 			{
 				if(pluginDepends.arg.length() != 11)
 				{
@@ -472,7 +474,7 @@ public class PluginJAR
 					ok = false;
 				}
 			}
-			else if(pluginDepends.what.equals("plugin"))
+			else if("plugin".equals(pluginDepends.what))
 			{
 				int index2 = pluginDepends.arg.indexOf(' ');
 				if(index2 == -1)
@@ -537,7 +539,7 @@ public class PluginJAR
 					}
 				}
 			}
-			else if(pluginDepends.what.equals("class"))
+			else if("class".equals(pluginDepends.what))
 			{
 				if(!pluginDepends.optional)
 				{
@@ -1247,20 +1249,20 @@ public class PluginJAR
 			ZipEntry entry = entries.nextElement();
 			String name = entry.getName();
 			String lname = name.toLowerCase();
-			if(lname.equals("actions.xml"))
+			if("actions.xml".equals(lname))
 			{
 				cache.actionsURI = classLoader.getResource(name);
 			}
-			else if(lname.equals("browser.actions.xml"))
+			else if("browser.actions.xml".equals(lname))
 			{
 				cache.browserActionsURI = classLoader.getResource(name);
 			}
-			else if(lname.equals("dockables.xml"))
+			else if("dockables.xml".equals(lname))
 			{
 				dockablesURI = classLoader.getResource(name);
 				cache.dockablesURI = dockablesURI;
 			}
-			else if(lname.equals("services.xml"))
+			else if("services.xml".equals(lname))
 			{
 				servicesURI = classLoader.getResource(name);
 				cache.servicesURI = servicesURI;
@@ -1421,7 +1423,7 @@ public class PluginJAR
 				// behavior, where a PropertiesChanged
 				// was sent after plugins were started
 				((EBComponent)plugin).handleMessage(
-					new org.gjt.sp.jedit.msg.PropertiesChanged(null));
+					new PropertiesChanged(null));
 			}
 			EditBus.addToBus(plugin);
 		}
@@ -1449,11 +1451,12 @@ public class PluginJAR
 	//{{{ startPluginLater() method
 	private void startPluginLater()
 	{
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
-				if(!activated)
+				if (!activated)
 					return;
 
 				startPlugin();
@@ -1680,7 +1683,7 @@ public class PluginJAR
 				String value = readString(din);
 				if(value == null)
 					value = "";
-				returnValue.put(key,value);
+				returnValue.setProperty(key, value);
 			}
 			return returnValue;
 		} //}}}
@@ -1738,11 +1741,11 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ writeMap() method
-		private static void writeMap(DataOutputStream dout, Map map)
+		private static void writeMap(DataOutputStream dout, Properties properties)
 			throws IOException
 		{
-			dout.writeInt(map.size());
-			Set<Map.Entry<Object, Object>> set = map.entrySet();
+			dout.writeInt(properties.size());
+			Set<Map.Entry<Object, Object>> set = properties.entrySet();
 			for (Map.Entry<Object, Object> entry : set)
 			{
 				writeString(dout,entry.getKey());
