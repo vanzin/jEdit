@@ -137,14 +137,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
 		addComponent(systemTrayIcon);
 
-		if (OperatingSystem.isMacOS())
-		{
-			String settingsDirectory = jEdit.getSettingsDirectory();
-			useQuartz = new JCheckBox(jEdit.getProperty("options.appearance.useQuartz"));
-			useQuartz.setSelected(!new File(settingsDirectory, "noquartz").exists());
-			addComponent(useQuartz);
-		}
-
 		addSeparator("options.appearance.startup.label");
 
 		/* Show splash screen */
@@ -210,14 +202,10 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		primaryFont.repaint();
 		secondaryFont.repaint(); */
 
-		// These are handled a little differently from other jEdit settings
-		// as these flags need to be known very early in the
+		// This is handled a little differently from other jEdit settings
+		// as this flag needs to be known very early in the
 		// startup sequence, before the user properties have been loaded
 		setFileFlag("nosplash", !showSplash.isSelected());
-		if (OperatingSystem.isMacOS())
-		{
-			setFileFlag("noquartz", !useQuartz.isSelected());
-		}
 
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
