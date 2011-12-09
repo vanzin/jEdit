@@ -86,8 +86,7 @@
 			AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
 
 		<!-- Function calls -->
-		<SEQ_REGEXP TYPE="FUNCTION">(?:\s|[.])([a-zA-Z](\w)*)\s*(?=[(])</SEQ_REGEXP>
-		<SEQ TYPE="OPERATOR">(</SEQ>
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<!-- Annotation types -->
