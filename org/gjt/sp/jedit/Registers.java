@@ -413,9 +413,7 @@ public class Registers
 		try
 		{
 			Object data = transferable.getTransferData(dataFlavor);
-			if (dataFlavor.getRepresentationClass().equals(String.class))
-				return (String) data;
-			return data.toString();
+			return stripEOLChars(data.toString());
 		}
 		catch (UnsupportedFlavorException e)
 		{
@@ -650,6 +648,38 @@ public class Registers
 		}
 	} //}}}
 
+	//{{{ loadRegisters() method
+	private static String stripEOLChars(String selection) throws IOException
+	{
+		boolean trailingEOL = selection.endsWith("\n")
+				      || selection.endsWith(System.getProperty(
+			"line.separator"));
+
+		// Some Java versions return the clipboard
+		// contents using the native line separator,
+		// so have to convert it here
+		BufferedReader in = new BufferedReader(
+			new StringReader(selection));
+		StringBuilder buf = new StringBuilder(selection.length());
+		String line;
+		while((line = in.readLine()) != null)
+		{
+			// broken Eclipse workaround!
+			// 24 Febuary 2004
+			if(line.endsWith("\0"))
+			{
+				line = line.substring(0,
+						      line.length() - 1);
+			}
+			buf.append(line);
+			buf.append('\n');
+		}
+		// remove trailing \n
+		if(!trailingEOL && buf.length() != 0)
+			buf.setLength(buf.length() - 1);
+		return buf.toString();
+	}  //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -733,33 +763,7 @@ public class Registers
 					.getContents(this).getTransferData(
 					DataFlavor.stringFlavor);
 
-				boolean trailingEOL = selection.endsWith("\n")
-					|| selection.endsWith(System.getProperty(
-					"line.separator"));
-
-				// Some Java versions return the clipboard
-				// contents using the native line separator,
-				// so have to convert it here
-				BufferedReader in = new BufferedReader(
-					new StringReader(selection));
-				StringBuilder buf = new StringBuilder();
-				String line;
-				while((line = in.readLine()) != null)
-				{
-					// broken Eclipse workaround!
-					// 24 Febuary 2004
-					if(line.endsWith("\0"))
-					{
-						line = line.substring(0,
-							line.length() - 1);
-					}
-					buf.append(line);
-					buf.append('\n');
-				}
-				// remove trailing \n
-				if(!trailingEOL && buf.length() != 0)
-					buf.setLength(buf.length() - 1);
-				return buf.toString();
+				return stripEOLChars(selection);
 			}
 			catch(Exception e)
 			{
