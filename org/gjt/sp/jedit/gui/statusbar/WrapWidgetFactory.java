@@ -81,8 +81,12 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		{
 			Buffer buffer = view.getBuffer();
 			String wrap = buffer.getStringProperty("wrap");
+			if (largeBufferDeactivateWrap() && "soft".equals(wrap))
+			{
+				wrap = "none";
+			}
 			this.wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip",
-				new String[]{jEdit.getProperty("wrap." + wrap)}));
+								   new String[]{jEdit.getProperty("wrap." + wrap)}));
 			if("none".equals(wrap))
 			{
 				this.wrap.setEnabled(false);
@@ -110,6 +114,13 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 				fm.getHeight());
 			wrap.setPreferredSize(dim);
 			wrap.setMaximumSize(dim);
+		}
+
+		private boolean largeBufferDeactivateWrap()
+		{
+			Buffer buffer = view.getBuffer();
+			String largeFileMode = buffer.getStringProperty("largefilemode");
+			return "limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode);
 		}
 	} //}}}
 

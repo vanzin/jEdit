@@ -44,6 +44,9 @@ this release.
 }}}
 {{{ Editing
 
+- Using no highlight or limited syntax highlight in large buffers now also disable
+  soft wrap (Matthieu Casanova)
+
 - Latex Indentation a nuisance (# 3432974)
 
 - Made it possible to disable automatic indentation by buffer or by edit

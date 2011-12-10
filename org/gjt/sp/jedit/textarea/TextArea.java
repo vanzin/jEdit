@@ -4795,7 +4795,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		String oldWrap = wrap;
 		wrap = buffer.getStringProperty("wrap");
 		hardWrap = "hard".equals(wrap);
-		softWrap = "soft".equals(wrap);
+		String largeFileMode = buffer.getStringProperty("largefilemode");
+		softWrap = "soft".equals(wrap) && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));

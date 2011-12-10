@@ -1008,7 +1008,13 @@ public class Buffer extends JEditBuffer
 	{
 		String wrap = getStringProperty("wrap");
 		if(wrap.equals("none"))
-			wrap = "soft";
+		{
+			String largeFileMode = getStringProperty("largefilemode");
+			if ("limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode))
+				wrap = "hard";
+			else
+				wrap = "soft";
+		}
 		else if(wrap.equals("soft"))
 			wrap = "hard";
 		else if(wrap.equals("hard"))
@@ -1160,12 +1166,15 @@ public class Buffer extends JEditBuffer
 						switch (i)
 						{
 							case 0:
+								setProperty("largefilemode", "full");
 								setMode(mode);
 								return;
 							case 1:
+								setProperty("largefilemode", "limited");
 								setMode(mode, true);
 								return;
 							case 2:
+								setProperty("largefilemode", "nohighlight");
 								mode =  getDefaultMode();
 								setMode(mode);
 								return;
@@ -1174,14 +1183,17 @@ public class Buffer extends JEditBuffer
 				}
 				else if ("full".equals(largeFileMode))
 				{
+					setProperty("largefilemode", "full");
 					setMode(mode);
 				}
 				else if ("limited".equals(largeFileMode))
 				{
+					setProperty("largefilemode", "limited");
 					setMode(mode, true);
 				}
 				else if ("nohighlight".equals(largeFileMode))
 				{
+					setProperty("largefilemode", "nohighlight");
 					mode =  getDefaultMode();
 					setMode(mode);
 				}
