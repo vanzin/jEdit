@@ -5,7 +5,7 @@ jEdit 4.5 version history
 {{{ Version 4.5pre2
 
 Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski,
-Matthieu Casanova, and Björn "Vampire" Kautler for
+Evan Wright, Matthieu Casanova, and Björn "Vampire" Kautler for
 contributing to this release.
 
 {{{ Bug Fixes
