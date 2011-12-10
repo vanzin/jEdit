@@ -9,6 +9,9 @@ Dale Anson, Matthieu Casanova and Jarek Czekalski for contributing to
 this release.
 
 {{{ Bug fixes
+
+- Large file mode text description dialog (#3456370) (Matthieu Casanova)
+
 - Fixed Copy_Line macro that was copying one character of the next line (#3454377)
   (Matthieu Casanova)
 

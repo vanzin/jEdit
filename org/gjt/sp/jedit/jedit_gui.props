@@ -1239,12 +1239,12 @@ largeBufferDialog.message=The buffer is very large and jEdit may become\n\
 	unresponsive because of syntax highlight. You should consider the\n\
 	following options.\n\
 	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit\n\
-	may become very slow, this is not recommanded.\n\
+	may become very slow, this is not recommended.\n\
 	-Context insensitive syntax highlight. In that case jEdit will try to\n\
 	keep some syntax highlight, but the result may not be perfect. The\n\
 	buffer is highlighted line by line without taking care of the context\n\
 	of the previous line. So it is possible that the syntax is not accurate\n\
-	if you have tokens on multiple lines (multiline comments, xml tags ...)
+	if you have tokens on multiple lines (multiline comments, xml tags ...)\n\
 	-Use default edit mode of jEdit (usually text mode, no syntax highlight)
 largeBufferDialog.fullSyntax=Full syntax highlight
 largeBufferDialog.contextInsensitive=Context insensitive syntax highlight
