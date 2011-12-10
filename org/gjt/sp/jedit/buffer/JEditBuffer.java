@@ -1389,9 +1389,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 				: lineMgr.getLineContext(i - 1)
 			);
 
-			context = tokenMarker.markTokens(prevContext,
-				(i == lineIndex ? tokenHandler
-				: DummyTokenHandler.INSTANCE), seg);
+			TokenHandler _tokenHandler = i == lineIndex ? tokenHandler : DummyTokenHandler.INSTANCE;
+			context = markTokens(seg, prevContext, _tokenHandler);
 			lineMgr.setLineContext(i,context);
 		}
 
@@ -2441,6 +2440,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	protected boolean contextInsensitive;
 	protected UndoManager undoMgr;
+	protected TokenMarker tokenMarker;
 
 	//{{{ Event firing methods
 
@@ -2711,6 +2711,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
+	//{{{ markTokens() method
+	protected TokenMarker.LineContext markTokens(Segment seg, TokenMarker.LineContext prevContext,
+						     TokenHandler _tokenHandler)
+	{
+		TokenMarker.LineContext context = tokenMarker.markTokens(prevContext, _tokenHandler, seg);
+		return context;
+	} //}}}
+
 	//{{{ Used to store property values
 	protected static class PropValue
 	{
@@ -2750,7 +2758,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private final PositionManager positionMgr;
 	private FoldHandler foldHandler;
 	private final IntegerArray integerArray;
-	private TokenMarker tokenMarker;
 	private boolean undoInProgress;
 	private boolean dirty;
 	private boolean readOnly;

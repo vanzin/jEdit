@@ -138,6 +138,7 @@ encodingDetectors=BOM XML-PI html python buffer-local-property
 
 # The critical size, over it a buffer will prompt when setting the edit mode
 largeBufferSize=4000000
+longLineLimit=4000
 largefilemode=ask
 
 #{{{ Buffer settings

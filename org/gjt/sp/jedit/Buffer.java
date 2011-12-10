@@ -51,6 +51,8 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
+import org.gjt.sp.jedit.syntax.TokenHandler;
+import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.util.IntegerArray;
@@ -955,6 +957,9 @@ public class Buffer extends JEditBuffer
 	public void propertiesChanged()
 	{
 		super.propertiesChanged();
+		longLineLimit = jEdit.getIntegerProperty("longLineLimit", 4000);
+		String largefilemode = getStringProperty("largefilemode");
+		longBufferMode = "limited".equals(largefilemode) || "nohighlight".equals(largefilemode);
 		if (!autoreloadOverridden)
 		{
 			setAutoReloadDialog(jEdit.getBooleanProperty("autoReloadDialog"));
@@ -1614,7 +1619,7 @@ public class Buffer extends JEditBuffer
 	Buffer(String path, boolean newFile, boolean temp, Map props)
 	{
 		super(props);
-
+		textTokenMarker = jEdit.getMode("text").getTokenMarker();
 		markers = new Vector<Marker>();
 
 		setFlag(TEMPORARY,temp);
@@ -1682,6 +1687,22 @@ public class Buffer extends JEditBuffer
 	//}}}
 
 	//{{{ Protected members
+
+	@Override
+	protected TokenMarker.LineContext markTokens(Segment seg, TokenMarker.LineContext prevContext,
+						      TokenHandler _tokenHandler)
+	{
+		TokenMarker.LineContext context;
+		if (longBufferMode && longLineLimit != 0 && longLineLimit < seg.length())
+		{
+			context = textTokenMarker.markTokens(prevContext, _tokenHandler, seg);
+		}
+		else
+		{
+			context = tokenMarker.markTokens(prevContext, _tokenHandler, seg);
+		}
+		return context;
+	}
 
 	//{{{ fireBeginUndo() method
 	protected void fireBeginUndo()
@@ -1796,6 +1817,8 @@ public class Buffer extends JEditBuffer
 
 	//{{{ Instance variables
 	/** Indicate if the autoreload property was overridden */
+	private int longLineLimit;
+	private TokenMarker textTokenMarker;
 	private boolean autoreloadOverridden;
 	private String path;
 	private String symlinkPath;
@@ -1806,10 +1829,7 @@ public class Buffer extends JEditBuffer
 	private long modTime;
 	private byte[] md5hash;
 	private int initialLength;
-	/**
-	 * The longBufferMode is an option
-	 */
-	private int longBufferMode;
+	private boolean longBufferMode;
 
 	private final Vector<Marker> markers;
 
