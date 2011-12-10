@@ -2001,6 +2001,18 @@ options.editing.elasticTabstops=Indent using elastic tabstops
 options.editing.elasticTabstops.tooltip=(Experimental) - may cause instability in jEdit.
 options.editing.deepIndent=Deep indent
 options.editing.autoIndent=Automatic indentation
+options.editing.largefilemode.title=Large file mode
+options.editing.largefilemode=What should I do about very big files:
+options.editing.largefilemode.option.ask=<html><b>Ask</b> what to do when opening a large file</html>
+options.editing.largefilemode.option.full=<html><b>Keep Full syntax</b> : jEdit's syntax highlight will work as usual, jEdit\
+                                               	may become <b>very slow, this is not recommended</b></html>
+options.editing.largefilemode.option.limited=<html>Context insensitive syntax highlight. In that case jEdit will try to\
+                                                  	keep some syntax highlight, but the result may not be perfect. The<br/>\
+                                                  	buffer is highlighted line by line without taking care of the context\
+                                                  	of the previous line. So it is possible that the syntax is not accurate<br/>\
+                                                  	if you have tokens on multiple lines (multiline comments, xml tags ...)\
+  							the soft wrap is also deactivated <b>(best choice)</b></html>
+options.editing.largefilemode.option.nohighlight=No syntax highlight, no soft wrap
 #}}}
 
 #{{{ Encodings pane
@@ -2119,7 +2131,7 @@ options.save-back.twoStageSave.tooltip=Stage 1: Create a temporary file and save
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers dirty.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get wiped out whenever a new one is created (it's a feature!) 
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get wiped out whenever a new one is created (it's a feature!)
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
 options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
 #}}}

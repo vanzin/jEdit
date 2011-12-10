@@ -1133,41 +1133,60 @@ public class Buffer extends JEditBuffer
 		}
 		if (mode != null)
 		{
-			boolean forceInsensitive = false;
 			if (!getFlag(TEMPORARY) && getLength() > jEdit.getIntegerProperty("largeBufferSize", 4000000))
 			{
 				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
-				if (!contextInsensitive)
+				String largeFileMode = jEdit.getProperty("largefilemode", "ask");
+				
+				if ("ask".equals(largeFileMode))
 				{
-					JTextPane tp = new JTextPane();
-					tp.setEditable(false);
-					tp.setText(jEdit.getProperty("largeBufferDialog.message"));
-					int i = JOptionPane.showOptionDialog(jEdit.getActiveView(),
-						tp,
-						jEdit.getProperty("largeBufferDialog.title", new String[]{name}),
-						JOptionPane.DEFAULT_OPTION,
-						JOptionPane.WARNING_MESSAGE,
-						null,
-						new String[]{
-							jEdit.getProperty("largeBufferDialog.fullSyntax"),
-							jEdit.getProperty("largeBufferDialog.contextInsensitive"),
-							jEdit.getProperty("largeBufferDialog.defaultMode")},
-						jEdit.getProperty("largeBufferDialog.fullSyntax"));
-					switch (i)
+					if (!contextInsensitive)
 					{
-						case 0:
-							// do nothing
-							break;
-						case 1:
-							forceInsensitive = true;
-							break;
-						case 2:
-							mode =  getDefaultMode();
-							break;
+						// the context is not insensitive 
+						JTextPane tp = new JTextPane();
+						tp.setEditable(false);
+						tp.setText(jEdit.getProperty("largeBufferDialog.message"));
+						int i = JOptionPane.showOptionDialog(jEdit.getActiveView(),
+										     tp,
+										     jEdit.getProperty("largeBufferDialog.title", new String[]{name}),
+										     JOptionPane.DEFAULT_OPTION,
+										     JOptionPane.WARNING_MESSAGE,
+										     null,
+										     new String[]{
+											     jEdit.getProperty("largeBufferDialog.fullSyntax"),
+											     jEdit.getProperty("largeBufferDialog.contextInsensitive"),
+											     jEdit.getProperty("largeBufferDialog.defaultMode")},
+										     jEdit.getProperty("largeBufferDialog.contextInsensitive"));
+						switch (i)
+						{
+							case 0:
+								setMode(mode);
+								return;
+							case 1:
+								setMode(mode, true);
+								return;
+							case 2:
+								mode =  getDefaultMode();
+								setMode(mode);
+								return;
+						}
 					}
 				}
+				else if ("full".equals(largeFileMode))
+				{
+					setMode(mode);
+				}
+				else if ("limited".equals(largeFileMode))
+				{
+					setMode(mode, true);
+				}
+				else if ("nohighlight".equals(largeFileMode))
+				{
+					mode =  getDefaultMode();
+					setMode(mode);
+				}
 			}
-			setMode(mode, forceInsensitive);
+			setMode(mode);
 			return;
 		}
 

@@ -137,8 +137,8 @@ encodingDetectors=BOM XML-PI html python buffer-local-property
 #}}}
 
 # The critical size, over it a buffer will prompt when setting the edit mode
-# to switch to context insensitive or default mode
 largeBufferSize=4000000
+largefilemode=ask
 
 #{{{ Buffer settings
 # These can also be specified as buffer-local properties

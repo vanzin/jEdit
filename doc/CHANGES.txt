@@ -78,6 +78,9 @@ this release.
 }}}
 {{{ Miscellaneous
 
+- The EditingOptionPane has now an option to remember the user choice about large file
+  treatment (Matthieu Casanova)
+
 - Removed 192mb heap size limit from startup scripts.
   Removed jedit.l4j.ini from Windows package files because no options were left.
 
