@@ -1144,7 +1144,8 @@ public class Buffer extends JEditBuffer
 		}
 		if (mode != null)
 		{
-			if (!getFlag(TEMPORARY) && getLength() > jEdit.getIntegerProperty("largeBufferSize", 4000000))
+			int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
+			if (!getFlag(TEMPORARY) && getLength() > largeBufferSize && largeBufferSize != 0)
 			{
 				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
 				String largeFileMode = jEdit.getProperty("largefilemode", "ask");
