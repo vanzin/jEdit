@@ -282,8 +282,6 @@ editpane.bufferset.default=view
 
 #{{{ Gutter
 
-view.gutter.lineNumbers=true
-
 # Gutter background color
 view.gutter.bgColor=#dbdbdb
 
@@ -324,7 +322,7 @@ view.gutter.fontsize=10
 view.gutter.borderWidth=2
 
 # Gutter displays line numbers
-view.gutter.lineNumbers=false
+view.gutter.lineNumbers=true
 
 # Line numbers are drawn with this alignment (left, center, right)
 view.gutter.numberAlignment=right
