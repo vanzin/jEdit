@@ -215,6 +215,7 @@ file=new-file \
      save \
      save-as \
      save-a-copy-as \
+     save-as-fsb \
      save-all \
      - \
      print \
@@ -255,6 +256,9 @@ save.label=$Save
 save.icon.small=16x16/actions/document-save.png
 save-as.label=S$ave As...
 save-as.icon.small=16x16/actions/document-save-as.png
+save-as-fsb.label=S$ave As (FSB)...
+save-as-fsb.icon.small=16x16/actions/document-save-as.png
+save-as-fsb.tooltip=Save in Directory of docked file system browser
 save-a-copy-as.label=Save a Cop$y As...
 save-a-copy-as.tooltip=Does not change the current buffer's path
 save-a-copy-as.icon.small=16x16/actions/document-save-as.png

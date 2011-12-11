@@ -1090,7 +1090,26 @@
 		buffer.saveAs(view,true);
 	</CODE>
 </ACTION>
-
+<ACTION NAME="save-as-fsb">
+<CODE>
+	dwm = view.getDockableWindowManager();
+	browser = dwm.getDockable("vfs.browser");
+	if (browser == null) {
+		dwm.showDockableWindow("vfs.browser");
+		browser = dwm.getDockable("vfs.browser");
+	}
+	if (browser == null) return;
+	path = browser.getDirectory() + "/";
+	files = GUIUtilities.showVFSFileDialog(view, path, VFSBrowser.SAVE_DIALOG,false);
+	// files[] should have length 1, since the dialog type is SAVE_DIALOG
+	if(files == null)
+		return false;
+	// rename current buffer
+	boolean saved = save(view, files[0], true);
+	if (saved)
+		setReadOnly(false);
+ </CODE>
+</ACTION>
 <ACTION NAME="save-a-copy-as">
 	<CODE>
 		buffer.saveAs(view,false);
