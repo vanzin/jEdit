@@ -33,6 +33,13 @@ public interface SearchFileSet
 	 * @param view The view performing the search
 	 */
 	String getFirstFile(View view);
+	
+	/**
+	 * Returns the last file to search.
+	 * @param view The view performing the search
+	 * @since jEdit 5.0
+	 */
+	String getLastFile(View view);
 
 	/**
 	 * Returns the next file to search.
@@ -40,6 +47,13 @@ public interface SearchFileSet
 	 * @param path The last file searched
 	 */
 	String getNextFile(View view, String path);
+	
+	/**
+	 * Returns the previous file in the set.
+	 * @param view The view performing the search
+	 * @param path The last file searched
+	 */
+	String getPrevFile(View view, String path);
 
 	/**
 	 * Returns all path names in this file set.

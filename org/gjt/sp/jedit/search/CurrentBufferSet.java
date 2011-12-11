@@ -36,9 +36,24 @@ public class CurrentBufferSet implements SearchFileSet
 	{
 		return view.getBuffer().getPath();
 	} //}}}
+	
+	//{{{ getLastFile() method
+	public String getLastFile(View view)
+	{
+		return view.getBuffer().getPath();
+	} //}}}
 
 	//{{{ getNextFile() method
 	public String getNextFile(View view, String file)
+	{
+		if(file == null)
+			return view.getBuffer().getPath();
+		else
+			return null;
+	} //}}}
+	
+	//{{{ getPrevFile() method
+	public String getPrevFile(View view, String file)
 	{
 		if(file == null)
 			return view.getBuffer().getPath();

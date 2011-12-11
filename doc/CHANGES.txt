@@ -101,6 +101,8 @@ this release.
 
 - Settings directory migrated to %APPDATA%/jEdit on Windows
   (#2510763 - Alan Ezust)
+  
+- Added support for "Find Previous" when searching in multiple files (Evan Wright)
 
 }}}
 

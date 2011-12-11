@@ -467,8 +467,6 @@ public class SearchAndReplace
 			return false;
 		}
 
-		boolean _reverse = reverse && fileset instanceof CurrentBufferSet;
-
 		try
 		{
 			view.showWaitCursor();
@@ -498,7 +496,14 @@ loop:			for(;;)
 					 * it inside the buffer == null, or add
 					 * a 'finally' clause. you decide which one's
 					 * worse. */
-					path = fileset.getNextFile(view,path);
+					if (reverse)
+					{
+						path = fileset.getPrevFile(view, path);
+					}
+					else
+					{
+						path = fileset.getNextFile(view, path);
+					}
 
 					if(buffer == null)
 						continue loop;
@@ -516,17 +521,17 @@ loop:			for(;;)
 							textArea.getCaretPosition());
 						if(s == null)
 							start = textArea.getCaretPosition();
-						else if(_reverse)
+						else if(reverse)
 							start = s.getStart();
 						else
 							start = s.getEnd();
 					}
-					else if(_reverse)
+					else if(reverse)
 						start = buffer.getLength();
 					else
 						start = 0;
 
-					if(find(view,buffer,start,repeat,_reverse))
+					if(find(view,buffer,start,repeat,reverse))
 						return true;
 				}
 
@@ -568,7 +573,7 @@ loop:			for(;;)
 				}
 				else
 				{
-					Integer[] args = {Integer.valueOf(_reverse ? 1 : 0)};
+					Integer[] args = {Integer.valueOf(reverse ? 1 : 0)};
 					int result = GUIUtilities.confirm(comp,
 						"keepsearching",args,
 						JOptionPane.YES_NO_OPTION,
@@ -743,9 +748,8 @@ loop:			for(;;)
 				retVal += replaceInSelection(view,textArea,
 					buffer,matcher,smartCaseReplace,s);
 			}
-
-			boolean _reverse = !regexp && reverse && fileset instanceof CurrentBufferSet;
-			if(_reverse)
+			
+			if(reverse)
 			{
 				// so that Replace and Find continues from
 				// the right location
