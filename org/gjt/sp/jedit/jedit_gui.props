@@ -2135,8 +2135,8 @@ options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers di
 options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get wiped out whenever a new one is created (it's a feature!)
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
 options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
-options.save-back.saveAsUsesFSB=Save As uses File System Browser directory
-options.save-back.saveAsUsesFSB.tooltip=Use the directory in the FSB address bar as default save location
+options.save-back.saveAsUsesFSB="Save As" defaults to File System Browser directory
+
 #}}}
 
 #{{{ Shortcuts pane
