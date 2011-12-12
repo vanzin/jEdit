@@ -261,6 +261,7 @@ public class OperatingSystem
 	 * @since jEdit 4.3pre17
 	 * @deprecated obsolete, since we depend on Java 1.6 now
 	 */
+	@Deprecated
 	public static boolean hasJava16()
 	{
 		return true;
@@ -336,9 +337,9 @@ public class OperatingSystem
 		// for debugging, make jEdit think its using a different
 		// version of Java than it really is.
 		String javaVersion = System.getProperty("jedit.force.java.version");
-		if(javaVersion == null || javaVersion.length() == 0)
+		if(javaVersion == null || javaVersion.isEmpty())
 			javaVersion = System.getProperty("java.version");
-		if(javaVersion == null || javaVersion.length() == 0)
+		if(javaVersion == null || javaVersion.isEmpty())
 			javaVersion = System.getProperty("java.runtime.version");
 		java17 = javaVersion.compareTo("1.7") >= 0;
 	} //}}}
