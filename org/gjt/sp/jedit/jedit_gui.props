@@ -1240,15 +1240,15 @@ largeBufferDialog.message=The buffer is very large and jEdit may become\n\
 	following options.\n\
 	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit\n\
 	may become very slow, this is not recommended.\n\
-	-Context insensitive syntax highlight. In that case jEdit will try to\n\
-	keep some syntax highlight, but the result may not be perfect. The\n\
+	-Context insensitive syntax highlighting. In this case, jEdit will try to\n\
+	do some syntax highlighting, but the result may not be perfect. The\n\
 	buffer is highlighted line by line without taking care of the context\n\
-	of the previous line. So it is possible that the syntax is not accurate\n\
+	of the previous line. It is possible that the syntax is not accurate\n\
 	if you have tokens on multiple lines (multiline comments, xml tags ...)\n\
-	-Use default edit mode of jEdit (usually text mode, no syntax highlight)
+	-Use 'text' mode of jEdit (no syntax highlighting)
 largeBufferDialog.fullSyntax=Full syntax highlight
 largeBufferDialog.contextInsensitive=Context insensitive syntax highlight
-largeBufferDialog.defaultMode=Default edit mode
+largeBufferDialog.defaultMode=Text edit mode
 #}}}
 
 #{{{ I/O error dialog box
