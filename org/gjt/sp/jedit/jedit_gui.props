@@ -215,7 +215,6 @@ file=new-file \
      save \
      save-as \
      save-a-copy-as \
-     save-as-fsb \
      save-all \
      - \
      print \
@@ -256,9 +255,6 @@ save.label=$Save
 save.icon.small=16x16/actions/document-save.png
 save-as.label=S$ave As...
 save-as.icon.small=16x16/actions/document-save-as.png
-save-as-fsb.label=Save As (FS$B)...
-save-as-fsb.icon.small=16x16/actions/document-save-as.png
-save-as-fsb.tooltip=Save in Directory of docked file system browser
 save-a-copy-as.label=Save a Cop$y As...
 save-a-copy-as.tooltip=Does not change the current buffer's path
 save-a-copy-as.icon.small=16x16/actions/document-save-as.png
@@ -2122,6 +2118,7 @@ options.firewall.socks.port=SOCKS proxy port:
 
 #{{{ Save & Backup pane
 options.save-back.label=Saving & Backup
+
 options.save-back.code=new SaveBackupOptionPane();
 options.save-back.autosave=Autosave frequency (secs):
 options.save-back.backups=Max number of backups:
@@ -2138,6 +2135,8 @@ options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers di
 options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get wiped out whenever a new one is created (it's a feature!)
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
 options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
+options.save-back.saveAsUsesFSB=Save As uses File System Browser directory
+options.save-back.saveAsUsesFSB.tooltip=Use the directory in the FSB address bar as default save location
 #}}}
 
 #{{{ Shortcuts pane

@@ -84,6 +84,9 @@ this release.
 - Fixed "Use textarea colors" for dockables created in non-metal L&F.
   (#1794400 - Alan Ezust)
 
+- New option in Saving and Backup pane: Use File System Browser dir for
+  Save-As (# 1591441 - Alan Ezust)
+  
 }}}
 {{{ Miscellaneous
 

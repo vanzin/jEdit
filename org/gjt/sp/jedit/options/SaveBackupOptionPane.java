@@ -49,12 +49,24 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	@Override
 	protected void _init()
 	{
+		
+		/* Save-As Uses FSB */
+		
+		saveAsUsesFSB = new JCheckBox(jEdit.getProperty(
+			"options.save-back.saveAsUsesFSB"));
+		saveAsUsesFSB.setSelected(jEdit.getBooleanProperty(
+			"saveAsUsesFSB"));
+		saveAsUsesFSB.setToolTipText(jEdit.getProperty(
+			"options.save-back.saveAsUsesFSB.tooltip"));
+		addComponent(saveAsUsesFSB);
+		
 		/* Two-stage save */
 		twoStageSave = new JCheckBox(jEdit.getProperty(
 			"options.save-back.twoStageSave"));
 		twoStageSave.setSelected(jEdit.getBooleanProperty(
 			"twoStageSave"));
 		twoStageSave.setToolTipText(jEdit.getProperty(
+			
 			"options.save-back.twoStageSave.tooltip"));
 		addComponent(twoStageSave);
 
@@ -133,6 +145,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	@Override
 	protected void _save()
 	{
+		jEdit.setBooleanProperty("saveAsUsesFSB", saveAsUsesFSB.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
 		jEdit.setProperty("autosave", this.autosave.getText());
@@ -162,6 +175,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ Private members
+	private JCheckBox saveAsUsesFSB;
 	private JCheckBox twoStageSave;
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;

@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -43,6 +44,7 @@ import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
@@ -370,9 +372,16 @@ public class Buffer extends JEditBuffer
 	 */
 	public boolean saveAs(View view, boolean rename)
 	{
-		String[] files = GUIUtilities.showVFSFileDialog(view,path,
-			VFSBrowser.SAVE_DIALOG,false);
-
+		String fileSavePath = path;
+		if (jEdit.getBooleanProperty("saveAsUsesFSB")) 
+		{
+			DockableWindowManager dwm = view.getDockableWindowManager();
+			Component comp = dwm.getDockable("vfs.browser");
+			VFSBrowser browser = (VFSBrowser) comp;
+			if (browser != null) 
+				fileSavePath = browser.getDirectory() + "/";
+		}
+		String[] files = GUIUtilities.showVFSFileDialog(view, fileSavePath, VFSBrowser.SAVE_DIALOG,false);
 		// files[] should have length 1, since the dialog type is
 		// SAVE_DIALOG
 		if(files == null)
