@@ -189,4 +189,4 @@ unsplit.shortcut=C+1
 vertical-paste-string-register.shortcut=C+r C+p
 vertical-paste.shortcut=C+e C+p
 vfs.browser-toggle.shortcut=A+1
-view-markers.shortcut=S+F11view-markers.shortcut=S+F11
+view-markers.shortcut=S+F11
