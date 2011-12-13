@@ -260,14 +260,22 @@ view.unsplitCurrent();
                       of hang, and attach that as a textfile to your bug report, explaining what you were doing at the time.
                       </para>
 
-                      <para> To obtain a thread dump, you must run jEdit with 
-                      <literal>java -jar jedit.jar</literal> from a command line
-                      shell <emphasis role="bold">in the foreground</emphasis>,
+                      <para> One way to obtain a thread dump, is to run jEdit with <literal>java -jar jedit.jar</literal> from a command
+                      line shell <emphasis role="bold">in the foreground</emphasis>,
                       wait for the hang or lockup, and type Ctrl+\ 
                       (or Ctrl+Break on Windows) into the shell window. 
                       You should see a thread dump printed immediately that will
                       help diagnose the problem. 
                       </para>
+
+                      <para>
+                      Another way to get a thread dump is to run jEdit as you
+                      normally would, then run 
+                      <ulink url="http://visualvm.java.net/">visualvm</ulink>.
+                      You can right click on the jEdit process from within
+                      visualvm and choose "thread dump". 
+                      </para>
+
                     </answer>
 			</qandaentry>
 			<qandaentry>
