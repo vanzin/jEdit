@@ -1235,14 +1235,13 @@ error-list.plugin-manager=Plugin Manager
 
 #{{{
 largeBufferDialog.title=Large buffer {0}
-largeBufferDialog.message=The buffer is very large and jEdit may become\n\
-	unresponsive because of syntax highlight. You should consider the\n\
-	following options.\n\
-	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit\n\
+largeBufferDialog.message=The buffer is very large and jEdit may become unresponsive\n\
+	due to syntax highlighting. You should consider the following options.\n\
+	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit \n\
 	may become very slow, this is not recommended.\n\
-	-Context insensitive syntax highlighting. In this case, jEdit will try to\n\
-	do some syntax highlighting, but the result may not be perfect. The\n\
-	buffer is highlighted line by line without taking care of the context\n\
+	-Context insensitive syntax highlighting. In this case, jEdit will\n\
+	do fast highlighting, but the result may not be perfect. The\n\
+	buffer is highlighted line by line without checking context\n\
 	of the previous line. It is possible that the syntax is not accurate\n\
 	if you have tokens on multiple lines (multiline comments, xml tags ...)\n\
 	-Use 'text' mode of jEdit (no syntax highlighting)
@@ -2004,14 +2003,14 @@ options.editing.autoIndent=Automatic indentation
 options.editing.largefilemode.title=Large file mode
 options.editing.largefilemode=What should I do about very big files:
 options.editing.largefilemode.option.ask=<html><b>Ask</b> what to do when opening a large file</html>
-options.editing.largefilemode.option.full=<html><b>Keep Full syntax</b> : jEdit's syntax highlight will work as usual, jEdit\
+options.editing.largefilemode.option.full=<html><b>Keep Full syntax</b> : jEdit's syntax highlight will work as usual, jEdit \
                                                	may become <b>very slow, this is not recommended</b></html>
-options.editing.largefilemode.option.limited=<html>Context insensitive syntax highlight. In that case jEdit will try to\
-                                                  	keep some syntax highlight, but the result may not be perfect. The<br/>\
-                                                  	buffer is highlighted line by line without taking care of the context\
-                                                  	of the previous line. So it is possible that the syntax is not accurate<br/>\
-                                                  	if you have tokens on multiple lines (multiline comments, xml tags ...)\
-  							the soft wrap is also deactivated <b>(best choice)</b></html>
+options.editing.largefilemode.option.limited=<html><b>Context insensitive syntax highlight</b>: In this case jEdit will \
+		do fast highlighting, but the result may not be perfect. The<br/>\
+		buffer is highlighted line by line without taking care of the context \
+		of the previous line. It is possible that the syntax is not accurate<br/>\
+		if you have tokens on multiple lines (multiline comments, xml tags ...) \
+		Soft wrap is also deactivated <b>(best choice)</b></html>
 options.editing.largefilemode.option.nohighlight=No syntax highlight, no soft wrap
 #}}}
 
