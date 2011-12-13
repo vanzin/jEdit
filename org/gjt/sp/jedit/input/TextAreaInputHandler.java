@@ -75,7 +75,16 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		//	Log.log(Log.DEBUG,this,view+".isFocused()="+view.isFocused()+'.',new Exception());
 		}
 
-		evt = _preprocessKeyEvent(evt);
+		if(evt.isConsumed())
+			return;
+
+		if(Debug.DUMP_KEY_EVENTS)
+		{
+			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
+					       + toString(evt));
+		}
+
+		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
 			return;
 
@@ -121,28 +130,6 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 				keyEventInterceptor.keyReleased(evt);
 			break;
 		}
-	} //}}}
-
-	//{{{ _preprocessKeyEvent() method
-	/**
-	 * This method returns if the keyboard event can be handled or not.
-	 *
-	 * @param evt the keyboard event
-	 * @return null if the keyboard event cannot be handled, or the keyboard event itself
-	 * otherwise
-	 */
-	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
-	{
-		if(evt.isConsumed())
-			return null;
-
-		if(Debug.DUMP_KEY_EVENTS)
-		{
-			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
-					+ toString(evt));
-		}
-
-		return KeyEventWorkaround.processKeyEvent(evt);
 	} //}}}
 
 	//{{{ processKeyEventSub() method
