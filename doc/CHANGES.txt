@@ -67,6 +67,9 @@ this release.
 }}}
 {{{ UI
 
+- Combined Global and Plugin options into a single pane, making Optional plugin obsolete.
+  (Alan Ezust - # 3455602)
+
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
@@ -102,7 +105,7 @@ this release.
 
 - jEdit support for keymaps (Matthieu Casanova)
 
-- Settings directory migrated to %APPDATA%/jEdit on Windows
+- User Settings directory migrated to %APPDATA%/jEdit on Windows
   (#2510763 - Alan Ezust)
   
 - Added support for "Find Previous" when searching in multiple files (Evan Wright)

@@ -396,7 +396,7 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		new GlobalOptions(view);
+		new org.gjt.sp.jedit.options.CombinedOptions(view);
 	</CODE>
 </ACTION>
 <ACTION NAME="global-bufferset">
@@ -844,7 +844,7 @@
 
 <ACTION NAME="plugin-options">
 	<CODE>
-		new PluginOptions(view);
+		new org.gjt.sp.jedit.options.CombinedOptions(view, 1);
 	</CODE>
 </ACTION>
 

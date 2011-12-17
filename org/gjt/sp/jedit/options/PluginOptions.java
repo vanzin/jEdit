@@ -30,7 +30,9 @@ import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
-
+/**
+ @deprecated use CombinedOptions
+ */
 public class PluginOptions extends OptionsDialog
 {
 	//{{{ PluginOptions constructor

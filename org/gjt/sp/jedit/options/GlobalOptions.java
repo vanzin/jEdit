@@ -29,7 +29,9 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.msg.PropertiesChanging;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/**
+   @deprecated - use CombinedOptinos
+*/
 public class GlobalOptions extends OptionsDialog
 {
 	//{{{ GlobalOptions constructor

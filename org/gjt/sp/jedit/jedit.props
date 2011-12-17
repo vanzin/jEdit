@@ -494,6 +494,7 @@ server.brokenToFront=false
 
 # restore remote VFS files by default (new option)
 options.general.restore.remote=true
+optional.title-template={0} {1}
 mime2mode.text/html=html
 
 #{{{ Keymaps

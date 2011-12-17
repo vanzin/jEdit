@@ -257,10 +257,12 @@ view.unsplitCurrent();
                       <para> Sometimes, it can be due to a deadlock, or an
                       infinite loop, or something else. You need to obtain a 
                       <emphasis role="bold">thread dump</emphasis> from the time
-                      of hang, and attach that as a textfile to your bug report, explaining what you were doing at the time.
+                      of hang, and attach that as a textfile to your bug report,
+                      explaining what you were doing at the time.
                       </para>
 
-                      <para> One way to obtain a thread dump, is to run jEdit with <literal>java -jar jedit.jar</literal> from a command
+                      <para> One way to obtain a thread dump, is to run jEdit
+                      with <literal>java -jar jedit.jar</literal> from a command
                       line shell <emphasis role="bold">in the foreground</emphasis>,
                       wait for the hang or lockup, and type Ctrl+\ 
                       (or Ctrl+Break on Windows) into the shell window. 
