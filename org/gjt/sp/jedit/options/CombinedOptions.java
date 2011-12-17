@@ -20,9 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */ 
 package org.gjt.sp.jedit.options;
-
 import java.awt.Frame;
-
 import org.gjt.sp.jedit.jEdit;
 // import org.gjt.sp.jedit.options.BufferOptionPane;
 
@@ -38,7 +36,7 @@ import org.gjt.sp.jedit.jEdit;
 
 public class CombinedOptions extends TabbedOptionDialog
 {
-    
+
 	// {{{ Members
 
 	GlobalOptionGroup globalOptions;
@@ -46,15 +44,14 @@ public class CombinedOptions extends TabbedOptionDialog
 	// BufferOptionPane bufferOptions;
 
 	int startingIndex = 0;
-
 	// }}}
-
 	
 	// {{{ CombinedOptions Constructors	
 	/**
 	 * Static constructor that remembers the previously used tab.
 	 */
-	public static CombinedOptions combinedOptions(Frame parent) {
+	public static CombinedOptions combinedOptions(Frame parent) 
+	{
 		int startingIndex = jEdit.getIntegerProperty("optional.last.tab", 0);
 		return new CombinedOptions(parent, startingIndex);
 	}

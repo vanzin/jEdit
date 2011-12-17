@@ -43,6 +43,7 @@ import org.gjt.sp.util.Log;
  * An abstract options dialog box.
  * @author Slava Pestov
  * @version $Id$
+ * @todo: refactor to use OptionGroupPane
  */
 public abstract class OptionsDialog extends EnhancedDialog
 	implements ActionListener, TreeSelectionListener

@@ -55,11 +55,11 @@ import org.gjt.sp.util.Log;
 
 
 /**
- * An option pane for displaying groups of options. There is a lot of code here
- * which was taken from OptionDialog, but this class is a component which can
+ * An option pane for displaying groups of options. There is code here
+ * which was taken from OptionsDialog, but this class is a component which can
  * be embedded in other Dialogs.
  * 
- * @see OptionDialog
+ * @see OptionsDialog
  * 
  * @author ezust
  * 
