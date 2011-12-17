@@ -4,7 +4,7 @@
  * :folding=explicit:
  *
  * Copyright (C) 2005 Slava Pestov
- * Copyright (C) 2005 Alan Ezust 
+ * Copyright (C) 2011 Alan Ezust 
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,6 @@ import org.gjt.sp.util.Log;
  * be embedded in other Dialogs.
  * 
  * @see OptionDialog
- * 
  * 
  * @author ezust
  * 

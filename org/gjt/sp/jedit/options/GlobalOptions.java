@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanging;
 import org.gjt.sp.jedit.*;
 //}}}
 /**
-   @deprecated - use CombinedOptinos
+   @deprecated - use CombinedOptions
 */
 public class GlobalOptions extends OptionsDialog
 {

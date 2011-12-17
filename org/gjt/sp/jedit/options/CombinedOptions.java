@@ -1,6 +1,23 @@
 /*
+ * CombinedOptions.java - Combined options dialog
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:
+ *
+ * Copyright (C) 2011 Alan Ezust
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */ 
 package org.gjt.sp.jedit.options;
 
@@ -12,11 +29,11 @@ import org.gjt.sp.jedit.jEdit;
 // {{{ class CombinedOptions
 /**
  * 
- * An OptionDialog which combines Global and Plugin options 2 tabs on a single
- * dialog
+ * An OptionDialog which combines Global and Plugin options 
+ * into 2 tabs on a single dialog.
  * 
  * @author Alan Ezust
- * 
+ * @since jEdit 5.0pre1 
  */
 
 public class CombinedOptions extends TabbedOptionDialog
@@ -32,15 +49,17 @@ public class CombinedOptions extends TabbedOptionDialog
 
 	// }}}
 
+	
+	// {{{ CombinedOptions Constructors	
 	/**
-	 * Remembers the previously used tab.
+	 * Static constructor that remembers the previously used tab.
 	 */
 	public static CombinedOptions combinedOptions(Frame parent) {
 		int startingIndex = jEdit.getIntegerProperty("optional.last.tab", 0);
 		return new CombinedOptions(parent, startingIndex);
 	}
 	
-	// {{{ CombinedOptions Constructors
+
 	public CombinedOptions(Frame parent, int tabIndex)
 	{
 		super(parent, "Combined Options");

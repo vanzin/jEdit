@@ -3,7 +3,8 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2005 Slava Pestov, Alan Ezust
+ * Copyright (C) 2005 Slava Pestov
+ * Copyright (C) 2011 Alan Ezust
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,12 +54,8 @@ import org.gjt.sp.jedit.gui.EnhancedDialog;
 
 // {{{ TabbedOptionDialog class
 /**
- * Replacement for OptionsDialog. It uses the OptionGroupPane instead of
- * managing its own optons.
- * 
- * This class should eventually replace
- * 
- * @ref OptionsDialog
+ * Replacement for OptionsDialog. It uses OptionGroupPane instead of
+ * managing its own options.
  * 
  * @author ezust
  * 
