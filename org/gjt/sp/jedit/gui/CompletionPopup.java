@@ -45,7 +45,6 @@ import javax.swing.JWindow;
 import javax.swing.ListSelectionModel;
 import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
@@ -447,13 +446,10 @@ public class CompletionPopup extends JWindow
 				default:
 					if(e.isActionKey()
 						|| e.isAltDown()
-						|| e.isMetaDown())
+						|| e.isMetaDown()
+						|| e.isControlDown())
 					{
 						dispose();
-					}
-					else if (e.isControlDown())
-					{
-						e.consume();
 					}
 					break;
 				}
