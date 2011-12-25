@@ -396,9 +396,10 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		return org.gjt.sp.jedit.options.CombinedOptions.combinedOptions(view);
+		new org.gjt.sp.jedit.options.CombinedOptions(view, 0);
 	</CODE>
 </ACTION>
+
 <ACTION NAME="global-bufferset">
 	<CODE>
 		bufferSetManager = jEdit.getBufferSetManager();
