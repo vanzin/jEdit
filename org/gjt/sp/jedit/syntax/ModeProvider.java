@@ -35,7 +35,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -54,15 +53,10 @@ public class ModeProvider
 
 	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
 
-	// any mode that is added that is already in the 'modes' map is added here. These
-	// 'override' modes are modes loaded from outside of the standard issue catalog files.
-	private final LinkedHashMap<String, Mode> overrideModes = new LinkedHashMap<String, Mode>(20);
-
 	//{{{ removeAll() method
 	public void removeAll()
 	{
 		modes.clear();
-		overrideModes.clear();
 	} //}}}
 
 	//{{{ getMode() method
@@ -73,12 +67,7 @@ public class ModeProvider
 	 */
 	public Mode getMode(String name)
 	{
-		Mode mode = overrideModes.get(name);
-		if (mode == null)
-		{
-			mode = modes.get(name);
-		}
-		return mode;
+		return modes.get(name);
 	} //}}}
 
 	//{{{ getModeForFile() method
@@ -111,25 +100,11 @@ public class ModeProvider
 			filename = filename.substring(0, filename.length() - 3);
 
 		List<Mode> acceptable = new ArrayList<Mode>();
-
-		// First check overrideModes as these are user supplied modes.
-		// User modes have priority.
-		for(Mode mode : overrideModes.values())
+		for(Mode mode : modes.values())
 		{
 			if(mode.accept(filepath, filename, firstLine))
 			{
 				acceptable.add(mode);
-			}
-		}
-		if (acceptable.isEmpty())
-		{
-			// no user modes were acceptable, so check standard modes.
-			for(Mode mode : modes.values())
-			{
-				if(mode.accept(filepath, filename, firstLine))
-				{
-					acceptable.add(mode);
-				}
 			}
 		}
 		if (acceptable.size() == 1)
@@ -138,6 +113,8 @@ public class ModeProvider
 		}
 		if (acceptable.size() > 1)
 		{
+			// The check should be in reverse order so that
+			// modes from the user catalog get checked first!
 			Collections.reverse(acceptable);
 
 			// the very most acceptable mode is one whose file
@@ -176,7 +153,6 @@ public class ModeProvider
 		return null;
 	} //}}}
 
-
 	//{{{ getModes() method
 	/**
 	 * Returns an array of installed edit modes.
@@ -184,14 +160,7 @@ public class ModeProvider
 	 */
 	public Mode[] getModes()
 	{
-		Mode[] array = new Mode[modes.size() + overrideModes.size()];
-		Collection<Mode> modesValues = modes.values();
-		Mode[] standard = modesValues.toArray(new Mode[modesValues.size()]);
-		Collection<Mode> overridenValues = overrideModes.values();
-		Mode[] override = overridenValues.toArray(new Mode[overridenValues.size()]);
-		System.arraycopy(standard, 0, array, 0, standard.length);
-		System.arraycopy(override, 0, array, standard.length, override.length);
-		return array;
+		return modes.values().toArray(new Mode[modes.size()]);
 	} //}}}
 
 	//{{{ addMode() method
@@ -204,15 +173,13 @@ public class ModeProvider
 	 */
 	public void addMode(Mode mode)
 	{
-		if (modes.get(mode.getName()) != null)
-		{
-			overrideModes.put(mode.getName(), mode);
-			modes.remove(mode.getName());
-		}
-		else
-		{
-			modes.put(mode.getName(), mode);
-		}
+		String name = mode.getName();
+
+		// The removal makes the "insertion order" in modes
+		// (LinkedHashMap) follow the order of addMode() calls.
+		modes.remove(name);
+
+		modes.put(name, mode);
 	} //}}}
 
 	//{{{ loadMode() method
