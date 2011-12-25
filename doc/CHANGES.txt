@@ -28,7 +28,10 @@ contributing to this release.
   (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
 
 - Fixed #3434527: Jump to wrong line with folded target (Evan Wright)  
-  
+
+- \r (0x0A, CR) could be pasted from clipboard into buffer.
+  (Bug #3142456 - Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
