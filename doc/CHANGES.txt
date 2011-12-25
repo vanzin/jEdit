@@ -29,6 +29,9 @@ this release.
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
+- \r (0x0A, CR) could be pasted from clipboard into buffer.
+  (Bug #3142456 - Matthieu Casanova)
+
 }}}
 {{{ API Changes
 
