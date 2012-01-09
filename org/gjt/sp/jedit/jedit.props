@@ -277,6 +277,9 @@ view.ctrlForRectangularSelection=true
 view.minStartupWidth=200
 view.minStartupHeight=200
 
+Combined\ Options.width=1024
+Combined\ Options.height=768
+
 # The default bufferSet scope
 editpane.bufferset.default=view
 
