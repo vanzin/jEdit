@@ -260,6 +260,7 @@
 		<copy todir="${textAreaPackage}/src">
 			<fileset dir="${basedir}">
 				<include name="modes/*"/>
+				<include name="keymaps/*"/>
 				<include name="org/gjt/sp/jedit/bsh/*"/>
 				<include name="org/gjt/sp/jedit/bsh/**/*"/>
 
@@ -541,6 +542,7 @@
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
+				<include name="keymaps/*.props"/>
 				<include name="modes/*"/>
 			</fileset>
 			<manifest>

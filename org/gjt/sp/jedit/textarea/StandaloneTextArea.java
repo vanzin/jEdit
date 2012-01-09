@@ -65,7 +65,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
 //}}}
-// {{{ class StandaloneTextArea
+
 /**
  * jEdit's standalone text component.<p>
  *
@@ -329,7 +329,7 @@ public class StandaloneTextArea extends TextArea
 		return propertyManager.getProperty(name);
 	} //}}}
 
-	//{{{ getBooleanProperty() method
+	//{{{ getBooleanProperty() methods
 	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property
@@ -337,9 +337,8 @@ public class StandaloneTextArea extends TextArea
 	private boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name,false);
-	} //}}}
+	}
 
-	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property
@@ -384,7 +383,6 @@ public class StandaloneTextArea extends TextArea
 			}
 		}
 	} //}}}
-
 
 	//{{{ getFontProperty() methods
 	/**
@@ -479,7 +477,6 @@ public class StandaloneTextArea extends TextArea
 		else
 			return SyntaxUtilities.parseColor(value, def);
 	} //}}}
-
 
 	//{{{ propertiesChanged() method
 	/**
@@ -583,6 +580,7 @@ public class StandaloneTextArea extends TextArea
 	public static StandaloneTextArea createTextArea()
 	{
 		final Properties props = new Properties();
+		props.putAll(loadProperties("/keymaps/jEdit_keys.props"));
 		props.putAll(loadProperties("/org/gjt/sp/jedit/jedit.props"));
 		StandaloneTextArea textArea = new StandaloneTextArea(new IPropertyManager()
 		{
@@ -682,4 +680,4 @@ public class StandaloneTextArea extends TextArea
 		frame.pack();
 		frame.setVisible(true);
 	} //}}}
-}// }}}
+}
