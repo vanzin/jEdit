@@ -1,6 +1,6 @@
 jEdit 5.0 version history
        (changes since jEdit 4.5)
-:encoding=UTF-8:
+:encoding=UTF-8:maxLineLen=80:wrap=hard:
 
 {{{ Version 5.0pre1
 
@@ -11,10 +11,10 @@ this release.
 {{{ Bug fixes
 - Fixed Ctrl + key not working in completion popup (Matthieu Casanova)
 
-- Large file mode text description dialog (#3456370) (Matthieu Casanova)
+- Large file mode text description dialog (#3456370 - Matthieu Casanova)
 
-- Fixed Copy_Line macro that was copying one character of the next line (#3454377)
-  (Matthieu Casanova)
+- Fixed Copy_Line macro that was copying one character of the next line 
+  (#3454377 - Matthieu Casanova)
 
 - Fixed copy of Hypersearch results adding \r in the clipboard (#3142456)
   (Matthieu Casanova)
@@ -24,7 +24,7 @@ this release.
   (Bug #2327520 - Björn "Vampire" Kautler)
 
 - Added select all and select none buttons to PingPongList fixing a bug in
-  EncodingsOptionPane (#3434850) (Matthieu Casanova)
+  EncodingsOptionPane (#3434850 - Matthieu Casanova)
 
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
@@ -48,11 +48,11 @@ this release.
 }}}
 {{{ Editing
 
-- Using no highlight or limited syntax highlight in large buffers now also disable
-  soft wrap (Matthieu Casanova)
+- Using no highlight or limited syntax highlight in large buffers now also
+  disables soft wrap (Matthieu Casanova)
 
-- Using no highlight or limited syntax highlight in large buffers now disable highlight
-  of very long lines (Matthieu Casanova)
+- Using no highlight or limited syntax highlight in large buffers now disables
+  highlight of very long lines (Matthieu Casanova)
 
 - Latex Indentation a nuisance (# 3432974)
 
@@ -71,8 +71,8 @@ this release.
 }}}
 {{{ UI
 
-- Combined Global and Plugin options into a single pane, making Optional plugin obsolete.
-  (Alan Ezust - # 3455602)
+- Combined Global and Plugin options into a single pane, making Optional plugin
+  obsolete. (Alan Ezust - # 3455602)
 
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
