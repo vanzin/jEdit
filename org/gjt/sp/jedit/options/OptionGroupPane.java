@@ -59,6 +59,9 @@ import org.gjt.sp.util.Log;
  * which was taken from OptionsDialog, but this class is a component which can
  * be embedded in other Dialogs.
  * 
+ * Shows a JTree on the left, and an option pane on the right, with a splitter
+ * between. 
+ * 
  * @see OptionsDialog
  * 
  * @author ezust
@@ -354,7 +357,8 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 	{
 		if (currentPane != null)
 			jEdit.setProperty(getName() + ".last", currentPane.getName());
-
+		int dividerPosition = splitter.getDividerLocation();
+		jEdit.setIntegerProperty(optionGroup.getName() + ".splitter", dividerPosition);
 		save(optionGroup);
 	}
 
