@@ -28,13 +28,18 @@ import org.gjt.sp.jedit.bsh.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -1020,6 +1025,76 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			return getSelectedFiles();
 		}
 	} //}}}
+	
+	public void paste(VFSFile file) throws IOException, UnsupportedFlavorException
+	{
+		if (file == null)
+			throw new IllegalArgumentException("file cannot be null");
+		String targetPath = null;
+		switch (file.getType())
+		{
+			case VFSFile.FILESYSTEM:
+				return;
+			case VFSFile.FILE:
+				targetPath = MiscUtilities.getParentOfPath(file.getPath());
+				break;
+			case VFSFile.DIRECTORY:
+				targetPath = file.getPath();
+				break;
+		}
+		VFS vfs = VFSManager.getVFSForPath(targetPath);
+		Object vfsSession = null;
+		try
+		{
+			vfsSession = vfs.createVFSSession(targetPath, this);
+
+			Transferable transferable = Registers.getRegister('$').getTransferable();
+			if (transferable.isDataFlavorSupported(ListVFSFileTransferable.jEditFileList))
+			{
+				List<VFSFile> copiedFiles = (List<VFSFile>) transferable.getTransferData(ListVFSFileTransferable.jEditFileList);
+				for (VFSFile f : copiedFiles)
+				{
+					if (f.getType() == VFSFile.FILE)
+					{
+						String sourcePath = f.getPath();
+						String sourceName = f.getName();
+						_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+					}
+				}
+			}
+			else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+			{
+				List<File> copiedFiles = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				for (File f : copiedFiles)
+				{
+					if (f.isFile())
+					{
+						String sourcePath = f.getAbsolutePath();
+						String sourceName = f.getName();
+						_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+					}
+				}
+			}
+		}
+		finally
+		{
+			vfs._endVFSSession(vfsSession, this);
+		}
+	}
+
+	private void _copy(Object vfsSession, VFS vfs, String sourcePath, String sourceName, String targetPath)
+		throws IOException
+	{
+		String name = createUniqueFilename(vfsSession, vfs, targetPath, sourceName);
+		if (name == null)
+		{
+			Log.log(Log.WARNING, this, "Unable to create unique name for file " +
+						   targetPath + '/' + sourceName);
+		}
+		String targetName = MiscUtilities.constructPath(targetPath, name);
+		ThreadUtilities
+			.runInBackground(new CopyFileWorker(view, sourcePath, targetName));
+	}
 
 	//{{{ locateFile() method
 	/**
@@ -1498,6 +1573,38 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		if(path != null)
 			reloadDirectory();
 	} //}}}
+
+	/**
+	 * Create a unique filename
+	 * @param session the session for the vfs
+	 * @param vfs the vfs
+	 * @param path the parent directory
+	 * @param baseName the filename
+	 * @return baseName if it doesn't already exists, or baseName-copy-i with i as an integer < 1000. Null if unable
+	 * to find a unique filename
+	 * @throws IOException
+	 */
+	private String createUniqueFilename(Object session, VFS vfs, String path, String baseName) throws IOException
+	{
+		String s = MiscUtilities.constructPath(path, baseName);
+		VFSFile file = vfs._getFile(session, s, this);
+		String extension = MiscUtilities.getFileExtension(baseName);
+		String nameNoExtension = MiscUtilities.getFileNameNoExtension(baseName);
+		if (file == null)
+			return baseName;
+
+		for (int i = 1;i<1000;i++)
+		{
+			String name = nameNoExtension + "-copy-" + i;
+			if (extension != null)
+				name += extension;
+			s = MiscUtilities.constructPath(path, name);
+			file = vfs._getFile(session, s, this);
+			if (file == null)
+				return name;
+		}
+		return null;
+	}
 
 	/* We do this stuff because the browser is not able to handle
 	 * more than one request yet */

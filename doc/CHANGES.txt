@@ -9,6 +9,10 @@ Dale Anson, Matthieu Casanova, Jimmy Chaw and Jarek Czekalski for contributing t
 this release.
 
 {{{ Bug fixes
+- When copying a file in VFSBrowser, if a file with the same name already exists
+  a suffix copy-n is added to avoid deleting the existing file (#3470759)
+  (Matthieu Casanova)
+
 - Fixed Ctrl + key not working in completion popup (Matthieu Casanova)
 
 - Large file mode text description dialog (#3456370 - Matthieu Casanova)

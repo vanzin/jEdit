@@ -73,47 +73,7 @@
 	<CODE>
         if (files.length != 1)
             return;
-        org.gjt.sp.jedit.io.VFSFile file = files[0];
-        String targetPath;
-        switch (file.getType())
-        {
-            case org.gjt.sp.jedit.io.VFSFile.FILESYSTEM:
-                return;
-            case org.gjt.sp.jedit.io.VFSFile.FILE:
-                targetPath = MiscUtilities.getParentOfPath(file.getPath());
-                break;
-            case org.gjt.sp.jedit.io.VFSFile.DIRECTORY:
-                targetPath = file.getPath();
-                break;
-        }
-
-        java.awt.datatransfer.Transferable transferable = Registers.getRegister('$').getTransferable();
-        if (transferable.isDataFlavorSupported(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList))
-        {
-            List copiedFiles = (List) transferable.getTransferData(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList);
-            Iterator iterator = copiedFiles.iterator();
-            while (iterator.hasNext())
-            {
-                org.gjt.sp.jedit.io.VFSFile f = (org.gjt.sp.jedit.io.VFSFile) iterator.next();
-                if (f.getType() == org.gjt.sp.jedit.io.VFSFile.FILE)
-                {
-                    ThreadUtilities.runInBackground(new CopyFileWorker(view, f.getPath(), targetPath));
-                }
-            }
-        }
-        else if (transferable.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor))
-        {
-            List copiedFiles = (List) transferable.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
-            Iterator iterator = copiedFiles.iterator();
-            while (iterator.hasNext())
-            {
-                File f = (File) iterator.next();
-                if (f.isFile())
-                {
-                    ThreadUtilities.runInBackground(new CopyFileWorker(view, f.getAbsolutePath(), targetPath));
-                }
-            }
-        }
+	browser.paste(files[0]);
 	</CODE>
 </ACTION>
 
