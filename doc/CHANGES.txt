@@ -1,6 +1,6 @@
 jEdit 5.0 version history
        (changes since jEdit 4.5)
-:encoding=UTF-8:maxLineLen=80:wrap=hard:
+:encoding=UTF-8:
 
 {{{ Version 5.0pre1
 
@@ -129,4 +129,4 @@ this release.
 }}}
 
 jEdit buffer local properties:
-:folding=explicit:collapseFolds=2:
+:folding=explicit:collapseFolds=2:maxLineLen=80:wrap=hard:
