@@ -69,6 +69,8 @@
 			<KEYWORD1>hitPoint_changed</KEYWORD1>
 			<KEYWORD1>hitNormal_changed</KEYWORD1>
 			<KEYWORD1>hitTexcoord_changed</KEYWORD1>
+			<KEYWORD1>orientation_changed</KEYWORD1>
+			<KEYWORD1>position_changed</KEYWORD1>
 			<KEYWORD1>autoOffset</KEYWORD1>
 			<KEYWORD1>offset</KEYWORD1>
 			<KEYWORD1>maxPosition</KEYWORD1>
@@ -170,6 +172,8 @@
 			<KEYWORD1>info</KEYWORD1>
 			<KEYWORD1>mustEvaluate</KEYWORD1>
 			<KEYWORD1>directOutput</KEYWORD1>
+			<KEYWORD1>cycleInterval</KEYWORD1>
+			<KEYWORD1>cycleTime</KEYWORD1>
 
 			<KEYWORD2>META</KEYWORD2>
 			<KEYWORD2>Shape</KEYWORD2>
