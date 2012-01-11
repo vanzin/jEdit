@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2010 Matthieu Casanova
+ * Copyright (C) 2010, 2012 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
  */
 package org.gjt.sp.jedit.datatransfer;
 
+//{{{ Imports
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFSFile;
 
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+//}}}
 
 /**
  * @author Matthieu Casanova
@@ -45,21 +47,25 @@ public class ListVFSFileTransferable implements Transferable
 	
 	private final List<VFSFile> files;
 
+	//{{{ ListVFSFileTransferable constructor
 	public ListVFSFileTransferable(VFSFile[] files)
 	{
 		this.files = Collections.unmodifiableList(Arrays.asList(files));
-	}
+	} //}}}
 
+	//{{{ getTransferDataFlavors() method
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		return supported;
-	}
+	} //}}}
 
+	//{{{ isDataFlavorSupported() method
 	public boolean isDataFlavorSupported(DataFlavor flavor)
 	{
 		return jEditFileList.equals(flavor) || DataFlavor.stringFlavor.equals(flavor);
-	}
+	} //}}}
 
+	//{{{ getTransferData() method
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 	{
 		if (jEditFileList.equals(flavor))
@@ -74,7 +80,7 @@ public class ListVFSFileTransferable implements Transferable
 				VFSFile vfsFile = files.get(i);
 				if (i != 0)
 					builder.append('\n');
-				builder.append(vfsFile);
+				builder.append(vfsFile.getPath());
 			}
 			return builder.toString();
 		}
@@ -89,5 +95,5 @@ public class ListVFSFileTransferable implements Transferable
 			return files;
 		}
 		throw new UnsupportedFlavorException(flavor);
-	}
+	} //}}}
 }

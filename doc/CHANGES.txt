@@ -102,6 +102,9 @@ this release.
 }}}
 {{{ Miscellaneous
 
+- Pasting a VFSFile as String dataflavor will now paste the full path instead of
+  the name of the file (Matthieu Casanova)
+
 - The EditingOptionPane has now an option to remember the user choice about large file
   treatment (Matthieu Casanova)
 
