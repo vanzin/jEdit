@@ -1069,7 +1069,14 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 					{
 						String sourcePath = f.getPath();
 						String sourceName = f.getName();
-						_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+						try
+						{
+							_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+						}
+						catch (IOException e)
+						{
+							Log.log(Log.ERROR, this, e.getMessage());
+						}
 					}
 				}
 			}
@@ -1082,7 +1089,14 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 					{
 						String sourcePath = f.getAbsolutePath();
 						String sourceName = f.getName();
-						_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+						try
+						{
+							_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
+						}
+						catch (IOException e)
+						{
+							Log.log(Log.ERROR, this, e.getMessage());
+						}
 					}
 				}
 			}
@@ -1535,8 +1549,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		String name = createUniqueFilename(vfsSession, vfs, targetPath, sourceName);
 		if (name == null)
 		{
-			Log.log(Log.WARNING, this, "Unable to create unique name for file " +
-						   targetPath + '/' + sourceName);
+			throw new IOException("Unable to create unique name for file " +
+					      targetPath + '/' + sourceName);
 		}
 		String targetName = MiscUtilities.constructPath(targetPath, name);
 		ThreadUtilities
