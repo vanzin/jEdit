@@ -5,8 +5,8 @@ jEdit 5.0 version history
 {{{ Version 5.0pre1
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust,
-Dale Anson, Matthieu Casanova, Jimmy Chaw and Jarek Czekalski for contributing to
-this release.
+Dale Anson, Matthieu Casanova, Jimmy Chaw and Jarek Czekalski for contributing 
+to this release.
 
 {{{ Bug fixes
 - When copying a file in VFSBrowser, if a file with the same name already exists
@@ -80,15 +80,15 @@ this release.
 {{{ UI
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
-  obsolete. (Alan Ezust - # 3455602)
+	obsolete. (Alan Ezust - # 3455602)
 
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
   (Bug #3415064 - Alan Ezust)
 
-- Changed menus to use Mac-specific symbols for accelerator keys when using
-  OS X and the native look & feel (SF.net patch #1950147 - Nathan Gray)
+- Changed menus to use Mac-specific symbols for accelerator keys when using OS X
+  and the native look & feel (SF.net patch #1950147 - Nathan Gray)
 
 - Added an option (on by default) to use the native Quartz renderer on
   Mac OS X (Evan Wright)
@@ -108,8 +108,8 @@ this release.
 - Pasting a VFSFile as String dataflavor will now paste the full path instead of
   the name of the file (Matthieu Casanova)
 
-- The EditingOptionPane has now an option to remember the user choice about large file
-  treatment (Matthieu Casanova)
+- The EditingOptionPane has now an option to remember the user choice about
+  large file treatment (Matthieu Casanova)
 
 - Removed 192mb heap size limit from startup scripts.
   Removed jedit.l4j.ini from Windows package files because no options were left.
@@ -127,7 +127,7 @@ this release.
 
 - User Settings directory migrated to %APPDATA%/jEdit on Windows
   (#2510763 - Alan Ezust)
-  
+
 - Added support for "Find Previous" when searching in multiple files (Evan Wright)
 
 }}}
@@ -135,4 +135,5 @@ this release.
 }}}
 
 jEdit buffer local properties:
-:folding=explicit:collapseFolds=2:maxLineLen=80:wrap=hard:
+:maxLineLen=80:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
+:folding=explicit:collapseFolds=2
