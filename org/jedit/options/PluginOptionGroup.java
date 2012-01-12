@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.gjt.sp.jedit.options;
+package org.jedit.options;
 
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.EditPlugin;
 import org.gjt.sp.jedit.OptionGroup;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.options.PluginOptions.NoPluginsPane;
+
 
 /**
 *  Refactored from PluginOptions.java - this class
