@@ -48,7 +48,7 @@ makeBugReport()
 	lastError = new StringBuffer();
 	insideError = false;
 	startupDone = false;
-	activityLogHeaderLines = 9;
+	activityLogHeaderLines = 250;
 	try
 	{
 		for(i = 0; i < activityLogHeaderLines; ++i)
