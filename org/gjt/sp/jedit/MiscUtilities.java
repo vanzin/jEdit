@@ -420,10 +420,34 @@ public class MiscUtilities
 		return VFSManager.getVFSForPath(path).getFileName(path);
 	} //}}}
 
+	//{{{ getCompleteBaseName() method
+	/**
+	 * Returns the complete basename of a file.
+	 * If your filename is
+	 * IP-192.168.1.1-data.tar.gz
+	 * it will returns
+	 * IP-192.168.1.1-data.tar
+	 * @param path the path name
+	 * @return the complete basename.
+	 * @since jEdit 5.0
+	 */
+	public static String getCompleteBaseName(String path)
+	{
+		String name = getFileName(path);
+		int index = name.lastIndexOf('.');
+		if (index == -1)
+			return name;
+		return name.substring(0, index);
+	} //}}}
+
 	//{{{ getFileNameNoExtension() method
 	/**
 	 * Returns the last component of the specified path name without the
 	 * trailing extension (if there is one).
+	 * If your filename is
+	 * IP-192.168.1.1-data.tar.gz
+	 * it will returns
+	 * IP-192
 	 * @param path The path name
 	 * @since jEdit 4.0pre8
 	 */

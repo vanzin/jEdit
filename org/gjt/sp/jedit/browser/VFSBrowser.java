@@ -1617,7 +1617,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		String s = MiscUtilities.constructPath(path, baseName);
 		VFSFile file = vfs._getFile(session, s, this);
 		String extension = MiscUtilities.getFileExtension(baseName);
-		String nameNoExtension = MiscUtilities.getFileNameNoExtension(baseName);
+		String nameNoExtension = MiscUtilities.getCompleteBaseName(baseName);
 		if (file == null)
 			return baseName;
 

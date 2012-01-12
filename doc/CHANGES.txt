@@ -39,6 +39,9 @@ this release.
 }}}
 {{{ API Changes
 
+- New method MiscUtilities.getCompleteBaseName() to return the complete base
+  name of a file (until the last .) (Matthieu Casanova)
+
 - TextUtilities.join() now accept Collection<?> instead of Collection<String>
   (Matthieu Casanova)
 
