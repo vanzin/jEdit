@@ -24,8 +24,8 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
-import org.gjt.sp.jedit.keymap.KeymapManager;
-import org.gjt.sp.jedit.keymap.KeymapManagerImpl;
+import org.jedit.keymap.KeymapManager;
+import org.jedit.keymap.KeymapManagerImpl;
 import org.gjt.sp.jedit.migration.KeymapMigration;
 import org.gjt.sp.jedit.migration.MigrationService;
 import org.gjt.sp.jedit.visitors.JEditVisitor;

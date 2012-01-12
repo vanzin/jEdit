@@ -29,7 +29,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
-import org.gjt.sp.jedit.keymap.Keymap;
+import org.jedit.keymap.Keymap;
 //}}}
 
 /**

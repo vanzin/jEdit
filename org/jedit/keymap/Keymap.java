@@ -19,22 +19,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.keymap;
-
-import java.io.File;
-import java.io.FileFilter;
+package org.jedit.keymap;
 
 /**
- * A FileFilter that returns keymaps files.
- *
  * @author Matthieu Casanova
  * @since jEdit 5.0
  */
-public class KeymapFileFilter implements FileFilter
+public interface Keymap
 {
-	@Override
-	public boolean accept(File pathname)
-	{
-		return pathname.isFile() && pathname.getName().endsWith("_keys.props");
-	}
+	/**
+	 * Returns a shortcut.
+	 * @param name the shortcut name
+	 * @return the action name or <code>null</code> if there is no shortcut
+	 */
+	String getShortcut(String name);
+	
+	/**
+	 * Set a new shortcut.
+	 * @param name the shortcut name
+	 * @param shortcut the action name, or <code>null</code> to delete a 
+	 * shortcut
+	 */
+	void setShortcut(String name, String shortcut);
+	
+	/**
+	 * Save the keymaps.
+	 */
+	void save();
 }

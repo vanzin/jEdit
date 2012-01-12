@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.*;
 
 import org.gjt.sp.jedit.input.AbstractInputHandler;
-import org.gjt.sp.jedit.keymap.Keymap;
+import org.jedit.keymap.Keymap;
 import org.gjt.sp.util.Log;
 //}}}
 

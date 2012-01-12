@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
-import org.gjt.sp.jedit.keymap.Keymap;
+import org.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;

@@ -27,8 +27,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.keymap.Keymap;
-import org.gjt.sp.jedit.keymap.KeymapManager;
+import org.jedit.keymap.Keymap;
+import org.jedit.keymap.KeymapManager;
 
 /**
  * @author Matthieu Casanova
