@@ -82,7 +82,7 @@ dropdown-arrow.icon=ToolbarMenu.gif
 view.toolbar=new-file open-file save close-buffer - print - \
 	undo redo - cut copy paste - find find-next - \
 	new-view unsplit split-horizontal split-vertical - \
-	buffer-options global-options - \
+	buffer-options combined-options - \
 	plugin-manager - help
 
 new-file.icon=22x22/actions/document-new.png
@@ -705,6 +705,7 @@ utils=vfs.browser \
       - \
       buffer-options \
       global-options \
+      combined-options \
       - \
       %quick-options
 utils.label=$Utilities
@@ -716,6 +717,8 @@ buffer-options.label=$Buffer Options...
 buffer-options.icon.small=16x16/actions/document-properties.png
 global-options.label=$Global Options...
 global-options.icon.small=16x16/categories/preferences-system.png
+combined-options.label=$Options...
+combined-options.icon.small=16x16/categories/preferences-system.png
 
 #{{{ Recent Directories menu
 recent-directories.label=$Recent Directories

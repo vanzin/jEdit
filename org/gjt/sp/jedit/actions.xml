@@ -394,6 +394,13 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="combined-options">
+	<CODE>
+		new org.gjt.sp.jedit.options.CombinedOptions(view);
+	</CODE>
+</ACTION>
+
+
 <ACTION NAME="global-options">
 	<CODE>
 		new org.gjt.sp.jedit.options.CombinedOptions(view, 0);

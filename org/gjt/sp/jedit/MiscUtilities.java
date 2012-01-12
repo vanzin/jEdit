@@ -1,12 +1,13 @@
 /*
- * MiscUtilities.java - Various miscallaneous utility functions
+ * MiscUtilities.java - Various miscellaneous utility functions
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2005 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
- *
+ * Portions copyright (c) 2005-2012 by the jEdit All-Volunteer Development Team (tm)
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
