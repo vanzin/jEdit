@@ -1145,8 +1145,7 @@
 				   shortname="jEdit"
 				   signature="JESP"
 				   stubfile="jedit"
-				   version="${jedit.version}"
-				   vmoptions="-Xmx192M">
+				   version="${jedit.version}">
 			<javaproperty name="apple.awt.antialiasing" value="true"/>
 			<javaproperty name="apple.awt.textantialiasing" value="true"/>
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
