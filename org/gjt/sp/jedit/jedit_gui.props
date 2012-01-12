@@ -38,6 +38,8 @@ common.moveDown=Move Down
 common.moveDown.icon=22x22/actions/go-down.png
 common.clearAll=Clear All
 common.clearAll.icon=22x22/actions/edit-clear.png
+common.selectAll=Select All
+common.selectNone=Select None
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
@@ -1977,8 +1979,6 @@ options.encodings.available.tooltip=<html>Encodings in this column will <b>not</
   Drag them to the right column to activate them</html>
 options.encodings.selected.tooltip=Encodings in this column be shown in encoding dialogs.\
   Drag them to the left column to hide them
-options.encodings.selectAll=Select All
-options.encodings.selectNone=Select None
 #}}}
 
 #{{{ Gutter pane

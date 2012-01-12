@@ -32,6 +32,11 @@ contributing to this release.
 - \r (0x0A, CR) could be pasted from clipboard into buffer.
   (Bug #3142456 - Matthieu Casanova)
 
+- Added select all and select none buttons to PingPongList fixing a bug in
+  EncodingsOptionPane (#3434850) (Matthieu Casanova)
+
+  
+
 }}}
 {{{ Miscellaneous
 
