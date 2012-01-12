@@ -28,10 +28,10 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.EditPlugin;
 import org.gjt.sp.jedit.OptionGroup;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.options.PluginOptions.NoPluginsPane;
 
 
 /**
@@ -261,6 +261,14 @@ public class PluginOptionGroup extends OptionGroup
 		}
 
 
+	} //}}}
+	//{{{ NoPluginsPane class
+	public static class NoPluginsPane extends AbstractOptionPane
+	{
+		public NoPluginsPane()
+		{
+			super("no-plugins");
+		}
 	} //}}}
 
 } // }}}

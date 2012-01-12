@@ -78,6 +78,7 @@ public class HistoryModel extends DefaultListModel
 		int myMaxSize = (maxSize == -1) ? defaultMaxSize : maxSize;
 		if (text.length() > myMaxSize)
 		{
+			// ??? Is this really correct?
 			return;
 		}
 		int currentSize = getCurrentSize();

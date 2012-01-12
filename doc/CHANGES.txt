@@ -27,9 +27,6 @@ to this release.
   the installer package and thus does not corrupt the JavaDoc files anymore
   (Bug #2327520 - Björn "Vampire" Kautler)
 
-- Added select all and select none buttons to PingPongList fixing a bug in
-  EncodingsOptionPane (#3434850 - Matthieu Casanova)
-
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
