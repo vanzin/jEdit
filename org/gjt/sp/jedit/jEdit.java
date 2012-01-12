@@ -26,8 +26,8 @@ import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
 import org.jedit.keymap.KeymapManager;
 import org.jedit.keymap.KeymapManagerImpl;
-import org.gjt.sp.jedit.migration.KeymapMigration;
-import org.gjt.sp.jedit.migration.MigrationService;
+import org.jedit.migration.KeymapMigration;
+import org.jedit.migration.MigrationService;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 
 import java.awt.*;
