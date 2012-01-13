@@ -516,7 +516,37 @@ public abstract class VFS
 	 * @since jEdit 4.3pre3
 	 */
 	public static boolean copy(ProgressObserver progress, VFS sourceVFS, Object sourceSession,String sourcePath,
-		VFS targetVFS, Object targetSession,String targetPath, Component comp, boolean canStop)
+				   VFS targetVFS, Object targetSession,String targetPath, Component comp, boolean canStop)
+		throws IOException
+	{
+		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath,
+			    comp, canStop, true);
+	}
+
+	/**
+	 * Copy a file to another using VFS.
+	 *
+	 * @param progress the progress observer. It could be null if you don't want to monitor progress. If not null
+	 *                  you should probably launch this command in a WorkThread
+	 * @param sourceVFS the source VFS
+	 * @param sourceSession the VFS session
+	 * @param sourcePath the source path. It must be a file and must exists
+	 * @param targetVFS the target VFS
+	 * @param targetSession the target session
+	 * @param targetPath the target path.
+	 * If it is a path, it must exists, if it is a file, the parent must
+	 * exists
+	 * @param comp comp The component that will parent error dialog boxes
+	 * @param canStop could this copy be stopped ?
+	 * @param sendVFSUpdate true if you want to send a VFS update after the copy. False otherwise (if you do a lot
+	 *                      of copy)
+	 * @return true if the copy was successful
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 5.0
+	 */
+	public static boolean copy(ProgressObserver progress, VFS sourceVFS, Object sourceSession,String sourcePath,
+		VFS targetVFS, Object targetSession,String targetPath, Component comp, boolean canStop,
+		boolean sendVFSUpdate)
 	throws IOException
 	{
 		if (progress != null)
@@ -560,7 +590,8 @@ public abstract class VFS
 			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
 			out = new BufferedOutputStream(targetVFS._createOutputStream(targetSession, targetPath, comp));
 			boolean copyResult = IOUtilities.copyStream(IOBUFSIZE, progress, in, out, canStop);
-			VFSManager.sendVFSUpdate(targetVFS, targetPath, true);
+			if (sendVFSUpdate)
+				VFSManager.sendVFSUpdate(targetVFS, targetPath, true);
 			return copyResult;
 		}
 		finally
@@ -579,6 +610,45 @@ public abstract class VFS
 	 * @param targetPath the target path
 	 * @param comp comp The component that will parent error dialog boxes
 	 * @param canStop if true the copy can be stopped
+	 * @param sendVFSUpdate true if you want to send a VFS update after the copy. False otherwise (if you do a lot
+	 *                      of copy)
+	 * @return true if the copy was successful
+	 * @throws IOException IOException If an I/O error occurs
+	 * @since jEdit 5.0
+	 */
+	public static boolean copy(ProgressObserver progress, String sourcePath,String targetPath, Component comp,
+				   boolean canStop, boolean sendVFSUpdate)
+		throws IOException
+	{
+		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
+		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
+		if (sourceSession == null)
+		{
+			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS +
+							" for path " + sourcePath);
+			return false;
+		}
+		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
+		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
+		if (targetSession == null)
+		{
+			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS +
+							" for path " + targetPath);
+			return false;
+		}
+		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath,
+			    comp,canStop, sendVFSUpdate);
+	}
+
+	/**
+	 * Copy a file to another using VFS.
+	 *
+	 * @param progress the progress observer. It could be null if you don't want to monitor progress. If not null
+	 *                  you should probably launch this command in a WorkThread
+	 * @param sourcePath the source path
+	 * @param targetPath the target path
+	 * @param comp comp The component that will parent error dialog boxes
+	 * @param canStop if true the copy can be stopped
 	 * @return true if the copy was successful
 	 * @throws IOException IOException If an I/O error occurs
 	 * @since jEdit 4.3pre3
@@ -586,21 +656,7 @@ public abstract class VFS
 	public static boolean copy(ProgressObserver progress, String sourcePath,String targetPath, Component comp, boolean canStop)
 	throws IOException
 	{
-		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
-		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
-		if (sourceSession == null)
-		{
-			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS + " for path " + sourcePath);
-			return false;
-		}
-		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
-		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
-		if (targetSession == null)
-		{
-			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS + " for path " + targetPath);
-			return false;
-		}
-		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
+		return copy(progress, sourcePath, targetPath, comp, canStop, true);
 	} //}}}
 
 	//{{{ insert() method

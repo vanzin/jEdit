@@ -9,6 +9,7 @@ Dale Anson, Matthieu Casanova, Jimmy Chaw and Jarek Czekalski for contributing
 to this release.
 
 {{{ Bug fixes
+
 - When copying a file in VFSBrowser, if a file with the same name already exists
   a suffix copy-n is added to avoid deleting the existing file (#3470759)
   (Matthieu Casanova)
@@ -35,6 +36,23 @@ to this release.
 
 }}}
 {{{ API Changes
+
+- New constructors for CopyFileWorker:
+  CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target)
+  CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target,
+  			Behavior behavior)
+  CopyFileWorker(Component comp, File[] files, String target)
+  CopyFileWorker(Component comp, File[] files, String target, Behavior behavior)
+  to allow copy of multiple files at the same time (Matthieu Casanova)
+
+- New VFS.copy() methods:
+  copy(ProgressObserver progress, VFS sourceVFS, Object sourceSession,
+  	String sourcePath, VFS targetVFS, Object targetSession,
+  	String targetPath, Component comp, boolean canStop,
+  	boolean sendVFSUpdate)
+  copy(ProgressObserver progress, String sourcePath,String targetPath,
+  	Component comp, boolean canStop, boolean sendVFSUpdate)
+  (Matthieu Casanova)
 
 - New method MiscUtilities.getCompleteBaseName() to return the complete base
   name of a file (until the last .) (Matthieu Casanova)

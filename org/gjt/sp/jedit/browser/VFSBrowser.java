@@ -1063,42 +1063,14 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			if (transferable.isDataFlavorSupported(ListVFSFileTransferable.jEditFileList))
 			{
 				List<VFSFile> copiedFiles = (List<VFSFile>) transferable.getTransferData(ListVFSFileTransferable.jEditFileList);
-				for (VFSFile f : copiedFiles)
-				{
-					if (f.getType() == VFSFile.FILE)
-					{
-						String sourcePath = f.getPath();
-						String sourceName = f.getName();
-						try
-						{
-							_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
-						}
-						catch (IOException e)
-						{
-							Log.log(Log.ERROR, this, e.getMessage());
-						}
-					}
-				}
+				CopyFileWorker worker = new CopyFileWorker(this, copiedFiles.toArray(new VFSFile[copiedFiles.size()]), targetPath);
+				ThreadUtilities.runInBackground(worker);
 			}
 			else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			{
 				List<File> copiedFiles = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-				for (File f : copiedFiles)
-				{
-					if (f.isFile())
-					{
-						String sourcePath = f.getAbsolutePath();
-						String sourceName = f.getName();
-						try
-						{
-							_copy(vfsSession, vfs, sourcePath, sourceName, targetPath);
-						}
-						catch (IOException e)
-						{
-							Log.log(Log.ERROR, this, e.getMessage());
-						}
-					}
-				}
+				CopyFileWorker worker = new CopyFileWorker(this, copiedFiles.toArray(new File[copiedFiles.size()]), targetPath);
+				ThreadUtilities.runInBackground(worker);
 			}
 		}
 		finally
@@ -1542,21 +1514,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				"vfs.browser.toolbar-dialog");
 	} //}}}
 
-	//{{{ _copy() method
-	private void _copy(Object vfsSession, VFS vfs, String sourcePath, String sourceName, String targetPath)
-		throws IOException
-	{
-		String name = createUniqueFilename(vfsSession, vfs, targetPath, sourceName);
-		if (name == null)
-		{
-			throw new IOException("Unable to create unique name for file " +
-					      targetPath + '/' + sourceName);
-		}
-		String targetName = MiscUtilities.constructPath(targetPath, name);
-		ThreadUtilities
-			.runInBackground(new CopyFileWorker(view, sourcePath, targetName));
-	} //}}}
-
 	//{{{ propertiesChanged() method
 	private void propertiesChanged()
 	{
@@ -1599,41 +1556,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		if(path != null)
 			reloadDirectory();
 	} //}}}
-
-	//{{{ createUniqueFilename() method
-	/**
-	 * Create a unique filename
-	 * @param session the session for the vfs
-	 * @param vfs the vfs
-	 * @param path the parent directory
-	 * @param baseName the filename
-	 * @return baseName if it doesn't already exists, or baseName-copy-i 
-	 * with i as an integer < 1000. Null if unable
-	 * to find a unique filename
-	 * @throws IOException
-	 */
-	private String createUniqueFilename(Object session, VFS vfs, String path, String baseName) throws IOException
-	{
-		String s = MiscUtilities.constructPath(path, baseName);
-		VFSFile file = vfs._getFile(session, s, this);
-		String extension = MiscUtilities.getFileExtension(baseName);
-		String nameNoExtension = MiscUtilities.getCompleteBaseName(baseName);
-		if (file == null)
-			return baseName;
-
-		for (int i = 1;i<1000;i++)
-		{
-			String name = nameNoExtension + "-copy-" + i;
-			if (extension != null)
-				name += extension;
-			s = MiscUtilities.constructPath(path, name);
-			file = vfs._getFile(session, s, this);
-			if (file == null)
-				return name;
-		}
-		return null;
-	} //}}}
-
 
 	/* We do this stuff because the browser is not able to handle
 	 * more than one request yet */
