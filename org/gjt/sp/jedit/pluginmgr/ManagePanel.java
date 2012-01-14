@@ -642,6 +642,7 @@ public class ManagePanel extends JPanel
 			}
 			jEdit.removePluginJAR(jar,false);
 			jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(jar.getPath()),true);
+			jEdit.propertiesChanged();
 		} //}}}
 
 		//{{{ saveSelection() method

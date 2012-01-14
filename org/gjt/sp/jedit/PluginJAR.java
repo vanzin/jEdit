@@ -214,6 +214,7 @@ public class PluginJAR
 		}
 		jar.checkDependencies();
 		jar.activatePluginIfNecessary();
+		jEdit.propertiesChanged();
 		return jar;
 	} // }}}
 
