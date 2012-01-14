@@ -422,13 +422,13 @@ public class MiscUtilities
 
 	//{{{ getCompleteBaseName() method
 	/**
-	 * Returns the complete basename of a file.
-	 * If your filename is
-	 * IP-192.168.1.1-data.tar.gz
-	 * it will returns
-	 * IP-192.168.1.1-data.tar
+	 * @return the complete basename of a file (before the last period).
+	 * i.e. if your filename is
+	 *    IP-192.168.1.1-data.tar.gz
+	 * it will return
+	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
-	 * @return the complete basename.
+	 * @see getFileNameNoExtension
 	 * @since jEdit 5.0
 	 */
 	public static String getCompleteBaseName(String path)
@@ -442,14 +442,14 @@ public class MiscUtilities
 
 	//{{{ getFileNameNoExtension() method
 	/**
-	 * Returns the last component of the specified path name without the
-	 * trailing extension (if there is one).
-	 * If your filename is
-	 * IP-192.168.1.1-data.tar.gz
-	 * it will returns
-	 * IP-192
+	 * @return the base name of a file (before the first period). 
+	 * i.e. If your filename is
+	 *     IP-192.168.1.1-data.tar.gz
+	 * it will return
+	 *     IP-192
 	 * @param path The path name
 	 * @since jEdit 4.0pre8
+	 * @see getCompleteBaseName
 	 */
 	public static String getFileNameNoExtension(String path)
 	{
