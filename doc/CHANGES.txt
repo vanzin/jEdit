@@ -9,6 +9,8 @@ Evan Wright, Matthieu Casanova, and Björn "Vampire" Kautler for
 contributing to this release.
 
 {{{ Bug Fixes
+- Fixed Copy_Line macro that was copying one character of the next line (#3454377)
+  (Matthieu Casanova)
 
 - Fixed a NPE when trying to activate a plugin if one of it's dependencies is
   missing (#2077205) (Matthieu Casanova)
