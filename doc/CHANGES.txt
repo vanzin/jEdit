@@ -51,8 +51,10 @@ to this release.
   	Component comp, boolean canStop, boolean sendVFSUpdate)
   (Matthieu Casanova)
 
-- New method MiscUtilities.getCompleteBaseName() to return the complete base
-  name of a file (until the last .) (Matthieu Casanova)
+- New methods MiscUtilities.getCompleteBaseName() to return 
+  the (complete) base names of a file (until the last .) and
+  and getBaseName(), to replace the badly named getFileNameNoExtension,
+  which is now deprecated (Matthieu Casanova, Alan Ezust)
 
 - TextUtilities.join() now accept Collection<?> instead of Collection<String>
   (Matthieu Casanova)

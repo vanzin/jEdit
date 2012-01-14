@@ -7,7 +7,7 @@
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
  * Portions copyright (c) 2005-2012 by the jEdit All-Volunteer Development Team (tm)
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -123,7 +123,7 @@ public class MiscUtilities
 	static final Pattern varPattern = Pattern.compile(varPatternString);
 	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
 	static final Pattern winPattern = Pattern.compile(winPatternString);
-	
+
 	/** Accepts a string from the user which may contain variables of various syntaxes.
 	 *  The function supports the following expansion syntaxes:
 	 *     $varname
@@ -132,7 +132,7 @@ public class MiscUtilities
 	 *     And expand each of these by looking at the system environment variables for possible
 	 *     expansions.
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
-	 *     @since 4.3pre7
+	 *     @since jEdit 4.3
 	 *     @see #abbreviate
 	 *     @author ezust
 	 */
@@ -142,7 +142,7 @@ public class MiscUtilities
 		Matcher m = p.matcher(arg);
 		if (!m.find())
 		{
-			if (OperatingSystem.isWindows()) 
+			if (OperatingSystem.isWindows())
 				p = winPattern;
 			else p = varPattern2;
 			m = p.matcher(arg);
@@ -394,9 +394,16 @@ public class MiscUtilities
 
 	//{{{ getFileExtension() method
 	/**
-	 * Returns the extension of the specified filename, or an empty
-	 * string if there is none.
+	 * Returns the extension of the specified filename,
+
 	 * @param path The path
+	 * @return the last dot (.) and the text that follows, or an empty
+	 * string if no dots are found.
+	 * i.e. if your filename is
+	 *    IP-192.168.1.1-data.tar.gz
+	 * it will return
+	 *    .gz
+	 * @see getCompleteBaseName
 	 */
 	public static String getFileExtension(String path)
 	{
@@ -428,7 +435,7 @@ public class MiscUtilities
 	 * it will return
 	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
-	 * @see getFileNameNoExtension
+	 * @see getBaseName
 	 * @since jEdit 5.0
 	 */
 	public static String getCompleteBaseName(String path)
@@ -440,18 +447,18 @@ public class MiscUtilities
 		return name.substring(0, index);
 	} //}}}
 
-	//{{{ getFileNameNoExtension() method
+	//{{{ getBaseName() method
 	/**
-	 * @return the base name of a file (before the first period). 
+	 * @return the base name of a file (before the first period).
 	 * i.e. If your filename is
 	 *     IP-192.168.1.1-data.tar.gz
 	 * it will return
 	 *     IP-192
 	 * @param path The path name
-	 * @since jEdit 4.0pre8
+	 * @since jEdit 5.0
 	 * @see getCompleteBaseName
-	 */
-	public static String getFileNameNoExtension(String path)
+	*/
+	public static String getBaseName(String path)
 	{
 		String name = getFileName(path);
 		int index = name.indexOf('.');
@@ -459,6 +466,15 @@ public class MiscUtilities
 			return name;
 		else
 			return name.substring(0,index);
+	}
+	/**
+	  @return the same thing as getBaseName()
+	  @deprecated use getBaseName() instead.
+	  @since jEdit 4.0
+	*/
+	public static String getFileNameNoExtension(String path)
+	{
+		return getBaseName(path);
 	} //}}}
 
 	//{{{ getParentOfPath() method
@@ -1114,7 +1130,7 @@ loop:		for(;;)
 	//{{{ getEncodings() methods
 	/**
 	 * Returns a list of supported character encodings.
-	 * @since jEdit 4.3pre5
+	 * @since jEdit 4.3
 	 * @param getSelected Whether to return just the selected encodings or all.
 	 */
 	public static String[] getEncodings(boolean getSelected)
