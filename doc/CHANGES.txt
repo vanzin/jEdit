@@ -9,6 +9,9 @@ Evan Wright, Matthieu Casanova, and Björn "Vampire" Kautler for
 contributing to this release.
 
 {{{ Bug Fixes
+
+- Large file mode text description dialog (#3456370) (Matthieu Casanova)
+
 - Fixed Copy_Line macro that was copying one character of the next line (#3454377)
   (Matthieu Casanova)
 
