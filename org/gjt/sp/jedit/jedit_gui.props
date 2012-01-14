@@ -105,7 +105,7 @@ split-horizontal.icon=22x22/actions/window-split-horizontal.png
 split-vertical.icon=22x22/actions/window-split-vertical.png
 buffer-options.icon=22x22/actions/document-properties.png
 global-options.icon=22x22/categories/preferences-system.png
-
+combined-options.icon=22x22/categories/preferences-system.png
 plugin-manager.icon=22x22/places/plugins.png
 help.icon=22x22/apps/help-browser.png
 

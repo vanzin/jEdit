@@ -396,7 +396,7 @@
 
 <ACTION NAME="combined-options">
 	<CODE>
-		new org.jedit.options.CombinedOptions(view);
+		return org.jedit.options.CombinedOptions.combinedOptions(view);
 	</CODE>
 </ACTION>
 

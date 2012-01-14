@@ -18,9 +18,6 @@ to this release.
 
 - Large file mode text description dialog (#3456370 - Matthieu Casanova)
 
-- Fixed Copy_Line macro that was copying one character of the next line 
-  (#3454377 - Matthieu Casanova)
-
 - Fixed copy of Hypersearch results adding \r in the clipboard (#3142456)
   (Matthieu Casanova)
 
