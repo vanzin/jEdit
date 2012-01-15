@@ -402,8 +402,6 @@ TODO:
 
 	<!-- PHP variables (PHPDOC_VAR for phpdoc blocks) -->
 	<RULES SET="PHP_VAR">
-		<!-- (Class-)Variables -->
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD4">[\$]+[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?=\s*=\s*(&amp;\s*)?new)</SEQ_REGEXP>
 
 		<!-- Normal variables -->
 		<!-- Not using MARK_FOLLOWING, which would match $foo\" completely (in PHP_LITERAL2) -->
