@@ -2,7 +2,9 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- Catalog entry:
+<!--
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:Catalog entry:
 <MODE NAME="php" FILE="php.xml"
 				FILE_NAME_GLOB="*.{php3,php4,php5,php,phtml}"
 				FIRST_LINE_GLOB="&lt;?php*" />
@@ -4938,7 +4940,7 @@ TODO:
 	</RULES>
 
 
-	<!-- Go to PHP mode again -->
+	<!--{{{ Go to PHP mode again -->
 	<RULES SET="TO_PHP" DEFAULT="MARKUP">
 		<SPAN TYPE="MARKUP" DELEGATE="PHP">
 			<BEGIN>&lt;?php</BEGIN>
@@ -4955,96 +4957,58 @@ TODO:
 			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
+	<!--}}}-->
 
+	<RULES SET="PHPDOC_BLOCK" DEFAULT="COMMENT4" IGNORE_CASE="TRUE"/>
 
-	<!-- Extended label block, also uses "|" as seperator -->
-	<RULES SET="PHPDOC_LABEL_BLOCK_EXTENDED" DEFAULT="COMMENT3"
-		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-		<SEQ TYPE="OPERATOR">|</SEQ>
+	<!--{{{ rule PHPDOC -->
+	<RULES SET="PHPDOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
 
-		<!-- Delegate back (gets not caught from PHPDOC_LABEL_BLOCK): -->
-		<IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS" />
-		<IMPORT DELEGATE="PHPDOC_LABEL_BLOCK" />
-
-		<IMPORT DELEGATE="PHPDOC_LABEL_KEYWORDS" />
-		<IMPORT DELEGATE="PHPDOC" />
-		<IMPORT DELEGATE="PHPDOC_VAR" />
-		<IMPORT DELEGATE="PHP_BASIC_KEYWORD1" />
-	</RULES>
-
-	<!-- A block after a label tag like "@see" -->
-	<RULES SET="PHPDOC_LABEL_BLOCK" DEFAULT="COMMENT3"
-		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-
-		<!-- Delegate back -->
-		<!-- <IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS" /> -->
-
-		<SEQ TYPE="COMMENT3" DELEGATE="PHPDOC">*/</SEQ>
-
-		<MARK_PREVIOUS TYPE="FUNCTION">()</MARK_PREVIOUS>
-
-		<IMPORT DELEGATE="PHPDOC_LABEL_KEYWORDS" />
-		<IMPORT DELEGATE="PHPDOC" />
-		<IMPORT DELEGATE="PHPDOC_VAR" />
-		<IMPORT DELEGATE="PHP_BASIC_KEYWORD1" />
-		<IMPORT DELEGATE="PHP_TYPES" />
-	</RULES>
-
-
-	<!-- A block after @access -->
-	<RULES SET="PHPDOC_LABEL_BLOCK_ACCESS" DEFAULT="COMMENT3"
-		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-		<IMPORT DELEGATE="KEYWORDS_VISIBILITY" />
-
-		<!-- Delegate back: -->
-		<IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS"/>
-	</RULES>
-
-
-	<RULES SET="PHPDOC_BLOCK" DEFAULT="COMMENT3"
-		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-		<!-- highlight function/method name as token type FUNCTION -->
-		<MARK_PREVIOUS TYPE="FUNCTION">()</MARK_PREVIOUS>
-
-		<!-- Delegate back: -->
-		<IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS"/>
-		<IMPORT DELEGATE="PHPDOC"/>
-		<IMPORT DELEGATE="PHPDOC_VAR"/>
-	</RULES>
-
-
-	<!-- Helper for class references in rule PHPDOC -->
-	<RULES SET="OBJECT_PHPDOC">
-		<SPAN TYPE="OPERATOR" DELEGATE="PHP">
-			<BEGIN>[</BEGIN>
-			<END>]</END>
+		<!--{{{ HTML comments -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
 		</SPAN>
-		<SEQ_REGEXP TYPE="FUNCTION" HASH_CHAR="-&gt;" DELEGATE="PHPDOC">-&gt;\w+\s*(?=\()</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="KEYWORD4" HASH_CHAR="-&gt;" DELEGATE="OBJECT_PHPDOC">-&gt;\w+(?=(\[[\s\w'"]+\])?-&gt;)</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="KEYWORD4" HASH_CHAR="-&gt;" DELEGATE="PHPDOC">-&gt;\w*</SEQ_REGEXP>
+		<!--}}}-->
 
-		<IMPORT DELEGATE="PHP_KEYWORDS" />
-	</RULES>
+		<!--{{{ PHPdoc allows this -->
+		<SEQ TYPE="COMMENT3">&lt;&lt;</SEQ>
+		<SEQ TYPE="COMMENT3">&lt;=</SEQ>
+		<SEQ TYPE="COMMENT3">&lt; </SEQ>
+		<!--}}}-->
+
+		<!--{{{ strings in quotes -->
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
+		<BEGIN>&quot;</BEGIN>
+		<END>&quot;</END>
+		</SPAN>
+		<!--}}}-->
+
+		<!--{{{ HTML tag -->
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS"
+			NO_LINE_BREAK="TRUE">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		<!--}}}-->
+
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" NO_WORD_BREAK="FALSE" DELEGATE="PHPDOC_BLOCK">
+			<BEGIN>@(?:param|throws|exception|serialField)(\s)</BEGIN>
+			<END>$1</END>
+		</SPAN_REGEXP>
+
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" NO_WORD_BREAK="FALSE" DELEGATE="PHPDOC_BLOCK">
+			<BEGIN>\{@(internal|link)\s</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
 
 
-	<!-- Almost like PHP_VAR - but with another delegate -->
-	<RULES SET="PHPDOC_VAR">
-		<!-- (Class-)Variables -->
-		<SEQ_REGEXP TYPE="KEYWORD4" HASH_CHAR="$" DELEGATE="OBJECT_PHPDOC">[\$]+[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?=(\[[\s\w'"]+\])?-&gt;)</SEQ_REGEXP>
+		<SPAN DELEGATE="PHP" TYPE="MARKUP">
+			<BEGIN>&lt;code&gt;</BEGIN>
+			<END>&lt;/code&gt;</END>
+		</SPAN>
 
-		<MARK_PREVIOUS TYPE="KEYWORD4">::</MARK_PREVIOUS>
-
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD4">[\$]+[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(?=\s*=\s*(&amp;\s*)?new)</SEQ_REGEXP>
-
-		<!-- Normal variables -->
-		<IMPORT DELEGATE="PHP_VAR" />
-	</RULES>
-
-
-	<!-- phpdoc / phpDocumentor label tags -->
-	<RULES SET="PHPDOC_LABEL_KEYWORDS">
-		<!-- {{{
-			Some (@global, @param, ..) are here just for complete-word -->
+		<!--{{{ keywords -->
 		<KEYWORDS>
 			<LABEL>@abstract</LABEL>
 			<LABEL>@access</LABEL>
@@ -5078,65 +5042,9 @@ TODO:
 			<LABEL>@var</LABEL>
 			<LABEL>@version</LABEL>
 		</KEYWORDS>
-		<!-- }}} -->
+		<!--}}}-->
 	</RULES>
-
-
-	<!-- Delegate to PHPDOC_LABEL_BLOCK[_EXTENDED|_ACCESS] or back to PHPDOC -->
-	<RULES SET="PHPDOC_DELEGATE_LABEL_BLOCKS" DEFAULT="COMMENT3">
-		<!-- Delegate empty line (just an asterisk) back to PHPDOC -->
-		<SEQ_REGEXP TYPE="COMMENT3" AT_WHITESPACE_END="TRUE" DELEGATE="PHPDOC" HASH_CHAR="*">\*\s*$</SEQ_REGEXP>
-
-		<SEQ_REGEXP TYPE="LABEL" HASH_CHAR="@"
-			DELEGATE="PHPDOC_LABEL_BLOCK_EXTENDED">@(global|param|return|staticvar|var|throws)</SEQ_REGEXP>
-
-		<SEQ_REGEXP TYPE="LABEL" HASH_CHAR="@"
-			DELEGATE="PHPDOC_LABEL_BLOCK">@(deprecated|see|uses)</SEQ_REGEXP>
-
-		<SEQ TYPE="LABEL" DELEGATE="PHPDOC_LABEL_BLOCK_ACCESS">@access</SEQ>
-
-		<!-- Delegate the remaining phpdoc tags back to PHPDOC_BLOCK: -->
-		<SEQ_REGEXP TYPE="LABEL" HASH_CHAR="@"
-			DELEGATE="PHPDOC_BLOCK">@(abstract|author|category|const|constant|copyright|example|filesource|final|ignore|internal|license|link|name|package|since|static|subpackage|todo|tutorial|version)</SEQ_REGEXP>
-	</RULES>
-
-
-	<!-- The main phpdoc rules -->
-	<RULES SET="PHPDOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE"
-		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-		<!-- HTML comments -->
-		<SPAN TYPE="COMMENT1">
-			<BEGIN>&lt;!--</BEGIN>
-			<END>--&gt;</END>
-		</SPAN>
-
-		<SPAN TYPE="LABEL" DELEGATE="PHPDOC_BLOCK">
-			<BEGIN>{@internal</BEGIN>
-			<END>}}</END>
-		</SPAN>
-
-		<SPAN TYPE="LABEL" DELEGATE="PHPDOC_BLOCK">
-			<BEGIN>{@link</BEGIN>
-			<END>}</END>
-		</SPAN>
-
-		<!-- PHPdoc allows this -->
-		<SEQ TYPE="COMMENT3">&lt;&lt;</SEQ>
-		<SEQ TYPE="COMMENT3">&lt;=</SEQ>
-		<SEQ TYPE="COMMENT3">&lt; </SEQ>
-
-		<SPAN DELEGATE="PHP" TYPE="MARKUP">
-			<BEGIN>&lt;code&gt;</BEGIN>
-			<END>&lt;/code&gt;</END>
-		</SPAN>
-
-		<!-- Imports: -->
-		<IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS" />
-		<IMPORT DELEGATE="PHPDOC_LABEL_KEYWORDS" />
-		<IMPORT DELEGATE="PHPDOC_VAR" />
-		<IMPORT DELEGATE="PHP_BASIC_KEYWORD1" />
-	</RULES>
-
+	<!--}}}-->
 
 	<RULES SET="INVALID_LT" DEFAULT="INVALID">
 		<SEQ TYPE="INVALID">&lt;</SEQ>

@@ -68,6 +68,10 @@ to this release.
 
 }}}
 {{{ Editing
+
+- Major simplification of phpdoc to make it look more like javadoc
+  (#1803310, #3029383, #3316733) (Matthieu Casanova)
+
 - Added some missing keywords to vrml2 edit mode (patch #3471586) (Jimmy Chaw)
 
 - Using no highlight or limited syntax highlight in large buffers now also
