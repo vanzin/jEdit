@@ -69,6 +69,9 @@ to this release.
 }}}
 {{{ Editing
 
+- Removed special highlight for object access in php edit mode
+  (#2985508) (Matthieu Casanova)
+
 - Major simplification of phpdoc to make it look more like javadoc
   (#1803310, #3029383, #3316733) (Matthieu Casanova)
 
