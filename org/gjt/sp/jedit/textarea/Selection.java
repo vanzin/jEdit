@@ -394,20 +394,22 @@ public abstract class Selection implements Cloneable
 			if(startOffset == -1)
 			{
 				extraStartVirt = startColumn - width[0];
-				//startOffset = buffer.getLineEndOffset(startLine) - 1;
+				startOffset = buffer.getLineEndOffset(startLine) - 1;
 			}
-			/*else
-				startOffset += buffer.getLineStartOffset(startLine);*/
+			else
+				startOffset += buffer.getLineStartOffset(startLine);
 
 			int endOffset = buffer.getOffsetOfVirtualColumn(endLine,
 				endColumn,width);
 			if(endOffset == -1)
 			{
 				extraEndVirt = endColumn - width[0];
-				//endOffset = buffer.getLineEndOffset(endLine) - 1;
+				endOffset = buffer.getLineEndOffset(endLine) - 1;
 			}
-			/*else
-				endOffset += buffer.getLineStartOffset(endLine);*/
+			else
+				endOffset += buffer.getLineStartOffset(endLine);
+			this.start = startOffset;
+			this.end = endOffset;
 		} //}}}
 
 		//{{{ getStartColumn() method
