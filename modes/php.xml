@@ -143,8 +143,8 @@ TODO:
 			<END>;</END>
 		</SPAN>
 	</RULES>
-
-
+	
+	<!--{{{ rule TAGS -->
 	<!-- HTML tags (from MAIN rule) -->
 	<RULES SET="TAGS" DEFAULT="MARKUP" ESCAPE="\">
 		<PROPS>
@@ -161,15 +161,18 @@ TODO:
 		<IMPORT DELEGATE="INVALID_LT" />
 		<IMPORT DELEGATE="html::TAGS" />
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule CSS_OPENTAG -->
 	<!-- CSS where PHP code may be injected -->
 	<RULES SET="CSS_OPENTAG" DEFAULT="MARKUP">
 		<SEQ TYPE="MARKUP" DELEGATE="CSS">&gt;</SEQ>
 
 		<IMPORT DELEGATE="TO_LITERAL+PHP"/>
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule CSS -->
 	<RULES SET="CSS" DEFAULT="MARKUP">
 		<!-- CSS has no line comment: -->
 		<PROPS>
@@ -183,8 +186,9 @@ TODO:
 		<IMPORT DELEGATE="TO_PHP"/>
 		<IMPORT DELEGATE="css::MAIN"/>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule OBJECT_PHP -->
 	<!-- Helper for class references in rule PHP -->
 	<RULES SET="OBJECT_PHP" DEFAULT="KEYWORD4" ESCAPE="\"> <!-- TODO: ESCAPE should not be needed, see http://sourceforge.net/tracker/index.php?func=detail&aid=1600458&group_id=588&atid=100588 -->
 		<SPAN TYPE="OPERATOR" DELEGATE="PHP_EXPRESSION">
@@ -252,8 +256,9 @@ TODO:
 		<IMPORT DELEGATE="PHP_VAR" />
 		<IMPORT DELEGATE="PHP_KEYWORDS" />
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP_LITERAL2 -->
 	<!-- PHP literal where variables get parsed -->
 	<RULES SET="PHP_LITERAL2" DEFAULT="LITERAL2" ESCAPE="\">
 		<!-- expressions in curly braces ("{$foo}") -->
@@ -267,7 +272,9 @@ TODO:
 
 		<IMPORT DELEGATE="PHP_VAR" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule PHP_LITERAL3 -->
 	<!-- PHP literal in backticks, where variables get parsed; based on PHP_LITERAL2 -->
 	<RULES SET="PHP_LITERAL3" DEFAULT="LITERAL3" ESCAPE="\">
 		<!-- expressions in curly braces ("{$foo}") -->
@@ -281,7 +288,9 @@ TODO:
 
 		<IMPORT DELEGATE="PHP_VAR" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule PHP_LITERAL4 -->
 	<!-- PHP heredoc blocks, where variables get parsed; see PHP_LITERAL2 -->
 	<RULES SET="PHP_LITERAL4" DEFAULT="LITERAL4" ESCAPE="\">
 		<!-- expressions in curly braces ("{$foo}") -->
@@ -295,7 +304,9 @@ TODO:
 
 		<IMPORT DELEGATE="PHP_VAR" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rul -->
 	<!-- Helper for class / interface definition -->
 	<RULES SET="DEF_CLASS" DEFAULT="KEYWORD4">
 		<!-- back to "PHP" for curly brace, the closing one gets handled there -->
@@ -311,8 +322,9 @@ TODO:
 			<KEYWORD1>implements</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule DEF_FUNCTION -->
 	<!-- Function definition -->
 	<RULES SET="DEF_FUNCTION" DEFAULT="FUNCTION">
 		<!-- Invalid, go back: -->
@@ -323,7 +335,9 @@ TODO:
 
 		<IMPORT DELEGATE="PHP_COMMENTS" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule DEF_FUNCTION_ARGS -->
 	<!-- Arguments of a function definition -->
 	<RULES SET="DEF_FUNCTION_ARGS" DEFAULT="KEYWORD4">
 		<!-- back to "PHP" for closing bracket: -->
@@ -336,7 +350,9 @@ TODO:
 		<IMPORT DELEGATE="PHP_COMMENTS" />
 		<IMPORT DELEGATE="PHP_TYPES" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule DEF_FUNCTION_ARGS_VALUE -->
 	<!-- Default values of a function argument -->
 	<RULES SET="DEF_FUNCTION_ARGS_VALUE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
 		<!-- Literals, without var substitution: -->
@@ -361,7 +377,9 @@ TODO:
 		<IMPORT DELEGATE="PHP_COMMENTS" />
 		<IMPORT DELEGATE="PHP_BASIC_KEYWORD1" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule DEF_FUNCTION_ARGS_VALUE_ARRAY -->
 	<!-- Body of "array(...)" in function argument default values -->
 	<RULES SET="DEF_FUNCTION_ARGS_VALUE_ARRAY" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
 		<!-- Literals, without var substitution: -->
@@ -375,8 +393,9 @@ TODO:
 		</SPAN>
 		<SEQ TYPE="OPERATOR">,</SEQ>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP_COMMENTS -->
 	<!-- Comments in PHP -->
 	<RULES SET="PHP_COMMENTS">
 		<!-- special case -->
@@ -398,8 +417,9 @@ TODO:
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT4">#</EOL_SPAN>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP_VAR -->
 	<!-- PHP variables (PHPDOC_VAR for phpdoc blocks) -->
 	<RULES SET="PHP_VAR">
 
@@ -407,8 +427,9 @@ TODO:
 		<!-- Not using MARK_FOLLOWING, which would match $foo\" completely (in PHP_LITERAL2) -->
 		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3">[\$]+[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*</SEQ_REGEXP>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP -->
 	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
 		<!-- Class definitions.
 		     This uses SEQ_REGEXP (instead of SPAN_*) for the keywords only,
@@ -420,8 +441,9 @@ TODO:
 		<!-- Imports: -->
 		<IMPORT DELEGATE="PHP_EXPRESSION" />
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP_EXPRESSION -->
 	<!-- A basic PHP expression, as it can be used in $a->{EXPR} -->
 	<RULES SET="PHP_EXPRESSION" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
 		<!-- Comments: -->
@@ -544,12 +566,16 @@ TODO:
 		<!-- TODO: split this, so e.g. "new", "class" etc don't show up here, but only in "PHP" -->
 		<IMPORT DELEGATE="PHP_KEYWORDS" />
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule PHP_VAR_NEW_KW -->
 	<RULES SET="PHP_VAR_NEW_KW" DEFAULT="KEYWORD4">
 		<SEQ TYPE="OPERATOR" DELEGATE="PHP_EXPRESSION">(</SEQ>
 		<SEQ TYPE="OPERATOR" DELEGATE="PHP">;</SEQ>
 	</RULES>
+	<!--}}}-->
 
+	<!--{{{ rule PHP_BASIC_KEYWORD1 -->
 	<RULES SET="PHP_BASIC_KEYWORD1">
 		<KEYWORDS>
 			<KEYWORD1>true</KEYWORD1>
@@ -557,8 +583,9 @@ TODO:
 			<KEYWORD1>null</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{  -->
 	<RULES SET="PHP_TYPES">
 		<!-- Taken from: http://php.net/manual/en/language.types.php -->
 		<KEYWORDS>
@@ -579,8 +606,9 @@ TODO:
 			<OPERATOR>string</OPERATOR>
 		</KEYWORDS>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule PHP_KEYWORDS -->
 	<RULES SET="PHP_KEYWORDS">
 		<IMPORT DELEGATE="KEYWORDS_VISIBILITY" />
 		<IMPORT DELEGATE="PHP_BASIC_KEYWORD1" />
@@ -4728,8 +4756,9 @@ TODO:
 			<KEYWORD4>stdClass</KEYWORD4>
 		</KEYWORDS>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule KEYWORDS_VISIBILITY -->
 	<RULES SET="KEYWORDS_VISIBILITY">
 		<KEYWORDS>
 			<KEYWORD1>private</KEYWORD1>
@@ -4737,16 +4766,17 @@ TODO:
 			<KEYWORD1>public</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
+	<!--}}}-->
 
-
-	<!-- Javascript -->
+	<!--{{{ rule JAVASCRIPT_OPENTAG -->
 	<RULES SET="JAVASCRIPT_OPENTAG" DEFAULT="MARKUP">
 		<SEQ TYPE="MARKUP" DELEGATE="JAVASCRIPT">&gt;</SEQ>
 		<IMPORT DELEGATE="TO_LITERAL+PHP"/> <!-- handle PHP in <script> tag -->
 		<IMPORT DELEGATE="html::TAGS" /> <!-- handle e.g. 'style="width:1px"' -->
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule TO_LITERAL+PHP -->
 	<!-- Handle literals, but allow switching to PHP therein, e.g. from html TAGS -->
 	<RULES SET="TO_LITERAL+PHP">
 		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL1+PHP">
@@ -4759,32 +4789,36 @@ TODO:
 		</SPAN>
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule JAVASCRIPT -->
 	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP" ESCAPE="\">
 		<IMPORT DELEGATE="TO_LITERAL+PHP"/>
 		<IMPORT DELEGATE="TO_PHP"/>
 		<IMPORT DELEGATE="javascript::MAIN"/>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule LITERAL1+PHP -->
 	<!-- Handle PHP tags in LITERAL1, e.g. in the "type" attribute of a <SCRIPT> tag -->
 	<RULES SET="LITERAL1+PHP" DEFAULT="LITERAL1" ESCAPE="\">
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule LITERAL2+PHP -->
 	<!-- Handle PHP tags in LITERAL2, e.g. in the "type" attribute of a <SCRIPT> tag -->
 	<RULES SET="LITERAL2+PHP" DEFAULT="LITERAL2" ESCAPE="\">
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
+	<!--}}}-->
 
-
+	<!--{{{ rule COMMENT1+PHP -->
 	<!-- Handle PHP tags in comments -->
 	<RULES SET="COMMENT1+PHP" DEFAULT="COMMENT1">
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
-
+	<!--}}}-->
 
 	<!--{{{ Go to PHP mode again -->
 	<RULES SET="TO_PHP" DEFAULT="MARKUP">
