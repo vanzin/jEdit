@@ -138,6 +138,8 @@ public class MiscUtilities
 	 */
 	public static String expandVariables(String arg)
 	{
+		if (arg.startsWith("~/") || arg.startsWith("~\\")) 
+			return System.getProperty("user.home") + arg.substring(1);			
 		Pattern p = varPattern;
 		Matcher m = p.matcher(arg);
 		if (!m.find())
