@@ -103,9 +103,12 @@ public class BrowserCommandsMenu extends JPopupMenu
 				&& (browser.getMode() == VFSBrowser.BROWSER
 				|| browser.getMode() == VFSBrowser.BROWSER_DIALOG))
 			{
-				add(createMenuItem("open"));
-				add(GUIUtilities.loadMenuItem(VFSBrowser.getActionContext(),
-					"vfs.browser.open-desktop", true));
+				add(createMenuItem("open", "22x22/actions/document-open.png"));
+				JMenuItem openDesktop = GUIUtilities
+					.loadMenuItem(VFSBrowser.getActionContext(),
+						      "vfs.browser.open-desktop", true);
+				openDesktop.setIcon(GUIUtilities.loadIcon("22x22/actions/document-open.png"));
+				add(openDesktop);
 				add(GUIUtilities.loadMenu(
 					VFSBrowser.getActionContext(),
 					"vfs.browser.open-in"));
@@ -115,41 +118,41 @@ public class BrowserCommandsMenu extends JPopupMenu
 					add(createMenuItem("close"));
 			}
 			else if(type != -1)
-				add(createMenuItem("open"));
+				add(createMenuItem("open", "22x22/actions/document-open.png"));
 
 			if(rename)
 				add(createMenuItem("rename"));
 
 			if(delete)
-				add(createMenuItem("delete"));
+				add(createMenuItem("delete", "22x22/actions/edit-delete.png"));
 
-			add(createMenuItem("copy-path"));
-			add(createMenuItem("paste"));
+			add(createMenuItem("copy-path", "22x22/actions/edit-copy.png"));
+			add(createMenuItem("paste", "22x22/actions/edit-paste.png"));
 
 			if((files.length == 1) || (browser.getSelectedFiles().length != 0))
-		   		add(createMenuItem("properties"));
+		   		add(createMenuItem("properties", "22x22/actions/document-properties.png"));
 
 			addSeparator();
 		}
 
-		add(createMenuItem("up"));
-		add(createMenuItem("previous"));
-		add(createMenuItem("next"));
-		add(createMenuItem("reload"));
+		add(createMenuItem("up", "22x22/actions/go-parent.png"));
+		add(createMenuItem("previous", "22x22/actions/go-previous.png"));
+		add(createMenuItem("next", "22x22/actions/go-next.png"));
+		add(createMenuItem("reload", "22x22/actions/document-reload.png"));
 		add(createMenuItem("roots"));
-		add(createMenuItem("home"));
+		add(createMenuItem("home", "22x22/actions/go-home.png"));
 		add(createMenuItem("synchronize"));
 		addSeparator();
 
 		if(browser.getMode() == VFSBrowser.BROWSER)
-			add(createMenuItem("new-file"));
+			add(createMenuItem("new-file", "22x22/actions/document-new.png"));
 
-		add(createMenuItem("new-directory"));
+		add(createMenuItem("new-directory", "22x22/actions/folder-new.png"));
 
 		if(browser.getMode() == VFSBrowser.BROWSER)
 		{
 			addSeparator();
-			add(createMenuItem("search-directory"));
+			add(createMenuItem("search-directory", "22x22/actions/system-search.png"));
 		}
 
 		addSeparator();
@@ -207,11 +210,18 @@ public class BrowserCommandsMenu extends JPopupMenu
 	private JCheckBoxMenuItem autoDetect;
 	private JRadioButtonMenuItem otherEncoding;
 
-	//{{{ createMenuItem() method
+	//{{{ createMenuItem() methods
+	private JMenuItem createMenuItem(String name, String iconName)
+	{
+		JMenuItem jMenuItem =
+			GUIUtilities.loadMenuItem(VFSBrowser.getActionContext(), "vfs.browser." + name, false);
+		jMenuItem.setIcon(GUIUtilities.loadIcon(iconName));
+		return jMenuItem;
+	}
+
 	private JMenuItem createMenuItem(String name)
 	{
-		return GUIUtilities.loadMenuItem(VFSBrowser.getActionContext(),
-			"vfs.browser." + name,false);
+		return createMenuItem(name, null);
 	} //}}}
 
 	//{{{ createEncodingMenu() method
