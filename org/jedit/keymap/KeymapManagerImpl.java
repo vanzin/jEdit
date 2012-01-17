@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.gjt.sp.jedit.IPropertyManager;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 //}}}
@@ -48,11 +47,21 @@ public class KeymapManagerImpl implements KeymapManager
 {
 	private Keymap currentKeymap;
 	private final IPropertyManager propertyManager;
+	/**
+	 * The userKeymapFolder, it can be null if jEdit runs with nosettings;
+	 */
+	private static File userKeymapFolder;
+	private final File systemKeymapFolder;
+	
 
 	//{{{ KeymapManagerImpl() constructor
-	public KeymapManagerImpl(IPropertyManager propertyManager)
+	public KeymapManagerImpl(IPropertyManager propertyManager,
+				 File systemKeymapFolder,
+				 File userKeymapFolder)
 	{
 		this.propertyManager = propertyManager;
+		this.systemKeymapFolder = systemKeymapFolder;
+		this.userKeymapFolder = userKeymapFolder;
 	} //}}}
 
 	//{{{ getKeymap() method
@@ -66,10 +75,11 @@ public class KeymapManagerImpl implements KeymapManager
 	@Override
 	public Collection<String> getKeymapNames()
 	{
-		Collection<String> systemKeymapNames = getSystemKeymapNames();
-		Collection<String> userKeymapNames = getUserKeymapNames();
-		systemKeymapNames.addAll(userKeymapNames);
-		Set<String> keyMaps = new HashSet<String>(systemKeymapNames.size() + userKeymapNames.size());
+		Collection<String> systemKeymapNames = getKeymapsFromFolder(systemKeymapFolder);
+		Collection<String> userKeymapNames = getKeymapsFromFolder(userKeymapFolder);
+		if (userKeymapNames != null)
+			systemKeymapNames.addAll(userKeymapNames);
+		Set<String> keyMaps = new HashSet<String>();
 		keyMaps.addAll(systemKeymapNames);
 		keyMaps.addAll(userKeymapNames);
 		return keyMaps;
@@ -171,7 +181,7 @@ public class KeymapManagerImpl implements KeymapManager
 	} //}}}
 
 	//{{{ getKeymapFile() method
-	private static File getKeymapFile(String name)
+	private File getKeymapFile(String name)
 	{
 		File file = getUserKeymapFile(name);
 		if (!file.isFile())
@@ -182,32 +192,20 @@ public class KeymapManagerImpl implements KeymapManager
 	//{{{ getUserKeymapFile() method
 	static File getUserKeymapFile(String name)
 	{
-		return new File(getUserKeymapFolder(), name + "_keys.props");
+		return new File(userKeymapFolder, name + "_keys.props");
 	} //}}}
 
 	//{{{ getSystemKeymapFile() method
-	private static File getSystemKeymapFile(String name)
+	private File getSystemKeymapFile(String name)
 	{
-		return new File(getSystemKeymapFolder(), name + "_keys.props");
-	} //}}}
-
-	//{{{ getSystemKeymapNames() method
-	private static Collection<String> getSystemKeymapNames()
-	{
-		File keymapFolder = getSystemKeymapFolder();
-		return getKeymapsFromFolder(keymapFolder);
-	} //}}}
-
-	//{{{ getUserKeymapNames() method
-	private static Collection<String> getUserKeymapNames()
-	{
-		File keymapFolder = getUserKeymapFolder();
-		return getKeymapsFromFolder(keymapFolder);
+		return new File(systemKeymapFolder, name + "_keys.props");
 	} //}}}
 
 	//{{{ getKeymapsFromFolder() method
 	private static Collection<String> getKeymapsFromFolder(File folder)
 	{
+		if (folder == null)
+			return null;
 		Collection<String> names = new ArrayList<String>();
 		File[] files = folder.listFiles(new KeymapFileFilter());
 		if (files != null)
@@ -220,20 +218,6 @@ public class KeymapManagerImpl implements KeymapManager
 			}
 		}
 		return names;
-	} //}}}
-
-	//{{{ getUserKeymapFolder() method
-	private static File getUserKeymapFolder()
-	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		return new File(settingsDirectory, "keymaps");
-	} //}}}
-
-	//{{{ getSystemKeymapFolder() method
-	private static File getSystemKeymapFolder()
-	{
-		String homeDirectory = jEdit.getJEditHome();
-		return new File(homeDirectory, "keymaps");
 	} //}}}
 
 	//{{{ getCurrentKeymapName() method

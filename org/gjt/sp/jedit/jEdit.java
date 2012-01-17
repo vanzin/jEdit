@@ -3288,7 +3288,14 @@ public class jEdit
 
 		bufferHash = new HashMap<String, Buffer>();
 
-		keymapManager = new KeymapManagerImpl(propertyManager);
+		File userKeymapFolder = null;
+		if (settingsDirectory != null)
+		{
+			userKeymapFolder = new File(settingsDirectory, "keymaps");
+		}
+		keymapManager = new KeymapManagerImpl(propertyManager,
+						      new File(jEditHome, "keymaps"),
+						      userKeymapFolder);
 		inputHandler = new DefaultInputHandler(null);
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
