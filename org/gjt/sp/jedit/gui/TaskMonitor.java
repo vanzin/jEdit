@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2010 Matthieu Casanova
+ * Copyright © 2010-2012 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Task;
@@ -38,6 +39,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+//}}}
 
 /**
  * @author Matthieu Casanova
@@ -48,6 +50,7 @@ public class TaskMonitor extends JPanel implements TaskListener
 	private final JTable table;
 	private final JLabel remainingCount;
 
+	//{{{ TaskMonitor constructor
 	public TaskMonitor()
 	{
 		super(new BorderLayout());
@@ -79,8 +82,9 @@ public class TaskMonitor extends JPanel implements TaskListener
 
 		add(new IOProgressMonitor(), BorderLayout.NORTH);
 		add(panel);
-	}
+	} //}}}
 
+	//{{{ addNotify() method
 	@Override
 	public void addNotify()
 	{
@@ -93,63 +97,75 @@ public class TaskMonitor extends JPanel implements TaskListener
 		});
 		TaskManager.instance.addTaskListener(this);
 		super.addNotify();
-	}
+	} //}}}
 
+	//{{{ removeNotify() method
 	@Override
 	public void removeNotify()
 	{
 		TaskManager.instance.removeTaskListener(this);
 		super.removeNotify();
 		model.removeAll();
-	}
+	} //}}}
 
+	//{{{ waiting() method
 	public void waiting(Task task)
 	{
 		model.addTask(task);
-	}
+	} //}}}
 
+	//{{{ running() method
 	public void running(Task task)
 	{
 		repaint();
-	}
+	} //}}}
 
+	//{{{ done() method
 	public void done(Task task)
 	{
 		model.removeTask(task);
-	}
+	} //}}}
 
+	//{{{ statusUpdated() method
 	public void statusUpdated(Task task)
 	{
 		repaint();
-	}
+	} //}}}
 
+	//{{{ maximumUpdated() method
 	public void maximumUpdated(Task task)
 	{
 		repaint();
-	}
+	} //}}}
 
+	//{{{ valueUpdated() method
 	public void valueUpdated(Task task)
 	{
 		repaint();
-	}
+	} //}}}
 
+	//{{{ updateTasksCount() method
 	private void updateTasksCount()
 	{
 		remainingCount.setText(jEdit.getProperty("taskmanager.remainingtasks.label",
 						new Object[]{model.getRowCount()}));
-	}
+	} //}}}
 
+	//{{{ TaskCellRenderer class
 	private static class TaskCellRenderer implements TableCellRenderer
 	{
 		private final JProgressBar progress;
 		private final JButton button;
+
+		//{{{ TaskCellRenderer constructor
 		private TaskCellRenderer()
 		{
 			progress = new JProgressBar();
 			button = new JButton(GUIUtilities.loadIcon(jEdit.getProperty("close-buffer.icon")));
 			progress.setStringPainted(true);
-		}
+		} //}}}
 
+		//{{{ getTableCellRendererComponent
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 							       boolean hasFocus, int row, int column)
 		{
@@ -178,17 +194,19 @@ public class TaskMonitor extends JPanel implements TaskListener
 				progress.setString(task.getStatus());
 				return progress;
 			}
-
+			button.setEnabled(task.isCancellable());
 			return button;
-		}
-	}
+		} //}}}
+	} //}}}
 
+	//{{{ TaskTableEditor class
 	private class TaskTableEditor extends AbstractCellEditor implements TableCellEditor
 	{
 		private final JButton button;
 
 		private Task task;
 
+		//{{{ TaskTableEditor constructor
 		private TaskTableEditor()
 		{
 			button = new JButton(GUIUtilities.loadIcon(jEdit.getProperty("close-buffer.icon")));
@@ -200,12 +218,13 @@ public class TaskMonitor extends JPanel implements TaskListener
 					stopCellEditing();
 				}
 			});
-		}
+		} //}}}
 
+		//{{{ getCellEditorValue() method
 		public Object getCellEditorValue()
 		{
 			return null;
-		}
+		} //}}}
 
 		//{{{ getTableCellEditorComponent() method
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
@@ -213,38 +232,45 @@ public class TaskMonitor extends JPanel implements TaskListener
 			task = (Task) value;
 			return button;
 		} //}}}
-	}
+	} //}}}
 
+	//{{{ TaskTableModel class
 	private static class TaskTableModel extends AbstractTableModel
 	{
 		private final java.util.List<Task> tasks;
 
+		//{{{ TaskTableModel constructor
 		private TaskTableModel()
 		{
 			tasks = new ArrayList<Task>();
-		}
+		} //}}}
 
+		//{{{ getRowCount() method
 		public int getRowCount()
 		{
 			return tasks.size();
-		}
+		} //}}}
 
+		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
 			return 2;
-		}
+		} //}}}
 
+		//{{{ isCellEditable() method
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			return columnIndex == 1;
-		}
+		} //}}}
 
+		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			return tasks.get(rowIndex);
-		}
+		} //}}}
 
+		//{{{ addTask() method
 		void addTask(final Task task)
 		{
 			ThreadUtilities.runInDispatchThread(new Runnable()
@@ -255,8 +281,9 @@ public class TaskMonitor extends JPanel implements TaskListener
 					fireTableRowsInserted(tasks.size()-1, tasks.size()-1);
 				}
 			});
-		}
+		} //}}}
 
+		//{{{ removeTask() method
 		void removeTask(final Task task)
 		{
 			ThreadUtilities.runInDispatchThread(new Runnable()
@@ -271,12 +298,13 @@ public class TaskMonitor extends JPanel implements TaskListener
 					}
 				}
 			});
-		}
+		} //}}}
 
+		//{{{ removeAll() method
 		public void removeAll()
 		{
 			tasks.clear();
 			fireTableDataChanged();
-		}
-	}
+		} //}}}
+	} //}}}
 }

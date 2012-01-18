@@ -108,6 +108,9 @@ and Jarek Czekalski for contributing to this release.
 }}}
 {{{ UI
 
+- If a Task is not cancellable, the cancel button of TaskMonitor is disabled
+  (Matthieu Casanova)
+
 - Added Icons to the VFS Browser context menu (Matthieu Casanova)
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
