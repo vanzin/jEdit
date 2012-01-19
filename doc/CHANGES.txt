@@ -12,6 +12,9 @@ contributing to this release.
 
 - Large file mode text description dialog (#3456370) (Matthieu Casanova)
 
+- VFS Browser was stuck if trying to browse a VFS that needed a session but the
+  session could not be opened (#3471386) (Matthieu Casanova)
+
 - Fixed Copy_Line macro that was copying one character of the next line (#3454377)
   (Matthieu Casanova)
 
