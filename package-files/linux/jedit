@@ -2,11 +2,6 @@
 #
 # Runs jEdit - Programmer's Text Editor.
 #
-
-# Set jvm heap initial and maximum sizes (in megabytes).
-JAVA_HEAP_MAX_SIZE=-Xmx512M
-
-
 # Find a java installation.
 if [ -z "${JAVA_HOME}" ]; then
 	echo 'Warning: $JAVA_HOME environment variable not set! Consider setting it.'
@@ -24,5 +19,4 @@ else
 fi
 
 # Launch application.
-
 exec "${JAVA}" -jar "/usr/share/jEdit/@jar.filename@" -reuseview "$@"
