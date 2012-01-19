@@ -9,7 +9,7 @@
         <author>
             <othername>The jEdit all-volunteer development team</othername>
         </author>
-
+        <date> 2012 </date>
     </articleinfo>
 
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,

@@ -40,6 +40,8 @@ contributing to this release.
 - Added select all and select none buttons to PingPongList fixing a bug in
   EncodingsOptionPane (#3434850) (Matthieu Casanova)
 
+- Fixed #3474515 - MiscUtilities.expandVariables does not expand ~ (Alan Ezust)  
+  
   
 
 }}}
