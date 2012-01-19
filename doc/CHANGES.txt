@@ -99,9 +99,6 @@ and Jarek Czekalski for contributing to this release.
 - Fix for tracker 2976661, script tag attributes not syntax highlighted.
   (Dale Anson)
 
-- Fix for tracker 3165177, method/function names not always highlighted.
-  (Dale Anson)
-
 - Fix for tracker 846913, jsp syntax highlighting for single line comments.
   (Dale Anson)
 
