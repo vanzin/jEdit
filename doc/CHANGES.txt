@@ -10,6 +10,9 @@ and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
+- VFS Browser was stuck if trying to browse a VFS that needed a session but the
+  session could not be opened (#3471386) (Matthieu Casanova
+
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists

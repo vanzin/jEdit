@@ -169,7 +169,11 @@ class BrowserView extends JPanel
 
 		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
+		{
+			if (delayedAWTTask != null)
+				ThreadUtilities.runInDispatchThread(delayedAWTTask);
 			return;
+		}
 
 		if(node == null)
 		{
