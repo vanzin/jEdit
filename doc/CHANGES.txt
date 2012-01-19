@@ -10,9 +10,6 @@ and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
-- VFS Browser was stuck if trying to browse a VFS that needed a session but the
-  session could not be opened (#3471386) (Matthieu Casanova
-
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists
@@ -20,8 +17,6 @@ and Jarek Czekalski for contributing to this release.
   (Matthieu Casanova)
 
 - Fixed Ctrl + key not working in completion popup (Matthieu Casanova)
-
-- Large file mode text description dialog (#3456370 - Matthieu Casanova)
 
 - Fixed copy of Hypersearch results adding \r in the clipboard (#3142456)
   (Matthieu Casanova)
