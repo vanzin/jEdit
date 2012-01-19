@@ -30,9 +30,6 @@ and Jarek Czekalski for contributing to this release.
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
-- \r (0x0A, CR) could be pasted from clipboard into buffer.
-  (Bug #3142456 - Matthieu Casanova)
-
 }}}
 {{{ API Changes
 
@@ -144,14 +141,6 @@ and Jarek Czekalski for contributing to this release.
 
 - The EditingOptionPane has now an option to remember the user choice about
   large file treatment (Matthieu Casanova)
-
-- Removed 192mb heap size limit from startup scripts.
-  Removed jedit.l4j.ini from Windows package files because no options were left.
-  NOTE:
-    Old jedit.l4j.ini won't be removed on upgrade. In that case, manual
-    removal will be required. Please look for jedit.l4j.ini in the
-    install directory after running the installer. If you found only
-    "-Xmx192M" in the file, you can remove it or the file itself.
 
 - OS/2 tasks were removed from the Java installer as OS/2 does not
   have a working Java 6 implementation and probably never will have

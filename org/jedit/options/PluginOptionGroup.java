@@ -3,8 +3,8 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
- * Copyright (C) 2006 Alan Ezust
+ * Portions Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2012 Alan Ezust
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,14 +38,9 @@ import org.gjt.sp.jedit.jEdit;
 *  Refactored from PluginOptions.java - this class
 *  contains only the OptionGroup
 *  and none of the GUI code.
-*   NOTE: This version does not show optionpanes from plugins that
-*   use the deprecated (pre 4.2) plugin APIs.  
-*  @since jedit4.3pre3
-*  @todo - add this to jEdit core and refactor the PluginOptions.java to use this some day?
+*  @since jedit5.0
 *
 */
-
-
 // {{{ PluginOptionGroup class
 public class PluginOptionGroup extends OptionGroup 
 {
