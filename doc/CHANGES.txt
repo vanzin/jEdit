@@ -47,6 +47,13 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Removed 192mb heap size limit from startup scripts.
+  Removed jedit.l4j.ini from Windows package files because no options were left.
+  NOTE:
+    Old jedit.l4j.ini won't be removed on upgrade. In that case, manual
+    removal will be required. Please look for jedit.l4j.ini in the
+    install directory after running the installer. If you found only
+    "-Xmx192M" in the file, you can remove it or the file itself.
 
 }}}
 {{{ API Changes
