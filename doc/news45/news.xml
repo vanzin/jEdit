@@ -15,6 +15,8 @@
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
     <itemizedlist>
+    <listitem><para> Performance improvements, as well as a "large file" mode
+    for handling extra large files. </para></listitem> 
     <listitem><para> Edit using <ulink url="http://nickgravgaard.com/elastictabstops/">Elastic tabstops</ulink>,
     set from Global Options - Editing, Buffer Options, or via buffer-local properties. </para></listitem>
     <listitem><para> Lots of old deprecated APIs were removed. Some plugins may be broken as a result. </para></listitem>

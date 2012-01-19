@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appendix id="legal-notice">
     <title>Legal Notice</title>
-
     <!-- jEdit buffer-local properties:                      -->
-
     <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
-
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
     <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
-
-    <!-- Copyright (C) 2006 Alan Ezust				         -->
+    <!-- Copyright (C) 2006-2012 Alan Ezust				         -->
 
     <para>Permission is granted to copy, distribute and/or modify this document
     under the terms of the <ulink url="http://www.gnu.org/licenses/fdl.html">
