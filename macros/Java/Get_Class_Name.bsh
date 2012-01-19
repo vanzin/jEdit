@@ -5,14 +5,14 @@ selected text with the current class name.
 This macro walks though several steps in an attempt to guess the correct class
 name.
 
-First, it searches backwards for the nearest occurance of the keyword 'class,'
-so it should work for inner class definitions.  It does not, however, do any 
-fancy code parsing, so if you run this macro at any point after an inner class 
-definition, it will return the name of the inner class, not the parent class.
+First, it searches backwards for the nearest occurance of the keyword 'class,' 
+and check which class the target belongs to, so it works for inner class definitions.
+If you run this macro at any point after an inner class definition but belongs to a
+parent class, it will return the name of the parent class.
 
-If that fails, it attempts to guess the class name from the file name; i.e. it 
-would return "FooBar" if the buffer was named "FooBar.cc."  If this fails (if, 
-for example, the buffer is untitled), it returns an empty string.
+If that fails(out of any class boundary), it attempts to guess the class name from 
+the file name; i.e. it would return "FooBar" if the buffer was named "FooBar.cc."  
+If this fails (if, for example, the buffer is untitled), it returns an empty string.
 
 Copyright (C)  2004 Thomas Galvin - software@thomas-galvin.com
 
@@ -49,12 +49,38 @@ String getClassName()
   String text = textArea.getText();
   int index = text.lastIndexOf("class", selectionStart);
 
+  boolean flag = false;
+  // check which class the targetposition belongs to
   if(index != -1)
+  {
+    flag = true;
+    index = selectionStart;
+    int tag = 0;
+    while(flag){
+	char check = text.charAt(index);
+	if(check == '}'){
+	    tag++;
+	}
+	if(check == '{'){
+	    tag--;
+	    if(tag == -1){
+		index = text.lastIndexOf("class", index);
+		break;
+	    }
+	}
+	index--;
+	// out of any classes' boundary
+	if(index == -1)
+	    flag = false;
+    }
+  }
+
+  if(flag)
   {
     textArea.setCaretPosition(index);
     int lineNumber = textArea.getCaretLine();
     int lineEnd = textArea.getLineEndOffset(lineNumber);
-    String lineText = text.substring(index, lineEnd);
+    String lineText = text.substring(index, lineEnd);   
     
     StringTokenizer tokenizer = new StringTokenizer(lineText);
     tokenizer.nextToken(); //eat "class"

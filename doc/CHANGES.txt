@@ -153,6 +153,8 @@ and Jarek Czekalski for contributing to this release.
 
 - Added support for "Find Previous" when searching in multiple files (Evan Wright)
 
+- Applied patch to Get_Class_Name macro from lxdyglt to find
+  classname for inner classes. (#3301598 - Dale Anson)
 }}}
 
 }}}
