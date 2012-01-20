@@ -1606,8 +1606,13 @@ public class jEdit
 	//{{{ openTemporary() methods
 	/**
 	 * Opens a temporary buffer. A temporary buffer is like a normal
-	 * buffer, except that an event is not fired, the the buffer is
+	 * buffer, except that an event is not fired and the buffer is
 	 * not added to the buffers list.
+	 * <p>If a buffer for the given <code>path</code> was
+	 * already opened in jEdit, then this instance is returned.
+	 * Otherwise jEdit will not store a reference
+	 * to the returned Buffer object.
+	 * <p>This method is thread-safe.  
 	 *
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
@@ -1624,9 +1629,8 @@ public class jEdit
 		return openTemporary(view, parent, path, newFile, null);
 	}
 	/**
-	 * Opens a temporary buffer. A temporary buffer is like a normal
-	 * buffer, except that an event is not fired, the the buffer is
-	 * not added to the buffers list.
+	 * Opens a temporary buffer.
+	 * Details: {@link #openTemporary(View, String, String, boolean)}
 	 *
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
