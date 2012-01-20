@@ -35,8 +35,8 @@ import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
 
-public class RegisterViewer extends JPanel implements ActionListener,
-	DockableWindow
+public class RegisterViewer extends JPanel
+	implements DockableWindow, DefaultFocusComponent
 {
 	//{{{ RegisterViewer constructor
 	public RegisterViewer(View view, String position)
@@ -55,7 +55,7 @@ public class RegisterViewer extends JPanel implements ActionListener,
 			GUIUtilities.loadIcon("Paste.png"));
 		pasteRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("paste-string-register.label")));
-		pasteRegister.addActionListener(this);
+		pasteRegister.addActionListener(new InsertHandler());
 		pasteRegister.setActionCommand("paste-string-register");
 		toolBar.add(pasteRegister);
 
@@ -63,10 +63,9 @@ public class RegisterViewer extends JPanel implements ActionListener,
 			GUIUtilities.loadIcon("Clear.png"));
 		clearRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("clear-string-register.label")));
-		clearRegister.addActionListener(this);
+		clearRegister.addActionListener(new ClearHandler());
 		clearRegister.setActionCommand("clear-string-register");
 		toolBar.add(clearRegister);
-
 		
 		add(BorderLayout.NORTH,toolBar);
 
@@ -76,13 +75,27 @@ public class RegisterViewer extends JPanel implements ActionListener,
 		registerList.setCellRenderer(new Renderer());
 		registerList.addListSelectionListener(new ListHandler());
 		registerList.addMouseListener(new MouseHandler());
-
 		contentTextArea = new JTextArea(10,20);
 		contentTextArea.setEditable(true);
 		documentHandler = new DocumentHandler();
 		//contentTextArea.getDocument().addDocumentListener(documentHandler);
 		contentTextArea.addFocusListener(new FocusHandler());
-
+		//key bindings
+		this.registerKeyboardAction(new EscapeHandler(),
+			KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), 
+			WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		registerList.registerKeyboardAction(new InsertHandler(),
+			KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), 
+			WHEN_FOCUSED);
+		registerList.registerKeyboardAction(new InsertHandler(),
+			KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), 
+			WHEN_FOCUSED);
+		registerList.registerKeyboardAction(new ClearHandler(),
+			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), 
+			WHEN_FOCUSED);
+		contentTextArea.registerKeyboardAction(new TabHandler(),
+			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK),
+			WHEN_FOCUSED);
 		int orientation = JSplitPane.HORIZONTAL_SPLIT;
 		if (position.equals(DockableWindowManager.LEFT) ||
 			position.equals(DockableWindowManager.RIGHT))
@@ -94,17 +107,14 @@ public class RegisterViewer extends JPanel implements ActionListener,
 
 		refreshList();
 	} //}}}
-	
-	//{{{ actionPerformed() method
-	public void actionPerformed(ActionEvent evt)
-	{
-		String cmd = evt.getActionCommand();
-		if (cmd.equals("paste-string-register"))
-			insertRegister();
-		else if (cmd.equals("clear-string-register"))
-			clearSelectedIndex();
-	} //}}}
 
+	//{{{ focusOnDefaultComponent() method
+	@Override
+	public void focusOnDefaultComponent()
+	{
+		registerList.requestFocus();
+	} //}}}
+	
 	//{{{ handleRegisterChanged() method
 	@EBHandler
 	public void handleRegisterChanged(RegisterChanged msg)
@@ -141,17 +151,6 @@ public class RegisterViewer extends JPanel implements ActionListener,
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ clearSelectedIndex() method
-	private void clearSelectedIndex()
-	{
-		Object o = registerList.getSelectedValue();
-		if (o != null && o instanceof Character)
-		{
-			Registers.clearRegister(((Character)o).charValue());
-			refreshList();
-		}
-	} //}}}
 
 	//{{{ Instance variables
 	private JList registerList;
@@ -211,6 +210,17 @@ public class RegisterViewer extends JPanel implements ActionListener,
 		Registers.Register reg = Registers.getRegister(((Character)o).charValue());
 		view.getTextArea().setSelectedText(reg.toString());
 		view.getTextArea().requestFocus();
+	} //}}}
+
+	//{{{ clearSelectedIndex() method
+	private void clearSelectedIndex()
+	{
+		Object o = registerList.getSelectedValue();
+		if (o != null && o instanceof Character)
+		{
+			Registers.clearRegister(((Character)o).charValue());
+			refreshList();
+		}
 	} //}}}
 
 	//}}}
@@ -324,13 +334,7 @@ public class RegisterViewer extends JPanel implements ActionListener,
 					JMenuItem item = GUIUtilities.loadMenuItem("paste");
 					popup.add(item);
 					item = new JMenuItem(jEdit.getProperty("clear-string-register.label"));
-					item.addActionListener(new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
-							clearSelectedIndex();
-						}
-					});
+					item.addActionListener(new ClearHandler());
 					popup.add(item);
 				}
 				GUIUtilities.showPopupMenu(popup, registerList, evt.getX(), evt.getY(), false);
@@ -394,5 +398,41 @@ public class RegisterViewer extends JPanel implements ActionListener,
 		}
 	}//}}}
 
-	//}}}
+	//{{{ EscapeHandler Class
+	class EscapeHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			view.getTextArea().requestFocus();
+			view.toFront();
+	  	}
+	}//}}}
+
+	//{{{ TabHandler Class
+	class TabHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			registerList.requestFocus();
+	  	}
+	}//}}}
+
+	//{{{ InsertHandler Class
+	class InsertHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			insertRegister();
+	  	}
+	}//}}}
+
+	//{{{ ClearHandler Class
+	class ClearHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			clearSelectedIndex();
+
+	  	}
+	}//}}}
 }
