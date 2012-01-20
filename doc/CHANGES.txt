@@ -131,6 +131,9 @@ and Jarek Czekalski for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Document jEdit's command line parameters into Activity Log 
+  (#2960844 - Alan Ezust)
+
 - Pasting a VFSFile as String dataflavor will now paste the full path instead of
   the name of the file (Matthieu Casanova)
 

@@ -24,6 +24,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
+import org.gjt.sp.util.StringList;
 import org.jedit.keymap.KeymapManager;
 import org.jedit.keymap.KeymapManagerImpl;
 import org.jedit.migration.KeymapMigration;
@@ -104,6 +105,7 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
+		StringList slargs = new StringList(args);
 		//{{{ Check for Java 1.6 or later
 		String javaVersion = System.getProperty("java.version");
 		if(javaVersion.compareTo("1.6") < 0)
@@ -264,6 +266,8 @@ public class jEdit
 			portFile = null;
 
 		Log.init(true,level);
+		
+		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + slargs.join(" "));		
 		//}}}
 
 		//{{{ Try connecting to another running jEdit instance
