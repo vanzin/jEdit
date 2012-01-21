@@ -141,6 +141,7 @@ public class KeymapManagerImpl implements KeymapManager
 	@Override
 	public boolean copyKeymap(String name, String newName)
 	{
+		Log.log(Log.DEBUG, this, "copyKeymap(" + name + ',' + newName + ')');
 		File keymapFile = getUserKeymapFile(newName);
 		if (keymapFile.exists())
 			throw new IllegalArgumentException("Keymap " + newName + " already exists");
@@ -151,6 +152,7 @@ public class KeymapManagerImpl implements KeymapManager
 		keymapFile.getParentFile().mkdirs();
 		BufferedInputStream in = null;
 		BufferedOutputStream out = null;
+		Log.log(Log.DEBUG, this, "Copying "+ originalKeymap.getAbsolutePath() + " to " + keymapFile.getAbsolutePath());
 		try
 		{
 			in = new BufferedInputStream(new FileInputStream(originalKeymap));
