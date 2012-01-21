@@ -3301,9 +3301,6 @@ public class jEdit
 		{
 			userKeymapFolder = new File(settingsDirectory, "keymaps");
 		}
-		keymapManager = new KeymapManagerImpl(propertyManager,
-						      new File(jEditHome, "keymaps"),
-						      userKeymapFolder);
 		inputHandler = new DefaultInputHandler(null);
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
@@ -3365,6 +3362,9 @@ public class jEdit
 		jEditHome = MiscUtilities.resolveSymlinks(jEditHome);
 
 		Log.log(Log.MESSAGE,jEdit.class,"jEdit home directory is " + jEditHome);
+		keymapManager = new KeymapManagerImpl(propertyManager,
+		      new File(jEditHome, "keymaps"),
+		      userKeymapFolder);
 
 		if(settingsDirectory != null)
 		{
