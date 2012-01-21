@@ -432,9 +432,13 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
 
-		GUIUtilities.advanceSplashProgress("Migrate keymaps");
-		MigrationService keymapMigration = new KeymapMigration();
-		keymapMigration.migrate();
+
+		if (settingsDirectory != null)
+		{
+			GUIUtilities.advanceSplashProgress("Migrate keymaps");
+			MigrationService keymapMigration = new KeymapMigration();
+			keymapMigration.migrate();
+		}
 
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
