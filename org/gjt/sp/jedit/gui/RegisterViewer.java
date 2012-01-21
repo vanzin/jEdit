@@ -112,7 +112,7 @@ public class RegisterViewer extends JPanel
 	@Override
 	public void focusOnDefaultComponent()
 	{
-		registerList.requestFocus();
+		registerList.requestFocusInWindow();
 	} //}}}
 	
 	//{{{ handleRegisterChanged() method
@@ -209,6 +209,8 @@ public class RegisterViewer extends JPanel
 			return;
 		Registers.Register reg = Registers.getRegister(((Character)o).charValue());
 		view.getTextArea().setSelectedText(reg.toString());
+		// can't use requestFocusInWindow() here, otherwise we'll stay
+		// in RegisterViewer when it is a floating window
 		view.getTextArea().requestFocus();
 	} //}}}
 
@@ -413,7 +415,7 @@ public class RegisterViewer extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			registerList.requestFocus();
+			registerList.requestFocusInWindow();
 	  	}
 	}//}}}
 

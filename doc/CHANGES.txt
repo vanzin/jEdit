@@ -6,7 +6,7 @@ jEdit 5.0 version history
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
-and Jarek Czekalski for contributing to this release.
+Martin Raspe and Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
@@ -129,7 +129,11 @@ and Jarek Czekalski for contributing to this release.
 
 - New option in Saving and Backup pane: Use File System Browser dir for
   Save-As (# 1591441 - Alan Ezust)
-  
+
+- RegisterViewer: set initial focus to registerList, added key bindings for
+  inserting content, clearing a register and leaving the registerList
+  (#3437779 - Martin Raspe)
+
 }}}
 {{{ Miscellaneous
 
