@@ -474,6 +474,7 @@ public class MiscUtilities
 	  @deprecated use getBaseName() instead.
 	  @since jEdit 4.0
 	*/
+	@Deprecated
 	public static String getFileNameNoExtension(String path)
 	{
 		return getBaseName(path);
