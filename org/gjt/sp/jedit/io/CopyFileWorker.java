@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import java.awt.Component;
-import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.gjt.sp.jedit.MiscUtilities;
@@ -53,9 +53,8 @@ public class CopyFileWorker extends Task
 
 	private final Component comp;
 
-	private VFSFile[] vfsFiles;
-	private File[] files;
-	
+	private List<String> sources;
+
 	/**
 	 * The behavior if the target already exists.
 	 */
@@ -85,6 +84,7 @@ public class CopyFileWorker extends Task
 	 * @param comp   the component that will be used as parent in case of error
 	 * @param source the source path
 	 * @param target the target path (it is the file path, not a parent directory)
+	 * @param latch a latch so the caller knows when the copy is done
 	 */
 	private CopyFileWorker(Component comp, String source, String target, CountDownLatch latch)
 	{
@@ -104,15 +104,14 @@ public class CopyFileWorker extends Task
 	 * Copy all files from the list to the target directory.
 	 * If some files already exist in the target directory the {@link Behavior} will decide what
 	 * to do.
-	 * If a target filename already exists it will be skipped.
 	 * @param comp   the component that will be used as parent in case of error
-	 * @param vfsFiles the source files
+	 * @param sources the sources path to copy
 	 * @param target the target path (it must be a directory otherwise nothing will be copied)
 	 * @since jEdit 5.0
 	 */
-	public CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target)
+	public CopyFileWorker(Component comp, List<String> sources, String target)
 	{
-		this(comp, vfsFiles, target, Behavior.SKIP);
+		this(comp, sources, target, Behavior.SKIP);
 	}
 
 	/**
@@ -120,48 +119,17 @@ public class CopyFileWorker extends Task
 	 * If some files already exist in the target directory the {@link Behavior} will decide what
 	 * to do.
 	 * @param comp   the component that will be used as parent in case of error
-	 * @param vfsFiles the source files
+	 * @param sources the sources path to copy
 	 * @param target the target path (it must be a directory otherwise nothing will be copied)
 	 * @param behavior the behavior if the target file already exists
 	 * @since jEdit 5.0
 	 */
-	public CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target, Behavior behavior)
+	public CopyFileWorker(Component comp, List<String> sources, String target, Behavior behavior)
 	{
-		if (vfsFiles == null || target == null)
+		if (sources == null || target == null)
 			throw new NullPointerException("The source and target cannot be null");
 		this.comp = comp;
-		this.vfsFiles = vfsFiles;
-		this.target = target;
-		this.behavior = behavior;
-	}
-
-	/**
-	 * Copy all files from the list to the target directory.
-	 * If a target filename already exists it will be skipped.
-	 * @param comp   the component that will be used as parent in case of error
-	 * @param target the target path (it must be a directory otherwise nothing will be copied)
-	 * @since jEdit 5.0
-	 */
-	public CopyFileWorker(Component comp, File[] files, String target)
-	{
-		this(comp, files, target, Behavior.OVERWRITE);
-	}
-
-	/**
-	 * Copy all files from the list to the target directory.
-	 * If some files already exist in the target directory the {@link Behavior} will decide what
-	 * to do.
-	 * @param comp   the component that will be used as parent in case of error
-	 * @param target the target path (it must be a directory otherwise nothing will be copied)
-	 * @param behavior the behavior if the target file already exists
-	 * @since jEdit 5.0
-	 */
-	public CopyFileWorker(Component comp, File[] files, String target, Behavior behavior)
-	{
-		if (files == null || target == null)
-			throw new NullPointerException("The source and target cannot be null");
-		this.comp = comp;
-		this.files = files;
+		this.sources = sources;
 		this.target = target;
 		this.behavior = behavior;
 	} //}}}
@@ -199,16 +167,16 @@ public class CopyFileWorker extends Task
 	private void copyFileList()
 	{
 		VFS vfs = VFSManager.getVFSForPath(target);
-		Object session = null;
+		Object targetSession = null;
 		try
 		{
-			session = vfs.createVFSSession(target, comp);
-			if (session == null)
+			targetSession = vfs.createVFSSession(target, comp);
+			if (targetSession == null)
 			{
 				Log.log(Log.ERROR, this, "Target VFS path cannot be reached");
 				return;
 			}
-			VFSFile targetFile = vfs._getFile(session, target, comp);
+			VFSFile targetFile = vfs._getFile(targetSession, target, comp);
 			if (targetFile == null)
 			{
 				Log.log(Log.ERROR, this, "Target is unreachable or do not exist");
@@ -220,38 +188,16 @@ public class CopyFileWorker extends Task
 				Log.log(Log.ERROR, this, "Target is not a directory");
 				return;
 			}
-
-			if (vfsFiles != null)
+			if (sources != null)
 			{
-				setMaximum(vfsFiles.length);
-				for (int i = 0, vfsFilesLength = vfsFiles.length; i < vfsFilesLength; i++)
+				setMaximum(sources.size());
+				for (int i = 0; i < sources.size(); i++)
 				{
 					setValue(i);
-					VFSFile f = vfsFiles[i];
-					if (f.getType() == VFSFile.FILE)
-					{
-						String sourcePath = f.getPath();
-						String sourceName = f.getName();
-						setLabel(sourceName);
-						copy(session, vfs, sourcePath, sourceName, target);
-					}
-				}
-			}
-			if (files != null)
-			{
-				setMaximum(files.length);
-
-				for (int i = 0, filesLength = files.length; i < filesLength; i++)
-				{
-					setValue(i);
-					File f = files[i];
-					if (f.isFile())
-					{
-						String sourcePath = f.getAbsolutePath();
-						String sourceName = f.getName();
-						setLabel(sourceName);
-						copy(session, vfs, sourcePath, sourceName, target);
-					}
+					String sourcePath = sources.get(i);
+					String sourceName = MiscUtilities.getFileName(sourcePath);
+					setLabel(sourceName);
+					copy(targetSession, vfs, sourcePath, sourceName, target);
 				}
 			}
 		}
@@ -268,8 +214,8 @@ public class CopyFileWorker extends Task
 			VFSManager.sendVFSUpdate(vfs, target, true);
 			try
 			{
-				if (session != null)
-					vfs._endVFSSession(session, comp);
+				if (targetSession != null)
+					vfs._endVFSSession(targetSession, comp);
 			}
 			catch (IOException e)
 			{
@@ -313,7 +259,7 @@ public class CopyFileWorker extends Task
 
 
 		String extension = MiscUtilities.getFileExtension(baseName);
-		String nameNoExtension = MiscUtilities.getFileNameNoExtension(baseName);
+		String nameNoExtension = MiscUtilities.getBaseName(baseName);
 		for (int i = 1;i<1000;i++)
 		{
 			String name = nameNoExtension + "-copy-" + i;

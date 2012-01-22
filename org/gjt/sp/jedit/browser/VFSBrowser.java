@@ -1060,18 +1060,25 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 				return;
 			}
 			Transferable transferable = Registers.getRegister('$').getTransferable();
+			List<String> sources = new ArrayList<String>();
 			if (transferable.isDataFlavorSupported(ListVFSFileTransferable.jEditFileList))
 			{
-				List<VFSFile> copiedFiles = (List<VFSFile>) transferable.getTransferData(ListVFSFileTransferable.jEditFileList);
-				CopyFileWorker worker = new CopyFileWorker(this, copiedFiles.toArray(new VFSFile[copiedFiles.size()]), targetPath);
-				ThreadUtilities.runInBackground(worker);
+				Iterable<VFSFile> copiedFiles = (Iterable<VFSFile>) transferable.getTransferData(ListVFSFileTransferable.jEditFileList);
+				for (VFSFile copiedFile : copiedFiles)
+				{
+					sources.add(copiedFile.getPath());
+				}
 			}
 			else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			{
-				List<File> copiedFiles = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-				CopyFileWorker worker = new CopyFileWorker(this, copiedFiles.toArray(new File[copiedFiles.size()]), targetPath);
-				ThreadUtilities.runInBackground(worker);
+				Iterable<File> copiedFiles = (Iterable<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				for (File copiedFile : copiedFiles)
+				{
+					sources.add(copiedFile.getAbsolutePath());
+				}
 			}
+			CopyFileWorker worker = new CopyFileWorker(this, sources, targetPath);
+			ThreadUtilities.runInBackground(worker);
 		}
 		finally
 		{
