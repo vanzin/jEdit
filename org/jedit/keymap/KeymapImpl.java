@@ -49,7 +49,7 @@ class KeymapImpl implements Keymap
 	private boolean modified;
 
 	//{{{ KeymapImpl() constructor
-	public KeymapImpl(String name, File file)
+	KeymapImpl(String name, File file)
 	{
 		this.name = name;
 		this.file = file;
