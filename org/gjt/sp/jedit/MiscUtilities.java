@@ -405,7 +405,7 @@ public class MiscUtilities
 	 *    IP-192.168.1.1-data.tar.gz
 	 * it will return
 	 *    .gz
-	 * @see getCompleteBaseName
+	 * @see #getCompleteBaseName(String)
 	 */
 	public static String getFileExtension(String path)
 	{
@@ -437,7 +437,7 @@ public class MiscUtilities
 	 * it will return
 	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
-	 * @see getBaseName
+	 * @see #getBaseName(String)
 	 * @since jEdit 5.0
 	 */
 	public static String getCompleteBaseName(String path)
@@ -458,7 +458,7 @@ public class MiscUtilities
 	 *     IP-192
 	 * @param path The path name
 	 * @since jEdit 5.0
-	 * @see getCompleteBaseName
+	 * @see #getCompleteBaseName(String)
 	*/
 	public static String getBaseName(String path)
 	{
