@@ -396,8 +396,7 @@ public class MiscUtilities
 
 	//{{{ getFileExtension() method
 	/**
-	 * Returns the extension of the specified filename,
-
+	 * Returns the extension of the specified filename, starting with the last dot.
 	 * @param path The path
 	 * @return the last dot (.) and the text that follows, or an empty
 	 * string if no dots are found.
@@ -437,7 +436,7 @@ public class MiscUtilities
 	 * it will return
 	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
-	 * @see #getBaseName(String)
+	 * @see #getBaseName(String), #getFileExtension(String)
 	 * @since jEdit 5.0
 	 */
 	public static String getCompleteBaseName(String path)

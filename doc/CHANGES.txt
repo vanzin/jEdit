@@ -6,9 +6,13 @@ jEdit 5.0 version history
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
-Martin Raspe and Jarek Czekalski for contributing to this release.
+Martin Raspe, Michael Pradel and Jarek Czekalski for contributing to this
+release. 
 
 {{{ Bug fixes
+
+- Inner class of FilteredListModel passes wrong "this" (patch# 3477759 - 
+  Michael Pradel
 
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 

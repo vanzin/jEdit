@@ -255,8 +255,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		}
 		catch(Throwable t)
 		{
-			Log.log(Log.ERROR,this,"Error initializing options:");
-			Log.log(Log.ERROR,this,t);
+			Log.log(Log.ERROR,this,"Error initializing options:", t);
 		}
 
 		currentPane = optionPane;
@@ -467,8 +466,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Error saving options:");
-				Log.log(Log.ERROR,this,t);
+				Log.log(Log.ERROR,this,"Error saving options:", t);
 			}
 		}
 		else if(obj instanceof String)
