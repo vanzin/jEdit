@@ -413,6 +413,27 @@ public class Chunk extends Token
 		return fontSubstList;
 	} //}}}
 
+	//{{{ getFont() method
+	/**
+	 * Determines the best font for printing a character
+	 * from substitution fonts detemined by getfonts()
+	 * @param i Codepoint of the character
+	 */
+	private Font getFont(int i)
+	{
+		Font f = null;
+		for (Font candidate : getFonts())
+		{
+			 if (candidate.canDisplay(i))
+			 {
+				 f = candidate;
+				 break;
+			 }
+		}
+		return f;
+	} //}}}
+
+
 	//{{{ drawGlyphs() method
 	/**
 	 * Draws the internal list of glyph vectors into the given
@@ -510,6 +531,10 @@ public class Chunk extends Token
 			                       : -1;
 			if (max == -1)
 			{
+				/*
+				 * No font substitution
+				 * -> Draw all with the main font
+				 */
 				width += addGlyphVector(dflt,
 							frc,
 							text,
@@ -519,8 +544,8 @@ public class Chunk extends Token
 			else
 			{
 				/*
-				 * Draw as much as we can and update the
-				 * current offset.
+				 * Draw as much as we can with the main font
+				 * and update the current offset.
 				 */
 				if (max > start)
 				{
@@ -536,31 +561,24 @@ public class Chunk extends Token
 				 * Find a font that can display the next
 				 * characters.
 				 */
-				Font f = null;
-				for (Font candidate : getFonts())
-				{
-					 if (candidate.canDisplay(text[start]))
-					 {
-						 f = candidate;
-						 break;
-					 }
-				}
+
+				Font f = getFont(Character.codePointAt(text,start));
 
 				if (f != null)
 				{
-					f = f.deriveFont(dflt.getStyle(), dflt.getSize());
-
 					/*
 					 * Find out how many characters
-					 * the current font cannot
-					 * display, but the chosen one
-					 * can.
+					 * the current font should display
 					 */
 					int last = start;
 					while (last < end &&
-					       f.canDisplay(text[last]) &&
-					       !dflt.canDisplay(text[last]))
-						last++;
+					      f == getFont(Character.codePointAt(text,last)))
+					{
+						int dl = Character.charCount(Character.codePointAt(text,last));
+						last += dl;
+					}
+
+					f = f.deriveFont(dflt.getStyle(), dflt.getSize());
 
 					width += addGlyphVector(f,
 								frc,
@@ -572,12 +590,13 @@ public class Chunk extends Token
 				}
 				else
 				{
+					int ds = Character.charCount(Character.codePointAt(text,start));
 					width += addGlyphVector(dflt,
 								frc,
 								text,
 								start,
-								start + 1);
-					start++;
+								start + ds);
+					start += ds;
 				}
 			}
 		}
