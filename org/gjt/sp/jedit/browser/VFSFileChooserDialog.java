@@ -68,7 +68,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public VFSFileChooserDialog(View view, String path,
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
-		super(view,getDefaultTitle(),true);
+		super(view,getTitle(mode),true);
 		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
@@ -83,7 +83,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public VFSFileChooserDialog(Dialog parent, View view, String path,
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
-		super(parent,getDefaultTitle(),true);
+		super(parent,getTitle(mode),true);
 		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());		
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
@@ -98,7 +98,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public VFSFileChooserDialog(Frame parent, View view, String path,
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
-		super(parent, getDefaultTitle(),true);
+		super(parent,getTitle(mode),true);
 		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());		
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
@@ -264,6 +264,26 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	private static String getDefaultTitle()
 	{
 		return jEdit.getProperty("vfs.browser.title");
+	}// }}}
+
+	//{{{ getTitle() method
+	private static String getTitle(int mode)
+	{
+		switch(mode)
+		{
+		case VFSBrowser.OPEN_DIALOG:
+			return jEdit.getProperty("vfs.browser.title.open");
+		case VFSBrowser.SAVE_DIALOG:
+			return jEdit.getProperty("vfs.browser.title.save");
+		case VFSBrowser.BROWSER:
+			return jEdit.getProperty("vfs.browser.title");
+		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
+			return jEdit.getProperty("vfs.browser.title");
+		case VFSBrowser.BROWSER_DIALOG:
+			return jEdit.getProperty("vfs.browser.title.dialog");
+		default:
+			return jEdit.getProperty("vfs.browser.title");
+		}
 	}// }}}
 
 	//{{{ _init method

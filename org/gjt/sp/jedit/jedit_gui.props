@@ -2466,6 +2466,9 @@ task-monitor.title=Task Monitor
 #{{{ VFS browser
 vfs.browser.title=File Browser
 vfs.browser.longtitle=File System Browser
+vfs.browser.title.open=File Browser - Open
+vfs.browser.title.save=File Browser - Save
+vfs.browser.title.dialog=File Browser - Open
 vfs.browser.path=Path:
 vfs.browser.path.mnemonic=p
 vfs.browser.filter=Filter:
