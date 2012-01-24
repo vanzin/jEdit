@@ -530,8 +530,14 @@
             <title>The Text Area Pane</title>
 
             <para>The <guibutton>Text Area</guibutton> pane contains settings to
-            customize the appearance of the text area. See <xref
-            linkend="overview" />.</para>
+            customize the appearance of the text area. </para>
+            
+            <para>You can configure the <guibutton>Text Font</guibutton>, antialias settings, colors, cursor style, highlight matching, and word-completion settings from here. </para>
+            
+            <para><guibutton>Automatic Font Substitution</guibutton> if checked, shows a list of
+            <guibutton>Auxiliary Fonts</guibutton>.
+            Fonts added to this list will allow jEdit to search them for glyphs that may be missing from your chosen <guibutton>Text Font</guibutton>. </para>
+            
         </section>
 
         <section id="toolbar-pane">
