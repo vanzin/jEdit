@@ -111,6 +111,9 @@ Czekalski for contributing to this release.
 }}}
 {{{ UI
 
+- Text Area option for Search System Fonts in Font substitution
+  (#3479585 - Max Funk)
+
 - Dialog titles in file system browser (SPennington - #2968930, #2807301)
 
 - Standarized Buffer Switcher combo (Jarek Czekalski - #3456572, #3408584)
