@@ -542,9 +542,11 @@
             
             <para><guibutton>Automatic Font Substitution</guibutton> if checked,
             shows a list of <guibutton>Auxiliary Fonts</guibutton>.
-            Fonts added to this list will allow jEdit to search them 
-            (in order) for glyphs that may be missing from your chosen 
-            <guibutton>Text Font</guibutton>. </para>
+            Fonts added to this list will determine the order jEdit searches 
+            for glyphs that may be missing from your chosen 
+            <guibutton>Text Font</guibutton>. No fonts need to be listed here at all,
+            since by default, <emphasis>all of the installed fonts</emphasis> 
+            are checked if the option is checked.   </para>
             
         </section>
 
