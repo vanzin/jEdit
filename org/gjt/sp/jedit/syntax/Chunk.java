@@ -221,11 +221,13 @@ public class Chunk extends Token
 		if (props == null)
 		{
 			fontSubstEnabled = false;
+			fontSubstSystemFontsEnabled = true;
 			preferredFonts = null;
 		}
 		else
 		{
 			fontSubstEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubst"));
+			fontSubstSystemFontsEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubstSystemFonts"));
 		}
 
 
@@ -386,6 +388,7 @@ public class Chunk extends Token
 	private boolean visible;
 
 	private static boolean fontSubstEnabled;
+	private static boolean fontSubstSystemFontsEnabled;
 	private static Font[] preferredFonts;
 	private static Font[] fontSubstList;
 
@@ -398,17 +401,27 @@ public class Chunk extends Token
 	{
 		if (fontSubstList == null)
 		{
-			Font[] systemFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+			if (fontSubstSystemFontsEnabled)
+			{
+				Font[] systemFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
-			fontSubstList = new Font[preferredFonts.length +
-						 systemFonts.length];
+				fontSubstList = new Font[preferredFonts.length +
+							 systemFonts.length];
 
-			System.arraycopy(preferredFonts, 0, fontSubstList, 0,
-					 preferredFonts.length);
+				System.arraycopy(preferredFonts, 0, fontSubstList, 0,
+						 preferredFonts.length);
 
-			System.arraycopy(systemFonts, 0, fontSubstList,
-					 preferredFonts.length,
-					 systemFonts.length);
+				System.arraycopy(systemFonts, 0, fontSubstList,
+						 preferredFonts.length,
+						 systemFonts.length);
+			}
+			else
+			{
+				fontSubstList = new Font[preferredFonts.length];
+
+				System.arraycopy(preferredFonts, 0, fontSubstList, 0,
+						 preferredFonts.length);
+			}
 		}
 		return fontSubstList;
 	} //}}}

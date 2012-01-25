@@ -540,14 +540,16 @@
             that helps with certain versions of Java, but usually not in combination
             with subpixel antialiasing. </para>
             
-            <para><guibutton>Automatic Font Substitution</guibutton> if checked,
-            shows a list of <guibutton>Auxiliary Fonts</guibutton>.
+            <para><guibutton>Additional Fonts with font substitution</guibutton> if checked,
+            shows a list of <guibutton>Preferred fonts</guibutton>, as well as the following option.
             Fonts added to this list will determine the order jEdit searches 
             for glyphs that may be missing from your chosen 
-            <guibutton>Text Font</guibutton>. No fonts need to be listed here at all,
-            since by default, <emphasis>all of the installed fonts</emphasis> 
-            are checked if the option is checked.   </para>
-            
+            <guibutton>Text Font</guibutton>. </para>
+            <para> If the 
+            <guibutton>Font Substitution: Search all system fonts</guibutton> option is checked, <emphasis>all of the installed fonts</emphasis> 
+            are searched for glyphs, after the preferred list is searched. If this option is checked, no fonts need to be added to preferred fonts list. 
+            You probably don't want to un-check either of these options unless you want to test a system with limited fonts. </para>
+
         </section>
 
         <section id="toolbar-pane">

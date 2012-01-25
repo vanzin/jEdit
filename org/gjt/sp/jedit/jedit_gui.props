@@ -2234,10 +2234,12 @@ options.syntax.foldLine.0=Collapsed fold line, level > 3
 options.textarea.label=Text Area
 options.textarea.code=new TextAreaOptionPane();
 options.textarea.font=Text font:
-options.textarea.fontsubst=Automatic font substitution
-options.textarea.fontsubst.tooltip=Automatically select the appropriate font \
-if the chosen one can't display characters.
-options.textarea.fontsubstlist=Auxiliary fonts:
+options.textarea.fontSubst=Additional fonts with font substitution
+options.textarea.fontSubst.tooltip=Search other fonts for glyphs that may be missing from selected Text Font (instead of showing rectangles)
+options.textarea.fontSubstList=Font substitution: Preferred fonts:
+options.textarea.fontSubstSystemFonts=Font substitution: Search all system fonts
+options.textarea.fontSubstWarning.label=Font substitution
+options.textarea.fontSubstWarning=Without system fonts you will need preferred fonts.
 options.textarea.foreground=Text color:
 options.textarea.background=Background color:
 options.textarea.caret=Caret:

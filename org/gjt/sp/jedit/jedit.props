@@ -224,6 +224,10 @@ view.fontsize=12
 # 0=plain, 1=bold, 2=italic, 3=boldItalic
 view.fontstyle=0
 
+# Font Substitution
+view.enableFontSubst=false
+view.enableFontSubstSystemFonts=true
+
 # Background and foreground colors (for the text area)
 view.bgColor=#ffffff
 view.fgColor=#000000
