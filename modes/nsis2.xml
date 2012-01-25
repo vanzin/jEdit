@@ -13,11 +13,22 @@ This file should be accurate as of the version of NSIS 2.30. If I've left someth
 
 <MODE>
 	<PROPS>
+	  <PROPERTY NAME="commentStart" VALUE="/*" />
+	  <PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE=";" />
 		<PROPERTY NAME="indentNextLine" VALUE="\s*(.*:|(function\s+.*)|(section\s+.*)|(subsection\s+.*))" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DEFAULT="NULL">
+	<!-- Java comment (C style) -->
+    <SPAN TYPE="COMMENT1">
+      <BEGIN>/*</BEGIN>
+      <END>*/</END>
+    </SPAN>
+
+    <!-- Silly comment -->
+    <SEQ TYPE="COMMENT1">/**/</SEQ>
+	
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT2">#</EOL_SPAN>
 
