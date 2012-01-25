@@ -14,7 +14,7 @@ contributing to this release.
 - Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534)
 
 - Inner class of FilteredListModel passes wrong "this" (patch# 3477759 - 
-  Michael Pradel
+  Michael Pradel)
 
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 
@@ -72,6 +72,9 @@ contributing to this release.
 }}}
 {{{ Editing
 
+- Ruby Edit Mode: Improved Symbol Highlighting 
+   (#1918110 - Ingo Tomahogh, Alan Ezust)
+
 - "velocity_pure.xml" edit mode to replace older sgml-based velocity.xml.
    Velocity keywords nested within markup tags incorrecly highlighted.
    (#1285741 - Robert Schwenn)
@@ -92,7 +95,7 @@ contributing to this release.
 - Using no highlight or limited syntax highlight in large buffers now disables
   highlight of very long lines (Matthieu Casanova)
 
-- Latex Indentation a nuisance (# 3432974)
+- Latex Indentation a nuisance (#3432974)
 
 - Made it possible to disable automatic indentation by buffer or by edit
   mode, and created a status widget to toggle the setting (Evan Wright)

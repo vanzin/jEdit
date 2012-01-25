@@ -536,6 +536,10 @@
             antialias settings, colors, cursor style, highlight matching, and 
             word-completion settings from here. </para>
             
+            <para><guibutton>Fractional Font Metrics</guibutton> is an old option
+            that helps with certain versions of Java, but usually not in combination
+            with subpixel antialiasing. </para>
+            
             <para><guibutton>Automatic Font Substitution</guibutton> if checked,
             shows a list of <guibutton>Auxiliary Fonts</guibutton>.
             Fonts added to this list will allow jEdit to search them 
