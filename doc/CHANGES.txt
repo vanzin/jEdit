@@ -72,6 +72,9 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- roff.xml: New ROFF/GROFF/TROFF edit mode 
+  (#3081484 - Bad Sector, Robert Schwenn)
+
 - nsis2.xml: Added Java/C style comments. (#2976473) 
 
 - Ruby Edit Mode: Improved Symbol Highlighting 

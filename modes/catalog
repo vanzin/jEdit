@@ -456,6 +456,10 @@
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.{rhtml,html.erb}" />
 
+<MODE NAME="roff"
+        FILE="roff.xml"
+        FILE_NAME_GLOB="*.{1,2,3,4,5,6,7,8,9,me,ms,mm,mom,tmac}" />
+				
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
 
