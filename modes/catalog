@@ -106,7 +106,7 @@
 				FILE_NAME_GLOB="CMakeLists.txt"/>
 
 <MODE NAME="cobol"		FILE="cobol.xml"
-				FILE_NAME_GLOB="*.cbl" />
+				FILE_NAME_GLOB="*.{cbl,cob}" />
 
 <MODE NAME="coffeescript"	FILE="coffeescript.xml"
 				FILE_NAME_GLOB="*.coffee" />

@@ -72,6 +72,8 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- Updated cobol.xml (#2654343 - Markus Röhner)
+
 - fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
 
 - roff.xml: New ROFF/GROFF/TROFF edit mode 
