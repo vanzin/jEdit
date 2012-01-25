@@ -72,6 +72,8 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
+
 - roff.xml: New ROFF/GROFF/TROFF edit mode 
   (#3081484 - Bad Sector, Robert Schwenn)
 
