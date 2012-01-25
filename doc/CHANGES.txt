@@ -72,6 +72,8 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- New metapost.xml mode (#1606258 - discoleo)
+
 - Updated cobol.xml (#2654343 - Markus Röhner)
 
 - fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
