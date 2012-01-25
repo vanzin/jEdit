@@ -352,10 +352,19 @@
 		<SEQ TYPE="OPERATOR">?</SEQ>
 
 		<!-- Symbols -->
-		<SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LABEL">:[\p{Alpha}_][\p{Alnum}_]*[?]?</SEQ_REGEXP>
+		<SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LITERAL4">:[\p{Alpha}_][\p{Alnum}_]*[?]?</SEQ_REGEXP>
+		<SPAN AT_WORD_START="TRUE" TYPE="LITERAL4">
+		  <BEGIN>:'</BEGIN> <END>'</END>
+		</SPAN>
 
-		<SEQ TYPE="OPERATOR">:</SEQ>
-
+		<!-- %s$Hello world$ -->
+		<SPAN_REGEXP HASH_CHAR="%s" TYPE="LITERAL4">
+		  <BEGIN>%s([^\p{Alnum}])</BEGIN>
+		  <END>$1</END>
+    </SPAN_REGEXP>
+    <!-- Delegate contents of #{} expression in a double quoted symbol to MAIN so that
+    it will be syntax highlighted as well -->
+    
 		<KEYWORDS>
 			<KEYWORD1>BEGIN</KEYWORD1>
 			<KEYWORD1>END</KEYWORD1>
@@ -442,7 +451,16 @@
 		<MARK_FOLLOWING TYPE="KEYWORD4">#@</MARK_FOLLOWING>
 		<MARK_FOLLOWING TYPE="NULL">#$</MARK_FOLLOWING>
 	</RULES>
-
+	<RULES DEFAULT="LITERAL4" SET="doubleQuoteSymbol" ESCAPE="\">
+      <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
+      <BEGIN>#{</BEGIN>
+      <END>}</END>
+    </SPAN>
+    <MARK_FOLLOWING TYPE="KEYWORD4">#@@</MARK_FOLLOWING>
+    <MARK_FOLLOWING TYPE="KEYWORD4">#@</MARK_FOLLOWING>
+    <MARK_FOLLOWING TYPE="NULL">#$</MARK_FOLLOWING>
+  </RULES>
+		
 	<!-- Delegate contents of #{} expression in backquotes to MAIN so that
 	     it will be syntax highlighted as well -->
 	<RULES DEFAULT="LITERAL2" SET="BackquoteLiteral" ESCAPE="\">
