@@ -72,6 +72,8 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- New mxml.xml mode, and updates to ActionScript (#2913561 - Chris Hill)
+
 - New metapost.xml mode (#1606258 - Kondr)
 
 - Updated cobol.xml (#2654343 - Markus Röhner)
