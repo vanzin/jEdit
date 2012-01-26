@@ -133,7 +133,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 				else
 					resetFilter();
 
-				fireContentsChanged(this, 0, getSize() - 1);
+				fireContentsChanged(FilteredListModel.this, 0, getSize() - 1);
 				restoreSelection(selectedIndices);
 			}
 		};
