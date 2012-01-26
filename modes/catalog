@@ -324,7 +324,10 @@
 <MODE NAME="metapost"
          FILE="mpost.xml"
          FILE_NAME_GLOB="*.mp"/>				
-				
+
+<MODE NAME="mxml"		FILE="mxml.xml"
+				FILE_NAME_GLOB="*.mxml" />
+
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
 
