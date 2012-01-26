@@ -72,14 +72,14 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
-- New metapost.xml mode (#1606258 - discoleo)
+- New metapost.xml mode (#1606258 - Kondr)
 
 - Updated cobol.xml (#2654343 - Markus Röhner)
 
 - fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
 
 - roff.xml: New ROFF/GROFF/TROFF edit mode 
-  (#3081484 - Bad Sector, Robert Schwenn)
+  (#3081484 - Kostas Michalopoulos, Robert Schwenn)
 
 - nsis2.xml: Added Java/C style comments. (#2976473) 
 
@@ -87,7 +87,7 @@ Czekalski for contributing to this release.
    (#1918110 - Ingo Tomahogh, Alan Ezust)
 
 - "velocity_pure.xml" edit mode to replace older sgml-based velocity.xml.
-   Velocity keywords nested within markup tags incorrecly highlighted.
+   Velocity keywords nested within markup tags incorrectly highlighted.
    (#1285741 - Robert Schwenn)
 
 - Updated D edit mode (#3463009 - Olivier Pisano)
