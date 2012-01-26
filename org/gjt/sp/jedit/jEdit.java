@@ -61,6 +61,7 @@ import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.StringList;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
@@ -101,6 +102,7 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
+		StringList slargs = new StringList(args);
 		//{{{ Check for Java 1.6 or later
 		String javaVersion = System.getProperty("java.version");
 		if(javaVersion.compareTo("1.6") < 0)
@@ -256,6 +258,8 @@ public class jEdit
 			portFile = null;
 
 		Log.init(true,level);
+
+		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + slargs.join(" "));
 		//}}}
 
 		//{{{ Try connecting to another running jEdit instance
@@ -1443,7 +1447,7 @@ public class jEdit
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
@@ -3867,7 +3871,7 @@ public class jEdit
 						view = newView(null,null);
 
 					Buffer buffer;
-					
+
 					// Treat the elements of additionalFiles just like command-line arguments
 					if (!additionalFiles.isEmpty())
 					{
@@ -3880,7 +3884,7 @@ public class jEdit
 					{
 						buffer = openFiles(null,userDir,args);
 					}
-					
+
 					if(buffer != null)
 						view.setBuffer(buffer,true);
 				}

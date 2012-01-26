@@ -10,6 +10,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Document jEdit's command line parameters into Activity Log
+  (#2960844 - Alan Ezust)
+
 - Large file mode text description dialog (#3456370) (Matthieu Casanova)
 
 - VFS Browser was stuck if trying to browse a VFS that needed a session but the
@@ -35,7 +38,7 @@ contributing to this release.
   confusion about what encoding was used at loading/saving the buffer.
   (SF.net patch #3434651 - Jarek Czekalski, for bug #1643580)
 
-- Fixed #3434527: Jump to wrong line with folded target (Evan Wright)  
+- Fixed #3434527: Jump to wrong line with folded target (Evan Wright)
 
 - \r (0x0A, CR) could be pasted from clipboard into buffer.
   (Bug #3142456 - Matthieu Casanova)
@@ -43,9 +46,9 @@ contributing to this release.
 - Added select all and select none buttons to PingPongList fixing a bug in
   EncodingsOptionPane (#3434850) (Matthieu Casanova)
 
-- Fixed #3474515 - MiscUtilities.expandVariables does not expand ~ (Alan Ezust)  
-  
-  
+- Fixed #3474515 - MiscUtilities.expandVariables does not expand ~ (Alan Ezust)
+
+
 
 }}}
 {{{ Miscellaneous
