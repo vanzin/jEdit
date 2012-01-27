@@ -4,14 +4,14 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre2
 
-Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski,
-Evan Wright, Matthieu Casanova, and Björn "Vampire" Kautler for
-contributing to this release.
+Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski, Michael Pradel, Evan
+Wright, Matthieu Casanova, and Björn "Vampire" Kautler for contributing to this
+release.
 
 {{{ Bug Fixes
 
-- Document jEdit's command line parameters into Activity Log
-  (#2960844 - Alan Ezust)
+- Inner class of FilteredListModel passes wrong "this" (patch# 3477759 - 
+  Michael Pradel)
 
 - Large file mode text description dialog (#3456370) (Matthieu Casanova)
 
@@ -52,6 +52,9 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Document jEdit's command line parameters into Activity Log 
+  (#2960844 - Alan Ezust)
 
 - Removed 192mb heap size limit from startup scripts.
   Removed jedit.l4j.ini from Windows package files because no options were left.
