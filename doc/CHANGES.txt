@@ -11,7 +11,7 @@ Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
-- Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534)
+- Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534, 3480246)
 
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 

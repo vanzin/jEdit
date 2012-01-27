@@ -274,10 +274,10 @@
 
             <para>The <guibutton>Appearance</guibutton> pane can be used to
             change the appearance of user interface controls such as buttons,
-            labels and menus. It can also be used to change the docking
-            framework (the dockable window manager). The number of items
-            retained in history text fields can also be set here; see
-            <xref linkend="history" />.</para>
+            labels and menus. It can also be used to change the icon set, or 
+            look and feel, enable/disable the splash screen or
+            system tray, and other appearance tweaks. You can also set the number of items
+            retained in history text fields, see <xref linkend="history" />.</para>
 
         </section>
 
@@ -298,9 +298,13 @@
             docking locations for each of them. Another way to
             specify docking locations is to use the popup menus associated with each dockable window. </para>
 
-            <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current b uffer through the checkboxes in this pane. See <xref linkend="docking" />.
+            <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current buffer through the checkboxes in this pane. See <xref linkend="docking" />.
             </para>
 
+            <para> jEdit also supports alternate docking frameworks. If 
+            the appropriate plugins are installed (Currently only MyDoggy
+            is available), you can change docking frameworks from here. 
+            </para>
 
         </section>
 
@@ -316,7 +320,7 @@
 
             <para>The <literal>File name
             glob</literal> and <literal>First line glob</literal> text
-            fields let you specify a glob pattern that names and first lines of
+            fields let you specify a glob pattern that paths and first lines of
             buffers will be matched against to determine the edit mode. See
             <xref linkend="globs" /> for information about glob patterns.</para>
 
@@ -403,8 +407,9 @@
             <title>The Gutter Pane</title>
 
             <para>The <guibutton>Gutter</guibutton> option pane contains
-            settings to customize the appearance of the gutter. Some new options were added
-            to jEdit 4.3, including "show gutter", "minimal number of digits to reserve for line numbers",
+            settings to customize the appearance of the gutter. You can
+            customize values such as 
+            "minimal number of digits to reserve for line numbers",
             and "fold style".  See <xref linkend="overview" />.</para>
         </section>
 
@@ -419,15 +424,6 @@
 
         </section>
 
-        <section id="printing-pane">
-            <title>The Printing Pane</title>
-
-            <para>The <guibutton>Printing</guibutton> option pane contains
-            settings to control the appearance of printed output. Workarounds
-            that might be needed for your Java version to print correctly can
-            also be enabled here. See <xref linkend="printing" />.</para>
-        </section>
-
         <section id="pluginmgr-pane">
             <title>The Plugin Manager Pane</title>
 
@@ -435,6 +431,16 @@
             chooser for the desired download mirror, as well as various settings
             such as the directory where plugins are to be installed. In addition, you can set the time in minutes that the pluginlist can be cached from jedit.org, helping to reduce the server load. See <xref
             linkend="using-plugins" />.</para>
+        </section>
+
+        
+        <section id="printing-pane">
+            <title>The Printing Pane</title>
+
+            <para>The <guibutton>Printing</guibutton> option pane contains
+            settings to control the appearance of printed output. Workarounds
+            that might be needed for your Java version to print correctly can
+            also be enabled here. See <xref linkend="printing" />.</para>
         </section>
 
         <section id="firewall-pane">
@@ -502,7 +508,7 @@
             <title>The Status Bar Pane</title>
 
             <para>The <guibutton>Status Bar</guibutton>, its API, and its corresponding option
-            pane were redesigned in jEdit 4.3. Now, the pane contains settings to customize
+            pane contains settings to customize
             which widgets are in the status bar, their order, and what separators exist
             between them. Or, you can disable it completely, for regular and/or plain views.
             See <xref linkend="status-bar" />.</para>
@@ -593,7 +599,7 @@
         example when you want to copy jEdit settings between computers.</para>
 
         <para>The location of the settings directory is system-specific
-        <footnote><para>
+        <footnote><para> On Linux, it is <literal>~/.jedit</literal>. 
            On Windows, you will find it in <literal>%APPDATA%\jEdit</literal>. 
            On the Mac, it is <literal>~/Library/jEdit</literal>. 
         </para></footnote>.
@@ -745,8 +751,9 @@
             integer or boolean) by plugins at runtime.</para>
 
             <para>Do not edit this file while jEdit is running. If you do, it
-            is possible that your changes will be lost since jEdit writes to this
-            this file frequently.</para>
+            is possible that your changes (either your edits, or jEdit settings 
+            changes) may get lost. </para>
+            
         </section>
 
         <section id="sitepropertiesfiles">
