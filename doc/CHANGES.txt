@@ -69,6 +69,8 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
+- Haskell mode: Removed the fixed 8 character indent and tab size, #3470636
+
 - New mxml.xml mode, and updates to ActionScript (#2913561 - Chris Hill)
 
 - New metapost.xml mode (#1606258 - Kondr)
