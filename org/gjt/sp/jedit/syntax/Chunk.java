@@ -435,6 +435,10 @@ public class Chunk extends Token
 	private Font getFont(int i)
 	{
 		Font f = null;
+
+		if (Character.isISOControl(i))
+			return f;
+
 		for (Font candidate : getFonts())
 		{
 			 if (candidate.canDisplay(i))
