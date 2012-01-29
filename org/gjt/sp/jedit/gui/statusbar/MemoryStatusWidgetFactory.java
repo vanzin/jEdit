@@ -28,9 +28,11 @@ package org.gjt.sp.jedit.gui.statusbar;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -192,7 +194,11 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 
 			Rectangle2D bounds = g.getFont().getStringBounds(str,frc);
 
-			Graphics g2 = g.create();
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+
 			g2.setClip(insets.left,insets.top,
 				(int)(width * fraction),
 				height);
@@ -202,10 +208,6 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			g2.drawString(str,
 				insets.left + ((int) (width - bounds.getWidth()) / 2),
 				(int)(insets.top + lm.getAscent()));
-
-			g2.dispose();
-
-			g2 = g.create();
 
 			g2.setClip(insets.left + (int)(width * fraction),
 				insets.top,MemoryStatus.this.getWidth()
