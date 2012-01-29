@@ -5,7 +5,7 @@ jEdit 4.5 version history
 {{{ Version 4.5pre2
 
 Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski, Michael Pradel, Evan
-Wright, Matthieu Casanova, and Björn "Vampire" Kautler for contributing to this
+Wright, Matthieu Casanova and Björn "Vampire" Kautler for contributing to this
 release.
 
 {{{ Bug Fixes
@@ -18,8 +18,8 @@ release.
 - VFS Browser was stuck if trying to browse a VFS that needed a session but the
   session could not be opened (#3471386) (Matthieu Casanova)
 
-- Fixed Copy_Line macro that was copying one character of the next line (#3454377)
-  (Matthieu Casanova)
+- Fixed Copy_Line macro that was copying one character of the next line
+  (#3454377) (Matthieu Casanova)
 
 - Fixed a NPE when trying to activate a plugin if one of it's dependencies is
   missing (#2077205) (Matthieu Casanova)
@@ -48,8 +48,6 @@ release.
 
 - Fixed #3474515 - MiscUtilities.expandVariables does not expand ~ (Alan Ezust)
 
-
-
 }}}
 {{{ Miscellaneous
 
@@ -63,14 +61,6 @@ release.
     removal will be required. Please look for jedit.l4j.ini in the
     install directory after running the installer. If you found only
     "-Xmx192M" in the file, you can remove it or the file itself.
-
-}}}
-{{{ API Changes
-
-
-}}}
-{{{ Editing
-
 
 }}}
 
@@ -229,7 +219,8 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   BufferIORequest.UNICODE_MAGIC_1
   BufferIORequest.UNICODE_MAGIC_2
   BufferIORequest.XML_PI_LENGTH
-  JEditBuffer.indentLine(int lineIndex, boolean canIncreaseIndent, boolean canDecreaseIndent)
+  JEditBuffer.indentLine(int lineIndex, boolean canIncreaseIndent,
+                         boolean canDecreaseIndent)
   JEditBuffer.isElectricKey(char ch)
   MiscUtilities.UTF_8_Y
   MiscUtilities.getFileParent(String path)
@@ -238,23 +229,33 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   MiscUtilities.compareVersions(String v1, String v2)
   MiscUtilities.quicksort(Object[] obj, Comparator compare)
   MiscUtilities.quicksort(List list, Comparator compare)
-  MiscUtilities.copyStream(int bufferSize, ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
-  MiscUtilities.copyStream(ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
+  MiscUtilities.copyStream(int bufferSize, ProgressObserver progress,
+                           InputStream in, OutputStream out, boolean canStop)
+  MiscUtilities.copyStream(ProgressObserver progress, InputStream in,
+                           OutputStream out, boolean canStop)
   MiscUtilities.isBinary(Reader reader)
   MiscUtilities.closeQuietly(InputStream in)
   MiscUtilities.closeQuietly(OutputStream out)
   MiscUtilities.createWhiteSpace(int len, int tabSize)
   MiscUtilities.getLeadingWhiteSpaceWidth(String str, int tabSize)
   MiscUtilities.getColorHexString(Color c)
-  Chunk.init(Segment seg, TabExpander expander, float x, FontRenderContext fontRenderContext)
-  DisplayTokenHandler.init(SyntaxStyle[] styles, FontRenderContext fontRenderContext, TabExpander expander, List<Chunk> out, float wrapMargin)
+  Chunk.init(Segment seg, TabExpander expander, float x,
+             FontRenderContext fontRenderContext)
+  DisplayTokenHandler.init(SyntaxStyle[] styles,
+                           FontRenderContext fontRenderContext,
+                           TabExpander expander, List<Chunk> out,
+                           float wrapMargin)
   DisplayTokenHandler.initChunk(Chunk chunk, Segment seg)
   ParserRuleSet.getRules(char ch)
   ParserRule.EXCLUDE_MATCH
   ParserRule.NO_ESCAPE
   ParserRule.next
-  ParserRule.createRegexpSequenceRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, boolean ignoreCase)
-  ParserRule.createRegexpEOLSpanRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, byte matchType, boolean ignoreCase)
+  ParserRule.createRegexpSequenceRule(char hashChar, int posMatch, String seq,
+                                      ParserRuleSet delegate, byte id,
+                                      boolean ignoreCase)
+  ParserRule.createRegexpEOLSpanRule(char hashChar, int posMatch, String seq,
+                                     ParserRuleSet delegate, byte id,
+                                     byte matchType, boolean ignoreCase)
   PluginManagerProgress.setValue(int value)
   BracketIndentRule.getBrackets(String line)
   CloseBracketIndentRule.isMatch(String line)
@@ -280,10 +281,13 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   GUIUtilities.READ_ONLY_BUFFER_ICON
   GUIUtilities.NORMAL_BUFFER_ICON
   GUIUtilities.WINDOW_ICON
-  BeanShell.runScript(View view, String path, Reader in, boolean ownNamespace, boolean rethrowBshErrors)
-  BeanShell.runScript(View view, String path, boolean ownNamespace, boolean rethrowBshErrors)
+  BeanShell.runScript(View view, String path, Reader in, boolean ownNamespace,
+                      boolean rethrowBshErrors)
+  BeanShell.runScript(View view, String path, boolean ownNamespace,
+                      boolean rethrowBshErrors)
   BeanShell.eval(View view, String command, boolean rethrowBshErrors)
-  BeanShell.eval(View view, NameSpace namespace, String command, boolean rethrowBshErrors)
+  BeanShell.eval(View view, NameSpace namespace, String command,
+                 boolean rethrowBshErrors)
   EditAction.getView(Component comp)
   EditBus.getComponents()
   JarClassLoader.getZipFile()
@@ -295,7 +299,8 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   MiscUtilities.getLeadingWhiteSpace(String str)
   MiscUtilities.getTrailingWhiteSpace(String str)
   MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
-  MiscUtilities.getOffsetOfVirtualColumn(Segment seg, int tabSize, int column, int[] totalVirtualWidth)
+  MiscUtilities.getOffsetOfVirtualColumn(Segment seg, int tabSize, int column,
+                                         int[] totalVirtualWidth)
   MiscUtilities.createWhiteSpace(int len, int tabSize, int start)
   MiscUtilities.globToRE(String glob)
   MiscUtilities.quicksort(Vector vector, Compare compare)
@@ -317,8 +322,10 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   Registers.StringRegister
   jEdit.getActionSetForAction(EditAction action)
   jEdit.getActions()
-  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile)
-  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile, Hashtable props)
+  jEdit.openFile(View view, String parent, String path, boolean readOnly,
+                 boolean newFile)
+  jEdit.openFile(View view, String parent, String path, boolean readOnly,
+                 boolean newFile, Hashtable props)
   jEdit.createTextArea()
   TextArea.getMarkLine()
   VFS.DirectoryEntry
@@ -328,7 +335,8 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   VFS._getDirectoryEntry(Object session, String path, Component comp)
   VFSManager.getVFSByName(String name)
   VFSManager.registerVFS(String protocol, VFS vfs)
-  VFSManager.error(final Component comp, final String error, final Object[] args)
+  VFSManager.error(final Component comp, final String error,
+                   final Object[] args)
   VFSManager.getFilesystems()
   VFSFile.name
   VFSFile.path
