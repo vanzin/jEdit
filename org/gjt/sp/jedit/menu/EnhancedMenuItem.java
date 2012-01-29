@@ -55,7 +55,7 @@ public class EnhancedMenuItem extends JMenuItem
 
 		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
 		{
-			setText(label + " (" + shortcut + ")");
+			setText(label + " ( " + shortcut + " )");
 			shortcut = null;
 		}
 		else
