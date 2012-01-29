@@ -2,7 +2,7 @@ jEdit 4.5 version history
        (changes since jEdit 4.4.2)
 :encoding=UTF-8:
 
-{{{ Version 4.5pre2
+{{{ Version 4.5.0
 
 Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski, Michael Pradel, Evan
 Wright, Matthieu Casanova and Björn "Vampire" Kautler for contributing to this
