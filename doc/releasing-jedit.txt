@@ -187,13 +187,13 @@ branch = major + "." + minor + ".x";
 tag = "jedit-"
       + major
       + "-" + minor
-      + (beta != 99 ? "-pre" + beta : (bugfix != 0 ? "-" + bugfix : ""));
+      + (beta != 99 ? "-pre" + beta : "-" + bugfix);
 version = major
           + "." + minor
-          + (beta != 99 ? "pre" + beta : (bugfix != 0 ? "." + bugfix : ""));
+          + (beta != 99 ? "pre" + beta : "." + bugfix);
 nextVersion = major
               + "." + minor
-              + (beta != 99 ? "pre" + (beta + 1) : (beta == 99 ? "." + (bugfix + 1) : ""));
+              + (beta != 99 ? "pre" + (beta + 1) : "." + (bugfix + 1));
 nextBuild = String.format("%02d.%02d.%02d.%02d",
                           new Object[] { Integer.valueOf(major),
                                          Integer.valueOf(minor),
