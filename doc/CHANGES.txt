@@ -13,6 +13,8 @@ Czekalski for contributing to this release.
 
 - Fixed status bar widget editing (#3414671) (Matthieu Casanova)
 
+- Fixed replace all on a directory that was broken (#3480583) (Matthieu Casanova)
+
 - Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534, 3480246)
 
 - Fixed rectangular selection constructor (patch #3440310) (peibl)

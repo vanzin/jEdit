@@ -165,7 +165,7 @@ public abstract class BufferListSet implements SearchFileSet
 				return null;
 			}
 
-			for(int i = 1; i < files.length - 1; i++)
+			for(int i = 0; i < files.length - 1; i++)
 			{
 				if(StandardUtilities.compareStrings(
 					files[i],path,ignoreCase) == 0)
@@ -173,7 +173,11 @@ public abstract class BufferListSet implements SearchFileSet
 					if (direction == Direction.NEXT)
 						return files[i + 1];
 					else
+					{
+						if (i == 0)
+							return files[files.length - 1];
 						return files[i - 1];
+					}
 				}
 			}
 
