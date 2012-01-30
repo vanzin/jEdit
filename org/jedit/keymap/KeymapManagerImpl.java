@@ -33,6 +33,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -61,6 +63,15 @@ public class KeymapManagerImpl implements KeymapManager
 	{
 		this.propertyManager = propertyManager;
 		this.systemKeymapFolder = systemKeymapFolder;
+		if (!systemKeymapFolder.isDirectory())
+		{
+			Log.log(Log.ERROR, this, "System keymap folder do not exist, your installation is broken."
+						 + "Install keymaps in " + systemKeymapFolder.getAbsolutePath());
+			JOptionPane.showMessageDialog(null, "System keymap folder do not exist, your installation is broken."
+							    + "Install keymaps in " + systemKeymapFolder.getAbsolutePath(), "Fatal Error",
+						      JOptionPane.ERROR_MESSAGE);
+			System.exit(10);
+		}
 		this.userKeymapFolder = userKeymapFolder;
 	} //}}}
 
