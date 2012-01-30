@@ -77,7 +77,7 @@ public class Mode
 		{
 			filepathRE = null;
 			String filenameGlob = (String)getProperty("filenameGlob");
-			if(filenameGlob != null && filenameGlob.length() != 0)
+			if(filenameGlob != null && !filenameGlob.isEmpty())
 			{
 				// translate glob to regex
 				String filepathRE = StandardUtilities.globToRE(filenameGlob);
@@ -98,7 +98,7 @@ public class Mode
 
 			firstlineRE = null;
 			String firstlineGlob = (String)getProperty("firstlineGlob");
-			if(firstlineGlob != null && firstlineGlob.length() != 0)
+			if(firstlineGlob != null && !firstlineGlob.isEmpty())
 			{
 				firstlineRE = Pattern.compile(StandardUtilities.globToRE(firstlineGlob),
 							      Pattern.CASE_INSENSITIVE);
@@ -365,6 +365,7 @@ public class Mode
 
 	//{{{ Indent rules
 
+	//{{{ getIndentRules() method
 	public synchronized List<IndentRule> getIndentRules()
 	{
 		if (indentRules == null)
@@ -372,8 +373,9 @@ public class Mode
 			initIndentRules();
 		}
 		return indentRules;
-	}
+	} //}}}
 
+	//{{{ isElectricKey() method
 	public synchronized boolean isElectricKey(char ch)
 	{
 		if (electricKeys == null)
@@ -396,8 +398,9 @@ public class Mode
 		}
 
 		return (electricKeys.indexOf(ch) >= 0);
-	}
+	} //}}}
 
+	//{{{ initIndentRules() method
 	private void initIndentRules()
 	{
 		List<IndentRule> rules = new LinkedList<IndentRule>();
@@ -457,8 +460,9 @@ public class Mode
 			rules.add(new WhitespaceRule());
 
 		indentRules = Collections.unmodifiableList(rules);
-	}
+	} //}}}
 
+	//{{{ createRegexpIndentRule() method
 	private IndentRule createRegexpIndentRule(String prop)
 	{
 		String value = (String) getProperty(prop);
@@ -480,8 +484,9 @@ public class Mode
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ createBracketIndentRules() method
 	private void createBracketIndentRules(String prop,
 						List<IndentRule> rules)
 	{
@@ -507,7 +512,7 @@ public class Mode
 				+ '=' + value + ':');
 			Log.log(Log.ERROR,this,e);
 		}
-	}
+	} //}}}
 
 	//}}}
 
