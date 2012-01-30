@@ -20,7 +20,7 @@
 	<property name="jedit.build.number"
 		  value="04.05.99.00"/>
 	<property name="jedit.version.final"
-		  value="false"/>
+		  value="true"/>
 
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
