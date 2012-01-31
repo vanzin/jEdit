@@ -2,11 +2,34 @@ jEdit 4.5 version history
        (changes since jEdit 4.4.2)
 :encoding=UTF-8:
 
+{{{ Version 4.5.1
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 4.5.0
 
 Thanks to Shlomy Reinstein, Alan Ezust, Jarek Czekalski, Michael Pradel, Evan
-Wright, Matthieu Casanova, Nathan Gray and Björn "Vampire" Kautler for contributing to this
-release.
+Wright, Matthieu Casanova, Nathan Gray and Björn "Vampire" Kautler for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -49,14 +72,12 @@ release.
 - Fixed #3474515 - MiscUtilities.expandVariables does not expand ~ (Alan Ezust)
 
 }}}
-
 {{{ UI
 
 - Changed menus to use Mac-specific symbols for accelerator keys when using OS X
   and the native look & feel (SF.net patch #1950147 - Nathan Gray)
 
 }}}
-
 {{{ Miscellaneous
 
 - Document jEdit's command line parameters into Activity Log 
