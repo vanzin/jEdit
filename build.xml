@@ -14,14 +14,6 @@
 	<property file="build.properties"
 		  prefix="config"/>
 
-	<!-- jEdit Version -->
-	<property name="jedit.version"
-		  value="5.0pre1"/>
-	<property name="jedit.build.number"
-		  value="05.00.01.00"/>
-	<property name="jedit.version.final"
-		  value="false"/>
-
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
 		  value="1.6"/>
@@ -51,20 +43,6 @@
 	<property name="textAreaPackage"
 		  location="../textarea"/>
 
-	<!-- Various Filenames -->
-	<property name="jar.filename"
-		  value="${ant.project.name}.jar"/>
-	<property name="dist.jar.filename"
-		  value="jedit${jedit.version}install.jar"/>
-	<property name="manual.filename.prefix"
-		  value="jedit${jedit.version}manual-"/>
-	<property name="src.archive.filename"
-		  value="jedit${jedit.version}source.tar.bz2"/>
-	<property name="win.filename"
-		  value="jedit${jedit.version}install"/>
-	<property name="mac.disk.image.filename"
-		  value="jedit${jedit.version}install.dmg"/>
-
 	<!-- Ivy Properties -->
 	<property name="config.ivy.version"
 		  value="2.2.0"/>
@@ -76,6 +54,8 @@
 		  location="${ivy.jar.dir}/${ivy.jar.filename}"/>
 
 	<!-- Miscellaneous -->
+	<property name="jar.filename"
+		  value="${ant.project.name}.jar"/>
 	<property name="config.build.debuglevel"
 		  value="lines,vars,source"/>
 	<property name="config.build.nowarn"
@@ -162,6 +142,43 @@
 					 includes="*.jar"/>
 			</classpath>
 		</taskdef>
+
+		<script language="beanshell">
+			<classpath>
+				<fileset dir="${lib.dir}/scripting"
+					 includes="*.jar"/>
+			</classpath>
+
+			import java.util.regex.Pattern;
+			file = new File(basedir, "org/gjt/sp/jedit/jEdit.java");
+			fileChars = new char[file.length()];
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			reader.read(fileChars, 0, fileChars.length);
+			pattern = Pattern.compile("public static String getBuild\\(\\)[^}]+return \"([^\"]{11})\"");
+			matcher = pattern.matcher(new String(fileChars));
+			matcher.find();
+			build = matcher.group(1);
+			major = Integer.parseInt(build.substring(0,2));
+			minor = Integer.parseInt(build.substring(3,5));
+			beta = Integer.parseInt(build.substring(6,8));
+			bugfix = Integer.parseInt(build.substring(9,11));
+			version = major
+			          + "." + minor
+			          + (beta != 99 ? "pre" + beta : "." + bugfix);
+			project.setUserProperty("jedit.version", version);
+			project.setUserProperty("jedit.build.number", build);
+			project.setUserProperty("jedit.version.final", Boolean.toString(beta == 99));
+		</script>
+		<property name="dist.jar.filename"
+			  value="jedit${jedit.version}install.jar"/>
+		<property name="manual.filename.prefix"
+			  value="jedit${jedit.version}manual-"/>
+		<property name="src.archive.filename"
+			  value="jedit${jedit.version}source.tar.bz2"/>
+		<property name="win.filename"
+			  value="jedit${jedit.version}install"/>
+		<property name="mac.disk.image.filename"
+			  value="jedit${jedit.version}install.dmg"/>
 	</target>
 
 	<target name="clean"
@@ -1062,7 +1079,7 @@
 	</target>
 
 	<target name="dist-src"
-		depends="init"
+		depends="init,setup"
 		description="build the src-archive">
 		<mkdir dir="${dist.dir}"/>
 		<tar destfile="${dist.dir}/${src.archive.filename}"
