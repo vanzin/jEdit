@@ -265,7 +265,7 @@ public class KeyEventTranslator
 	 * or a keycode name from the <code>KeyEvent</code> class, without
 	 * the <code>VK_</code> prefix. Returns null if the string corresponds
 	 * to multiple KeyStrokes (e.g., "C+e C+COMMA").
-	 * @param keyStroke A string description of the key stroke
+	 * @param shortcut A string description of the key stroke
 	 * @since jEdit 5.0
          */
         public static KeyStroke parseKeyStroke(String shortcut)

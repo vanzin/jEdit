@@ -436,7 +436,8 @@ public class MiscUtilities
 	 * it will return
 	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
-	 * @see #getBaseName(String), #getFileExtension(String)
+	 * @see #getBaseName(String) getBaseName
+	 * @see #getFileExtension(String) getFileExtension
 	 * @since jEdit 5.0
 	 */
 	public static String getCompleteBaseName(String path)

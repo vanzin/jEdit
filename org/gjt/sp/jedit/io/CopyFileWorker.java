@@ -47,7 +47,17 @@ public class CopyFileWorker extends Task
 	 * The behavior if the target already exists
 	 * @since jEdit 5.0
 	 */
-	enum Behavior { SKIP, OVERWRITE, RENAME }
+	enum Behavior 
+	{ 
+		/** Do not copy file. */
+		SKIP, 
+	
+		/** Overwrite existing file. */
+		OVERWRITE, 
+	
+		/** Rename existing file. */
+		RENAME 
+	}
 
 	private String source;
 
@@ -102,8 +112,8 @@ public class CopyFileWorker extends Task
 
 	/**
 	 * Copy all files from the list to the target directory.
-	 * If some files already exist in the target directory the {@link Behavior} will decide what
-	 * to do.
+	 * If some files already exist in the target directory the files will 
+	 * be skipped.
 	 * @param comp   the component that will be used as parent in case of error
 	 * @param sources the sources path to copy
 	 * @param target the target path (it must be a directory otherwise nothing will be copied)
@@ -116,7 +126,7 @@ public class CopyFileWorker extends Task
 
 	/**
 	 * Copy all files from the list to the target directory.
-	 * If some files already exist in the target directory the {@link Behavior} will decide what
+	 * If some files already exist in the target directory the <code>Behavior</code> will decide what
 	 * to do.
 	 * @param comp   the component that will be used as parent in case of error
 	 * @param sources the sources path to copy

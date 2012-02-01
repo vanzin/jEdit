@@ -62,7 +62,7 @@ import org.gjt.sp.util.Log;
  * Shows a JTree on the left, and an option pane on the right, with a splitter
  * between. 
  * 
- * @see OptionsDialog
+ * @see org.gjt.sp.jedit.gui.OptionsDialog OptionsDialog
  * 
  * @author ezust
  * 

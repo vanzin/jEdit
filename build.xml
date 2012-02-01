@@ -772,6 +772,8 @@
 					       packages="org.gjt.sp*"/>
 					<group title="BeanShell"
 					       packages="org.gjt.sp.jedit.bsh*"/>
+					<tag name="todo" scope="all" description="To do:"/>
+					<tag name="example" scope="all" description="Example:"/>
 				</javadoc>
 			</contrib:else>
 		</contrib:if>

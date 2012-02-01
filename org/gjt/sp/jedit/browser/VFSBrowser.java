@@ -767,7 +767,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 * Rename a file.
 	 * It will prompt for the new name.
 	 * @param from the file to rename
-	 * @param from to the target name
+	 * @param to the target name
 	 * @since jEdit 4.5pre1
 	 */
 	public void rename(VFSFile from, String to)
