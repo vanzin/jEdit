@@ -138,9 +138,7 @@ String createCppGetMethod( String className, String type, String variableName ) 
     if (type == null) {
         type = "";   
     }
-    System.out.println("7 " + className + ", " + type + ", " + variableName);
     String uppperVariable = Character.toUpperCase( variableName.charAt( 0 ) ) + variableName.substring( 1, variableName.length() );
-    System.out.println("8");
     String result =
         "/*" + LS +
         "function: get" + uppperVariable + "()" + LS +
@@ -177,124 +175,198 @@ String createCppSetMethod( String className, String type, String variableName ) 
 }
 
 void parseSelection() {
+    // offsets from start of buffer
     int selectionStart;
     int selectionEnd;
-    if(textArea.getSelection().length != 0){  // if there are selections exists
+    if (textArea.getSelection().length() == 0) {
+        // no selection, use current line
+        selectionStart = textArea.getLineStartOffset(textArea.getCaretLine());
+        selectionEnd = textArea.getLineEndOffset(textArea.getCaretLine());
+    }
+    else {
         selectionStart = textArea.getSelection(0).getStart();
         selectionEnd = textArea.getSelection(0).getEnd();
     }
-    else {		// if no selection
-        selectionStart = textArea.getCaretPosition();
-        selectionEnd = textArea.getCaretPosition();
-    }
-    textArea.setCaretPosition( selectionStart );
-    int startLine = textArea.getCaretLine();
-
-    textArea.setCaretPosition( selectionEnd );
-    int endLine = textArea.getCaretLine();
 
     StringBuffer code = new StringBuffer();
     String className = getClassName();
+    
+    // remove comments and blank lines
+    ArrayList lines = stripComments(buffer, selectionStart, selectionEnd);
+    if (lines.size() == 0) {
+        return;   
+    }
+    
+    // parse each line for variable declaration. Lines are already trimmed and
+    // have all comments removed.
+    for (int i = 0; i < lines.size(); i++) {
+        String lineText = lines.get(i);
+        
+        // combine lines up to next semi-colon into a single line
+        while(!lineText.endsWith(";") && i < lines.size()) {
+            lineText += lines.get(++i);   
+        }
+        
+        // ensure line contains at least two words, that is, a type
+        // and a variable name at minimum. This is a fairly lame check in that
+        // "public int" would qualify, but it does mean that I don't have to
+        // do so much bounds checking below.
+        if (!lineText.matches("\\S+\\s+[_A-Za-z0-9$]+.*?")) {
+            continue;   
+        }
+        
+        // remove semi-colon
+        if ( lineText.endsWith( ";" ) ) {
+            lineText = lineText.substring( 0, lineText.length() - 1 );
+        }
+        lineText = lineText.trim();
+        if ( lineText.length() == 0 ) {
+            continue;
+        }
+        
+        // list to hold variable names
+        ArrayList variables = new ArrayList();
+        
+        // the variable type
+        String type = "";
+        
+        // could have declaration like "int x, y = 6;", which is why there
+        // needs to be an array for the variable names
+        if ( lineText.indexOf( "," ) > 0 ) {
+            int comma = lineText.indexOf(",");
+            String front = lineText.substring(0, comma);        // everything before the first comma
+            if (front.indexOf("=") > 0) {
+                front = front.substring(0, front.indexOf("=")); // drop the initial value  
+            }
+            front = front.trim();
+            String[] fronts = front.split("\\s+");
+            variables.add(fronts[fronts.length - 1]);           // last item in array is variable name
+            type = fronts[fronts.length - 2];                   // next to last item is type
 
-    for ( int i = startLine; i <= endLine; i++ ) {
-        // parse each line for variable declaration
-        String lineText = textArea.getLineText( i );
-        if ( lineText != null && lineText.length() > 0 ) {
-            System.out.println("1");
-            // remove leading and trailing whitespace
+            String back = lineText.substring(comma + 1);        // everything after the first comma
+            String[] backs = back.split(",");
+            for (back : backs) {
+                back = back.trim();
+                String[] parts = back.split("\\s+");            // could have initializer with spaces
+                String var = extractVar(parts[0]);              // could have i=0, ie, no spaces
+                variables.add(var);   
+            }
+        }
+        else {
+            // just one variable declared, may be initialized
+            if (lineText.indexOf("=") > 0) {
+                lineText = lineText.substring(0, lineText.indexOf("="));    // drop the intial value
+            }
             lineText = lineText.trim();
-            if ( lineText.length() == 0 ) {
-                continue;   // nothing to do with this line
-            }
+            String[] parts = lineText.split("\\s+");
+            variables.add(extractVar(parts[parts.length - 1])); // last item in array is variable name
+            type = parts[parts.length - 2];                     // next to last item is type
+        }
+        
+        type = type.trim();
+        
+        if (variables.size() == 0) {
+            continue;   
+        }
+        code.append( LS );
 
-            // remove semi-colon
-            if ( lineText.endsWith( ";" ) ) {
-                lineText = lineText.substring( 0, lineText.length() - 1 );
-            }
-            System.out.println("2");
-            // remove initial assignment if present
-            if ( lineText.indexOf( "=" ) > 0 ) {
-                lineText = lineText.substring( 0, lineText.indexOf( "=" ) );
-            }
-            System.out.println("3");
-            lineText = lineText.trim();
-            if ( lineText.length() == 0 ) {
-                continue;
-            }
-            System.out.println("4");
-            // list to hold variable names
-            ArrayList variables = new ArrayList();
-
-            // could have declaration like int x, y; so split them out into the
-            // variables array
-            if ( lineText.indexOf( "," ) > 0 ) {
-                int index = lineText.indexOf( "," );                        // just after first variable name
-                String front = lineText.substring( 0, index );              // up to and including the first variable name
-                String back = lineText.substring( index );                  // remaining variable names
-                lineText = front.substring( 0, front.lastIndexOf( " " ) );  // adjust remaining line text, this contains the type
-                front = front.substring( front.lastIndexOf( " " ) ).trim(); // first variable name
-                String[] backs = back.split( "," );                         // remaining variable names
-                variables.add( front );                                     // add first variable name to the list
-                for ( String back : backs ) {                               // add remaining variable names to the list
-                    String maybe = back.trim();
-                    if ( maybe.length() > 0 ) {
-                        variables.add( maybe );
-                    }
+        // create the get and set methods for each variable
+        for ( String variable : variables ) {
+            if ( createGetMethods ) {
+                String tmp = JAVA_MODE ? createJavaGetMethod( type, variable ) : createCppGetMethod( className, type, variable );
+                if ( tmp != null && tmp.length() > 0 ) {
+                    code.append( tmp ).append( LS );
                 }
             }
-            else {
-                // just one variable declared
-                String var = lineText.substring( lineText.lastIndexOf( " " ) ).trim();
-                variables.add( var );
-                lineText = lineText.substring( 0, lineText.lastIndexOf( " " ) ).trim();
-            }
-            System.out.println("5");
-            if ( lineText.trim().length() == 0 ) {
-                continue;       // no type declared for this variable
-            }
 
-            // get the variable type
-            String type = "";
-            if (lineText.lastIndexOf( " " ) > 0) {
-                type = lineText.substring( lineText.lastIndexOf( " " ) );
-            }
-            type = type.trim();
-            System.out.println("5.1");
-            
-            if ( variables.size() > 0 ) {
-                code.append( LS );
-            }
-
-            // create the get and set methods for each variable
-            for ( String variable : variables ) {
-                if ( createGetMethods ) {
-                    String tmp = JAVA_MODE ? createJavaGetMethod( type, variable ) : createCppGetMethod( className, type, variable );
-                    if ( tmp != null && tmp.length() > 0 ) {
-                        code.append( tmp ).append( LS );
-                    }
-                }
-
-                if ( createSetMethods && lineText.indexOf( "final " ) == -1 && lineText.indexOf( "const " ) == -1 ) {
-                    String tmp = JAVA_MODE ? createJavaSetMethod( type, variable ) : createCppSetMethod( className, type, variable );
-
-                    if ( tmp != null && tmp.compareTo( "" ) != 0 ) {
-                        code.append( LS ).append( tmp ).append( LS );
-                    }
+            if ( createSetMethods && lineText.indexOf( "final " ) == -1 && lineText.indexOf( "const " ) == -1 ) {
+                String tmp = JAVA_MODE ? createJavaSetMethod( type, variable ) : createCppSetMethod( className, type, variable );
+                if ( tmp != null && tmp.compareTo( "" ) != 0 ) {
+                    code.append( LS ).append( tmp ).append( LS );
                 }
             }
         }
     }
 
+    String toInsert = code.toString();
+    if (toInsert.trim().length() == 0) {
+        return;   
+    }
+    
     // move to the end of the selected text
     textArea.setCaretPosition( selectionEnd );
 
     // insert get/set methods
-    textArea.setSelectedText( code.toString() );
+    textArea.setSelectedText( toInsert );
 
     // select the inserted code and indent it
     textArea.setCaretPosition( selectionEnd );
     textArea.moveCaretPosition( selectionEnd + code.length(), true );
     textArea.indentSelectedLines();
+}
+
+import org.gjt.sp.jedit.syntax.*;
+
+// Given the buffer and start and end of the selection, remove comments and 
+// blank lines, then return a list of the remaining lines. The list contains 
+// the trimmed line text.
+ArrayList stripComments( Buffer buffer, int startOffset, int endOffset ) {
+    int firstLine = buffer.getLineOfOffset(startOffset);
+    
+    // the last line may not actually have anything selected, just the caret
+    // happens to be at the start of the line or include part of the whitespace
+    // at the start of the line. In this case, don't include the last line.
+    int lastLine = buffer.getLineOfOffset(endOffset);
+    String lastLineText = buffer.getText(buffer.getLineStartOffset(lastLine), endOffset - buffer.getLineStartOffset(lastLine));
+    if (lastLineText.trim().length() == 0) {
+        --lastLine;   
+    }
+    
+    ArrayList lines = new ArrayList();
+    DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+    StringBuilder lineBuffer = new StringBuilder();
+    
+    for ( int lineNum = firstLine; lineNum <= lastLine; lineNum++ ) {
+        int lineStart = buffer.getLineStartOffset(lineNum);
+        lineBuffer.delete(0, lineBuffer.length());
+
+        tokenHandler.init();
+        buffer.markTokens( lineNum, tokenHandler );
+        Token token = tokenHandler.getTokens();
+        
+        // skip comments
+        while(token.id != Token.END) {
+            if (token.id < Token.COMMENT1 || token.id > Token.COMMENT4) {
+                lineBuffer.append(buffer.getText(lineStart + token.offset, token.length));
+            }
+            token = token.next;   
+        }
+        
+        String line = lineBuffer.toString().trim();
+        
+        // skip blank lines
+        if (line.length() > 0) {
+            lines.add(line.trim());
+        }
+    }
+    return lines;
+} 
+
+boolean isWhitespace(Token token) {
+    String text = buffer.getText(token.offset, token.length);
+    return text.trim().length() == 0;
+}
+
+// given something line "a = 6", returns just the "a". 
+String extractVar(String var) {
+    if (var == null) {
+        return "";   
+    }
+    var = var.trim();
+    if (var.indexOf("=") > 0) {
+        var = var.substring(0, var.indexOf("=")).trim();
+    }
+    return var;
 }
 
 void displayPrompt() {

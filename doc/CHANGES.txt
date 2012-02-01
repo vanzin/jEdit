@@ -186,6 +186,10 @@ Czekalski for contributing to this release.
 
 - Applied patch to Get_Class_Name macro from lxdyglt to find
   classname for inner classes. (#3301598 - Dale Anson)
+  
+- Fixed some edge cases in the Make_Get_and_Set_Methods macro, properly handle
+  comments, multi-line variable declarations and multiple initializers.
+  (Dale Anson)
 }}}
 
 }}}
