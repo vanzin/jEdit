@@ -67,6 +67,10 @@
                 <!-- Non-Haskell-98 keywords -->
                 <SEQ_REGEXP TYPE="KEYWORD1">foreign(?![a-z_A-Z0-9'])</SEQ_REGEXP>
                 <SEQ_REGEXP TYPE="KEYWORD1">family(?![a-z_A-Z0-9'])</SEQ_REGEXP>
+                <!-- GHC extension keywords -->
+                <SEQ_REGEXP TYPE="KEYWORD1">proc(?![a-z_A-Z0-9'])</SEQ_REGEXP>
+                <SEQ_REGEXP TYPE="KEYWORD1">rec(?![a-z_A-Z0-9'])</SEQ_REGEXP>
+                <SEQ_REGEXP TYPE="KEYWORD1">mdo(?![a-z_A-Z0-9'])</SEQ_REGEXP>
 
                 <SEQ_REGEXP TYPE="DIGIT">0[xXoO][0-9a-fA-F]+</SEQ_REGEXP>
                 <SEQ_REGEXP TYPE="DIGIT">[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?</SEQ_REGEXP>
@@ -83,7 +87,10 @@
                 <SEQ_REGEXP TYPE="KEYWORD4">@(?![!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~:])</SEQ_REGEXP>
                 <SEQ_REGEXP TYPE="KEYWORD4">~(?![!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~:])</SEQ_REGEXP>
                 <SEQ_REGEXP TYPE="KEYWORD4">=&gt;(?![!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~:])</SEQ_REGEXP>
-                
+
+                <!-- GHC extension reserved operators -->
+                <SEQ_REGEXP TYPE="KEYWORD4">-(&lt;{1,2})(?![!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~:])</SEQ_REGEXP>
+
                 <!-- Normal operators, backquoted operators -->
                 <SEQ_REGEXP TYPE="OPERATOR">([A-Z][a-z_A-Z0-9']*\.)*[!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~][!#$%&amp;\*+\./&lt;=&gt;?@\\\^\|\-~:]*</SEQ_REGEXP>
                 <SEQ_REGEXP TYPE="OPERATOR">`([A-Z][a-z_A-Z0-9']*\.)*[a-z_][a-z_A-Z0-9']*`</SEQ_REGEXP>

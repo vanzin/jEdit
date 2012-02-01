@@ -6,8 +6,8 @@ jEdit 5.0 version history
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
-Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, and Jarek
-Czekalski for contributing to this release.
+Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski and
+Stephen Blackheath for contributing to this release.
 
 {{{ Bug fixes
 
@@ -73,7 +73,10 @@ Czekalski for contributing to this release.
 }}}
 {{{ Editing
 
-- Haskell mode: Removed the fixed 8 character indent and tab size, #3470636
+- Haskell mode:
+  - Removed the fixed 8 character indent and tab size, #3470636.
+  - Added some GHC extensions: recursive do and arrow notation -
+    patch #3470637 by Stephen Blackheath
 
 - New mxml.xml mode, and updates to ActionScript (#2913561 - Chris Hill)
 
