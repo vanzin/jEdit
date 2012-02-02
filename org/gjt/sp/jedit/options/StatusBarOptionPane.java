@@ -434,7 +434,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidget");
 			Arrays.sort(allWidgets);
 			
-			boolean valueIsWidget = Arrays.binarySearch(allWidgets, value) >= 0;
+			boolean valueIsWidget = value != null && Arrays.binarySearch(allWidgets, value) >= 0;
 			
 			Vector<String> widgets = new Vector<String>(allWidgets.length);
 			Set<String> usedWidget = new HashSet<String>(listModel.getSize());
@@ -506,6 +506,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				labelRadio.setSelected(true);
 				labelField.setText(value);
 				labelField.setEnabled(true);
+				widgetCombo.setEnabled(false);
 			}
 
 			getContentPane().add(center, BorderLayout.CENTER);
