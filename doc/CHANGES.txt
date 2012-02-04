@@ -124,6 +124,9 @@ Stephen Blackheath for contributing to this release.
 
 - Fix for tracker 846913, jsp syntax highlighting for single line comments.
   (Dale Anson)
+  
+- Updated css mode with new css 3 properties and values, tracker 3483390.
+  (Dale Anson)
 
 }}}
 {{{ UI
