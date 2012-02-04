@@ -135,6 +135,9 @@
 <MODE NAME="d"			FILE="d.xml"
 				FILE_NAME_GLOB="*.d" />
 
+<MODE NAME="dart"			FILE="dart.xml"
+				FILE_NAME_GLOB="*.dart" />
+
 <MODE NAME="django"		FILE="django.xml"/>
 
 <MODE NAME="dot"		FILE="dot.xml"
