@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <project name="jedit"
 	 default="build"
 	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"

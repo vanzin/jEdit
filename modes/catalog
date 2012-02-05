@@ -16,8 +16,8 @@
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
 <MODE NAME="ant"		FILE="ant.xml"
-				FILE_NAME_GLOB="*.xml"
-				FIRST_LINE_GLOB="&lt;project*&gt;" />
+				FILE_NAME_GLOB="*build.xml"
+				FIRST_LINE_GLOB="*&lt;project*" />
 
 <MODE NAME="antlr"		FILE="antlr.xml"
 				FILE_NAME_GLOB="*.g" />
