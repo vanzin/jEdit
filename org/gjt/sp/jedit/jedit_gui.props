@@ -2746,6 +2746,7 @@ install-plugins.info=Author: {0}\n\
 update-plugins.title=Update
 
 plugin-manager.progress=Downloading {0} from mirror {1}
+plugin-manager.progress.title=Installing plugin(s)
 plugin-manager.progress.stop=Stop
 #}}}
 

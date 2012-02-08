@@ -36,7 +36,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	//{{{ PluginManagerProgress constructor
 	PluginManagerProgress(PluginManager dialog, Roster roster)
 	{
-		super(dialog,jEdit.getProperty("plugin-manager.progress"),true);
+		super(dialog,jEdit.getProperty("plugin-manager.progress.title"),true);
 
 		this.roster = roster;
 
@@ -108,10 +108,9 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param status the new status (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
-	 public void setStatus(String status) 
-	 {
-		 setTitle(status);
-		 progress.setString(status);
+	public void setStatus(String status)
+	{
+		progress.setString(status);
 	} //}}}
 
 	//{{{ done() method

@@ -11,6 +11,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 {{{ Bug fixes
 
+- The Install/Update plugin dialog with progress bar should not show the
+  progression of installation in it's title (#3485497) (Matthieu Casanova)
+
 - If the plugin list was not already loaded, there is no reason to load it
   because of a property change (#3485645) (Matthieu Casanova)
 
