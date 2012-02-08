@@ -66,7 +66,7 @@ public class PluginManager extends JFrame
 	@EBHandler
 	public void handlePropertiesChanged(PropertiesChanged message)
 	{
-		if (shouldUpdatePluginList())
+		if (pluginList != null && shouldUpdatePluginList())
 		{
 			pluginList = null;
 			updatePluginList();
