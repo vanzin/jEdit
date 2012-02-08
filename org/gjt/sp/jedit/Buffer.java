@@ -1130,6 +1130,8 @@ public class Buffer extends JEditBuffer
 
 	//}}}
 
+	//}}}
+	
 	//{{{ Edit modes, syntax highlighting
 
 	//{{{ setMode() method
