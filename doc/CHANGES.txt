@@ -76,6 +76,23 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   anymore Windows is the only DOS derived OS, so use OperatingSystem.isWindows()
   instead (Matthieu Casanova)
 
+- Some undocumented but public members in class DisplayTokenHandler and
+  Chunk became private as they should be in the first place.
+    Specifically:
+      org.gjt.sp.jedit.syntax.DisplayTokenHandler
+        MAX_CHUNK_LEN
+        initChunk()  (* this was protected)
+      org.gjt.sp.jedit.syntax.Chunk
+        accessable
+        initialized
+        style
+        width
+        Chunk constructors
+        offsetToX() (non static)
+        xToOffset() (non static)
+        init()
+  (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 

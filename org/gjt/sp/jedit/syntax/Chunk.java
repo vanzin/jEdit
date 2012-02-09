@@ -43,10 +43,6 @@ import org.gjt.sp.jedit.IPropertyManager;
  */
 public class Chunk extends Token
 {
-	//{{{ Static variables
-	private static final char[] EMPTY_TEXT = new char[0];
-	//}}}
-
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
@@ -252,24 +248,25 @@ public class Chunk extends Token
 		preferredFonts = userFonts.toArray(new Font[userFonts.size()]);
 	} //}}}
 
-	//{{{ Instance variables
-	public boolean accessable;
-	public boolean initialized;
+	//{{{ Package private members
 
+	//{{{ Instance variables
+	boolean accessable;
+	boolean initialized;
 	// set up after init()
-	public SyntaxStyle style;
-	public float width;
+	SyntaxStyle style;
+	float width;
 	//}}}
 
 	//{{{ Chunk constructor
-	public Chunk(float width, int offset, ParserRuleSet rules)
+	Chunk(float width, int offset, ParserRuleSet rules)
 	{
 		super(Token.NULL,offset,0,rules);
 		this.width = width;
 	} //}}}
 
 	//{{{ Chunk constructor
-	public Chunk(byte id, int offset, int length, ParserRuleSet rules,
+	Chunk(byte id, int offset, int length, ParserRuleSet rules,
 		SyntaxStyle[] styles, byte defaultID)
 	{
 		super(id,offset,length,rules);
@@ -281,7 +278,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ offsetToX() method
-	public final float offsetToX(int offset)
+	final float offsetToX(int offset)
 	{
 		if(!visible || glyphs == null)
 			return 0.0f;
@@ -304,7 +301,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ xToOffset() method
-	public final int xToOffset(float x, boolean round)
+	final int xToOffset(float x, boolean round)
 	{
 		if (!visible || glyphs == null)
 		{
@@ -348,7 +345,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ init() method
-	public void init(Segment seg, TabExpander expander, float x,
+	void init(Segment seg, TabExpander expander, float x,
 		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{
 		initialized = true;
@@ -378,7 +375,20 @@ public class Chunk extends Token
 		}
 	} //}}}
 
+	//}}}
+
 	//{{{ Private members
+
+	//{{{ Static variables
+	private static final char[] EMPTY_TEXT = new char[0];
+
+	private static boolean fontSubstEnabled;
+	private static boolean fontSubstSystemFontsEnabled;
+	private static Font[] preferredFonts;
+	private static Font[] fontSubstList;
+	//}}}
+
+	//{{{ Instance variables
 	// this is either style.getBackgroundColor() or
 	// styles[defaultID].getBackgroundColor()
 	private Color background;
@@ -386,11 +396,7 @@ public class Chunk extends Token
 	//private GlyphVector gv;
 	private List<GlyphVector> glyphs;
 	private boolean visible;
-
-	private static boolean fontSubstEnabled;
-	private static boolean fontSubstSystemFontsEnabled;
-	private static Font[] preferredFonts;
-	private static Font[] fontSubstList;
+	//}}}
 
 	//{{{ getFonts() method
 	/**
@@ -449,7 +455,6 @@ public class Chunk extends Token
 		}
 		return f;
 	} //}}}
-
 
 	//{{{ drawGlyphs() method
 	/**

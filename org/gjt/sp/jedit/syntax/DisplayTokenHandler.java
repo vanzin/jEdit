@@ -34,9 +34,6 @@ import java.util.List;
  */
 public class DisplayTokenHandler extends DefaultTokenHandler
 {
-	// don't have chunks longer than 100 characters to avoid slowing things down
-	public static final int MAX_CHUNK_LEN = 100;
-
 	//{{{ init() method
 	/**
 	 * Init some variables that will be used when marking tokens.
@@ -165,6 +162,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 	//{{{ Private members
 
+	// don't have chunks longer than 100 characters to avoid slowing things down
+	private static final int MAX_CHUNK_LEN = 100;
+
 	//{{{ Instance variables
 	private SyntaxStyle[] styles;
 	private FontRenderContext fontRenderContext;
@@ -191,7 +191,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	protected void initChunk(Chunk chunk, Segment seg, int physicalLineOffset)
+	private void initChunk(Chunk chunk, Segment seg, int physicalLineOffset)
 	{
 		chunk.init(seg,expander,x,fontRenderContext, physicalLineOffset);
 	} //}}}
