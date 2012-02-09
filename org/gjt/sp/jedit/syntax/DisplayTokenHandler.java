@@ -78,6 +78,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ getChunkList() method
 	/**
 	 * Returns the list of chunks.
+	 * Each element is a head of linked chunks and represents a
+	 * screen line.
 	 * @since jEdit 4.1pre7
 	 */
 	public List<Chunk> getChunkList()
@@ -100,10 +102,11 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	public void handleToken(Segment seg, byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
+		final Segment lineText = seg;
 		if(id == Token.END)
 		{
 			if(firstToken != null)
-				out.add(merge((Chunk)firstToken,seg));
+				out.add(mergeAdjucentChunks((Chunk)firstToken,lineText));
 			return;
 		}
 
@@ -115,11 +118,11 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 			if(wrapMargin != 0.0f)
 			{
-				initChunk(chunk,seg);
+				initChunk(chunk,lineText);
 				x += chunk.width;
 
-				if(Character.isWhitespace(seg.array[
-					seg.offset + chunk.offset]))
+				if(Character.isWhitespace(lineText.array[
+					lineText.offset + chunk.offset]))
 				{
 					if(seenNonWhitespace)
 					{
@@ -138,13 +141,13 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 						Chunk nextLine = new Chunk(endOfWhitespace,
 							end.offset + end.length,
 							getParserRuleSet(context));
-						initChunk(nextLine,seg);
+						initChunk(nextLine,lineText);
 
 						nextLine.next = end.next;
 						end.next = null;
 
 						if(firstToken != null)
-							out.add(merge((Chunk)firstToken,seg));
+							out.add(mergeAdjucentChunks((Chunk)firstToken,lineText));
 
 						firstToken = nextLine;
 
@@ -162,7 +165,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 	//{{{ Private members
 
-	// don't have chunks longer than 100 characters to avoid slowing things down
+	// Don't have chunks longer than a limit to avoid slowing things down.
+	// For example, too long chunks are hardly clipped out at rendering.
 	private static final int MAX_CHUNK_LEN = 100;
 
 	//{{{ Instance variables
@@ -191,13 +195,17 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	private void initChunk(Chunk chunk, Segment seg)
+	private void initChunk(Chunk chunk, Segment lineText)
 	{
-		chunk.init(seg,expander,x,fontRenderContext, physicalLineOffset);
+		chunk.init(lineText,expander,x,fontRenderContext, physicalLineOffset);
 	} //}}}
 
-	//{{{ merge() method
-	private Chunk merge(Chunk first, Segment seg)
+	//{{{ mergeAdjucentChunks() method
+	/**
+	 * Merges each adjucent chunks if possible, to reduce the number
+	 * of chunks for rendering performance.
+	 */
+	private Chunk mergeAdjucentChunks(Chunk first, Segment lineText)
 	{
 		if(first == null)
 			return null;
@@ -206,7 +214,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		while(chunk.next != null)
 		{
 			Chunk next = (Chunk)chunk.next;
-			if(canMerge(chunk,next,seg))
+			if(canMerge(chunk,next,lineText))
 			{
 				// in case already initialized; un-initialize it
 				chunk.initialized = false;
@@ -218,7 +226,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
-					initChunk(chunk,seg);
+					initChunk(chunk,lineText);
 					if(wrapMargin == 0.0f)
 						x += chunk.width;
 				}
@@ -227,19 +235,19 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		}
 
 		if(!chunk.initialized)
-			initChunk(chunk,seg);
+			initChunk(chunk,lineText);
 
 		return first;
 	} //}}}
 
 	//{{{ canMerge() method
-	private static boolean canMerge(Chunk c1, Chunk c2, Segment seg)
+	private static boolean canMerge(Chunk c1, Chunk c2, Segment lineText)
 	{
 		if(!c1.isAccessible() || !c2.isAccessible())
 			return false;
 
-		char ch1 = seg.array[seg.offset + c1.offset];
-		char ch2 = seg.array[seg.offset + c2.offset];
+		char ch1 = lineText.array[lineText.offset + c1.offset];
+		char ch2 = lineText.array[lineText.offset + c2.offset];
 
 		return ((c1.style == c2.style)
 			&& ch1 != '\t' && ch2 != '\t'

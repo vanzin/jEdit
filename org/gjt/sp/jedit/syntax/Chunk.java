@@ -257,6 +257,9 @@ public class Chunk extends Token
 	//}}}
 
 	//{{{ Chunk constructor
+	/**
+	 * Constructs a virtual indent appears at the beggining of a wrapped line.
+	 */
 	Chunk(float width, int offset, ParserRuleSet rules)
 	{
 		super(Token.NULL,offset,0,rules);
@@ -353,7 +356,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ init() method
-	void init(Segment seg, TabExpander expander, float x,
+	void init(Segment lineText, TabExpander expander, float x,
 		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{
 		initialized = true;
@@ -361,17 +364,17 @@ public class Chunk extends Token
 		{
 			// do nothing
 		}
-		else if(length == 1 && seg.array[seg.offset + offset] == '\t')
+		else if(length == 1 && lineText.array[lineText.offset + offset] == '\t')
 		{
 			float newX = expander.nextTabStop(x,physicalLineOffset+offset);
 			width = newX - x;
 		}
 		else
 		{
-			str = new String(seg.array,seg.offset + offset,length);
+			str = new String(lineText.array,lineText.offset + offset,length);
 
-			char[] textArray = seg.array;
-			int textStart = seg.offset + offset;
+			char[] textArray = lineText.array;
+			int textStart = lineText.offset + offset;
 			width = layoutGlyphs(fontRenderContext,
 					     textArray,
 					     textStart,
