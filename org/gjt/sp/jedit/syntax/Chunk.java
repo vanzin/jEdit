@@ -75,12 +75,11 @@ public class Chunk extends Token
 						chunks.width,10));
 				}
 
-				if(chunks.accessable && chunks.visible)
+				if(chunks.isAccessible() && chunks.glyphs != null)
 				{
 					gfx.setFont(chunks.style.getFont());
 					gfx.setColor(chunks.style.getForegroundColor());
-
-					if (glyphVector && chunks.glyphs != null)
+					if (glyphVector)
 						chunks.drawGlyphs(gfx, x + _x, y);
 					else if(chunks.str != null)
 					{
@@ -125,7 +124,7 @@ public class Chunk extends Token
 			if(x + _x + chunks.width > clipRect.x
 				&& x + _x < clipRect.x + clipRect.width)
 			{
-				if(chunks.accessable)
+				if(chunks.isAccessible())
 				{
 					//{{{ Paint token background color if necessary
 					Color bgColor = chunks.background;
@@ -167,7 +166,7 @@ public class Chunk extends Token
 
 		while(chunks != null)
 		{
-			if(chunks.accessable && offset < chunks.offset + chunks.length)
+			if(chunks.isAccessible() && offset < chunks.offset + chunks.length)
 				return x + chunks.offsetToX(offset - chunks.offset);
 
 			x += chunks.width;
@@ -193,7 +192,7 @@ public class Chunk extends Token
 
 		while(chunks != null)
 		{
-			if(chunks.accessable && x < _x + chunks.width)
+			if(chunks.isAccessible() && x < _x + chunks.width)
 				return chunks.xToOffset(x - _x,round);
 
 			_x += chunks.width;
@@ -251,7 +250,6 @@ public class Chunk extends Token
 	//{{{ Package private members
 
 	//{{{ Instance variables
-	boolean accessable;
 	boolean initialized;
 	// set up after init()
 	SyntaxStyle style;
@@ -263,6 +261,7 @@ public class Chunk extends Token
 	{
 		super(Token.NULL,offset,0,rules);
 		this.width = width;
+		assert !isAccessible();
 	} //}}}
 
 	//{{{ Chunk constructor
@@ -270,17 +269,26 @@ public class Chunk extends Token
 		SyntaxStyle[] styles, byte defaultID)
 	{
 		super(id,offset,length,rules);
-		accessable = true;
 		style = styles[id];
 		background = style.getBackgroundColor();
 		if(background == null)
 			background = styles[defaultID].getBackgroundColor();
+		assert isAccessible();
+	} //}}}
+
+	//{{{ isAccessible() method
+	/**
+	 * Returns true if this chunk has accesible text.
+	 */
+	final boolean isAccessible()
+	{
+		return length > 0;
 	} //}}}
 
 	//{{{ offsetToX() method
 	final float offsetToX(int offset)
 	{
-		if(!visible || glyphs == null)
+		if(glyphs == null)
 			return 0.0f;
 
 		float x = 0.0f;
@@ -303,7 +311,7 @@ public class Chunk extends Token
 	//{{{ xToOffset() method
 	final int xToOffset(float x, boolean round)
 	{
-		if (!visible || glyphs == null)
+		if (glyphs == null)
 		{
 			if (round && width - x < x)
 				return offset + length;
@@ -349,21 +357,17 @@ public class Chunk extends Token
 		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{
 		initialized = true;
-
-		if(!accessable)
+		if(!isAccessible())
 		{
 			// do nothing
 		}
 		else if(length == 1 && seg.array[seg.offset + offset] == '\t')
 		{
-			visible = false;
 			float newX = expander.nextTabStop(x,physicalLineOffset+offset);
 			width = newX - x;
 		}
 		else
 		{
-			visible = true;
-
 			str = new String(seg.array,seg.offset + offset,length);
 
 			char[] textArray = seg.array;
@@ -393,9 +397,7 @@ public class Chunk extends Token
 	// styles[defaultID].getBackgroundColor()
 	private Color background;
 	private String str;
-	//private GlyphVector gv;
 	private List<GlyphVector> glyphs;
-	private boolean visible;
 	//}}}
 
 	//{{{ getFonts() method

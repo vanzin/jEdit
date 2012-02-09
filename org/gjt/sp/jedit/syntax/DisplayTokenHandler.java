@@ -235,7 +235,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ canMerge() method
 	private static boolean canMerge(Chunk c1, Chunk c2, Segment seg)
 	{
-		if(!c1.accessable || !c2.accessable)
+		if(!c1.isAccessible() || !c2.isAccessible())
 			return false;
 
 		char ch1 = seg.array[seg.offset + c1.offset];
