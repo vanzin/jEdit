@@ -115,7 +115,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 			if(wrapMargin != 0.0f)
 			{
-				initChunk(chunk,seg, physicalLineOffset);
+				initChunk(chunk,seg);
 				x += chunk.width;
 
 				if(Character.isWhitespace(seg.array[
@@ -138,7 +138,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 						Chunk nextLine = new Chunk(endOfWhitespace,
 							end.offset + end.length,
 							getParserRuleSet(context));
-						initChunk(nextLine,seg,  physicalLineOffset);
+						initChunk(nextLine,seg);
 
 						nextLine.next = end.next;
 						end.next = null;
@@ -191,7 +191,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	private void initChunk(Chunk chunk, Segment seg, int physicalLineOffset)
+	private void initChunk(Chunk chunk, Segment seg)
 	{
 		chunk.init(seg,expander,x,fontRenderContext, physicalLineOffset);
 	} //}}}
@@ -218,7 +218,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
-					initChunk(chunk,seg, physicalLineOffset);
+					initChunk(chunk,seg);
 					if(wrapMargin == 0.0f)
 						x += chunk.width;
 				}
@@ -227,7 +227,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		}
 
 		if(!chunk.initialized)
-			initChunk(chunk,seg, physicalLineOffset);
+			initChunk(chunk,seg);
 
 		return first;
 	} //}}}
