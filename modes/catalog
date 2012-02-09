@@ -301,6 +301,9 @@
 <MODE NAME="literate-haskell"	FILE="literate-haskell.xml"
 				FILE_NAME_GLOB="*.lhs" />
 
+<MODE NAME="logs"		FILE="logs.xml"
+				FILE_NAME_GLOB="*.log" /> 
+				
 <MODE NAME="logtalk"		FILE="logtalk.xml"
 				FILE_NAME_GLOB="*.lgt" />
 

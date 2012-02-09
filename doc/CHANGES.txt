@@ -79,6 +79,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ Editing
 
+- logs edit mode added (Matthieu Casanova)
+
 - Dart mode added (Patch #3483431 - Chris Sullins)
 
 - Haskell mode:
