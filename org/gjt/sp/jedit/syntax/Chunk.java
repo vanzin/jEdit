@@ -251,8 +251,8 @@ public class Chunk extends Token
 
 	//{{{ Instance variables
 	boolean initialized;
-	// set up after init()
 	SyntaxStyle style;
+	// set up after init()
 	float width;
 	//}}}
 
