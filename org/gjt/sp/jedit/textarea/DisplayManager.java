@@ -258,7 +258,7 @@ public class DisplayManager
 		// if the caret is on a collapsed fold, collapse the
 		// parent fold
 		if(line != 0
-			&& line != buffer.getLineCount() - 1
+			&& line != lineCount - 1
 			&& buffer.isFoldStart(line)
 			&& !isLineVisible(line + 1))
 		{
@@ -381,23 +381,25 @@ public class DisplayManager
 		if(buffer.getFoldHandler() instanceof IndentFoldHandler)
 			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
-		showLineRange(0,buffer.getLineCount() - 1);
+		int lineCount = buffer.getLineCount();
+		int end = lineCount - 1;
+		showLineRange(0,end);
 
 		int leastFolded = -1;
 		int firstInvisible = 0;
 
-		for(int i = 0; i < buffer.getLineCount(); i++)
+		for(int i = 0; i < lineCount; i++)
 		{
+			int level = buffer.getFoldLevel(i);
 			// Keep track of the least fold level up to this point in the file,
 			// because we can't hide a line at this level since there will be no "root"
 			// line to unfold it from
-			if (leastFolded == -1 || buffer.getFoldLevel(i) < leastFolded)
+			if (leastFolded == -1 || level < leastFolded)
 			{
-				leastFolded = buffer.getFoldLevel(i);
+				leastFolded = level;
 			}
 		
-			if (buffer.getFoldLevel(i) < foldLevel ||
-			    buffer.getFoldLevel(i) == leastFolded)
+			if (level < foldLevel || level == leastFolded)
 			{
 				if(firstInvisible != i)
 				{
@@ -408,8 +410,8 @@ public class DisplayManager
 			}
 		}
 
-		if(firstInvisible != buffer.getLineCount())
-			hideLineRange(firstInvisible,buffer.getLineCount() - 1);
+		if(firstInvisible != lineCount)
+			hideLineRange(firstInvisible,end);
 
 		notifyScreenLineChanges();
 		if(update && textArea.getDisplayManager() == this)
@@ -439,7 +441,8 @@ public class DisplayManager
 	 */
 	public void narrow(int start, int end)
 	{
-		if(start > end || start < 0 || end >= buffer.getLineCount())
+		int lineCount = buffer.getLineCount();
+		if(start > end || start < 0 || end >= lineCount)
 			throw new ArrayIndexOutOfBoundsException(start + ", " + end);
 
 		if(start < getFirstVisibleLine() || end > getLastVisibleLine())
@@ -447,12 +450,11 @@ public class DisplayManager
 
 		if(start != 0)
 			hideLineRange(0,start - 1);
-		if(end != buffer.getLineCount() - 1)
-			hideLineRange(end + 1,buffer.getLineCount() - 1);
+		if(end != lineCount - 1)
+			hideLineRange(end + 1,lineCount - 1);
 
 		// if we narrowed to a single collapsed fold
-		if(start != buffer.getLineCount() - 1
-			&& !isLineVisible(start + 1))
+		if(start != lineCount - 1 && !isLineVisible(start + 1))
 			expandFold(start,false);
 
 		textArea.fireNarrowActive();
