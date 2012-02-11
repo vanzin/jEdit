@@ -54,13 +54,10 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		float wrapMargin, int physicalLineOffset)
 	{
 		super.init();
-
-		x = 0.0f;
-
 		this.styles = styles;
 		this.fontRenderContext = fontRenderContext;
 		this.expander = expander;
-		this.physicalLineOffset = physicalLineOffset;
+		this.out = out;
 
 		// SILLY: allow for anti-aliased characters' "fuzz"
 		if(wrapMargin != 0.0f)
@@ -68,11 +65,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		else
 			this.wrapMargin = 0.0f;
 
-		this.out = out;
-
-		seenNonWhitespace = false;
-		endX = endOfWhitespace = 0.0f;
-		end = null;
+		this.physicalLineOffset = physicalLineOffset;
 	} //}}}
 
 	//{{{ getChunkList() method
@@ -102,11 +95,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	public void handleToken(Segment seg, byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
-		final Segment lineText = seg;
 		if(id == Token.END)
 		{
-			if(firstToken != null)
-				out.add(mergeAdjucentChunks((Chunk)firstToken,lineText));
+			makeScreenLine(seg);
 			return;
 		}
 
@@ -115,51 +106,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			int splitLength = Math.min(length - splitOffset,MAX_CHUNK_LEN);
 			Chunk chunk = createChunk(id,offset + splitOffset,splitLength,context);
 			addToken(chunk,context);
-
-			if(wrapMargin != 0.0f)
-			{
-				initChunk(chunk,lineText);
-				x += chunk.width;
-
-				if(Character.isWhitespace(lineText.array[
-					lineText.offset + chunk.offset]))
-				{
-					if(seenNonWhitespace)
-					{
-						end = lastToken;
-						endX = x;
-					}
-					else
-						endOfWhitespace = x;
-				}
-				else
-				{
-					if(x > wrapMargin
-						&& end != null
-						&& seenNonWhitespace)
-					{
-						Chunk nextLine = new Chunk(endOfWhitespace,
-							end.offset + end.length,
-							getParserRuleSet(context));
-						initChunk(nextLine,lineText);
-
-						nextLine.next = end.next;
-						end.next = null;
-
-						if(firstToken != null)
-							out.add(mergeAdjucentChunks((Chunk)firstToken,lineText));
-
-						firstToken = nextLine;
-
-						x = x - endX + endOfWhitespace;
-
-						end = null;
-						endX = x;
-					}
-
-					seenNonWhitespace = true;
-				}
-			}
 		}
 	} //}}}
 
@@ -173,16 +119,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	private SyntaxStyle[] styles;
 	private FontRenderContext fontRenderContext;
 	private TabExpander expander;
-	private float x;
-	private int physicalLineOffset;
-
 	private List<Chunk> out;
 	private float wrapMargin;
-	private float endX;
-	private Token end;
-
-	private boolean seenNonWhitespace;
-	private float endOfWhitespace;
+	private int physicalLineOffset;
 	//}}}
 
 	//{{{ createChunk() method
@@ -195,7 +134,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	private void initChunk(Chunk chunk, Segment lineText)
+	private void initChunk(Chunk chunk, float x, Segment lineText)
 	{
 		chunk.init(lineText,expander,x,fontRenderContext, physicalLineOffset);
 	} //}}}
@@ -209,6 +148,12 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	{
 		if(first == null)
 			return null;
+
+		// x is accurate only when soft wrap is off.
+		// It's OK because when soft wrap is on, chunks are
+		// already initialized, and un-initialization never
+		// happens on tabs which are sole user of the value.
+		float x = 0.0f;
 
 		Chunk chunk = first;
 		while(chunk.next != null)
@@ -226,7 +171,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
-					initChunk(chunk,lineText);
+					initChunk(chunk, x, lineText);
 					if(wrapMargin == 0.0f)
 						x += chunk.width;
 				}
@@ -235,7 +180,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		}
 
 		if(!chunk.initialized)
-			initChunk(chunk,lineText);
+			initChunk(chunk, x, lineText);
 
 		return first;
 	} //}}}
@@ -247,6 +192,73 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			&& c1.isAccessible() && !c1.isTab(lineText)
 			&& c2.isAccessible() && !c2.isTab(lineText)
 			&& (c1.length + c2.length) <= MAX_CHUNK_LEN;
+	} //}}}
+
+	//{{{ makeScreenLineInWrapMargin() method
+	/**
+	 * Do the main job for soft wrap feature.
+	 */
+	private void makeScreenLineInWrapMargin(Segment lineText)
+	{
+		Chunk lineHead = (Chunk)firstToken;
+		boolean seenNonWhitespace = false;
+		float endOfWhitespace = 0.0f;
+		float x = 0.0f;
+		Chunk end = null;
+		float endX = 0.0f;
+		for (Chunk chunk = lineHead; chunk != null; chunk = (Chunk)chunk.next)
+		{
+			initChunk(chunk, x, lineText);
+			x += chunk.width;
+			if(Character.isWhitespace(lineText.array[
+				lineText.offset + chunk.offset]))
+			{
+				if(seenNonWhitespace)
+				{
+					end = chunk;
+					endX = x;
+				}
+				else
+					endOfWhitespace = x;
+			}
+			else
+			{
+				if(x > wrapMargin
+					&& end != null
+					&& seenNonWhitespace)
+				{
+					Chunk nextLine = new Chunk(endOfWhitespace,
+						end.offset + end.length, end.rules);
+					initChunk(nextLine, x, lineText);
+					nextLine.next = end.next;
+					end.next = null;
+					out.add(mergeAdjucentChunks(lineHead,lineText));
+					lineHead = nextLine;
+					x = x - endX + endOfWhitespace;
+					end = null;
+					endX = x;
+				}
+				seenNonWhitespace = true;
+			}
+		}
+		out.add(mergeAdjucentChunks(lineHead,lineText));
+	} //}}}
+
+	//{{{ makeScreenLine() method
+	private void makeScreenLine(Segment lineText)
+	{
+		if(firstToken == null)
+		{
+			assert out.isEmpty();
+		}
+		else if(wrapMargin > 0.0f)
+		{
+			makeScreenLineInWrapMargin(lineText);
+		}
+		else
+		{
+			out.add(mergeAdjucentChunks((Chunk)firstToken, lineText));
+		}
 	} //}}}
 
 	//}}}
