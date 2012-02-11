@@ -279,6 +279,16 @@ public class Chunk extends Token
 		assert isAccessible();
 	} //}}}
 
+	//{{{ Chunk constructor
+	Chunk(byte id, int offset, int length, ParserRuleSet rules,
+		SyntaxStyle style, Color background)
+	{
+		super(id,offset,length,rules);
+		this.style = style;
+		this.background = background;
+		assert isAccessible();
+	} //}}}
+
 	//{{{ isAccessible() method
 	/**
 	 * Returns true if this chunk has accesible text.
@@ -296,6 +306,38 @@ public class Chunk extends Token
 	{
 		return length == 1
 			&& lineText.array[lineText.offset + offset] == '\t';
+	} //}}}
+
+	//{{{ snippetBefore() method
+	/**
+	 * Returns a shorten uninitialized chunk before specific offset.
+	 */
+	final Chunk snippetBefore(int snipOffset)
+	{
+		assert 0 <= snipOffset && snipOffset < length;
+		return new Chunk(id, offset, snipOffset,
+			rules, style, background);
+	} //}}}
+
+	//{{{ snippetAfter() method
+	/**
+	 * Returns a shorten uninitialized chunk after specific offset.
+	 */
+	final Chunk snippetAfter(int snipOffset)
+	{
+		assert 0 <= snipOffset && snipOffset < length;
+		return new Chunk(id, offset + snipOffset, length - snipOffset,
+			rules, style, background);
+	} //}}}
+
+	//{{{ snippetBeforeLineOffset() method
+	/**
+	 * Returns a shorten uninitialized chunk before specific offset.
+	 * The offset is it in the line text, instead of in chunk.
+	 */
+	final Chunk snippetBeforeLineOffset(int lineOffset)
+	{
+		return snippetBefore(lineOffset - this.offset);
 	} //}}}
 
 	//{{{ offsetToX() method

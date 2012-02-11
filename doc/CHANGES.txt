@@ -223,6 +223,11 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Fixed some edge cases in the Make_Get_and_Set_Methods macro, properly handle
   comments, multi-line variable declarations and multiple initializers.
   (Dale Anson)
+
+- Soft wrap now works at non-whitespace line breaks within some natural
+  language texts; Japanese for example.
+  (SF.net patch #2483695 - Kazutoshi Satoda)
+
 }}}
 
 }}}
