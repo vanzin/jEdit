@@ -243,15 +243,10 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ canMerge() method
 	private static boolean canMerge(Chunk c1, Chunk c2, Segment lineText)
 	{
-		if(!c1.isAccessible() || !c2.isAccessible())
-			return false;
-
-		char ch1 = lineText.array[lineText.offset + c1.offset];
-		char ch2 = lineText.array[lineText.offset + c2.offset];
-
-		return ((c1.style == c2.style)
-			&& ch1 != '\t' && ch2 != '\t'
-			&& (c1.length + c2.length <= MAX_CHUNK_LEN));
+		return c1.style == c2.style
+			&& c1.isAccessible() && !c1.isTab(lineText)
+			&& c2.isAccessible() && !c2.isTab(lineText)
+			&& (c1.length + c2.length) <= MAX_CHUNK_LEN;
 	} //}}}
 
 	//}}}

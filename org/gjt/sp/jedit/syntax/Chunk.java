@@ -288,6 +288,16 @@ public class Chunk extends Token
 		return length > 0;
 	} //}}}
 
+	//{{{ isTab() method
+	/**
+	 * Returns true if this chunk represents a tab.
+	 */
+	final boolean isTab(Segment lineText)
+	{
+		return length == 1
+			&& lineText.array[lineText.offset + offset] == '\t';
+	} //}}}
+
 	//{{{ offsetToX() method
 	final float offsetToX(int offset)
 	{
@@ -364,7 +374,7 @@ public class Chunk extends Token
 		{
 			// do nothing
 		}
-		else if(length == 1 && lineText.array[lineText.offset + offset] == '\t')
+		else if(isTab(lineText))
 		{
 			float newX = expander.nextTabStop(x,physicalLineOffset+offset);
 			width = newX - x;
