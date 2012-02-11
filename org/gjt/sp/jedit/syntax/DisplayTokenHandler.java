@@ -167,7 +167,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			if(canMerge(chunk,next,lineText))
 			{
 				chunk.length += next.length;
-				chunk.width += next.width;
 				chunk.next = next.next;
 			}
 			else
