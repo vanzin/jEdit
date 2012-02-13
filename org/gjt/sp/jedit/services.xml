@@ -170,4 +170,8 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.tray.JEditTrayIcon" NAME="swing">
 		new org.gjt.sp.jedit.gui.tray.JEditSwingTrayIcon();
 	</SERVICE>
+
+	<SERVICE CLASS="org.jedit.core.MigrationService" NAME="keymap">
+		new org.jedit.migration.KeymapMigration();
+	</SERVICE>
 </SERVICES>

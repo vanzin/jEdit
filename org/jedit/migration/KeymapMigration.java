@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.gjt.sp.jedit.jEdit;
+import org.jedit.core.MigrationService;
 import org.jedit.keymap.Keymap;
 import org.jedit.keymap.KeymapManager;
 

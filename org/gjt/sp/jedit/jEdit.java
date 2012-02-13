@@ -25,10 +25,9 @@ package org.gjt.sp.jedit;
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
 import org.gjt.sp.util.StringList;
+import org.jedit.core.MigrationService;
 import org.jedit.keymap.KeymapManager;
 import org.jedit.keymap.KeymapManagerImpl;
-import org.jedit.migration.KeymapMigration;
-import org.jedit.migration.MigrationService;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 
 import java.awt.*;
@@ -436,7 +435,7 @@ public class jEdit
 		if (settingsDirectory != null)
 		{
 			GUIUtilities.advanceSplashProgress("Migrate keymaps");
-			MigrationService keymapMigration = new KeymapMigration();
+			MigrationService keymapMigration = ServiceManager.getService(MigrationService.class, "keymap");
 			keymapMigration.migrate();
 		}
 
