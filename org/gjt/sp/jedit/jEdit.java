@@ -431,14 +431,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
 
-
-		if (settingsDirectory != null)
-		{
-			GUIUtilities.advanceSplashProgress("Migrate keymaps");
-			MigrationService keymapMigration = ServiceManager.getService(MigrationService.class, "keymap");
-			keymapMigration.migrate();
-		}
-
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
 
@@ -471,6 +463,14 @@ public class jEdit
 		VFSManager.init();
 		GUIUtilities.advanceSplashProgress("init resources");
 		initResources();
+
+		if (settingsDirectory != null)
+		{
+			GUIUtilities.advanceSplashProgress("Migrate keymaps");
+			MigrationService keymapMigration = ServiceManager.getService(MigrationService.class, "keymap");
+			keymapMigration.migrate();
+		}
+
 		SearchAndReplace.load();
 
 		if(loadPlugins)
@@ -3092,6 +3092,7 @@ public class jEdit
 	private static Vector<ErrorListDialog.ErrorEntry> pluginErrors;
 	private static final Object pluginErrorLock = new Object();
 	private static Vector<PluginJAR> jars;
+	private static Map<String, PluginJAR> pluginJars;
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
@@ -3264,6 +3265,7 @@ public class jEdit
 			}
 		};
 		jars = new Vector<PluginJAR>();
+		pluginJars = new HashMap<String, PluginJAR>();
 		FoldHandler.foldHandlerProvider = new ServiceManager.ServiceFoldHandlerProvider();
 		actionContext = new ActionContext()
 		{
