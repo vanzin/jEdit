@@ -1077,10 +1077,9 @@ public abstract class VFS
 		List<String> files, String directory, VFSFileFilter filter, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
-		String resolvedPath = directory;
 		if (recursive && !MiscUtilities.isURL(directory))
 		{
-			resolvedPath = MiscUtilities.resolveSymlinks(directory);
+			String resolvedPath = MiscUtilities.resolveSymlinks(directory);
 			/*
 			 * If looking at a symlink, do not traverse the
 			 * resolved path more than once.
