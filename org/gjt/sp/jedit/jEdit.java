@@ -1161,14 +1161,20 @@ public class jEdit
 	public static void addPluginJAR(String path)
 	{
 		PluginJAR jar = new PluginJAR(new File(path));
-		jars.addElement(jar);
-		jar.init();
-		jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(path));
-		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
-		if(!isMainThread())
+		if (jar.init())
 		{
-			EditBus.send(new DynamicMenuChanged("plugins"));
-			initKeyBindings();
+			jars.addElement(jar);
+			jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(path));
+			EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
+			if(!isMainThread())
+			{
+				EditBus.send(new DynamicMenuChanged("plugins"));
+				initKeyBindings();
+			}
+		}
+		else
+		{
+			jar.uninit(false);
 		}
 	} //}}}
 
@@ -1226,7 +1232,8 @@ public class jEdit
 		{
 			jar.uninit(false);
 			jars.removeElement(jar);
-			initKeyBindings();
+			if (!isMainThread())
+				initKeyBindings();
 		}
 
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED,exit));

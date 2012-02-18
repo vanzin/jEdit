@@ -2721,6 +2721,8 @@ manage-plugins.remove=Remove...
 manage-plugins.help=Help...
 manage-plugins.restore.icon=22x22/actions/document-open.png
 manage-plugins.save.icon=22x22/actions/document-save.png
+plugin-load-error.message=Unable to load plugin
+plugin-load-error.title=Plugin load error
 #}}}
 
 #{{{ Plugin installation

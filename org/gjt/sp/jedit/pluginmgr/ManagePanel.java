@@ -523,7 +523,11 @@ public class ManagePanel extends JPanel
 					if(value.equals(Boolean.FALSE))
 						return;
 
-					PluginJAR.load(entry.jar, true);
+					PluginJAR load = PluginJAR.load(entry.jar, true);
+					if (load == null)
+					{
+						GUIUtilities.error(ManagePanel.this, "plugin-load-error", null);
+					}
 				}
 				else
 				{

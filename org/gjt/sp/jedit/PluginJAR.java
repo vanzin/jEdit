@@ -176,6 +176,8 @@ public class PluginJAR
 		}
 		jEdit.addPluginJAR(path);
 		jar = jEdit.getPluginJAR(path);
+		if (jar == null)
+			return null;
 		EditPlugin plugin = jar.getPlugin();
 		if (plugin == null)
 		{
@@ -1025,12 +1027,13 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ init() method
-	void init()
+	boolean init()
 	{
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
 		{
-			loadCache(cache);
+			if (!loadCache(cache))
+				return false;
 			classLoader.activate();
 		}
 		else
@@ -1042,6 +1045,10 @@ public class PluginJAR
 				{
 					setPluginCache(this,cache);
 					classLoader.activate();
+				}
+				else
+				{
+					return false;
 				}
 			}
 			catch(IOException io)
@@ -1056,6 +1063,7 @@ public class PluginJAR
 				uninit(false);
 			}
 		}
+		return true;
 	} //}}}
 
 	//{{{ uninit() method
@@ -1132,8 +1140,26 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ loadCache() method
-	private void loadCache(PluginCacheEntry cache)
+	private boolean loadCache(PluginCacheEntry cache)
 	{
+		// Check if a plugin with the same name
+		// is already loaded
+		if(cache.pluginClass != null)
+		{
+			// Check if a plugin with the same name
+			// is already loaded
+			if (!continueLoading(cache.pluginClass, cache.cachedProperties))
+			{
+				return false;
+			}
+			else
+			{
+				EditPlugin otherPlugin = jEdit.getPlugin(cache.pluginClass);
+				if (otherPlugin != null)
+					jEdit.removePluginJAR(otherPlugin.getPluginJAR(), false);
+			}
+		}
+
 		classes = cache.classes;
 		resources = cache.resources;
 
@@ -1200,31 +1226,21 @@ public class PluginJAR
 
 		if(cache.pluginClass != null)
 		{
-			// Check if a plugin with the same name
-			// is already loaded
-			if(jEdit.getPlugin(cache.pluginClass) != null)
-			{
-				jEdit.pluginError(path, "plugin-error.already-loaded",
-					null);
-				uninit(false);
-			}
-			else
-			{
-				String label = jEdit.getProperty(
-					"plugin." + cache.pluginClass
-					+ ".name");
-				actions.setLabel(jEdit.getProperty(
-					"action-set.plugin",
-					new String[] { label }));
-				plugin = new EditPlugin.Deferred(this,
-					cache.pluginClass);
-			}
+			String label = jEdit.getProperty(
+				"plugin." + cache.pluginClass
+				+ ".name");
+			actions.setLabel(jEdit.getProperty(
+				"action-set.plugin",
+				new String[] { label }));
+			plugin = new EditPlugin.Deferred(this,
+				cache.pluginClass);
 		}
 		else
 		{
 			if(actions.size() != 0)
 				actionsPresentButNotCoreClass();
 		}
+		return true;
 	} //}}}
 
 	//{{{ generateCache() method
@@ -1318,12 +1334,20 @@ public class PluginJAR
 
 				// Check if a plugin with the same name
 				// is already loaded
-				if(jEdit.getPlugin(className) != null)
+				if (!continueLoading(className, cache.cachedProperties))
 				{
-					jEdit.pluginError(path, "plugin-error.already-loaded",
-						null);
 					return null;
 				}
+				else
+				{
+					EditPlugin otherPlugin = jEdit.getPlugin(className);
+					if (otherPlugin != null)
+					{
+						jEdit.removePluginJAR(otherPlugin.getPluginJAR(), false);
+//						otherPlugin.getPluginJAR().uninit(false);
+					}
+				}
+
 				plugin = new EditPlugin.Deferred(this,
 				     className);
 				label = _label;
@@ -1394,6 +1418,18 @@ public class PluginJAR
 
 		return cache;
 	} //}}}
+	
+	private static boolean continueLoading(String clazz, Properties cachedProperties)
+	{
+		if(jEdit.getPlugin(clazz) != null)
+		{
+			String otherVersion = jEdit.getProperty("plugin."+clazz+".version");
+			String thisVersion = cachedProperties.getProperty("plugin."+clazz+".version");
+			if (otherVersion.compareTo(thisVersion) > 0)
+				return false;
+		}
+		return true;
+	}
 
 	//{{{ startPlugin() method
 	private void startPlugin()
