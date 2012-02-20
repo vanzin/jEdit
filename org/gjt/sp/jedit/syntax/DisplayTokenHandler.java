@@ -103,12 +103,52 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			return;
 		}
 
-		for(int splitOffset = 0; splitOffset < length; splitOffset += MAX_CHUNK_LEN)
+		// first branch to avoid unnecessary instansiation of
+		// BreakIterator.
+		if(length <= MAX_CHUNK_LEN)
 		{
-			int splitLength = Math.min(length - splitOffset,MAX_CHUNK_LEN);
-			Chunk chunk = createChunk(id,offset + splitOffset,splitLength,context);
-			addToken(chunk,context);
+			Chunk chunk = createChunk(id, offset, length, context);
+			addToken(chunk, context);
+			return;
 		}
+
+		// split the token but at character breaks not to affect
+		// the result of painting.
+		final BreakIterator charBreaker = BreakIterator.getCharacterInstance();
+		charBreaker.setText(seg);
+		final int tokenBeinIndex = seg.offset + offset;
+		final int tokenEndIndex = tokenBeinIndex + length;
+		int splitOffset = 0;
+		do
+		{
+			final int beginIndex = tokenBeinIndex + splitOffset;
+			int charBreakIndex = charBreaker.preceding(beginIndex + MAX_CHUNK_LEN + 1);
+			// {{{ care for unrealistic case, to be complete ...
+			// There must be a char break at beginning of token.
+			assert charBreakIndex != BreakIterator.DONE;
+			if(charBreakIndex <= beginIndex)
+			{
+				// try splitting after the limit, to
+				// make the chunk shorter anyway.
+				charBreakIndex = charBreaker.following(beginIndex + MAX_CHUNK_LEN);
+				// There must be a char break at end of token.
+				assert charBreakIndex != BreakIterator.DONE;
+				if(charBreakIndex >= tokenEndIndex)
+				{
+					// can't split
+					break;
+				}
+			} //}}}
+			final int splitLength = charBreakIndex - beginIndex;
+			Chunk chunk = createChunk(id, offset + splitOffset,
+					splitLength, context);
+			addToken(chunk, context);
+			splitOffset += splitLength;
+		}
+		while(splitOffset + MAX_CHUNK_LEN < length);
+		Chunk chunk = createChunk(id, offset + splitOffset,
+				length - splitOffset, context);
+		addToken(chunk, context);
 	} //}}}
 
 	//{{{ Private members
