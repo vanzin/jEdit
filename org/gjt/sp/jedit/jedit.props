@@ -512,3 +512,9 @@ keymap.default=jEdit
 keymaps.jEdit.label=jEdit
 keymaps.IntelliJ.label=IntelliJ IDEA
 #}}}
+
+
+available.lang=en fr
+# if lang.usedefaultlocale is true, the lang.current is not used
+lang.usedefaultlocale=true
+lang.current=en

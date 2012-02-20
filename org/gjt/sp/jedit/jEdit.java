@@ -430,6 +430,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
+		initi18nProperties();
 
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
@@ -3561,6 +3562,41 @@ public class jEdit
 			{
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
+		}
+	} //}}}
+
+	//{{{ initi18nProperties() method
+	/**
+	 * Loads user properties.
+	 */
+	private static void initi18nProperties()
+	{
+		String language = null;
+		if (getBooleanProperty("lang.usedefaultlocale"))
+		{
+			language = Locale.getDefault().getLanguage();
+		}
+		else
+		{
+			language = getProperty("lang.current", "en");
+		}
+		InputStream langResource = null;
+		try
+		{
+			langResource = jEdit.class.getResourceAsStream("/org/jedit/i18n/jedit_" + language + ".props");
+			propMgr.loadi18nProps(langResource);
+		}
+		catch (IOException e)
+		{
+			if (getBooleanProperty("lang.usedefaultlocale"))
+			{
+				// if it is the default locale, it is not an error
+				Log.log(Log.ERROR, jEdit.class, "Unable to load language", e);
+			}
+		}
+		finally
+		{
+			IOUtilities.closeQuietly(langResource);
 		}
 	} //}}}
 

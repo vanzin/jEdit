@@ -458,6 +458,7 @@
 				<include name="org/gjt/sp/jedit/icons/**/*.gif"/>
 				<include name="org/gjt/sp/jedit/icons/**/*.jpg"/>
 				<include name="org/gjt/sp/jedit/icons/**/*.png"/>
+				<include name="org/jedit/i18n/*.props"/>
 			</fileset>
 		</jar>
 		<copy todir="${jar.location}">

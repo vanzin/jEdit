@@ -164,6 +164,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ UI
 
+- jEdit now supports localization. (Matthieu Casanova)
+
 - Text Area option for Search System Fonts in Font substitution
   (#3479585 - Max Funk)
 

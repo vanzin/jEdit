@@ -35,6 +35,7 @@ class PropertyManager
 		for (Properties plugin : plugins)
 			total.putAll(plugin);
 		total.putAll(site);
+		total.putAll(i18n);
 		total.putAll(user);
 		return total;
 	} //}}}
@@ -51,6 +52,16 @@ class PropertyManager
 		throws IOException
 	{
 		loadProps(site,in);
+	} //}}}
+
+	//{{{ loadi18nProps() method
+	void loadi18nProps(InputStream in)
+		throws IOException
+	{
+		if (in == null)
+			i18n.clear();
+		else
+			loadProps(i18n,in);
 	} //}}}
 
 	//{{{ loadUserProps() method
@@ -95,8 +106,12 @@ class PropertyManager
 		String value = user.getProperty(name);
 		if(value != null)
 			return value;
-		else
-			return getDefaultProperty(name);
+
+		value = i18n.getProperty(name);
+		if (value != null)
+			return value;
+
+		return getDefaultProperty(name);
 	} //}}}
 
 	//{{{ setProperty() method
@@ -153,6 +168,7 @@ class PropertyManager
 	private final Properties system = new Properties();
 	private final List<Properties> plugins = new LinkedList<Properties>();
 	private final Properties site = new Properties();
+	private final Properties i18n = new Properties();
 	private final Properties user = new Properties();
 
 	//{{{ getDefaultProperty() method

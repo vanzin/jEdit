@@ -24,10 +24,14 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Locale;
+
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.gui.NumericTextField;
 
@@ -176,6 +180,36 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"options.appearance.decorateDialogs"));
 		decorateDialogs.setSelected(jEdit.getBooleanProperty("decorate.dialogs"));
 		addComponent(decorateDialogs);
+
+		String language;
+		if (jEdit.getBooleanProperty("lang.usedefaultlocale"))
+		{
+			language = Locale.getDefault().getLanguage();
+		}
+		else
+		{
+			language = jEdit.getProperty("lang.current", "en");
+		}
+		String availableLanguages = jEdit.getProperty("available.lang", "en");
+		String[] languages = availableLanguages.split(" ");
+
+		useDefaultLocale = new JCheckBox(jEdit.getProperty("options.appearance.usedefaultlocale.label"));
+		useDefaultLocale.setSelected(jEdit.getBooleanProperty("lang.usedefaultlocale"));
+		useDefaultLocale.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				lang.setEnabled(!useDefaultLocale.isSelected());
+			}
+		});
+		lang = new JComboBox(languages);
+		lang.setEnabled(!useDefaultLocale.isSelected());
+		lang.setSelectedItem(language);
+
+		addSeparator("options.appearance.i18n.section.label");
+		addComponent(useDefaultLocale);
+		addComponent(jEdit.getProperty("options.appearance.lang.label"), lang);
 	} //}}}
 
 	//{{{ _save() method
@@ -210,6 +244,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
 		jEdit.setBooleanProperty("decorate.dialogs",decorateDialogs.isSelected());
+		jEdit.setBooleanProperty("lang.usedefaultlocale", useDefaultLocale.isSelected());
+		jEdit.setProperty("lang.current", String.valueOf(lang.getSelectedItem()));
 	} //}}}
 
 	//{{{ Private members
@@ -218,6 +254,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private String oldTheme;
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
+	private JCheckBox useDefaultLocale;
+	private JComboBox lang;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
 	private FontSelector helpViewerFont;
