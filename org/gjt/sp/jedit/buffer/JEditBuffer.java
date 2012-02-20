@@ -678,10 +678,32 @@ public class JEditBuffer
 	 */
 	public void insert(int offset, String str)
 	{
-		if(str == null)
+		insert(offset, (CharSequence) str);
+	}
+
+	/**
+	 * Inserts a string into the buffer.
+	 * @param offset The offset
+	 * @param seg The segment
+	 * @since jEdit 4.0pre1
+	 */
+	public void insert(int offset, Segment seg)
+	{
+		insert(offset, (CharSequence) seg);
+	}
+
+	/**
+	 * Inserts a string into the buffer.
+	 * @param offset The offset
+	 * @param seq The charsequence
+	 * @since jEdit 5.0pre1
+	 */
+	public void insert(int offset, CharSequence seq)
+	{
+		if(seq == null)
 			return;
 
-		int len = str.length();
+		int len = seq.length();
 
 		if(len == 0)
 			return;
@@ -696,67 +718,23 @@ public class JEditBuffer
 			if(offset < 0 || offset > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset);
 
-			contentMgr.insert(offset,str);
+			contentMgr.insert(offset,seq);
 
 			integerArray.clear();
 
 			for(int i = 0; i < len; i++)
 			{
-				if(str.charAt(i) == '\n')
+				if(seq.charAt(i) == '\n')
 					integerArray.add(i + 1);
 			}
 
 			if(!undoInProgress)
 			{
-				undoMgr.contentInserted(offset,len,str,!dirty);
+				undoMgr.contentInserted(offset,len,
+							seq.toString(),!dirty);
 			}
 
 			contentInserted(offset,len,integerArray);
-		}
-		finally
-		{
-			writeUnlock();
-		}
-	}
-
-	/**
-	 * Inserts a string into the buffer.
-	 * @param offset The offset
-	 * @param seg The segment
-	 * @since jEdit 4.0pre1
-	 */
-	public void insert(int offset, Segment seg)
-	{
-		if(seg.count == 0)
-			return;
-
-		if(isReadOnly())
-			throw new RuntimeException("buffer read-only");
-
-		try
-		{
-			writeLock();
-
-			if(offset < 0 || offset > contentMgr.getLength())
-				throw new ArrayIndexOutOfBoundsException(offset);
-
-			contentMgr.insert(offset,seg);
-
-			integerArray.clear();
-
-			for(int i = 0; i < seg.count; i++)
-			{
-				if(seg.array[seg.offset + i] == '\n')
-					integerArray.add(i + 1);
-			}
-
-			if(!undoInProgress)
-			{
-				undoMgr.contentInserted(offset,seg.count,
-					seg.toString(),!dirty);
-			}
-
-			contentInserted(offset,seg.count,integerArray);
 		}
 		finally
 		{

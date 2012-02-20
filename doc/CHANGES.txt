@@ -47,6 +47,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ API Changes
 
+- New method JEditBuffer.insert(int offset, CharSequence seq) to insert
+  text in a buffer. (Matthieu Casanova)
+
 - New constructors for CopyFileWorker:
   CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target)
   CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target,
