@@ -2839,7 +2839,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 					// encoding mustn't be set this way as it must
 					// be equal to encoding used to load or save the
 					// file.
-					if (!name.equals(ENCODING)) {
+					if (!name.equals(ENCODING))
+					{
 						// use the low-level property setting code
 						// so that if we have a buffer-local
 						// property with the same value as a default,
@@ -2918,7 +2919,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			for(int ik=startLine- parentColumnBlock.getStartLine();currentLine<=endLine;ik++)
 			{
 				Segment seg = new Segment();
-				int actualStart =  startColumn ;
+				int actualStart =  startColumn;
 				if(!parentColumnBlock.getLines().isEmpty())
 				{
 					ColumnBlockLine line =
@@ -2934,7 +2935,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				if(tabPos>=0)
 				{
 					columnBlockLines.add(new ColumnBlockLine(currentLine, actualStart, actualStart+tabPos));
-					if( tabPos>colBlockWidth)
+					if(tabPos>colBlockWidth)
 					{
 						colBlockWidth =  tabPos;
 					}
@@ -2968,7 +2969,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ getTabStopPosition() method
-	public int getTabStopPosition(Segment seg )
+	public int getTabStopPosition(Segment seg)
 	{
 		for (int i = 0; i < seg.count; i++)
 		{
