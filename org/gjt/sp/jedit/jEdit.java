@@ -1162,9 +1162,9 @@ public class jEdit
 	public static void addPluginJAR(String path)
 	{
 		PluginJAR jar = new PluginJAR(new File(path));
+		jars.addElement(jar);
 		if (jar.init())
 		{
-			jars.addElement(jar);
 			jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(path));
 			EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
 			if(!isMainThread())
@@ -1175,6 +1175,7 @@ public class jEdit
 		}
 		else
 		{
+			jars.removeElement(jar);
 			jar.uninit(false);
 		}
 	} //}}}
