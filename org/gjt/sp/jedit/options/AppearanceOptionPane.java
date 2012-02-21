@@ -27,6 +27,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.*;
@@ -206,7 +207,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		lang = new JComboBox(languages);
 		lang.setEnabled(!useDefaultLocale.isSelected());
 		lang.setSelectedItem(language);
-
+		
+		lang.setRenderer(new LangCellRenderer());
 		addSeparator("options.appearance.i18n.section.label");
 		addComponent(useDefaultLocale);
 		addComponent(jEdit.getProperty("options.appearance.lang.label"), lang);
@@ -325,4 +327,19 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			}
 		}
 	} //}}}
+	
+	private static class LangCellRenderer extends DefaultListCellRenderer
+	{
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+							      boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list, value, index, isSelected,
+								  cellHasFocus);
+			String label = jEdit.getProperty("options.appearance.lang."+value);
+			if (label != null)
+				setText(label);
+			return this;
+		}
+	}
 }
