@@ -412,12 +412,18 @@
 		bufferSetManager = jEdit.getBufferSetManager();
 		bufferSetManager.setScope(BufferSet.Scope.global);
 	</CODE>
+	<IS_SELECTED>
+		return (jEdit.getBufferSetManager().getScope().equals(BufferSet.Scope.global));
+	</IS_SELECTED>
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
 		bufferSetManager = jEdit.getBufferSetManager();
 		bufferSetManager.setScope(BufferSet.Scope.view);
 	</CODE>
+	<IS_SELECTED>
+		return (jEdit.getBufferSetManager().getScope().equals(BufferSet.Scope.view));
+	</IS_SELECTED>	
 </ACTION>
 
 <ACTION NAME="bufferset-toggle-exclusive">
@@ -435,6 +441,10 @@
 		bufferSetManager = jEdit.getBufferSetManager();
 		bufferSetManager.setScope(BufferSet.Scope.editpane);
 	</CODE>
+	<IS_SELECTED>
+		return (jEdit.getBufferSetManager().getScope().equals(BufferSet.Scope.editpane));
+	</IS_SELECTED>	
+	
 </ACTION>
 
 <ACTION NAME="goto-line">
