@@ -168,6 +168,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Added complete french translation (Jojaba http://jojaba.free.fr)
 
+- Added complete german translation (Robert Schwenn)
+
 - Text Area option for Search System Fonts in Font substitution
   (#3479585 - Max Funk)
 
