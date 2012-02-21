@@ -6,7 +6,7 @@ jEdit 5.0 version history
 
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
-Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski,
+Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
 Stephen Blackheath and Chris Sullins for contributing to this release.
 
 {{{ Bug fixes
@@ -165,6 +165,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 {{{ UI
 
 - jEdit now supports localization. (Matthieu Casanova)
+
+- Added complete french translation (Jojaba http://jojaba.free.fr)
 
 - Text Area option for Search System Fonts in Font substitution
   (#3479585 - Max Funk)
