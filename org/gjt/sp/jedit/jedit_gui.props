@@ -646,11 +646,11 @@ prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 buffersets.label=$Buffer Sets
 buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive
-global-bufferset.label=$Global Scope
+global-bufferset.label=$Global Scope BufferSets
 global-bufferset.tooltip=All EditPanes share the same BufferSet.
-view-bufferset.label=$View Scope
+view-bufferset.label=$View Scope BufferSets
 view-bufferset.tooltip=EditPanes in the same View share the same BufferSet.
-editpane-bufferset.label=$EditPane Scope
+editpane-bufferset.label=$EditPane Scope BufferSets
 editpane-bufferset.tooltip=Each Editpane has its own BufferSet.
 
 
