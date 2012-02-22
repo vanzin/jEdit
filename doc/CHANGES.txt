@@ -183,8 +183,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Added Icons to the VFS Browser context menu (Matthieu Casanova)
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
-	obsolete. (Alan Ezust - # 3455602)
-
+	obsolete, fixing auto resize dialog issue. (Alan Ezust - #3455602, #3449498)
+	
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
