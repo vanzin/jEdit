@@ -240,6 +240,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   language texts; Japanese for example.
   (SF.net patch #2483695 - Kazutoshi Satoda)
 
+- Introduced glyph caching to lower CPU usage on text rendering and
+  line wrapping. (Kazutoshi Satoda)
+
 }}}
 
 }}}

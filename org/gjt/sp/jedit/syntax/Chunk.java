@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.lang.ref.SoftReference;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
@@ -246,6 +249,10 @@ public class Chunk extends Token
 		}
 
 		preferredFonts = userFonts.toArray(new Font[userFonts.size()]);
+
+		// Clear cache, not to hold reference to old fonts which
+		// might become unused after properties changed.
+		glyphCache = null;
 	} //}}}
 
 	//{{{ Package private members
@@ -437,13 +444,28 @@ public class Chunk extends Token
 		else
 		{
 			str = new String(lineText.array,lineText.offset + offset,length);
-
-			char[] textArray = lineText.array;
-			int textStart = lineText.offset + offset;
-			width = layoutGlyphs(fontRenderContext,
-					     textArray,
-					     textStart,
-					     textStart + length);
+			GlyphKey cacheKey = new GlyphKey(str,
+				style.getFont(), fontRenderContext);
+			GlyphCache cache = getGlyphCache();
+			List<GlyphVector> cachedGlyphs = cache.get(cacheKey);
+			if (cachedGlyphs != null)
+			{
+				glyphs = cachedGlyphs;
+				float w = 0.0f;
+				for (GlyphVector gv: glyphs)
+				{
+					w += (float)gv.getLogicalBounds().getWidth();
+				}
+				width = w;
+			}
+			else
+			{
+				char[] textArray = lineText.array;
+				int textStart = lineText.offset + offset;
+				width = layoutGlyphs(fontRenderContext,
+					textArray, textStart, textStart + length);
+				cache.put(cacheKey, glyphs);
+			}
 		}
 		assert isInitialized();
 	} //}}}
@@ -459,6 +481,26 @@ public class Chunk extends Token
 	private static boolean fontSubstSystemFontsEnabled;
 	private static Font[] preferredFonts;
 	private static Font[] fontSubstList;
+
+	// This cache is meant to reduce calls of layoutGlyphVector(),
+	// which was an outclassing CPU bottleneck (profiled on jProfiler,
+	// Sun JDK 6, Windows XP).
+	//
+	// The capacity is roughly tuned so that the effect is clearly
+	// noticeable on very large random int table in C mode; like
+	// following:
+	//   int table000[100] = { 232, 190, 69, ..., 80, 246, 78 };
+	//   int table000[100] = { 69, 84, 206, ..., 160, 197, 161 };
+	//   ...
+	//   int table099[100] = { 219, 100, 60, ..., 100, 203, 8 };
+	//   int table100[100] = { 159, 189, 159, ..., 76, 9, 239, };
+	// and the additional heap usage is lower than 1 MB.
+	//
+	// Heap usage was measured as about 400 KB / 256 entries (JRE 7u3,
+	// Windows XP).
+	private static int glyphCacheCapacity = 256;
+	private static SoftReference<GlyphCache> glyphCache;
+
 	//}}}
 
 	//{{{ Instance variables
@@ -693,6 +735,85 @@ public class Chunk extends Token
 		}
 
 		return width;
+	} //}}}
+
+	//{{{ getGlyphCache() method
+	private static GlyphCache getGlyphCache()
+	{
+		if (glyphCache != null)
+		{
+			GlyphCache cache = glyphCache.get();
+			if (cache != null)
+			{
+				return cache;
+			}
+		}
+		GlyphCache newOne = new GlyphCache(glyphCacheCapacity);
+		glyphCache = new SoftReference<GlyphCache>(newOne);
+		return newOne;
+	} //}}}
+
+	//{{{ class GlyphKey
+	private static class GlyphKey
+	{
+		public final String token;
+		public final Font font;
+		public final FontRenderContext context;
+
+		GlyphKey(String token, Font font, FontRenderContext context)
+		{
+			assert token != null;
+			assert font != null;
+			assert context != null;
+			this.token = token;
+			this.font = font;
+			this.context = context;
+		}
+
+		@Override
+		public final int hashCode()
+		{
+			return token.hashCode()
+				+ font.hashCode()
+				+ context.hashCode();
+		}
+
+		@Override
+		public final boolean equals(Object otherObject)
+		{
+			// should be called only from GlyphCache to
+			// compare with other keys, then explicit type
+			// checking and null checking are not necessary.
+			GlyphKey other = (GlyphKey)otherObject;
+			return token.equals(other.token)
+				&& font.equals(other.font)
+				&& context.equals(other.context);
+		}
+
+		@Override
+		public final String toString()
+		{
+			return token;
+		}
+	} //}}}
+
+	//{{{ class GlyphCache
+	private static class GlyphCache extends LinkedHashMap<GlyphKey, List<GlyphVector>>
+	{
+		public GlyphCache(int capacity)
+		{
+			// Avoid rehashing with known limit.
+			super(capacity + 1, 1.0f, true/*accessOrder*/);
+			this.capacity = capacity;
+		}
+
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<GlyphKey, List<GlyphVector>> eldest)
+		{
+			return size() > capacity;
+		}
+
+		private final int capacity;
 	} //}}}
 
 	//}}}
