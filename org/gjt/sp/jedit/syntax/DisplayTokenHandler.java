@@ -244,7 +244,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ recalculateTabWidth() method
-	private float recalculateTabWidth(Chunk lineHead, Segment lineText)
+	// Returns true if all chunks are recaluculated and the total
+	// width fits in wrap margin.
+	private boolean recalculateTabWidthInWrapMargin(Chunk lineHead, Segment lineText)
 	{
 		float x = 0.0f;
 		for(Chunk chunk = lineHead; chunk != null; chunk = (Chunk)chunk.next)
@@ -254,8 +256,12 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				initChunk(chunk, x, lineText);
 			}
 			x += chunk.width;
+			if(x > wrapMargin)
+			{
+				return false;
+			}
 		}
-		return x;
+		return true;
 	} //}}}
 
 	//{{{ countLeadingWhitespaces() method
@@ -362,7 +368,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				lineHead = remaining;
 			}
 			lineHead = makeWrappedLine(lineHead, virtualIndentWidth, lineText);
-			if(recalculateTabWidth(lineHead, lineText) <= wrapMargin)
+			if(recalculateTabWidthInWrapMargin(lineHead, lineText))
 			{
 				// Fits in the margin. No more need to wrap.
 				out.add(lineHead);
