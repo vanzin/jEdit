@@ -251,7 +251,6 @@ public class Chunk extends Token
 	//{{{ Package private members
 
 	//{{{ Instance variables
-	boolean initialized;
 	SyntaxStyle style;
 	// set up after init()
 	float width;
@@ -266,6 +265,7 @@ public class Chunk extends Token
 		super(Token.NULL,offset,0,rules);
 		this.width = width;
 		assert !isAccessible();
+		assert isInitialized();
 	} //}}}
 
 	//{{{ Chunk constructor
@@ -278,6 +278,7 @@ public class Chunk extends Token
 		if(background == null)
 			background = styles[defaultID].getBackgroundColor();
 		assert isAccessible();
+		assert !isInitialized();
 	} //}}}
 
 	//{{{ Chunk constructor
@@ -288,6 +289,7 @@ public class Chunk extends Token
 		this.style = style;
 		this.background = background;
 		assert isAccessible();
+		assert !isInitialized();
 	} //}}}
 
 	//{{{ isAccessible() method
@@ -297,6 +299,17 @@ public class Chunk extends Token
 	final boolean isAccessible()
 	{
 		return length > 0;
+	} //}}}
+
+	//{{{ isInitialized() method
+	/**
+	 * Returns true if this chunk is ready for painting.
+	 */
+	final boolean isInitialized()
+	{
+		return !isAccessible()	// virtual indent
+			|| (glyphs != null)	// normal text
+			|| (width > 0);	// tab
 	} //}}}
 
 	//{{{ isTab() method
@@ -412,7 +425,6 @@ public class Chunk extends Token
 	void init(Segment lineText, TabExpander expander, float x,
 		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{
-		initialized = true;
 		if(!isAccessible())
 		{
 			// do nothing
@@ -433,6 +445,7 @@ public class Chunk extends Token
 					     textStart,
 					     textStart + length);
 		}
+		assert isInitialized();
 	} //}}}
 
 	//}}}
