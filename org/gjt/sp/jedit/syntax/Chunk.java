@@ -29,8 +29,9 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Collections;
+import java.util.Arrays;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
@@ -536,8 +537,9 @@ public class Chunk extends Token
 	//{{{ addGlyphVector() method
 	/**
 	 * Creates a glyph vector for the text with the given font,
-	 * and adds it to the internal list.
+	 * and adds it to the list.
 	 *
+	 * @param	glyphs	list to add
 	 * @param	f	Font to use for rendering.
 	 * @param	frc	Font rendering context.
 	 * @param	text	Char array with text to render.
@@ -546,11 +548,9 @@ public class Chunk extends Token
 	 *
 	 * @return Width of the rendered text.
 	 */
-	private float addGlyphVector(Font f,
-				     FontRenderContext frc,
-				     char[] text,
-				     int start,
-				     int end)
+	private static float addGlyphVector(ArrayList<GlyphVector> glyphs,
+		Font f, FontRenderContext frc,
+		char[] text, int start, int end)
 	{
 		// FIXME: Need BiDi support.
 		int layoutFlags = Font.LAYOUT_LEFT_TO_RIGHT
@@ -601,9 +601,7 @@ public class Chunk extends Token
 		float width = 0.0f;
 		int max = 0;
 		Font dflt = style.getFont();
-
-		glyphs = new LinkedList<GlyphVector>();
-
+		ArrayList<GlyphVector> glyphs_ = new ArrayList<GlyphVector>();
 		while (max != -1 && start < end)
 		{
 			max = fontSubstEnabled ? dflt.canDisplayUpTo(text, start, end)
@@ -614,11 +612,8 @@ public class Chunk extends Token
 				 * No font substitution
 				 * -> Draw all with the main font
 				 */
-				width += addGlyphVector(dflt,
-							frc,
-							text,
-							start,
-							end);
+				width += addGlyphVector(glyphs_,
+					dflt, frc, text, start, end);
 			}
 			else
 			{
@@ -628,11 +623,8 @@ public class Chunk extends Token
 				 */
 				if (max > start)
 				{
-					width += addGlyphVector(dflt,
-								frc,
-								text,
-								start,
-								max);
+					width += addGlyphVector(glyphs_,
+						dflt, frc, text, start, max);
 					start = max;
 				}
 
@@ -659,26 +651,34 @@ public class Chunk extends Token
 
 					f = f.deriveFont(dflt.getStyle(), dflt.getSize());
 
-					width += addGlyphVector(f,
-								frc,
-								text,
-								start,
-								last);
+					width += addGlyphVector(glyphs_,
+						f, frc, text, start, last);
 
 					start = last;
 				}
 				else
 				{
 					int ds = Character.charCount(Character.codePointAt(text,start));
-					width += addGlyphVector(dflt,
-								frc,
-								text,
-								start,
-								start + ds);
+					width += addGlyphVector(glyphs_,
+						dflt, frc, text, start, start + ds);
 					start += ds;
 				}
 			}
 		}
+
+		// Optimize memory usage knowing that the size of list
+		// is 1 in most case, and the list can be immutable
+		// after here.
+		if (glyphs_.size() == 1)
+		{
+			glyphs = Collections.singletonList(glyphs_.get(0));
+		}
+		else
+		{
+			glyphs = Arrays.asList(glyphs_.toArray(
+				new GlyphVector[glyphs_.size()]));
+		}
+
 		return width;
 	} //}}}
 
