@@ -1195,7 +1195,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
 					browseDirectoryInNewWindow(view,file.getPath());
 				else
-					setDirectory(file.getPath());
+					if (selectedFiles.length == 1)
+						setDirectory(file.getPath());
 			}
 			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
