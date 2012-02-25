@@ -30,8 +30,6 @@ import java.awt.geom.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.lang.ref.SoftReference;
@@ -447,7 +445,7 @@ public class Chunk extends Token
 			GlyphKey cacheKey = new GlyphKey(str,
 				style.getFont(), fontRenderContext);
 			GlyphCache cache = getGlyphCache();
-			List<GlyphVector> cachedGlyphs = cache.get(cacheKey);
+			GlyphVector[] cachedGlyphs = cache.get(cacheKey);
 			if (cachedGlyphs != null)
 			{
 				glyphs = cachedGlyphs;
@@ -508,7 +506,7 @@ public class Chunk extends Token
 	// styles[defaultID].getBackgroundColor()
 	private Color background;
 	private String str;
-	private List<GlyphVector> glyphs;
+	private GlyphVector[] glyphs;
 	//}}}
 
 	//{{{ getFonts() method
@@ -720,20 +718,7 @@ public class Chunk extends Token
 				}
 			}
 		}
-
-		// Optimize memory usage knowing that the size of list
-		// is 1 in most case, and the list can be immutable
-		// after here.
-		if (glyphs_.size() == 1)
-		{
-			glyphs = Collections.singletonList(glyphs_.get(0));
-		}
-		else
-		{
-			glyphs = Arrays.asList(glyphs_.toArray(
-				new GlyphVector[glyphs_.size()]));
-		}
-
+		glyphs = glyphs_.toArray(new GlyphVector[glyphs_.size()]);
 		return width;
 	} //}}}
 
@@ -798,7 +783,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ class GlyphCache
-	private static class GlyphCache extends LinkedHashMap<GlyphKey, List<GlyphVector>>
+	private static class GlyphCache extends LinkedHashMap<GlyphKey, GlyphVector[]>
 	{
 		public GlyphCache(int capacity)
 		{
@@ -808,7 +793,7 @@ public class Chunk extends Token
 		}
 
 		@Override
-		protected boolean removeEldestEntry(Map.Entry<GlyphKey, List<GlyphVector>> eldest)
+		protected boolean removeEldestEntry(Map.Entry<GlyphKey, GlyphVector[]> eldest)
 		{
 			return size() > capacity;
 		}
