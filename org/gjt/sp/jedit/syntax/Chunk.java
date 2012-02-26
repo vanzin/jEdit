@@ -689,7 +689,8 @@ public class Chunk extends Token
 			if (substFont != null)
 			{
 				while (substEnd < end &&
-				      substFont == getSubstFont(nextChar = Character.codePointAt(text, substEnd)))
+					!mainFont.canDisplay(nextChar = Character.codePointAt(text, substEnd)) &&
+					substFont == getSubstFont(nextChar))
 				{
 					substEnd += Character.charCount(nextChar);
 				}
