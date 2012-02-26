@@ -3585,7 +3585,7 @@ public class jEdit
 		try
 		{
 			langResource = jEdit.class.getResourceAsStream("/org/jedit/localization/jedit_" + language + ".props");
-			propMgr.loadi18nProps(langResource);
+			propMgr.loadLocalizationProps(langResource);
 		}
 		catch (IOException e)
 		{
