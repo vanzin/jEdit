@@ -430,7 +430,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
-		initi18nProperties();
+		initLocalizationProperties();
 
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
@@ -3566,11 +3566,11 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ initi18nProperties() method
+	//{{{ initLocalizationProperties() method
 	/**
-	 * Loads user properties.
+	 * Loads localization property file(s).
 	 */
-	private static void initi18nProperties()
+	private static void initLocalizationProperties()
 	{
 		String language = null;
 		if (getBooleanProperty("lang.usedefaultlocale"))
