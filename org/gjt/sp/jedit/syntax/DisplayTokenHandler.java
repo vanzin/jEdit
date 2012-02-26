@@ -577,11 +577,17 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			char next = text.setIndex(baseBreak);
 			char prev = text.previous();
 			text.setIndex(originalIndex);
-			// breaking without white spaces are wanted only
-			// for some natural languages which uses non-ASCII
-			// characters.
+			// When breaking at whitespace, jEdit treat the
+			// whitespaces as belonging to the previous line and
+			// make them editable.
 			return !Character.isWhitespace(next)
-				&& (Character.isWhitespace(prev) || next > 0x7f);
+				// Assuming that breaking without white spaces
+				// are wanted only for some natural languages
+				// which uses non-ASCII characters. Otherwise
+				// keep traditional jEdit behavior (break only
+				// at whitespaces).
+				&& (Character.isWhitespace(prev)
+					|| prev > 0x7f || next > 0x7f);
 		}
 	} //}}}
 
