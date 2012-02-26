@@ -1940,7 +1940,7 @@ options.appearance.textColors=Use jEdit text area colors in all text \
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 
-options.appearance.i18n.section.label=Localization
+options.appearance.localization.section.label=Localization
 options.appearance.usedefaultlocale.label=Use defaut locale
 options.appearance.lang.label=Language (change is effective on restart)
 options.appearance.lang.en=English

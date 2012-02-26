@@ -181,37 +181,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"options.appearance.decorateDialogs"));
 		decorateDialogs.setSelected(jEdit.getBooleanProperty("decorate.dialogs"));
 		addComponent(decorateDialogs);
-
-		String language;
-		if (jEdit.getBooleanProperty("lang.usedefaultlocale"))
-		{
-			language = Locale.getDefault().getLanguage();
-		}
-		else
-		{
-			language = jEdit.getProperty("lang.current", "en");
-		}
-		String availableLanguages = jEdit.getProperty("available.lang", "en");
-		String[] languages = availableLanguages.split(" ");
-
-		useDefaultLocale = new JCheckBox(jEdit.getProperty("options.appearance.usedefaultlocale.label"));
-		useDefaultLocale.setSelected(jEdit.getBooleanProperty("lang.usedefaultlocale"));
-		useDefaultLocale.addChangeListener(new ChangeListener()
-		{
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				lang.setEnabled(!useDefaultLocale.isSelected());
-			}
-		});
-		lang = new JComboBox(languages);
-		lang.setEnabled(!useDefaultLocale.isSelected());
-		lang.setSelectedItem(language);
-		
-		lang.setRenderer(new LangCellRenderer());
-		addSeparator("options.appearance.i18n.section.label");
-		addComponent(useDefaultLocale);
-		addComponent(jEdit.getProperty("options.appearance.lang.label"), lang);
 	} //}}}
 
 	//{{{ _save() method
@@ -246,8 +215,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
 		jEdit.setBooleanProperty("decorate.dialogs",decorateDialogs.isSelected());
-		jEdit.setBooleanProperty("lang.usedefaultlocale", useDefaultLocale.isSelected());
-		jEdit.setProperty("lang.current", String.valueOf(lang.getSelectedItem()));
 	} //}}}
 
 	//{{{ Private members
@@ -256,8 +223,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private String oldTheme;
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
-	private JCheckBox useDefaultLocale;
-	private JComboBox lang;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
 	private FontSelector helpViewerFont;
@@ -327,19 +292,4 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			}
 		}
 	} //}}}
-	
-	private static class LangCellRenderer extends DefaultListCellRenderer
-	{
-		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-							      boolean cellHasFocus)
-		{
-			super.getListCellRendererComponent(list, value, index, isSelected,
-								  cellHasFocus);
-			String label = jEdit.getProperty("options.appearance.lang."+value);
-			if (label != null)
-				setText(label);
-			return this;
-		}
-	}
 }
