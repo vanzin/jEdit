@@ -608,22 +608,6 @@ public class Chunk extends Token
 		return result;
 	} // }}}
 
-	//{{{ addGlyphVector() method
-	/**
-	 * Creates a glyph vector for the text with the given font,
-	 * and adds it to the list.
-	 * @return Width of the rendered text.
-	 */
-	private static float addGlyphVector(ArrayList<GlyphVector> glyphs,
-		Font font, FontRenderContext frc,
-		char[] text, int start, int end)
-	{
-		GlyphVector gv = layoutGlyphVector(font, frc,
-			text, start, end);
-		glyphs.add(gv);
-		return (float) gv.getLogicalBounds().getWidth();
-	} // }}}
-
 	//{{{ layoutGlyphs() method
 	/**
 	 * Layout the glyphs to render the given text, applying font
@@ -660,64 +644,135 @@ public class Chunk extends Token
 		}
 		else
 		{
-			ArrayList<GlyphVector> glyphs_ = new ArrayList<GlyphVector>();
-			width = doFontSubstitution(glyphs_,
-				mainFont, frc, substStart,
-				text, start, end);
-			glyphs = glyphs_.toArray(new GlyphVector[glyphs_.size()]);
+			FontSubstitution subst = new FontSubstitution(
+				mainFont, frc, text, start);
+			subst.addNonSubstRange(substStart - start);
+			doFontSubstitution(subst, mainFont,
+				text, substStart, end);
+			subst.finish();
+			glyphs = subst.getGlyphs();
+			width = subst.getWidth();
 		}
 	} //}}}
 
 	//{{{ doFontSubstitution() method
-	private static float doFontSubstitution(ArrayList<GlyphVector> glyphs,
-		Font mainFont, FontRenderContext frc, int substStart,
+	private static void doFontSubstitution(FontSubstitution subst,
+		Font mainFont,
 		char[] text, int start, int end)
 	{
-		float width = 0.0f;
 		for (;;)
 		{
-			if (substStart > start)
-			{
-				width += addGlyphVector(glyphs,
-					mainFont, frc, text, start, substStart);
-			}
-			assert substStart < end;
-			int nextChar = Character.codePointAt(text, substStart);
+			assert start < end;
+			int nextChar = Character.codePointAt(text, start);
+			int charCount = Character.charCount(nextChar);
 			assert !mainFont.canDisplay(nextChar);
 			Font substFont = getSubstFont(nextChar);
-			int substEnd = substStart + Character.charCount(nextChar);
 			if (substFont != null)
 			{
-				while (substEnd < end &&
-					!mainFont.canDisplay(nextChar = Character.codePointAt(text, substEnd)) &&
-					substFont == getSubstFont(nextChar))
-				{
-					substEnd += Character.charCount(nextChar);
-				}
-				width += addGlyphVector(glyphs,
-					substFont.deriveFont(mainFont.getStyle(),
-						mainFont.getSize()), frc,
-					text, substStart, substEnd);
+				subst.addRange(substFont, charCount);
 			}
 			else
 			{
-				width += addGlyphVector(glyphs,
-					mainFont, frc, text, substStart, substEnd);
+				subst.addNonSubstRange(charCount);
 			}
-			start = substEnd;
+			start += charCount;
 			if (start >= end)
 			{
 				break;
 			}
-			substStart = mainFont.canDisplayUpTo(text, start, end);
-			if (substStart == -1)
+			int nextSubstStart =
+				mainFont.canDisplayUpTo(text, start, end);
+			if (nextSubstStart == -1)
 			{
-				width += addGlyphVector(glyphs,
-					mainFont, frc, text, start, end);
+				subst.addNonSubstRange(end - start);
 				break;
 			}
+			subst.addNonSubstRange(nextSubstStart - start);
+			start = nextSubstStart;
 		}
-		return width;
+	} //}}}
+
+	//{{{ class FontSubstitution
+	// A helper class to build GlyphVector[] with least calls to
+	// layoutGlyphVector() no matter how many the font substitution
+	// logic find intermediate boundaries.
+	private static class FontSubstitution
+	{
+		public FontSubstitution(Font mainFont, FontRenderContext frc,
+			char[] text, int start)
+		{
+			this.mainFont = mainFont;
+			this.frc = frc;
+			this.text = text;
+			rangeStart = start;
+			rangeFont = null;
+			rangeLength = 0;
+			glyphs = new ArrayList<GlyphVector>();
+			width = 0.0f;
+		}
+
+		public void addNonSubstRange(int length)
+		{
+			addRange(null, length);
+		}
+
+		private void addRange(Font font, int length)
+		{
+			if (font == rangeFont)
+			{
+				rangeLength += length;
+			}
+			else
+			{
+				addGlyphVectorOfLastRange();
+				rangeFont = font;
+				rangeStart += rangeLength;
+				rangeLength = length;
+			}
+		}
+
+		public void finish()
+		{
+			addGlyphVectorOfLastRange();
+			rangeFont = null;
+			rangeStart += rangeLength;
+			rangeLength = 0;
+		}
+
+		public GlyphVector[] getGlyphs()
+		{
+			return glyphs.toArray(new GlyphVector[glyphs.size()]);
+		}
+
+		public float getWidth()
+		{
+			return (float)width;
+		}
+
+		private final Font mainFont;
+		private final FontRenderContext frc;
+		private final char[] text;
+		private int rangeStart;
+		private Font rangeFont;
+		private int rangeLength;
+		private final ArrayList<GlyphVector> glyphs;
+		private double width;
+
+		private void addGlyphVectorOfLastRange()
+		{
+			if (rangeLength == 0)
+			{
+				return;
+			}
+			Font font = (rangeFont == null) ?
+				mainFont :
+				rangeFont.deriveFont(mainFont.getStyle(),
+					mainFont.getSize());
+			GlyphVector gv = layoutGlyphVector(font, frc,
+				text, rangeStart, rangeStart + rangeLength);
+			glyphs.add(gv);
+			width += gv.getLogicalBounds().getWidth();
+		}
 	} //}}}
 
 	//{{{ getGlyphCache() method
