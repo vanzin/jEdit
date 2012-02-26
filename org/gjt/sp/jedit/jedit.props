@@ -518,3 +518,4 @@ available.lang=en de fr
 # if lang.usedefaultlocale is true, the lang.current is not used
 lang.usedefaultlocale=true
 lang.current=en
+
