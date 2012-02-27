@@ -587,7 +587,25 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				// keep traditional jEdit behavior (break only
 				// at whitespaces).
 				&& (Character.isWhitespace(prev)
-					|| prev > 0x7f || next > 0x7f);
+					|| prev > 0x7f || next > 0x7f)
+				// Workarounds for the problem reported at
+				// SF.net bug #3488310; unexpected soft wrap
+				// happens at closing "&ldquo;".
+				// Probably the cause is in the implementation
+				// of BreakIterator for line breaks. Some
+				// similer problems are also reported in
+				// bugs.sun.com.
+				// http://www.google.co.jp/search?q=site%3Abugs.sun.com+BreakIterator+getLineInstance
+				// There seems to be some problems in handling
+				// of quotation marks.
+				// The followings are accumulated cases that
+				// exhibits the problem under a local test on
+				// JRE 7u3 with samples taken from Wikipedia.
+				// http://en.wikipedia.org/wiki/Non-English_usage_of_quotation_marks
+				&& !("”’»›".indexOf(prev) >= 0
+					&& !Character.isWhitespace(next))
+				&& !(!Character.isWhitespace(prev)
+					&& "“„‘‚«‹".indexOf(next) >= 0);
 		}
 	} //}}}
 
