@@ -449,21 +449,22 @@ public class Chunk extends Token
 			if (cachedGlyphs != null)
 			{
 				glyphs = cachedGlyphs;
-				float w = 0.0f;
-				for (GlyphVector gv: glyphs)
-				{
-					w += (float)gv.getLogicalBounds().getWidth();
-				}
-				width = w;
 			}
 			else
 			{
 				int textStart = lineText.offset + offset;
 				int textEnd = textStart + length;
-				layoutGlyphs(fontRenderContext,
+				glyphs = layoutGlyphs(style.getFont(),
+					fontRenderContext,
 					lineText.array, textStart, textEnd);
 				cache.put(cacheKey, glyphs);
 			}
+			float w = 0.0f;
+			for (GlyphVector gv: glyphs)
+			{
+				w += (float)gv.getLogicalBounds().getWidth();
+			}
+			width = w;
 		}
 		assert isInitialized();
 	} //}}}
@@ -611,8 +612,7 @@ public class Chunk extends Token
 	//{{{ layoutGlyphs() method
 	/**
 	 * Layout the glyphs to render the given text, applying font
-	 * substitution if configured. GlyphVectors are created and set
-	 * to glyphs field. Also, its width is set to width field.
+	 * substitution if configured.
 	 *
 	 * Font substitution works in the following manner:
 	 *	- All characters that can be rendered with the main
@@ -623,24 +623,18 @@ public class Chunk extends Token
 	 *
 	 * The user can define his list of preferred fonts, which will
 	 * be tried before the system fonts.
-	 *
-	 * @param	frc	Font rendering context.
-	 * @param	text	Char array with text to render.
-	 * @param	start	Start index of text to render.
-	 * @param	end	End index of text to render.
 	 */
-	private void layoutGlyphs(FontRenderContext frc,
+	private static GlyphVector[] layoutGlyphs(Font mainFont,
+		FontRenderContext frc,
 		char[] text, int start, int end)
 	{
-		Font mainFont = style.getFont();
 		int substStart = !fontSubstEnabled ? -1
 			: mainFont.canDisplayUpTo(text, start, end);
 		if (substStart == -1)
 		{
 			GlyphVector gv = layoutGlyphVector(mainFont, frc,
 				text, start, end);
-			glyphs = new GlyphVector[] {gv};
-			width = (float)gv.getLogicalBounds().getWidth();
+			return new GlyphVector[] {gv};
 		}
 		else
 		{
@@ -650,8 +644,7 @@ public class Chunk extends Token
 			doFontSubstitution(subst, mainFont,
 				text, substStart, end);
 			subst.finish();
-			glyphs = subst.getGlyphs();
-			width = subst.getWidth();
+			return subst.getGlyphs();
 		}
 	} //}}}
 
@@ -708,7 +701,6 @@ public class Chunk extends Token
 			rangeFont = null;
 			rangeLength = 0;
 			glyphs = new ArrayList<GlyphVector>();
-			width = 0.0f;
 		}
 
 		public void addNonSubstRange(int length)
@@ -749,11 +741,6 @@ public class Chunk extends Token
 			return glyphs.toArray(new GlyphVector[glyphs.size()]);
 		}
 
-		public float getWidth()
-		{
-			return (float)width;
-		}
-
 		private final Font mainFont;
 		private final FontRenderContext frc;
 		private final char[] text;
@@ -761,7 +748,6 @@ public class Chunk extends Token
 		private Font rangeFont;
 		private int rangeLength;
 		private final ArrayList<GlyphVector> glyphs;
-		private double width;
 
 		private void addGlyphVectorOfLastRange()
 		{
@@ -776,7 +762,6 @@ public class Chunk extends Token
 			GlyphVector gv = layoutGlyphVector(font, frc,
 				text, rangeStart, rangeStart + rangeLength);
 			glyphs.add(gv);
-			width += gv.getLogicalBounds().getWidth();
 		}
 	} //}}}
 
