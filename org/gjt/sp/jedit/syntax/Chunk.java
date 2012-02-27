@@ -718,6 +718,11 @@ public class Chunk extends Token
 
 		private void addRange(Font font, int length)
 		{
+			assert length >= 0;
+			if (length == 0)
+			{
+				return;
+			}
 			if (font == rangeFont)
 			{
 				rangeLength += length;
