@@ -246,20 +246,24 @@
 # the presence of this property also tells jEdit the plugin is using the new API
 plugin.QuickNotepadPlugin.activate=defer
 
-# These two properties are required for all plugins
+# Even if you don't store additional files, this is a good idea to set:
+plugin.QuickNotepadPlugin.usePluginHome=true
+
+# Required for all plugins:
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 
 # version number == jEdit version number
-plugin.QuickNotepadPlugin.version=4.4
+plugin.QuickNotepadPlugin.version=4.5
 
 # online help
 plugin.QuickNotepadPlugin.docs=index.html
 
-# we only have one dependency, jEdit 4.4.1
-plugin.QuickNotepadPlugin.depend.0=jedit 04.04.99.01
+# we only have one dependency, jEdit 4.5
+# See jEdit.getBuild() to understand version numbering scheme. 
+plugin.QuickNotepadPlugin.depend.0=jedit 4.05.99.00
 
-# plugin menu
+# quicknotepad's plugin menu - a list of actions or separators
 plugin.QuickNotepadPlugin.menu=quicknotepad \
 	- \
 	quicknotepad.choose-file \
@@ -354,12 +358,13 @@ backslash.property=A backslash can be inserted by writing \\.</programlisting>
         <informalexample>
             <programlisting># general plugin information
 plugin.QuickNotepadPlugin.activate=defer
+plugin.QuickNotepadPlugin.usePluginHome=true
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
-plugin.QuickNotepadPlugin.version=4.03
+plugin.QuickNotepadPlugin.version=4.5
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-# depends on jEdit 4.4.1
-plugin.QuickNotepadPlugin.depend.0=jedit 04.04.99.01
+# depends on jEdit 4.5
+plugin.QuickNotepadPlugin.depend.0=jedit 04.05.99.00
 plugin.QuickNotepadPlugin.description=A demo jEdit plugin that provides a notepad dockable.
 plugin.QuickNotepadPlugin.longdescription=description.html
 </programlisting>
@@ -476,8 +481,7 @@ options.quicknotepad.filepath=</programlisting>
         closed, after it is closed, created, loaded, or saved. Each of these
         messages are described in further detail in the API docs.</para>
 
-        <para>As another example, The Navigator plugin monitors a newly added
-        (to jEdit 4.3) EBMessage of the kind <ulink
+        <para>As another example, The Navigator plugin monitors an EBMessage of the kind <ulink
         url="../api/org/gjt/sp/jedit/BufferChanging.html">BufferChanging</ulink>.
         The BufferChanging event provides Navigator enough advance notice to
         save the TextArea's caret just before the current EditPane changes its
