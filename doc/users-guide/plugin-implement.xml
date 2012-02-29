@@ -1148,18 +1148,22 @@ else if(msg instanceof ViewUpdate) {
 
         <informalexample>
             <programlisting>
-&lt;project name="QuickNotepad"
-         default="build"&gt;
-    &lt;description&gt;
-        This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
-    &lt;/description&gt;
-    &lt;property name=&quot;user-doc.xml&quot;
-          value=&quot;users-guide.xml&quot; /&gt;
-    &lt;property file=&quot;build.properties&quot; /&gt;
-    &lt;property file=&quot;../build.properties&quot; /&gt;
-	&lt;property name=&quot;build.support&quot;
-			  value=&quot;../../../build-support&quot; /&gt;
-    &lt;import file="${build.support}/plugin-build.xml" /&gt;
+&lt;project name=&quot;QuickNotepad&quot; default=&quot;build&quot;&gt;
+  &lt;description&gt;
+    This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
+  &lt;/description&gt;
+
+  &lt;property file=&quot;build.properties&quot;/&gt;
+  &lt;property file=&quot;../build.properties&quot;/&gt;
+  &lt;property name=&quot;user-doc.xml&quot; location = &quot;users-guide.xml&quot;/&gt;
+  &lt;import file=&quot;${build.support}/plugin-build.xml&quot; /&gt;
+
+  &lt;!-- Extra files that should be included in the jar --&gt;
+  &lt;selector id=&quot;packageFiles&quot;&gt;
+    &lt;or&gt;
+        &lt;filename name=&quot;*.txt&quot; /&gt;
+    &lt;/or&gt;
+  &lt;/selector&gt;
 &lt;/project&gt;
 </programlisting>
         </informalexample>
