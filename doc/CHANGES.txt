@@ -12,7 +12,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 {{{ Bug fixes
 
 - If the same plugin is installed in home and install folder, only the newest
-  is loaded (Matthieu Casanova)
+  is loaded. (#1848802 - Matthieu Casanova)
 
 - The Install/Update plugin dialog with progress bar should not show the
   progression of installation in it's title (#3485497) (Matthieu Casanova)

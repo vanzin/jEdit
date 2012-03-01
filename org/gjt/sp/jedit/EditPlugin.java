@@ -205,28 +205,30 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  *
  * Here is an example set of plugin properties:
  *
- * <pre>plugin.QuickNotepadPlugin.activate=defer
- *plugin.QuickNotepadPlugin.name=QuickNotepad
- *plugin.QuickNotepadPlugin.author=John Gellene
- *plugin.QuickNotepadPlugin.version=4.2
- *plugin.QuickNotepadPlugin.docs=QuickNotepad.html
- *plugin.QuickNotepadPlugin.depend.0=jedit 04.02.01.00
- *plugin.QuickNotepadPlugin.menu=quicknotepad \
- *    - \
- *    quicknotepad.choose-file \
- *    quicknotepad.save-file \
- *    quicknotepad.copy-to-buffer
- *plugin.QuickNotepadPlugin.option-pane=quicknotepad
- *
- * plugin.QuickNotepadPlugin.option-pane=quicknotepad
- * plugin.QuickNotepadPlugin.usePluginHome=false
- * options.quicknotepad.code=new QuickNotepadOptionPane();
- * options.quicknotepad.label=QuickNotepad
- * options.quicknotepad.file=File:
- * options.quicknotepad.choose-file=Choose
- * options.quicknotepad.choose-file.title=Choose a notepad file
- * options.quicknotepad.choose-font=Font:
- * options.quicknotepad.show-filepath.title=Display notepad file path
+<pre>
+# jEdit only needs to load the plugin the first time the user accesses it
+# the presence of this property also tells jEdit the plugin is using the new API
+plugin.QuickNotepadPlugin.activate=defer
+plugin.QuickNotepadPlugin.name=QuickNotepad
+plugin.QuickNotepadPlugin.author=John Gellene
+plugin.QuickNotepadPlugin.usePluginHome=true
+plugin.QuickNotepadPlugin.version=4.5
+plugin.QuickNotepadPlugin.docs=index.html
+
+plugin.QuickNotepadPlugin.depend.0=jedit 04.05.99.00
+plugin.QuickNotepadPlugin.depend.1=jdk 1.6
+plugin.QuickNotepadPlugin.description=This plugin provides a dockable "scratch pad" for writing and displaying notes, to do lists or similar items as unformatted text.
+# plugin menu
+plugin.QuickNotepadPlugin.menu=quicknotepad \
+	- \
+	quicknotepad.choose-file \
+	quicknotepad.save-file \
+	quicknotepad.copy-to-buffer
+
+quicknotepad.label=QuickNotepad
+plugin.QuickNotepadPlugin.option-pane=quicknotepad
+options.quicknotepad.code=new QuickNotepadOptionPane();
+options.quicknotepad.label=QuickNotepad
 </pre>
  *
  * Note that action and option pane labels are not shown in the above example.
