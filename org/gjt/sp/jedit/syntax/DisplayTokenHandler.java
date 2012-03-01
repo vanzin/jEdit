@@ -598,14 +598,51 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				// http://www.google.co.jp/search?q=site%3Abugs.sun.com+BreakIterator+getLineInstance
 				// There seems to be some problems in handling
 				// of quotation marks.
-				// The followings are accumulated cases that
-				// exhibits the problem under a local test on
-				// JRE 7u3 with samples taken from Wikipedia.
-				// http://en.wikipedia.org/wiki/Non-English_usage_of_quotation_marks
-				&& !("”’»›".indexOf(prev) >= 0
-					&& !Character.isWhitespace(next))
-				&& !(!Character.isWhitespace(prev)
-					&& "“„‘‚«‹".indexOf(next) >= 0);
+				&& !isUnacceptableBreakInsideQuote(baseBreak,
+					text, prev, next);
+		}
+
+		// Retrieves char at specified index without altering
+		// the current index of CharacterIterator.
+		private static char charAt(CharacterIterator text, int index)
+		{
+			int originalIndex = text.getIndex();
+			char c = text.setIndex(index);
+			text.setIndex(originalIndex);
+			return c;
+		}
+
+		private static boolean isUnacceptableBreakInsideQuote(
+			int baseBreak, CharacterIterator text,
+			char prev, char next)
+		{
+			// The following quotation marks are accumulated
+			// cases that exhibits the problem under a local
+			// test on JRE 7u3 with samples taken from Wikipedia.
+			// http://en.wikipedia.org/wiki/Non-English_usage_of_quotation_marks
+			//
+			// The last check for enclosing whitespace avoids
+			// unwanted rejection of line breaks in CJK text
+			// (which don't have such whitespace) where default
+			// behavior of BreakIterator is reasonable.
+			//
+			if ("”’»›".indexOf(prev) >= 0
+				&& !Character.isWhitespace(next))
+			{
+				int beforeQuote = baseBreak - 2;
+				return beforeQuote < text.getBeginIndex()
+					|| Character.isWhitespace(charAt(text,
+						beforeQuote));
+			}
+			else if (!Character.isWhitespace(prev)
+					&& "“„‘‚«‹".indexOf(next) >= 0)
+			{
+				int afterQuote = baseBreak + 1;
+				return afterQuote >= text.getEndIndex()
+					|| Character.isWhitespace(charAt(text,
+						afterQuote));
+			}
+			return false;
 		}
 	} //}}}
 
