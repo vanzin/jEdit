@@ -33,7 +33,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 //}}}
 
 /**
@@ -191,15 +190,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			hypersearchResultsWarning);
 
 
-		String language;
-		if (jEdit.getBooleanProperty("lang.usedefaultlocale"))
-		{
-			language = Locale.getDefault().getLanguage();
-		}
-		else
-		{
-			language = jEdit.getProperty("lang.current", "en");
-		}
+		String language = jEdit.getCurrentLanguage();
+
 		String availableLanguages = jEdit.getProperty("available.lang", "en");
 		String[] languages = availableLanguages.split(" ");
 

@@ -52,6 +52,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ API Changes
 
+- New jEdit.getCurrentLanguage() method that returns the language used  by jEdit.
+  (Matthieu Casanova)
+
 - New method JEditBuffer.insert(int offset, CharSequence seq) to insert
   text in a buffer. (Matthieu Casanova)
 
