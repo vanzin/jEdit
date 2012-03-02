@@ -36,7 +36,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +46,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -53,6 +57,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.DummyFoldHandler;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
@@ -79,12 +84,12 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  * syntax.</li>
  * <li>A file named <code>dockables.xml</code> defining dockable windows.
  * Only one such file per plugin is allowed. See {@link
- * org.gjt.sp.jedit.gui.DockableWindowManager} for
+ * DockableWindowManager} for
  * syntax.</li>
  * <li>A file named <code>services.xml</code> defining additional services
  * offered by the plugin, such as virtual file systems.
  * Only one such file per plugin is allowed. See {@link
- * org.gjt.sp.jedit.ServiceManager} for
+ * ServiceManager} for
  * syntax.</li>
  * <li>File with extension <code>.props</code> containing name/value pairs
  * separated by an equals sign.
@@ -111,18 +116,18 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  * {@link EditPlugin#start()} for a full description.
  *
  *
- * @see org.gjt.sp.jedit.jEdit#getProperty(String)
- * @see org.gjt.sp.jedit.jEdit#getPlugin(String)
- * @see org.gjt.sp.jedit.jEdit#getPlugins()
- * @see org.gjt.sp.jedit.jEdit#getPluginJAR(String)
- * @see org.gjt.sp.jedit.jEdit#getPluginJARs()
- * @see org.gjt.sp.jedit.jEdit#addPluginJAR(String)
- * @see org.gjt.sp.jedit.jEdit#removePluginJAR(PluginJAR,boolean)
- * @see org.gjt.sp.jedit.ActionSet
- * @see org.gjt.sp.jedit.gui.DockableWindowManager
- * @see org.gjt.sp.jedit.OptionPane
- * @see org.gjt.sp.jedit.PluginJAR
- * @see org.gjt.sp.jedit.ServiceManager
+ * @see jEdit#getProperty(String)
+ * @see jEdit#getPlugin(String)
+ * @see jEdit#getPlugins()
+ * @see jEdit#getPluginJAR(String)
+ * @see jEdit#getPluginJARs()
+ * @see jEdit#addPluginJAR(String)
+ * @see jEdit#removePluginJAR(PluginJAR,boolean)
+ * @see ActionSet
+ * @see DockableWindowManager
+ * @see OptionPane
+ * @see PluginJAR
+ * @see ServiceManager
  *
  * @author Slava Pestov
  * @version $Id$
@@ -138,6 +143,7 @@ public class PluginJAR
 	private final JARClassLoader classLoader;
 	private ZipFile zipFile;
 	private Properties properties;
+	private Map<String, Properties> localizationProperties;
 	/**
 	 * The class list contained in this jar.
 	 */
@@ -401,7 +407,7 @@ public class PluginJAR
 	/**
 	 * Returns the plugin's action set for the file system browser action
 	 * context {@link
-	 * org.gjt.sp.jedit.browser.VFSBrowser#getActionContext()}.
+	 * VFSBrowser#getActionContext()}.
 	 * These actions are loaded from
 	 * the <code>browser.actions.xml</code> file; see {@link ActionSet}.
 	 *.
@@ -1163,6 +1169,18 @@ public class PluginJAR
 		classes = cache.classes;
 		resources = cache.resources;
 
+		// this must be done before loading cachedProperties
+		if (cache.localizationProperties != null)
+		{
+			localizationProperties = cache.localizationProperties;
+			String currentLanguage = jEdit.getCurrentLanguage();
+			Properties langProperties = localizationProperties.get(currentLanguage);
+			if (langProperties != null)
+			{
+				jEdit.addPluginProps(langProperties);
+			}
+		}
+
 		/* this should be before dockables are initialized */
 		if(cache.cachedProperties != null)
 		{
@@ -1247,6 +1265,7 @@ public class PluginJAR
 	public PluginCacheEntry generateCache() throws IOException
 	{
 		properties = new Properties();
+		localizationProperties = new HashMap<String, Properties>();
 
 		List<String> classes = new LinkedList<String>();
 		List<String> resources = new LinkedList<String>();
@@ -1258,8 +1277,11 @@ public class PluginJAR
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
 		cache.cachedProperties = new Properties();
-
+		cache.localizationProperties = new HashMap<String, Properties>();
+		
 		Enumeration<? extends ZipEntry> entries = zipFile.entries();
+		Pattern languageFilePattern = Pattern.compile("lang_(\\w+).props");
+
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = entries.nextElement();
@@ -1285,9 +1307,36 @@ public class PluginJAR
 			}
 			else if(lname.endsWith(".props"))
 			{
-				InputStream in = classLoader.getResourceAsStream(name);
-				properties.load(in);
-				in.close();
+				Matcher matcher = languageFilePattern.matcher(lname);
+				if (matcher.matches())
+				{
+					String languageName = matcher.group(1);
+					Properties props = new Properties();
+					InputStream in = null;
+					try
+					{
+						in = classLoader.getResourceAsStream(name);
+						props.load(in);
+						localizationProperties.put(languageName, props);
+					}
+					finally
+					{
+						IOUtilities.closeQuietly(in);
+					}
+				}
+				else
+				{
+					InputStream in = null;
+					try
+					{
+						in = classLoader.getResourceAsStream(name);
+						properties.load(in);
+					}
+					finally
+					{
+						IOUtilities.closeQuietly(in);
+					}
+				}
 			}
 			else if(name.endsWith(".class"))
 			{
@@ -1306,6 +1355,7 @@ public class PluginJAR
 		}
 
 		cache.cachedProperties = properties;
+		cache.localizationProperties = localizationProperties;
 		jEdit.addPluginProps(properties);
 
 		this.classes = cache.classes =
@@ -1522,7 +1572,7 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB7A2E422;
+		public static final int MAGIC = 0xB7A2E423;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
@@ -1544,6 +1594,7 @@ public class PluginJAR
 		ServiceManager.Descriptor[] cachedServices;
 
 		public Properties cachedProperties;
+		public Map<String, Properties> localizationProperties;
 		public String pluginClass;
 		//}}}
 
@@ -1603,7 +1654,8 @@ public class PluginJAR
 			resources = readStringArray(din);
 
 			cachedProperties = readMap(din);
-
+			localizationProperties = readLanguagesMap(din);
+			
 			pluginClass = readString(din);
 
 			return true;
@@ -1647,6 +1699,7 @@ public class PluginJAR
 			writeStringArray(dout,resources);
 
 			writeMap(dout,cachedProperties);
+			writeLanguages(dout, localizationProperties);
 
 			writeString(dout,pluginClass);
 		} //}}}
@@ -1724,6 +1777,26 @@ public class PluginJAR
 			return returnValue;
 		} //}}}
 
+		//{{{ readLanguagesMap() method
+		private static Map<String, Properties> readLanguagesMap(DataInputStream din)
+			throws IOException
+		{
+			int languagesCount = din.readInt();
+			if (languagesCount == 0)
+				return Collections.emptyMap();
+			
+			
+			Map<String, Properties> languages = new HashMap<String, Properties>(languagesCount);
+			for (int i = 0;i<languagesCount;i++)
+			{
+				String lang = readString(din);
+				Properties props = readMap(din);
+				languages.put(lang, props);
+			}
+
+			return languages;
+		} //}}}
+
 		//{{{ writeString() method
 		private static void writeString(DataOutputStream dout,
 			Object obj) throws IOException
@@ -1786,6 +1859,18 @@ public class PluginJAR
 			{
 				writeString(dout,entry.getKey());
 				writeString(dout,entry.getValue());
+			}
+		} //}}}
+
+		//{{{ writeLanguages() method
+		private static void writeLanguages(DataOutputStream dout, Map<String, Properties> languages)
+			throws IOException
+		{
+			dout.writeInt(languages.size());
+			for (Map.Entry<String, Properties> entry : languages.entrySet())
+			{
+				writeString(dout, entry.getKey());
+				writeMap(dout, entry.getValue());
 			}
 		} //}}}
 
