@@ -295,7 +295,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		for(;;)
 		{
 			final int offsetInMargin = Chunk.xToOffset(lineHead, wrapMargin, false);
-			assert offsetInMargin == -1;
+			assert offsetInMargin != -1;
 			lineBreaker.skipToNearest(offsetInMargin);
 			final int lineBreak = lineBreaker.currentBreak();
 			if(lineBreak == LineBreaker.DONE)
