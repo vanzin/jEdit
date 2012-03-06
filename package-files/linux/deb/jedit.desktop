@@ -18,3 +18,4 @@ Categories=Development;TextEditor;
 StartupNotify=true
 MimeType=text/plain;
 StartupWMClass=org-gjt-sp-jedit-jEdit
+Keywords=Code;Editor;Programming;PHP;FTP;
