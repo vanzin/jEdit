@@ -482,8 +482,12 @@ public class DisplayManager
 
 		if(!initialized)
 		{
-			bufferHandler.foldHandlerChanged(buffer);
-			notifyScreenLineChanges();
+			folds.reset(buffer.getLineCount());
+			resetAnchors();
+			int collapseFolds = buffer.getIntegerProperty(
+				"collapseFolds",0);
+			if(collapseFolds != 0)
+				expandFolds(collapseFolds);
 			initialized = true;
 		}
 		else
@@ -675,13 +679,17 @@ public class DisplayManager
 			// bufferLoaded().
 			return;
 
+		initialized = false;
 		folds.reset(buffer.getLineCount());
-		resetAnchors();
-
-		int collapseFolds = buffer.getIntegerProperty(
-			"collapseFolds",0);
-		if(collapseFolds != 0)
-			expandFolds(collapseFolds);
+		if(textArea.getDisplayManager() == this)
+		{
+			init();
+		}
+		else
+		{
+			// init() will be called later when the buffer
+			// is set in the textArea.
+		}
 	} //}}}
 
 	//}}}
