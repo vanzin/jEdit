@@ -3446,6 +3446,8 @@ public class jEdit
 				"/org/gjt/sp/jedit/jedit.props"));
 			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
 				"/org/gjt/sp/jedit/jedit_gui.props"));
+			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+				"/org/jedit/localization/jedit_en.props"));
 		}
 		catch(Exception e)
 		{
@@ -3455,6 +3457,7 @@ public class jEdit
 				"One of the following property files could not be loaded:\n"
 				+ "- jedit.props\n"
 				+ "- jedit_gui.props\n"
+				+ "- jedit_en.props\n"
 				+ "jedit.jar is probably corrupt.");
 			Log.log(Log.ERROR,jEdit.class,e);
 			System.exit(1);
@@ -3594,6 +3597,11 @@ public class jEdit
 	private static void initLocalizationProperties()
 	{
 		String language = getCurrentLanguage();
+		if ("en".equals(language))
+		{
+			// no need to load english as localization property as it always loaded as default language
+			return;
+		}
 		InputStream langResource = null;
 		try
 		{
