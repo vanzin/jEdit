@@ -49,11 +49,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   could be displayed with the main font. (the problem was reported by
   Max Funk as SF.net patch #3488967 - Kazutoshi Satoda)
 
-- Fixed text area curruption (strange exceptions and/or inconsitent
-  display) which could happen when multiple files are opened
-  simultaneously in a text area. This could also happen on some other
-  minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
-
 - Made basic edit operations aware of characters above BMP and combining
   character sequences.
   (SF.net bug #3040720 - Kazutoshi Satoda)
