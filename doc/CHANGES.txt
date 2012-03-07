@@ -4,13 +4,17 @@ jEdit 4.5 version history
 
 {{{ Version 4.5.1
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, and Alan Ezust 
+for contributing to this release.
 
 {{{ Bug Fixes
 
- - Fixed status bar widget editing (#3414671) (Matthieu Casanova)
+- If the plugin list was not already loaded, there is no reason to load it
+  because of a property change (#3485645) (Matthieu Casanova)
 
- - Fixed text area curruption (strange exceptions and/or inconsitent
+- Fixed status bar widget editing (#3414671) (Matthieu Casanova)
+
+- Fixed text area corruption (strange exceptions and/or inconsitent
    display) which could happen when multiple files are opened
    simultaneously in a text area. This could also happen on some other
    minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
