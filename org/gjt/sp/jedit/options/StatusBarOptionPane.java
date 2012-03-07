@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008-2011 Matthieu Casanova
+ * Copyright (C) 2008-2012 Matthieu Casanova
  * Portions Copyright (C) 2000-2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -355,13 +355,17 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			}
 			else if(source == edit)
 			{
-				String value = selectWidget();
-				if (value == null)
+				Object selectedValue = list.getSelectedValue();
+				if (selectedValue == null)
 					return;
-
+				WidgetSelectionDialog dialog = new WidgetSelectionDialog(StatusBarOptionPane.this,
+											 String.valueOf(selectedValue));
+				String value = dialog.getValue();
+				if (value == null || value.isEmpty())
+					return;
 				int index = list.getSelectedIndex();
-
-				listModel.insertElementAt(value,index);
+				listModel.remove(index);
+				listModel.insertElementAt(value, index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
 				updatePreview();
@@ -418,12 +422,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		private JRadioButton widgetRadio;
 		private String value;
 
-		//{{{ WidgetSelectionDialog constructor
-		WidgetSelectionDialog(Component comp)
+		//{{{ WidgetSelectionDialog constructors
+		WidgetSelectionDialog(Component comp, String value)
 		{
-			super(GUIUtilities.getParentDialog(comp),
-			      jEdit.getProperty("options.status.edit.title"),
-			      true);
+			super(GUIUtilities.getParentDialog(comp), jEdit.getProperty("options.status.edit.title"), true);
 			ButtonGroup buttonGroup = new ButtonGroup();
 			labelRadio = new JRadioButton(jEdit.getProperty("options.status.edit.labelRadioButton"));
 			widgetRadio = new JRadioButton(jEdit.getProperty("options.status.edit.widgetRadioButton"));
@@ -436,6 +438,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
 
 			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidget");
+			Arrays.sort(allWidgets);
+			
+			boolean valueIsWidget = value != null && Arrays.binarySearch(allWidgets, value) >= 0;
+			
 			Vector<String> widgets = new Vector<String>(allWidgets.length);
 			Set<String> usedWidget = new HashSet<String>(listModel.getSize());
 			for (int i = 0; i < listModel.getSize(); i++)
@@ -444,7 +450,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			}
 			for (String widget : allWidgets)
 			{
-				if (!usedWidget.contains(widget))
+				if (!usedWidget.contains(widget) || (valueIsWidget && widget.equals(value)))
 					widgets.add(widget);
 			}
 			widgetCombo = new JComboBox(widgets);
@@ -496,13 +502,29 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			}
 			center.add(p);
 
-
+			if (valueIsWidget)
+			{
+				widgetRadio.setSelected(true);
+				widgetCombo.setSelectedItem(value);
+			}
+			else
+			{
+				labelRadio.setSelected(true);
+				labelField.setText(value);
+				labelField.setEnabled(true);
+				widgetCombo.setEnabled(false);
+			}
 
 			getContentPane().add(center, BorderLayout.CENTER);
 			getContentPane().add(southPanel, BorderLayout.SOUTH);
 			pack();
 			setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 			setVisible(true);
+		}
+
+		WidgetSelectionDialog(Component comp)
+		{
+			this(comp, null);
 		} //}}}
 
 		//{{{ ok() method

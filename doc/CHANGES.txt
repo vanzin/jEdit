@@ -8,6 +8,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+ - Fixed status bar widget editing (#3414671) (Matthieu Casanova)
+
  - Fixed text area curruption (strange exceptions and/or inconsitent
    display) which could happen when multiple files are opened
    simultaneously in a text area. This could also happen on some other
