@@ -54,6 +54,10 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   simultaneously in a text area. This could also happen on some other
   minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
 
+- Made basic edit operations aware of characters above BMP and combining
+  character sequences.
+  (SF.net bug #3040720 - Kazutoshi Satoda)
+
 }}}
 {{{ API Changes
 

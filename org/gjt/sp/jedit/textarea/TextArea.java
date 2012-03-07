@@ -28,6 +28,8 @@ import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
+import java.text.BreakIterator;
+import java.text.CharacterIterator;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -974,7 +976,7 @@ public abstract class TextArea extends JComponent
 	 *
 	 * @param x The x co-ordinate of the point
 	 * @param y The y co-ordinate of the point
-	 * @param round Round up to next letter if past the middle of a letter?
+	 * @param round Round up to next character if past the middle of a character?
 	 * @since jEdit 3.2pre6
 	 */
 	public int xyToOffset(int x, int y, boolean round)
@@ -991,12 +993,10 @@ public abstract class TextArea extends JComponent
 	//{{{ xToScreenLineOffset() method
 	/**
 	 * Converts a point in a given screen line to an offset.
-	 * Note that unlike in previous jEdit versions, this method now returns
-	 * -1 if the y co-ordinate is out of bounds.
 	 *
 	 * @param x The x co-ordinate of the point
 	 * @param screenLine The screen line
-	 * @param round Round up to next letter if past the middle of a letter?
+	 * @param round Round up to next character if past the middle of a character?
 	 * @since jEdit 3.2pre6
 	 */
 	public int xToScreenLineOffset(int screenLine, int x, boolean round)
@@ -1009,12 +1009,32 @@ public abstract class TextArea extends JComponent
 		}
 		else
 		{
-			int offset = Chunk.xToOffset(lineInfo.chunks,
-				x - horizontalOffset,round);
-			if(offset == -1 || offset == lineInfo.offset + lineInfo.length)
-				offset = lineInfo.offset + lineInfo.length - 1;
-
-			return getLineStartOffset(lineInfo.physicalLine) + offset;
+			float xInLine = x - horizontalOffset;
+			int offsetInLine = Chunk.xToOffset(lineInfo.chunks,
+				xInLine, false);
+			int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
+			if (offsetInLine == -1 || offsetInLine == lineInfo.offset + lineInfo.length)
+				return lineStartOffset + lineInfo.offset +
+					lineInfo.length - 1;
+			int offset = lineStartOffset + offsetInLine;
+			final LineCharacterBreaker charBreaker =
+				new LineCharacterBreaker(this, offset);
+			int lower = charBreaker.offsetIsBoundary(offset) ?
+				offset : charBreaker.previousOf(offset);
+			if (round)
+			{
+				float lowerX = Chunk.offsetToX(lineInfo.chunks,
+					lower - lineStartOffset);
+				int upper = charBreaker.nextOf(lower);
+				float upperX = Chunk.offsetToX(lineInfo.chunks,
+					upper - lineStartOffset);
+				return (xInLine < ((lowerX + upperX) / 2)) ?
+						lower : upper;
+			}
+			else
+			{
+				return lower;
+			}
 		}
 	} //}}}
 
@@ -1878,6 +1898,9 @@ forward_scan:	do
 	public void extendSelection(int offset, int end,
 		int extraStartVirt, int extraEndVirt)
 	{
+		offset = getCharacterBoundaryAt(offset);
+		end = getCharacterBoundaryAt(end);
+
 		Selection s = getSelectionAtOffset(offset);
 		if(s != null)
 		{
@@ -2249,8 +2272,8 @@ forward_scan:	do
 			finishCaretUpdate(oldCaretLine,scrollMode,false);
 		else
 		{
-			caret = newCaret;
-			caretLine = getLineOfOffset(newCaret);
+			caret = getCharacterBoundaryAt(newCaret);
+			caretLine = getLineOfOffset(caret);
 
 			magicCaret = -1;
 
@@ -2441,7 +2464,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 			}
 		}
 		else
-			newCaret = caret + 1;
+			newCaret = getNextCharacterOffset(caret);
 
 		if(select)
 			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
@@ -2712,20 +2735,20 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				if(caret == s.start)
 				{
 					if(extraStartVirt == 0)
-						newCaret = caret - 1;
+						newCaret = getPrevCharacterOffset(caret);
 					else
 						extraStartVirt--;
 				}
 				else
 				{
 					if(extraEndVirt == 0)
-						newCaret = caret - 1;
+						newCaret = getPrevCharacterOffset(caret);
 					else
 						extraEndVirt--;
 				}
 			}
 			else
-				newCaret = caret - 1;
+				newCaret = getPrevCharacterOffset(caret);
 		}
 		else if(caret == getLineStartOffset(caretLine))
 		{
@@ -2738,7 +2761,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			newCaret = getLineEndOffset(line) - 1;
 		}
 		else
-			newCaret = caret - 1;
+			newCaret = getPrevCharacterOffset(caret);
 
 		if(select)
 			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
@@ -5423,7 +5446,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				int caretLineEnd = getLineEndOffset(caretLine);
 				if(caretLineEnd - caret > 1)
-					buffer.remove(caret,1);
+					deleteNextCharacter(caret);
 			}
 
 			buffer.insert(caret,str);
@@ -5763,6 +5786,40 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 	} //}}}
 
+	//{{{ deleteNextCharacter() method
+	// Delete a code point or combining character sequence at once.
+	private void deleteNextCharacter(int offset)
+	{
+		assert offset < buffer.getLength();
+		int length = getNextCharacterOffset(offset) - offset;
+		buffer.remove(offset, length);
+	} //}}}
+
+	//{{{ deletePrevCodePoint() method
+	// Delete a code point.
+	// This is the behavior of backward removal on Windows Notepad.
+	private void deletePrevCodePoint(int offset)
+	{
+		assert offset > 0;
+		int length = 1;
+		if (offset >= 2)
+		{
+			Segment prevText = new Segment();
+			buffer.getText(offset - 1, 1, prevText);
+			char prevCodeUnit = prevText.array[prevText.offset];
+			if (Character.isLowSurrogate(prevCodeUnit))
+			{
+				buffer.getText(offset - 2, 1, prevText);
+				prevCodeUnit = prevText.array[prevText.offset];
+				if (Character.isHighSurrogate(prevCodeUnit))
+				{
+					length = 2;
+				}
+			}
+		}
+		buffer.remove(offset - length, length);
+	} //}}}
+
 	//{{{ delete() method
 	private void delete(boolean forward)
 	{
@@ -5802,8 +5859,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				getToolkit().beep();
 				return;
 			}
-
-			buffer.remove(caret,1);
+			deleteNextCharacter(caret);
 		}
 		else
 		{
@@ -5812,8 +5868,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				getToolkit().beep();
 				return;
 			}
-
-			buffer.remove(caret - 1,1);
+			deletePrevCodePoint(caret);
 		}
 	} //}}}
 
@@ -5848,10 +5903,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				if(forward)
 				{
 					if(offset != buffer.getLineEndOffset(i) - 1)
-						buffer.remove(offset,1);
+						deleteNextCharacter(offset);
 				}
 				else
-					buffer.remove(offset-1,1);
+					deletePrevCodePoint(offset);
 			}
 		}
 		finally
@@ -6256,6 +6311,190 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			popup.show(comp,x + extraOffset,y + extraOffset);
 
 	} //}}}
+
+	//{{{ Character boundary staffs
+	//{{{ LineCharacterBreaker class
+	// Shared context among some operations which are aware of
+	// characters above BMP and combining character sequence.
+	private static class LineCharacterBreaker
+	{
+		private final BreakIterator charBreaker;
+		private final int index0Offset;
+
+		public LineCharacterBreaker(TextArea textArea, int offset)
+		{
+			final int line = textArea.getLineOfOffset(offset);
+			charBreaker = BreakIterator.getCharacterInstance();
+			charBreaker.setText(new CharIterator(textArea.buffer.getLineSegment(line)));
+			index0Offset = textArea.getLineStartOffset(line);
+		}
+
+		public boolean offsetIsBoundary(int offset)
+		{
+			return charBreaker.isBoundary(offset - index0Offset);
+		}
+
+		public int nextOf(int offset)
+		{
+			int following = charBreaker.following(offset -
+					index0Offset);
+			if (following == BreakIterator.DONE)
+			{
+				// This means a end of line. Then it is
+				// safe to assume 1 code unit is a character.
+				// This may return an offset beyond the
+				// length of buffer. But it is a callers
+				// responsibility.
+				return offset + 1;
+			}
+			return following + index0Offset;
+			
+		}
+
+		public int previousOf(int offset)
+		{
+			int preceding = charBreaker.preceding(offset -
+					index0Offset);
+			if (preceding == BreakIterator.DONE)
+			{
+				// This means a start of line. Then it is
+				// safe to assume 1 code unit is a character.
+				// This may return -1. But it is a callers
+				// responsibility.
+				return offset - 1;
+			}
+			return preceding + index0Offset;
+		}
+
+		//{{{ CharIterator class
+		// This class adapt CharSequence, which is used to avoid
+		// text copy, to CharacterIterator, which is used to pass
+		// a text to BreakIterator.
+		private static class CharIterator implements CharacterIterator
+		{
+			private final CharSequence sequence;
+			private int index;
+
+			public CharIterator(CharSequence sequence)
+			{
+				this.sequence = sequence;
+				index = 0;
+			}
+
+			@Override
+			public char first()
+			{
+				index = 0;
+				return current();
+			}
+
+			@Override
+			public char last()
+			{
+				int length = sequence.length();
+				index = (length > 0) ? length - 1 : length;
+				return current();
+			}
+
+			@Override
+			public char current()
+			{
+				return index < sequence.length() ?
+					sequence.charAt(index) : DONE;
+			}
+
+			@Override
+			public char next()
+			{
+				int length = sequence.length();
+				if (index < length)
+				{
+					index = index + 1;
+					return current();
+				}
+				else
+				{
+					return DONE;
+				}
+			}
+
+			@Override
+			public char previous()
+			{
+				if (index > 0)
+				{
+					index = index - 1;
+					return current();
+				}
+				else
+				{
+					return DONE;
+				}
+			}
+
+			@Override
+			public char setIndex(int position)
+			{
+				if (0 <= position &&
+					position <= sequence.length())
+				{
+					index = position;
+					return current();
+				}
+				else
+				{
+					// There should be a bug in caller.
+					// Stacktrace will be enough.
+					throw new IllegalArgumentException();
+				}
+			}
+
+			@Override
+			public int getBeginIndex()
+			{
+				return 0;
+			}
+
+			@Override
+			public int getEndIndex()
+			{
+				return sequence.length();
+			}
+
+			@Override
+			public int getIndex()
+			{
+				return index;
+			}
+
+			@Override
+			public Object clone()
+			{
+				CharIterator newOne = new CharIterator(sequence);
+				newOne.index = index;
+				return newOne;
+			}
+		} //}}}
+	} //}}}
+
+	private int getPrevCharacterOffset(int offset)
+	{
+		return new LineCharacterBreaker(this, offset).previousOf(offset);
+	}
+
+	private int getNextCharacterOffset(int offset)
+	{
+		return new LineCharacterBreaker(this, offset).nextOf(offset);
+	}
+
+	private int getCharacterBoundaryAt(int offset)
+	{
+		final LineCharacterBreaker charBreaker =
+			new LineCharacterBreaker(this, offset);
+		return charBreaker.offsetIsBoundary(offset) ?
+			offset : charBreaker.previousOf(offset);
+	}
+	//}}}
 
 	//{{{ Inner classes
 
