@@ -8,6 +8,10 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+ - Fixed text area curruption (strange exceptions and/or inconsitent
+   display) which could happen when multiple files are opened
+   simultaneously in a text area. This could also happen on some other
+   minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
