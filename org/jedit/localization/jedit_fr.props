@@ -7,8 +7,10 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ### French translation by Jojaba (http://jojaba.free.fr)
 
+#{{{ jEdit core (jedit_gui.props)
+
 #{{{ Default user catalog file
-defaultCatalog=<\u20acxml version="1.0"\u20ac>\n\
+defaultCatalog=<?xml version="1.0"?>\n\
 	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
 	\n\
 	<MODES>\n\
@@ -95,7 +97,7 @@ global-close-buffer.tooltip=Fermer le tampon dans tous les panneaux d'\u00E9diti
 closeall-except-active.tooltip=Effacer le jeu de tampons dans le panneau d'\u00E9dition courant \u00E0 l'exception du(des) tampon(s) affich\u00E9s
 closeall-except-active.label=Fermer les au$tres
 closeall-bufferset.label=Tou&t fermer
-closeall-bufferset.tooltip=Fermer le jeu de tampons dans le panneau d'\u00e9dition
+closeall-bufferset.tooltip=Fermer le jeu de tampons dans le panneau d'\u00E9dition
 bufferset-toggle-exclusive.label=Basculer vers les jeux de tampons exclusifs
 bufferset-toggle-exclusive.tooltip=Lorsqu'un tampon est ouvert, le fermer dans d'autres jeux de tampons non inclus.
 close-all.label=Tout fer$mer (g\u00E9n\u00E9ral)
@@ -518,18 +520,18 @@ view.gutter.marker=Marqueur : {0}
 #}}}
 
 #{{{ Status messages
-view.status.add-marker=Raccourci pour le nouveau marqueur \u20ac [{0}]
+view.status.add-marker=Raccourci pour le nouveau marqueur ? [{0}]
 view.status.auto-wrap=Recherche infructueuse !
 view.status.bracket=Lignes correspondantes {0}: {1}
 view.status.caret-tooltip=Num\u00E9ro d'offset, de ligne et de colonne (offset,line,column[-virtual] relative%)
-view.status.copy-append-string-register=Nom du registre vers lequel ajouter la s\u00E9lection \u20ac [{0}]
-view.status.copy-string-register=Registre vers lequel copier \u20ac [{0}]
-view.status.cut-append-string-register=Registre vers lequel d\u00E9placer la s\u00E9lection \u20ac [{0}]
-view.status.cut-string-register=Registre vers lequel d\u00E9placer \u20ac [{0}]
-view.status.expand-folds=Niveau de repli \u20ac [1-9]
-view.status.goto-marker=Quel raccourci de marqueur atteindre \u20ac [{0}]
+view.status.copy-append-string-register=Nom du registre vers lequel ajouter la s\u00E9lection ? [{0}]
+view.status.copy-string-register=Registre vers lequel copier ? [{0}]
+view.status.cut-append-string-register=Registre vers lequel d\u00E9placer la s\u00E9lection ? [{0}]
+view.status.cut-string-register=Registre vers lequel d\u00E9placer ? [{0}]
+view.status.expand-folds=Niveau de repli ? [1-9]
+view.status.goto-marker=Quel raccourci de marqueur atteindre ? [{0}]
 view.status.incomplete-abbrev={0} param\u00E8tre(s) sp\u00E9cifi\u00E9(s) ou {1} est(sont) requis !
-view.status.insert-literal=Touche \u00E0 ins\u00E9rer litt\u00E9ralement \u20ac
+view.status.insert-literal=Touche \u00E0 ins\u00E9rer litt\u00E9ralement ?
 view.status.io-1=I/O : 1 op\u00E9ration en cours
 view.status.io.done=Entr\u00E9e/sortie effectu\u00E9e
 view.status.io=I/O : {0} op\u00E9rations en cours
@@ -544,7 +546,7 @@ view.status.no-markers=Aucun marqueur d\u00E9fini
 view.status.no-registers=Aucun registre d\u00E9fini
 view.status.overwrite-changed=Le mode de remplacement est {0,choice,0#d\u00E9sactiv\u00E9|1#activ\u00E9}
 view.status.overwrite-tooltip=Indicateur du mode de remplacement/insertion (clic pour modifier)
-view.status.paste-string-register=Registre \u00E9 partir duquel coller \u20ac [{0}]
+view.status.paste-string-register=Registre \u00E9 partir duquel coller ? [{0}]
 view.status.print=Impression de la page {0}
 view.status.quick-copy=Mode de copie rapide - le texte marqu\u00E9 remplacera la s\u00E9lection
 view.status.recording=Enregistrement de macro
@@ -552,11 +554,11 @@ view.status.rect-select-changed=La s\u00E9lection rectangulaire est {0,choice,0#
 view.status.rect-tooltip=Mode de s\u00E9lection rectangulaire (clic pour modifier)
 view.status.replace-all={0} occurrence(s) a(ont) \u00E9t\u00E9 remplac\u00E9e(s) dans {1} tampon(s)
 view.status.search-not-found=Cha\u00EEne de caract\u00E8res introuvable !
-view.status.select-marker=Raccourci du marqueur jusqu'o\u00F9 s\u00E9lectionner \u20ac [{0}]
-view.status.swap-marker=Raccourci du marqueur par rapport auquel d\u00E9finir la position du curseur \u20ac \
+view.status.select-marker=Raccourci du marqueur jusqu'o\u00F9 s\u00E9lectionner ? [{0}]
+view.status.swap-marker=Raccourci du marqueur par rapport auquel d\u00E9finir la position du curseur ? \
 	[{0}]
 view.status.vertical-paste-string-register=Registre vers collage vertical \
-	\u00E0 partir de \u20ac [{0}]
+	\u00E0 partir de ? [{0}]
 view.status.wrap-changed=Le mode de retour \u00E0 la ligne : "{0}"
 view.status.wrap-tooltip=<html>Mode de retour \u00E0 la ligne {0} (cliquer pour modifier)</html>
 view.status.indent-tooltip=Indicateur de retrait automatique (cliquer pour modifier)
@@ -590,13 +592,13 @@ about.title=\u00C0 propos de jEdit
 about.version=jEdit {0}, mode {1}, utilisant la version {2} de Java
 about.mode.standalone=ind\u00E9pendant
 about.mode.server=serveur
-about.mode.server-background=serveur en arrière-plan
+about.mode.server-background=serveur en arri\u00E8re-plan
 about.navigate=Utilisez les fl\u00E8ches pour naviguer dans le texte
 
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
-about.text=jEdit a \u00e9t\u00e9 con\u00e7u pour vous par\n\
+about.text=jEdit a \u00E9t\u00E9 con\u00e7u pour vous par\n\
 	\n\
 	Slava Pestov\n\
 	Aaron Bell\n\
@@ -798,7 +800,7 @@ about.text=jEdit a \u00e9t\u00e9 con\u00e7u pour vous par\n\
 	Wojciech Stryjewski\n\
 	Wolfgang Chico-T\u00F6pfer\n\
 	\n\
-	Je souhaiterais \u00e9galement remercier les utilisateurs pour\n\
+	Je souhaiterais \u00E9galement remercier les utilisateurs pour\n\
 	leurs commentaires, et signalements de bogues.
 #}}}
 
@@ -866,7 +868,7 @@ vfs.overwrite-readonly.message=Le fichier {0} est en lecture seule.\n\
 
 vfs.twostageimpossible.title=Un enregistrement en 2 \u00E9tapes ne peut \u00EAtre utilis\u00E9
 vfs.twostageimpossible.message=Un enregistrement en 2 \u00E9tapes ne peut \u00EAtre utilis\u00E9, souhaitez-vous\n\
-	tout de m\u00EAme enregistrer \u20ac
+	tout de m\u00EAme enregistrer ?
 
 out-of-memory-error=La m\u00E9moire allou\u00E9e \u00E0 Java est insuffisante pour achever\n\
 	cette requ\u00EAte. Veuillez augmenter la m\u00E9moire allou\u00E9e.\n\
@@ -904,7 +906,7 @@ directory-error-nomsg.message=Ouverture du dossier {0}\n\
 
 encoding-error.title=Encodage incompatible
 encoding-error.message=Ouverture du fichier {0}\n\
-	impossible \u00e9tant encod\u00E9 en "{1}".\n\
+	impossible \u00E9tant encod\u00E9 en "{1}".\n\
 	({2})\n\
 	\n\
 	Pour utiliser un autre encodage, allez dans les commandes\n\
@@ -957,14 +959,14 @@ setmarker.message=Nom du marqueur :
 #{{{ File not saved dialog
 notsaved.title=Le fichier non enregistr\u00E9
 # {0} - file name
-notsaved.message=Enregistrer les modifications de {0} \u20ac
+notsaved.message=Enregistrer les modifications de {0} ?
 #}}}
 
 #{{{ File changed, still reload dialog
 changedreload.title=Fichier modifi\u00E9
 changedreload.message=Le fichier {0}\n\
 	a \u00E9t\u00E9 modifi\u00E9 depuis le dernier enregistrement ; si vous le rechargez,\n\
-	les modifications seront perdues. Continuer \u20ac
+	les modifications seront perdues. Continuer ?
 #}}}
 
 #{{{ Autosave file exists dialog
@@ -972,7 +974,7 @@ autosave-found.title=Fichier enregistr\u00E9 automatiquement trouv\u00E9
 # {0} - autosave file name
 autosave-found.message=le fichier {0} enregistr\u00E9 automatiquement\n\
 	 a \u00E9t\u00E9 trouv\u00E9 ! Cela signifie probablement que jEdit\n\
-	a \u00E9t\u00E9 referm\u00E9 avant son enregistrement. Souhaitez-vous ouvrir ce fichier \u20ac
+	a \u00E9t\u00E9 referm\u00E9 avant son enregistrement. Souhaitez-vous ouvrir ce fichier ?
 
 autosave-loaded.title=Chargement de fichier enregistr\u00E9 automatiquement
 autosave-loaded.message=Le fichier {0} enregistr\u00E9 automatiquement\n\
@@ -983,12 +985,12 @@ autosave-loaded.message=Le fichier {0} enregistr\u00E9 automatiquement\n\
 
 #{{{ Save all confirm dialog
 saveall.title=Enregistrer tous les tampons
-saveall.message=Souhaitez-vous vraiment enregistrer tous les tampons modifi\u00E9s \u20ac
+saveall.message=Souhaitez-vous vraiment enregistrer tous les tampons modifi\u00E9s ?
 #}}}
 
 #{{{ Reload all confirm dialog
 reload-all.title=Recharger tous les tampons
-reload-all.message=Souhaitez-vous vraiment recharger tous les tampons \u00E0 partir du disque \u20ac\n\
+reload-all.message=Souhaitez-vous vraiment recharger tous les tampons \u00E0 partir du disque ?\n\
 	Les modifications effectu\u00E9es lors de cette session SERONT PERDUES !
 #}}}
 
@@ -1089,14 +1091,14 @@ search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Tout remplacer
 search.replaceAllBtn.mnemonic=a
 
-# Beep when searching automatically wraps\u20ac
+# Beep when searching automatically wraps?
 
 #}}}
 
 #{{{ Keep searching dialog
 keepsearching.title=Aucune autre correspondance trouv\u00E9e
 keepsearching.message=Aucune autre correspondance trouv\u00E9e. Continuer la recherche \u00E0 partir\n\
-	 {0,choice,0#du d\u00E9but|1#de la fin} \u20ac
+	 {0,choice,0#du d\u00E9but|1#de la fin} ?
 #}}}
 
 #{{{ HyperSearch results dialog
@@ -1129,7 +1131,7 @@ hypersearch-status=Recherche en cours
 hypersearch.tooManyResults.label=Trop de r\u00E9sultats
 hypersearch.tooManyResults.title=Trop de r\u00E9sultats
 hypersearch.tooManyResults.message=La recherche que vous avez lanc\u00E9e propose {0} \
-	r\u00E9sultats et est encore en cours. Souhaitez-vous interrompre la recherche \u20ac
+	r\u00E9sultats et est encore en cours. Souhaitez-vous interrompre la recherche ?
 #}}}
 
 
@@ -1159,7 +1161,7 @@ empty-fileset.message=Les donn\u00E9es sp\u00E9cifi\u00E9es ne contiennent pas d
 remote-dir-search.title=Dossier distant choisi
 remote-dir-search.message=Vous avez choisi de rechercher dans un dossier distant.\n\
 	Le traitement d\u00E9pendra du type de connexion et de la qualit\u00E9 du r\u00E9seau.\n\
-	Souhaitez-vous vraiment continuer \u20ac
+	Souhaitez-vous vraiment continuer ?
 #}}}
 
 #{{{ "Search in selection" active but nothing selected in text area
@@ -1180,13 +1182,13 @@ paste-deleted.caption=Texte supprim\u00E9 r\u00E9cemment :
 filechanged-save.title=Fichier modifi\u00E9 sur le disque
 filechanged-save.message=Le fichier {0}\n\
 	a \u00E9t\u00E9 modifi\u00E9 par un autre programme. Souhaitez-vous vraiment\n\
-	poursuivre l'enregistrement \u20ac
+	poursuivre l'enregistrement ?
 #}}}
 
 #{{{ File exists dialog
 fileexists.title=Fichier existant
 fileexists.message=Le fichier {0} existe d\u00E9j\u00E0. Souhaitez-vous vraiment\n\
-	le remplacer \u20ac
+	le remplacer ?
 #}}}
 
 #{{{ Select line range dialog
@@ -1245,7 +1247,7 @@ edit-abbrev.duplicate.title=Abr\u00E9viation en doublon
 edit-abbrev.duplicate.message=\
 	Une autre expansion de cette abr\u00E9viation existe d\u00E9j\u00E0.\n\
 	\n\
-	Souhaitez-vous remplacer cette expansion existante \u20ac
+	Souhaitez-vous remplacer cette expansion existante ?
 
 abbrev-editor.abbrev=Abr\u00E9viation :
 abbrev-editor.before=Texte \u00E0 ins\u00E9rer avant le curseur :
@@ -1347,11 +1349,11 @@ macro-not-recording.message=Aucun enregistrement de macro en cours.
 
 #{{{ Large repeat count warning
 large-repeat-count.title=Grand nombre de r\u00E9p\u00E9titions
-large-repeat-count.message=Souhaitez-vous vraiment appeler "{0}" {1} fois\u20ac
+large-repeat-count.message=Souhaitez-vous vraiment appeler "{0}" {1} fois?
 
 large-repeat-count.user-input.title=Grand nombre de r\u00E9p\u00E9titions
 large-repeat-count.user-input.message=Souhaitez-vous vraiment ins\u00E9rer "{0}" \
-	{1} fois \u20ac
+	{1} fois ?
 #}}}
 
 #{{{ Wrong fold mode dialog
@@ -1488,8 +1490,8 @@ options.appearance.decorateFrames=Utiliser Swing look & feel pour le style des b
 options.appearance.decorateDialogs=Utiliser Swing look & feel pour le style des bordures des bo\u00EEtes de dialogue
 
 options.appearance.localization.section.label=Localisation
-options.appearance.usedefaultlocale.label=Utiliser la langue par d\u00e9faut
-options.appearance.lang.label=Langue (la modification est effective après red\u00e9marrage)
+options.appearance.usedefaultlocale.label=Utiliser la langue par d\u00E9faut
+options.appearance.lang.label=Langue (la modification est effective apr\u00e8s red\u00E9marrage)
 options.appearance.lang.en=English
 options.appearance.lang.fr=Fran\u00E7ais
 options.appearance.lang.de=Deutsch
@@ -1509,7 +1511,7 @@ options.context.add.separator=S\u00E9parateur
 options.context.add.action=Commande ou macro :
 
 options.context.reset.dialog.title=R\u00E9tablissement des \u00E9l\u00E9ments par d\u00E9faut
-options.context.reset.dialog.message=Souhaitez-vous vraiment r\u00E9tablir le menu contextuel install\u00E9 par d\u00E9faut \u20ac
+options.context.reset.dialog.message=Souhaitez-vous vraiment r\u00E9tablir le menu contextuel install\u00E9 par d\u00E9faut ?
 #}}}
 
 #{{{ Docking pane
@@ -1520,7 +1522,7 @@ options.appearance.selectFramework.label=Syst\u00E8me d'ancrage :
 options.docking.autoSaveModeLayout.label=Enregistrer automatiquement la disposition d'ancrage sp\u00E9cifique au mode
 options.docking.autoLoadModeLayout.label=Charger automatiquement la disposition d'ancrage sp\u00E9cifique au mode
 options.docking.selectSet.label=\u00C9l\u00E9ments ancrables :
-options.docking.system-change.note=(Exp\u00e9rimental) Red\u00e9marrer jEdit pour que les modifications prennent effet
+options.docking.system-change.note=(Exp\u00E9rimental) Red\u00E9marrer jEdit pour que les modifications prennent effet
 #}}}
 
 #{{{ Editing pane
@@ -1557,15 +1559,15 @@ options.editing.autoIndent=Retrait automatique
 options.editing.largefilemode.title=Mode de fichier volumineux
 options.editing.largefilemode=Que dois-je faire en cas de fichier volumineux :
 options.editing.largefilemode.option.ask=<html><b>Demander</b> que faire lors de l'ouverture d'un fichier volumineux</html>
-options.editing.largefilemode.option.full=<html><b>Conserver la coloration complète</b> : la coloration syntaxique de jEdit fonctionnera comme habituellement, jEdit \
-                                               	pourra devenir <b>très lent, ceci n'est pas recommand\u00e9</b></html>
-options.editing.largefilemode.option.limited=<html><b>Coloration syntaxique insensible au contexte</b> : dans ce cas jEdit proc\u00e9dera à \
-		une coloration rapide, mais le r\u00e9sultat ne sera peut-être pas parfait. Le<br/>\
-		tampon est color\u00e9 ligne par ligne sans prendre en compte le contexte \
-		de la ligne pr\u00e9c\u00e9dente. Il est possible que la syntaxe ne soit pas pr\u00e9cise<br/>\
+options.editing.largefilemode.option.full=<html><b>Conserver la coloration compl\u00e8te</b> : la coloration syntaxique de jEdit fonctionnera comme habituellement, jEdit \
+                                               	pourra devenir <b>tr\u00e8s lent, ceci n'est pas recommand\u00E9</b></html>
+options.editing.largefilemode.option.limited=<html><b>Coloration syntaxique insensible au contexte</b> : dans ce cas jEdit proc\u00E9dera \u00e0 \
+		une coloration rapide, mais le r\u00E9sultat ne sera peut-\u00eatre pas parfait. Le<br/>\
+		tampon est color\u00E9 ligne par ligne sans prendre en compte le contexte \
+		de la ligne pr\u00E9c\u00E9dente. Il est possible que la syntaxe ne soit pas pr\u00E9cise<br/>\
 		si vous avez des portions de code sur plusieurs lignes (commentaires sur plusieurs lignes, balises xml ...) \
-		Le retour à la ligne souple est \u00e9galement d\u00e9sactiv\u00e9 <b>(meilleur choix)</b></html>
-options.editing.largefilemode.option.nohighlight=Pas de coloration syntaxique, pas de retour à la ligne souple
+		Le retour \u00e0 la ligne souple est \u00E9galement d\u00E9sactiv\u00E9 <b>(meilleur choix)</b></html>
+options.editing.largefilemode.option.nohighlight=Pas de coloration syntaxique, pas de retour \u00e0 la ligne souple
 #}}}
 
 #{{{ Encodings pane
@@ -1681,7 +1683,7 @@ options.save-back.suppressNotSavedConfirmUntitled=Ne jamais marquer les tampons 
 options.save-back.suppressNotSavedConfirmUntitled.tooltip=Si ceci est coch\u00E9, cela signifie que les tampons sans titres seront supprim\u00E9s quand un autre est cr\u00E9\u00E9 (c'est une fonctionnalit\u00E9 !)
 options.save-back.useMD5forDirtyCalculation=Ne jamais marquer les tampons comme \u00E9tant modifi\u00E9s mais pas enregistr\u00E9s si le contenu n'a pas chang\u00E9.
 options.save-back.useMD5forDirtyCalculation.tooltip=Comparer la longueur et le MD5 hash du tampon \u00E0 l'horaire de chargement pour d\u00E9cider si un tampon \u00E9dit\u00E9 est modifi\u00E9 mais pas encore enregistr\u00E9.
-options.save-back.saveAsUsesFSB="Enregistrer sous" par d\u00e9faut vers le dossier de l'explorateur de fichiers
+options.save-back.saveAsUsesFSB="Enregistrer sous" par d\u00E9faut vers le dossier de l'explorateur de fichiers
 #}}}
 
 #{{{ Shortcuts pane
@@ -1690,11 +1692,11 @@ options.shortcuts.deletekeymap.dialog.label=Supprimer le jeu de raccourcis
 options.shortcuts.deletekeymap.dialog.title=Supprimer
 options.shortcuts.duplicatekeymap.label=dupliquer
 options.shortcuts.duplicatekeymap.dialog.label=Choisir le nouveau nom du jeu de raccourcis
-options.shortcuts.duplicatekeymap.keymapalreadyexists.label=Le nom existe d\u00e9jà, choisissez-en un autre
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=Le nom existe d\u00E9j\u00e0, choisissez-en un autre
 options.shortcuts.duplicatekeymap.dialog.title=nom du jeu de raccourcis
-options.shortcuts.resetkeymap.label=r\u00e9initialiser
-options.shortcuts.resetkeymap.dialog.label=R\u00e9initialiser le jeu de raccourcis
-options.shortcuts.resetkeymap.dialog.title=r\u00e9initialiser le jeu de raccourcis
+options.shortcuts.resetkeymap.label=r\u00E9initialiser
+options.shortcuts.resetkeymap.dialog.label=R\u00E9initialiser le jeu de raccourcis
+options.shortcuts.resetkeymap.dialog.title=r\u00E9initialiser le jeu de raccourcis
 options.shortcuts.keymap.label=Choix du jeu de raccourcis :
 options.shortcuts.label=Raccourcis
 options.shortcuts.select.label=\u00C9diter les raccourcis :
@@ -1715,10 +1717,10 @@ grab-key.assigned-to.prefix=Pr\u00E9fixe de {0}
 grab-key.clear=Effacer
 grab-key.remove=Supprimer
 
-grab-key.remove-ask.title=Supprimer le raccourci \u20ac
+grab-key.remove-ask.title=Supprimer le raccourci ?
 grab-key.remove-ask.message=\
 	Vous n'avez pas d\u00E9fini de nouveau raccourci.\n\
-	Souhaitez-vous vraiment supprimer ce raccourci \u20ac
+	Souhaitez-vous vraiment supprimer ce raccourci ?
 
 grab-key.duplicate-alt-shortcut.title=Raccourci en doublon
 grab-key.duplicate-alt-shortcut.message=\
@@ -1730,7 +1732,7 @@ grab-key.duplicate-shortcut.message=\
 	Ce raccourci est d\u00E9j\u00E0 assign\u00E9 \u00E0\n\
 	\u00AB {0} \u00BB.\n\
 	\n\
-	Souhaitez-vous l'assigner \u00E0 ce nouvel \u00E9l\u00E9ment \u20ac
+	Souhaitez-vous l'assigner \u00E0 ce nouvel \u00E9l\u00E9ment ?
 
 grab-key.prefix-shortcut.title=Raccourci invalide
 grab-key.prefix-shortcut.message=\
@@ -1773,11 +1775,11 @@ options.syntax.foldLine.0=Ligne repli\u00E9e, niveau > 3
 options.textarea.label=Zone de texte
 options.textarea.font=Police :
 options.textarea.fontsubst=Substitution de police automatique
-options.textarea.fontsubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte s\u00e9lectionn\u00e9e (au lieu d'afficher des rectangles)
+options.textarea.fontsubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte s\u00E9lectionn\u00E9e (au lieu d'afficher des rectangles)
 options.textarea.fontsubstlist=Polices pr\u00E9f\u00E9r\u00E9es :
-options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices système
+options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices syst\u00e8me
 options.textarea.fontSubstWarning.label=Substitution de police
-options.textarea.fontSubstWarning=Sans aucune police système, vous aurez besoin de polices pr\u00e9f\u00e9r\u00e9es.
+options.textarea.fontSubstWarning=Sans aucune police syst\u00e8me, vous aurez besoin de polices pr\u00E9f\u00E9r\u00E9es.
 options.textarea.foreground=Couleur du texte :
 options.textarea.background=Couleur du fond :
 options.textarea.caret=Curseur :
@@ -1824,12 +1826,12 @@ options.toolbar.edit.choose=Parcourir...
 options.toolbar.edit.no-icon=Aucune ic\u00F4ne s\u00E9lectionn\u00E9e
 
 options.toolbar.reset.dialog.title=R\u00E9tablir la barre par d\u00E9faut
-options.toolbar.reset.dialog.message=Souhaitez-vous vraiment r\u00E9tablir la barre d'outils propos\u00E9e par d\u00E9faut \u00E0 l'installation \u20ac
+options.toolbar.reset.dialog.message=Souhaitez-vous vraiment r\u00E9tablir la barre d'outils propos\u00E9e par d\u00E9faut \u00E0 l'installation ?
 #}}}
 
 #{{{ View pane
-options.view.label=Fenêtres
-options.view.viewLayout=Disposition des fenêtres
+options.view.label=Fen\u00eatres
+options.view.viewLayout=Disposition des fen\u00eatres
 options.view.floatableToolbars=Barres d'outils flottantes
 options.view.alternateDockingLayout=Placement alternatif de fen\u00EAtre ancr\u00E9e
 options.view.alternateToolBarLayout=Placement alternatif de la barre d'outils
@@ -1974,7 +1976,7 @@ io-progress-monitor.abort=Interrompre
 #{{{ I/O abort dialog box
 abort.title=Interrompre I/O
 abort.message=Souhaitez-vous vraiment interrompre cette op\u00E9ration\n\
-	entr\u00E9e/sortie \u20ac Si vous annulez un enregistrement de fichier,\n\
+	entr\u00E9e/sortie ? Si vous annulez un enregistrement de fichier,\n\
 	cela pourra entra\u00EEner des pertes de donn\u00E9es.
 #}}}
 
@@ -2093,12 +2095,12 @@ vfs.browser.recurse-favorites.title=Impossible d'ajouter des favoris \u00E0 eux-
 vfs.browser.recurse-favorites.message=La liste des favoris ne peut \u00E9tre ajout\u00E9e \u00E0 elle-m\u00EAme.
 
 vfs.browser.delete-confirm.title=Confirmation de suppression de fichiers
-vfs.browser.delete-confirm.message=Souhaitez-vous vraiment supprimer les fichiers suivants {1}\u20ac\n\n\
+vfs.browser.delete-confirm.message=Souhaitez-vous vraiment supprimer les fichiers suivants {1}?\n\n\
 	{0}
 
 vfs.browser.delete-favorites.title=Retirer des favoris
 vfs.browser.delete-favorites.message=Souhaitez-vous vraiment supprimer les dossiers/fichiers suivants \
-	de la liste des favoris \u20ac\n\n\
+	de la liste des favoris ?\n\n\
 	{0}
 
 vfs.browser.rename.title=Renommer le fichier
@@ -2133,7 +2135,7 @@ plugin-manager.done=Fermer
 
 plugin-manager.remove-confirm.title=D\u00E9sinstallation de plugins
 plugin-manager.remove-confirm.message=Souhaitez-vous vraiment d\u00E9sinstaller les \
-	plugins suivants \u20ac
+	plugins suivants ?
 
 plugin-manager.dependency.title=Plugin n\u00E9cessaire pour fonctionnement
 plugin-manager.dependency.message={0} est n\u00E9cessaire pour que les plugins suivants fonctionnent.\n\
@@ -2154,7 +2156,7 @@ plugin-manager.noOrphan.message=Aucun jar orphelin dans votre installation jEdit
 plugin-manager.findOrphan.label=Recherche des orphelins
 plugin-manager.findOrphan.title=jars orphelins trouv\u00E9s
 plugin-manager.findOrphan.message=Apparatenance des jars suivants \u00E0 aucun plugin\n\
-	Les supprimer \u20ac\n (soyez prudents, ils peuvent \u00EAtre d\u00E9clar\u00E9s dynamiquement dans certains \n\
+	Les supprimer ?\n (soyez prudents, ils peuvent \u00EAtre d\u00E9clar\u00E9s dynamiquement dans certains \n\
   plugins comme les pilotes JDBC) :
 
 install-plugins.depend.title=Installation de plugins suppl\u00E9mentaires
@@ -2303,3 +2305,161 @@ killring.load-memoryerror.title=Erreur de m\u00E9moire
 killring.start=d\u00E9marrer
 killring.stop=arr\u00EAter
 killring.delete=arr\u00EAter la boucle infinie et d\u00E9marrer
+
+#}}}
+
+#{{{ Macros                       
+
+#{{{ Properties used by macros     
+
+#{{{ common    
+macro.rs.general.ErrorNotEditableDialog.title=permission d'\u00E9criture
+macro.rs.general.ErrorNotEditableDialog.message=Impossible de modifier le fichier !
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=Filtre de ligne
+macro.rs.LineFilter.ignoreCaseCheckBox.label=Ignorer la casse
+macro.rs.LineFilter.regexpPanelBorder.title=Motif de comparaison (Expression r\u00E9guli\u00E8re)
+macro.rs.LineFilter.processModeRadioButtonMatching.label=correspondant
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=ne correspondant pas
+macro.rs.LineFilter.processModeOptionPanelBorder.title=Lignes
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=\u00C9crire dans un nouveau fichier
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=Supprimer
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=Action
+
+macro.rs.LineFilter.DeleteActionDisabled.message=Impossible de supprimer
+macro.rs.LineFilter.MultipleSelection.message=La s\u00E9lection multiple n''est pas prise en charge
+macro.rs.LineFilter.BlockSelection.message=La s\u00E9lection lacunaire n''est pas prise en charge
+
+macro.rs.LineFilter.SummaryDeleted.label=Ligne(s) effac\u00E9e(s) !
+macro.rs.LineFilter.SummaryWritten.label=Nouvelle(s) ligne(s) \u00E9crite(s) dans nouveau fichier
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=Expression r\u00E9guli\u00E8re invalide
+macro.rs.LineFilter.ErrorRegexpDialog.message=Cette expression r\u00E9guli\u00E8re est invalide !
+
+# obsolete as of version 1.3
+macro.rs.LineFilter.ErrorNotEditableDialog.title=permission d'\u00E9criture
+macro.rs.LineFilter.ErrorNotEditableDialog.message=Le fichier ne peut \u00EAtre modifi\u00E9 !
+macro.rs.LineFilter.processModeRadioButton1.label=correspondant
+macro.rs.LineFilter.processModeRadioButton2.label=ne correspondant pas
+macro.rs.LineFilter.actionModeRadioButton1.label=\u00C9crire dans un nouveau fichier
+macro.rs.LineFilter.actionModeRadioButton2.label=Supprimer
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C         
+C/Include_Guard.label=Gardien Include
+C/Toggle_Header_Source.label=Basculer entre le header et la source
+#}}}
+
+#{{{ Clipboard 
+Clipboard/Copy_Lines.label=Copier les lignes
+Clipboard/Copy_Lines_Containing.label=Copier les lignes contenant...
+Clipboard/Copy_Visible_Lines.label=Copier les lignes visibles
+Clipboard/Cut_Lines.label=Couper les lignes
+Clipboard/Cut_Lines_Containing.label=Couper les lignes contenant...
+Clipboard/Paste_Indent.label=Coller avec retrait
+#}}}
+
+#{{{ Editing  
+Editing/Duplicate_Lines_Above.label=Dupliquer les lignes vers le haut
+Editing/Duplicate_Lines_Below.label=Dupliquer les lignes vers le bas
+Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Editing/Emacs_Next_Line.label=Emacs ligne suivante
+Editing/Emacs_Previous_Line.label=Emacs ligne pr\u00E9c\u00E9dente
+Editing/Go_to_Column.label=Atteindre la colonne
+Editing/Greedy_Backspace.label=Suppression arri\u00E8re gourmande
+Editing/Greedy_Delete.label=Suppression gourmande
+Editing/Greedy_Left.label=Gourmande vers la gauche
+Editing/Greedy_Right.label=Gourmande vers la droite
+Editing/Keywords_to_Upper_Case.label=Mots-cl\u00E9s en majuscule
+Editing/Mode_Switcher.label=S\u00E9lecteur de mode
+Editing/Move_Lines_Down.label=D\u00E9placer les lignes vers le bas
+Editing/Move_Lines_Up.label=D\u00E9placer les lignes vers le haut
+Editing/Open_Line_Above.label=Ajouter une ligne vide au-dessus
+Editing/Open_Line_Below.label=Ajouter une ligne vide en-dessous
+Editing/Toggle_Fold.label=Fermer/d\u00E9velopper le repli
+#}}}
+
+#{{{ Files    
+Files/Browse_Buffer_Directory.label=Explorer le dossier du tampon courant
+Files/Browse_Directory.label=Ouvrir un dossier
+Files/Buffer_Switcher.label=S\u00E9lecteur de fichier
+Files/Close_All_Except_Active.label=Fermer tous les autres
+Files/Copy_Name_to_Clipboard.label=Copier le nom de fichier
+Files/Copy_Path_to_Clipboard.label=Copier le chemin du fichier
+Files/Delete_Current.label=Supprimer le fichier courant
+Files/Duplicate_Buffer.label=Dupliquer le fichier courant
+Files/Glob_Close.label=Fermer selon un motif
+Files/Insert_Selection.label=Ins\u00E9rer la s\u00E9lection
+Files/Next_Dirty_Buffer.label=Fichier modifi\u00E9 suivant
+Files/Open_Path.label=Ouvrir le fichier (demande du nom)
+Files/Open_Selection.label=Ouvrir le fichier s\u00E9lectionn\u00E9
+Files/Send_Buffer_To_Next_Split.label=Placer le tampon dans la zone de partage suivante
+Files/Toggle_ReadOnly.label=Modifier les permissions
+#}}}
+
+#{{{ Interface
+Interface/Decrease_Font_Size.label=Diminuer la taille de police
+Interface/Increase_Font_Size.label=Augmenter la taille de police
+Interface/Open_Context_Menu.label=Ouvrir le menu contextuel
+Interface/Reset_TextArea.label=R\u00E9initialiser la zone de texte
+Interface/Splitpane_Grow.label=Agrandir la zone de partage
+Interface/Toggle_Bottom_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e en bas
+Interface/Toggle_Left_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e \u00E0 gauche
+Interface/Toggle_Right_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e \u00E0 droite
+Interface/Toggle_Top_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e en haut
+#}}}
+
+#{{{ Java      
+Java/Create_Constructor.label=Cr\u00E9er un constructeur
+Java/Get_Class_Name.label=Indiquer le nom de classe
+Java/Get_Package_Name.label=Indiquer le nom du paquetage
+Java/Java_File_Save.label=Stocker le fichier Java
+Java/Make_Get_and_Set_Methods.label=G\u00E9n\u00E9rer les m\u00E9thodes Get et Set
+Java/Preview_JavaDoc_Of_Current_Buffer.label=Aperçu JavaDoc du tampon courant
+#}}}
+
+#{{{ Misc     
+Misc/Debug_BufferSets.label=D\u00E9boguer le jeu de tampons
+Misc/Display_Abbreviations.label=Liste des abr\u00E9viations
+Misc/Display_Actions.label=Liste des Actions
+Misc/Display_Character_Code.label=Afficher le code du caract\u00E8re
+Misc/Display_Shortcuts.label=Liste des raccourcis
+Misc/Evaluate_Buffer_in_BeanShell.label=Lancer le tampon en tant que code BeanShell
+Misc/Hex_Convert.label=Conversion hexad\u00E9cimale
+Misc/HyperSearch_Results_to_Buffer.label=R\u00E9sultats de l'Hyper-recherche dans un nouveau tampon
+Misc/Buffer_to_HyperSearch_Results.label=R\u00E9sultats de l'Hyper-recherche import\u00E9e du tampon courant
+Misc/Make_Bug_Report.label=Infos jEdit pour d\u00E9bogage
+Misc/Run_Script.label=Lancer en tant que script
+Misc/Show_Threads.label=Liste des processus
+#}}}
+
+#{{{ Properties
+Properties/Create_Plugin_Announcement.label=Cr\u00E9er une annoce de plugin
+Properties/Insert_Buffer_Properties.label=Ins\u00E9rer les propri\u00E9t\u00E9s du tampon
+Properties/Look_and_Feel_Properties.label=Liste des propri\u00E9t\u00E9s Look and Feel
+Properties/System_Properties.label=Liste des propri\u00E9t\u00E9s syst\u00E8me
+Properties/jEdit_Properties.label=Liste des propri\u00E9t\u00E9s de jEdit
+#}}}
+
+#{{{ Text      
+Text/Add_Prefix_and_Suffix.label=Ajouter un pr\u00E4fixe et un suffixe
+Text/Color_Picker.label=Palette de couleur
+Text/Compose_Tag.label=Cr\u00E9er une balise XML
+Text/Duplicate_Line.label=Dupliquer la ligne
+Text/Insert_Date.label=Ajouter la date et l'horaire Internet
+Text/Insert_Tag.label=Ins\u00E9rer une balise XML
+Text/Line_Filter.label=Filtre de lignes
+Text/Next_Char.label=S\u00E9lection jusqu'au caract\u00E8re (\u00E0 indiquer)
+Text/Reverse_Lines.label=Inverser l'ordre des lignes
+Text/Single_Space_Buffer.label=R\u00E9duire l'espace entre les lignes
+#}}}
+
+#}}}
+
+#}}}
