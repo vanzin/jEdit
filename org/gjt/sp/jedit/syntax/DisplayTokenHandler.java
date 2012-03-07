@@ -589,8 +589,10 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				&& (Character.isWhitespace(prev)
 					|| prev > 0x7f || next > 0x7f)
 				// Workarounds for the problem reported at
-				// SF.net bug #3488310; unexpected soft wrap
-				// happens at closing "&ldquo;".
+				// - SF.net bug #3497312; Unexpected softwrap
+				//   in contracted words with ’ as apostrophe.
+				// - SF.net bug #3488310; unexpected soft wrap
+				//   happens at closing "&ldquo;".
 				// Probably the cause is in the implementation
 				// of BreakIterator for line breaks. Some
 				// similer problems are also reported in
@@ -598,6 +600,12 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				// http://www.google.co.jp/search?q=site%3Abugs.sun.com+BreakIterator+getLineInstance
 				// There seems to be some problems in handling
 				// of quotation marks.
+				&& !(prev == '’'
+					// This test excludes CJK characters
+					// which may come after a closing
+					// quote.
+					&& (Character.isLowerCase(next)
+						|| Character.isUpperCase(next)))
 				&& !isUnacceptableBreakInsideQuote(baseBreak,
 					text, prev, next);
 		}
