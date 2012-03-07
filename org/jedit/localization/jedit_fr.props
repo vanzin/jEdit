@@ -62,11 +62,11 @@ save-layout.message=Disposition d''ancrage \u00E0 enregistrer :
 
 #{{{ Tool bar
 view.search.find=Rechercher :
-view.search.close-tooltip=Masquer la barre de recherche (\u00c9CHAP)
+view.search.close-tooltip=Masquer la barre de recherche (\u00C9CHAP)
 
 view.action.prompt=Action :
 view.action.no-completions=Aucune action de ce type trouv\u00E9e
-view.action.close-tooltip=Masquer la barre action (\u00c9CHAP)
+view.action.close-tooltip=Masquer la barre action (\u00C9CHAP)
 #}}}
 
 #{{{ Context menu
@@ -562,7 +562,7 @@ view.status.vertical-paste-string-register=Registre vers collage vertical \
 view.status.wrap-changed=Le mode de retour \u00E0 la ligne : "{0}"
 view.status.wrap-tooltip=<html>Mode de retour \u00E0 la ligne {0} (cliquer pour modifier)</html>
 view.status.indent-tooltip=Indicateur de retrait automatique (cliquer pour modifier)
-view.status.autoindent-changed=\u00c9tat du retrait automatique : "{0}"
+view.status.autoindent-changed=\u00C9tat du retrait automatique : "{0}"
 view.status.bufferset-tooltip=localisation du jeu de tampons : {0}
 wrap.none=d\u00E9sactiv\u00E9
 wrap.hard=strict
@@ -598,210 +598,9 @@ about.navigate=Utilisez les fl\u00E8ches pour naviguer dans le texte
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
-about.text=jEdit a \u00E9t\u00E9 con\u00e7u pour vous par\n\
-	\n\
-	Slava Pestov\n\
-	Aaron Bell\n\
-	Adam Sawicki\n\
-	Adrian Baker\n\
-	Alan Ezust\n\
-	Alessandro Falappa\n\
-	Alex Levin\n\
-	Alexander Maryanovsky\n\
-	Alfonso Garcia\n\
-	Alwyn Barry\n\
-	Amedeo Farello\n\
-	Andre Kaplan\n\
-	Andrey Khalyavin\n\
-	Anshal Shukla\n\
-	Anthony Roy\n\
-	Artur Biesiadowski\n\
-	Aziz Sharif\n\
-	Barry Carr\n\
-	Beau Tateyama\n\
-	Ben Glazer\n\
-	Ben Sarsgard\n\
-	Ben Williams\n\
-	Bernhard Walle\n\
-	Bertalan Fodor\n\
-	Bill McMilleon\n\
-	Bj\u00F6rn "Vampire" Kautler\n\
-	Brad Mace\n\
-	Brant Langer Gurganus\n\
-	Brett Smith\n\
-	Bruno Tatibouet\n\
-	Calvin Yu\n\
-	Carlos Quiroz\n\
-	Carmine Lucarelli\n\
-	Chris Grindstaff\n\
-	Chris Kent\n\
-	Chris Petersen\n\
-	Chris Scott\n\
-	Chris Sullins\n\
-	Christoph Daniel Schulze\n\
-	Claude Eisenhut\n\
-	Cullen Linn\n\
-	Dakshinamurthy Karra\n\
-	Dale Anson\n\
-	Daniel Hahler\n\
-	Daniel Johnson\n\
-	Danny Dig\n\
-	Dante Fabrizio\n\
-	David Askew\n\
-	David Moss\n\
-	David Taylor\n\
-	Dennis Hotson\n\
-	Denis Lambot\n\
-	Dirk Moebius\n\
-	Dominic Stolerman\n\
-	Dusty Phillips\n\
-	Ed Stewart\n\
-	Eric Benoit\n\
-	Eric Berry\n\
-	Eric Ladner\n\
-	Evan Wright\n\
-	Fan Ho Yin\n\
-	Francesc Roses\n\
-	George Hovey\n\
-	George Latkiewicz\n\
-	Gerd Knops\n\
-	Gili Tzabari\n\
-	Giulio Piancastelli\n\
-	Greg Cooper\n\
-	Greg Merrill\n\
-	Horst Eff\n\
-	Ian Maclean\n\
-	Igor Lesik\n\
-	Israel Olalla\n\
-	Jakub Rozto\u010Dil\n\
-	Jamie LaScolea\n\
-	Jarek Czekalski\n\
-	Jason Ginchereau\n\
-	Jean-Francois Larvoire\n\
-	Jeffrey Hoyt\n\
-	Jeff Robertson\n\
-	Jerry McBride\n\
-	Jiger Patel\n\
-	Jim Lawton\n\
-	Jim Morris\n\
-	Jim Wissner\n\
-	Jimmy Chaw\n\
-	J\u00F6rg Spieler\n\
-	John Gellene\n\
-	John Perry\n\
-	Jojaba\n\
-	Jonathan Revusky\n\
-	Jorg Winter\n\
-	Joseph Erickson\n\
-	Joseph Schroer\n\
-	Juha Lindfors\n\
-	Justin Dieters\n\
-	Justin Hagstrom\n\
-	Kasper Graversen\n\
-	Kazutoshi Satoda\n\
-	Kenrick Drew\n\
-	Kevin Burton\n\
-	Kevin Hunter\n\
-	Kevin McWhirter\n\
-	Ken Gentry\n\
-	Ken Turner\n\
-	Klaus Hartlage\n\
-	Konstantin Pribluda\n\
-	Krassimir Berov\n\
-	Kris Kopicki\n\
-	Kristian Ovaska\n\
-	Krzysztof Krzyzaniak\n\
-	Lionel Fiol\n\
-	Magnus Henriksson\n\
-	Maik Schreiber\n\
-	Marc Rummel\n\
-	Marcelo Vanzin\n\
-	Marcio Marchini\n\
-	Marco Hunsicker\n\
-	Marco Gotze\n\
-	Marcus Jonason\n\
-	Martin Raspe\n\
-	Matija Kejzar\n\
-	Matt Albrecht\n\
-	Matt Price\n\
-	Matthew Flower\n\
-	Matthew Payne\n\
-	Matthew Price\n\
-	Matthias Schneider\n\
-	Matthieu Casanova\n\
-	Michael Jacobson\n\
-	Michael Taft\n\
-	Michael Schlotter\n\
-	Mike Dillon\n\
-	Mike Gorski\n\
-	Mike Hansen\n\
-	Mirco Bova\n\
-	Nahuel Foronda\n\
-	Neil Bertram\n\
-	Nicholas O'Leary\n\
-	Nils Krahnstoever\n\
-	Nils Nordman\n\
-	Nitsan Vardi\n\
-	Ollie Rutherfurd\n\
-	Orhan Alkan\n\
-	Patrick Tingen\n\
-	Paul Libbrecht\n\
-	Peter Cox\n\
-	Peter Graves\n\
-	Philipp Janda\n\
-	Phillip Mateescu\n\
-	Ralf Engels\n\
-	Randolf Mock\n\
-	Randy Hudson\n\
-	Rex Young\n\
-	Richard Ashwell\n\
-	Richard Beton\n\
-	Rick Gibbs\n\
-	Rick Owen\n\
-	Rob Watson\n\
-	Robert McKinnon\n\
-	Robert Schwenn\n\
-	Robert Swarr\n\
-	Romain Guy\n\
-	Rudolf Widmann\n\
-	Ryan Fowler\n\
-	Ryan Grove\n\
-	Ryan Mott\n\
-	Saimon Moore\n\
-	Satguru Srivastava\n\
-	Scott Allen\n\
-	Scott Willy\n\
-	Scott Wyatt\n\
-	Sebastien Pierre\n\
-	Seph Soliman\n\
-	Sergey Udaltsov\n\
-	Shlomy Reinstein\n\
-	Silas Smith\n\
-	Stefan Kost\n\
-	Stefano Maestri\n\
-	Stephen Bartlett\n\
-	Stephen Blackheath\n\
-	Steve Jakob\n\
-	Stuart Barlow\n\
-	Tal Davidson\n\
-	Thomas Alspaugh\n\
-	Thomas Bock\n\
-	Thomas Dilts\n\
-	Thomas Galvin\n\
-	Todd Papaioannou\n\
-	Tom Copeland\n\
-	Tom Locke\n\
-	Trevor Harmon\n\
-	Vicente Salvador\n\
-	Vinod Kiran\n\
-	Will Sargent\n\
-	Will Varfar\n\
-	Wiktor Adamski\n\
-	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00F6pfer\n\
-	\n\
-	Je souhaiterais \u00E9galement remercier les utilisateurs pour\n\
-	leurs commentaires, et signalements de bogues.
+about.text.prefix=jEdit a \u00E9t\u00E9 con\u00E7u pour vous par
+about.text.suffix=Je souhaiterais \u00E9galement remercier les utilisateurs pour\n\
+                  	leurs commentaires, et signalements de bogues.
 #}}}
 
 #{{{ Error list dialog, used to report I/O and plugin load errors
@@ -1491,7 +1290,7 @@ options.appearance.decorateDialogs=Utiliser Swing look & feel pour le style des 
 
 options.appearance.localization.section.label=Localisation
 options.appearance.usedefaultlocale.label=Utiliser la langue par d\u00E9faut
-options.appearance.lang.label=Langue (la modification est effective apr\u00e8s red\u00E9marrage)
+options.appearance.lang.label=Langue (la modification est effective apr\u00E8s red\u00E9marrage)
 options.appearance.lang.en=English
 options.appearance.lang.fr=Fran\u00E7ais
 options.appearance.lang.de=Deutsch
@@ -1559,15 +1358,15 @@ options.editing.autoIndent=Retrait automatique
 options.editing.largefilemode.title=Mode de fichier volumineux
 options.editing.largefilemode=Que dois-je faire en cas de fichier volumineux :
 options.editing.largefilemode.option.ask=<html><b>Demander</b> que faire lors de l'ouverture d'un fichier volumineux</html>
-options.editing.largefilemode.option.full=<html><b>Conserver la coloration compl\u00e8te</b> : la coloration syntaxique de jEdit fonctionnera comme habituellement, jEdit \
-                                               	pourra devenir <b>tr\u00e8s lent, ceci n'est pas recommand\u00E9</b></html>
-options.editing.largefilemode.option.limited=<html><b>Coloration syntaxique insensible au contexte</b> : dans ce cas jEdit proc\u00E9dera \u00e0 \
-		une coloration rapide, mais le r\u00E9sultat ne sera peut-\u00eatre pas parfait. Le<br/>\
+options.editing.largefilemode.option.full=<html><b>Conserver la coloration compl\u00E8te</b> : la coloration syntaxique de jEdit fonctionnera comme habituellement, jEdit \
+                                               	pourra devenir <b>tr\u00E8s lent, ceci n'est pas recommand\u00E9</b></html>
+options.editing.largefilemode.option.limited=<html><b>Coloration syntaxique insensible au contexte</b> : dans ce cas jEdit proc\u00E9dera \u00E0 \
+		une coloration rapide, mais le r\u00E9sultat ne sera peut-\u00EAtre pas parfait. Le<br/>\
 		tampon est color\u00E9 ligne par ligne sans prendre en compte le contexte \
 		de la ligne pr\u00E9c\u00E9dente. Il est possible que la syntaxe ne soit pas pr\u00E9cise<br/>\
 		si vous avez des portions de code sur plusieurs lignes (commentaires sur plusieurs lignes, balises xml ...) \
-		Le retour \u00e0 la ligne souple est \u00E9galement d\u00E9sactiv\u00E9 <b>(meilleur choix)</b></html>
-options.editing.largefilemode.option.nohighlight=Pas de coloration syntaxique, pas de retour \u00e0 la ligne souple
+		Le retour \u00E0 la ligne souple est \u00E9galement d\u00E9sactiv\u00E9 <b>(meilleur choix)</b></html>
+options.editing.largefilemode.option.nohighlight=Pas de coloration syntaxique, pas de retour \u00E0 la ligne souple
 #}}}
 
 #{{{ Encodings pane
@@ -1692,7 +1491,7 @@ options.shortcuts.deletekeymap.dialog.label=Supprimer le jeu de raccourcis
 options.shortcuts.deletekeymap.dialog.title=Supprimer
 options.shortcuts.duplicatekeymap.label=dupliquer
 options.shortcuts.duplicatekeymap.dialog.label=Choisir le nouveau nom du jeu de raccourcis
-options.shortcuts.duplicatekeymap.keymapalreadyexists.label=Le nom existe d\u00E9j\u00e0, choisissez-en un autre
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=Le nom existe d\u00E9j\u00E0, choisissez-en un autre
 options.shortcuts.duplicatekeymap.dialog.title=nom du jeu de raccourcis
 options.shortcuts.resetkeymap.label=r\u00E9initialiser
 options.shortcuts.resetkeymap.dialog.label=R\u00E9initialiser le jeu de raccourcis
@@ -1777,9 +1576,9 @@ options.textarea.font=Police :
 options.textarea.fontsubst=Substitution de police automatique
 options.textarea.fontsubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte s\u00E9lectionn\u00E9e (au lieu d'afficher des rectangles)
 options.textarea.fontsubstlist=Polices pr\u00E9f\u00E9r\u00E9es :
-options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices syst\u00e8me
+options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices syst\u00E8me
 options.textarea.fontSubstWarning.label=Substitution de police
-options.textarea.fontSubstWarning=Sans aucune police syst\u00e8me, vous aurez besoin de polices pr\u00E9f\u00E9r\u00E9es.
+options.textarea.fontSubstWarning=Sans aucune police syst\u00E8me, vous aurez besoin de polices pr\u00E9f\u00E9r\u00E9es.
 options.textarea.foreground=Couleur du texte :
 options.textarea.background=Couleur du fond :
 options.textarea.caret=Curseur :
@@ -1830,8 +1629,8 @@ options.toolbar.reset.dialog.message=Souhaitez-vous vraiment r\u00E9tablir la ba
 #}}}
 
 #{{{ View pane
-options.view.label=Fen\u00eatres
-options.view.viewLayout=Disposition des fen\u00eatres
+options.view.label=Fen\u00EAtres
+options.view.viewLayout=Disposition des fen\u00EAtres
 options.view.floatableToolbars=Barres d'outils flottantes
 options.view.alternateDockingLayout=Placement alternatif de fen\u00EAtre ancr\u00E9e
 options.view.alternateToolBarLayout=Placement alternatif de la barre d'outils
@@ -2002,7 +1801,7 @@ vfs.browser.type=Type
 vfs.browser.type.file=Fichier
 vfs.browser.type.directory=Dossier
 vfs.browser.type.filesystem=Arborescence
-vfs.browser.status=\u00c9tat
+vfs.browser.status=\u00C9tat
 vfs.browser.status.no=Pas d'acc\u00E8s
 vfs.browser.status.ro=En lecture seule
 vfs.browser.status.append=Ajout uniquement
@@ -2409,10 +2208,10 @@ Interface/Increase_Font_Size.label=Augmenter la taille de police
 Interface/Open_Context_Menu.label=Ouvrir le menu contextuel
 Interface/Reset_TextArea.label=R\u00E9initialiser la zone de texte
 Interface/Splitpane_Grow.label=Agrandir la zone de partage
-Interface/Toggle_Bottom_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e en bas
-Interface/Toggle_Left_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e \u00E0 gauche
-Interface/Toggle_Right_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e \u00E0 droite
-Interface/Toggle_Top_Docking_Area.label=Afficher/masquer la fenêtre ancr\u00E9e en haut
+Interface/Toggle_Bottom_Docking_Area.label=Afficher/masquer la fen\u00EAtre ancr\u00E9e en bas
+Interface/Toggle_Left_Docking_Area.label=Afficher/masquer la fen\u00EAtre ancr\u00E9e \u00E0 gauche
+Interface/Toggle_Right_Docking_Area.label=Afficher/masquer la fen\u00EAtre ancr\u00E9e \u00E0 droite
+Interface/Toggle_Top_Docking_Area.label=Afficher/masquer la fen\u00EAtre ancr\u00E9e en haut
 #}}}
 
 #{{{ Java      
@@ -2421,7 +2220,7 @@ Java/Get_Class_Name.label=Indiquer le nom de classe
 Java/Get_Package_Name.label=Indiquer le nom du paquetage
 Java/Java_File_Save.label=Stocker le fichier Java
 Java/Make_Get_and_Set_Methods.label=G\u00E9n\u00E9rer les m\u00E9thodes Get et Set
-Java/Preview_JavaDoc_Of_Current_Buffer.label=Aperçu JavaDoc du tampon courant
+Java/Preview_JavaDoc_Of_Current_Buffer.label=Aper\u00E7u JavaDoc du tampon courant
 #}}}
 
 #{{{ Misc     

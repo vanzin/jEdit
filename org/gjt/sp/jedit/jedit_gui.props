@@ -1028,12 +1028,7 @@ about.mode.server=server
 about.mode.server-background=server-background
 about.navigate=Press arrow keys to navigate about text
 
-# This text scrolls by in the about dialog box.
-# Hack: Since StringTokenizer treats two consequent \n as one token, we
-# insert a space by itself in the text to create blank lines.
-about.text=jEdit is brought to you by\n\
-	\n\
-	Slava Pestov\n\
+about.text.contributors=Slava Pestov\n\
 	Aaron Bell\n\
 	Adam Sawicki\n\
 	Adrian Baker\n\
@@ -1231,10 +1226,7 @@ about.text=jEdit is brought to you by\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00F6pfer\n\
-	\n\
-	I'd also like to thank the users for their\n\
-	comments, feedback and bug reports.
+	Wolfgang Chico-T\u00F6pfer
 #}}}
 
 #{{{ Error list dialog, used to report I/O and plugin load errors
