@@ -14,10 +14,10 @@ and Alan Ezust for contributing to this release.
 
 - Fixed status bar widget editing (#3414671) (Matthieu Casanova)
 
-- Fixed text area corruption (strange exceptions and/or inconsitent
-   display) which could happen when multiple files are opened
-   simultaneously in a text area. This could also happen on some other
-   minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
+- Fixed text area corruption (strange exceptions and/or inconsistent
+  display) which could happen when multiple files are opened
+  simultaneously in a text area. This could also happen on some other
+  minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
