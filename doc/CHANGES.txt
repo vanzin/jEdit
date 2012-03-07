@@ -17,9 +17,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - The Install/Update plugin dialog with progress bar should not show the
   progression of installation in it's title (#3485497) (Matthieu Casanova)
 
-- If the plugin list was not already loaded, there is no reason to load it
-  because of a property change (#3485645) (Matthieu Casanova)
-
 - Fixed replace all on a directory that was broken (#3480583) (Matthieu Casanova)
 
 - Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534, 3480246)
