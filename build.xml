@@ -767,7 +767,10 @@
 					 windowtitle="jEdit API"
 					 doctitle="jEdit API"
 					 failonerror="true"
-					 source="${target.java.version}">
+					 source="${target.java.version}"
+					 encoding="UTF-8"
+					 docencoding="UTF-8"
+					 charset="UTF-8">
 					<group title="jEdit"
 					       packages="org.gjt.sp*"/>
 					<group title="BeanShell"
