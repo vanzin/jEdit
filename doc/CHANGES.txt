@@ -249,6 +249,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Introduced glyph caching to lower CPU usage on text rendering and
   line wrapping. (Kazutoshi Satoda)
+  
+- Updated Move Lines Up and Down macros to move whole lines regardless of
+  selection. (Dale Anson)
 
 }}}
 
