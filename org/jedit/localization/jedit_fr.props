@@ -2117,18 +2117,18 @@ macro.rs.general.ErrorNotEditableDialog.message=Impossible de modifier le fichie
 #}}}
 
 #{{{ Line_Filter
-macro.rs.LineFilter.MainDialog.title=Filtre de ligne
+macro.rs.LineFilter.MainDialog.title=Filtre de lignes
 macro.rs.LineFilter.ignoreCaseCheckBox.label=Ignorer la casse
 macro.rs.LineFilter.regexpPanelBorder.title=Motif de comparaison (Expression r\u00E9guli\u00E8re)
-macro.rs.LineFilter.processModeRadioButtonMatching.label=correspondant
-macro.rs.LineFilter.processModeRadioButtonNotMatching.label=ne correspondant pas
+macro.rs.LineFilter.processModeRadioButtonMatching.label=qui correspondent
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=qui ne correspondent pas
 macro.rs.LineFilter.processModeOptionPanelBorder.title=Lignes
-macro.rs.LineFilter.actionModeRadioButtonWrite.label=\u00C9crire dans un nouveau fichier
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=\u00C9crire dans un nouveau tampon
 macro.rs.LineFilter.actionModeRadioButtonDelete.label=Supprimer
 macro.rs.LineFilter.actionModeOptionPanelBorder.title=Action
 
 macro.rs.LineFilter.DeleteActionDisabled.message=Impossible de supprimer
-macro.rs.LineFilter.MultipleSelection.message=La s\u00E9lection multiple n''est pas prise en charge
+macro.rs.LineFilter.MultipleSelection.message=La s\u00E9lection rectangulaire n''est pas prise en charge
 macro.rs.LineFilter.BlockSelection.message=La s\u00E9lection lacunaire n''est pas prise en charge
 
 macro.rs.LineFilter.SummaryDeleted.label=Ligne(s) effac\u00E9e(s) !
@@ -2136,14 +2136,6 @@ macro.rs.LineFilter.SummaryWritten.label=Nouvelle(s) ligne(s) \u00E9crite(s) dan
 
 macro.rs.LineFilter.ErrorRegexpDialog.title=Expression r\u00E9guli\u00E8re invalide
 macro.rs.LineFilter.ErrorRegexpDialog.message=Cette expression r\u00E9guli\u00E8re est invalide !
-
-# obsolete as of version 1.3
-macro.rs.LineFilter.ErrorNotEditableDialog.title=permission d'\u00E9criture
-macro.rs.LineFilter.ErrorNotEditableDialog.message=Le fichier ne peut \u00EAtre modifi\u00E9 !
-macro.rs.LineFilter.processModeRadioButton1.label=correspondant
-macro.rs.LineFilter.processModeRadioButton2.label=ne correspondant pas
-macro.rs.LineFilter.actionModeRadioButton1.label=\u00C9crire dans un nouveau fichier
-macro.rs.LineFilter.actionModeRadioButton2.label=Supprimer
 #}}}
 
 #}}}
@@ -2216,14 +2208,15 @@ Interface/Toggle_Top_Docking_Area.label=Afficher/masquer la fen\u00EAtre ancr\u0
 
 #{{{ Java      
 Java/Create_Constructor.label=Cr\u00E9er un constructeur
-Java/Get_Class_Name.label=Indiquer le nom de classe
-Java/Get_Package_Name.label=Indiquer le nom du paquetage
-Java/Java_File_Save.label=Stocker le fichier Java
+Java/Get_Class_Name.label=Obtenir le nom de classe
+Java/Get_Package_Name.label=Obtenir le nom du paquetage
+Java/Java_File_Save.label=Enregistrer le fichier Java
 Java/Make_Get_and_Set_Methods.label=G\u00E9n\u00E9rer les m\u00E9thodes Get et Set
 Java/Preview_JavaDoc_Of_Current_Buffer.label=Aper\u00E7u JavaDoc du tampon courant
 #}}}
 
-#{{{ Misc     
+#{{{ Misc
+Misc/Buffer_to_HyperSearch_Results.label=R\u00E9sultats de l'Hyper-recherche import\u00E9e du tampon courant
 Misc/Debug_BufferSets.label=D\u00E9boguer le jeu de tampons
 Misc/Display_Abbreviations.label=Liste des abr\u00E9viations
 Misc/Display_Actions.label=Liste des Actions
@@ -2232,18 +2225,17 @@ Misc/Display_Shortcuts.label=Liste des raccourcis
 Misc/Evaluate_Buffer_in_BeanShell.label=Lancer le tampon en tant que code BeanShell
 Misc/Hex_Convert.label=Conversion hexad\u00E9cimale
 Misc/HyperSearch_Results_to_Buffer.label=R\u00E9sultats de l'Hyper-recherche dans un nouveau tampon
-Misc/Buffer_to_HyperSearch_Results.label=R\u00E9sultats de l'Hyper-recherche import\u00E9e du tampon courant
 Misc/Make_Bug_Report.label=Infos jEdit pour d\u00E9bogage
 Misc/Run_Script.label=Lancer en tant que script
 Misc/Show_Threads.label=Liste des processus
 #}}}
 
 #{{{ Properties
-Properties/Create_Plugin_Announcement.label=Cr\u00E9er une annoce de plugin
+Properties/Create_Plugin_Announcement.label=Cr\u00E9er une annonce de plugin
 Properties/Insert_Buffer_Properties.label=Ins\u00E9rer les propri\u00E9t\u00E9s du tampon
+Properties/jEdit_Properties.label=Liste des propri\u00E9t\u00E9s de jEdit
 Properties/Look_and_Feel_Properties.label=Liste des propri\u00E9t\u00E9s Look and Feel
 Properties/System_Properties.label=Liste des propri\u00E9t\u00E9s syst\u00E8me
-Properties/jEdit_Properties.label=Liste des propri\u00E9t\u00E9s de jEdit
 #}}}
 
 #{{{ Text      
