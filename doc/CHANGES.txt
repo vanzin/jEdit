@@ -219,6 +219,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Macros folder can now be localized with properties
+  macros.folder.[foldername].label (Matthieu Casanova)
+
 - Pasting a VFSFile as String dataflavor will now paste the full path instead of
   the name of the file (Matthieu Casanova)
 

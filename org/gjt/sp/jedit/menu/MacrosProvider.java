@@ -81,7 +81,7 @@ public class MacrosProvider implements DynamicMenuProvider
 			{
 				Vector subvector = (Vector)obj;
 				String name = (String)subvector.elementAt(0);
-				JMenu submenu = new JMenu(name);
+				JMenu submenu = new JMenu(jEdit.getProperty("macros.folder."+ name + ".label", name));
 				createMacrosMenu(submenu,subvector,1);
 				if(submenu.getMenuComponentCount() != 0)
 					menuItems.add(submenu);
