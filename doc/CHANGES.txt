@@ -164,6 +164,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   
 - Updated css mode with new css 3 properties and values, tracker 3483390.
   (Dale Anson)
+  
+- Updated html mode to recognize new html 5 keywords, updated jsp mode to
+  delegate to html mode for html tags. (Dale Anson)
 
 }}}
 {{{ UI
