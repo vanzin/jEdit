@@ -7,6 +7,8 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
+#{{{ jEdit core (jedit_gui.props)
+
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
 	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
@@ -2102,3 +2104,154 @@ killring.load-memoryerror.title=Memory error
 killring.start=start
 killring.stop=stop
 killring.delete=delete killring and start
+
+#}}}
+
+#{{{ Macros                       
+
+#{{{ Properties used by macros     
+
+#{{{ common    
+macro.rs.general.ErrorNotEditableDialog.title=write permission
+macro.rs.general.ErrorNotEditableDialog.message=Buffer is not editable!
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=LineFilter
+macro.rs.LineFilter.ignoreCaseCheckBox.label=Ignore case
+macro.rs.LineFilter.regexpPanelBorder.title=Pattern to compare (Regular Expression)
+macro.rs.LineFilter.processModeRadioButtonMatching.label=Matching
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=Not matching
+macro.rs.LineFilter.processModeOptionPanelBorder.title=Lines
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=Write to new buffer
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=Delete
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=Action
+
+macro.rs.LineFilter.DeleteActionDisabled.message=Delete is not available
+macro.rs.LineFilter.MultipleSelection.message=Multiple selection is not supported
+macro.rs.LineFilter.BlockSelection.message=Rectangular selection is not supported
+
+macro.rs.LineFilter.SummaryDeleted.label=Lines deleted!
+macro.rs.LineFilter.SummaryWritten.label=Lines written to a new buffer.
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=Invalid regular expression
+macro.rs.LineFilter.ErrorRegexpDialog.message=The regular expression is invalid!
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C         
+C/Include_Guard.label=Include Guard
+C/Toggle_Header_Source.label=Toggle Header Source
+#}}}
+
+#{{{ Clipboard 
+Clipboard/Copy_Lines.label=Copy Lines
+Clipboard/Copy_Lines_Containing.label=Copy Lines Containing
+Clipboard/Copy_Visible_Lines.label=Copy Visible Lines
+Clipboard/Cut_Lines.label=Cut Lines
+Clipboard/Cut_Lines_Containing.label=Cut Lines Containing
+Clipboard/Paste_Indent.label=Paste Indent
+#}}}
+
+#{{{ Editing  
+Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
+Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
+Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Editing/Emacs_Next_Line.label=Emacs Next Line
+Editing/Emacs_Previous_Line.label=Emacs Previous Line
+Editing/Go_to_Column.label=Go To Column
+Editing/Greedy_Backspace.label=Greedy Backspace
+Editing/Greedy_Delete.label=Greedy Delete
+Editing/Greedy_Left.label=Greedy Left
+Editing/Greedy_Right.label=Greedy Right
+Editing/Keywords_to_Upper_Case.label=Keywords to Upper Case
+Editing/Mode_Switcher.label=Mode Switcher
+Editing/Move_Lines_Down.label=Move Lines Down
+Editing/Move_Lines_Up.label=Move Lines Up
+Editing/Open_Line_Above.label=Open Line Above
+Editing/Open_Line_Below.label=Open Line Below
+Editing/Toggle_Fold.label=Toggle Fold
+#}}}
+
+#{{{ Files    
+Files/Browse_Buffer_Directory.label=Browse Buffer Directory
+Files/Browse_Directory.label=Browse Directory
+Files/Buffer_Switcher.label=Buffer Switcher
+Files/Close_All_Except_Active.label=Close All Except Active
+Files/Copy_Name_to_Clipboard.label=Copy Name to Clipboard
+Files/Copy_Path_to_Clipboard.label=Copy Path to Clipboard
+Files/Delete_Current.label=Delete Current
+Files/Duplicate_Buffer.label=Duplicate Buffer
+Files/Glob_Close.label=Glob Close
+Files/Insert_Selection.label=Insert Selection
+Files/Next_Dirty_Buffer.label=Next Dirty Buffer
+Files/Open_Path.label=Open Path
+Files/Open_Selection.label=Open Selection
+Files/Send_Buffer_To_Next_Split.label=Send Buffer To Next Split
+Files/Toggle_ReadOnly.label=Toggle ReadOnly
+#}}}
+
+#{{{ Interface
+Interface/Decrease_Font_Size.label=Decrease Font Size
+Interface/Increase_Font_Size.label=Increase Font Size
+Interface/Open_Context_Menu.label=Open Context Menu
+Interface/Reset_TextArea.label=Reset TextArea
+Interface/Splitpane_Grow.label=Splitpane Grow
+Interface/Toggle_Bottom_Docking_Area.label=Toggle Bottom Docking Area
+Interface/Toggle_Left_Docking_Area.label=Toggle Left Docking Area
+Interface/Toggle_Right_Docking_Area.label=Toggle Right Docking Area
+Interface/Toggle_Top_Docking_Area.label=Toggle Top Docking Area
+#}}}
+
+#{{{ Java      
+Java/Create_Constructor.label=Create Constructor
+Java/Get_Class_Name.label=Get Class Name
+Java/Get_Package_Name.label=Get Package Name
+Java/Java_File_Save.label=Java File Save
+Java/Make_Get_and_Set_Methods.label=Make Get and Set Methods
+Java/Preview_JavaDoc_Of_Current_Buffer.label=Preview JavaDoc Of Current Buffer
+#}}}
+
+#{{{ Misc
+Misc/Buffer_to_HyperSearch_Results.label=Buffer to HyperSearch_Results
+Misc/Debug_BufferSets.label=Debug BufferSets
+Misc/Display_Abbreviations.label=Display Abbreviations
+Misc/Display_Actions.label=Display Actions
+Misc/Display_Character_Code.label=Display Character Code
+Misc/Display_Shortcuts.label=Display Shortcuts
+Misc/Evaluate_Buffer_in_BeanShell.label=Evaluate Buffer in BeanShell
+Misc/Hex_Convert.label=Hex Convert
+Misc/HyperSearch_Results_to_Buffer.label=HyperSearch Results to Buffer
+Misc/Make_Bug_Report.label=Make Bug Report
+Misc/Run_Script.label=Run Script
+Misc/Show_Threads.label=Show Threads
+#}}}
+
+#{{{ Properties
+Properties/Create_Plugin_Announcement.label=Create Plugin Announcement
+Properties/Insert_Buffer_Properties.label=Insert Buffer Properties
+Properties/jEdit_Properties.label=jEdit Properties
+Properties/Look_and_Feel_Properties.label=Look and Feel Properties
+Properties/System_Properties.label=System Properties
+
+#}}}
+
+#{{{ Text      
+Text/Add_Prefix_and_Suffix.label=Add Prefix and Suffix
+Text/Color_Picker.label=Color Picker
+Text/Compose_Tag.label=Compose Tag
+Text/Duplicate_Line.label=Duplicate Line
+Text/Insert_Date.label=Insert Date
+Text/Insert_Tag.label=Insert Tag
+Text/Line_Filter.label=Line Filter
+Text/Next_Char.label=Next Char
+Text/Reverse_Lines.label=Reverse Lines
+Text/Single_Space_Buffer.label=Single Space Buffer
+#}}}
+
+#}}}
+
+#}}}
