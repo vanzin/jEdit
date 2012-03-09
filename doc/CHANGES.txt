@@ -48,6 +48,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Fixed memory leaks which could climb to be observable with complex
   syntax rules and large files. (Kazutoshi Satoda)
 
+- Fixed unreasonable slow down which could happen with complex syntax
+  rules and large files. (Kazutoshi Satoda)
+
 }}}
 {{{ API Changes
 

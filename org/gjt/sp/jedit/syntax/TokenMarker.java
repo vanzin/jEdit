@@ -953,12 +953,13 @@ unwind:		while(context.parent != null)
 		//{{{ hashCode() method
 		public int hashCode()
 		{
-			if(inRule != null)
-				return inRule.hashCode();
-			else if(rules != null)
-				return rules.hashCode();
-			else
-				return 0;
+			int code = 0;
+			code += (parent != null) ? parent.hashCode() : 0;
+			code += (inRule != null) ? inRule.hashCode() : 0;
+			code += (rules != null) ? rules.hashCode() : 0;
+			code += (spanEndSubst != null) ? spanEndSubst.hashCode() : 0;
+			code += (spanEndSubstRegex != null) ? spanEndSubstRegex.hashCode() : 0;
+			return code;
 		} //}}}
 
 		//{{{ equals() method
