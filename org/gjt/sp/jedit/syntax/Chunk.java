@@ -389,12 +389,8 @@ public class Chunk extends Token
 	private static Font[] preferredFonts;
 	private static Font[] fontSubstList;
 
-	//{{{ getFonts() method
-	/**
-	 * Returns a list of fonts to be searched when applying font
-	 * substitution.
-	 */
-	private static Font[] getFonts()
+	//{{{ getFontSubstList() method
+	private static Font[] getFontSubstList()
 	{
 		if (fontSubstList == null)
 		{
@@ -412,6 +408,32 @@ public class Chunk extends Token
 		}
 		return fontSubstList;
 	} //}}}
+
+	//{{{ getSubstFont() method
+	/**
+	 * Returns the first font which can display a character from
+	 * configured substitution candidates, or null if there is no
+	 * such font.
+	 */
+	private static Font getSubstFont(int codepoint)
+	{
+		// Workaround for a problem reported in SF.net patch #3480246
+		// > If font substitution with system fonts is enabled,
+		// > I get for inserted control characters strange mathematical
+		// > symbols from a non-unicode font in my system.
+		if (Character.isISOControl(codepoint))
+			return null;
+
+		for (Font candidate: getFontSubstList())
+		{
+			if (candidate.canDisplay(codepoint))
+			{
+				return candidate;
+			}
+		}
+		return null;
+	} //}}}
+
 
 	//{{{ drawGlyphs() method
 	/**
@@ -438,7 +460,7 @@ public class Chunk extends Token
 	 * Creates a glyph vector for the text with the given font,
 	 * and adds it to the internal list.
 	 *
-	 * @param	f	Font to use for rendering.
+	 * @param	font	Font to use for rendering.
 	 * @param	frc	Font rendering context.
 	 * @param	text	Char array with text to render.
 	 * @param	start	Start index of text to render.
@@ -446,26 +468,26 @@ public class Chunk extends Token
 	 *
 	 * @return Width of the rendered text.
 	 */
-	private float addGlyphVector(Font f,
-				     FontRenderContext frc,
-				     char[] text,
-				     int start,
-				     int end)
+	private float addGlyphVector(
+		Font font, FontRenderContext frc,
+		char[] text, int start, int end)
 	{
 		// FIXME: Need BiDi support.
 		int layoutFlags = Font.LAYOUT_LEFT_TO_RIGHT
 			| Font.LAYOUT_NO_START_CONTEXT
 			| Font.LAYOUT_NO_LIMIT_CONTEXT;
 
-		GlyphVector gv = f.layoutGlyphVector(frc,
+		GlyphVector gv = font.layoutGlyphVector(frc,
 						     text,
 						     start,
 						     end,
 						     layoutFlags);
+
 		// This is necessary to work around a memory leak in Sun Java 6 where
 		// the sun.font.GlyphLayout is cached and reused while holding an
 		// instance to the char array.
-		f.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, layoutFlags);
+		font.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, layoutFlags);
+
 		glyphs.add(gv);
 		return (float) gv.getLogicalBounds().getWidth();
 	} // }}}
@@ -477,9 +499,9 @@ public class Chunk extends Token
 	 * added to the internal glyph list.
 	 *
 	 * Font substitution works in the following manner:
-	 *	- All characters that can be rendered with the default
+	 *	- All characters that can be rendered with the main
 	 *	  font will be.
-	 *	- For characters that can't be handled by the default
+	 *	- For characters that can't be handled by the main
 	 *	  font, iterate over the list of available fonts to
 	 *	  find an appropriate one. The first match is chosen.
 	 *
@@ -499,87 +521,47 @@ public class Chunk extends Token
 				   int end)
 	{
 		float width = 0.0f;
-		int max = 0;
-		Font dflt = style.getFont();
+		Font mainFont = style.getFont();
 
 		glyphs = new LinkedList<GlyphVector>();
 
-		while (max != -1 && start < end)
+		while (start < end)
 		{
-			max = fontSubstEnabled ? dflt.canDisplayUpTo(text, start, end)
-			                       : -1;
-			if (max == -1)
+			int substStart = !fontSubstEnabled ? -1
+				: mainFont.canDisplayUpTo(text, start, end);
+			if (substStart == -1)
 			{
-				width += addGlyphVector(dflt,
-							frc,
-							text,
-							start,
-							end);
+				width += addGlyphVector(
+					mainFont, frc, text, start, end);
+				break;
+			}
+			if (substStart > start)
+			{
+				width += addGlyphVector(
+					mainFont, frc, text, start, substStart);
+			}
+			int nextChar = Character.codePointAt(text, substStart);
+			Font substFont = getSubstFont(nextChar);
+			int substEnd = substStart + Character.charCount(nextChar);
+			if (substFont != null)
+			{
+				while (substEnd < end &&
+					!mainFont.canDisplay(nextChar = Character.codePointAt(text, substEnd)) &&
+					substFont == getSubstFont(nextChar))
+				{
+					substEnd += Character.charCount(nextChar);
+				}
+				width += addGlyphVector(
+					substFont.deriveFont(mainFont.getStyle(),
+						mainFont.getSize()), frc,
+					text, substStart, substEnd);
 			}
 			else
 			{
-				/*
-				 * Draw as much as we can and update the
-				 * current offset.
-				 */
-				if (max > start)
-				{
-					width += addGlyphVector(dflt,
-								frc,
-								text,
-								start,
-								max);
-					start = max;
-				}
-
-				/*
-				 * Find a font that can display the next
-				 * characters.
-				 */
-				Font f = null;
-				for (Font candidate : getFonts())
-				{
-					 if (candidate.canDisplay(text[start]))
-					 {
-						 f = candidate;
-						 break;
-					 }
-				}
-
-				if (f != null)
-				{
-					f = f.deriveFont(dflt.getStyle(), dflt.getSize());
-
-					/*
-					 * Find out how many characters
-					 * the current font cannot
-					 * display, but the chosen one
-					 * can.
-					 */
-					int last = start;
-					while (last < end &&
-					       f.canDisplay(text[last]) &&
-					       !dflt.canDisplay(text[last]))
-						last++;
-
-					width += addGlyphVector(f,
-								frc,
-								text,
-								start,
-								last);
-
-					start = last;
-				}
-				else
-				{
-					width += addGlyphVector(dflt,
-								frc,
-								text,
-								start,
-								start + 1);
-					start++;
-				}
+				width += addGlyphVector(
+					mainFont, frc, text, substStart, substEnd);
 			}
+			start = substEnd;
 		}
 		return width;
 	} //}}}
