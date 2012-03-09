@@ -9,6 +9,10 @@ Alan Ezust, and Max Funk for contributing to this release.
 
 {{{ Bug Fixes
 
+- Made basic edit operations aware of characters above BMP and combining
+  character sequences.
+  (SF.net bug #3040720 - Kazutoshi Satoda)
+
 - The Install/Update plugin dialog with progress bar should not show the
   progression of installation in it's title (#3485497) (Matthieu Casanova)
 
