@@ -98,6 +98,7 @@
 			<KEYWORD2>background-size</KEYWORD2>
 			<KEYWORD2>color</KEYWORD2>
 			<KEYWORD2>opacity</KEYWORD2>
+			<KEYWORD2>rendering-intent</KEYWORD2>
 
 			<!-- Font properties -->
 			<KEYWORD2>font</KEYWORD2>
@@ -130,9 +131,12 @@
 			<KEYWORD2>text-shadow</KEYWORD2>
 			<KEYWORD2>text-decoration</KEYWORD2>
 			<KEYWORD2>text-indent</KEYWORD2>
+			<KEYWORD2>text-justify</KEYWORD2>
 			<KEYWORD2>text-overflow</KEYWORD2>
 			<KEYWORD2>text-transform</KEYWORD2>
+			<KEYWORD2>word-break</KEYWORD2>
 			<KEYWORD2>word-spacing</KEYWORD2>
+			<KEYWORD2>word-wrap</KEYWORD2>
 			<KEYWORD2>letter-spacing</KEYWORD2>
 			<KEYWORD2>white-space</KEYWORD2>
 
@@ -305,6 +309,7 @@
 			<INVALID>bookmark-label</INVALID> 					
 			<INVALID>bookmark-level</INVALID> 					
 			<INVALID>bookmark-target</INVALID>	
+			<INVALID>border-image</INVALID> 					
 			<INVALID>border-image-outset</INVALID> 					
 			<INVALID>border-image-repeat</INVALID> 					
 			<INVALID>border-image-slice</INVALID> 					
@@ -505,6 +510,7 @@
             <KEYWORD3>distribute-space</KEYWORD3>
             <KEYWORD3>dotted</KEYWORD3>
             <KEYWORD3>double</KEYWORD3>
+            <KEYWORD3>resize</KEYWORD3>
             <KEYWORD3>e-resize</KEYWORD3>
             <KEYWORD3>ease</KEYWORD3>
             <KEYWORD3>ease-in</KEYWORD3>
