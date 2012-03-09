@@ -16,8 +16,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Fixed replace all on a directory that was broken (#3480583) (Matthieu Casanova)
 
-- Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534, 3480246)
-
 - Fixed rectangular selection constructor (patch #3440310) (peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists
@@ -35,10 +33,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
-
-- Made basic edit operations aware of characters above BMP and combining
-  character sequences.
-  (SF.net bug #3040720 - Kazutoshi Satoda)
 
 - Fixed memory leaks which could climb to be observable with complex
   syntax rules and large files. (Kazutoshi Satoda)
