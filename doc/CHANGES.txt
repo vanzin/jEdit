@@ -5,7 +5,7 @@ jEdit 4.5 version history
 {{{ Version 4.5.1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Kazutoshi Satoda,
-and Alan Ezust for contributing to this release.
+Alan Ezust, and Max Funk for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -21,6 +21,8 @@ and Alan Ezust for contributing to this release.
   display) which could happen when multiple files are opened
   simultaneously in a text area. This could also happen on some other
   minor conditions. (SF.net bug #3442116 - Kazutoshi Satoda)
+
+- Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534)
 
 }}}
 {{{ Miscellaneous
