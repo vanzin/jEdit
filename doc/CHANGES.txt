@@ -45,6 +45,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   character sequences.
   (SF.net bug #3040720 - Kazutoshi Satoda)
 
+- Fixed memory leaks which could climb to be observable with complex
+  syntax rules and large files. (Kazutoshi Satoda)
+
 }}}
 {{{ API Changes
 

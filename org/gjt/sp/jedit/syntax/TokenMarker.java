@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import javax.swing.text.Segment;
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -901,7 +902,8 @@ unwind:		while(context.parent != null)
 	 */
 	public static class LineContext
 	{
-		private static final Map<LineContext, LineContext> intern = new HashMap<LineContext, LineContext>();
+		private static final WeakHashMap<LineContext, WeakReference<LineContext>> intern =
+			new WeakHashMap<LineContext, WeakReference<LineContext>>();
 
 		public LineContext parent;
 		public ParserRule inRule;
@@ -935,14 +937,17 @@ unwind:		while(context.parent != null)
 		//{{{ intern() method
 		public LineContext intern()
 		{
-			LineContext obj = intern.get(this);
-			if(obj == null)
+			WeakReference<LineContext> ref = intern.get(this);
+			if(ref != null)
 			{
-				intern.put(this,this);
-				return this;
+				LineContext obj = ref.get();
+				if(obj != null)
+				{
+					return obj;
+				}
 			}
-			else
-				return obj;
+			intern.put(this, new WeakReference<LineContext>(this));
+			return this;
 		} //}}}
 
 		//{{{ hashCode() method
