@@ -17,15 +17,15 @@ Priority: optional
 Homepage: http://www.jedit.org/
 Description: A plugin-based editor for programmers.
  As one of the most feature rich editors available, jEdit boasts support for
- syntax highlighting in more than 140 languages. jEdit combines the power of
+ syntax highlighting in more than 200 languages. jEdit combines the power of
  Emacs, the user-friendliness of Kate, and the advanced editing features
  (such as vertical paste) of Ultraedit, to bring you an open-source
  plugin-based programmer's editor of professional quality.
  .
- It is possible to define complex macros in BeanShell or Jython, or other
- languages that fit into the BSF. jEdit offers a powerful and user-friendly
- keyboard mapping system (including 2-keystroke shortcuts), making it
- possible to give jEdit a very Emacs-like feel, if you so desire.
+ It is possible to define complex macros in BeanShell, JavaScript, 
+ Jython, or other languages that fit into the BSF. jEdit offers a powerful 
+ and user-friendly keyboard mapping system (including 2-keystroke shortcuts), 
+ making it possible to give jEdit a very Emacs-like feel, if you so desire.
  .
  Its functionality is easily extended by the use of 'plugins' which can be
  downloaded, updated, and installed, all without exiting the editor. These
