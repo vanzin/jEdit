@@ -9,6 +9,9 @@ Alan Ezust, and Max Funk for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed memory leaks which could climb to be observable with complex
+  syntax rules and large files. (Kazutoshi Satoda)
+
 - Made basic edit operations aware of characters above BMP and combining
   character sequences.
   (SF.net bug #3040720 - Kazutoshi Satoda)
