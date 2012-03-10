@@ -160,11 +160,6 @@ Thanks to  for contributing to this release.
 }}}
      - Update the build number in org/gjt/sp/jedit/jEdit.java getBuild() method to
             return "[nextBuild]";
-     - Update the version and build number in build.xml to
-            <property name="jedit.version"
-                      value="[nextVersion]" />
-            <property name="jedit.build.number"
-                      value="[nextBuild]" />
      - Submit your changes by doing
             svn commit -m "Update the version number to [nextVersion]"
        in the root source directory
