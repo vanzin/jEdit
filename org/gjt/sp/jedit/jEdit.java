@@ -3432,6 +3432,33 @@ public class jEdit
 		});
 	} //}}}
 
+	//{{{ getResourceAsUTF8Text() method
+	private static Reader getResourceAsUTF8Text(String name)
+		throws IOException
+	{
+		InputStream bytes = jEdit.class.getResourceAsStream(name);
+		if (bytes == null)
+		{
+			return null;
+		}
+		Reader text = null;
+		try
+		{
+			// Using our CharsetEncoding to reliably detect
+			// encoding errors.
+			CharsetEncoding utf8 = new CharsetEncoding("UTF-8");
+			text = utf8.getTextReader(bytes);
+		}
+		finally
+		{
+			if (text == null)
+			{
+				bytes.close();
+			}
+		}
+		return text;
+	} //}}}
+
 	//{{{ initSystemProperties() method
 	/**
 	 * Load system properties.
@@ -3446,7 +3473,7 @@ public class jEdit
 				"/org/gjt/sp/jedit/jedit.props"));
 			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
 				"/org/gjt/sp/jedit/jedit_gui.props"));
-			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+			propMgr.loadSystemProps(getResourceAsUTF8Text(
 				"/org/jedit/localization/jedit_en.props"));
 		}
 		catch(Exception e)
@@ -3602,10 +3629,10 @@ public class jEdit
 			// no need to load english as localization property as it always loaded as default language
 			return;
 		}
-		InputStream langResource = null;
+		Reader langResource = null;
 		try
 		{
-			langResource = jEdit.class.getResourceAsStream("/org/jedit/localization/jedit_" + language + ".props");
+			langResource = getResourceAsUTF8Text("/org/jedit/localization/jedit_" + language + ".props");
 			propMgr.loadLocalizationProps(langResource);
 		}
 		catch (IOException e)

@@ -40,8 +40,14 @@ class PropertyManager
 		return total;
 	} //}}}
 
-	//{{{ loadSystemProps() method
+	//{{{ loadSystemProps() methods
 	void loadSystemProps(InputStream in)
+		throws IOException
+	{
+		loadProps(system,in);
+	}
+
+	void loadSystemProps(Reader in)
 		throws IOException
 	{
 		loadProps(system,in);
@@ -55,7 +61,7 @@ class PropertyManager
 	} //}}}
 
 	//{{{ loadLocalizationProps() method
-	void loadLocalizationProps(InputStream in)
+	void loadLocalizationProps(Reader in)
 		throws IOException
 	{
 		if (in == null)
@@ -190,6 +196,20 @@ class PropertyManager
 
 	//{{{ loadProps() method
 	private static void loadProps(Properties into, InputStream in)
+		throws IOException
+	{
+		try
+		{
+			into.load(in);
+		}
+		finally
+		{
+			in.close();
+		}
+	} //}}}
+
+	//{{{ loadProps() method
+	private static void loadProps(Properties into, Reader in)
 		throws IOException
 	{
 		try

@@ -2,7 +2,7 @@
 ### jEdit user interface definitions,
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
-### :encoding=ISO-8859-1:
+### :encoding=UTF-8:
 ###
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
@@ -494,7 +494,7 @@ whitespace-home.label=Go to Start of White Space
 #{{{ View stuff
 
 # Title
-view.title=jEdit -\ 
+view.title=jEdit -\u0020
 view.title.dirty=\ (modified)
 
 view.docking.close-tooltip=Hides the current docked window
@@ -1292,7 +1292,7 @@ options.appearance.localization.section.label=Localization
 options.appearance.usedefaultlocale.label=Use defaut locale
 options.appearance.lang.label=Language (change is effective on restart)
 options.appearance.lang.en=English
-options.appearance.lang.fr=Fran\u00E7ais
+options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch
 #}}}
 
@@ -2107,11 +2107,11 @@ killring.delete=delete killring and start
 
 #}}}
 
-#{{{ Macros                       
+#{{{ Macros
 
-#{{{ Properties used by macros     
+#{{{ Properties used by macros
 
-#{{{ common    
+#{{{ common
 macro.rs.general.ErrorNotEditableDialog.title=write permission
 macro.rs.general.ErrorNotEditableDialog.message=Buffer is not editable!
 #}}}
@@ -2142,12 +2142,12 @@ macro.rs.LineFilter.ErrorRegexpDialog.message=The regular expression is invalid!
 
 #{{{ Macro Names for Macros Menu (only original macros in original folders!)
 
-#{{{ C         
+#{{{ C
 C/Include_Guard.label=Include Guard
 C/Toggle_Header_Source.label=Toggle Header Source
 #}}}
 
-#{{{ Clipboard 
+#{{{ Clipboard
 Clipboard/Copy_Lines.label=Copy Lines
 Clipboard/Copy_Lines_Containing.label=Copy Lines Containing
 Clipboard/Copy_Visible_Lines.label=Copy Visible Lines
@@ -2156,7 +2156,7 @@ Clipboard/Cut_Lines_Containing.label=Cut Lines Containing
 Clipboard/Paste_Indent.label=Paste Indent
 #}}}
 
-#{{{ Editing  
+#{{{ Editing
 Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
 Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
 Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
@@ -2176,7 +2176,7 @@ Editing/Open_Line_Below.label=Open Line Below
 Editing/Toggle_Fold.label=Toggle Fold
 #}}}
 
-#{{{ Files    
+#{{{ Files
 Files/Browse_Buffer_Directory.label=Browse Buffer Directory
 Files/Browse_Directory.label=Browse Directory
 Files/Buffer_Switcher.label=Buffer Switcher
@@ -2206,7 +2206,7 @@ Interface/Toggle_Right_Docking_Area.label=Toggle Right Docking Area
 Interface/Toggle_Top_Docking_Area.label=Toggle Top Docking Area
 #}}}
 
-#{{{ Java      
+#{{{ Java
 Java/Create_Constructor.label=Create Constructor
 Java/Get_Class_Name.label=Get Class Name
 Java/Get_Package_Name.label=Get Package Name
@@ -2239,7 +2239,7 @@ Properties/System_Properties.label=System Properties
 
 #}}}
 
-#{{{ Text      
+#{{{ Text
 Text/Add_Prefix_and_Suffix.label=Add Prefix and Suffix
 Text/Color_Picker.label=Color Picker
 Text/Compose_Tag.label=Compose Tag
