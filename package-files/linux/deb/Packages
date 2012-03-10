@@ -3,8 +3,8 @@ Version: 4:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Installed-Size: @deb.installed.size@
-Recommends: sun-java6-jre
-Suggests: exuberant-ctags, cscope, global, ant, sun-java6-jdk
+Recommends: default-jre | openjdk-6-jre
+Suggests: default-jdk | openjdk-6-jdk, exuberant-ctags, cscope, global, ant 
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Filename: @deb.repository.file@
