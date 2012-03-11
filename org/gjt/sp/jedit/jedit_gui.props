@@ -1935,6 +1935,9 @@ options.appearance.decorateDialogs=Draw dialog box borders using Swing look & fe
 options.appearance.localization.section.label=Localization
 options.appearance.usedefaultlocale.label=Use defaut locale
 options.appearance.lang.label=Language (change is effective on restart)
+# It is encouraged to set the following labels in their own language
+# here (not in localized .props) to catch eyes of non-English users more
+# friendly.
 options.appearance.lang.en=English
 options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch

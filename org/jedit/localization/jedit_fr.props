@@ -1291,9 +1291,6 @@ options.appearance.decorateDialogs=Utiliser Swing look & feel pour le style des 
 options.appearance.localization.section.label=Localisation
 options.appearance.usedefaultlocale.label=Utiliser la langue par défaut
 options.appearance.lang.label=Langue (la modification est effective après redémarrage)
-options.appearance.lang.en=English
-options.appearance.lang.fr=Français
-options.appearance.lang.de=Deutsch
 #}}}
 
 #{{{ Context Menu pane
