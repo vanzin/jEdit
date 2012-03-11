@@ -101,6 +101,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ Editing
 
+- Scala mode added (#3501401 - Daniel Spiewak)
+
 - logs edit mode added (Matthieu Casanova)
 
 - Dart mode added (Patch #3483431 - Chris Sullins)
