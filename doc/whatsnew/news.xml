@@ -12,10 +12,13 @@
         <date> 2012 </date>
     </articleinfo>
 
+
     <para> Detailed changes can always be found in the <ulink
     url="../CHANGES.txt">Detailed Change Log</ulink>, 
     but here are some of the major features of this version. </para>
 
+    <para> Updated html/css edit modes with HTML5/CSS3 keywords. </para>
+    
     <itemizedlist> <listitem><para> Localization - jEdit now supports switching
     from default locale, and French and German translations for those locales,
     containing translations of common jEdit labels. It is also now quite easy to
@@ -26,7 +29,7 @@
     for Emacs, MacOS, Intellij and classic jEdit are provided, and users can
     create or customize them. 
     </para></listitem>
-    
+
     <listitem><para> New Editing options: Disable or simplified automatic
     indentation, and default response when opening a large file.
     </para></listitem> 
