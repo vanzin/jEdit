@@ -40,6 +40,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Fixed unreasonable slow down which could happen with complex syntax
   rules and large files. (Kazutoshi Satoda)
 
+- Fixed memory leaks which happened when split panes or multiple views
+  are used. (Kazutoshi Satoda)
+
 }}}
 {{{ API Changes
 

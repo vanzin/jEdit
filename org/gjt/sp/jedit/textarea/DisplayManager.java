@@ -700,6 +700,7 @@ public class DisplayManager
 	private final JEditBuffer buffer;
 	private final TextArea textArea;
 	private final BufferHandler bufferHandler;
+	private final ElasticTabStopBufferListener elasticTabStopListener;
 
 	//{{{ DisplayManager constructor
 	private DisplayManager(JEditBuffer buffer, TextArea textArea,
@@ -713,8 +714,8 @@ public class DisplayManager
 		firstLine = new FirstLine(this,textArea);
 		bufferHandler = new BufferHandler(this,textArea,buffer);
 		//TODO:invoke ElasticTabStopBufferListener methods from inside BufferHandler to avoid chunking same line twice
-		ElasticTabStopBufferListener listener = new ElasticTabStopBufferListener(textArea);
-		buffer.addBufferListener(listener, JEditBuffer.HIGH_PRIORITY);
+		elasticTabStopListener = new ElasticTabStopBufferListener(textArea);
+		buffer.addBufferListener(elasticTabStopListener, JEditBuffer.HIGH_PRIORITY);
 		// this listener priority thing is a bad hack...
 		buffer.addBufferListener(bufferHandler, JEditBuffer.HIGH_PRIORITY);
 
@@ -742,6 +743,7 @@ public class DisplayManager
 	private void dispose()
 	{
 		buffer.removeBufferListener(bufferHandler);
+		buffer.removeBufferListener(elasticTabStopListener);
 	} //}}}
 
 	//{{{ showLineRange() method

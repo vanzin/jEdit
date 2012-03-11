@@ -68,6 +68,14 @@ public class JEditTextArea extends TextArea
 		EditBus.addToBus(this);
 	} //}}}
 
+	//{{{ dispose() method
+	@Override
+	public void dispose()
+	{
+		EditBus.removeFromBus(this);
+		super.dispose();
+	} //}}}
+
 	//{{{ getFoldPainter() method
 	@Override
 	public FoldPainter getFoldPainter()
