@@ -514,7 +514,7 @@ keymaps.IntelliJ.label=IntelliJ IDEA
 #}}}
 
 
-available.lang=en de fr
+available.lang=en de fr ja
 # if lang.usedefaultlocale is true, the lang.current is not used
 lang.usedefaultlocale=true
 lang.current=en

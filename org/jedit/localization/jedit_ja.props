@@ -1,0 +1,2254 @@
+###
+### jEdit user interface definitions,
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+### :encoding=UTF-8:
+###
+### Copyright (C) 1998, 2005 Slava Pestov
+###
+
+#{{{ jEdit core (jedit_gui.props)
+
+#{{{ Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+#}}}
+
+#{{{ Common strings
+common.ok=了解
+common.cancel=取消し
+common.close=閉じる
+common.error=エラー
+common.apply=適用
+common.more=さらに
+common.insert=挿入
+common.add=追加
+common.remove=削除
+common.moveUp=上へ
+common.moveDown=下へ
+common.clearAll=すべてクリア
+common.selectAll=すべて選択
+common.selectNone=選択解除
+
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
+#}}}
+
+#{{{ Miscellaneous
+history.caption=入力履歴:
+
+action-set.jEdit=ビルトイン コマンド
+action-set.browser=ファイルシステム ブラウザ
+action-set.macros=マクロ
+action-set.plugin=プラグイン: {0}
+
+macro-handler.beanshell.label=BeanShell スクリプト
+macro-handler.beanshell.glob=*.bsh
+
+save-layout-failed.message=ドッキングレイアウトの保存に失敗しました。
+load-layout.title=ドッキングレイアウトの読み込み
+load-layout.message=読み込むドッキングレイアウト:
+save-layout.title=ドッキングレイアウトの保存
+save-layout.message=保存するドッキングレイアウト:
+#}}}
+
+#{{{ Tool bar
+view.search.find=検索:
+view.search.close-tooltip=検索バーを隠す (ESC)
+
+view.action.prompt=アクション:
+view.action.no-completions=該当するアクションはありません
+view.action.close-tooltip=アクションバーを隠す (ESC)
+#}}}
+
+#{{{ Context menu
+view.context.customize=メニューをカスタマイズ...
+#}}}
+
+#{{{ System tray menu
+tray.newView.label=新規ビュー
+tray.newPlainView.label=新規プレーンビュー
+tray.exit.label=終了
+#}}}
+
+#{{{ Menu bar
+
+#{{{ File menu
+file.label=ファイル($F)
+new-file.label=新規作成($N)
+new-file-in-mode.label=モードを指定して新規作成($M)
+new-file-in-mode.dialog.title=新規ファイル
+new-file-in-mode.dialog.message=編集モード:
+open-file.label=開く($O)...
+reload.label=再読み込み($R)
+reload-all.label=すべて再読み込み($D)...
+close-buffer.label=閉じる($C)
+close-buffer.tooltip=この編集ペインのバッファセット内でのみ閉じます。
+global-close-buffer.label=閉じる (グローバル)
+global-close-buffer.tooltip=すべての編集ペインとビューでバッファを閉じます。
+closeall-except-active.tooltip=編集ペインのバッファセット中で他のものを閉じます。
+closeall-except-active.label=他を閉じる($T)
+closeall-bufferset.label=すべて閉じる($E)
+closeall-bufferset.tooltip=編集ペインのバッファセットをクリアします。
+bufferset-toggle-exclusive.label=排他バッファセットの切り替え($X)
+bufferset-toggle-exclusive.tooltip=バッファが開かれるとき、他の無関係なバッファセット中にあれば閉じます。
+close-all.label=すべて閉じる(グローバル)
+close-all.tooltip=すべてのビューのすべてのバッファを閉じます。
+save.label=保存($S)
+save-as.label=名前を付けて保存($A)...
+save-a-copy-as.label=複製に名前を付けて保存($Y)...
+save-a-copy-as.tooltip=現在のバッファのパスは変化しません。
+save-all.label=すべて保存($L)...
+print.label=印刷($P)...
+page-setup.label=印刷設定($G)...
+# Print selection not yet implemented
+#print-selection.label=選択範囲を印刷($T)...
+exit.label=終了($X)
+
+#{{{ Recent Files menu
+recent-files.label=最近開いたファイル($F)
+recent-files.textfield.tooltip=ここにフィルタプレフィクスやグロブパターンを入力するこどができます
+no-recent-files.label=最近開いたファイルはありません
+clear-recent-files.label=ファイル履歴のクリア
+#}}}
+
+reload-encoding.label=エンコーディングを指定して再読み込み($E)
+reload-encoding.error={0} は有効なエンコーディングではありません
+
+#}}}
+
+#{{{ Edit menu
+
+edit.label=編集($E)
+undo.label=元に戻す($U)
+redo.label=やり直し($R)
+cut.label=切り取り($C)
+copy.label=コピー($O)
+paste.label=貼り付け($P)
+select-all.label=すべて選択($A)
+word-count.label=単語カウント($W)...
+complete-word.label=単語補完($M)
+expand-abbrev.label=略語の展開($X)
+goto-line.label=行を指定して移動($G)...
+
+#{{{ More Clipboard menu
+clipboard.label=クリップボード拡張($B)
+cut-append.label=追加切り取り($C)
+copy-append.label=追加コピー($O)
+vertical-paste.label=垂直貼り付け($V)
+paste-previous.label=クリップボード履歴から貼り付け($U)...
+paste-deleted.label=削除履歴から貼り付け($D)...
+paste-special.label=形式を選択して貼り付け...
+cut-string-register.label=レジスタに切り取り($T)
+copy-string-register.label=レジスタにコピー($P)
+paste-string-register.label=レジスタを貼り付け($R)
+clear-string-register.label=レジスタをクリア
+cut-append-string-register.label=レジスタに追加切り取り($N)
+copy-append-string-register.label=レジスタに追加コピー($A)
+vertical-paste-string-register.label=レジスタを垂直貼り付け($E)
+view-registers.label=レジスタの閲覧($W)
+#}}}
+
+#{{{ More Selection menu
+selection.label=選択範囲拡張($S)
+select-none.label=選択解除($N)
+select-word.label=単語を選択($W)
+select-line.label=行を選択($L)
+select-paragraph.label=段落の選択($P)
+invert-selection.label=選択範囲の反転($I)
+toggle-multi-select.label=マルチ選択($M)
+toggle-rect-select.label=矩形選択($R)
+select-line-range.label=行範囲を指定して選択($C)...
+#}}}
+
+#{{{ Text menu
+text.label=テキスト($T)
+delete-line.label=行削除($D)
+delete-start-line.label=行頭まで削除($S)
+delete-end-line.label=行末まで削除($E)
+join-lines.label=行結合($J)
+delete-paragraph.label=段落削除($P)
+format-paragraph.label=段落整形($F)
+to-lower.label=小文字に変換($L)
+to-upper.label=大文字に変換($U)
+#}}}
+
+#{{{ Indent menu
+indent.label=インデント($I)
+indent-lines.label=行をインデント($I)
+shift-left.label=インデントを左へ($)
+shift-right.label=インデントを右へ($)
+remove-trailing-ws.label=末尾空白を除去($W)
+spaces-to-tabs.label=スペースをタブに変換($S)
+tabs-to-spaces.label=タブをスペースに変換($T)
+#}}}
+
+#{{{ Source menu
+source.label=ソース($E)
+range-comment.label=範囲コメント($R)
+line-comment.label=行コメント($L)
+select-block.label=コードブロック選択($S)
+match-bracket.label=対応する括弧に移動($M)
+prev-bracket.label=前の括弧に移動($P)
+next-bracket.label=次の括弧に移動($N)
+#}}}
+
+#}}}
+
+#{{{ Search menu
+search.label=検索($S)
+find.label=検索/置換($F)...
+find-next.label=次を検索($N)
+find-prev.label=前を検索($V)
+search-in-open-buffers.label=操作中バッファを検索($B)...
+search-in-directory.label=ディレクトリを検索($D)...
+replace-in-selection.label=選択範囲内で置換($R)
+replace-and-find-next.label=置換して次を検索($P)
+replace-all.label=すべて置換($A)
+quick-search.label=インクリメンタル検索($I)
+hypersearch.label=ハイパーサーチバー($H)
+quick-search-word.label=選択単語をインクリメンタル検索($N)
+hypersearch-word.label=選択単語をハイパーサーチ($Y)
+whole-word.label=完全一致単語のみ($W)
+ignore-case.label=大文字小文字を区別しない($C)
+regexp.label=正規表現($X)
+hypersearch-results.label=ハイパーサーチ結果
+#}}}
+
+#{{{ Markers menu
+markers.label=マーカー($M)
+add-marker.label=マーカーの追加/削除($A)
+add-marker-shortcut.label=マーカーショートカットとして追加($W)
+remove-all-markers.label=マーカーをすべて削除($M)
+goto-marker.label=マーカーへ移動($G)
+select-marker.label=マーカーまで選択($S)
+swap-marker.label=選択行を現在のマーカーと入れ替え($P)
+prev-marker.label=前のマーカーへ移動($P)
+next-marker.label=次のマーカーへ移動($N)
+no-markers.label=マーカーがありません
+markers.blank-line=[Blank line]
+#}}}
+
+#{{{ Folding menu
+folds.label=フォールド($O)
+collapse-fold.label=フォールドを閉じる($C)
+expand-one-level.label=フォールド階層をひとつ開く($E)
+expand-fold.label=フォールド階層をすべて開く($F)
+collapse-all-folds.label=すべてのフォールドを閉じる($A)
+expand-folds.label=階層を指定してフォールドを開く($L)
+expand-all-folds.label=すべてのフォールドを開く($X)
+select-fold.label=フォールドを選択($S)
+add-explicit-fold.label=明示的フォールドを追加($D)
+narrow-to-fold.label=子階層のみ表示($R)
+narrow-to-selection.label=選択領域のみ表示($W)
+parent-fold.label=親フォールドへ移動($G)
+prev-fold.label=前のフォールドへ移動($P)
+next-fold.label=次のフォールドへ移動($N)
+#}}}
+
+#{{{ View menu
+view.label=ビュー($V)
+new-view.label=新規ビュー($V)
+new-view.tooltip=ドッキングありの新規メインウィンドウ
+new-plain-view.label=新規プレーンビュー($W)
+new-plain-view.tooltip=よりツールバーが少なくドッキングなしの新規メインウィンドウ
+close-view.label=ビューを閉じる($C)
+close-view.tooltip=メインウィンドウを閉じ、もしこれが最後のビューなら jEdit を終了します。
+prev-buffer.label=前のバッファへ移動($P)
+next-buffer.label=次のバッファへ移動($N)
+recent-buffer.label=直前のバッファへ移動($R)
+toggle-buffer-switcher.label=バッファスイッチャの表示($B)
+focus-buffer-switcher.label=バッファスイッチャにフォーカス($W)
+toggle-line-numbers.label=行番号の表示($L)
+toggle-statusbar.label=ステータスバーの表示($T)
+toggle-gutter.label=ガターの表示($G)
+show-context-menu.label=コンテキストメニューを表示
+set-view-title.label=ビューのタイトルを設定...
+set-view-title.tooltip=デスクトップ上で区別しやすいよう、メインウィンドウのタイトルを設定します。
+toggle-full-screen.label=フルスクリーンモードに切り替え($F)
+
+#{{{ Scrolling menu
+scrolling.label=スクロール($G)
+scroll-to-current-line.label=現在行までスクロール($T)
+scroll-and-center.label=スクロールしてキャレットを中央へ($S)
+center-caret.label=キャレットをスクリーンの中央へ($C)
+scroll-up-line.label=前行にスクロール($U)
+scroll-down-line.label=次行にスクロール($D)
+scroll-up-page.label=前ページにスクロール($P)
+scroll-down-page.label=次ページにスクロール($O)
+#}}}
+
+#{{{ Splitting menu
+splitting.label=分割($S)
+split-horizontal.label=水平分割($H)
+split-vertical.label=垂直分割($V)
+unsplit-current.label=分割解除($U)
+unsplit.label=すべて分割解除($A)
+resplit.label=分割を復元($R)
+prev-textarea.label=前のテキストエリアへ($P)
+next-textarea.label=次のテキストエリアへ($N)
+buffersets.label=バッファセット($B)
+global-bufferset.label=グローバルスコープ($G)
+global-bufferset.tooltip=すべての編集ペインで同じバッファセットを共有します。
+view-bufferset.label=ビュースコープ($V)
+view-bufferset.tooltip=同じビューにある編集ペインは同じバッファセットを共有します。
+editpane-bufferset.label=編集ペインスコープ($E)
+editpane-bufferset.tooltip=各編集ペインがそれぞれ個別にバッファセット持ちます。
+#}}}
+
+#{{{ Docking menu
+docking.label=ドッキング($D)
+docking.menu.label=ドッキング可能メニュー
+toggle-dock-areas.label=ドッキングエリアの表示切り替え($A)
+left-docking-area.label=左ドッキングエリアにフォーカス($L)
+top-docking-area.label=上ドッキングエリアにフォーカス($T)
+right-docking-area.label=右ドッキングエリアにフォーカス($R)
+bottom-docking-area.label=下ドッキングエリアにフォーカス($B)
+focus-textarea.label=テキストエリアにフォーカス
+close-docking-area.label=現在のドッキングエリアを閉じる($C)
+layout-load.label=ドッキングレイアウトの読み込み($L)...
+layout-save.label=ドッキングレイアウトの保存($S)...
+layout-load-current-mode.label=現在のモードのドッキングレイアウトを読み込み
+layout-save-current-mode.label=現在のモードのドッキングレイアウトを保存
+#}}}
+
+#}}}
+
+#{{{ Utilities menu
+
+utils.label=ユーティリティ($U)
+vfs.browser.label=ファイルシステム ブラウザ($F)
+action-bar.label=アクションバー($A)
+last-action.label=最後のアクションを繰り返す($P)
+buffer-options.label=バッファ オプション($B)...
+global-options.label=グローバル オプション($G)...
+combined-options.label=オプション($O)...
+
+#{{{ Recent Directories menu
+recent-directories.label=最近開いたディレクトリ($R)
+no-recent-dirs.label=最近開いたディレクトリはありません
+#}}}
+
+#{{{ Favorites menu
+favorites.label=お気に入り($V)
+add-buffer-to-favorites.label=バッファをお気に入りに追加
+add-dir-to-favorites.label=ディレクトリをお気に入りに追加
+edit-favorites.label=お気に入りを編集
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=カレントディレクトリ($C)
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=$jEdit ホームディレクトリ
+#}}}
+
+#{{{ Settings Directory menu
+settings-directory.label=個人設定ディレクトリ($S)
+#}}}
+
+#{{{ BeanShell menu
+beanshell.label=B$eanShell
+eval.label=BeanShell 式を評価($E)...
+eval-for-selected-lines.label=選択行ごとに評価式を適用($F)...
+eval-selection.label=選択範囲を評価し置換($S)
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting.label=トラブルシューティング($T)
+log-viewer.label=アクティビティ ログ($A)
+update-log.label=保存されたアクティビティ ログを更新($U)
+io-progress-monitor.label=$I/O プロセスモニタ
+task-monitor.label=タスクモニタ($T)
+keyboard-tester.label=キーボードテスタ($K)...
+memory-status.label=メモリステータス($M)...
+reload-modes.label=編集モードを再読み込み($R)
+#}}}
+
+#{{{ Quick options menu
+quick-options.label=クイック設定($Q)
+edit-syntax-style.label=キャレット位置のトークンのシンタクススタイルを編集
+#}}}
+
+#}}}
+
+#{{{ Macros menu
+macros.label=マクロ($C)
+new-macro.label=新規マクロ
+record-macro.label=マクロの記録($R)...
+stop-recording.label=記録停止($S)
+last-macro.label=最後のマクロを繰り返す
+record-temp-macro.label=一時マクロの記録($T)
+run-temp-macro.label=一時マクロ実行($P)
+run-other-macro.label=その他のマクロ実行($O)...
+rescan-macros.label=マクロの再スキャン($N)
+no-macros.label=マクロがありません
+#}}}
+
+#{{{ Plugins menu
+plugins.label=プラグイン($P)
+plugin-manager.label=プラグイン マネージャ($M)...
+plugin-options.label=プラグイン オプション($O)...
+no-plugins.label=プラグインはインストールされていません
+#}}}
+
+#{{{ Help menu
+help-menu.label=ヘルプ($H)
+about.label=jEdit について($A)...
+help.label=jEdit ヘルプ($H)
+tip-of-the-day.label=今日のヒント($T)
+userFeedback.label=提案を送る...
+#}}}
+
+#}}}
+
+#{{{ Macro strings
+
+macro.temp.header=// This is a temporary macro. First, check over the\n\
+		  // commands to make sure this is what you intended.\n\
+		  // Then, to run this macro, switch to the buffer\n\
+		  // where you would like to execute it and press C+m C+p.
+
+macro.header=// This is a recorded macro. First, check over the\n\
+	     // commands to make sure this is what you intended. Then,\n\
+	     // save this buffer, and the macro should appear in the\n\
+	     // Macros menu.
+
+#}}}
+
+#{{{ Commands that don't appear in menus
+backspace-word.label=直前の単語を削除
+backspace-word-std.label=直前の単語を削除 (ホワイトスペースを含む)
+backspace-word-std-after.label=直前の単語を削除 (単語の後のホワイトスペースを含む)
+backspace.label=直前の文字を削除
+delete-word.label=直後の単語を削除
+delete-word-std.label=直後の単語を削除 (ホワイトスペースを含む)
+delete.label=直後の文字を削除
+document-end.label=バッファの末尾に移動
+document-home.label=バッファの先頭に移動
+end.label=エンド
+home.label=ホーム
+smart-end.label=スマート エンド
+smart-home.label=スマート ホーム
+insert-literal.label=直後にリテラル文字を挿入
+insert-newline.label=改行を挿入
+insert-newline-indent.label=改行とインデントを挿入
+insert-tab.label=タブ文字を挿入
+insert-tab-indent.label=タブ文字とインデントを挿入
+line-end.label=行末に移動
+line-home.label=行頭に移動
+next-char.label=直後の文字に移動
+next-line.label=直後の行に移動
+next-page.label=直後のページに移動
+next-paragraph.label=直後の段落に移動
+next-word.label=直後の単語に移動
+next-word-std.label=直後の単語に移動 (ホワイトスペースを含む)
+overwrite.label=上書きモード
+prev-char.label=直前の文字に移動
+prev-line.label=直前の行に移動
+prev-page.label=直前のページに移動
+prev-paragraph.label=直前の段落に移動
+prev-word.label=直前の単語に移動
+prev-word-std.label=直前の単語に移動 (ホワイトスペースを含む)
+prev-word-std-after.label=直前の単語に移動 (単語の後のホワイトスペースを含む)
+select-document-end.label=バッファの末尾までを選択
+select-document-home.label=バッファの先頭までを選択
+select-end.label=スマートエンド位置までを選択
+select-home.label=スマートホーム位置までを選択
+select-line-end.label=行末までを選択
+select-line-home.label=行頭までを選択
+select-next-char.label=直後の文字を選択
+select-next-line.label=直後の行を選択
+select-next-page.label=直後のページを選択
+select-next-paragraph.label=直後の段落を選択
+select-next-word.label=直後の単語を選択
+select-next-word-std.label=直後の単語を選択 (ホワイトスペースを含む)
+select-prev-char.label=直前の文字を選択
+select-prev-line.label=直前の行を選択
+select-prev-page.label=直前のページを選択
+select-prev-paragraph.label=直前の段落を選択
+select-prev-word.label=直前の単語を選択
+select-prev-word-std.label=直前の単語を選択 (ホワイトスペースを含む)
+select-prev-word-std-after.label=直後の単語を選択 (単語の後のホワイトスペースを含む)
+select-visible-end.label=末尾表示行までを選択
+select-visible-home.label=先頭表示行までを選択
+select-whitespace-end.label=ホワイトスペースの終了までを選択
+select-whitespace-home.label=ホワイトスペースの開始までを選択
+toggle-line-separator.label=改行文字を切り替え
+toggle-word-wrap.label=ワードラップを切り替え
+visible-end.label=末尾表示行に移動
+visible-home.label=先頭表示行に移動
+whitespace-end.label=ホワイトスペースの末尾に移動
+whitespace-home.label=ホワイトスペースの先頭に移動
+#}}}
+
+#{{{ View stuff
+
+# Title
+view.title=jEdit -\u0020
+view.title.dirty=\ (変更)
+
+view.docking.close-tooltip=現在のドッキングウィンドウを隠す
+view.docking.menu-tooltip=ドッキングオプション
+view.docking.menu-floating=フロート
+view.docking.menu-top=上にドッキング
+view.docking.menu-left=左にドッキング
+view.docking.menu-bottom=下にドッキング
+view.docking.menu-right=右にドッキング
+view.docking.menu-clone=新規インスタンス
+view.docking.menu-close=閉じる
+view.docking.menu-undock=ドッキングから除去
+
+view.docking.toggle.label={0} (切り替え)
+view.docking.float.label={0} (新規フロートインスタンス)
+
+directory.not-local=リモートファイルシステムのディレクトリを一覧できません
+directory.no-files=ファイルがありません
+
+#{{{ Gutter highlight
+view.gutter.marker.no-name=マーカー
+view.gutter.marker=マーカー: {0}
+#}}}
+
+#{{{ Status messages
+view.status.add-marker=新規マーカーのショートカット? [{0}]
+view.status.auto-wrap=検索文字列が見つかりません。巡回します!
+view.status.bracket=一致 行 {0}: {1}
+view.status.caret-tooltip=オフセット/行/列番号 (オフセット,行,列[-仮想] 相対%)
+view.status.copy-append-string-register=追加コピーするレジスタ? [{0}]
+view.status.copy-string-register=コピーするレジスタ? [{0}]
+view.status.cut-append-string-register=追加切り取りするレジスタ? [{0}]
+view.status.cut-string-register=切り取りするレジスタ? [{0}]
+view.status.expand-folds=フォールドレベル? [1-9]
+view.status.goto-marker=移動に使用するマーカーのショートカット? [{0}]
+view.status.incomplete-abbrev={0} 個のパラメータが指定されましたが {1} 個が要求されます!
+view.status.insert-literal=そのまま挿入するキー?
+view.status.io-1=I/O: 操作が進行中
+view.status.io.done=I/O 完了
+view.status.io=I/O: {0} 件の操作が進行中
+view.status.linesep-changed=改行文字を設定 {0}
+view.status.linesep-tooltip=改行文字 (クリックで変更)
+view.status.memory-tooltip=Java ヒープメモリ: {0}Kb/{1}Kb
+view.status.mode-tooltip=編集モード/フォールドモード/エンコーディング
+view.status.multi-changed=マルチ選択モード {0,choice,0#オフ|1#オン}
+view.status.multi-tooltip=マルチ選択モード (クリックで変更)
+view.status.narrow=すべてのテキストを表示するには、"すべてのフォールドを開く"を実行
+view.status.no-markers=マーカーは設定されていません
+view.status.no-registers=レジスタは定義されていません
+view.status.overwrite-changed=上書きモード {0,choice,0#オフ|1#オン}
+view.status.overwrite-tooltip=上書き/挿入モードインジケータ (クリックで変更)
+view.status.paste-string-register=これを貼り付け用に登録? [{0}]
+view.status.print=印刷中 ページ {0}
+view.status.quick-copy=クィックコピーモード - マークされたテキストは選択範囲で置換されます
+view.status.recording=マクロ記録中
+view.status.rect-select-changed=矩形選択 {0,choice,0#オフ|1#オン}
+view.status.rect-tooltip=矩形選択モード (クリックで変更)
+view.status.replace-all={1} ファイル中 {0} 件が置換されました
+view.status.search-not-found=検索文字列は見つかりません!
+view.status.select-marker=選択に使用するマーカーのショートカット? [{0}]
+view.status.swap-marker=キャレット位置と置き換えるマーカーのショートカット? \
+	[{0}]
+view.status.vertical-paste-string-register=垂直貼り付けに使用するレジスタ \
+	[{0}]
+view.status.wrap-changed=ワードラップモードは現在 "{0}" です
+view.status.wrap-tooltip=<html>ワードラップモードは {0} です。(クリックで変更)</html>
+view.status.indent-tooltip=自動インデントインジケータ (クリックで変更)
+view.status.autoindent-changed=インデントの状態は現在 "{0}" です。
+view.status.bufferset-tooltip=バッファセットスコープは {0} です。
+wrap.none=なし
+wrap.hard=ハード
+wrap.soft=ソフト
+#}}}
+
+#{{{ Status bar component visibility
+
+#}}}
+
+#}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: ページ {1}
+
+print-error.title=印刷エラー
+print-error.message=以下を印刷中にエラーが発生しました:\n\
+	{0}
+#}}}
+
+#{{{ Various dialog boxes
+
+#{{{ About dialog
+about.title=jEdit について
+about.version=jEdit {0} {1} モード Java {2}
+about.mode.standalone=スタンドアローン
+about.mode.server=サーバ
+about.mode.server-background=サーバ バックグラウンド
+about.navigate=矢印キーを押してクレジットをスクロールできます
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text.prefix=jEdit は以下の人たちからあなたに提供されました。
+about.text.suffix=ユーザの皆さんのご意見、フィードバック、バグ報告にも\n\
+	また深く感謝したいと思います。
+#}}}
+
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=プラグイン マネージャ
+#}}}
+
+#{{{
+largeBufferDialog.title=巨大バッファ {0}
+largeBufferDialog.message=バッファが非常に大きく、シンタクスハイライトのために jEdit が応答しなくなる恐れが\n\
+	あります。下記の選択肢を考慮してください。\n\
+	-完全な文法を維持 : jEdit のシンタクスハイライトは通常どおり機能しますが、jEdit が\n\
+	とても遅くなるかもしれません。これは推奨されません。\n\
+	-文脈を検知しないシンタクスハイライト。この場合 jEdit はいくらかはシンタクスハイライト\n\
+	を維持しようとしますが、結果は完全でないかもしれません。バッファは前の行の文脈を無視して、\n\
+	個々の行ごとにハイライトされます。もし複数行にわたる句 (複数行コメントやXMLタグ...) が\n\
+	あれば、文法が正確でないことがありえます。\n\
+	-jEdit のデフォルトの編集モードを使用 (通常はシンタクスハイライトのないテキストモード)
+
+largeBufferDialog.fullSyntax=完全なシンタクスハイライト
+largeBufferDialog.contextInsensitive=文脈を検知しないシンタクスハイライト
+largeBufferDialog.defaultMode=テキスト編集モード
+#}}}
+
+#{{{ I/O error dialog box
+ioerror.title=I/O エラー
+ioerror.caption=以下の {0} 件の I/O 操作を完了できませんでした:
+ioerror.caption-1=以下の I/O 操作を完了できませんでした:
+
+ioerror={0}
+ioerror.directory-error=ディレクトリが一覧できません: {0}
+ioerror.directory-error-nomsg=ディレクトリが一覧できません。
+ioerror.encoding-error=エンコーディング"{0}"では読み込めませんでした。\n\
+	({1})\n\
+	異なるエンコーディングを選んでみてください。\n\
+	メニューの ファイル->エンコーディングを指定して再読み込み で選択できます。\n\
+	自動的にこの操作が実行されるようにしたい場合、グローバルオプションのエンコーディング\n\
+	ペインにある「代替エンコーディング（複数可）」に候補を追加します。
+
+ioerror.write-encoding-error=エンコーディング"{0}"で、{1}行目の{2}列目にある\n\
+	文字{3}のエンコードに失敗しました。
+ioerror.read-error=読み込めません: {0}
+ioerror.write-error=保存できません: {0}
+ioerror.unsupported-encoding-error={0} 文字セットはこのJVMでサポートされていません。
+ioerror.open-directory=ディレクトリはバッファとして開けません。
+ioerror.save-directory=ディレクトリにはバッファを保存できません。
+ioerror.no-read=ファイルを読み込むには権限が不足しています。
+ioerror.no-write=ファイルを読み込むには権限が不足しています。
+ioerror.write-error-readonly=保存できません。ファイルは読み込み専用です。
+ioerror.save-readonly-twostagefail=保存できません。ファイルが読み込み専用のため、ツーステージ保存が不可能です。
+ioerror.badurl=不正な URL: {0}
+ioerror.delete-error=ファイルを削除できません。
+ioerror.rename-exists=既存ファイル {0} を上書きできません。
+ioerror.rename-error={0} に名前を変更できません。
+ioerror.mkdir-error=ディレクトリを作成できません。
+
+vfs.not-supported.list=ファイルシステム "{0}" 上のディレクトリはブラウズできません。
+vfs.not-supported.load=ファイルシステム "{0}" 上のファイルを開くことはできません。
+vfs.not-supported.save=ファイルシステム "{0}" には保存することが出来ません。
+
+vfs.overwrite-readonly.title=ファイルは読み込み専用です
+vfs.overwrite-readonly.message=ファイル {0} は読み込み専用です。\n\
+	ツーステージ保存(Unixではファイル所有者をリセット)が使用する\
+	読み込み専用フラグをリセットして保存しますか。
+
+vfs.twostageimpossible.title=ツーステージ保存は使用できません。
+vfs.twostageimpossible.message=ツーステージ保存は使用できませが、どうしても\n\
+	保存したいですか ?
+
+out-of-memory-error=Javaヒープメモリが不足していたため、この要求を完了\
+	できませんでした。最大ヒープサイズを増加させて再試行してください。\n\
+	\n\
+	Javaヒープサイズの変更についてのドキュメントは、ユーザーガイドの\
+	"jEdit Basics" 章の "Buffers" 節にあります。
+
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=I/O エラー発生 ({0})
+
+read-error.title=読み込みエラー
+# {0} - the path name {1} - the error message
+read-error.message=ファイル名 {0}\n\
+	I/O エラーのためロードできません。\n\
+	({1})
+
+write-error.title=書き込みエラー
+# {0} - the path name {1} - the error message
+write-error.message=ファイル名 {0}\n\
+	I/O エラーのため保存できません。\n\
+	({1})
+
+directory-error.title=ディレクトリ エラー
+# {0} - the path name {1} - the error message
+directory-error.message=ディレクトリ名 {0}\n\
+	I/O エラーのため一覧できません。\n\
+	({1})
+
+directory-error-nomsg.title=ディレクトリ エラー
+# {0} - the path name
+directory-error-nomsg.message=ディレクトリ名 {0}\n\
+	I/O エラーのため一覧できません。
+
+encoding-error.title=非互換エンコーディング
+encoding-error.message=ファイル名 {0}\n\
+	"{1}" エンコーディングではロードできません。\n\
+	({2})\n\
+	\n\
+	異なるエンコーディングを使用するには、ファイル->開く \n\
+	にある"コマンド"の"エンコーディング"メニューを試してください。\n\
+	\n\
+	本当に行き詰まり、どのエンコーディングを使っていいかわからない\n\
+	場合は、"ASCII" か "8859_1" を試してください。
+
+open-directory.title=ディレクトリは開けません
+open-directory.message={0} はディレクトリです。\n\
+	ディレクトリを編集するために開くことは出来ません。
+
+save-directory.title=ディレクトリは保存できません
+save-directory.message={0} はディレクトリです。\n\
+	バッファをディレクトリに上書き保存することはできません。
+
+no-read.title=ファイルを開けません
+no-read.message={0} から読み込むことが出来ません。\n\
+	権限が不足している可能性があります。
+
+no-write.title=ファイルを保存できません
+no-write.message={0} に保存することができません。\n\
+	権限が不足している可能性があります。
+
+badurl.title=無効なURL
+# {0} - the URL
+# {1} - the error
+badurl.message=この URL は無効です: {0}\n\
+	({1})
+#}}}
+
+#{{{ Go to line dialog
+goto-line.title=行移動
+goto-line.message=移動先の行:
+#}}}
+
+#{{{ Word count dialog
+wordcount.title=単語カウント
+# {0} - characters
+# {1} - words
+# {2} - lines
+wordcount.message=文字: {0}\n単語: {1}\n行: {2}
+#}}}
+
+#{{{ Set marker dialog
+setmarker.title=マーカー設置
+setmarker.message=マーカー名:
+#}}}
+
+#{{{ File not saved dialog
+notsaved.title=ファイルは保存されていません
+# {0} - file name
+notsaved.message={0} への変更を保存しますか?
+#}}}
+
+#{{{ File changed, still reload dialog
+changedreload.title=ファイルは変更されています
+changedreload.message=ファイル {0}\n\
+	は最後の保存以降に変更されています。再読み込みすると\n\
+	変更は失われます。続けますか?
+#}}}
+
+#{{{ Autosave file exists dialog
+autosave-found.title=自動保存ファイルがあります
+# {0} - autosave file name
+autosave-found.message=自動保存ファイル {0}\n\
+	が見つかりました! 保存できないうちに jEdit がクラッシュした\n\
+	可能性があります。自動保存ファイルを開きますか?
+
+autosave-loaded.title=自動保存ファイルのロード完了
+autosave-loaded.message=自動保存ファイル {0}\n\
+	をロードしました。すぐに、保存されていないデータを含んでいないかを確認してください。\n\
+	自動保存された変更を維持したい場合、このファイルを保存します。\n\
+	これらを破棄したい場合、ファイル->再読み込み を実行します。
+#}}}
+
+#{{{ Save all confirm dialog
+saveall.title=すべてのバッファを保存
+saveall.message=修正されたすべてのバッファを保存してもよろしいですか?
+#}}}
+
+#{{{ Reload all confirm dialog
+reload-all.title=すべてのバッファを再読み込み
+reload-all.message=すべてのバッファをディスクから再読み込みしてもよろしいですか?\n\
+	開いているバッファの保存していない変更は、すべて失われることになります!
+#}}}
+
+#{{{ Encoding prompt
+encoding-prompt.title=異なるエンコーディングで開く
+encoding-prompt.message=使用する文字エンコーディング:
+#}}}
+
+#{{{ Macro recording already in progress dialog
+already-recording.title=すでに記録中
+already-recording.message=マクロの記録はすでに開始されています。
+#}}}
+
+#{{{ No temporary macro dialog
+no-temp-macro.title=一時マクロなし
+no-temp-macro.message=記録されている一時マクロはありません。
+#}}}
+
+#{{{ Record macro dialog
+record.title=マクロの記録
+record.message=マクロ名:
+#}}}
+
+#{{{ Some features don't work with -nosettings dialog
+no-settings.title=機能は無効です
+no-settings.message=jEdit は -nosettings スイッチで起動されています。\n\
+	この機能を使うには、そのスイッチなしで jEdit を起動しなければなりません。
+#}}}
+
+#{{{ Some features don't work with the web start version
+no-webstart.title=機能は無効です
+no-webstart.message=この機能は WebStart 版の jEdit では使用できません。
+
+#}}}
+
+#{{{ Search and replace dialog
+search.title=検索/置換
+
+search.find=検索(S):
+search.find.tooltip=PgUp/PgDownか右クリックで履歴呼び出し
+search.find.mnemonic=S
+search.replace=置換(W):
+search.replace.mnemonic=W
+search.string-replace-btn=テキスト
+search.beanshell-replace-btn=BeanShell スニペットからの戻り値
+
+search.settings=オプション:
+search.keep=ダイアログを維持(K)
+search.keep.mnemonic=K
+search.word=完全一致単語のみ(Q)
+search.word.mnemonic=Q
+search.case=大文字小文字を区別しない(I)
+search.case.mnemonic=I
+search.regexp=正規表現(X)
+search.regexp.mnemonic=X
+search.hypersearch=ハイパーサーチ(H)
+search.hypersearch.mnemonic=H
+search.wrap=自動ラップ(T)
+search.wrap.mnemonic=T
+
+search.direction=方向:
+search.back=後方(B)
+search.back.mnemonic=B
+search.forward=前方(O)
+search.forward.mnemonic=O
+
+search.fileset=検索対象:
+search.selection=選択範囲(N)
+search.selection.mnemonic=N
+search.current=現在のバッファ(C)
+search.current.mnemonic=C
+search.all=すべてのバッファ(L)
+search.all.mnemonic=L
+search.directory=ディレクトリ(D):
+search.directory.mnemonic=D
+search.skipHidden=隠し/バックアップを無視(H)
+search.skipBinary=バイナリファイルを無視(B)
+search.skipHidden.mnemonic=H
+search.skipBinary.mnemonic=B
+
+search.directoryField=ディレクトリ(Y):
+search.directoryField.mnemonic=Y
+search.filterField=フィルタ(F):
+search.filterField.mnemonic=F
+search.filterField.tooltip={*.c,*.h} で拡張子複数対応
+search.subdirs=サブディレクトリの検索(U)
+search.subdirs.mnemonic=U
+search.choose=選択(E)...
+search.choose.mnemonic=E
+search.synchronize=同期(Z)
+search.synchronize.mnemonic=Z
+search.synchronize.tooltip=フィルタとディレクトリに現在のバッファの拡張子と場所をセットします。
+search.findBtn=検索(F)
+search.findBtn.mnemonic=F
+search.replaceBtn=置換
+search.replaceAndFindBtn=置換して検索(R)
+search.replaceAndFindBtn.mnemonic=R
+search.replaceAllBtn=すべて置換(A)
+search.replaceAllBtn.mnemonic=A
+
+# Beep when searching automatically wraps?
+
+#}}}
+
+#{{{ Keep searching dialog
+keepsearching.title=これ以上の一致は発見できません
+keepsearching.message=これ以上の一致は発見できません。\n\
+	{0,choice,0#先頭|1#末尾}から検索を続けますか?
+#}}}
+
+#{{{ HyperSearch results dialog
+hypersearch-results.title=ハイパーサーチ結果
+hypersearch-results.result-caption={0} ({1} 箇所 / {2} ファイル中)
+hypersearch-results.open=開く
+hypersearch-results.open-view=新規ビューで開く
+hypersearch-results.open-plain-view=新規プレーンビューで開く
+hypersearch-results.open-split=新規スプリットで開く
+hypersearch-results.remove-node=ノード削除
+hypersearch-results.new-search=ここから新規検索
+hypersearch-results.expand-child-nodes=子ノードの展開
+hypersearch-results.collapse-child-nodes=子ノードの折りたたみ
+hypersearch-results.copy-to-clipboard=クリップボードにコピー
+hypersearch-results.redo=ハイパーサーチ やり直し
+hypersearch-results.tree-view=ツリービュー表示の切り替え
+hypersearch-results.clear.label=すべてのノードを削除
+hypersearch-results.stop.label=ハイパーサーチを中止して、現在の結果を表示
+hypersearch-results.multi.label=複数結果表示の切り替え
+hypersearch-results.highlight.label=一致ハイライトスタイルを設定
+hypersearch-results.file-caption={0} ({1} 箇所 / {2} 行中)
+hypersearch-results.searching="{0}" の検索中...
+hypersearch-results.no-results="{0}" は見つかりませんでした。
+hypersearch-results.done="{0}" の検索結果:
+
+hypersearch-status=検索中
+#}}}
+
+#{{{ HyperSearch too many results
+hypersearch.tooManyResults.label=結果が多すぎます
+hypersearch.tooManyResults.title=結果が多すぎます
+hypersearch.tooManyResults.message=この検索はまだ完了していませんが、\n\
+	{0}件もの結果を返しました。中止しますか?。
+#}}}
+
+
+#{{{ Search and replace error dialog
+searcherror.title=検索/置換エラー
+# {0} - error message
+searcherror.message=この操作を実行中にエラーが発生しました。
+#}}}
+
+#{{{ Search and replace error dialog
+searcherror-bsh.title=検索/置換エラー
+# {0} - error message
+searcherror-bsh.message=この操作を実行中にエラーが発生しました。\n\
+	\n\
+	置換文字列をBeanShell式として解釈する意図がないなら、\n\
+	置換モードが"テキスト"に設定されていることを確認してください。
+#}}}
+
+#{{{ Empty fileset error dialog
+empty-fileset.title=空のファイルセット
+empty-fileset.message=指定された検索ファイルセットはファイルを含んでいません。
+	ファイル名フィルタと検索対象ディレクトリ(適用可能なら)を\n\
+	正しく設定してください。
+#}}}
+
+#{{{ Can only search local directories dialog
+remote-dir-search.title=非ローカルディレクトリの選択
+remote-dir-search.message=非ローカルディレクトリへの検索を実行しました。\n\
+	ネットワーク遅延等のために非常に遅くなる場合があります。\n\
+	継続してもよろしいですか?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=何も選択されていません
+search-no-selection.message=いくらかのテキストを選択するか、"選択範囲を\n\
+	検索"オプションを無効にしてください。
+#}}}
+
+#{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<ホワイトスペース>
+paste-previous.title=履歴から貼り付け
+paste-previous.caption=最近 コピー/切り取り されたテキスト:
+paste-deleted.title=削除履歴から貼り付け
+paste-deleted.caption=最近削除されたテキスト:
+#}}}
+
+#{{{ File changed on disk dialog
+filechanged-save.title=ディスク上のファイル変更
+filechanged-save.message=ファイル {0} は\n\
+	ディスク上で他のプログラムによって変更されています。\n\
+	保存処理を継続してもよろしいですか?
+#}}}
+
+#{{{ File exists dialog
+fileexists.title=既存ファイルあり
+fileexists.message=ファイル {0} はすでに存在します。\n\
+	上書きしてもよろしいですか?
+#}}}
+
+#{{{ Select line range dialog
+selectlinerange.title=行範囲を指定して選択
+selectlinerange.caption=選択する行範囲:
+selectlinerange.start=開始行:
+selectlinerange.end=終了行:
+#}}}
+
+#{{{ View registers dialog
+view-registers.title=レジスタ
+view-registers.caption=レジスタ:
+view-registers.clipboard=$ (クリップボード)
+view-registers.selection=% (選択範囲)
+view-registers.none=レジスタは定義されていません
+view-registers.register=レジスタ:
+view-registers.contents=内容:
+view-registers.undefined=__UNDEFINED__
+#}}}
+
+#{{{ Close all buffers dialog
+close.title=未保存の変更
+close.caption=以下のバッファには未保存の変更があります:
+close.selectAll=すべて選択(A)
+close.selectAll.mnemonic=A
+close.save=選択を保存(S)
+close.save.mnemonic=S
+close.discard=選択を破棄(D)
+close.discard.mnemonic=D
+#}}}
+
+#{{{ Files changed on disk dialog
+files-changed.title=ディスク上でのファイル変更
+files-changed.caption=以下のファイルはディスク上で他のプログラムによって変更されました:
+files-changed.deleted=ディスク上で削除されたので再作成して保存:
+files-changed.changed-auto=自動的に再読み込み:
+files-changed.changed=ディスク上での変更:
+files-changed.changed-dirty-auto=バッファ編集中のため再読み込みされません:
+files-changed.changed-dirty=バッファ編集中でディスク上のファイル変更:
+files-changed.select-all=すべて選択(A)
+files-changed.select-all.mnemonic=A
+files-changed.reload=再読み込み(R)
+files-changed.reload.mnemonic=R
+files-changed.ignore=無視(I)
+files-changed.ignore.mnemonic=I
+#}}}
+
+#{{{ Abbrev dialogs
+add-abbrev.title=略語の追加
+add-abbrev.mode=モード別追加
+add-abbrev.global=グローバル追加
+
+edit-abbrev.title=略語の編集
+
+edit-abbrev.duplicate.title=略語の重複
+edit-abbrev.duplicate.message=\
+	この略語にはすでに他の展開後が存在します。\n\
+	\n\
+	既存の展開語をオーバーライドしますか?
+
+abbrev-editor.abbrev=略語:
+abbrev-editor.before=キャレットの前に挿入するテキスト:
+abbrev-editor.after=キャレットの後に挿入するテキスト:
+#}}}
+
+#{{{ XMode errors
+xmode-error.title=XML パースエラー
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message={0} のパース中にエラーが発生しました。行 {1}:\n\
+	{3}
+xmode-error.dtd=DTDをロードできません。\n({0})
+xmode-error.termchar-invalid=AT_CHAR 属性の値が不正です ({0})
+xmode-error.doctype-invalid=MODE ドキュメントタイプが期待されますが、存在するのは {0} でした
+xmode-error.empty-tag={0} タグは空にできません
+xmode-error.token-invalid=トークンタイプ {0} は不正です
+xmode-error.empty-keyword=キーワードテキストは空にできません
+xmode-error.regexp=不正な正規表現\n({0})
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR と HASH_CHARS を両方指定することはできません
+xmode-error.delegate-invalid=不正なデリゲート: {0}
+#}}}
+
+#{{{ JARClassLoader errors
+plugin-error.title=プラグインエラー
+plugin-error.caption=以下のプラグインをロードできません:
+plugin-error.caption-1=以下のプラグインをロードできません:
+
+plugin-error.load-error=ロードできません: {0}\n\
+	もっとも有力な原因は、JARファイルが壊れていることです。\n\
+	再インストールしてみてください。完全なスタックトレースを見るには、\n\
+	ユーティリティ->トラブルシューティング->アクティビティ ログ を参照\n\
+	してください。
+plugin-error.start-error=開始できません: {0}\n\
+	プラグインをより最新のバージョンにアップデートしてみてください。
+plugin-error.already-loaded=ふたつのコピーがインストールされています。\
+	ふたつのコピーのうち一方を削除してください。
+plugin-error.dep-jdk=Java {0} かそれ以降が必要ですが、バージョン {1} しかありません。
+plugin-error.dep-jedit=jEdit {0} かそれ以降が必要ですが、バージョン {1} しかありません。\n\
+	新しいバージョンの jEdit を <http://www.jedit.org> からダウンロードしてください。.
+plugin-error.dep-plugin.no-version={1} のバージョン {0} かそれ以降が必要ですが、\
+	{1} はインストールされていません。
+plugin-error.dep-plugin.broken={0} が必要ですが、{0}\n\
+	をロードできません。
+plugin-error.dep-plugin={1} のバージョン {0} かそれ以降が必要ですが、\
+	{1} はバージョン {2} しかありません。
+plugin-error.dep-class=クラス {0} が必要です。\n\
+	適切なプラグインかクラスライブラリをインストールしてみてください。
+plugin-error.missing-jar=JAR ファイル {0} が必要です。\n\
+	この JAR ファイルはプラグインの一部ですが、見つかりません。\n\
+	プラグインを再インストールしてみてください。
+plugin-error.not-42=このプラグインは動的ローディングをサポートしません。\n\
+	このプラグインのインストール/削除後に、jEdit を再起動する必要があります。
+
+plugin-error-download.title=プラグインエラー
+plugin-error-download.message=プラグインのダウンロード中にエラーが発生しました。他のミラーを試してください。\n{0}
+#}}}
+
+#{{{ Macro dialogs
+macro-input.title=マクロ 入力
+macro-error.title=マクロ エラー
+macro-message.title=マクロ メッセージ
+macro-confirm.title=マクロ 確認
+#}}}
+
+#{{{ BeanShell stuff
+beanshell-error.title=BeanShell エラー
+beanshell-error.message=BeanShellエラーが発生しました。
+
+beanshell-eval-input.title=BeanShell式の評価
+beanshell-eval-input.message=BeanShell式:\n\
+	\n\
+	変数:\n\
+	view - 現在のビューインスタンス\n\
+	editPane - 現在の編集ペインインスタンス\n\
+	textArea - 現在のテキストエリアインスタンス\n\
+	buffer - 現在のバッファ
+
+beanshell-eval.title=BeanShell評価
+beanshell-eval.message={0}
+
+beanshell-eval-line.title=BeanShell式の評価
+beanshell-eval-line.message=各選択行を評価するBeanShell\
+	式:\n\
+	\n\
+	変数:\n\
+	line - バッファの開始からの行インデックス\n\
+	index - 選択範囲開始からの行インデックス\n\
+	text - 行のテキスト\n\
+	view - 現在のビューインスタンス\n\
+	editPane - 現在の編集ペインインスタンス\n\
+	textArea - 現在のテキストエリアインスタンス\n\
+	buffer - 現在のバッファ
+#}}}
+
+#{{{ Macro not recording dialog
+macro-not-recording.title=記録されていません
+macro-not-recording.message=現在マクロは記録されていません。
+#}}}
+
+#{{{ Large repeat count warning
+large-repeat-count.title=非常に多い反復回数
+large-repeat-count.message=本当に "{0}" を {1} 回実行しますか?
+
+large-repeat-count.user-input.title=非常に多い反復回数
+large-repeat-count.user-input.message=本当に "{0}" を {1} 回挿入しますか?
+
+#}}}
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=誤ったフォールドモード
+folding-not-explicit.message=このコマンドは明示的なフォールドモードでのみ使用できます。
+#}}}
+
+#{{{ Memory status dialog box
+memory-status.title=Java ヒープメモリ
+memory-status.gc=ガベージコレクションで {0} Kb 解放されました。
+memory-status.use=使用 {0} Kb / 合計 {1} Kb
+#}}}
+
+#{{{ Multiple I/O request errors
+buffer-multiple-io.title=I/O エラー
+buffer-multiple-io.message=各バッファは、いちどにひとつの入出力操作しかできません。\n\
+	他の操作を開始するのは、現在の操作が完了（もしくはI/O\n\
+	進捗モニタで中止）するまで待ってください。
+
+
+browser-multiple-io.title=I/O エラー
+browser-multiple-io.message=各ファイルシステムブラウザは、いちどにひとつの入出力操作しかできません。\n\
+	他の操作を開始するのは、現在の操作が完了（もしくはI/O\n\
+	進捗モニタで中止）するまで待ってください。
+	
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=ラップマージン
+format-maxlinelen.message=このコマンドを実行するには、ラップマージンを0に\n\
+	設定しなければなりません。
+#}}}
+
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=シンタクス書式設定
+syntax-style-no-token.message=キャレット位置のテキストは設定できる\
+	シンタクス書式に関連していません。
+#}}}
+
+#{{{ View title dialog
+view.title.select=このビューのタイトルを入力してください:
+#}}}
+#}}}
+
+#{{{ Buffer options dialog
+buffer-options.title=バッファ オプション
+buffer-options.caption=このダイアログボックスは現在のバッファのみ設定を変更します。\n\
+	編集モードのデフォルト設定を変更するには、\n\n
+	ユーティリティ->グローバル オプション->編集 ダイアログを参照してください。
+buffer-options.loading-saving=読み込み/保存
+buffer-options.lineSeparator=改行文字:
+buffer-options.encoding=文字エンコーディング:
+buffer-options.gzipped=GZIP(圧縮)ファイル
+buffer-options.editing=編集
+buffer-options.mode=編集モード:
+#}}}
+
+#{{{ Global options dialog
+options.title=オプション
+options.title-template={0}: {1}
+options.jedit.label=jEdit
+
+# Option pane to show by default
+options.last=editing
+
+#{{{ Options groups
+
+#}}}
+
+#{{{ General pane
+options.general.label=一般
+options.general.lineSeparator=デフォルト改行文字:
+options.general.encoding=デフォルト文字エンコーディング:
+options.general.encodingAutodetect=可能な場合ファイルのエンコーディングを自動検出
+options.general.checkModStatus=編集中のファイルがディスク上で変更されたとき:
+options.general.checkModStatus.nothing=何もしない
+options.general.checkModStatus.prompt=問い合わせる
+options.general.checkModStatus.reload=自動的に更新し通知する
+options.general.checkModStatus.silentReload=通知せずに自動更新
+options.general.checkModStatusUpon=ファイル変更を確認するきっかけ:
+options.general.checkModStatusUpon.focus=アプリケーションフォーカス
+options.general.checkModStatusUpon.all=アプリケーションフォーカス 対象バッファ表示 他バッファの保存
+options.general.checkModStatusUpon.operations=対象バッファ表示 他バッファの保存
+options.general.checkModStatusUpon.focusBuffer=対象バッファ表示および保存
+options.general.checkModStatusUpon.none=対象バッファの保存
+options.general.recentFiles=最近開いたファイルの記憶:
+options.general.hypersearch.maxWarningResults=ハイパーサーチの中止を問う閾値:
+options.general.sortRecent=最近開いたファイルをソート
+options.general.saveCaret=最近開いたファイルのキャレット位置を保存
+options.general.persistentMarkers=マーカーの位置を保存
+options.general.resetUndo=保存時に元に戻す履歴をリセット
+options.general.restore=起動時に前回開いていたファイルを開く
+options.general.restore.splits=分割設定を復元
+options.general.restore.remote=... VFS経由のリモートファイルも開く
+options.general.restore.cli=... コマンドラインでファイル名が指定された場合も開く
+options.general.encodingDetectors=エンコーディング検出方法(複数可):
+options.general.fallbackEncodings=代替エンコーディング(複数可):
+options.general.fallbackEncodings.tooltip=ロード中のエンコーディングエラーに対して再試行する、ホワイトスペースで分割された複数のエンコーディング
+options.general.systrayicon=システムトレイアイコンを表示
+#}}}
+
+#{{{ Abbreviations pane
+options.abbrevs.label=略語
+options.abbrevs.set=略語セット:
+options.abbrevs.expandOnInput=スペースキーで略語を展開する
+options.abbrevs.abbrev=略語
+options.abbrevs.expand=展開
+options.abbrevs.add=追加...
+options.abbrevs.edit=編集...
+options.abbrevs.remove=削除
+#}}}
+
+#{{{ Appearance pane
+options.appearance.label=外観
+options.appearance.iconTheme=アイコンテーマ:
+options.appearance.fonts.antialias=テキストエリア以外のフォントをアンチエイリアス
+options.appearance.lf=Swing のルック・アンド・フィール:
+options.appearance.primaryFont=ボタン/メニュー/ラベルのフォント:
+options.appearance.secondaryFont=リスト/テキストフィールドのフォント:
+options.appearance.helpViewerFont=ヘルプビュアー/ブラウザテキストのフォント:
+options.appearance.history=テキストフィールド入力の履歴数:
+options.appearance.menuSpillover=これ以上のメニュー項目はあふれ出す:
+options.appearance.startup.label=起動オプション
+options.appearance.showSplash=起動時にスプラッシュスクリーンを表示
+options.appearance.showTips=起動時にヒントを表示
+options.appearance.experimental.label=実験的なオプション
+options.appearance.experimental.caption=Java のバージョンによっては以下の\
+	オプションが正しく機能しない\n\
+	かもしれません。問題がある場合はこれらをオフにしてください。
+
+options.appearance.textColors=すべてのテキストコンポーネントに jEditテキスト\
+	エリアの色を反映
+options.appearance.decorateFrames=Swing のルック・アンド・フィールを使ってウィンドウの境界を描画
+options.appearance.decorateDialogs=Swing のルック・アンド・フィールを使ってダイアログボックスの境界を描画
+
+options.appearance.localization.section.label=ローカライズ
+options.appearance.usedefaultlocale.label=デフォルトのロケールを使用
+options.appearance.lang.label=言語 (再起動で変更が反映されます)
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=コンテキストメニュー
+options.context.caption=テキストエリア右クリックメニューの項目:
+options.context.add=追加...
+options.context.remove=削除
+options.context.moveUp=上へ
+options.context.moveDown=下へ
+options.context.reset=デフォルトに戻す
+options.context.add.title=コンテキストメニューに追加
+options.context.add.caption=コンテキストメニューに追加:
+options.context.add.separator=セパレータ
+options.context.add.action=コマンド/マクロ:
+
+options.context.reset.dialog.title=デフォルトに戻す
+options.context.reset.dialog.message=本当にコンテキストメニューをインストールデフォルトに戻しますか?
+#}}}
+
+#{{{ Docking pane
+options.docking.label=ドッキング
+options.docking.title=ウィンドウ
+options.docking.dockPosition=ドッキング位置
+options.docking.selectFramework.label=ドッキングフレームワーク:
+options.docking.autoSaveModeLayout.label=モードで指定したドッキングレイアウトを自動的に保存
+options.docking.autoLoadModeLayout.label=モードで指定したドッキングレイアウトを自動的に読み込み
+options.docking.selectSet.label=ドッキング可能セット:
+options.docking.system-change.note=(実験的) 変更を反映するには jEdit を再起動してください
+#}}}
+
+#{{{ Editing pane
+options.editing.label=編集
+options.editing.defaultMode=デフォルト編集モード:
+options.editing.undoCount=アンドゥ回数:
+options.editing.caption-0=\
+	モードごとの設定をカスタマイズするには、以下のメニューから\n\
+	編集モードを選択します。現在はグローバルデフォルトが表示\n\
+	されています。
+options.editing.caption-1=\
+	モードごとの設定をカスタマイズするには、"デフォルト設定を使用"\n\
+	チェックを外します。そうでなければ、<グローバルデフォルト>セク\n\
+	ションの設定が使用されます。
+options.editing.mode=設定を変更するモード:
+options.editing.global=<グローバルデフォルト>
+options.editing.useDefaults=デフォルト設定を使用
+options.editing.filenameGlob=ファイル名フィルタ:
+options.editing.firstlineGlob=先頭行フィルタ:
+options.editing.folding=フォールディングモード:
+options.editing.collapseFolds=初期状態で閉じているフォールド階層:
+options.editing.wrap=ワードラップ:
+options.editing.maxLineLen=ラップマージン:
+options.editing.maxLineLen.tooltip=0でテキストエリアの幅に一致 (ソフトラップのみ)
+options.editing.tabSize=タブ幅:
+options.editing.indentSize=インデント幅:
+options.editing.noWordSep=単語の一部とされる文字:
+options.editing.camelCasedWords=キャメルケースの単語を分離
+options.editing.noTabs=ソフトタブ (スペースで近似)
+options.editing.elasticTabstops=エラスティックタブストップを使ってインデント
+options.editing.elasticTabstops.tooltip=(実験的) - jEdit が不安定になるかもしれません。
+options.editing.deepIndent=深いインデント
+options.editing.autoIndent=自動インデント
+options.editing.largefilemode.title=巨大ファイルモード
+options.editing.largefilemode=非常に大きなファイルではどうすべきですか:
+options.editing.largefilemode.option.ask=<html><b>問い合わせ</b>: 大きなファイルを開いたときどうするか聞きます。</html>
+options.editing.largefilemode.option.full=<html><b>完全なシンタックスを維持</b>: jEdit のシンタックスハイライトはいつもどおりはたらきます。\
+                                               	jEdit が<b>とても遅くなるのでお勧めしません</b></html>
+options.editing.largefilemode.option.limited=<html><b>文脈を無視するシンタックスハイライト</b>: この場合jEditは高速にハイライトを行いますが、結果は完全ではありません。<br/>\
+		バッファは前の行を気にすることなく、行ごとにハイライトされます。もし複数行のトークン(複数行コメントやXMLタグなど)がある場合は<br/>\
+		文法が正確でなくなる可能性があります。禁則処理も無効化されます。<b>(推奨)</b></html>
+
+
+
+options.editing.largefilemode.option.nohighlight=シンタックスハイライトと禁則処理なし
+#}}}
+
+#{{{ Encodings pane
+options.encodings.label=エンコーディング
+options.encodings.selectEncodings=エンコーディングダイアログで表示されるエンコーディングを選択してください:
+options.encodings.available=使用可能エンコーディング
+options.encodings.selected=選択済みエンコーディング
+options.encodings.available.tooltip=<html>このボックス内のエンコーディングは、エンコーディングダイアログには<b>表示されません</b>。\
+  有効にするには、右のボックスに項目をドラッグしてください。</html>
+options.encodings.selected.tooltip=このボックス内のエンコーディングは、エンコーディングダイアログに表示されます。\
+  非表示にするには、左のボックスに項目をドラッグしてください。
+#}}}
+
+#{{{ Gutter pane
+options.gutter.label=ガター
+options.gutter.enabled=ガターを表示
+options.gutter.optionalComponents=追加のガターコンポーネント
+options.gutter.lineNumbers=行番号
+options.gutter.minLineNumberDigits=行番号のために確保する最小桁数:
+options.gutter.selectionAreaEnabled=行番号が非表示のとき行選択エリアを表示
+options.gutter.selectionAreaBgColor=選択エリア背景色:
+options.gutter.selectionAreaWidth=選択エリア幅 (ピクセル):
+options.gutter.font=ガターフォント:
+options.gutter.foreground=行番号の色:
+options.gutter.background=背景色:
+options.gutter.borderWidth=ガター境界幅:
+options.gutter.numberAlignment=行番号位置揃え:
+options.gutter.interval-1=周期的にハイライト
+options.gutter.interval-2=行:
+options.gutter.currentLineHighlight=現在行ハイライト:
+options.gutter.structureHighlight=構造スコープの表示:
+options.gutter.markerHighlight=マーカー位置の表示:
+options.gutter.foldColor=フォールドマーカー:
+options.gutter.focusBorderColor=フォーカスを持つガターの境界:
+options.gutter.noFocusBorderColor=フォーカスを持たないガターの境界:
+options.gutter.foldStyle.label=フォールドスタイル:
+options.gutter.foldStyleNames.Triangle=三角形
+options.gutter.foldStyleNames.Square=正方形
+options.gutter.foldStyleNames.Circle=円
+#}}}
+
+#{{{ Mouse pane
+options.mouse.label=マウス
+options.mouse.dragAndDrop=テキストエリアへのドラッグ&ドロップ
+options.mouse.joinNonWordChars=ダブルクリックドラッグは非アルファベット文字を結合
+options.mouse.middleMousePaste=クィックコピーに中マウスボタンを使用
+options.mouse.ctrlForRectangularSelection=Ctrlキーが押されている間矩形選択に切り替える
+options.mouse.gutter.foldClick=ガターのクリック:
+options.mouse.gutter.SfoldClick=ガターのShift+クリック:
+options.mouse.gutter.toggle-fold=フォールドの開閉
+options.mouse.gutter.toggle-fold-fully=下位フォールド階層すべての開閉
+#}}}
+
+#{{{ Plugin Manager pane
+options.plugin-manager.label=プラグインマネージャ
+options.plugin-manager.updateMirrors=ミラーリストの更新
+options.plugin-manager.workthread=ミラーリストの更新中 ...
+options.plugin-manager.downloadSource=プラグインのソースコードをダウンロード
+options.plugin-manager.deleteDownloads=インストール後にダウンロードディレクトリ\
+	の圧縮ファイルを削除
+options.plugin-manager.mirror=選択中のダウンロードミラー:
+options.plugin-manager.location=プラグインのインストール先:
+options.plugin-manager.settings-dir=jEdit 個人設定ディレクトリ
+options.plugin-manager.app-dir=jEdit アプリケーションディレクトリ
+options.plugin-manager.none=デフォルトのプラグインセンター
+#}}}
+
+#{{{ Printing pane
+options.print.label=印刷
+options.print.font=印刷フォント:
+options.print.fontstyle=印刷フォントスタイル:
+options.print.fontsize=印刷フォントサイズ:
+options.print.header=ファイル名をヘッダに印刷
+options.print.footer=日付/時刻/ページ番号をフッタに印刷
+options.print.lineNumbers=行番号を印刷
+options.print.color=印刷に色を反映
+options.print.tabSize=印刷時のタブ幅:
+options.print.workarounds=Java バグの問題回避
+options.print.glyphVector=空白印刷の問題回避 (スプールのファイルサイズが増加します)
+options.print.force13=旧式の印刷APIを使用 (印刷時に jEdit がハングアップする\
+	場合に有効化してください)
+options.print.folds=フォールドされた領域を印刷
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=プロキシサーバ
+options.firewall.http.enabled=HTTPプロキシサーバを使用
+options.firewall.http.host=HTTPプロキシ ホスト:
+options.firewall.http.port=HTTPプロキシ ポート:
+options.firewall.http.user=ユーザ名:
+options.firewall.http.password=パスワード:
+options.firewall.http.nonProxy=直接接続する接続先:
+options.firewall.socks.enabled=SOCKSプロキシサーバを使用
+options.firewall.socks.host=SOCKSプロキシ ホスト:
+options.firewall.socks.port=SOCKSプロキシ ポート:
+#}}}
+
+#{{{ Save & Backup pane
+options.save-back.label=保存 & バックアップ
+
+options.save-back.autosave=自動保存の周期 (秒):
+options.save-back.backups=バックアップの最大数:
+options.save-back.backupDirectory=バックアップディレクトリ:
+options.save-back.backupPrefix=バックアップファイル名プレフィクス:
+options.save-back.backupSuffix=バックアップファイル名サフィクス:
+options.save-back.backupEverySave=保存のたびにバックアップ
+options.save-back.backupEverySave.tooltip=ファイルシステムによってはファイル権限がリセットされます
+options.save-back.twoStageSave=ツー・ステージ セーブ (より安全ですが、Unixではファイル所有者がリセットされます)
+options.save-back.twoStageSave.tooltip=ステージ 1: 古いファイルをリネーム。 ステージ 2: その場に新規ファイルを作成。
+options.save-back.confirmSaveAll="すべて保存"コマンドは確認ダイアログを表示
+options.save-back.autosaveUntitled=無題バッファを自動保存
+options.save-back.suppressNotSavedConfirmUntitled=無題バッファはダーティーとしてマークしない。
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=これをチェックすると新規バッファが作られるとき常に無題バッファが排除されることになります。(これは仕様です!)
+options.save-back.useMD5forDirtyCalculation=内容が変わっていなければダーティーとしてマークしない。
+options.save-back.useMD5forDirtyCalculation.tooltip=読み込み時のバッファの長さとMD5ハッシュで比較し、バッファがダーティーかどうか判別。
+options.save-back.saveAsUsesFSB="名前を付けて保存" のデフォルトはファイルシステムブラウザのディレクトリ
+#}}}
+
+#{{{ Shortcuts pane
+options.shortcuts.deletekeymap.label=削除
+options.shortcuts.deletekeymap.dialog.label=キーマップを削除しますか
+options.shortcuts.deletekeymap.dialog.title=削除
+options.shortcuts.duplicatekeymap.label=複製
+options.shortcuts.duplicatekeymap.dialog.label=キーマップ名を決めてください
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=この名前はすでに存在します。違うものにしてください
+options.shortcuts.duplicatekeymap.dialog.title=キーマップ名
+options.shortcuts.resetkeymap.label=リセット
+options.shortcuts.resetkeymap.dialog.label=キーマップのリセット
+options.shortcuts.resetkeymap.dialog.title=キーマップのリセット
+options.shortcuts.keymap.label=キーマップ:
+options.shortcuts.label=ショートカット
+options.shortcuts.select.label=ショートカットの編集:
+options.shortcuts.select.tooltip=グローバル/マクロ/プラグインのショートカットを選択できます
+options.shortcuts.name=コマンド
+options.shortcuts.shortcut1=優先ショートカット
+options.shortcuts.shortcut2=代替ショートカット
+options.shortcuts.filter.label=フィルタ:
+options.shortcuts.filter.tooltip=名称がこの文字列を含むアクションだけを表示
+options.shortcuts.clear.label=クリア
+
+grab-key.title=ショートカットを指定してください
+grab-key.caption="{0}"に割当てたいショートカットキーを押し、了解をクリックしてください。
+grab-key.keyboard-test=問題を起こしているキーストロークを入力してください。
+grab-key.assigned-to=現在の割当: {0}
+grab-key.assigned-to.none=<なし>
+grab-key.assigned-to.prefix={0} プレフィクス
+grab-key.clear=クリア
+grab-key.remove=割当の解除
+
+grab-key.remove-ask.title=ショートカットを解除しますか?
+grab-key.remove-ask.message=\
+	新たなショートカットが指定されませんでした。\n\
+	現在のショートカットを解除しますか?
+
+grab-key.duplicate-alt-shortcut.title=重複ショートカット
+grab-key.duplicate-alt-shortcut.message=\
+	選択されたショートカットはこの項目の別のショートカットと\n\n
+	重複します。他のものを選択してください。
+
+grab-key.duplicate-shortcut.title=重複ショートカット
+grab-key.duplicate-shortcut.message=\
+	このショートカットはすでに以下に割当てられています。\n\
+	"{0}".\n\
+	\n\
+	この割当をオーバーライドしますか?
+
+grab-key.prefix-shortcut.title=不適切なショートカット
+grab-key.prefix-shortcut.message=\
+	他のショートカットのプレフィクスと一致するため、\n\
+	このショートカットは使えません。\n\
+	他のものを選択してください。
+#}}}
+
+#{{{ Status bar pane
+options.status.label=ステータスバー
+options.status.visible=ステータスバーの表示
+options.status.plainview.visible=プレーンビューでステータスバーを表示
+options.status.foreground=ステータスバーのテキスト:
+options.status.background=ステータスバーの背景:
+options.status.memory.foreground=メモリインジケータ前景:
+options.status.memory.background=メモリインジケータ背景:
+options.status.edit.title=ステータスバー項目を編集
+options.status.edit.labelRadioButton=ラベル
+options.status.edit.widgetRadioButton=ウィジェット
+options.status.edit.labelLabel=ラベルを入力:
+options.status.edit.widgetLabel=ウィジェットを選択:
+options.status.caret.linenumber=キャレット行番号を表示
+options.status.caret.dot=行頭からのキャレット位置を表示
+options.status.caret.virtual=行頭からのキャレット仮想位置を表示
+options.status.caret.offset=ファイル先頭からのキャレット位置を表示
+options.status.caret.bufferlength=ファイル長を表示
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=シンタクス ハイライト
+options.syntax.object=トークンタイプ
+options.syntax.style=テキストスタイル
+options.syntax.foldLine.1=閉じたフォールド行 レベル 1
+options.syntax.foldLine.2=閉じたフォールド行 レベル 2
+options.syntax.foldLine.3=閉じたフォールド行 レベル 3
+options.syntax.foldLine.0=閉じたフォールド行 レベル > 3
+#}}}
+
+#{{{ Text Area pane
+options.textarea.label=テキストエリア
+options.textarea.font=テキストフォント:
+options.textarea.fontSubst=フォント置換用の追加フォント
+options.textarea.fontsubst.tooltip=選ばれた文字を表示できない場合、自動的に適切なフォントを選択します。
+options.textarea.fontsubstlist=フォント置換: 推奨フォント:
+options.textarea.fontSubstSystemFonts=Font substitution: Search all system fonts
+options.textarea.fontSubstWarning.label=Font substitution
+options.textarea.fontSubstWarning=Without system fonts you will need preferred fonts.
+options.textarea.foreground=テキスト色:
+options.textarea.background=背景色:
+options.textarea.caret=キャレット:
+options.textarea.blinkCaret=点滅
+options.textarea.blockCaret=ブロック
+options.textarea.thickCaret=幅広
+options.textarea.selection=単一選択:
+options.textarea.multipleSelection=マルチ選択:
+options.textarea.selectionFg=選択中の文字色:
+options.textarea.lineHighlight=現在行のハイライト:
+options.textarea.structureHighlight=一致要素ハイライト:
+options.textarea.eolMarkers=行末マーカー:
+options.textarea.wrapGuide=ラップガイド:
+options.textarea.electricBorders=自動スクロール
+options.textarea.stdNextPrevWord=次/前の単語へ移動するときホワイトスペースを含む
+options.textarea.antiAlias=アンチエイリアス スムーズフォント
+options.textarea.antiAlias.tooltip=いくつかのシステムで表示が遅くなります
+options.textarea.fracFontMetrics=Fractional フォントメトリクス (文字の表示が\
+	よりスムーズになります)
+options.textarea.fracFontMetrics.tooltip=サブピクセルアンチエイリアスとの併用はお薦めしません
+options.textarea.stripTrailingEOL=最終行末を隠す (あれば)
+options.textarea.completeFromAllBuffers=開いているすべてのバッファから単語補完 (デフォルト\
+    では現在画面表示中のバッファからの検索に制限されます)
+options.textarea.lineSpacing.label=追加の水平行間隔 (ピクセル単位):
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=ツールバー
+options.toolbar.showToolbar=ツールバーの表示
+options.toolbar.caption=ツールバーに表示されるボタン:
+options.toolbar.add=追加...
+options.toolbar.edit=編集...
+options.toolbar.remove=削除
+options.toolbar.moveUp=上へ
+options.toolbar.moveDown=下へ
+options.toolbar.reset=デフォルトに戻す
+options.toolbar.edit.title=ツールバーエントリの編集
+options.toolbar.edit.caption=タイプ:
+options.toolbar.edit.separator=セパレータ
+options.toolbar.edit.action=コマンド/マクロ:
+options.toolbar.edit.builtin=ビルトインアイコンを使用:
+options.toolbar.edit.file=ファイルからアイコンをロード:
+options.toolbar.edit.choose=選択
+options.toolbar.edit.no-icon=アイコンが選択されていません
+
+options.toolbar.reset.dialog.title=デフォルトに戻す
+options.toolbar.reset.dialog.message=本当にツールバーをインストールデフォルトに戻しますか?
+#}}}
+
+#{{{ View pane
+options.view.label=ビュー
+options.view.viewLayout=ビューレイアウト
+options.view.floatableToolbars=フロート可能なツールバー
+options.view.alternateDockingLayout=別のドッキングウィンドウ配置
+options.view.alternateToolBarLayout=別のツールバー配置
+options.view.showFullPath=タイトルバーにバッファのフルパスを表示
+options.view.showSearchbar=検索バーを常に表示
+options.view.beepOnSearchAutoWrap=検索が自動的に巡回したとき音を鳴らす
+options.view.showBufferSwitcher=バッファスイッチャを表示
+options.view.bufferSwitcherMaxRowsCount=バッファスイッチャ内の表示行数:
+options.view.sortBuffers=バッファセットをソート
+options.view.sortByName=パス名の代わりにファイル名でバッファセットをソート
+options.view.fullScreenIncludesMenu=フルスクリーンモードでメニューバーを表示
+options.view.fullScreenIncludesToolbar=フルスクリーンモードでツールバーを表示
+options.view.fullScreenIncludesStatus=フルスクリーンモードでステータスバーを表示
+options.bufferset.scope=バッファセットのスコープ:
+options.editpane.bufferset.contain=新規バッファセットの内容:
+options.editpane.bufferset.newbufferset.copy=現在のバッファセットのコピー
+options.editpane.bufferset.newbufferset.empty=空のバッファひとつ
+options.editpane.bufferset.newbufferset.currentbuffer=現在のバッファのみ
+#}}}
+
+
+
+#{{{ File System Browser panes
+options.browser.label=ファイルシステム ブラウザ
+
+options.browser.colors.label=色
+options.browser.colors.glob=ファイル名フィルタ
+options.browser.colors.color=色
+options.browser.colors.add=追加
+options.browser.colors.remove=削除
+
+options.browser.general.label=一般
+options.browser.general.defaultPath=デフォルトパス:
+options.browser.general.defaultPath.favorites=お気に入り
+options.browser.general.defaultPath.home=ホームディレクトリ
+options.browser.general.defaultPath.last=最近開いたディレクトリ
+options.browser.general.defaultPath.buffer=現在のバッファの親ディレクトリ
+options.browser.general.defaultPath.working=jEdit プロセスの作業ディレクトリ
+options.browser.general.showMenubar=メニューバーを表示
+options.browser.general.showToolbar=ツールバーを表示
+options.browser.general.showIcons=アイコンを表示
+options.browser.general.showHiddenFiles=隠しファイルを表示
+options.browser.general.sortIgnoreCase=ソート時に大文字小文字を区別しない
+options.browser.general.sortMixFilesAndDirs=ファイルとディレクトリを混在させる
+options.browser.general.doubleClickClose=開いているファイルをダブルクリックしたときは閉じる
+options.browser.general.currentBufferFilter=ファイルダイアログのフィルタを\
+	現在のバッファの拡張子にする
+options.browser.general.useDefaultIcons=デフォルトアイコンを使用
+#}}}
+
+#{{{ Browser Context Menu
+options.browser.custom.context.label=コンテキストメニュー
+options.browser.custom.context.caption=ブラウザの右クリックメニューのカスタム項目:
+#}}}
+
+#{{{ Font selector
+font-selector.title=フォントの選択
+font-selector.family=フォント名:
+font-selector.size=サイズ:
+font-selector.style=スタイル:
+font-selector.plain=標準
+font-selector.bold=太字
+font-selector.italic=斜体
+font-selector.bolditalic=太字 斜体
+font-selector.preview=プレビュー
+font-selector.long-text=The quick brown fox jumps over the lazy dog.
+#}}}
+
+#{{{ Color chooser, used by options.syntaxs
+colorChooser.title=色の選択
+#}}}
+
+#{{{ Style editor, used by options.syntaxs
+style-editor.title=スタイルエディタ
+style-editor.tokenType=トークンの区分:
+style-editor.italics=斜体
+style-editor.bold=太字
+style-editor.fgColor=文字色:
+style-editor.bgColor=背景色:
+#}}}
+
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=オプション
+options.plugins.label=プラグイン
+options.no-plugins.label=プラグインオプションはありません
+#}}}
+
+#{{{ Help viewer
+helpviewer.title=jEdit ヘルプ
+helpviewer.loading=ロード中...
+helpviewer.back.label=戻る
+helpviewer.forward.label=進む
+
+helpviewer.toc.loading=ロード中...
+helpviewer.toc.label=コンテンツ
+helpviewer.toc.welcome=Welcome to jEdit
+helpviewer.toc.readme=General Information
+helpviewer.toc.changes=Detailed Change Log
+helpviewer.toc.todo=To Do List and Known Bugs
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.copying-apache=Apache License
+helpviewer.toc.copying-plugins=Plugin Licensing Amendment
+helpviewer.toc.plugins=Plugins
+helpviewer.toc.online-apidocs=jEdit API Reference (Online)
+
+helpviewer.search.label=検索
+helpviewer.search.caption=検索語:
+helpviewer.searching=検索中...
+helpviewer.no-results=該当なし
+#}}}
+
+#{{{ Tip of the day window
+tip.title=今日のヒント
+tip.caption=ご存知ですか...
+tip.show-next-time=起動時にヒントを表示
+tip.next-tip=次のヒント
+
+tip.not-found=doc/tips ディレクトリがありません
+#}}}
+
+#{{{ Activity log
+log-viewer.title=アクティビティ ログ
+log-viewer.caption=ログの全テキストの保存先 {0}
+log-viewer.copy=コピー
+log-viewer.tail.label=末尾
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=マーカーリストを表示($W)
+view-markers.title=マーカーリスト
+#}}}
+
+#{{{ I/O progress monitor
+io-progress-monitor.title=I/O 進捗モニタ
+io-progress-monitor.caption={0} 件を保留中。
+io-progress-monitor.idle=スレッド アイドル中
+io-progress-monitor.abort=中断
+
+#{{{ I/O abort dialog box
+abort.title=I/O の中断
+abort.message=現在の入出力要求を本当に中断しますか?\n\
+	ファイルの保存を中断した場合、データが失われるかもしれません。
+
+#}}}
+
+#}}}
+
+#{{{ Task  monitor
+task-monitor.title=タスクモニタ
+#}}}
+
+#{{{ VFS browser
+vfs.browser.title=ファイルブラウザ
+vfs.browser.longtitle=ファイルシステム ブラウザ
+vfs.browser.title.open=ファイルブラウザ - 開く
+vfs.browser.title.save=ファイルブラウザ- 保存
+vfs.browser.title.dialog=ファイルブラウザ - 開く
+vfs.browser.path=パス:
+vfs.browser.path.mnemonic=p
+vfs.browser.filter=フィルタ:
+vfs.browser.tree.loading=読み込み中...
+
+vfs.browser.name=名前
+vfs.browser.type=種類
+vfs.browser.type.file=ファイル
+vfs.browser.type.directory=ディレクトリ
+vfs.browser.type.filesystem=ファイルシステム
+vfs.browser.status=状態
+vfs.browser.status.no=アクセス禁止
+vfs.browser.status.ro=読み取り専用
+vfs.browser.status.append=追記専用
+vfs.browser.status.rw=読み書き可能
+vfs.browser.size=サイズ
+vfs.browser.modified=最終更新日
+
+vfs.browser.file_filter.glob=グロブファイルフィルタ
+vfs.browser.file_filter.dir_only=ディレクトリのみ
+
+#{{{ Actions
+vfs.browser.browse-window.label=新規ウィンドウでブラウズ
+vfs.browser.browse.label=ブラウズ
+vfs.browser.close.label=閉じる
+vfs.browser.copy-path.label=コピー
+vfs.browser.delete.label=削除...
+vfs.browser.delete.shortcut=DELETE
+vfs.browser.home.label=ホームディレクトリ
+vfs.browser.home.shortcut=~
+vfs.browser.properties.label=プロパティ
+vfs.browser.properties.title=ファイル/ディレクトリ プロパティ
+vfs.browser.insert.label=挿入
+vfs.browser.new-directory.label=新規ディレクトリ...
+vfs.browser.new-directory.shortcut=INSERT
+vfs.browser.new-file.label=新規ファイル
+vfs.browser.new-file.shortcut=C+n
+vfs.browser.open.label=開く
+vfs.browser.open-desktop.label=デスクトップに開く($D)
+vfs.browser.other-encoding-2.label=その他 ({0})...
+vfs.browser.other-encoding.label=その他...
+vfs.browser.reload.label=ディレクトリの再読み込み
+vfs.browser.reload.shortcut=F5
+vfs.browser.rename.label=名前の変更...
+vfs.browser.rename.shortcut=F2
+vfs.browser.roots.label=ルートディレクトリ
+vfs.browser.roots.shortcut=/
+vfs.browser.search-directory.label=ディレクトリ内検索...
+vfs.browser.show-hidden-files.label=隠しファイルの表示
+vfs.browser.synchronize.label=現在のバッファのディレクトリ
+vfs.browser.synchronize.shortcut=-
+vfs.browser.up.label=親ディレクトリ
+vfs.browser.up.shortcut=A+Up
+vfs.browser.paste.label=貼り付け
+vfs.browser.previous.label=前のディレクトリ
+vfs.browser.previous.shortcut=A+Left
+vfs.browser.next.label=次のディレクトリ
+vfs.browser.next.shortcut=A+Right
+#}}}
+
+#{{{ Tool bar
+
+#}}}
+
+#{{{ Commands menu
+vfs.browser.commands.label=コマンド
+vfs.browser.commands.encoding.label=エンコーディング
+vfs.browser.commands.encoding.auto-detect=自動検出
+
+vfs.browser.open-in.label=ここで開く
+vfs.browser.open-view.label=新規ビュー
+vfs.browser.open-plain-view.label=新規プレーンビュー
+vfs.browser.open-split.label=新規スプリット
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=プラグイン
+vfs.browser.plugins.plugin-manager.label=プラグイン マネージャ...
+vfs.browser.plugins.plugin-options.label=プラグイン オプション...
+vfs.browser.plugins.no-plugins.label=プラグインはありません
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=お気に入り
+vfs.browser.favorites.add-to-favorites.label=お気に入りに追加
+vfs.browser.favorites.edit-favorites.label=お気に入りの編集
+vfs.browser.favorites.no-favorites.label=お気に入りはありません
+#}}}
+
+vfs.browser.dialog.open=開く
+vfs.browser.dialog.save=保存
+vfs.browser.dialog.choose-dir=選択
+vfs.browser.dialog.filename=ファイル名(F):
+vfs.browser.dialog.filename.mnemonic=F
+
+#{{{ Dialogs
+vfs.browser.bad-filter.title=無効なフィルタ
+vfs.browser.bad-filter.message=フィルタ {0} は無効です ({1})
+
+vfs.browser.recurse-favorites.title=自己循環するお気に入りの禁止
+vfs.browser.recurse-favorites.message=お気に入りリストをそれ自身に追加することはできません。
+
+vfs.browser.delete-confirm.title=ファイル削除の確認
+vfs.browser.delete-confirm.message=以下の{1}を本当に削除しますか?\n\n\
+	{0}
+
+vfs.browser.delete-favorites.title=お気に入りからの削除
+vfs.browser.delete-favorites.message=以下のファイルを本当にお気に入りから削除しますか?\n\n\
+	{0}
+
+
+vfs.browser.rename.title=ファイル名の変更
+vfs.browser.rename.message={0}の新しいファイル名を入力:
+
+vfs.browser.mkdir.title=新規ディレクトリ
+vfs.browser.mkdir.message=新しいディレクトリの名前(またはパス):
+#}}}
+
+#}}}
+
+#{{{ I/O status messages
+vfs.status.load=ロード中 {0}
+vfs.status.load-markers=マーカーのロード中 {0}
+vfs.status.save=保存中 {0}
+vfs.status.save-markers=マーカーの保存中 {0}
+vfs.status.autosave=自動保存中 {0}
+vfs.status.listing-directory=読み込み中 {0}
+vfs.status.deleting=削除中 {0}
+vfs.status.renaming=名前変更中 {0} から {1}
+#}}}
+
+#{{{ Plugin manager
+
+plugin-manager.title=プラグイン マネージャ
+
+plugin-manager.hide-libraries=ライブラリを非表示
+
+plugin-manager.mgr-options=ダウンロード オプション...
+plugin-manager.plugin-options=プラグイン オプション...
+plugin-manager.done=閉じる
+
+plugin-manager.remove-confirm.title=プラグインの削除
+plugin-manager.remove-confirm.message=以下のプラグインを本当に削除しますか?
+
+
+plugin-manager.dependency.title=プラグイン依存関係
+plugin-manager.dependency.message={0} は以下のプラグインが利用します。\n\
+	{0} を選択解除すると以下のプラグインは選択解除されます:
+
+plugin-manager.remove-dependencies.title=プラグイン依存関係
+plugin-manager.remove-dependencies.message=削除されるプラグインは以下のプラグインが利用します。\n\
+	これらを削除すると以下のプラグインは選択解除されます:
+
+plugin-manager.cleanup.label=クリーンアップ
+plugin-manager.cleanup.title=プラグインデータをクリーンアップ
+plugin-manager.cleanup.message=以下のプラグインのデータを削除:
+
+plugin-manager.noOrphan.label=未使用の検索
+plugin-manager.noOrphan.title=未使用のjarはありません
+plugin-manager.noOrphan.message=このjEditインストレーションには未使用のjarがひとつもありませんでした
+
+plugin-manager.findOrphan.label=未使用の検索
+plugin-manager.findOrphan.title=未使用のjarを発見
+plugin-manager.findOrphan.message=以下のjarはどのプラグインにも属していません\n\
+	削除しますか?\n (注 これらはJDBCドライバのように、なんらかのプラグインで動的に\n\
+	宣言されることがありえます):
+
+install-plugins.depend.title=依存プラグインが必要です
+install-plugins.depend.message=インストールしようとしているプラグインには、さらに\n\
+	プラグインが必要です。このまま継続するとそれらが自動的に\n\
+	インストールされます。
+
+plugin-manager.status.loaded=ロードされています
+plugin-manager.status.not-loaded=ロードされていません
+plugin-manager.status.error=エラー
+
+plugin-manager.list-download-connect=plugins.jedit.org に接続中
+plugin-manager.list-download=プラグインリストを plugins.jedit.org からダウンロード中
+plugin-manager.list-download.need-password.title=HTTPプロキシはパスワードが必要です
+plugin-manager.list-download.need-password.message=HTTPプロキシはパスワードが必要です。\n\
+  有効なユーザ名とパスワードを "ダウンロード オプション" で設定して下さい。
+plugin-manager.list-download.disconnected.title=プラグインリストのダウンロードエラー
+plugin-manager.list-download.disconnected.message=プラグインリストがダウンロードできません:\n\
+  ホスト {0} が見えません。インターネット接続を確認したほうがよいかもしれません...
+plugin-manager.list-download.generic-error.title=プラグインリストのダウンロードエラー
+plugin-manager.list-download.generic-error.message=プラグインリストのダウンロードエラー:\n\
+  エラー {0} - {1}
+plugin-manager.filterField=名称にこの文字列を含むプラグインだけを表示
+
+#{{{ Plugin management
+manage-plugins.title=管理
+
+manage-plugins.info.name=名前
+manage-plugins.info.version=バージョン
+manage-plugins.info.status=ステータス
+manage-plugins.info.data=データ
+
+manage-plugins.data-size.unknown=<不明>
+
+manage-plugins.remove=削除...
+manage-plugins.help=ヘルプ...
+plugin-load-error.message=プラグインをロードできません
+plugin-load-error.title=プラグインロードエラー
+#}}}
+
+#{{{ Plugin installation
+install-plugins.title=インストール
+
+install-plugins.info.name=名前
+install-plugins.info.size=サイズ
+install-plugins.info.releaseDate=リリース日
+install-plugins.info.version=バージョン
+install-plugins.info.category=カテゴリ
+
+install-plugins.totalSize=プラグイン数 {0} / 合計サイズ: {1}
+install-plugins.select-all=すべて選択
+install-plugins.install=インストール
+install-plugins.show-updates=アップデートの表示
+
+install-plugins.info=作者: {0}\n\
+	リリース日: {1}\n\
+	{2}
+
+update-plugins.title=アップデート
+
+plugin-manager.progress=ダウンロード中 {0} ミラー {1} から
+plugin-manager.progress.title=プラグインのインストール中
+plugin-manager.progress.stop=中止
+#}}}
+
+#{{{ Plugin remove error
+plugin-manager.remove-failed.title=削除失敗
+plugin-manager.remove-failed.message=プラグイン {0} は\n\
+	削除されませんでした。
+#}}}
+
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=名前
+fileprop.path=パス
+fileprop.lastmod=最終更新日
+fileprop.size=サイズ
+fileprop.properties=プロパティ
+fileprop.readable=読込み可能
+fileprop.writeable=書込み可能
+fileprop.attribute=属性
+fileprop.okBtn=了解
+fileprop.cancelBtn=取消し
+fileprop.selectedFiles=選択されたファイル
+fileprop.selectedDirectories=選択されたディレクトリ
+#}}}
+
+#{{{ Activity log viewer
+log-viewer.dialog.title=アクティビティログ設定
+log-viewer.settings.label=設定
+log-viewer.message.label=メッセージ表示:
+log-viewer.message.debug.label=Debug
+log-viewer.message.message.label=Message
+log-viewer.message.notice.label=Notice
+log-viewer.message.warning.label=Warning
+log-viewer.message.error.label=Error
+#}}}
+
+logs-remove-all-errors.label=すべてのエラーを削除
+
+taskmanager.remainingtasks.label=残りタスク {0}
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=バッファの編集モード (例:java)
+statusbar.mode.sample=java
+statusbar.fold.label=バッファのフォールドモード (例:explicit)
+statusbar.fold.sample=explicit
+statusbar.encoding.label=バッファのエンコーディング (例:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=バッファのワードラップモード (例:N)
+statusbar.wrap.sample=N
+statusbar.indent.label=自動インデント (例:F)
+statusbar.indent.sample=F
+statusbar.multiSelect.label=バッファのマルチ選択モード (例:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=バッファの矩形選択モード (例:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=バッファの上書き (例:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=バッファの改行文字 (例:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=メモリステータス (例:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=時計 (例:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=バッファセットのスコープ (例:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=選択範囲の長さ (例:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=ディスク上の最終更新日 (例:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+statusbar.task-monitor.label=タスクモニタ (例: 7 task(s))
+statusbar.task-monitor.tooltip=実行中のタスクを見るにはクリック
+statusbar.task-monitor.sample=7 task(s)
+statusbar.task-monitor.template={0} task(s)
+#}}}
+
+killring.load-memoryerror.message=<html>前回削除されたテキストを読み込めません。メモリヒープ空間を大きくしてください。<br>\
+  それでも jEdit を起動する場合は<b>開始する<b/>を押してください。<br>起動せず設定を変更するには<b>中止する</b>を押して下さい。<br><b>ヒストリファイルを削除</b>してから jEdit を起動することもできます。</html>
+killring.load-memoryerror.title=メモリエラー
+killring.start=開始する
+killring.stop=中止する
+killring.delete=キルリングを削除して起動
+
+#}}}
+
+#{{{ Macros
+
+#{{{ Properties used by macros
+
+#{{{ common
+macro.rs.general.ErrorNotEditableDialog.title=書き込み権限
+macro.rs.general.ErrorNotEditableDialog.message=バッファは編集可能ではありません!
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=行フィルタ
+macro.rs.LineFilter.ignoreCaseCheckBox.label=大文字小文字を区別しない
+macro.rs.LineFilter.regexpPanelBorder.title=照合パターン (正規表現)
+macro.rs.LineFilter.processModeRadioButtonMatching.label=一致したとき
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=不一致のとき
+macro.rs.LineFilter.processModeOptionPanelBorder.title=行が
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=新規バッファに書き出し
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=削除
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=アクション
+
+macro.rs.LineFilter.DeleteActionDisabled.message=削除はできません
+macro.rs.LineFilter.MultipleSelection.message=マルチ選択はサポートされません
+macro.rs.LineFilter.BlockSelection.message=矩形選択はサポートされません
+
+macro.rs.LineFilter.SummaryDeleted.label=行が削除されました!
+macro.rs.LineFilter.SummaryWritten.label=行が新規バッファに書き出されました。
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=不正な正規表現
+macro.rs.LineFilter.ErrorRegexpDialog.message=正規表現が不正です!
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C
+C/Include_Guard.label=インクルードガード
+C/Toggle_Header_Source.label=ヘッダとソースの切り替え
+#}}}
+
+#{{{ Clipboard
+Clipboard/Copy_Lines.label=行をコピー
+Clipboard/Copy_Lines_Containing.label=テキストを含む行をコピー
+Clipboard/Copy_Visible_Lines.label=表示されている行をコピー
+Clipboard/Cut_Lines.label=行を切り取り
+Clipboard/Cut_Lines_Containing.label=テキストを含む行を切り取り
+Clipboard/Paste_Indent.label=インデントして貼り付け
+#}}}
+
+#{{{ Editing
+Editing/Duplicate_Lines_Above.label=上の行を複製
+Editing/Duplicate_Lines_Below.label=下の行を複製
+Editing/Emacs_Ctrl-K.label=Emacs の Ctrl-K
+Editing/Emacs_Next_Line.label=Emacs の次行
+Editing/Emacs_Previous_Line.label=Emacs の前行
+Editing/Go_to_Column.label=列に移動
+Editing/Greedy_Backspace.label=貪欲なバックスペース
+Editing/Greedy_Delete.label=貪欲なデリート
+Editing/Greedy_Left.label=貪欲な左移動
+Editing/Greedy_Right.label=貪欲な右移動
+Editing/Keywords_to_Upper_Case.label=キーワードを大文字に
+Editing/Mode_Switcher.label=モード切替
+Editing/Move_Lines_Down.label=行を下へ移動
+Editing/Move_Lines_Up.label=行を上へ移動
+Editing/Open_Line_Above.label=上に行を空ける
+Editing/Open_Line_Below.label=下に行を空ける
+Editing/Toggle_Fold.label=フォールド切り替え
+#}}}
+
+#{{{ Files
+Files/Browse_Buffer_Directory.label=バッファのディレクトリをブラウズ
+Files/Browse_Directory.label=ディレクトリをブラウズ
+Files/Buffer_Switcher.label=バッファスイッチャ
+Files/Close_All_Except_Active.label=アクティブ以外をすべて閉じる
+Files/Copy_Name_to_Clipboard.label=クリップボードに名前をコピー
+Files/Copy_Path_to_Clipboard.label=クリップボードにパスをコピー
+Files/Delete_Current.label=現在のファイルを削除
+Files/Duplicate_Buffer.label=バッファの複製
+Files/Glob_Close.label=グロブで閉じる
+Files/Insert_Selection.label=選択を挿入
+Files/Next_Dirty_Buffer.label=次のダーティーバッファ
+Files/Open_Path.label=パスを開く
+Files/Open_Selection.label=選択を開く
+Files/Send_Buffer_To_Next_Split.label=バッファを次のスプリットに送る
+Files/Toggle_ReadOnly.label=読み込み専用の切り替え
+#}}}
+
+#{{{ Interface
+Interface/Decrease_Font_Size.label=フォントサイズを小さく
+Interface/Increase_Font_Size.label=フォントサイズを大きく
+Interface/Open_Context_Menu.label=コンテキストメニューを開く
+Interface/Reset_TextArea.label=テキストエリアをリセット
+Interface/Splitpane_Grow.label=分割ペインをやや大きく
+Interface/Toggle_Bottom_Docking_Area.label=下ドッキングエリアの切り替え
+Interface/Toggle_Left_Docking_Area.label=左ドッキングエリアの切り替え
+Interface/Toggle_Right_Docking_Area.label=右ドッキングエリアの切り替え
+Interface/Toggle_Top_Docking_Area.label=上ドッキングエリアの切り替え
+#}}}
+
+#{{{ Java
+Java/Create_Constructor.label=コンストラクタの生成
+Java/Get_Class_Name.label=クラス名の取得
+Java/Get_Package_Name.label=パッケージ名の取得
+Java/Java_File_Save.label=Java ファイルとして保存
+Java/Make_Get_and_Set_Methods.label=get/setメソッドを作成
+Java/Preview_JavaDoc_Of_Current_Buffer.label=現在のバッファの JavaDoc をプレビュー
+#}}}
+
+#{{{ Misc
+Misc/Buffer_to_HyperSearch_Results.label=バッファからハイパーサーチ結果へ
+Misc/Debug_BufferSets.label=バッファセットをデバッグ
+Misc/Display_Abbreviations.label=略語を表示
+Misc/Display_Actions.label=アクションを表示
+Misc/Display_Character_Code.label=文字コードを表示
+Misc/Display_Shortcuts.label=ショートカットを表示
+Misc/Evaluate_Buffer_in_BeanShell.label=バッファを BeanShell で評価
+Misc/Hex_Convert.label=16進数変換
+Misc/HyperSearch_Results_to_Buffer.label=ハイパーサーチ結果からバッファへ
+Misc/Make_Bug_Report.label=バグレポートを作成
+Misc/Run_Script.label=スクリプトを実行
+Misc/Show_Threads.label=スレッドを表示
+#}}}
+
+#{{{ Properties
+Properties/Create_Plugin_Announcement.label=プラグインアナウンスを作成
+Properties/Insert_Buffer_Properties.label=バッファのプロパティを挿入
+Properties/jEdit_Properties.label=jEdit プロパティ
+Properties/Look_and_Feel_Properties.label=ルック・アンド・フィールのプロパティ
+Properties/System_Properties.label=システムプロパティ
+
+#}}}
+
+#{{{ Text
+Text/Add_Prefix_and_Suffix.label=プレフィックスとサフィックスの追加
+Text/Color_Picker.label=カラーピッカー
+Text/Compose_Tag.label=タグに変換
+Text/Duplicate_Line.label=行の複製
+Text/Insert_Date.label=日付の挿入
+Text/Insert_Tag.label=タグの挿入
+Text/Line_Filter.label=行フィルタ
+Text/Next_Char.label=次の文字
+Text/Reverse_Lines.label=行の反転
+Text/Single_Space_Buffer.label=バッファのシングルスペース化
+#}}}
+
+#}}}
+
+#}}}

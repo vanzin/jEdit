@@ -1941,6 +1941,7 @@ options.appearance.lang.label=Language (change is effective on restart)
 options.appearance.lang.en=English
 options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch
+options.appearance.lang.ja=日本語 #Japanese
 #}}}
 
 #{{{ Context Menu pane
