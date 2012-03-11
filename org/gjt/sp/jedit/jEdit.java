@@ -3469,9 +3469,9 @@ public class jEdit
 
 		try
 		{
-			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+			propMgr.loadSystemProps(getResourceAsUTF8Text(
 				"/org/gjt/sp/jedit/jedit.props"));
-			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+			propMgr.loadSystemProps(getResourceAsUTF8Text(
 				"/org/gjt/sp/jedit/jedit_gui.props"));
 			propMgr.loadSystemProps(getResourceAsUTF8Text(
 				"/org/jedit/localization/jedit_en.props"));

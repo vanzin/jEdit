@@ -2,7 +2,7 @@
 ### jEdit user interface definitions,
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
-### :encoding=ISO-8859-1:
+### :encoding=UTF-8:
 ###
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
@@ -925,7 +925,7 @@ whitespace-home.label=Go to Start of White Space
 #{{{ View stuff
 
 # Title
-view.title=jEdit -\ 
+view.title=jEdit -\u0020
 view.title.dirty=\ (modified)
 
 view.docking.close-tooltip=Hides the current docked window
@@ -1053,7 +1053,7 @@ about.text.contributors=Slava Pestov\n\
 	Bernhard Walle\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bj\u00F6rn "Vampire" Kautler\n\
+	Björn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1101,7 +1101,7 @@ about.text.contributors=Slava Pestov\n\
 	Ian Maclean\n\
 	Igor Lesik\n\
 	Israel Olalla\n\
-	Jakub Rozto\u010Dil\n\
+	Jakub Roztočil\n\
 	Jamie LaScolea\n\
 	Jarek Czekalski\n\
 	Jason Ginchereau\n\
@@ -1114,7 +1114,7 @@ about.text.contributors=Slava Pestov\n\
 	Jim Morris\n\
 	Jim Wissner\n\
 	Jimmy Chaw\n\
-	J\u00F6rg Spieler\n\
+	Jörg Spieler\n\
 	John Gellene\n\
 	John Perry\n\
 	Jojaba\n\
@@ -1226,7 +1226,7 @@ about.text.contributors=Slava Pestov\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00F6pfer
+	Wolfgang Chico-Töpfer
 #}}}
 
 #{{{ Error list dialog, used to report I/O and plugin load errors
@@ -1936,7 +1936,7 @@ options.appearance.localization.section.label=Localization
 options.appearance.usedefaultlocale.label=Use defaut locale
 options.appearance.lang.label=Language (change is effective on restart)
 options.appearance.lang.en=English
-options.appearance.lang.fr=Fran\u00E7ais
+options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch
 #}}}
 
