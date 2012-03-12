@@ -1,5 +1,5 @@
 jEdit 5.0 version history
-       (changes since jEdit 4.5)
+       (changes since jEdit 4.5.1)
 :encoding=UTF-8:
 
 {{{ Version 5.0pre1
@@ -33,12 +33,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
-
-- Fixed memory leaks which could climb to be observable with complex
-  syntax rules and large files. (Kazutoshi Satoda)
-
-- Fixed unreasonable slow down which could happen with complex syntax
-  rules and large files. (Kazutoshi Satoda)
 
 - Fixed memory leaks which happened when split panes or multiple views
   are used. (Kazutoshi Satoda)
