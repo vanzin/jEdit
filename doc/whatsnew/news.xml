@@ -17,12 +17,14 @@
     url="../CHANGES.txt">Detailed Change Log</ulink>, 
     but here are some of the major features of this version. </para>
 
-    <para> Updated html/css edit modes with HTML5/CSS3 keywords. </para>
+    <itemizedlist> 
+    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
+    </para></listitem>
     
-    <itemizedlist> <listitem><para> Localization - jEdit now supports switching
-    from default locale, and French and German translations for those locales,
-    containing translations of common jEdit labels. It is also now quite easy to
-    add new translation property files.
+    <listitem><para> Localization - jEdit now supports switching
+    from default locale, and French, German and Japanese translations for those 
+    locales, containing common jEdit labels. It is also now possible to
+    add new or contribute to existing translation property files.
     </para></listitem>
     
     <listitem><para> Keymaps - named collections of shortcuts. Example keymaps
