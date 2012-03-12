@@ -9,6 +9,9 @@ Alan Ezust, and Max Funk for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed unreasonable slow down which could happen with complex syntax
+  rules and large files. (Kazutoshi Satoda)
+
 - Fixed memory leaks which could climb to be observable with complex
   syntax rules and large files. (Kazutoshi Satoda)
 
@@ -185,6 +188,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 - Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
   (#3034220 - Evan Wright)
+
 
 }}}
 {{{ API Changes
