@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,8 +89,6 @@ public class KeymapManagerImpl implements KeymapManager
 	{
 		Collection<String> systemKeymapNames = getKeymapsFromFolder(systemKeymapFolder);
 		Collection<String> userKeymapNames = getKeymapsFromFolder(userKeymapFolder);
-		if (userKeymapNames != null)
-			systemKeymapNames.addAll(userKeymapNames);
 		Set<String> keyMaps = new HashSet<String>();
 		keyMaps.addAll(systemKeymapNames);
 		keyMaps.addAll(userKeymapNames);
@@ -218,7 +217,7 @@ public class KeymapManagerImpl implements KeymapManager
 	private static Collection<String> getKeymapsFromFolder(File folder)
 	{
 		if (folder == null)
-			return null;
+			return Collections.emptyList();
 		Collection<String> names = new ArrayList<String>();
 		File[] files = folder.listFiles(new KeymapFileFilter());
 		if (files != null)
