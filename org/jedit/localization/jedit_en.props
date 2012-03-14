@@ -2104,13 +2104,254 @@ killring.delete=delete killring and start
 
 #}}}
 
-#{{{ Macros
+#{{{ Macros                       
 
-#{{{ Properties used by macros
+#{{{ Properties used by macros     
 
-#{{{ common
-macro.rs.general.ErrorNotEditableDialog.title=write permission
+#{{{ common    
+macro.rs.general.ErrorNotEditableDialog.title=Write permission
 macro.rs.general.ErrorNotEditableDialog.message=Buffer is not editable!
+#}}}
+
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=Copy lines containing:
+macro.rs.CopyLinesContaining.LinesCopied.message=line(s) copied
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=Cut lines containing:
+macro.rs.CutLinesContaining.LinesCut.message=line(s) cut
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.ColumnBefore.label=Column (between 1 and
+macro.rs.GoToColumn.ColumnAfter.label=):
+#}}}
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=Converted Keywords to Upper Case
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=Buffer Mode Switcher
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=Enter buffer mode:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=Changing mode of buffer
+macro.rs.BufferModeSwitcher.To.label=to
+macro.rs.BufferModeSwitcher.Mode.label=Mode
+macro.rs.BufferModeSwitcher.NotFound.label=Not found
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=Line move does not work with multiple selection.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=Directory to browse:
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=open Buffers
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] Switch to; [SPACE] Switch to, keep dialog; [DEL] Close Buffer
+macro.rs.BufferSwitcher.Help1.label=Help for Buffer Switcher macro:\n\n
+macro.rs.BufferSwitcher.Help2.label=DELETE closes selected buffer.\n
+macro.rs.BufferSwitcher.Help3.label=ENTER switches to selected buffer, closes dialog.\n
+macro.rs.BufferSwitcher.Help4.label=ESCAPE closes dialog.\n
+macro.rs.BufferSwitcher.Help5.label=SPACE switches to selected buffer, does not close dialog.\n\n
+macro.rs.BufferSwitcher.Help6.label=NOTE: This dialog will only be displayed once
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=Buffer doesn't exist on disk.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=doesn't support deleting.
+macro.rs.DeleteCurrent.Deleted.message=Deleted:
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=Glob Pattern:
+macro.rs.GlobClose.ErrorGlobPattern.error=Error in glob pattern:
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=No other buffers are dirty
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=No buffers are dirty
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=Path name:
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=This macro only works on local files.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Windows, Unix, & MacOS X.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=Font size now:
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=Uneven number of type names and variables.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=This macro will not work when the Java interpreter\n
+macro.rs.GetPackageName.NotWorking2.error=loads jEdit with the '-jar' command line option.
+macro.rs.GetPackageName.NotFind.error=Could not find a package name.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=Infinite loop:
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=Generate Code
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Create Get Methods
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Create Set Methods
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Create Get and Set Methods
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error=The 'HyperSearch Results' window is not open.
+macro.rs.HyperSearchResults.NotMatch.error=No HyperSearch matches.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=BUFFERSET DEBUGGING
+macro.rs.DebugBuffersets.BufferCount.label=BufferCount=
+macro.rs.DebugBuffersets.BufferList.label=BUFFER LIST
+macro.rs.DebugBuffersets.EndBufferList.label=END BUFFER LIST
+macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LIST
+macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=Abbreviation
+macro.rs.DisplayAbbreviations.Expansion.label=Expansion
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=Abbreviation set:
+macro.rs.DisplayAbbreviations.Close.label=Close
+macro.rs.DisplayAbbreviations.WriteSet.label=Write set
+macro.rs.DisplayAbbreviations.WriteAll.label=Write all
+macro.rs.DisplayAbbreviations.AbbreviationList.label=Abbreviation list
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=calling writeTableToNewBuffer for
+macro.rs.DisplayAbbreviations.SizeVector.label=size of vector =
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=The jEdit action bar can be opened via the Utilities menu and is usually\n
+macro.rs.DisplayActions.jEditActionBar2.label=assigned to the C+ENTER keyboard shortcut.\n\n
+macro.rs.DisplayActions.NoLabel.label=<no label>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=Character at caret:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit Keyboard Shortcut Table\n\n
+macro.rs.DisplayShortcuts.Name.label=Name
+macro.rs.DisplayShortcuts.Shortcut1.label=Shortcut - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
+macro.rs.DisplayShortcuts.Close.label=Close
+macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
+macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
+macro.rs.DisplayShortcuts.Center.label=Center
+macro.rs.DisplayShortcuts.South.label=South
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=before =
+macro.rs.HexConvert.After.label=\nafter =
+macro.rs.HexConvert.NotValidHex.label=is not valid hex string.
+macro.rs.HexConvert.ByteToString.label=Byte to String:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
+macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
+macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
+macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
+macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
+macro.rs.MakeBugReport.Error.label=[error]
+macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=Specify parameters for running script under
+macro.rs.RunScript.ScriptExecutionCancelled.message=Script execution was cancelled.
+macro.rs.RunScript.FileNotScript.error=The current file does not appear to be a script.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=daemon
+macro.rs.ShowThreads.Priority.label=prio
+macro.rs.ShowThreads.NotStarted.label=not started
+macro.rs.ShowThreads.Interrupted.label=interrupted
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] Close      [U] Update
+macro.rs.ShowThreads.CurrentThreads.label=Current Threads
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=Insert Buffer Local Properties
+macro.rs.InsertBufferProperties.Properties.label=Properties:
+macro.rs.InsertBufferProperties.Insert.label=Insert
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Note: Buffer Local properties must in the first or last 10 lines of a buffer to be recognized by jEdit.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--listing look and feel property names--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=System Properties
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=Add prefix and suffix to selected lines
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=Prefix to add:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=Suffix to add:
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=Color Picker
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=Internet Time
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=Enter name of tag:
 #}}}
 
 #{{{ Line_Filter
@@ -2135,16 +2376,36 @@ macro.rs.LineFilter.ErrorRegexpDialog.title=Invalid regular expression
 macro.rs.LineFilter.ErrorRegexpDialog.message=The regular expression is invalid!
 #}}}
 
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=Enter a character
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=Sorry, this macro doesn't work with Rectangular Selections.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=doesn't appear to be double-spaced:\n
+macro.rs.SingleSpaceBuffer.Line.message=Line
+macro.rs.SingleSpaceBuffer.NotBlank.message=isn't blank.
+#}}}
+
+#}}}
+
 #}}}
 
 #{{{ Macro Names for Macros Menu (only original macros in original folders!)
 
 #{{{ C
+macros.folder.C.label=C
+
 C/Include_Guard.label=Include Guard
 C/Toggle_Header_Source.label=Toggle Header Source
 #}}}
 
 #{{{ Clipboard
+macros.folder.Clipboard.label=Clipboard
+
 Clipboard/Copy_Lines.label=Copy Lines
 Clipboard/Copy_Lines_Containing.label=Copy Lines Containing
 Clipboard/Copy_Visible_Lines.label=Copy Visible Lines
@@ -2154,6 +2415,8 @@ Clipboard/Paste_Indent.label=Paste Indent
 #}}}
 
 #{{{ Editing
+macros.folder.Editing.label=Editing
+
 Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
 Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
 Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
@@ -2174,6 +2437,8 @@ Editing/Toggle_Fold.label=Toggle Fold
 #}}}
 
 #{{{ Files
+macros.folder.Files.label=Files
+
 Files/Browse_Buffer_Directory.label=Browse Buffer Directory
 Files/Browse_Directory.label=Browse Directory
 Files/Buffer_Switcher.label=Buffer Switcher
@@ -2192,6 +2457,8 @@ Files/Toggle_ReadOnly.label=Toggle ReadOnly
 #}}}
 
 #{{{ Interface
+macros.folder.Interface.label=Interface
+
 Interface/Decrease_Font_Size.label=Decrease Font Size
 Interface/Increase_Font_Size.label=Increase Font Size
 Interface/Open_Context_Menu.label=Open Context Menu
@@ -2204,6 +2471,8 @@ Interface/Toggle_Top_Docking_Area.label=Toggle Top Docking Area
 #}}}
 
 #{{{ Java
+macros.folder.Java.label=Java
+
 Java/Create_Constructor.label=Create Constructor
 Java/Get_Class_Name.label=Get Class Name
 Java/Get_Package_Name.label=Get Package Name
@@ -2213,6 +2482,8 @@ Java/Preview_JavaDoc_Of_Current_Buffer.label=Preview JavaDoc Of Current Buffer
 #}}}
 
 #{{{ Misc
+macros.folder.Misc.label=Misc
+
 Misc/Buffer_to_HyperSearch_Results.label=Buffer to HyperSearch_Results
 Misc/Debug_BufferSets.label=Debug BufferSets
 Misc/Display_Abbreviations.label=Display Abbreviations
@@ -2228,15 +2499,18 @@ Misc/Show_Threads.label=Show Threads
 #}}}
 
 #{{{ Properties
+macros.folder.Properties.label=Properties
+
 Properties/Create_Plugin_Announcement.label=Create Plugin Announcement
 Properties/Insert_Buffer_Properties.label=Insert Buffer Properties
 Properties/jEdit_Properties.label=jEdit Properties
 Properties/Look_and_Feel_Properties.label=Look and Feel Properties
 Properties/System_Properties.label=System Properties
-
 #}}}
 
-#{{{ Text
+#{{{ Text 
+macros.folder.Text.label=Text
+
 Text/Add_Prefix_and_Suffix.label=Add Prefix and Suffix
 Text/Color_Picker.label=Color Picker
 Text/Compose_Tag.label=Compose Tag
@@ -2247,8 +2521,6 @@ Text/Line_Filter.label=Line Filter
 Text/Next_Char.label=Next Char
 Text/Reverse_Lines.label=Reverse Lines
 Text/Single_Space_Buffer.label=Single Space Buffer
-#}}}
-
 #}}}
 
 #}}}
