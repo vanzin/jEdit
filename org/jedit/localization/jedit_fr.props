@@ -2113,6 +2113,247 @@ macro.rs.general.ErrorNotEditableDialog.title=permission d'écriture
 macro.rs.general.ErrorNotEditableDialog.message=Impossible de modifier le fichier !
 #}}}
 
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=Copier les lignes contenant :
+macro.rs.CopyLinesContaining.LinesCopied.message=lipne(s) copiée(s)
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=Couper les lignes contenant :
+macro.rs.CutLinesContaining.LinesCut.message=ligne(s) coupées
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.ColumnBefore.label=Colonne (entre 1 et
+macro.rs.GoToColumn.ColumnAfter.label=):
+#}}}
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=Mots-clés convertis en majuscules
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=Sélecteur de mode de tampon
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=Indiquer le mode du tampon :
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=Modification du mode du tampon
+macro.rs.BufferModeSwitcher.To.label=en
+macro.rs.BufferModeSwitcher.Mode.label=Mode
+macro.rs.BufferModeSwitcher.NotFound.label=introuvable
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=Le déplacement de lignes ne fonctionne pas avec la sélection multiple.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=Dossier à explorer :
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=ouvrir les tampons
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTRÉE] basculer vers; [ESPACE] basculer vers, laisser la boîte ouverte; [SUPPR] fermer le tampon
+macro.rs.BufferSwitcher.Help1.label=Aide pour la macro « Sélecteur de tampon » :\n\n
+macro.rs.BufferSwitcher.Help2.label=SUPPRIMER ferme le tampon sélectionné.\n
+macro.rs.BufferSwitcher.Help3.label=ENTRÉE bascule vers le tampon sélectionné, ferme la boîte de dialogue.\n
+macro.rs.BufferSwitcher.Help4.label=ÉCHAP ferme la boîte de dialogue.\n
+macro.rs.BufferSwitcher.Help5.label=ESPACE bascule vers le tampon sélectionné, ne ferme pas la boîte d edialogue.\n\n
+macro.rs.BufferSwitcher.Help6.label=REMARQUE : cette boîte de dialogue ne s'affichera qu'une fois
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=Le tampon n'existe pas sur le disque.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=ne permet pas de supprimer.
+macro.rs.DeleteCurrent.Deleted.message=Supprimé(s) :
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=Motif :
+macro.rs.GlobClose.ErrorGlobPattern.error=Erreur dans le motif :
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=Aucun autre tampon n'est modifié
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=Aucun tampon n'est modifié
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=Nom du chemin :
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=Cette macro ne fonctionne que sur les fichiers locaux.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=Cette macro ne fonctionne que sur Windows, Unix, & MacOS X.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=Taiile de la police à présent :
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=Pas le même nombre de noms de types et de variables.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=Cette macro ne fonctionnera pas lorsque l'interpréteur Java\n
+macro.rs.GetPackageName.NotWorking2.error=charge jEdit avec l'option de ligne de commande '-jar'.
+macro.rs.GetPackageName.NotFind.error=Impossible de trouver un nom de paquetage.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=Boucle infinie :
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=Générer le code
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Créer des méthodes Get
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Créer des méthodes Set
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Créer des méthodes Get et Get
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error=La fenêtre d'hyper-recherche n'est pas ouverte.
+macro.rs.HyperSearchResults.NotMatch.error=Aucune correspondance trouvée.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=BUFFERSET DEBUGGING
+macro.rs.DebugBuffersets.BufferCount.label=BufferCount=
+macro.rs.DebugBuffersets.BufferList.label=BUFFER LIST
+macro.rs.DebugBuffersets.EndBufferList.label=END BUFFER LIST
+macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LIST
+macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=Abréviation
+macro.rs.DisplayAbbreviations.Expansion.label=Expansion
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=Jeu d'abréviations :
+macro.rs.DisplayAbbreviations.Close.label=Fermer
+macro.rs.DisplayAbbreviations.WriteSet.label=Écrire le jeu
+macro.rs.DisplayAbbreviations.WriteAll.label=Tout écrire
+macro.rs.DisplayAbbreviations.AbbreviationList.label=Liste des abréviations
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=appel de writeTableToNewBuffer pour
+macro.rs.DisplayAbbreviations.SizeVector.label=taille du vecteur =
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=The jEdit action bar can be opened via the Utilities menu and is usually\n
+macro.rs.DisplayActions.jEditActionBar2.label=assigned to the C+ENTER keyboard shortcut.\n\n
+macro.rs.DisplayActions.NoLabel.label=<no label>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=Character at caret:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit Keyboard Shortcut Table\n\n
+macro.rs.DisplayShortcuts.Name.label=Name
+macro.rs.DisplayShortcuts.Shortcut1.label=Shortcut - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
+macro.rs.DisplayShortcuts.Close.label=Close
+macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
+macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
+macro.rs.DisplayShortcuts.Center.label=Center
+macro.rs.DisplayShortcuts.South.label=South
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=before =
+macro.rs.HexConvert.After.label=\nafter =
+macro.rs.HexConvert.NotValidHex.label=is not valid hex string.
+macro.rs.HexConvert.ByteToString.label=Byte to String:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
+macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
+macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
+macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
+macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
+macro.rs.MakeBugReport.Error.label=[error]
+macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=Specify parameters for running script under
+macro.rs.RunScript.ScriptExecutionCancelled.message=Script execution was cancelled.
+macro.rs.RunScript.FileNotScript.error=The current file does not appear to be a script.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=daemon
+macro.rs.ShowThreads.Priority.label=prio
+macro.rs.ShowThreads.NotStarted.label=not started
+macro.rs.ShowThreads.Interrupted.label=interrupted
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] Close      [U] Update
+macro.rs.ShowThreads.CurrentThreads.label=Current Threads
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=Insérer les propriétés locales du tampon
+macro.rs.InsertBufferProperties.Properties.label=Propriétés :
+macro.rs.InsertBufferProperties.Insert.label=Insérer
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Remarque : les propriétés loclaes du tampon doivent se trouver dans les 10 premières ou dernières lignes pour être reconnues par jEdit.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--listing des noms de propriétés look and feel--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=Propriétés Système
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=Ajouter un préfixe et un suffixe aux lignes sélectionnées
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=Préfixe à ajouter :
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=Suffixe à ajouter :
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=Palette de couleurs
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=Date et horaire Internet
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=Indiquer le nom de la balise :
+#}}}
+
 #{{{ Line_Filter
 macro.rs.LineFilter.MainDialog.title=Filtre de lignes
 macro.rs.LineFilter.ignoreCaseCheckBox.label=Ignorer la casse
@@ -2135,16 +2376,36 @@ macro.rs.LineFilter.ErrorRegexpDialog.title=Expression régulière invalide
 macro.rs.LineFilter.ErrorRegexpDialog.message=Cette expression régulière est invalide !
 #}}}
 
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=Indiquer un caractère
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=Désolé, cette macro ne fonctionne pas avec la sélection rectangulaire.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=semble ne pas contenir d'espace double :\n
+macro.rs.SingleSpaceBuffer.Line.message=La ligne
+macro.rs.SingleSpaceBuffer.NotBlank.message=n'est pas vide.
+#}}}
+
+#}}}
+
 #}}}
 
 #{{{ Macro Names for Macros Menu (only original macros in original folders!)
 
 #{{{ C
+macros.folder.C.label=C
+
 C/Include_Guard.label=Gardien Include
 C/Toggle_Header_Source.label=Basculer entre le header et la source
 #}}}
 
 #{{{ Clipboard
+macros.folder.Clipboard.label=Presse-papiers
+
 Clipboard/Copy_Lines.label=Copier les lignes
 Clipboard/Copy_Lines_Containing.label=Copier les lignes contenant...
 Clipboard/Copy_Visible_Lines.label=Copier les lignes visibles
@@ -2154,6 +2415,8 @@ Clipboard/Paste_Indent.label=Coller avec retrait
 #}}}
 
 #{{{ Editing
+macros.folder.Editing.label=Édition
+
 Editing/Duplicate_Lines_Above.label=Dupliquer les lignes vers le haut
 Editing/Duplicate_Lines_Below.label=Dupliquer les lignes vers le bas
 Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
@@ -2174,6 +2437,8 @@ Editing/Toggle_Fold.label=Fermer/développer le repli
 #}}}
 
 #{{{ Files
+macros.folder.Files.label=Fichiers
+
 Files/Browse_Buffer_Directory.label=Explorer le dossier du tampon courant
 Files/Browse_Directory.label=Ouvrir un dossier
 Files/Buffer_Switcher.label=Sélecteur de fichier
@@ -2192,6 +2457,8 @@ Files/Toggle_ReadOnly.label=Modifier les permissions
 #}}}
 
 #{{{ Interface
+macros.folder.Interface.label=Interface
+
 Interface/Decrease_Font_Size.label=Diminuer la taille de police
 Interface/Increase_Font_Size.label=Augmenter la taille de police
 Interface/Open_Context_Menu.label=Ouvrir le menu contextuel
@@ -2204,6 +2471,8 @@ Interface/Toggle_Top_Docking_Area.label=Afficher/masquer la fenêtre ancrée en 
 #}}}
 
 #{{{ Java
+macros.folder.Java.label=Java
+
 Java/Create_Constructor.label=Créer un constructeur
 Java/Get_Class_Name.label=Obtenir le nom de classe
 Java/Get_Package_Name.label=Obtenir le nom du paquetage
@@ -2213,6 +2482,8 @@ Java/Preview_JavaDoc_Of_Current_Buffer.label=Aperçu JavaDoc du tampon courant
 #}}}
 
 #{{{ Misc
+macros.folder.Misc.label=Divers
+
 Misc/Buffer_to_HyperSearch_Results.label=Résultats de l'Hyper-recherche importée du tampon courant
 Misc/Debug_BufferSets.label=Déboguer le jeu de tampons
 Misc/Display_Abbreviations.label=Liste des abréviations
@@ -2228,6 +2499,8 @@ Misc/Show_Threads.label=Liste des processus
 #}}}
 
 #{{{ Properties
+macros.folder.Properties.label=Propriétés
+
 Properties/Create_Plugin_Announcement.label=Créer une annonce de plugin
 Properties/Insert_Buffer_Properties.label=Insérer les propriétés du tampon
 Properties/jEdit_Properties.label=Liste des propriétés de jEdit
@@ -2236,6 +2509,8 @@ Properties/System_Properties.label=Liste des propriétés système
 #}}}
 
 #{{{ Text
+macros.folder.Text.label=Text
+
 Text/Add_Prefix_and_Suffix.label=Ajouter un präfixe et un suffixe
 Text/Color_Picker.label=Palette de couleur
 Text/Compose_Tag.label=Créer une balise XML
@@ -2246,8 +2521,6 @@ Text/Line_Filter.label=Filtre de lignes
 Text/Next_Char.label=Sélection jusqu'au caractère (à indiquer)
 Text/Reverse_Lines.label=Inverser l'ordre des lignes
 Text/Single_Space_Buffer.label=Réduire l'espace entre les lignes
-#}}}
-
 #}}}
 
 #}}}
