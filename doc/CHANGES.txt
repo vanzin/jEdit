@@ -9,6 +9,9 @@ Alan Ezust, and Max Funk for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed memory leaks which happened when split panes or multiple views
+  are used. (Kazutoshi Satoda)
+
 - Fixed unreasonable slow down which could happen with complex syntax
   rules and large files. (Kazutoshi Satoda)
 
@@ -188,7 +191,6 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 - Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
   (#3034220 - Evan Wright)
-
 
 }}}
 {{{ API Changes
