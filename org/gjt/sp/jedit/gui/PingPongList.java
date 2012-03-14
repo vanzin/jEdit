@@ -1,5 +1,5 @@
 /*
- * EncodingsOptionPane.java - Encodings options panel
+ * PingPongList.java - Ping Pong List
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -43,7 +43,9 @@ import static javax.swing.Box.createHorizontalStrut;
 import static org.gjt.sp.jedit.jEdit.getProperty;
 //}}}
 
-/**
+/** A panel with two lists, allowing the user to move items between them.
+ * All methods ensure that an element cannot appear in both lists simultaneously.
+ *
  * @author Matthieu Casanova
  * @since jEdit 4.4pre1
  */
