@@ -17,6 +17,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+//Localization
+final static String UnevenNumberMessage = jEdit.getProperty("macro.rs.CreateConstructor.UnevenNumber.message", "Uneven number of type names and variables.");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+    
+// Process
 boolean JAVA_MODE = buffer.getMode().getName().toLowerCase().equals("java");
 String UNDEFINED = "UNKNOWN_CLASS";
 
@@ -76,7 +81,7 @@ public String createJavaConstructor(String className, String[] typeNames, String
 {
   if(typeNames.length != variableNames.length)
   {
-    Macro.message(view, "Uneven number of type names and variables.");
+    Macro.message(view, UnevenNumberMessage);
     return "";
   }
   
@@ -109,7 +114,7 @@ public String createCppConstructor(String className, String[] typeNames, String[
 {
   if(typeNames.length != variableNames.length)
   {
-    Macro.message(view, "Uneven number of type names and variables.");
+    Macro.message(view, UnevenNumberMessage);
     return "";
   }
   
@@ -232,6 +237,6 @@ void parseSelection()
 }
 
 if( buffer.isReadOnly() )
-	Macros.error( view, "Buffer is read-only." );
+	Macros.error( view, NotEditableMessage );
 else
 	parseSelection();

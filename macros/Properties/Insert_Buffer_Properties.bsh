@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002, 2003 Ollie Rutherfurd <oliver@rutherfurd.net>
  *
- * BugFixed by Björn "Vampire" Kautler <Vampire0@gmx.net>
+ * BugFixed by BjÃ¶rn "Vampire" Kautler <Vampire0@gmx.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,14 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import org.gjt.sp.jedit.gui.JCheckBoxList;
 
+// Localization
+final static String InsertLocalPropertiesLabel = jEdit.getProperty("macro.rs.InsertBufferProperties.InsertLocalProperties.label", "Insert Buffer Local Properties");
+final static String PropertiesLabel = jEdit.getProperty("macro.rs.InsertBufferProperties.Properties.label", "Properties:");
+final static String InsertLabel = jEdit.getProperty("macro.rs.InsertBufferProperties.Insert.label", "Insert");
+final static String PROPERTY_COMMON_CANCEL = jEdit.getProperty("common.cancel");
+final static String MustBeIn10LinesMessage = jEdit.getProperty("macro.rs.InsertBufferProperties.MustBeIn10Lines.message", "Note: Buffer Local properties must in the first or last 10 lines of a buffer to be recognized by jEdit.");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+
 BufferLocalPropertiesDialog(View view){
 
 	this.view = view;
@@ -71,11 +79,11 @@ BufferLocalPropertiesDialog(View view){
 		checkedProps.put(property,"checked");
 	}
 
-	dialog = new JDialog(view,"Insert Buffer Local Properties",true);
+	dialog = new JDialog(view,InsertLocalPropertiesLabel,true);
 	content = new JPanel(new BorderLayout());
 	content.setBorder(new EmptyBorder(10,10,10,10));
 	dialog.setContentPane(content);
-	content.add(new JLabel("Properties:"), BorderLayout.NORTH);
+	content.add(new JLabel(PropertiesLabel), BorderLayout.NORTH);
 
 	_entries = new Vector();
 	names = props.keys();
@@ -97,8 +105,8 @@ BufferLocalPropertiesDialog(View view){
 	buttons.setBorder(new EmptyBorder(12,50,0,50));
 	buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 	buttons.add(Box.createGlue());
-	insert = new JButton("Insert");
-	cancel = new JButton("Cancel");
+	insert = new JButton(InsertLabel);
+	cancel = new JButton(PROPERTY_COMMON_CANCEL);
 	insert.addActionListener(this);
 	cancel.addActionListener(this);
 	dialog.getRootPane().setDefaultButton(insert);
@@ -188,7 +196,7 @@ BufferLocalPropertiesDialog(View view){
 
 		line = view.getTextArea().getCaretLine();
 		if(line >= 10 && line < (buffer.getLineCount()-10))
-			Macros.message(view, "Note: Buffer Local properties must in the first or last 10 lines of a buffer to be recognized by jEdit.");
+			Macros.message(view, MustBeIn10LinesMessage);
 
 		dialog.dispose();
 	}
@@ -202,7 +210,7 @@ BufferLocalPropertiesDialog(View view){
 }
 
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	BufferLocalPropertiesDialog(view);
 

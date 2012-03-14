@@ -25,7 +25,10 @@
  * Checked for jEdit 4.0 API
  *
  */
+// Localization
+final static String ListingLabel = jEdit.getProperty("macro.rs.LookAndFeelProperties.Listing.label", "--listing look and feel property names--");
 
+// Process
 void lookAndFeelProperties()
 {
 	defaults = javax.swing.UIManager.getLookAndFeelDefaults();
@@ -38,7 +41,7 @@ void lookAndFeelProperties()
 		Object o = e.getValue();
 		p.put(s.toString(),o.toString());
 	}
-	p.store(sb,"--listing look and feel property names--");
+	p.store(sb,ListingLabel);
 	newbuf = jEdit.newFile(view);
 	newbuf.insert(0, sb.toString());
 }

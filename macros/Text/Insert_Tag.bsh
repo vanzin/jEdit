@@ -22,7 +22,11 @@
  *
  * $Id$
  */
+// Localization
+final static String EnterNameTagLabel = jEdit.getProperty("macro.rs.InsertTag.EnterNameTag.label", "Enter name of tag:");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable"); 
 
+// Process
 Map tagsTemplate = new TreeMap() {{
  	 put("br", 		"<br/>");
  	 put("hr", 		"<hr/>");
@@ -34,7 +38,7 @@ Map tagsTemplate = new TreeMap() {{
 void insertTag()
 {
 	
-	String tag = Macros.input(view, "Enter name of tag:");
+	String tag = Macros.input(view, EnterNameTagLabel);
 	if( tag == null || tag.length() == 0) return;
 	String text = textArea.getSelectedText();
 	if(text == null) text = "";
@@ -72,7 +76,7 @@ void insertTag()
 } 
 
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	insertTag();
 

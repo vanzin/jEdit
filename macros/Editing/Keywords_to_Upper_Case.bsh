@@ -1,6 +1,10 @@
 /**
  * Converts keyword token types to upper case.
  */
+ 
+//Localization
+final static String ConvertedKeywordsMessage   = jEdit.getProperty("macro.rs.KeywordsToUpperCase.ConvertedKeywords.message", "Converted Keywords to Upper Case"); 
+ 
 void keywords2upper(View view)
 {
 	// declarations run faster than doing Token.KEYWORDx comparison
@@ -40,7 +44,7 @@ void keywords2upper(View view)
 	//long t2 = System.currentTimeMillis();
 	//print("elapsed: " + (t2-t1));
 
-	view.getStatus().setMessageAndClear("Converted Keywords to Upper Case");
+	view.getStatus().setMessageAndClear(ConvertedKeywordsMessage);
 }
 
 keywords2upper(view);

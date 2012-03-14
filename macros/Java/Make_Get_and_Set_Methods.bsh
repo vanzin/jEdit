@@ -44,7 +44,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-
+// Localization
+final static String DONE = jEdit.getProperty("macro.rs.MakeGetAndSetMethods.GenerateCode.label", "Generate Code");
+final static String CANCEL = jEdit.getProperty("common.cancel");
+final static String CreateGetMethodsLabel = jEdit.getProperty("macro.rs.MakeGetAndSetMethods.CreateGetMethods.label", "Create Get Methods");
+final static String CreateSetMethodsLabel = jEdit.getProperty("macro.rs.MakeGetAndSetMethods.CreateSetMethods.label", "Create Set Methods");
+final static String CreateGetandSetMethodsLabel = jEdit.getProperty("macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label", "Create Get and Set Methods");
+    
+//Process
 boolean JAVA_MODE = buffer.getMode().getName().equals( "java" );
 
 // use line separator from current buffer
@@ -370,11 +377,8 @@ String extractVar(String var) {
 }
 
 void displayPrompt() {
-    String DONE = "Generate Code";
-    String CANCEL = "Cancel";
-
-    JCheckBox getCheckbox = new JCheckBox( "Create Get Methods", true );
-    JCheckBox setCheckbox = new JCheckBox( "Create Set Methods", true );
+    JCheckBox getCheckbox = new JCheckBox( CreateGetMethodsLabel, true );
+    JCheckBox setCheckbox = new JCheckBox( CreateSetMethodsLabel, true );
 
     JPanel checkBoxPanel = new JPanel(new BorderLayout());
     checkBoxPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
@@ -394,8 +398,7 @@ void displayPrompt() {
     mainPanel.add( checkBoxPanel, BorderLayout.NORTH );
     mainPanel.add( buttonPanel, BorderLayout.SOUTH );
 
-    String title = "Create Get and Set Methods";
-    JDialog dialog = new JDialog( view, title, false );
+    JDialog dialog = new JDialog( view, CreateGetandSetMethodsLabel, false );
     dialog.setContentPane( mainPanel );
 
     actionPerformed( ActionEvent e ) {
@@ -418,7 +421,9 @@ void displayPrompt() {
     createButton.requestFocus();
 }
 
+
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
 if ( buffer.isReadOnly() )
-    Macros.error( view, "Buffer is read-only." );
+    Macros.error( view, NotEditableMessage );
 else
     displayPrompt();

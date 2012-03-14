@@ -7,8 +7,13 @@
  * $Id$
  */
 
+// Localization
+final static String CutLinesContainingLabel = jEdit.getProperty("macro.rs.CutLinesContaining.CutLinesContaining.label", "Cut lines containing:");
+final static String LinesCutMessage = jEdit.getProperty("macro.rs.CutLinesContaining.LinesCut.message", "line(s) cut");
+
+// Process 
 cutLinesContaining(){
-	String text = Macros.input(view,"Cut lines containing:");
+	String text = Macros.input(view, CutLinesContainingLabel);
 	if(text == null || "".equals(text))
 		return;
 	int count = 0;
@@ -27,7 +32,7 @@ cutLinesContaining(){
 	}
 	Registers.setRegister('$',buff.toString());
 	HistoryModel.getModel("clipboard").addItem(buff.toString());
-	view.getStatus().setMessageAndClear("" + count + " lines cut");
+	view.getStatus().setMessageAndClear(count + " " + LinesCutMessage);
 }
 
 if(buffer.isReadOnly())

@@ -26,6 +26,10 @@
  * $Id$
  */
 
+//Localization
+final static String WindowNotOpenError = jEdit.getProperty("macro.rs.HyperSearchResults.WindowNotOpen.error", "The 'HyperSearch Results' window is not open.");
+final static String NoMatchError = jEdit.getProperty("macro.rs.HyperSearchResults.NotMatch.error", "No HyperSearch matches.");
+ 
 traverseTree(javax.swing.tree.DefaultMutableTreeNode node, StringBuffer results){
 	if (node.getUserObject() instanceof org.gjt.sp.jedit.search.HyperSearchFileNode)
 	{
@@ -46,17 +50,17 @@ traverseTree(javax.swing.tree.DefaultMutableTreeNode node, StringBuffer results)
 }
 
 writeHypersearchResultsToBuffer(View view){
-	hs = view.getDockableWindowManager().getDockableWindow("hypersearch-results");
+        hs = view.getDockableWindowManager().getDockableWindow("hypersearch-results");
 	if (hs == null)
 	{
-		Macros.error(view, "The 'HyperSearch Results' window is not open.");
+		Macros.error(view, WindowNotOpenError);
 		return;
 	}
 
 	root = hs.getTreeModel().getRoot();
 	if(root == null || root.getDepth() == 0)
 	{
-		Macros.error(view, "No HyperSearch matches.");
+		Macros.error(view, NoMatchError);
 		return;
 	}
 

@@ -22,9 +22,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+// Localization
+final static String jEditActionBar1Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar1.label", "The jEdit action bar can be opened via the Utilities menu and is usually\n");
+final static String jEditActionBar2Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar2.label", "assigned to the C+ENTER keyboard shortcut.\n\n");
+final static String NoLabelLabel = jEdit.getProperty("macro.rs.DisplayActions.NoLabel.label", "<no label>");
+
+//Process
 StringBuffer buf = new StringBuffer();
-buf.append("The jEdit action bar can be opened via the Utilities menu and is usually\n");
-buf.append("assigned to the C+ENTER keyboard shortcut.\n\n");
+buf.append(jEditActionBar1Label);
+buf.append(jEditActionBar2Label);
 
 actionSets = jEdit.getActionSets();
 Arrays.sort(actionSets,new StandardUtilities.StringCompare(true));
@@ -44,7 +50,7 @@ for(i = 0; i < actionSets.length; i++)
 			String name = actions[j];
 			String label = jEdit.getProperty(actions[j] + ".label");
 			if(label == null)
-				label = "<no label>";
+				label = NoLabelLabel;
 			else
 				label = GUIUtilities.prettifyMenuLabel(label);
 			buf.append(name + " : " + label + "\n");

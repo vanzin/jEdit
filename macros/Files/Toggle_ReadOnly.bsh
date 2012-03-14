@@ -21,8 +21,11 @@
  * $Id$
  */
 
-
-
+// Localization
+final static String OnlyLocalFilesError = jEdit.getProperty("macro.rs.ToggleReadOnly.OnlyLocalFiles.error", "This macro only works on local files.");
+final static String OnlyWindowsUnixMacosError = jEdit.getProperty("macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error", "This macro only works on Windows, Unix, & MacOS X.");
+	
+//Process
 CmdThread(cmd, view)
 {
 	run()
@@ -37,13 +40,12 @@ CmdThread(cmd, view)
 
 void ToggleReadOnly(view)
 {
-
-	buffer = view.getBuffer();
+    buffer = view.getBuffer();
 
 	// must be using file vfs
 	if(!buffer.getVFS().getName().equals("file"))
 	{
-		Macros.error(view, "This macro only works on local files.");
+		Macros.error(view, OnlyLocalFilesError);
 		return;
 	}
 
@@ -62,7 +64,7 @@ void ToggleReadOnly(view)
 	}
 	else
 	{
-		Macros.error(view, "This macro only works on Windows, Unix, & MacOS X.");
+		Macros.error(view, OnlyWindowsUnixMacosError);
 		return;
 	}
 

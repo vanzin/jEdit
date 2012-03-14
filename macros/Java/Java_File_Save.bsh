@@ -35,6 +35,8 @@
  * $Id$
  */
 
+//Localization
+final static String InfiniteLoopError = jEdit.getProperty("macro.rs.JavaFileSave.InfiniteLoop.error", "Infinite loop:");
 
 // Check this is a new file
 if (buffer.isNewFile() && buffer.getPath() != null)
@@ -67,7 +69,7 @@ if (buffer.isNewFile() && buffer.getPath() != null)
             count++;
             if (count==1000)
             {
-               Log.log(Log.ERROR,BeanShell.class,"Infinite loop:["+txt+"]");
+               Log.log(Log.ERROR,BeanShell.class,InfiniteLoopError+"["+txt+"]");
                buffer.save(view,null,true);
                return;
             }

@@ -52,6 +52,17 @@
 
 import javax.swing.table.*;
 
+// Localization
+final static String jEditShortcutTableLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.jEditShortcutTable.label", "jEdit Keyboard Shortcut Table\n\n");
+final static String NameLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Name.label", "Name");
+final static String Shortcut1Label = jEdit.getProperty("macro.rs.DisplayShortcuts.Shortcut1.label", "Shortcut - 1");
+final static String Shortcut2Label = jEdit.getProperty("macro.rs.DisplayShortcuts.Shortcut2.label", "Shortcut - 2");
+final static String CloseLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Close.label", "Close");
+final static String WriteToBufferLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.WriteToBuffer.label", "Write to buffer");
+final static String ShortcutListLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.ShortcutList.label", "Keyboard shortcut list");
+final static String CenterLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Center.label", "Center");
+final static String SouthLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.South.label", "South");
+
 /*
  * method for creating vectors of row data describing shortcuts.
  */
@@ -99,8 +110,8 @@ Vector makeRow(String name, String shortcut1, String shortcut2)
 void writeTableToNewBuffer(Vector v)
 {
 	jEdit.newFile(view);
-	textArea.setSelectedText("jEdit Keyboard Shortcut Table\n\n");
-	headings = makeRow("Name", "Shortcut - 1", "Shortcut - 2");
+	textArea.setSelectedText(jEditShortcutTableLabel);
+	headings = makeRow(NameLabel, Shortcut1Label, Shortcut2Label);
 	writeLine(headings);
 	textArea.setSelectedText("\n");
 	for(int i = 0; i < v.size(); ++i)
@@ -147,7 +158,7 @@ void showShortcuts(View view)
 	makeShortcutsVector(v);
 	Collections.sort(v, new StandardUtilities.StringCompare());
 
-	table = new JTable(v, makeRow( "Name", "Shortcut-1", "Shortcut-2"));
+	table = new JTable(v, makeRow( NameLabel, Shortcut1Label, Shortcut2Label));
 	table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	table.setRowSelectionAllowed(true);
 	/* 	The next line prevents the table from being edited.
@@ -167,13 +178,13 @@ void showShortcuts(View view)
 	tablePane = new JScrollPane(table);
 	tablePane.setPreferredSize(new Dimension(450, 300));
 
-	close = new JButton("Close");
+	close = new JButton(CloseLabel);
 	close.addActionListener(this);
-	write = new JButton("Write to buffer");
+	write = new JButton(WriteToBufferLabel);
 	write.addActionListener(this);
 	void actionPerformed(e)
 	{
-		if(e.getSource().getText().equals("Close"))
+		if(e.getSource().getText().equals(CloseLabel))
 			dialog.hide();
 		else writeTableToNewBuffer(v);
 	}
@@ -181,10 +192,10 @@ void showShortcuts(View view)
 	buttonPanel.add(write);
 	buttonPanel.add(close);
 
-	title = "Keyboard shortcut list";
+	title = ShortcutListLabel;
 	dialog = new JDialog(view, title, false);
-	dialog.getContentPane().add(tablePane, "Center");
-	dialog.getContentPane().add(buttonPanel, "South");
+	dialog.getContentPane().add(tablePane, CenterLabel);
+	dialog.getContentPane().add(buttonPanel, SouthLabel);
 	dialog.getRootPane().setDefaultButton(close);
 
 

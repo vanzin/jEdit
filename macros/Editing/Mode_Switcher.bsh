@@ -36,9 +36,17 @@
 
 import javax.swing.border.EmptyBorder;
 
+//Localization
+final static String MainDialogTitle = jEdit.getProperty("macro.rs.BufferModeSwitcher.MainDialog.title", "Buffer Mode Switcher");
+final static String EnterBufferModeLabel = jEdit.getProperty("macro.rs.BufferModeSwitcher.EnterBufferMode.label", "Enter buffer mode:");
+final static String ChangingBufferModeLabel = jEdit.getProperty("macro.rs.BufferModeSwitcher.ChangingBufferMode.label", "Changing mode of buffer");
+final static String ToLabel = jEdit.getProperty("macro.rs.BufferModeSwitcher.To.label", "to");
+final static String ModeLabel = jEdit.getProperty("macro.rs.BufferModeSwitcher.Mode.label", "Mode");
+final static String NotFoundLabel = jEdit.getProperty("macro.rs.BufferModeSwitcher.NotFound.label", "Not found");
+
 //class ModeSwitcherTextField extends JTextField
 void modeSwitcher() {
-	JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
+	JDialog dialog = new JDialog(view, MainDialogTitle, true);
 	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	JPanel content = new JPanel(new BorderLayout());
 	content.setBorder(new EmptyBorder(12,12,12,12));
@@ -128,7 +136,7 @@ void modeSwitcher() {
 		textfield.setSelectionStart(0);
 		textfield.setSelectionEnd(m.getName().length());
 	}
-	content.add(new JLabel("Enter buffer mode:"), BorderLayout.NORTH);
+	content.add(new JLabel(EnterBufferModeLabel), BorderLayout.NORTH);
 	content.add(textfield, BorderLayout.CENTER);
 	Vector v = new Vector();
 	
@@ -146,13 +154,13 @@ void modeSwitcher() {
 				buffer.setMode(m);
 				Log.log(Log.NOTICE,
 						  BeanShell.class,
-						  "Changing mode of buffer ["+
-							  buffer.getName()+"] to ["+
+						  ChangingBufferModeLabel+" ["+
+							  buffer.getName()+"] "+ToLabel+" ["+
 							  m.getName()+"]");
 			} else {
 				Log.log(Log.WARNING,
 						  BeanShell.class,
-						  "Mode ["+textfield.getText()+"] not found");
+						  ModeLabel+" ["+textfield.getText()+"] "+NotFoundLabel);
 			}
 			evt.consume();
 			dialog.dispose();

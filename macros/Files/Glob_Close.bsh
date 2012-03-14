@@ -9,9 +9,14 @@
 
 import java.util.regex.Pattern;
 
+//Localization
+final static String GlobPatternLabel = jEdit.getProperty("macro.rs.GlobClose.GlobPattern.label", "Glob Pattern:");
+final static String ErrorGlobPattern = jEdit.getProperty("macro.rs.GlobClose.ErrorGlobPattern.error", "Error in glob pattern:");
+	
+//Process
 void globClose(View view)
 {
-	String glob = Macros.input(view, "Glob Pattern:");
+	String glob = Macros.input(view, GlobPatternLabel);
 	if(glob == null || glob.length() == 0)
 		return;
 
@@ -22,7 +27,7 @@ void globClose(View view)
 	}
 	catch(Exception e)
 	{
-		Macros.error(view,"Error in glob pattern: " + e.toString());
+		Macros.error(view, ErrorGlobPattern + " " + e.toString());
 		return;
 	}
 

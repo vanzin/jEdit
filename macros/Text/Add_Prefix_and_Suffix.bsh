@@ -39,13 +39,21 @@
 // import statements
 import javax.swing.border.*;
 
+// Localization
+final static String MainDialogTitle = jEdit.getProperty("macro.rs.AddPrefixAndSuffix.MainDialog.title", "Add prefix and suffix to selected lines");
+final static String PrefixToAddLabel = jEdit.getProperty("macro.rs.AddPrefixAndSuffix.PrefixToAdd.label", "Prefix to add:");
+final static String SuffixToAddLabel = jEdit.getProperty("macro.rs.AddPrefixAndSuffix.SuffixToAdd.label", "Suffix to add:");
+final static String PROPERTY_COMMON_OK = jEdit.getProperty("common.ok");
+final static String PROPERTY_COMMON_CANCEL = jEdit.getProperty("common.cancel");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+
 // main routine
 void prefixSuffixDialog(View view)
 {
 	this.view = view;
 
     // create dialog object and set its features
-    title = "Add prefix and suffix to selected lines";
+    title = MainDialogTitle;
     dialog = new JDialog(view, title, false);
     content = new JPanel(new BorderLayout());
     content.setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -55,9 +63,9 @@ void prefixSuffixDialog(View view)
     // entry of the prefix and suffix text
     fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
     prefixField = new HistoryTextField("macro.add-prefix");
-    prefixLabel = new JLabel("Prefix to add:");
+    prefixLabel = new JLabel(PrefixToAddLabel);
     suffixField = new HistoryTextField("macro.add-suffix");
-    suffixLabel = new JLabel("Suffix to add:");
+    suffixLabel = new JLabel(SuffixToAddLabel);
     fieldPanel.add(prefixLabel);
     fieldPanel.add(prefixField);
     fieldPanel.add(suffixLabel);
@@ -70,8 +78,8 @@ void prefixSuffixDialog(View view)
         BoxLayout.X_AXIS));
     buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
     buttonPanel.add(Box.createGlue());
-    ok = new JButton("OK");
-    cancel = new JButton("Cancel");
+    ok = new JButton(PROPERTY_COMMON_OK);
+    cancel = new JButton(PROPERTY_COMMON_CANCEL);
     ok.setPreferredSize(cancel.getPreferredSize());
     dialog.getRootPane().setDefaultButton(ok);
     buttonPanel.add(ok);
@@ -135,7 +143,7 @@ void prefixSuffixDialog(View view)
 // this single line of code is the script's main routine
 // it calls the methods and exits
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	prefixSuffixDialog(view);
 

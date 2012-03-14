@@ -30,7 +30,15 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+// Localization
+final static String DaemonLabel = jEdit.getProperty("macro.rs.ShowThreads.Daemon.label", "daemon");
+final static String PriorityLabel = jEdit.getProperty("macro.rs.ShowThreads.Priority.label", "prio");
+final static String NotStartedLabel = jEdit.getProperty("macro.rs.ShowThreads.NotStarted.label", "not started");
+final static String InterruptedLabel = jEdit.getProperty("macro.rs.ShowThreads.Interrupted.label", "interrupted");
+final static String CloseUpdateLabel = jEdit.getProperty("macro.rs.ShowThreads.CloseUpdate.label", "[Esc] Close      [U] Update");
+final static String CurrentThreadsLabel = jEdit.getProperty("macro.rs.ShowThreads.CurrentThreads.label", "Current Threads");
 
+// Process
 JFrame createThreadsFrame() {
 
 	void windowClosing(WindowEvent e) {
@@ -80,7 +88,7 @@ JFrame createThreadsFrame() {
 
 
 	DefaultMutableTreeNode createGroupNode(ThreadGroup g) {
-		node = new DefaultMutableTreeNode(g.getName() + (g.isDaemon() ? " (daemon)" : ""), true);
+		node = new DefaultMutableTreeNode(g.getName() + (g.isDaemon() ? " (" + DaemonLabel + ")" : ""), true);
 
 		groups = new ThreadGroup[g.activeGroupCount()];
 		count = g.enumerate(groups, false);
@@ -98,14 +106,14 @@ JFrame createThreadsFrame() {
 
 	String getDescription(Thread t) {
 		StringBuffer buf = new StringBuffer(t.getName());
-		buf.append(" (prio ");
+		buf.append(" (" + PriorityLabel + " ");
 		buf.append(t.getPriority());
 		if (!t.isAlive())
-			buf.append(", not started");
+			buf.append(", " + NotStartedLabel);
 		if (t.isDaemon())
-			buf.append(", daemon");
+			buf.append(", " + DaemonLabel);
 		if (t.isInterrupted())
-			buf.append(", interrupted");
+			buf.append(", " + InterruptedLabel);
 		buf.append(")");
 		return buf.toString();
 	}
@@ -116,9 +124,9 @@ JFrame createThreadsFrame() {
 	tree.addKeyListener(this);
 
 	stage = new JScrollPane(tree);
-	stage.setColumnHeaderView(new JLabel("[Esc] Close      [U] Update"));
+	stage.setColumnHeaderView(new JLabel(CloseUpdateLabel));
 
-	frame = new JFrame("Current Threads");
+	frame = new JFrame(CurrentThreadsLabel);
 	frame.setContentPane(stage);
 	frame.addWindowListener(this);
 	// set default size and position:

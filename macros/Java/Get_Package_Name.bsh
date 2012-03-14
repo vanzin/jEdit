@@ -28,6 +28,13 @@
  *
  */
 
+
+//Localization
+final static String NotWorking1Error = jEdit.getProperty("macro.rs.GetPackageName.NotWorking1.error", "This macro will not work when the Java interpreter\n");
+final static String NotWorking2Error = jEdit.getProperty("macro.rs.GetPackageName.NotWorking2.error", "loads jEdit with the '-jar' command line option.");
+final static String NotFindError = jEdit.getProperty("macro.rs.GetPackageName.NotFind.error", "Could not find a package name."); 
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+
 boolean testClassPath()
 {
 	classpath = System.getProperty("java.class.path");
@@ -92,21 +99,20 @@ String determinePackageName(String path)
 }
 
 if( buffer.isReadOnly() )
-	Macros.error( view, "Buffer is read-only." );
+	Macros.error( view, NotEditableMessage );
 else
 {
 	// main routine
 	if(!testClassPath())
 	{
-		Macros.error(view, "This macro will not work when the Java interpreter\n"
-			+ "loads jEdit with the '-jar' command line option.");
+		Macros.error(view, NotWorking1Error + NotWorking2Error);
 	}
 	else
 	{
 		result = determinePackageName(buffer.getPath());
 		if(result == null)
 		{
-			Macros.error(view, "Could not find a package name.");
+			Macros.error(view, NotFindError);
 		}
 		else textArea.setSelectedText(result);
 	}

@@ -22,17 +22,21 @@
  * Checked for jEdit 4.3 API
  *
  */
+ 
+//Localization
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
 
+// Process
 void duplicateLinesAbove()
 {
 	/*
-	 * Guard for readonly files becuase Buffer.insert()
+	 * Guard for readonly files because Buffer.insert()
 	 * ignores the flag
 	 *
 	 */
 	if(buffer.isReadOnly())
 	{
-		Macros.error(view, "This file is read only.");
+		Macros.error(view, NotEditableMessage);
 		return;
 	}
 

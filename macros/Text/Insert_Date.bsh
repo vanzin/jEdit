@@ -29,6 +29,11 @@
 
 // Wed Jan 31 03:12:33 AKST 2001 @550 /Internet Time/
 
+// Localization
+final static String InternetTimeLabel = jEdit.getProperty("macro.rs.InsertDate.InternetTime.label", "Internet Time");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+
+// Process
 void insertDate()
 {
 	Calendar rightNow = Calendar.getInstance();
@@ -52,11 +57,11 @@ void insertDate()
 
 	// inserting date and internet time to textarea
 	textArea.setSelectedText(Calendar.getInstance().getTime().toString()
-		+ " @" + (int)swatch + " /Internet Time/");
+		+ " @" + (int)swatch + " /" + InternetTimeLabel + "/");
 }
 
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	insertDate();
 

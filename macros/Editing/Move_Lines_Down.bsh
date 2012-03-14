@@ -1,7 +1,8 @@
 /*
-Move_Lines_Down.bsh - Beanshell macro to move a selection of lines up by one line.
+Move_Lines_Down.bsh - Beanshell macro to move a selection of lines down by one
+line.  This should handle multiple selections, but doesn't work quite right.
 
-Copyright (c) Dale Anson, 2004, 2012
+Copyright (c) Dale Anson, 2004
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -26,16 +27,19 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+//Localization
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+final static String NoMultipleSelectionError = jEdit.getProperty("macro.rs.MoveLines.NoMultipleSelection.error", "Line move does not work with multiple selection.");
+
 // check buffer read-only status
-if (buffer.isReadOnly()) {
-    Macros.error(view, "File is read only.");
-    return ;
+if ( buffer.isReadOnly() ) {
+   Macros.error( view, NotEditableMessage );
+   return ;
 }
 
-// prep for indenting
 Mode mode = buffer.getMode();
 boolean shouldIndent = false;
-String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"} ;
+String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"};
 for (String name : indentProps) {
     if (mode.getProperty(name) != null) {
         shouldIndent = true;
@@ -43,70 +47,64 @@ for (String name : indentProps) {
     }
 }
 
-// get the current selection(s)
+// get the current selection or the current line if no selection
 Selection[] selections = textArea.getSelection();
-Selection selection;
 
-// if nothing is selected, select current line
-if (selection == null || selections.length == 0) {
-    int line = textArea.getCaretLine();
-    int start_offset = textArea.getLineStartOffset(line);
-    int end_offset = textArea.getLineEndOffset(line);
-    selection = new Selection.Range(start_offset, end_offset);
-    textArea.addToSelection(selection);
-}
-else {
-    selection = selections[0];   
-}
-
-// this macro only works with single selection
+// this doesn't work right with multiple selection, so don't do anything
 if (selections.length > 1) {
-    Macros.error(view, "Line move does not work with multiple selection,\nwill only move first selection.");
+   Macros.error( view, NoMultipleSelectionError );
+   return ;
 }
 
-int first_line = selection.getStartLine();
+String ls = buffer.getStringProperty( "lineSeparator" );
+
+int line = textArea.getCaretLine();
 
 // make sure last line ends with a line separator
 String line_text = textArea.getLineText(textArea.getLineCount() - 1);
-if (line_text != null && line_text.trim().length() > 0 && !line_text.endsWith("\n") && first_line >= textArea.getLineCount() - 3) {
-    buffer.insert(buffer.getLength(), "\n");
+if (!line_text.endsWith(ls) && line >= textArea.getLineCount() - 3) {
+    buffer.insert(buffer.getLength(), ls);
 }
 
-// get selection last line offset
-int last_line = selection.getEndLine();
-
-// check bounds
-if (last_line == textArea.getLineCount() - 1) {
-    return ;    // at bottom, nowhere to go
+// if nothing is selected, select current line
+if (selection == null || selections.length == 0) {
+   selections = new Selection[1];
+   int start_offset = textArea.getLineStartOffset(line);
+   int end_offset = textArea.getLineEndOffset(line);
+   selections[0] = new Selection.Range(start_offset, end_offset);
+   textArea.addToSelection(selections[0]);
 }
 
-// set caret to start of first selected line
-textArea.setCaretPosition(textArea.getLineStartOffset(first_line));
+// adjust the start and end line offsets to reselect after the move
+int[] startLines = new int[selections.length];
+int[] endLines = new int[selections.length];
+for (int i = 0; i < selections.length; i++) {
+   startLines[i] = selections[i].getStartLine() + 1;
+   endLines[i] = selections[i].getEndLine() + 1;
+}
 
-// select entire block of lines
-textArea.selectNone();
-selection = new Selection.Range(textArea.getLineStartOffset(first_line), textArea.getLineStartOffset(last_line));
-textArea.addToSelection(selection);
+// cut the selected text, move down one line, and paste it back in
+Registers.cut( textArea, '_' );
+textArea.goToNextLine( false );
+Registers.paste( textArea, '_', false );
+textArea.goToPrevLine( false );
 
-// line offsets after move
-int next_first_line = first_line + 1;
-int next_last_line = last_line + 1;
-
-// move
-Registers.cut(textArea, '_');
-textArea.goToNextLine(false);
-Registers.paste(textArea, '_', false);
-textArea.goToNextLine(false);
-
-// set caret to start of first selected line
-textArea.setCaretPosition(textArea.getLineStartOffset(next_first_line));
-
-// indent
+// indent lines
 if (shouldIndent) {
-    buffer.indentLines(next_first_line, next_last_line);
+    for (int i = 0; i < startLines.length; i++) {
+        buffer.indentLines( startLines[i] - 1, endLines[i] );
+    }
 }
 
-// reselect
+// reselect the moved text
 textArea.selectNone();
-selection = new Selection.Range(textArea.getLineStartOffset(next_first_line), textArea.getLineStartOffset(next_last_line));
-textArea.addToSelection(selection);
+for (int i = 0; i < startLines.length; i++) {
+   selection = new Selection.Range(
+      textArea.getLineStartOffset( startLines[i] ),
+      textArea.getLineStartOffset( endLines[i] )
+   );
+   textArea.addToSelection(selection);
+}
+
+
+

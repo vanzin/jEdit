@@ -7,6 +7,10 @@
 * $Id$
 */
 
+//Localization
+final static String FontSizeMessage = jEdit.getProperty("macro.rs.ChangeFontSize.FontSize.message", "Font size now:");
+	
+//Process
 increaseFontSize()
 {
 	FONT_SIZE = "view.fontsize";
@@ -18,7 +22,7 @@ increaseFontSize()
 	jEdit.setIntegerProperty(CONSOLE_FONT_SIZE,size);
 	jEdit.propertiesChanged();
 	jEdit.saveSettings();
-	view.getStatus().setMessageAndClear("Font size now " + size);
+	view.getStatus().setMessageAndClear(FontSizeMessage + " " + size);
 }
 
 increaseFontSize();

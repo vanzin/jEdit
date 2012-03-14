@@ -24,9 +24,13 @@
  *
  */
 
+//Localization
+final static String DirectoryBrowseLabel = jEdit.getProperty("macro.rs.BrowseDirectory.DirectoryBrowse.label",  "Directory to browse:");
+
+// Process
 void browseDirectory()
 {
-	path = Macros.input(view,"Directory to browse:");
+	path = Macros.input(view, DirectoryBrowseLabel);
 	if(path != null)
 		VFSBrowser.browseDirectory(view,path);
 }

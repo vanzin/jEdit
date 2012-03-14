@@ -24,14 +24,19 @@
  * $Id$
  */
 
+// Localization
+final static String SpecifyParametersForRunningLabel = jEdit.getProperty("macro.rs.RunScript.SpecifyParametersForRunning.label", "Specify parameters for running script under");
+final static String ScriptExecutionCancelledMessage = jEdit.getProperty("macro.rs.RunScript.ScriptExecutionCancelled.message", "Script execution was cancelled.");
+final static String FileNotScriptError = jEdit.getProperty("macro.rs.RunScript.FileNotScript.error", "The current file does not appear to be a script.");
 
+// Process
 void execScript(interpreter, command)
 {
 	params = Macros.input(view,
-		"Specify parameters for running script under " + interpreter);
+		SpecifyParametersForRunningLabel + " " + interpreter);
 	if(params == null)
 	{
-		Macros.message(view, "Script execution was cancelled.");
+		Macros.message(view, ScriptExecutionCancelledMessage);
 		return;
 	}
 	runInSystemShell(view, command + params);
@@ -102,7 +107,7 @@ void runScript()
 	}
 	else {
 		Macros.error(view,
-			"The current file does not appear to be a script.");
+			String FileNotScriptError);
 	}
 }
 

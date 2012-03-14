@@ -26,12 +26,16 @@
  *
  */
 
+// Localization
+final static String SystemPropertiesLabel = jEdit.getProperty("macro.rs.SystemProperties.SystemProperties.label", "System Properties");
+  
+// Process
 systemProperties()
 {
 	props = System.getProperties();
 	sw = new StringWriter();
 	pw = new PrintWriter(sw);
-	props.store(pw,"System Properties");
+	props.store(pw,SystemPropertiesLabel);
 	jEdit.newFile(view);
 	textArea.setSelectedText(sw.toString());
 }

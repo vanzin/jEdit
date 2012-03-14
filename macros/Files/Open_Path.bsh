@@ -23,9 +23,13 @@
  *
  */
 
+// Localization
+final static String PathNameLabel = jEdit.getProperty("macro.rs.OpenPath.PathName.label", "Path name:");
+	
+//Process 
 void openPath()
 {
-	String path = Macros.input(view,"Path name:");
+	String path = Macros.input(view, PathNameLabel);
 	if(path != null)
 		jEdit.openFile(view,path);
 }

@@ -1,3 +1,6 @@
+// Localization
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
+
 void composeTag()
 {
 	caret = textArea.getCaretPosition();
@@ -19,7 +22,7 @@ void composeTag()
 }
 
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	composeTag();
 

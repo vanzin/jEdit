@@ -26,6 +26,10 @@
  *
  */
 
+ // Localization
+final static String EnterCharacterLabel = jEdit.getProperty("macro.rs.InsertTag.EnterCharacter.label", "Enter a character");
+
+// Process
 void nextChar()
 {
 	script = new StringBuffer(512);
@@ -38,7 +42,7 @@ void nextChar()
 	script.append( "if(__char__ != '\\n') ++match;"              );
 	script.append( "textArea.select(start, start + match - 1);}" );
 
-	view.getInputHandler().readNextChar("Enter a character",script.toString());
+	view.getInputHandler().readNextChar(EnterCharacterLabel,script.toString());
 }
 
 nextChar();

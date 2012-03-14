@@ -12,6 +12,11 @@
  * $Id$
  */
 
+// Localization
+final static String NotWorkingRectangularSelectionError = jEdit.getProperty("macro.rs.ReverseLines.NotWorkingRectangularSelection.error", "Sorry, this macro doesn't work with Rectangular Selections.");
+final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable"); 
+
+// Process 
 void reverseLines(textArea)
 {
 	JEditBuffer buffer = textArea.getBuffer();
@@ -22,7 +27,7 @@ void reverseLines(textArea)
 	{
 		if(selections[i] instanceof Selection.Rect)
 		{
-			Macros.error(view, "Sorry, this macro doesn't work with Rectangular Selections.");
+			Macros.error(view, NotWorkingRectangularSelectionError);
 			return;
 		}
 	}
@@ -76,7 +81,7 @@ void reverseLines(textArea)
 }
 
 if(buffer.isReadOnly())
-	Macros.error(view, "Buffer is read-only.");
+	Macros.error(view, NotEditableMessage);
 else
 	reverseLines(textArea);
 
