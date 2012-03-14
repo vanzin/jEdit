@@ -34,9 +34,6 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
 
-- Fixed memory leaks which happened when split panes or multiple views
-  are used. (Kazutoshi Satoda)
-
 }}}
 {{{ API Changes
 
