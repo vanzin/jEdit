@@ -59,6 +59,10 @@
 <MODE NAME="assembly-x86"	FILE="assembly-x86.xml"
 				FILE_NAME_GLOB="*.asm" />
 
+<MODE NAME="avro"
+      FILE="avro.xml"
+      FILE_NAME_GLOB="*.avdl" />
+
 <MODE NAME="awk"		FILE="awk.xml"
 				FILE_NAME_GLOB="*.awk"
 				FIRST_LINE_GLOB="#!*awk*" />
@@ -174,8 +178,8 @@
 				FILE_NAME_GLOB="*.{for,fort,f77}" />
 
 <MODE NAME="fortran90"		FILE="fortran90.xml"
-				FILE_NAME_GLOB="*.{f90,f95,f03}" />			
-				
+				FILE_NAME_GLOB="*.{f90,f95,f03}" />
+
 <MODE NAME="foxpro"		FILE="foxpro.xml"
 				FILE_NAME_GLOB="*.prg" />
 
@@ -302,8 +306,8 @@
 				FILE_NAME_GLOB="*.lhs" />
 
 <MODE NAME="logs"		FILE="logs.xml"
-				FILE_NAME_GLOB="*.log" /> 
-				
+				FILE_NAME_GLOB="*.log" />
+
 <MODE NAME="logtalk"		FILE="logtalk.xml"
 				FILE_NAME_GLOB="*.lgt" />
 
@@ -329,7 +333,7 @@
 
 <MODE NAME="metapost"
          FILE="mpost.xml"
-         FILE_NAME_GLOB="*.mp"/>				
+         FILE_NAME_GLOB="*.mp"/>
 
 <MODE NAME="mxml"		FILE="mxml.xml"
 				FILE_NAME_GLOB="*.mxml" />
@@ -475,16 +479,16 @@
 <MODE NAME="roff"
         FILE="roff.xml"
         FILE_NAME_GLOB="*.{1,2,3,4,5,6,7,8,9,me,ms,mm,mom,tmac}" />
-				
+
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
 
 <MODE NAME="rtf"		FILE="rtf.xml"
 				FILE_NAME_GLOB="*.rtf" />
 
-<MODE NAME="rakefile"   FILE="ruby.xml" 
+<MODE NAME="rakefile"   FILE="ruby.xml"
 				FILE_NAME_GLOB="*Rakefile" />
-				
+
 <MODE NAME="ruby"		FILE="ruby.xml"
 				FILE_NAME_GLOB="*.{rb,rbw}"
 				FIRST_LINE_GLOB="#!*/*ruby*" />
@@ -502,8 +506,8 @@
 				FILE_NAME_GLOB="*.sas" />
 
 <MODE NAME="scala"  	FILE="scala.xml"
-    			FILE_NAME_GLOB="*.scala" />				
-				
+    			FILE_NAME_GLOB="*.scala" />
+
 <MODE NAME="scheme"		FILE="scheme.xml"
 				FILE_NAME_GLOB="*.scm" />
 
@@ -597,7 +601,7 @@
 
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
-				
+
 <MODE NAME="vala"		FILE="vala.xml"
 				FILE_NAME_GLOB="*.vala" />
 
