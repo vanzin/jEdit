@@ -2257,6 +2257,7 @@ macro.rs.DisplayAbbreviations.AbbreviationList.label=Liste des abréviations
 macro.rs.DisplayAbbreviations.CallingWTTNB.label=appel de writeTableToNewBuffer pour
 macro.rs.DisplayAbbreviations.SizeVector.label=taille du vecteur :
 macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=Tableau des abréviations jEdit
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=Jeu d'abréviations :
 macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=Abréviation    Expansion
 macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< Aucune abréviation >>
 #}}}
