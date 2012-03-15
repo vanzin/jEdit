@@ -10,7 +10,7 @@
  */
 
 // Localization
-final static String NotDoubleSpacedMessage = jEdit.getProperty("macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message", "doesn't appear to be double-spaced:\n");
+final static String NotDoubleSpacedMessage = jEdit.getProperty("macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message", "doesn't appear to be double-spaced:");
 final static String LineMessage = jEdit.getProperty("macro.rs.SingleSpaceBuffer.Line.message", "Line");
 final static String NotBlankMessage = jEdit.getProperty("macro.rs.SingleSpaceBuffer.NotBlank.message", "isn't blank."); 
 
@@ -28,7 +28,7 @@ void singleSpaceBuffer(View view)
 		else
 		{
 			StringBuffer msg = new StringBuffer();
-			msg.append(buffer.getPath() + " " + NotDoubleSpacedMessage);
+			msg.append(buffer.getPath() + " " + NotDoubleSpacedMessage + "\n");
 			msg.append(LineMessage + " " + (line + 1) + " " + NotBlankMessage);
 			Macros.error(view, msg.toString());
 			return;

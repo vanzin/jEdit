@@ -63,6 +63,9 @@ final static String WriteAllLabel = jEdit.getProperty("macro.rs.DisplayAbbreviat
 final static String AbbreviationListLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.AbbreviationList.label", "Abbreviation list");
 final static String CallingWTTNBLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.CallingWTTNB.label", "calling writeTableToNewBuffer for");
 final static String SizeVectorLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.SizeVector.label", "size of vector =");
+final static String jEditAbbreviationTableLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label", "jEdit Abbreviation Table");
+final static String AbbreviationExpansionLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.AbbreviationExpansion.label", "Abbreviation    Expansion");
+final static String NoAbbreviationsLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.NoAbbreviations.label", "<< No abbreviations >>");
 
 /*
  * getActiveSets()
@@ -328,7 +331,7 @@ void writeAllToNewBuffer()
 void writeHeader()
 {
 	jEdit.newFile(view);
-	textArea.setSelectedText("jEdit Abbreviation Table\n\n");
+	textArea.setSelectedText(jEditAbbreviationTableLabel + "\n\n");
 }
 
 /*
@@ -337,10 +340,10 @@ void writeHeader()
  */
 void writeSet(Vector v, String setName)
 {
-	textArea.setSelectedText("Abbreviation set: " + setName + "\n");
-	textArea.setSelectedText("Abbreviation    Expansion\n\n");
+	textArea.setSelectedText(AbbreviationExpansionLabel + " " + setName + "\n");
+	textArea.setSelectedText(AbbreviationExpansionLabel + "\n\n");
 	if(v.size() == 0)
-		textArea.setSelectedText("<< No abbreviations >>\n");
+		textArea.setSelectedText(NoAbbreviationsLabel + "\n");
 	else for( int i = 0; i < v.size(); ++i)
 	{
 		StringBuffer sb = new StringBuffer(85);

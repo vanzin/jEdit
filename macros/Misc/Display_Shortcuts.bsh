@@ -53,15 +53,13 @@
 import javax.swing.table.*;
 
 // Localization
-final static String jEditShortcutTableLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.jEditShortcutTable.label", "jEdit Keyboard Shortcut Table\n\n");
+final static String jEditShortcutTableLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.jEditShortcutTable.label", "jEdit Keyboard Shortcut Table");
 final static String NameLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Name.label", "Name");
 final static String Shortcut1Label = jEdit.getProperty("macro.rs.DisplayShortcuts.Shortcut1.label", "Shortcut - 1");
 final static String Shortcut2Label = jEdit.getProperty("macro.rs.DisplayShortcuts.Shortcut2.label", "Shortcut - 2");
 final static String CloseLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Close.label", "Close");
 final static String WriteToBufferLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.WriteToBuffer.label", "Write to buffer");
 final static String ShortcutListLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.ShortcutList.label", "Keyboard shortcut list");
-final static String CenterLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.Center.label", "Center");
-final static String SouthLabel = jEdit.getProperty("macro.rs.DisplayShortcuts.South.label", "South");
 
 /*
  * method for creating vectors of row data describing shortcuts.
@@ -110,7 +108,7 @@ Vector makeRow(String name, String shortcut1, String shortcut2)
 void writeTableToNewBuffer(Vector v)
 {
 	jEdit.newFile(view);
-	textArea.setSelectedText(jEditShortcutTableLabel);
+	textArea.setSelectedText(jEditShortcutTableLabel + "\n\n");
 	headings = makeRow(NameLabel, Shortcut1Label, Shortcut2Label);
 	writeLine(headings);
 	textArea.setSelectedText("\n");
@@ -194,8 +192,8 @@ void showShortcuts(View view)
 
 	title = ShortcutListLabel;
 	dialog = new JDialog(view, title, false);
-	dialog.getContentPane().add(tablePane, CenterLabel);
-	dialog.getContentPane().add(buttonPanel, SouthLabel);
+	dialog.getContentPane().add(tablePane, "Center");
+	dialog.getContentPane().add(buttonPanel, "South");
 	dialog.getRootPane().setDefaultButton(close);
 
 

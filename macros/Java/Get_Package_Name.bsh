@@ -30,7 +30,7 @@
 
 
 //Localization
-final static String NotWorking1Error = jEdit.getProperty("macro.rs.GetPackageName.NotWorking1.error", "This macro will not work when the Java interpreter\n");
+final static String NotWorking1Error = jEdit.getProperty("macro.rs.GetPackageName.NotWorking1.error", "This macro will not work when the Java interpreter");
 final static String NotWorking2Error = jEdit.getProperty("macro.rs.GetPackageName.NotWorking2.error", "loads jEdit with the '-jar' command line option.");
 final static String NotFindError = jEdit.getProperty("macro.rs.GetPackageName.NotFind.error", "Could not find a package name."); 
 final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
@@ -105,7 +105,7 @@ else
 	// main routine
 	if(!testClassPath())
 	{
-		Macros.error(view, NotWorking1Error + NotWorking2Error);
+		Macros.error(view, NotWorking1Error + "\n" + NotWorking2Error);
 	}
 	else
 	{

@@ -23,14 +23,14 @@
  */
 
 // Localization
-final static String jEditActionBar1Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar1.label", "The jEdit action bar can be opened via the Utilities menu and is usually\n");
-final static String jEditActionBar2Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar2.label", "assigned to the C+ENTER keyboard shortcut.\n\n");
+final static String jEditActionBar1Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar1.label", "The jEdit action bar can be opened via the Utilities menu and is usually");
+final static String jEditActionBar2Label = jEdit.getProperty("macro.rs.DisplayActions.jEditActionBar2.label", "assigned to the C+ENTER keyboard shortcut.");
 final static String NoLabelLabel = jEdit.getProperty("macro.rs.DisplayActions.NoLabel.label", "<no label>");
 
 //Process
 StringBuffer buf = new StringBuffer();
-buf.append(jEditActionBar1Label);
-buf.append(jEditActionBar2Label);
+buf.append(jEditActionBar1Label + "\n");
+buf.append(jEditActionBar2Label + "\n\n");
 
 actionSets = jEdit.getActionSets();
 Arrays.sort(actionSets,new StandardUtilities.StringCompare(true));

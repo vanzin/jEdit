@@ -23,8 +23,8 @@
  */
 
 // Localization
-final static String BeforeLabel = jEdit.getProperty("macro.rs.HexConvert.Before.label", "before =");
-final static String AfterLabel = jEdit.getProperty("macro.rs.HexConvert.After.label", "\nafter =");
+final static String BeforeLabel = jEdit.getProperty("macro.rs.HexConvert.Before.label", "before:");
+final static String AfterLabel = jEdit.getProperty("macro.rs.HexConvert.After.label", "after:");
 final static String NotValidHexLabel = jEdit.getProperty("macro.rs.HexConvert.NotValidHex.label", "is not valid hex string.");
 final static String ByteToStringLabel = jEdit.getProperty("macro.rs.HexConvert.ByteToString.label", "Byte to String:");
 
@@ -59,7 +59,7 @@ void stringToByte(String target)
 
     StringBuffer foo = new StringBuffer();
     foo.append(BeforeLabel + " " + target);
-    foo.append(AfterLabel + " ");
+    foo.append("\n" + AfterLabel + " ");
 
     int length = string.length;
 	for (int i = 0; i < length; i++)
