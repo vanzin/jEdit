@@ -59,8 +59,7 @@
 <MODE NAME="assembly-x86"	FILE="assembly-x86.xml"
 				FILE_NAME_GLOB="*.asm" />
 
-<MODE NAME="avro"
-      FILE="avro.xml"
+<MODE NAME="avro"         FILE="avro.xml"
       FILE_NAME_GLOB="*.avdl" />
 
 <MODE NAME="awk"		FILE="awk.xml"

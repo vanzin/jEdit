@@ -18,7 +18,7 @@
     but here are some of the major features of this version. </para>
 
     <itemizedlist> 
-    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
+    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords. 
     </para></listitem>
     
     <listitem><para> Localization - jEdit now supports switching
@@ -35,6 +35,9 @@
     <listitem><para> New Editing options: Disable or simplified automatic
     indentation, and default response when opening a large file.
     </para></listitem> 
+
+    <listitem><para> Added a dozen new edit modes, updated a dozen more. 
+    </para></listitem>
 
     </itemizedlist>
 <!-- :maxLineLen=80:wrap=hard: -->
