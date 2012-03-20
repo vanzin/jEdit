@@ -1571,9 +1571,9 @@ options.syntax.foldLine.0=Ligne repliée, niveau > 3
 #{{{ Text Area pane
 options.textarea.label=Zone de texte
 options.textarea.font=Police :
-options.textarea.fontsubst=Substitution de police automatique
-options.textarea.fontsubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte sélectionnée (au lieu d'afficher des rectangles)
-options.textarea.fontsubstlist=Polices préférées :
+options.textarea.fontSubst=Substitution de police automatique
+options.textarea.fontSubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte sélectionnée (au lieu d'afficher des rectangles)
+options.textarea.fontSubstlist=Polices préférées :
 options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices système
 options.textarea.fontSubstWarning.label=Substitution de police
 options.textarea.fontSubstWarning=Sans aucune police système, vous aurez besoin de polices préférées.
@@ -1597,8 +1597,8 @@ options.textarea.antiAlias.tooltip=Ralentit l'affichage sur certains systèmes
 options.textarea.fracFontMetrics=Police à espacement proportionnel (pour un affichage plus « doux » \
 	du texte)
 options.textarea.fracFontMetrics.tooltip=Non recommandé avec l'antialiasing de sous-pixel
-options.textArea.stripTrailingEOL=Masquer la fin de ligne (si existante)
-options.textArea.completeFromAllBuffers=Mots complets de tous les tampons ouverts (par défaut, \
+options.textarea.stripTrailingEOL=Masquer la fin de ligne (si existante)
+options.textarea.completeFromAllBuffers=Mots complets de tous les tampons ouverts (par défaut, \
     la recherche est limitée aux tampons visibles actuellement)
 options.textarea.lineSpacing.label=Espacement supplémentaire entre les lignes (en pixels):
 #}}}
