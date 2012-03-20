@@ -1555,6 +1555,7 @@ options.status.caret.dot=Show caret offset from start of line
 options.status.caret.virtual=Show caret virtual offset from start of line
 options.status.caret.offset=Show caret offset from start of file
 options.status.caret.bufferlength=Show length of file
+options.status.caret.title=Caret position display options:
 #}}}
 
 #{{{ Syntax Highlighting pane
@@ -2249,7 +2250,6 @@ macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
 #{{{ Display Abbreviations
 macro.rs.DisplayAbbreviations.Abbreviation.label=Abbreviation
 macro.rs.DisplayAbbreviations.Expansion.label=Expansion
-macro.rs.DisplayAbbreviations.AbbreviationSet.label=Abbreviation set:
 macro.rs.DisplayAbbreviations.Close.label=Close
 macro.rs.DisplayAbbreviations.WriteSet.label=Write set
 macro.rs.DisplayAbbreviations.WriteAll.label=Write all
