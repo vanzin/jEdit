@@ -1571,9 +1571,9 @@ options.syntax.foldLine.0=Ligne repliée, niveau > 3
 #{{{ Text Area pane
 options.textarea.label=Zone de texte
 options.textarea.font=Police :
-options.textarea.fontSubst=Substitution de police automatique
+options.textarea.fontSubst=Polices supplémentaires pour la substitution
 options.textarea.fontSubst.tooltip=Rechercher des symboles dans les autres polices qui pourraient manquer dans la police de texte sélectionnée (au lieu d'afficher des rectangles)
-options.textarea.fontSubstlist=Polices préférées :
+options.textarea.fontSubstList=Polices préférées pour le remplacement :
 options.textarea.fontSubstSystemFonts=Police de substitution : Rechercher toutes les polices système
 options.textarea.fontSubstWarning.label=Substitution de police
 options.textarea.fontSubstWarning=Sans aucune police système, vous aurez besoin de polices préférées.
