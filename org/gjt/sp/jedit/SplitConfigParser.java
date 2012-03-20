@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+/** Class used by PerspectiveManager to parse SplitConfig strings.
+    May also be used by plugins. 
+    @since jEdit 4.4
+*/
 public class SplitConfigParser 
 {
 

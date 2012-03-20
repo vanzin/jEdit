@@ -1,5 +1,5 @@
 /*
- * BufferSet.java - A Set of Buffer.
+ * BufferSet.java - An ordered list of buffers.
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -34,14 +34,15 @@ import java.util.Collections;
 import java.util.Comparator;
 //}}}
 
-/**
- * A BufferSet is an ordered list of buffers.
+/** An ordered list of buffers, normally attached to an EditPane
+ *  and viewed in a BufferSwitcher.
  *
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
 public class BufferSet
 {
+	/** Possible scopes for BufferSets. */
 	public enum Scope { editpane, view, global }
 
 	//{{{ BufferSet constructor
@@ -346,7 +347,6 @@ public class BufferSet
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;
 	//}}}
-
 
 	//{{{ NameSorter class
 	private static class NameSorter implements Comparator<Buffer>

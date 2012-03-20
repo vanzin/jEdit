@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.indent;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
-/**
+/** Abstract Indentation Rule 
  * @author Slava Pestov
  * @version $Id$
  */

@@ -1,6 +1,6 @@
 /*
- * SaveCaretInfoVisitor.java - A visitor that save the carets info of the edit
- * panes
+ * SaveCaretInfoVisitor.java - A visitor that saves the caret info of
+ * an EditPane
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.visitors;
 
 import org.gjt.sp.jedit.EditPane;
 
-/**
+/** A visitor that saves the caret info of an EditPane
  * @author Matthieu Casanova
  */
 public class SaveCaretInfoVisitor extends JEditVisitorAdapter

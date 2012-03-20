@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.gui.statusbar;
 
 import javax.swing.JComponent;
 
-/**
+/** Status Bar Widget interface
  * @author Matthieu Casanova
  * @since jEdit 4.3pre14
  */

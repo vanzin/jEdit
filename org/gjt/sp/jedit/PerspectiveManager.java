@@ -36,8 +36,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * Manages persistence of open buffers and views across jEdit sessions.
+/** Manages persistence of open buffers and views across jEdit sessions.
  * @since jEdit 4.2pre1
  * @author Slava Pestov
  * @version $Id$
