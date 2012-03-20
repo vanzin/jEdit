@@ -1555,6 +1555,7 @@ options.status.caret.dot=Afficher la distance entre le curseur et le début de l
 options.status.caret.virtual=Afficher la distance virtuelle entre le curseur et le début de ligne
 options.status.caret.offset=Afficher la distance entre le curseur et le début du fichier
 options.status.caret.bufferlength=Afficher la longueur du fichier
+options.status.caret.title=Option d'affichage de la position du curseur :
 #}}}
 
 #{{{ Syntax Highlighting pane
