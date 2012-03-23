@@ -53,6 +53,7 @@ public abstract class Task implements Runnable, ProgressObserver
 	} //}}}
 
 	//{{{ run() method
+	@Override
 	public final void run()
 	{
 		state = SwingWorker.StateValue.STARTED;
@@ -77,18 +78,21 @@ public abstract class Task implements Runnable, ProgressObserver
 	 */
 	public abstract void _run();
 
+	@Override
 	public final void setValue(long value)
 	{
 		this.value = value;
 		TaskManager.instance.fireValueUpdated(this);
 	}
 
+	@Override
 	public final void setMaximum(long maximum)
 	{
 		this.maximum = maximum;
 		TaskManager.instance.fireMaximumUpdated(this);
 	}
 
+	@Override
 	public void setStatus(String status)
 	{
 		this.status = status;
