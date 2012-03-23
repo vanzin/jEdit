@@ -28,7 +28,6 @@ import java.awt.AWTEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 
@@ -467,27 +466,6 @@ public class JEditTextArea extends TextArea
 		});
 		popup.addSeparator();
 		popup.add(customize);
-	} //}}}
-
-	//{{{ showPopupMenu() method
-	/**
-	 * Shows the popup menu below the current caret position.
-	 * @since 4.3pre10
-	 */
-	@Override
-	public void showPopupMenu()
-	{
-		if (!popup.isVisible() && hasFocus())
-		{
-			Point caretPos = offsetToXY(getCaretPosition());
-			if (caretPos != null)
-			{
-				// Open the context menu below the caret
-				int lineHeight = getPainter().getLineHeight();
-				GUIUtilities.showPopupMenu(popup,
-					painter,caretPos.x,caretPos.y + lineHeight,true);
-			}
-		}
 	} //}}}
 
 	//{{{ handlePropertiesChanged() method

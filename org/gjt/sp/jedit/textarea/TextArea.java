@@ -6252,7 +6252,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 *
 	 * @since jEdit 4.1pre1
 	 */
-	private static void showPopupMenu(JPopupMenu popup, Component comp,
+	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y, boolean point)
 	{
 		int offsetX = 0;
