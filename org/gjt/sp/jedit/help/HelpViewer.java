@@ -54,6 +54,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -274,39 +275,16 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			   Once jEdit sets JDK 7 as dependency, all this should be
 			   reverted to synchronous code.
 			 */
-			Thread t = new Thread()
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>()
 			{
+				private boolean success;
 				@Override
-				public void run()
+				protected Void doInBackground() throws Exception
 				{
 					try
 					{
 						viewer.setPage(_url);
-						EventQueue.invokeLater(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								if (0 != scrollPosition)
-								{
-									viewerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
-								}
-								if(addToHistory)
-								{
-									historyModel.addToHistory(_url.toString());
-								}
-		
-								HelpViewer.this.shortURL = _shortURL;
-						
-								// select the appropriate tree node.
-								if(_shortURL != null)
-								{
-									toc.selectNode(_shortURL);
-								}
-								
-								viewer.requestFocus();
-							}
-						});
+						success = true;
 					}
 					catch(IOException io)
 					{
@@ -314,9 +292,36 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 						String[] args = { _url.toString(), io.toString() };
 						GUIUtilities.error(HelpViewer.this,"read-error",args);
 					}
+					return null;
+				}
+
+				@Override
+				protected void done()
+				{
+					if (success)
+					{
+						if (scrollPosition != 0)
+						{
+							viewerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
+						}
+						if(addToHistory)
+						{
+							historyModel.addToHistory(_url.toString());
+						}
+
+						HelpViewer.this.shortURL = _shortURL;
+
+						// select the appropriate tree node.
+						if(_shortURL != null)
+						{
+							toc.selectNode(_shortURL);
+						}
+
+						viewer.requestFocus();
+					}
 				}
 			};
-			t.start();
+			worker.execute();
 		}
 		catch(MalformedURLException mf)
 		{
