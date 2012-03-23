@@ -329,9 +329,12 @@ public class ServiceManager
 
 			return instance;
 		}
+
+		@Override
 		public int hashCode()
 		{
-			return name.hashCode();
+			int result = 31 * clazz.hashCode() + name.hashCode();
+			return result;
 		}
 
 		public boolean equals(Object o)
@@ -367,6 +370,7 @@ public class ServiceManager
 		 * @return the FoldHandler or null if it doesn't exist
 		 * @since jEdit 4.3pre10
 		 */
+		@Override
 		public FoldHandler getFoldHandler(String name)
 		{
 			FoldHandler handler = (FoldHandler) getService(SERVICE,name);
@@ -379,6 +383,7 @@ public class ServiceManager
 		 *
 		 * @since jEdit 4.3pre10
 		 */
+		@Override
 		public String[] getFoldModes()
 		{
 			String[] handlers = getServiceNames(SERVICE);
