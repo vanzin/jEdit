@@ -69,8 +69,8 @@ public class EvalError extends Exception
 		String trace;
 		if ( node != null )
 			trace = " : at Line: "+ node.getLineNumber() 
-				+ " : in file: "+ node.getSourceFile()
-				+ " : "+node.getText();
+				+ " :\n in file: "+ node.getSourceFile()
+				+ "\n : "+node.getText();
 		else
 			// Users should not normally see this.
 			trace = ": <at unknown location>";
