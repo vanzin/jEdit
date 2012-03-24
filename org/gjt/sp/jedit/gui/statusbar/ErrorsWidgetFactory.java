@@ -28,6 +28,8 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.textarea.JEditEmbeddedTextArea;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
@@ -192,7 +194,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 	//{{{ ErrorDialog class
 	private static class ErrorDialog extends EnhancedDialog
 	{
-		private final JTextArea textArea;
+		private final TextArea textArea;
 		private final ByteArrayOutputStream byteArrayOutputStream;
 		private final PrintStream printStream;
 		private final JButton removeThisError;
@@ -207,8 +209,8 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			byteArrayOutputStream = new ByteArrayOutputStream();
 			printStream = new PrintStream(byteArrayOutputStream);
 			throwables = Log.throwables.toArray();
-			textArea = new JTextArea();
-			textArea.setEditable(false);
+			textArea = new JEditEmbeddedTextArea();
+			textArea.getBuffer().setMode(jEdit.getMode("logs"));
 			if (throwables.length != 0)
 			{
 				Throwable throwable = (Throwable) throwables[0];
@@ -217,6 +219,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			combo = new JComboBox(throwables);
 			combo.addItemListener(new ItemListener()
 			{
+				@Override
 				public void itemStateChanged(ItemEvent e)
 				{
 					setThrowable((Throwable) combo.getSelectedItem());
@@ -234,7 +237,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			buttons.add(Box.createHorizontalStrut(6));
 			buttons.add(removeAllErrors = new JButton(jEdit.getProperty("common.clearAll")));
 
-			ErrorDialog.MyActionListener actionListener = new MyActionListener();
+			ActionListener actionListener = new MyActionListener();
 			removeThisError.addActionListener(actionListener);
 			removeAllErrors.addActionListener(actionListener);
 			buttons.add(Box.createGlue());
@@ -249,6 +252,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		//{{{ setThrowable() method
 		private void setThrowable(Throwable throwable)
 		{
+			textArea.getBuffer().setReadOnly(false);
 			if (throwable == null)
 			{
 				textArea.setText(null);
@@ -260,6 +264,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				textArea.setCaretPosition(0);
 				byteArrayOutputStream.reset();
 			}
+			textArea.getBuffer().setReadOnly(true);
 		} //}}}
 
 		//{{{ dispose() method

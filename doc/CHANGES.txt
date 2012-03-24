@@ -167,6 +167,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ UI
 
+- The Error status bar widget now use a JEditEmbeddedTextArea instead of a
+  simple swing TextArea to display exceptions (Matthieu Casanova)
+
 - jEdit now supports localization. (Matthieu Casanova)
 
 - Added complete french translation (Jojaba http://jojaba.free.fr)
