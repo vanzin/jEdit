@@ -28,11 +28,7 @@ import org.gjt.sp.jedit.buffer.BufferAdapter;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.textarea.TextArea;
 
-/** TODO: Make a good One-Line Description of this class. 
-  *
-  * TODO: A more detailed description of the purpose of this
-  *       class, which seems to be used for more than just
-  *       elastic tabstops.
+/** Buffer Listener for Elastic Tabstops.  
   */
 public class ElasticTabStopBufferListener extends BufferAdapter
 {

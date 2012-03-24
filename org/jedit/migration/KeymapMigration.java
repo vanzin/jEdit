@@ -31,7 +31,7 @@ import org.jedit.core.MigrationService;
 import org.jedit.keymap.Keymap;
 import org.jedit.keymap.KeymapManager;
 
-/**
+/** Extracts, removes the shortcuts from jEdit 4.5 properties, and places them into the "imported" keymap. 
  * @author Matthieu Casanova
  */
 public class KeymapMigration implements MigrationService

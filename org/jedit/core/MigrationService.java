@@ -21,10 +21,9 @@
 
 package org.jedit.core;
 
-/**
- * A Migration service.
- * The purpose is to migrate data from an old format to a new one.
- * This may happens when upgrading jEdit.
+/** A Migration service.
+ * There is currently only one concrete instance of this class and no
+ * general way to add new ones. This class might not be necessary.
  * @author Matthieu Casanova
  */
 public interface MigrationService
