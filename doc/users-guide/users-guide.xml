@@ -25,24 +25,24 @@
         
         <revhistory>
            <revision>
-                <revnumber>4.2</revnumber>
+                <revnumber>1.0 - 4.3</revnumber>
                 <date>1999-2004</date>
                 <author> <firstname>Slava</firstname> <surname>Pestov</surname> </author>
-                <revremark>Initial HTML document, maintainer up to jEdit 4.2</revremark>
+                <revremark>Initial HTML document</revremark>
             </revision>
             
             <revision>
-               <revnumber>4.1</revnumber>
+               <revnumber>3.2 - 4.1</revnumber>
                <date>2001-2002</date>
                <author> <firstname>John</firstname><surname>Gellene</surname> </author>
-               <revremark> Initial docbook version. Maintainer from jEdit 4.0 - 4.1. Wrote initial versions of Plugin Guide and Macro Guide. </revremark>
+               <revremark> Initial DocBook version. Initial versions of Plugin Guide and Macro Guide. </revremark>
                </revision>
             
             <revision>
-              <revnumber>5.0</revnumber>
+              <revnumber>4.3 - 5.0</revnumber>
               <date>2005-2012</date>
               <author><firstname>Alan</firstname><surname>Ezust</surname></author>
-              <revremark> Maintainer from jEdit 4.3 to jEdit 5.0 </revremark>
+              <revremark> Maintainer. </revremark>
             </revision>
         </revhistory>
     </bookinfo>
