@@ -22,8 +22,8 @@
 package org.jedit.core;
 
 /** A Migration service.
- * There is currently only one concrete instance of this class and no
- * general way to add new ones. This class might not be necessary.
+ * There is currently only one concrete implementation of this interface and no
+ * general way to add new MigrationServices yet. This class is not finished. 
  * @author Matthieu Casanova
  */
 public interface MigrationService
