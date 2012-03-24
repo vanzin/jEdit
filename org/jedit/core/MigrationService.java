@@ -23,15 +23,15 @@ package org.jedit.core;
 
 /** A Migration service.
  * There is currently only one concrete implementation of this interface and no
- * general way to add new MigrationServices yet. This class is not finished.
+ * general way to add new MigrationServices yet. 
  *
  * The goal of migration is usually to replace old properties or data files
- * with new one. The fact is that according to the data that will be updated
- * the migration may need to be done at various places during jEdit's startup
- * This prevent from calling all migration services at a specific time during
- * startup.
- * However the service exists so it doesn't add a compilation dependency
- * to jEdit.java class
+ * with a new set, located elsewhere. The fact is that depending on where 
+ * the data needs to be updated, the migration may need to be done at
+*  different places during jEdit's startup. 
+ * There is no specific time that all migration services are called currently.
+ * The service and interface exists so you don't need to add a compilation
+ * dependency on the org.gjt.sp.jEdit class.
  *
  * @author Matthieu Casanova
  */
