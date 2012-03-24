@@ -30,8 +30,11 @@ package org.jedit.core;
  * the data needs to be updated, the migration may need to be done at
 *  different places during jEdit's startup. 
  * There is no specific time that all migration services are called currently.
- * The service and interface exists so you don't need to add a compilation
- * dependency on the org.gjt.sp.jEdit class.
+ * The service and interface exists primarily you don't need to add a compilation
+ * dependency in the org.gjt.sp.jEdit class of your MigrationService class.
+ *
+ * Concrete instances need to gurantee that the migration itself is only done
+ * once.
  *
  * @author Matthieu Casanova
  */

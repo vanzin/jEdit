@@ -66,10 +66,9 @@ import org.gjt.sp.util.SyntaxUtilities;
 
 //}}}
 
-/**
- * jEdit's standalone text component.<p>
+/** jEdit's standalone text component.
  *
- * Use this class to embed a jEdit text area into other applications.
+ * Use this class to embed a jEdit TextArea into other applications.
  *
  * Example:
  * <code>
@@ -100,6 +99,7 @@ import org.gjt.sp.util.SyntaxUtilities;
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
+   @author Matthieu Casanova
  * @version $Id$
  */
 public class StandaloneTextArea extends TextArea
