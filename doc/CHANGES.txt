@@ -38,18 +38,6 @@ Alan Ezust, and Max Funk for contributing to this release.
 - Wrong chars in auxiliary fonts (Max Funk - #3474765, 3474534)
 
 }}}
-{{{ Miscellaneous
-
-
-}}}
-{{{ API Changes
-
-
-}}}
-{{{ Editing
-
-
-}}}
 
 }}}
 
