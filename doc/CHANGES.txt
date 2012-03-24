@@ -37,6 +37,11 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ API Changes
 
+- The JEditEmbeddedTextArea do not create an empty popup menu anymore.
+  To add a context menu in your JEditEmbeddedTextArea, please override
+  createPopupMenu(MouseEvent evt) as before, but also call
+  setRightClickPopupEnabled(true) in your constructor (Matthieu Casanova)
+
 - New jEdit.getCurrentLanguage() method that returns the language used  by jEdit.
   (Matthieu Casanova)
 

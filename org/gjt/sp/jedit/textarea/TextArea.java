@@ -145,8 +145,6 @@ public abstract class TextArea extends JComponent
 		// when setting the initial caret position for a buffer
 		// (eg, from the recent file list)
 		focusedComponent = this;
-
-		popupEnabled = true;
 	} //}}}
 
 	//{{{ getFoldPainter() method
@@ -6210,12 +6208,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ createPopupMenu() method
 	/**
 	 * Creates the popup menu.
+	 * If you want a popup menu, don't forget in your class to
+	 * call {@link #setRightClickPopupEnabled(boolean)} to enable the
+	 * popup menu
 	 * @since 4.3pre15
 	 */
 	public void createPopupMenu(MouseEvent evt)
 	{
-		if (popup == null)
-			popup = new JPopupMenu();
 	} //}}}
 
 	//{{{ showPopupMenu() method
