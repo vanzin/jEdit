@@ -1,5 +1,5 @@
 Package: jedit
-Version: 4:@jedit.build.number@
+Version: 5:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Installed-Size: @deb.installed.size@
