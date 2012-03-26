@@ -1280,7 +1280,7 @@ public class PluginJAR
 		cache.localizationProperties = new HashMap<String, Properties>();
 		
 		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-		Pattern languageFilePattern = Pattern.compile("lang_(\\w+).props");
+		Pattern languageFilePattern = Pattern.compile("lang_(\\w+).properties");
 
 		while(entries.hasMoreElements())
 		{
@@ -1307,6 +1307,29 @@ public class PluginJAR
 			}
 			else if(lname.endsWith(".props"))
 			{
+				InputStream in = null;
+				try
+				{
+					in = classLoader.getResourceAsStream(name);
+					properties.load(in);
+				}
+				finally
+				{
+					IOUtilities.closeQuietly(in);
+				}
+			}
+			else if(name.endsWith(".class"))
+			{
+				String className = MiscUtilities
+					.fileToClass(name);
+				if(className.endsWith("Plugin"))
+				{
+					plugins.add(className);
+				}
+				classes.add(className);
+			}
+			else
+			{
 				Matcher matcher = languageFilePattern.matcher(lname);
 				if (matcher.matches())
 				{
@@ -1325,32 +1348,7 @@ public class PluginJAR
 					}
 				}
 				else
-				{
-					InputStream in = null;
-					try
-					{
-						in = classLoader.getResourceAsStream(name);
-						properties.load(in);
-					}
-					finally
-					{
-						IOUtilities.closeQuietly(in);
-					}
-				}
-			}
-			else if(name.endsWith(".class"))
-			{
-				String className = MiscUtilities
-					.fileToClass(name);
-				if(className.endsWith("Plugin"))
-				{
-					plugins.add(className);
-				}
-				classes.add(className);
-			}
-			else
-			{
-				resources.add(name);
+					resources.add(name);
 			}
 		}
 
@@ -1572,7 +1570,7 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB7A2E423;
+		public static final int MAGIC = 0xB7A2E424;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
