@@ -1284,9 +1284,7 @@ public class PluginJAR
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
-		cache.cachedProperties = new Properties();
-		cache.localizationProperties = new HashMap<String, Properties>();
-		
+
 		Enumeration<? extends ZipEntry> entries = zipFile.entries();
 		Pattern languageFilePattern = Pattern.compile("lang_(\\w+).properties");
 
@@ -1362,6 +1360,19 @@ public class PluginJAR
 
 		cache.cachedProperties = properties;
 		cache.localizationProperties = localizationProperties;
+
+		// this must be done before loading cachedProperties
+		if (cache.localizationProperties != null)
+		{
+			localizationProperties = cache.localizationProperties;
+			String currentLanguage = jEdit.getCurrentLanguage();
+			Properties langProperties = localizationProperties.get(currentLanguage);
+			if (langProperties != null)
+			{
+				jEdit.addPluginProps(langProperties);
+			}
+		}
+
 		jEdit.addPluginProps(properties);
 
 		this.classes = cache.classes =
