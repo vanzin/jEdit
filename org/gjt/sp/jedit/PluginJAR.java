@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -1114,7 +1115,14 @@ public class PluginJAR
 			ServiceManager.unloadServices(this);
 
 			jEdit.removePluginProps(properties);
-
+			if (localizationProperties != null)
+			{
+				Collection<Properties> values = localizationProperties.values();
+				for (Properties value : values)
+				{
+					jEdit.removePluginProps(value);
+				}
+			}
 			try
 			{
 				if(zipFile != null)
