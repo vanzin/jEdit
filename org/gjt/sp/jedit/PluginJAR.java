@@ -98,6 +98,14 @@ import static org.gjt.sp.jedit.EditBus.EBHandler;
  * settings and strings used by the plugin. See {@link EditPlugin} for
  * information about properties used by jEdit. See
  * <code>java.util.Properties</code> for property file syntax.</li>
+ * <li>Since jEdit 5.0, files named lang_[language_iso_code].properties are
+ * localization files. If one of those files match the current language, jEdit
+ * will load it. If a label is missing in the localization file, it will be
+ * loaded from the other .props files.
+ * Those files will be ignored by jEdit's versions older than 5.0 and do not
+ * cause any problem
+ * See <a href="http://sourceforge.net/apps/mediawiki/jedit/index.php?title=Localization">
+ *         jEdit's localization wiki</a>
  * </ul>
  *
  * For a plugin to actually do something once it is resident in memory,
