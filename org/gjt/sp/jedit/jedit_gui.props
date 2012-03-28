@@ -989,3 +989,7 @@ install-plugins.clear-plugin-set.icon=22x22/actions/edit-clear.png
 #}}}
 
 errorwidget.popupmenu=logs-remove-all-errors
+
+#{{{ Sensible Defaults department
+vfs.browser.dock-position=left
+}}}
