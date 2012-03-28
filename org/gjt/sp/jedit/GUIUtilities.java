@@ -70,8 +70,7 @@ import java.awt.*;
 import java.awt.event.*;
 //}}}
 
-/**
- * Various GUI functions.<p>
+/** Various GUI utility functions related to icons, menus, toolbars, keyboard shortcuts, etc. 
  *
  * The most frequently used members of this class are:
  *

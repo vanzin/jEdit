@@ -25,6 +25,8 @@ import java.util.Vector;
 
 import javax.swing.text.TabExpander;
 
+/** A Swing TabExpander for Elastic Tabstops. */
+
 public class ElasticTabstopsTabExpander implements TabExpander 
 {
 	TextArea textArea;
