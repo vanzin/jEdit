@@ -64,10 +64,10 @@ public class MacrosProvider implements DynamicMenuProvider
 		JMenu subMenu = null;
 		for(int i = start; i < vector.size(); i++)
 		{
-			if (i != 0 && i % maxItems == 0)
+			if (i != start && i % maxItems == 0)
 			{
 				subMenu = new JMenu(jEdit.getProperty("common.more"));
-				createMacrosMenu(subMenu, vector, i+1);
+				createMacrosMenu(subMenu, vector, i);
 				break;
 			}
 			Object obj = vector.elementAt(i);
