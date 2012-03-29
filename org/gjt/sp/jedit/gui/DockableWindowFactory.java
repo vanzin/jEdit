@@ -54,8 +54,7 @@ import org.gjt.sp.jedit.bsh.NameSpace;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 //}}}
 
-/**
- * Loads <code>dockable.xml</code> files and manages creation
+/** Loads <code>dockable.xml</code> files and manages creation
  * of new dockable windows.
  *
  * @see DockableWindowManager
@@ -174,7 +173,7 @@ public class DockableWindowFactory
 	{
 		return dockableWindowFactories.get(name);
 	}
-	
+
 	public String getDockableWindowPluginClass(String name)
 	{
 		Window w = getDockableWindowFactory(name);
@@ -182,7 +181,7 @@ public class DockableWindowFactory
 			return null;
 		return w.plugin.getPlugin().getClassName();
 	}
-	
+
 	//{{{ getDockableWindowIterator() method
 	Iterator<Window> getDockableWindowIterator()
 	{
@@ -310,7 +309,7 @@ public class DockableWindowFactory
 		{
 			return booleanListToArray(cachedDockableMovableFlags);
 		} //}}}
-		
+
 		//{{{ booleanListToArray() method
 		/**
 		 * This method transforms a List<Boolean> into the corresponding
@@ -340,13 +339,13 @@ public class DockableWindowFactory
 		private java.util.List<String> cachedDockableNames;
 		private java.util.List<Boolean> cachedDockableActionFlags;
 		private java.util.List<Boolean> cachedDockableMovableFlags;
-		
+
 		private String dockableName;
 		private StringBuilder code;
 		private boolean actions;
 		private boolean movable;
 		static final boolean MOVABLE_DEFAULT = false;
-		
+
 		private Stack<String> stateStack;
 		//}}}
 
@@ -467,13 +466,13 @@ public class DockableWindowFactory
 			}
 			JComponent win = (JComponent)BeanShell.eval(view,nameSpace,code);
 
-			if (jEdit.getBooleanProperty("textColors")) {							
+			if (jEdit.getBooleanProperty("textColors")) {
 				LookAndFeel laf = UIManager.getLookAndFeel();
 				if (!laf.getID().equals("Metal")) {
 					GUIUtilities.applyTextAreaColors(win);
 				}
 			}
-			
+
 			synchronized(this)
 			{
 				isBeingCreated = false;

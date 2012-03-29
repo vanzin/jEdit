@@ -1,9 +1,7 @@
 package org.gjt.sp.jedit.gui;
 
-/**
- * <p>An interface for notifying MOVABLE dockable windows before their docking
- * position is changed. </p>
- * 
+/** An interface for notifying MOVABLE dockable windows before their docking position is changed.
+ *
  * @author Shlomy Reinstein
  * @version $Id$
  * @since jEdit 4.3pre11

@@ -29,9 +29,7 @@ import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
-/**
- * A dialog box showing a stack trace. Perhaps badly named, since any error, not
- * just a BeanShell error can be shown.
+/** A dialog box showing a stack trace. Perhaps badly named, since any error, not just a BeanShell error can be shown.
  * @author Slava Pestov
  * @version $Id$
  */

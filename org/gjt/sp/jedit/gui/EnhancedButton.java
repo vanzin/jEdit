@@ -28,7 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** A toolbar button */
 public class EnhancedButton extends RolloverButton
 {
 	//{{{ EnhancedButton constructor
@@ -54,7 +54,7 @@ public class EnhancedButton extends RolloverButton
 			{
 				setName(action.substring(iSuffix+1));
 			}
-			
+
 			setEnabled(true);
 			addActionListener(new EditAction.Wrapper(context,action));
 			addMouseListener(new MouseHandler());

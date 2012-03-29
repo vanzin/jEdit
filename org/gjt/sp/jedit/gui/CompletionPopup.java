@@ -50,8 +50,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
 //}}}
 
-/**
- * Popup window for word completion in text area.
+/** Popup window for word completion in text area.
  * This class provides basic UI of completion popup.
  *
  * @since jEdit 4.3pre11
@@ -78,7 +77,7 @@ public class CompletionPopup extends JWindow
 		 * Do the completion.
 		 */
 		public void complete(int index);
-	
+
 		/**
 		 * Returns a component to render a cell for the index
 		 * in the popup.
@@ -101,7 +100,7 @@ public class CompletionPopup extends JWindow
 	 * candidates. All key events for the view are intercepted by
 	 * this popup untill end of completion.
 	 * @since jEdit 4.3pre13
-	 */ 
+	 */
 	public CompletionPopup(View view)
 	{
 		super(view);

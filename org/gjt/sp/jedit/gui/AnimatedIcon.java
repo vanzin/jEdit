@@ -28,8 +28,9 @@ import java.awt.event.*;
 import javax.swing.*;
 //}}}
 
-/**
- * A animated version of ImageIcon. It can be used anywhere an ImageIcon can be.
+/** A Animated version of ImageIcon.
+ *
+ * It can be used anywhere an ImageIcon can be.
  */
 public class AnimatedIcon extends ImageIcon
 {

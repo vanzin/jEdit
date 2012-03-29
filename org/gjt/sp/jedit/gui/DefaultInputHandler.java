@@ -29,9 +29,8 @@ import java.util.Hashtable;
 import org.gjt.sp.jedit.*;
 //}}}
 
-/**
- * The default input handler. It maps sequences of keystrokes into actions
- * and inserts key typed events into the text area.
+/** The default input handler maps sequences of keystrokes into actions and inserts key typed events into the text area.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -136,7 +135,7 @@ public class DefaultInputHandler extends InputHandler
 			}
 			else
 			{
-				if (!dryRun) 
+				if (!dryRun)
 				{
 					readNextChar = null;
 					view.getStatus().setMessage(null);
@@ -147,7 +146,7 @@ public class DefaultInputHandler extends InputHandler
 		Object o = currentBindings.get(keyStroke);
 		if(o == null)
 		{
-			if (!dryRun) 
+			if (!dryRun)
 			{
 				// Don't beep if the user presses some
 				// key we don't know about unless a
@@ -161,13 +160,13 @@ public class DefaultInputHandler extends InputHandler
 					repeatCount = 1;
 					setCurrentBindings(bindings);
 				}
-				else if(input != '\0') 
+				else if(input != '\0')
 				{
-					if (!keyStroke.isFromGlobalContext()) 
+					if (!keyStroke.isFromGlobalContext())
 					{ // let user input be only local
 						userInput(input);
 					}
-				} 
+				}
 				else
 				{
 					// this is retarded. excuse me while I drool
@@ -180,7 +179,7 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(o instanceof Hashtable)
 		{
-			if (!dryRun) 
+			if (!dryRun)
 			{
 				setCurrentBindings((Hashtable)o);
 				ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
@@ -190,7 +189,7 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(o instanceof String)
 		{
-			if (!dryRun) 
+			if (!dryRun)
 			{
 				setCurrentBindings(bindings);
 				sendShortcutPrefixOff();
@@ -214,7 +213,7 @@ public class DefaultInputHandler extends InputHandler
 		}
 		return false;
 	} //}}}
-	
+
 	//{{{ getSymbolicModifierName() method
 	/**
 	 * Returns a the symbolic modifier name for the specified Java modifier

@@ -37,7 +37,8 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.util.Log;
 //}}}
-
+/** Used to list I/O and plugin load errors
+  */
 public class ErrorListDialog extends EnhancedDialog
 {
 	//{{{ ErrorEntry class

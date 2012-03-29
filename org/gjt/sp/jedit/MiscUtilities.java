@@ -430,9 +430,9 @@ public class MiscUtilities
 
 	//{{{ getCompleteBaseName() method
 	/**
-	 * @return the complete basename of a file (before the last period).
+	 * @return the complete basename of a fileName (before the last period).
 	 * i.e. if your filename is
-	 *    IP-192.168.1.1-data.tar.gz
+	 *    /net/log/IP-192.168.1.1-data.tar.gz
 	 * it will return
 	 *    IP-192.168.1.1-data.tar
 	 * @param path the path name
@@ -451,9 +451,9 @@ public class MiscUtilities
 
 	//{{{ getBaseName() method
 	/**
-	 * @return the base name of a file (before the first period).
+	 * @return the base name of a fileName (before the first period).
 	 * i.e. If your filename is
-	 *     IP-192.168.1.1-data.tar.gz
+	 *     /net/log/IP-192.168.1.1-data.tar.gz
 	 * it will return
 	 *     IP-192
 	 * @param path The path name

@@ -33,8 +33,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
-/**
- * Action invocation bar.
+/** Action invocation bar.
  */
 public class ActionBar extends JToolBar
 {
@@ -43,7 +42,7 @@ public class ActionBar extends JToolBar
 	{
 		this.view = view;
 		this.temp = temp;
-		
+
 		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		setFloatable(false);
 		add(Box.createHorizontalStrut(2));

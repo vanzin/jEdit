@@ -1,5 +1,5 @@
 /*
- * DockableWindowManager.java - manages dockable windows
+ * DockableWindowManagerImpl.java - manages dockable windows
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -67,15 +67,19 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 // }}}
 
-/**
- * Concrete class for Dockable Window Managers.
- * Each View has a single DockableWindowManager, for managing the
- * specific dockable instances associated with that View.
+/** Manages dockable windows for a single View.
+ *
+ * Concrete implementation of a Dockable Window Manager.
+ * Aka the "classic" docking framework.
+ *
  * @since jEdit 4.3pre16
+ * @author Slava Pestov
+ * @author Shlomy Reinstein
+ * @version $Id$
  */
 public class DockableWindowManagerImpl extends DockableWindowManager
 {
-	
+
 	//{{{ DockableWindowConfig class
 	public static class DockableWindowConfig extends DockingLayout
 	{
@@ -109,7 +113,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 					rightPos = Integer.parseInt(value);
 			}
 		} // }}}
-		
+
 		// dockables
 		public String top, left, bottom, right;
 		public int topPos, leftPos, bottomPos, rightPos;
@@ -178,7 +182,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			}
 			return true;
 		}
-		
+
 		@Override
 		public String getName()
 		{
@@ -199,7 +203,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	public Stack<String> showStack = new Stack<String>();
 	// }}}
 
-	// {{{ setDockingLayout() 	
+	// {{{ setDockingLayout()
 	public void setDockingLayout(DockingLayout docking)
 	{
 		DockableWindowConfig config = (DockableWindowConfig) docking;
@@ -216,15 +220,15 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 
 		if(config.right != null && config.right.length() != 0)
 				showDockableWindow(config.right);
-		
+
 	} // }}}
-	
+
 	// {{{ getDockingLayout()
 	@Override
 	public DockingLayout getDockingLayout(ViewConfig config)
 	{
 		DockableWindowConfig docking = new DockableWindowConfig();
-		
+
 		docking.top = getTopDockingArea().getCurrent();
 		docking.left = getLeftDockingArea().getCurrent();
 		docking.bottom = getBottomDockingArea().getCurrent();
@@ -275,12 +279,12 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	} //}}}
 
 	//{{{ setMainPanel() method
-	public void setMainPanel(JPanel panel) 
+	public void setMainPanel(JPanel panel)
 	{
 		add(panel, 0);
 	} //}}}
 
-	
+
 	//{{{ init() method
 	/**
 	 * Initialises dockable window manager. Do not call this method directly.
@@ -312,19 +316,19 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 			return null;
 		}
-		
+
 		// create a copy of this dockable window and float it
 		Entry newEntry = new Entry(entry.factory,FLOATING);
 		newEntry.win = newEntry.factory.createDockableWindow(view,FLOATING);
-		
+
 		if(newEntry.win != null)
 		{
-			FloatingWindowContainer fwc = new FloatingWindowContainer(this,true); 
+			FloatingWindowContainer fwc = new FloatingWindowContainer(this,true);
 			newEntry.container = fwc;
 			newEntry.container.register(newEntry);
 			newEntry.container.show(newEntry);
-			
-			
+
+
 		}
 		clones.add(newEntry);
 		return newEntry.win;
@@ -357,7 +361,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 				&& lastEntry.container == null)
 			{
 				FloatingWindowContainer fwc = new FloatingWindowContainer(
-					this,view.isPlainView()); 
+					this,view.isPlainView());
 				lastEntry.container = fwc;
 				lastEntry.container.register(lastEntry);
 			}
@@ -444,7 +448,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 
 	//{{{ closeCurrentArea() method
 	/**
-	 * Closes the most recently focused dockable. 
+	 * Closes the most recently focused dockable.
 	 * @since jEdit 4.1pre3
 	 */
 	public void closeCurrentArea()
@@ -464,7 +468,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 					return;
 				}
 				catch (Exception e) {}
-				
+
 				Component comp = view.getFocusOwner();
 				while(comp != null)
 				{
@@ -472,9 +476,9 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 					if(comp instanceof DockablePanel)
 					{
 						DockablePanel panel = (DockablePanel) comp;
-						
+
 						PanelWindowContainer container = panel.getWindowContainer();
-						
+
 						container.show((DockableWindowManagerImpl.Entry) null);
 						return;
 					}
@@ -862,10 +866,10 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 					entry.win = null;
 			}
 
-			if(newPosition.equals(FLOATING)) 
+			if(newPosition.equals(FLOATING))
 			{
 			}
-				
+
 			else
 			{
 				if(newPosition.equals(TOP))
@@ -991,24 +995,24 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 				+ ".dock-position",FLOATING));
 		} //}}}
 
-		
+
 		/**
 		 * @return the long title for the dockable floating window.
 		 */
-		public String longTitle() 
+		public String longTitle()
 		{
 			String title = jEdit.getProperty(factory.name + ".longtitle");
 			if (title == null) return shortTitle();
 			else return title;
-			
+
 		}
-		
+
 		/**
 		 * @return The short title, for the dockable button text
 		 */
-		public String shortTitle() 
+		public String shortTitle()
 		{
-			
+
 			String title = jEdit.getProperty(factory.name + ".title");
 			if(title == null)
 				return "NO TITLE PROPERTY: " + factory.name;
@@ -1023,7 +1027,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		{
 			String retval = jEdit.getProperty(factory.name + ".label");
 			retval = retval.replaceAll("\\$", "");
-			return retval; 
+			return retval;
 		}
 
 		//{{{ Entry constructor
@@ -1035,7 +1039,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			// get the title here, not in the factory constructor,
 			// since the factory might be created before a plugin's
 			// props are loaded
-			
+
 		} //}}}
 	} //}}}
 

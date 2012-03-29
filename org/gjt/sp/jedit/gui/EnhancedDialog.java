@@ -23,7 +23,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-/**
+/** Dialog that handles OK/Cancel for you
+ *
  * A dialog box that handles window closing, the ENTER key and the ESCAPE
  * key for you. All you have to do is implement ok() (called when
  * Enter is pressed) and cancel() (called when Escape is pressed, or window
@@ -142,12 +143,12 @@ public abstract class EnhancedDialog extends JDialog
 							if(selected != null)
 								combo.setSelectedItem(selected);
 						}
-						
+
 						if(combo.isPopupVisible())
 						{
 							evt.consume();
 							combo.setPopupVisible(false);
-						} 
+						}
 						return;
 					}
 					// TODO: add other classes that need custom key handling here.

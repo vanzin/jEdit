@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 //}}}
-
+/** A more flexible BorderLayout with dockables. */
 public class DockableLayout implements LayoutManager2
 {
 	// for backwards compatibility with plugins that fiddle with
@@ -50,7 +50,7 @@ public class DockableLayout implements LayoutManager2
 
 	//{{{ isAlternateLayout() method
 	/**
-	 * jEdit View option: wide horizontal docking areas versus tall vertical docking areas 
+	 * jEdit View option: wide horizontal docking areas versus tall vertical docking areas
 	 * @return true if using the "alternate layout"
 	 */
 	public boolean isAlternateLayout()

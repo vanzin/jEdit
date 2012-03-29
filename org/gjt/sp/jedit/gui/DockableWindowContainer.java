@@ -19,9 +19,9 @@
 
 package org.gjt.sp.jedit.gui;
 
-/**
- * A container for dockable windows. This class should never be used
- * directly.
+/** A container for dockable windows.
+ *
+ * This class should never be used directly, and is not public.
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 2.6pre3

@@ -51,10 +51,9 @@ import org.gjt.sp.jedit.gui.AbstractContextOptionPane.MenuItem;
 //}}}
 
 
-/**
- * Dialog for showing ActionSets and adding actions to context menus
- * Was package private and located in AbstractContextOptionPane.java
- * until 4.3pre16
+/** Dialog for showing ActionSets and adding actions to context menus
+ *
+ * Was package private and located in AbstractContextOptionPane.java until 4.3pre16
  *
  */
 public class ContextAddDialog extends EnhancedDialog

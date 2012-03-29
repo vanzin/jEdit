@@ -35,11 +35,10 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 
 import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
 
-/**
-  * A layout manager that places components in a rectangular grid
-  * with variable cell sizes that supports colspans and rowspans.
-  * <p>
-  * The container is divided into rectangles, and each component is placed
+/** <p>A layout manager that places components in a rectangular grid
+  * with variable cell sizes that supports colspans and rowspans. </p>
+  *
+  * <p> The container is divided into rectangles, and each component is placed
   * in a rectangular space defined by its colspan and rowspan.
   * Each row is as large as the largest component in
   * that row, and each column is as wide as the widest component in

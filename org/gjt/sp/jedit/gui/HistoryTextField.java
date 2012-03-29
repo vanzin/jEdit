@@ -33,8 +33,8 @@ import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
-/**
- * Text field with an arrow-key accessable history.
+/** Text field with an arrow-key + drop-down accessable history.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -196,7 +196,7 @@ public class HistoryTextField extends JTextField
 		{
 			setBorder(new CompoundBorder(this.getBorder(), new HistoryBorder()));
 		}
-		
+
 		repaint();
 	} //}}}
 

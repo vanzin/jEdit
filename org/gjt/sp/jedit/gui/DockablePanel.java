@@ -37,7 +37,8 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 //}}}
 
-/**
+/** A panel that holds dockable windows.
+ *
  * @version $Id$
  */
 class DockablePanel extends JPanel
@@ -139,7 +140,7 @@ class DockablePanel extends JPanel
 
 	/** This belong to ResizeMouseHandler but requires to be static. */
 	static Point dragStart;
-	
+
 	//{{{ ResizeMouseHandler class
 	class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
 	{

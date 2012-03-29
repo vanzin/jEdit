@@ -54,8 +54,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
-/**
- * A completion popup class.
+/** A word completion popup.
  */
 public class CompleteWord extends CompletionPopup
 {
@@ -192,7 +191,7 @@ public class CompleteWord extends CompletionPopup
 
 		return word.toString();
 	} //}}}
-	
+
 	//{{{ getVisibleBuffers() method
 	private static Collection<Buffer> getVisibleBuffers()
 	{
@@ -221,8 +220,8 @@ public class CompleteWord extends CompletionPopup
 		final KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
 		final String noWordSep = getNonAlphaNumericWordChars(
 			buffer,keywordMap);
-		
-		final Collection<Buffer> sourceBuffers = 
+
+		final Collection<Buffer> sourceBuffers =
 			jEdit.getBooleanProperty("completeFromAllBuffers") ?
 				Arrays.asList(jEdit.getBuffers()) :
 				getVisibleBuffers();
