@@ -27,9 +27,9 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 // }}}
 
-@SuppressWarnings("serial")
 // {{{ abstract class DockableWindowManager
-/**<p>Keeps track of all dockable windows for a single View, and provides
+
+/** <p> Keeps track of all dockable windows for a single View, and provides
  * an API for getting/showing/hiding them. </p>
  *
  * <p>Each {@link org.gjt.sp.jedit.View} has an instance of this class.</p>
@@ -117,7 +117,8 @@ import org.gjt.sp.util.Log;
  * @since jEdit 2.6pre3
  *
  */
- public abstract class DockableWindowManager extends JPanel
+@SuppressWarnings("serial")
+public abstract class DockableWindowManager extends JPanel
 {
 
 	//{{{ Constants

@@ -37,14 +37,14 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
-/**
+/** "Paste Special" dialog.
  * @author Matthieu Casanova
  */
 public class PasteSpecialDialog extends EnhancedDialog
 {
 		private static final DataFlavor[] flavors = {DataFlavor.stringFlavor,
 				JEditDataFlavor.jEditRichTextDataFlavor, JEditDataFlavor.html};
-		
+
 		private final TextArea textArea;
 		private final JButton ok;
 

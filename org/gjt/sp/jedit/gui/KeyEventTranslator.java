@@ -33,8 +33,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
-/**
- * In conjunction with the <code>KeyEventWorkaround</code>, hides some
+/** In conjunction with the <code>KeyEventWorkaround</code>, hides some
  * warts in the AWT key event API.
  *
  * @author Slava Pestov
@@ -215,10 +214,10 @@ public class KeyEventTranslator
 	{
 		if(keyStroke == null)
 			return null;
-		
+
 		String key;
         	int modifiers = 0;
-        	
+
         	String[] pieces = keyStroke.split("\\+", 2);
         	if (pieces.length == 1)
         	{
@@ -229,7 +228,7 @@ public class KeyEventTranslator
         		modifiers = parseModifiers(pieces[0]);
         		key = pieces[1];
         	}
-        	
+
 		if (key.length() == 1)
 		{
 			return new Key(modifiersToString(modifiers), 0, key.charAt(0));
@@ -244,7 +243,7 @@ public class KeyEventTranslator
 		{
 			return new Key(modifiersToString(modifiers), 0, ' ');
 		}
-		
+
 		int code = parseKeyCode(key);
 		if (code == KeyEvent.VK_UNDEFINED)
 		{
@@ -255,7 +254,7 @@ public class KeyEventTranslator
 			return new Key(modifiersToString(modifiers), code, '\0');
 		}
 	} //}}}
-	
+
 	//{{{ parseKeyStroke() method
         /**
          * Converts a string to a Swing KeyStroke. The string should be of the
@@ -272,10 +271,10 @@ public class KeyEventTranslator
         {
         	if (shortcut == null || shortcut.indexOf(' ') != -1)
         		return null;
-        	
+
         	String key;
         	int modifiers = 0;
-        	
+
         	String[] pieces = shortcut.split("\\+", 2);
         	if (pieces.length == 1)
         	{
@@ -286,7 +285,7 @@ public class KeyEventTranslator
         		modifiers = parseModifiers(pieces[0]);
         		key = pieces[1];
         	}
-        	
+
 		if (key.length() == 1)
 		{
 			return KeyStroke.getKeyStroke(new Character(key.charAt(0)), modifiers);
@@ -297,7 +296,7 @@ public class KeyEventTranslator
 					"Invalid key stroke: " + shortcut);
 			return null;
 		}
-		
+
 		int keyCode = parseKeyCode(key);
 		if (keyCode == KeyEvent.VK_UNDEFINED)
 		{
@@ -472,12 +471,12 @@ public class KeyEventTranslator
 				InputEvent.SHIFT_MASK);
 		}
 	}
-	
+
 	//{{{ parseModifiers() method
 	private static int parseModifiers(String modifierString)
 	{
 		int modifiers = 0;
-		
+
 		for (char ch : modifierString.toCharArray())
 		{
 			switch (Character.toUpperCase(ch))
@@ -496,10 +495,10 @@ public class KeyEventTranslator
 				break;
 			}
 		}
-		
+
 		return modifiers;
 	} //}}
-	
+
 	//{{{ parseKeyCode() method
 	/**
 	 * Parses the name of a keycode from the KeyEvent class to the the actual
@@ -519,7 +518,7 @@ public class KeyEventTranslator
 			return KeyEvent.VK_UNDEFINED;
 		}
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Key class

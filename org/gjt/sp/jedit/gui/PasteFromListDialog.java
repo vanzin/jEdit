@@ -30,7 +30,7 @@ import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** Paste previous/paste deleted dialog */
 public class PasteFromListDialog extends EnhancedDialog
 {
 	//{{{ PasteFromListDialog constructor
@@ -142,7 +142,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	private JButton insert;
 	private JButton cancel;
 	//}}}
-	
+
 	//{{{ cleanup()
 	private void cleanup()
 	{
@@ -157,7 +157,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	private String getSelectedClipText()
 	{
 		Object[] selected = clips.getSelectedValues();
-		
+
 		if (selected.length == 1)
 		{
 			// These strings may be very large, so if we can just return the same string
@@ -196,10 +196,10 @@ public class PasteFromListDialog extends EnhancedDialog
 		else
 		{
 			String text = getSelectedClipText();
-			int maxPreviewLength = 
+			int maxPreviewLength =
 				jEdit.getIntegerProperty("paste-from-list.max-preview-length",
 					100000);
-			
+
 			if (text.length() > maxPreviewLength)
 			{
 				String showText = text.substring(0, maxPreviewLength);
@@ -226,7 +226,7 @@ public class PasteFromListDialog extends EnhancedDialog
 		{
 			this.maxItemLength = maxItemLength;
 		}
-		
+
 		String shorten(String item)
 		{
 			StringBuilder buf = new StringBuilder();
@@ -243,7 +243,7 @@ public class PasteFromListDialog extends EnhancedDialog
 					buf.append("...");
 					break;
 				}
-				
+
 				char ch = item.charAt(i);
 				if(Character.isWhitespace(ch))
 				{
@@ -278,7 +278,7 @@ public class PasteFromListDialog extends EnhancedDialog
 
 			return this;
 		}
-		
+
 		private int maxItemLength;
 	} //}}}
 

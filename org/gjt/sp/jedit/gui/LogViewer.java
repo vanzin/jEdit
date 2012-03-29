@@ -35,7 +35,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
-/**
+/** Activity Log Viewer
  * @version $Id$
  */
 public class LogViewer extends JPanel implements DefaultFocusComponent
@@ -96,9 +96,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		copy = new JButton(jEdit.getProperty("log-viewer.copy"));
 		copy.addActionListener(new ActionHandler());
 		caption.add(copy);
-		
+
 		caption.add(Box.createHorizontalStrut(6));
-		
+
 		JButton settings = new JButton(jEdit.getProperty("log-viewer.settings.label"));
 		settings.addActionListener(new ActionListener()
 		{
@@ -431,11 +431,11 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			return filter.length() == 0 || text.contains(filter);
 		}
 	} //}}}
-	
+
 	//{{{ LogSettings dialog
 	private class LogSettings extends JDialog
 	{
-		LogSettings() 
+		LogSettings()
 		{
 			super(jEdit.getActiveView(), jEdit.getProperty("log-viewer.dialog.title"));
 			AbstractOptionPane pane = new AbstractOptionPane(jEdit.getProperty("log-viewer.settings.label"))
@@ -449,7 +449,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 						maxLines,
 						GridBagConstraints.REMAINDER);
 					addComponent(Box.createVerticalStrut(11));
-					debug = new JCheckBox(jEdit.getProperty("log-viewer.message.debug.label", "Debug"), 
+					debug = new JCheckBox(jEdit.getProperty("log-viewer.message.debug.label", "Debug"),
 						jEdit.getBooleanProperty("log-viewer.message.debug", true));
 					message = new JCheckBox(jEdit.getProperty("log-viewer.message.message.label", "Message"),
 						jEdit.getBooleanProperty("log-viewer.message.message", true));
@@ -459,7 +459,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 						jEdit.getBooleanProperty("log-viewer.message.warning", true));
 					error = new JCheckBox(jEdit.getProperty("log-viewer.message.error.label", "Error"),
 						jEdit.getBooleanProperty("log-viewer.message.error", true));
-					
+
 					addComponent(new JLabel(jEdit.getProperty("log-viewer.message.label", "Message Display:")));
 					addComponent(debug,
 						debugColor = new ColorWellButton(
@@ -481,9 +481,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 						errorColor = new ColorWellButton(
 						jEdit.getColorProperty("log-viewer.message.error.color", Color.RED)),
 						GridBagConstraints.REMAINDER);
-					
+
 					addComponent(Box.createVerticalStrut(11));
-					
+
 					JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 					JButton okButton = new JButton(jEdit.getProperty("common.ok"));
 					okButton.addActionListener(new ActionListener()
@@ -510,12 +510,12 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 					buttonPanel.add(cancelButton);
 					addComponent(buttonPanel, GridBagConstraints.HORIZONTAL);
 				}
-				
+
 				@Override
 				protected void _save()
 				{
 					jEdit.setIntegerProperty("log-viewer.maxlines", ((SpinnerNumberModel)maxLines.getModel()).getNumber().intValue());
-					
+
 					showDebug = debug.isSelected();
 					jEdit.setBooleanProperty("log-viewer.message.debug", showDebug);
 					showMessage = message.isSelected();
@@ -526,13 +526,13 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 					jEdit.setBooleanProperty("log-viewer.message.warning", showWarning);
 					showError = error.isSelected();
 					jEdit.setBooleanProperty("log-viewer.message.error", showError);
-					
-					jEdit.setColorProperty("log-viewer.message.debug.color", debugColor.getSelectedColor());	
-					jEdit.setColorProperty("log-viewer.message.message.color", messageColor.getSelectedColor());	
-					jEdit.setColorProperty("log-viewer.message.notice.color", noticeColor.getSelectedColor());	
-					jEdit.setColorProperty("log-viewer.message.warning.color", warningColor.getSelectedColor());	
+
+					jEdit.setColorProperty("log-viewer.message.debug.color", debugColor.getSelectedColor());
+					jEdit.setColorProperty("log-viewer.message.message.color", messageColor.getSelectedColor());
+					jEdit.setColorProperty("log-viewer.message.notice.color", noticeColor.getSelectedColor());
+					jEdit.setColorProperty("log-viewer.message.warning.color", warningColor.getSelectedColor());
 					jEdit.setColorProperty("log-viewer.message.error.color", errorColor.getSelectedColor());
-					
+
 					setFilter();
 				}
 			};
@@ -542,7 +542,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			setLocationRelativeTo(LogViewer.this);
 			setVisible(true);
 		}
-		
+
 		private JSpinner maxLines;
 		private JCheckBox debug;
 		private JCheckBox message;
@@ -554,7 +554,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		private ColorWellButton noticeColor;
 		private ColorWellButton warningColor;
 		private ColorWellButton errorColor;
-		
+
 	} //}}}
 }
 

@@ -10,7 +10,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import org.gjt.sp.jedit.jEdit;
-
+/** A dialog that pops up when you click on "Previously Entered Strings"
+  * from a HistoryTextField.
+  *
+  *  Allows the user to edit previously entered strings. Patch# 1818140
+  *
+  *  @author Joerg Spieler
+  *  @since jEdit 4.3
+*/
 public class ListModelEditor
 {
 

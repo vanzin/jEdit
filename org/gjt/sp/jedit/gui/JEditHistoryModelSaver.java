@@ -1,5 +1,5 @@
 /*
- * JEditHistoryModelSaver.java - Handles services.xml files in plugins
+ * JEditHistoryModelSaver.java -
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -32,7 +32,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharacterCodingException;
 import java.util.*;
 
-/**
+/** Handles loading and saving of the "history" files.
+ *
+ * A history file is .ini format and stores historymodels for all
+ * named historytextfields, separately but in the same file.
+ *
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */

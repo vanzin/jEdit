@@ -69,8 +69,7 @@ import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
-/**
- * A container for dockable windows. This class should never be used
+/** A container for dockable windows. This class should never be used
  * directly.
  * @author Slava Pestov
  * @version $Id$
@@ -129,7 +128,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	{
 		return wm;
 	} //}}}
-	
+
 	//{{{ register() method
 	public void register(DockableWindowManagerImpl.Entry entry)
 	{
@@ -290,7 +289,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		{
 			if (current != null)
 			{
-				
+
 				Object reason = DockableWindowUpdate.DEACTIVATED;
 				EditBus.send(new DockableWindowUpdate(wm, reason, current.factory.name));
 			}

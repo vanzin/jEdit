@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 //}}}
-
+/** Dockable view of markers in the current buffer */
 public class MarkerViewer extends JPanel implements ActionListener
 {
 	//{{{ MarkerViewer constructor

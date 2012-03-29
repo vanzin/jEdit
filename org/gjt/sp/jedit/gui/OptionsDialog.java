@@ -39,8 +39,7 @@ import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.Log;
 //}}}
 
-/**
- * An abstract options dialog box.
+/** An abstract options dialog box.
  * @author Slava Pestov
  * @version $Id$
  * @todo refactor to use OptionGroupPane
