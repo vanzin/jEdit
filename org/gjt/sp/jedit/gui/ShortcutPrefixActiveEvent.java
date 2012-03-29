@@ -32,8 +32,7 @@ import javax.swing.event.EventListenerList;
 import org.gjt.sp.util.Log;
 //}}}
 
-/**
- *  Description of the Class
+/** Event fired when jEdit starts and stops listening for shortcut completions
  *
  * @author     jchoyt
  * created    December 17, 2005

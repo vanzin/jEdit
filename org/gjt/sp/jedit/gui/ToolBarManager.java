@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** Handles toolbars for a single View */
 public class ToolBarManager
 {
 	//{{{ ToolBarManager constructor

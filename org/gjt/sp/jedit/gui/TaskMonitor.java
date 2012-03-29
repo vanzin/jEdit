@@ -41,8 +41,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 //}}}
 
-/**
+/** Task Monitor dockable panel, for showing progress on active tasks.
  * @author Matthieu Casanova
+ * @since jEdit 4.4
  */
 public class TaskMonitor extends JPanel implements TaskListener
 {
@@ -88,7 +89,7 @@ public class TaskMonitor extends JPanel implements TaskListener
 	@Override
 	public void addNotify()
 	{
-		TaskManager.instance.visit(new TaskManager.TaskVisitor() 
+		TaskManager.instance.visit(new TaskManager.TaskVisitor()
 		{
 			public void visit(Task task)
 			{

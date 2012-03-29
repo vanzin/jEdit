@@ -30,7 +30,7 @@ import java.awt.event.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** Dialog for selection of a range of lines */
 public class SelectLineRange extends EnhancedDialog implements ActionListener
 {
 	//{{{ SelectLineRange constructor

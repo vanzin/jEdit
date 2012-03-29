@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
-
+/** Dockable view of register contents */
 public class RegisterViewer extends JPanel
 	implements DockableWindow, DefaultFocusComponent
 {
@@ -48,7 +48,7 @@ public class RegisterViewer extends JPanel
 			jEdit.getProperty("view-registers.title"));
 		label.setBorder(new EmptyBorder(0,0,3,0));
 		toolBar.add(label);
-		
+
 		toolBar.add(Box.createGlue());
 
 		RolloverButton pasteRegister = new RolloverButton(
@@ -66,7 +66,7 @@ public class RegisterViewer extends JPanel
 		clearRegister.addActionListener(new ClearHandler());
 		clearRegister.setActionCommand("clear-string-register");
 		toolBar.add(clearRegister);
-		
+
 		add(BorderLayout.NORTH,toolBar);
 
 		DefaultListModel registerModel = new DefaultListModel();
@@ -82,16 +82,16 @@ public class RegisterViewer extends JPanel
 		contentTextArea.addFocusListener(new FocusHandler());
 		//key bindings
 		this.registerKeyboardAction(new EscapeHandler(),
-			KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), 
+			KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 			WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		registerList.registerKeyboardAction(new InsertHandler(),
-			KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), 
+			KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
 			WHEN_FOCUSED);
 		registerList.registerKeyboardAction(new InsertHandler(),
-			KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), 
+			KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0),
 			WHEN_FOCUSED);
 		registerList.registerKeyboardAction(new ClearHandler(),
-			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), 
+			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
 			WHEN_FOCUSED);
 		contentTextArea.registerKeyboardAction(new TabHandler(),
 			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK),
@@ -114,7 +114,7 @@ public class RegisterViewer extends JPanel
 	{
 		registerList.requestFocusInWindow();
 	} //}}}
-	
+
 	//{{{ handleRegisterChanged() method
 	@EBHandler
 	public void handleRegisterChanged(RegisterChanged msg)
@@ -284,7 +284,7 @@ public class RegisterViewer extends JPanel
 	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
-		{			
+		{
 			Object value = registerList.getSelectedValue();
 			if(!(value instanceof Character))
 			{
@@ -305,11 +305,11 @@ public class RegisterViewer extends JPanel
 				{
 					contentTextArea.setText("");
 					contentTextArea.setEditable(false);
-				}	
+				}
 				return;
 			}
-			
-			
+
+
 			if (!editing)
 			{
 				contentTextArea.setText(reg.toString());
@@ -376,7 +376,7 @@ public class RegisterViewer extends JPanel
 				editing = false;
 			}
 		}
-		
+
 		private void updateRegister()
 		{
 			Object value = registerList.getSelectedValue();

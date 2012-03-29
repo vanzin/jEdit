@@ -34,7 +34,8 @@ import org.gjt.sp.jedit.OperatingSystem;
 
 //}}}
 
-/**
+/** Class for buttons that implement rollovers
+ *
  * If you wish to have rollovers on your buttons, use this class.
  *
  * Unlike the Swing rollover support, this class works outside of

@@ -25,6 +25,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 
+/** Dialog displayed when expanding an unknown abbreviation */
 public class AddAbbrevDialog extends JDialog
 {
 	public AddAbbrevDialog(View view, String abbrev)

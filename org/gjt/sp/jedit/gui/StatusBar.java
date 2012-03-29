@@ -40,8 +40,7 @@ import org.gjt.sp.jedit.gui.statusbar.ToolTipLabel;
 import org.gjt.sp.util.*;
 //}}}
 
-/**
- * The status bar used to display various information to the user.<p>
+/** The status bar used to display various information to the user.
  *
  * Currently, it is used for the following:
  * <ul>

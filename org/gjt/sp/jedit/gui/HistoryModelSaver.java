@@ -1,5 +1,5 @@
 /*
- * HistoryModelSaver.java - Handles services.xml files in plugins
+ * HistoryModelSaver.java - Interface for loading and saving of the "history" files.
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -23,7 +23,8 @@ package org.gjt.sp.jedit.gui;
 
 import java.util.Map;
 
-/**
+/** Interface for loading and saving of the "history" files.
+ *
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */

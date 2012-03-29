@@ -29,7 +29,7 @@ import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** A dialog box with a text area */
 public class TextAreaDialog extends EnhancedDialog
 {
 	//{{{ TextAreaDialog constructor

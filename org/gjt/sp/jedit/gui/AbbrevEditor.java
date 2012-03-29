@@ -29,6 +29,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
+/** Panel for editing abbreviations */
 public class AbbrevEditor extends JPanel
 {
 	//{{{ AbbrevEditor constructor

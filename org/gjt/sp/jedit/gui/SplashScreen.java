@@ -27,8 +27,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
-/**
- * The splash screen displayed on startup.
+/** The splash screen displayed on startup.
  * @version $Id$
  */
 public class SplashScreen extends JComponent

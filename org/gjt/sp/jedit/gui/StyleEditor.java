@@ -50,6 +50,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 //{{{ StyleEditor class
+/** Style editor dialog */
 public class StyleEditor extends EnhancedDialog implements ActionListener
 {
 	//{{{ invokeForCaret() method
@@ -120,7 +121,7 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 
 		panel.add(new JLabel(jEdit.getProperty("style-editor.tokenType")));
 		panel.add(new JLabel(styleName));
-		
+
 		italics = new JCheckBox(jEdit.getProperty("style-editor.italics"));
 		italics.setSelected(style.getFont().isItalic());
 		panel.add(italics);

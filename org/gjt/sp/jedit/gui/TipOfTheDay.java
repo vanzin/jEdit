@@ -33,7 +33,7 @@ import java.util.Random;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
-
+/** Tip of the day window */
 public class TipOfTheDay extends EnhancedDialog
 {
 	//{{{ TipOfTheDay constructor

@@ -36,7 +36,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-/**
+/** Close all buffers dialog
  * @author Slava Pestov
  */
 public class CloseDialog extends EnhancedDialog
@@ -74,8 +74,8 @@ public class CloseDialog extends EnhancedDialog
 
 		for(Buffer buffer: buffers)
 		{
-			if(buffer.isDirty()) 
-				bufferModel.addElement(buffer.getPath()); 
+			if(buffer.isDirty())
+				bufferModel.addElement(buffer.getPath());
 		}
 
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferList));

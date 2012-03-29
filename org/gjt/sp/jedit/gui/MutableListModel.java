@@ -21,7 +21,10 @@
  */
 
 package org.gjt.sp.jedit.gui;
-
+/** Short Description of this class
+  *
+  * Long Description
+*/
 public interface MutableListModel extends javax.swing.ListModel
 {
 	public boolean removeElement(Object elem);
