@@ -265,8 +265,8 @@ public class jEdit
 			portFile = null;
 
 		Log.init(true,level);
-		
-		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + slargs.join(" "));		
+
+		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + slargs.join(" "));
 		//}}}
 
 		//{{{ Try connecting to another running jEdit instance
@@ -339,7 +339,7 @@ public class jEdit
 			// just exit
 			System.exit(0);
 		} //}}}
-		
+
 		// This must be done before anything graphical is displayed, so we can't even
 		// wait for the settings to be loaded, because the splash screen will already
 		// be visible
@@ -353,10 +353,10 @@ public class jEdit
 		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
 			GUIUtilities.showSplashScreen();
 
-		//{{{ Settings migration code. 
-		// Windows check introduced in 5.0pre1. 
+		//{{{ Settings migration code.
+		// Windows check introduced in 5.0pre1.
 		// MacOS check introduced in 4.3.
-		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows()) 
+		if((OperatingSystem.isMacOS() || OperatingSystem.isWindows())
 			&& shouldRelocateSettings && settingsDirectory != null)
 		{
 			relocateSettings();
@@ -408,7 +408,7 @@ public class jEdit
 		else
 		{
 			stream = null;
-		} //}}}		
+		} //}}}
 		Log.setLogWriter(stream);
 
 		Log.log(Log.NOTICE,jEdit.class,"jEdit version " + getVersion());
@@ -1645,7 +1645,7 @@ public class jEdit
 	 * already opened in jEdit, then this instance is returned.
 	 * Otherwise jEdit will not store a reference
 	 * to the returned Buffer object.
-	 * <p>This method is thread-safe.  
+	 * <p>This method is thread-safe.
 	 *
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
@@ -3681,11 +3681,11 @@ public class jEdit
 	private static void initPLAF()
 	{
 		String lf = getProperty("lookAndFeel");
+
 		if (isStartupDone() && UIManager.getLookAndFeel().getClass().getName().equals(lf))
 		{
 			return;
 		}
-
 		Font primaryFont = jEdit.getFontProperty(
 			"metal.primary.font");
 		if(primaryFont != null)
@@ -3803,6 +3803,8 @@ public class jEdit
 				SwingUtilities.updateComponentTreeUI(window);
 			}
 		}
+		Log.log(Log.MESSAGE, jEdit.class, "InitPLAF: " + lf);
+
 	} //}}}
 
 	//{{{ getNextUntitledBufferId() method
