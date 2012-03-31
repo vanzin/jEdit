@@ -177,23 +177,23 @@ build = matcher.group(1);
 major = Integer.parseInt(build.substring(0,2));
 minor = Integer.parseInt(build.substring(3,5));
 beta = Integer.parseInt(build.substring(6,8));
-bugfix = Integer.parseInt(build.substring(9,11));
+micro = Integer.parseInt(build.substring(9,11));
 branch = major + "." + minor + ".x";
 tag = "jedit-"
       + major
       + "-" + minor
-      + (beta != 99 ? "-pre" + beta : "-" + bugfix);
+      + (beta != 99 ? "-pre" + beta : "-" + micro);
 version = major
           + "." + minor
-          + (beta != 99 ? "pre" + beta : "." + bugfix);
+          + (beta != 99 ? "pre" + beta : "." + micro);
 nextVersion = major
               + "." + minor
-              + (beta != 99 ? "pre" + (beta + 1) : "." + (bugfix + 1));
+              + (beta != 99 ? "pre" + (beta + 1) : "." + (micro + 1));
 nextBuild = String.format("%02d.%02d.%02d.%02d",
                           new Object[] { Integer.valueOf(major),
                                          Integer.valueOf(minor),
                                          Integer.valueOf(beta == 99 ? beta : beta + 1),
-                                         Integer.valueOf(beta == 99 ? bugfix + 1 : bugfix) });
+                                         Integer.valueOf(beta == 99 ? micro + 1 : micro) });
 sourceForgeUsername = Macros.input(view, "Your SourceForge Username?", "Vampire0");
 SearchAndReplace.setBeanShellReplace(false);
 SearchAndReplace.setIgnoreCase(false);

@@ -956,12 +956,11 @@ loop:		for(;;)
 		int minor = Integer.parseInt(build.substring(3,5));
 		// Then the pre-release status
 		int beta = Integer.parseInt(build.substring(6,8));
-		// Finally the bug fix release
-		int bugfix = Integer.parseInt(build.substring(9,11));
+		// Finally the micro version number
+		int micro = Integer.parseInt(build.substring(9,11));
 
 		return major + "." + minor
-			+ (beta != 99 ? "pre" + beta :
-			(bugfix != 0 ? "." + bugfix : ""));
+			+ (beta != 99 ? "pre" + beta : "." + micro);
 	} //}}}
 
 	//{{{ isToolsJarAvailable() method

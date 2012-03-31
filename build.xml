@@ -160,10 +160,10 @@
 			major = Integer.parseInt(build.substring(0,2));
 			minor = Integer.parseInt(build.substring(3,5));
 			beta = Integer.parseInt(build.substring(6,8));
-			bugfix = Integer.parseInt(build.substring(9,11));
+			micro = Integer.parseInt(build.substring(9,11));
 			version = major
 			          + "." + minor
-			          + (beta != 99 ? "pre" + beta : "." + bugfix);
+			          + (beta != 99 ? "pre" + beta : "." + micro);
 			project.setUserProperty("jedit.version", version);
 			project.setUserProperty("jedit.build.number", build);
 			project.setUserProperty("jedit.version.final", Boolean.toString(beta == 99));
