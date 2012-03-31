@@ -3184,7 +3184,6 @@ public class jEdit
 		System.out.println("	<file> +line:<line>,<column>: Positions caret"
 			+ " at line number <line> and column number <column>");
 		System.out.println("	--: End of options");
-		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nobackground: Disable background mode (default)");
 		System.out.println("	-gui: Only if running in background mode; open initial view (default)");
@@ -3205,6 +3204,7 @@ public class jEdit
 		System.out.println("	-noserver: Don't start edit server");
 		System.out.println("	-settings=<path>: Load user-specific settings from <path>");
 		System.out.println("	-nosettings: Don't load user-specific settings");
+		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-startupscripts: Run startup scripts (default)");
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-usage: Print this message and exit");
