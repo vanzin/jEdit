@@ -594,7 +594,7 @@ public class jEdit
 
 	//{{{ Property methods
 
-	// getCurrentLanguage() method
+	//{{{ getCurrentLanguage() method
 	/**
 	 * Returns the current language used by jEdit.
 	 *
@@ -1022,12 +1022,8 @@ public class jEdit
 		}
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
-
-	//{{{ getKeyMapManager() method
-	public static KeymapManager getKeymapManager()
-	{
-		return keymapManager;
-	} //}}}
+	
+	//}}} Property methods fold end
 
 	//{{{ Plugin management methods
 
@@ -2955,7 +2951,13 @@ public class jEdit
 				      registerNameString});
 	} //}}}
 
-	//}}}
+	//{{{ getKeyMapManager() method
+	public static KeymapManager getKeymapManager()
+	{
+		return keymapManager;
+	} //}}}
+
+	//}}} Miscellaneous methods fold end
 
 	//{{{ Package-private members
 
