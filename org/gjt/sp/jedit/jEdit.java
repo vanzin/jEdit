@@ -1023,12 +1023,11 @@ public class jEdit
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
 
+	//{{{ getKeyMapManager() method
 	public static KeymapManager getKeymapManager()
 	{
 		return keymapManager;
-	}
-
-	//}}}
+	} //}}}
 
 	//{{{ Plugin management methods
 
@@ -3122,6 +3121,8 @@ public class jEdit
 	private static Vector<ErrorListDialog.ErrorEntry> pluginErrors;
 	private static final Object pluginErrorLock = new Object();
 	private static Vector<PluginJAR> jars;
+	private static final JEditPropertyManager propertyManager =
+	                     new JEditPropertyManager();
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
@@ -4540,5 +4541,4 @@ loop:		for(int i = 0; i < list.length; i++)
 		}
 	} //}}}
 
-	private static final JEditPropertyManager propertyManager = new JEditPropertyManager();
 }
