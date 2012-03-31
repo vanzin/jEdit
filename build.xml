@@ -1255,6 +1255,7 @@
 					       ivysettings.xml
 					       icons/file.icns
 					       icons/icon.icns
+					       org/gjt/sp/jedit/jEdit.java
 					       ${config.dist.dir}/${jar.filename}
 					       ${config.dist.dir}/classes/jarbundler/**
 					       ${config.dist.dir}/doc/**
@@ -1953,6 +1954,7 @@ Press Return key to continue...
 					       icons/jedit.ico
 					       icons/WindowsInstallerSmallImage.bmp
 					       icons/WindowsInstallerImage.bmp
+					       org/gjt/sp/jedit/jEdit.java
 					       package-files/windows/win32installer.iss
 					       ${config.dist.dir}/jedit.exe
 					       ${config.dist.dir}/${jar.filename}
