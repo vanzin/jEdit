@@ -350,8 +350,10 @@ public class jEdit
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
+		logTime("before splash screen activation");
 		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
 			GUIUtilities.showSplashScreen();
+		logTime("after splash screen activation");
 
 		//{{{ Settings migration code.
 		// Windows check introduced in 5.0pre1.
@@ -590,6 +592,7 @@ public class jEdit
 		// Open files, create the view and hide the splash screen.
 		SyntaxUtilities.propertyManager = jEdit.propertyManager;
 		finishStartup(gui,restore,newPlainView,userDir,args);
+		logTime("main done");
 	} //}}}
 
 	//{{{ Property methods
@@ -2957,6 +2960,15 @@ public class jEdit
 		return keymapManager;
 	} //}}}
 
+	//{{{ logTime(String) method
+	/** Logs time since startup, for benchmarking */
+	private static void logTime(String label)
+	{
+		long currentTime = System.currentTimeMillis();
+		Log.log(Log.DEBUG, jEdit.class,
+			label + ':' + (currentTime - startupTime) + " ms");
+	} //}}}
+
 	//}}} Miscellaneous methods fold end
 
 	//{{{ Package-private members
@@ -3125,6 +3137,7 @@ public class jEdit
 	private static Vector<PluginJAR> jars;
 	private static final JEditPropertyManager propertyManager =
 	                     new JEditPropertyManager();
+	private static long startupTime = System.currentTimeMillis();
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
@@ -4045,7 +4058,9 @@ public class jEdit
 				GUIUtilities.hideSplashScreen();
 
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
-					+ "complete");
+					+ "complete: "
+					+ (System.currentTimeMillis() - 
+					   startupTime) + " ms");
 
 				//{{{ Report any plugin errors
 				if(pluginErrors != null)
