@@ -130,7 +130,8 @@ public class SplashScreen extends JComponent
 		if (lastLabel != null)
 		{
 			Log.log(Log.DEBUG, SplashScreen.class,
-				lastLabel +':'+(currentTime - lastAdvanceTime) + "ms");
+				lastLabel + ':' + (currentTime - lastAdvanceTime)
+				+ "/" + (currentTime - firstAdvanceTime) + "ms");
 		}
 		if (label != null)
 		{
@@ -199,6 +200,7 @@ public class SplashScreen extends JComponent
 	private static final int PROGRESS_COUNT = 28;
 	private String label;
 	private String lastLabel;
+	private long firstAdvanceTime = System.currentTimeMillis();
 	private long lastAdvanceTime = System.currentTimeMillis();
 	private Font defaultFont = new Font("Dialog",Font.PLAIN,10);
 	private Font labelFont = UIManager.getFont("Label.font").deriveFont(9.8f);
