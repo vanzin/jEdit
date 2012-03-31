@@ -30,7 +30,7 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
-
+/** Displayed when editing abbrevs */
 public class EditAbbrevDialog extends JDialog
 {
 	//{{{ EditAbbrevDialog constructor

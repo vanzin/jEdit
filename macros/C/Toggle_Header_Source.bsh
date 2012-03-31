@@ -19,11 +19,11 @@
 
 	New to 1.4: Instead of throwing an exception, treats
 	files with no extension as header files, and tries to
-	open .cpp file with same basename. Searches in 
+	open .cpp file with same basename. Searches in
 	current project for header/source files too.
 
-	New to 1.5: Supports multiple, default header extensions. 
-	
+	New to 1.5: Supports multiple, default header extensions.
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
@@ -44,19 +44,14 @@ import projectviewer.*;
 import projectviewer.vpt.*;
 import java.util.*;
 
-/* Set this property from the console beanshell to something else if cpp is not
-   your favorite extension. e.g.:
+/* Set these properties via the console beanshell to something else if cpp,h are not
+   your favorite extensions. e.g.:
    jEdit.setProperty("default.extension.c", "cc");
+   jEdit.setProperty("default.extension.h", "hh");
 */
-
 String defaultSourceExtension = jEdit.getProperty("default.extension.c", "cpp");
-
-/* jEdit.setProperty("default.extension.h", "hh"); */
-
 String defaultHeaderExtension = jEdit.getProperty("default.extension.h", "h");
-
 String[] sourceExtensions = new String[]{"cpp", "cxx", "cc", "c"};
-
 String[] headerExtensions = new String[]{"h", "hh", "hpp", "hxx"};
 
 /** Looks for an existing file in the current project, if ProjectViewer is
@@ -77,7 +72,7 @@ String findBufferInProject(String fileName) {
         if ((path.endsWith("\\" + fileName)) || (path.endsWith("/" + fileName)))
             return path;
     }
-    return null;		
+    return null;
 }
 
 /** Looks for an existing file in the same directory, or
@@ -137,7 +132,7 @@ String getSourceFile(String baseName)
     return baseName + "." + defaultSourceExtension;
 }
 
-String getHeaderFile(String baseName) 
+String getHeaderFile(String baseName)
 {
     int numExt = headerExtensions.length;
     for (int i=numExt-1; i>=0; --i)
@@ -147,11 +142,11 @@ String getHeaderFile(String baseName)
         String path = findBuffer(tryFile);
         if (path != null) return path;
     }
-    
+
     // Try no extension at all:
     String path = findBuffer(baseName);
     if (path != null) return path;
-    
+
     // Then try current project
     if (activeProjectExists())
         for (int i=numExt-1; i>=0; --i)
@@ -188,10 +183,10 @@ void toggleHeaderSource()
         if (isSourceFile(extension))
         {
             path = getHeaderFile(baseName);
-            if (path == null) 
+            if (path == null)
                 path = baseName + "." + defaultHeaderExtension;
         }
-        else 
+        else
         {
             path = getSourceFile(baseName);
         }
