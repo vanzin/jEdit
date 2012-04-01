@@ -1,5 +1,4 @@
-/*
- * jEdit - Programmer's Text Editor
+/* MigrationService.java
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -23,16 +22,16 @@ package org.jedit.core;
 
 /** A Migration service.
  * There is currently only one concrete implementation of this interface and no
- * general way to add new MigrationServices yet. 
- *
+ * general way to add new MigrationServices yet.
+ * <br />
  * The goal of migration is usually to replace old properties or data files
- * with a new set, located elsewhere. The fact is that depending on where 
+ * with a new set, located elsewhere. The fact is that depending on where
  * the data needs to be updated, the migration may need to be done at
-*  different places during jEdit's startup. 
+*  different places during jEdit's startup. <br />
  * There is no specific time that all migration services are called currently.
- * The service and interface exists primarily you don't need to add a compilation
- * dependency in the org.gjt.sp.jEdit class of your MigrationService class.
- *
+ * The service and interface exists primarily so you don't need to add a compilation
+ * dependency of the org.gjt.sp.jEdit class to your MigrationService class. <br />
+ * <br />
  * Concrete instances need to gurantee that the migration itself is only done
  * once.
  *
