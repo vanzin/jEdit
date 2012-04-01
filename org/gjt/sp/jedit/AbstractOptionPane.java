@@ -71,7 +71,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public AbstractOptionPane(String internalName)
 	{
-		this.name = internalName;
+		name = internalName;
 		setLayout(gridBag = new GridBagLayout());
 	} //}}}
 
@@ -92,12 +92,14 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 * Returns the component that should be displayed for this option pane.
 	 * Because this class extends Component, it simply returns "this".
 	 */
+	@Override
 	public Component getComponent()
 	{
 		return this;
 	} //}}}
 
 	//{{{ init() method
+	@Override
 	public final void init()
 	{
 		if(!initialized)
@@ -108,6 +110,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	} //}}}
 
 	//{{{ save() method
+	@Override
 	public final void save()
 	{
 		if(initialized)
@@ -152,9 +155,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		JLabel l = newLabel(label, comp);
 		l.setBorder(new EmptyBorder(0,0,0,12));
 		addComponent(l,comp,GridBagConstraints.BOTH);
-	} //}}}
+	}
 
-	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
 	 * added in a vertical fashion, one per row. The label is
@@ -169,9 +171,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		JLabel l = newLabel(label, comp);
 		l.setBorder(new EmptyBorder(0,0,0,12));
 		addComponent(l,comp,fill);
-	} //}}}
+	}
 
-	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
 	 * added in a vertical fashion, one per row. The label is
@@ -184,9 +185,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	public void addComponent(Component comp1, Component comp2)
 	{
 		addComponent(comp1,comp2,GridBagConstraints.BOTH);
-	} //}}}
+	}
 
-	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
 	 * added in a vertical fashion, one per row. The label is
@@ -217,9 +217,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.weightx = 1.0f;
 		gridBag.setConstraints(comp2,cons);
 		add(comp2);
-	} //}}}
+	}
 
-	//{{{ addComponent() method
 	/**
 	 * Adds a component to the option pane. Components are
 	 * added in a vertical fashion, one per row.
@@ -238,9 +237,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 
 		gridBag.setConstraints(comp,cons);
 		add(comp);
-	} //}}}
+	}
 
-	//{{{ addComponent() method
 	/**
 	 * Adds a component to the option pane. Components are
 	 * added in a vertical fashion, one per row.
@@ -266,47 +264,35 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	//{{{ copyToolTips() method
 	private static void copyToolTips(Component c1, Component c2)
 	{
+		if (!(c1 instanceof JComponent) || !(c2 instanceof JComponent))
+			return;
+
+		JComponent jc1 = (JComponent) c1;
+		String tooltip = jc1.getToolTipText();
 		int tooltips = 0;
-		int jc = 0;
-		String text = null;
-		JComponent jc1 = null;
-		try
+		if (tooltip != null && !tooltip.isEmpty())
+			tooltips++;
+
+		JComponent jc2 = (JComponent) c2;
+		String tooltip2 = jc2.getToolTipText();
+		if (tooltip2 != null && !tooltip2.isEmpty())
 		{
-			jc1 = (JComponent) c1;
-			text = jc1.getToolTipText();
-			++jc;
-			if (text != null && text.length() > 0)
-				tooltips++;
-		}
-		catch (Exception e)
-		{
+			tooltip = tooltip2;
+			tooltips++;
 		}
 
-		JComponent jc2 = null;
-		try
+		// if there is 0 tooltip, do nothing
+		// if there is 1 tooltip, copy it to the two components
+		// if there is 2 tooltip, each component has it's tooltip, do
+		//     nothing
+		if (tooltips == 1)
 		{
-			jc2 = (JComponent) c2;
-			String text2 = jc2.getToolTipText();
-			++jc;
-			if (text2 != null && text2.length() > 0)
-			{
-				text = text2;
-				tooltips++;
-			}
+			jc1.setToolTipText(tooltip);
+			jc2.setToolTipText(tooltip);
 		}
-		catch (Exception e)
-		{
-		}
-
-		if (tooltips == 1 && jc == 2)
-		{
-			jc1.setToolTipText(text);
-			jc2.setToolTipText(text);
-		}
-
 	} //}}}
 
-	//{{{ addSeparator() method
+	//{{{ addSeparator() methods
 	/**
 	 * Adds a separator component.
 	 * @since jEdit 4.1pre7
@@ -330,9 +316,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		add(sep);
 
 		addComponent(Box.createVerticalStrut(6));
-	} //}}}
+	}
 
-	//{{{ addSeparator() method
 	/**
 	 * Adds a separator component.
 	 * @param label The separator label property
@@ -405,6 +390,6 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	//}}}
 
 	//{{{ Private members
-	private String name;
+	private final String name;
 	//}}}
 }
