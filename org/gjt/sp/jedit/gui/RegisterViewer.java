@@ -212,6 +212,12 @@ public class RegisterViewer extends JPanel
 		// can't use requestFocusInWindow() here, otherwise we'll stay
 		// in RegisterViewer when it is a floating window
 		view.getTextArea().requestFocus();
+		
+		// close the window if we are floating
+		DockableWindowManager dm = view.getDockableWindowManager();
+		if (!dm.isDockableWindowDocked("view-registers")) {
+			dm.hideDockableWindow("view-registers");
+		}
 	} //}}}
 
 	//{{{ clearSelectedIndex() method

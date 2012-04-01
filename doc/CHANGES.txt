@@ -215,9 +215,12 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - New option in Saving and Backup pane: Use File System Browser dir for
   Save-As (# 1591441 - Alan Ezust)
 
-- RegisterViewer: set initial focus to registerList, added key bindings for
-  inserting content, clearing a register and leaving the registerList
-  (#3437779 - Martin Raspe)
+- RegisterViewer:
+  - set initial focus to registerList, added key bindings for
+    inserting content, clearing a register and leaving the registerList
+    (#3437779 - Martin Raspe)
+  - close the floating window after inserting a clip, to make behaviour
+    consistent with Paste Previous window (#3478916 - Jarek Czekalski)
 
 }}}
 {{{ Miscellaneous
