@@ -24,9 +24,10 @@ package org.gjt.sp.jedit;
 
 
 /**
- * Manage properties.
+ * Interface for class that returns properties.
+ *
  * @author Matthieu Casanova
- * @since 4.3pre13
+ * @since jEdit 4.3
  */
 public interface IPropertyManager
 {

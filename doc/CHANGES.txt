@@ -69,7 +69,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   	Component comp, boolean canStop, boolean sendVFSUpdate)
   (Matthieu Casanova)
 
-- New methods MiscUtilities.getCompleteBaseName() to return 
+- New methods MiscUtilities.getCompleteBaseName() to return
   the (complete) base names of a file (until the last .) and
   and getBaseName(), to replace the badly named getFileNameNoExtension,
   which is now deprecated (Matthieu Casanova, Alan Ezust)
@@ -123,12 +123,12 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
 
-- roff.xml: New ROFF/GROFF/TROFF edit mode 
+- roff.xml: New ROFF/GROFF/TROFF edit mode
   (#3081484 - Kostas Michalopoulos, Robert Schwenn)
 
-- nsis2.xml: Added Java/C style comments. (#2976473) 
+- nsis2.xml: Added Java/C style comments. (#2976473)
 
-- Ruby Edit Mode: Improved Symbol Highlighting 
+- Ruby Edit Mode: Improved Symbol Highlighting
    (#1918110 - Ingo Tomahogh, Alan Ezust)
 
 - "velocity_pure.xml" edit mode to replace older sgml-based velocity.xml.
@@ -161,10 +161,10 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Fix for tracker 846913, jsp syntax highlighting for single line comments.
   (Dale Anson)
-  
+
 - Updated css mode with new css 3 properties and values, tracker 3483390.
   (Dale Anson)
-  
+
 - Updated html mode to recognize new html 5 keywords, updated jsp mode to
   delegate to html mode for html tags. (Dale Anson)
 
@@ -194,7 +194,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
 	obsolete, fixing auto resize dialog issue. (Alan Ezust - #3455602, #3449498)
-	
+
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
@@ -222,6 +222,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- New FileOpenerService, Offered by FastOpen 2.5, used by ErrorList 2.0
+  (#3481157 - Alan Ezust)
+
 - Macros folder can now be localized with properties
   macros.folder.[foldername].label (Matthieu Casanova)
 
@@ -244,7 +247,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Applied patch to Get_Class_Name macro from lxdyglt to find
   classname for inner classes. (#3301598 - Dale Anson)
-  
+
 - Fixed some edge cases in the Make_Get_and_Set_Methods macro, properly handle
   comments, multi-line variable declarations and multiple initializers.
   (Dale Anson)
@@ -255,7 +258,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Introduced glyph caching to lower CPU usage on text rendering and
   line wrapping. (Kazutoshi Satoda)
-  
+
 - Updated Move Lines Up and Down macros to move whole lines regardless of
   selection. (Dale Anson)
 
