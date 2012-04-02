@@ -50,7 +50,9 @@ abstract public class FileOpenerService
 	*   preferred one based on the "fileopener.service" property.
 	*
 	*   You can set a preferred FileOpener from the Console beanshell like this:
-	*   jEdit.setProperty("fileopener.service", "FastOpen")  // or "SmartOpen"
+	*   <pre>
+	*   jEdit.setProperty("fileopener.service", "FastOpen");  // or "SmartOpen"
+	*   </pre>
 	*   This setting is ignored if there is only one FileOpenerService available.
 	*
 	*   @param fileName the file name to search for

@@ -83,10 +83,10 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
  *
  * Plugins may define/provide more, so the only way to see a
  * complete list of service types currently in use is by calling
- * ServiceManager.getServiceTypes()
- *
+ * {@link #getServiceTypes()}.
+ * <br />
  * To use a service from a plugin, add a piece of code somewhere that calls
- * {@link #getServiceNames(String)} and  {@link #getService(String,String)},
+ * {@link #getServiceNames(String)} and  {@link #getService(String,String)}.
  *
  *
  * @see BeanShell
