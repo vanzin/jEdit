@@ -27,9 +27,9 @@ import org.gjt.sp.util.Log;
 
 /**  File Opener Service.
   *
-  *  Plugins such as FastOpen or SmartOpen can offer
-  *  this as a service to other plugins such as ErrorList that can use
-  *  it to open files when, for example, the error message only provides
+  *  FastOpen 2.5 and SmartOpen 1.1 offer this as a service to
+  *  other plugins such as ErrorList 2.0 that can use it to open
+  *  files when, for example, the error message only provides
   *  a filename and not an absolute path.
   *
   *  A response to SF.net ticket #3481157
@@ -39,15 +39,22 @@ import org.gjt.sp.util.Log;
   */
 abstract public class FileOpenerService
 {
-	/** Opens a file with an absolute path that has the given filename.
-	  *   Can cause a dialog to popup asking the user for a choice.
-	  *   @param fileName the file name to match on
+	/** Opens a file in jEdit, given only a filename and no path.
+	  *   May cause a dialog to popup asking the user for a choice.
+	  *   @param fileName the file name to search for
 	  *   @param view the parent View
         */
 	abstract public void openFile(String fileName, View view);
 
-	/** Searches available FileOpenerServices and uses the
-	*   preferred one based on properties to find a file.
+	/** Searches available FileOpenerServices and uses the first, or the
+	*   preferred one based on the "fileopener.service" property.
+	*
+	*   You can set a preferred FileOpener from the Console beanshell like this:
+	*   jEdit.setProperty("fileopener.service", "FastOpen")  // or "SmartOpen"
+	*   This setting is ignored if there is only one FileOpenerService available.
+	*
+	*   @param fileName the file name to search for
+	*   @param view the parent View
         */
 	static public void open(String fileName, View view)
 	{
@@ -65,7 +72,7 @@ abstract public class FileOpenerService
 		Object obj = ServiceManager.getService(FileOpenerService.class, myFinder);
 
 		// Preferred service is not found, use the only one available instead
-		if ((obj == null) && (myFinder != finders[0]))
+		if ((obj == null) && (!myFinder.equals(finders[0])))
 			obj = ServiceManager.getService(FileOpenerService.class, finders[0]);
 		// Open the file!
 		((FileOpenerService)obj).openFile(fileName, view);
