@@ -1737,15 +1737,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		 */
 		private void resetLater()
 		{
-			ThreadUtilities.runInDispatchThread(new Runnable()
+			EventQueue.invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
 				{
-					@Override
-					public void run()
-					{
-						isProcessingEvent = false;
-					}
+					isProcessingEvent = false;
 				}
-			);
+			});
 		}
 
 		private boolean isProcessingEvent;

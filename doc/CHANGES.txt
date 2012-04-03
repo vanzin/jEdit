@@ -11,6 +11,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed IO error when changing VFS Browser filter content
+  (#3502820 - Matthieu Casanova)
+
 - Remove jar cache when unloading a plugin (#3514022 - Matthieu Casanova)
 
 - Fixed macros at menu split are unaccessible (#3512853, Jarek Czekalski)
