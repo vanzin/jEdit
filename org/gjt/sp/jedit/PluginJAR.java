@@ -1135,6 +1135,7 @@ public class PluginJAR
 			{
 				Log.log(Log.ERROR,this,io);
 			}
+			removePluginCache();
 		}
 	} //}}}
 
@@ -1585,6 +1586,13 @@ public class PluginJAR
 		uninit(false);
 		// but we want properties to hang around
 		jEdit.addPluginProps(properties);
+	} //}}}
+
+	//{{{ removePluginCache() method
+	private void removePluginCache()
+	{
+		if(cachePath != null)
+			new File(cachePath).delete();
 	} //}}}
 
 	//}}}

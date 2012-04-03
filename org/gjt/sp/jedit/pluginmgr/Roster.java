@@ -212,8 +212,6 @@ class Roster
 
 			toLoad.remove(this.jar);
 
-			// remove cache file
-
 			// move JAR first
 			File jarFile = new File(this.jar);
 			File srcFile = new File(this.jar.substring(0, this.jar.length() - 4));
@@ -249,15 +247,9 @@ class Roster
 				{
 					toLoad.add(path);
 					unloadPluginJAR(_jar);
-					// clear cache file
-					String cachePath = jar.getCachePath();
-					if(cachePath != null)
-						new File(cachePath).delete();
-
 				}
 			}
 			jEdit.removePluginJAR(jar,false);
-			
 		} //}}}
 
 		//{{{ equals() method

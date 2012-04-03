@@ -11,6 +11,8 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 {{{ Bug fixes
 
+- Remove jar cache when unloading a plugin (#3514022 - Matthieu Casanova)
+
 - Fixed macros at menu split are unaccessible (#3512853, Jarek Czekalski)
 
 - Fixed favorites menu actions (#3512250 - Matthieu Casanova)
