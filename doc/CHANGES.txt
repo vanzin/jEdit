@@ -12,36 +12,36 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 {{{ Bug fixes
 
 - Fixed IO error when changing VFS Browser filter content
-  (#3502820 - Matthieu Casanova)
+  (#3502820 Matthieu Casanova)
 
-- Remove jar cache when unloading a plugin (#3514022 - Matthieu Casanova)
+- Remove jar cache when unloading a plugin (#3514022 Matthieu Casanova)
 
-- Fixed macros at menu split are unaccessible (#3512853, Jarek Czekalski)
+- Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
 
-- Fixed favorites menu actions (#3512250 - Matthieu Casanova)
+- Fixed favorites menu actions (#3512250 Matthieu Casanova)
 
 - If the same plugin is installed in home and install folder, only the newest
-  is loaded. (#1848802 - Matthieu Casanova)
+  is loaded. (#1848802 Matthieu Casanova)
 
-- Fixed replace all on a directory that was broken (#3480583) (Matthieu Casanova)
+- Fixed replace all on a directory that was broken (#3480583 Matthieu Casanova)
 
-- Fixed rectangular selection constructor (patch #3440310) (peibl)
+- Fixed rectangular selection constructor (patch #3440310 peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists
-  a suffix copy-n is added to avoid deleting the existing file (#3470759)
-  (Matthieu Casanova)
+  a suffix copy-n is added to avoid deleting the existing file 
+  (#3470759 Matthieu Casanova)
 
 - Fixed Ctrl + key not working in completion popup (Matthieu Casanova)
 
-- Fixed copy of Hypersearch results adding \r in the clipboard (#3142456)
-  (Matthieu Casanova)
+- Fixed copy of Hypersearch results adding \r in the clipboard
+  (#3142456 Matthieu Casanova)
 
 - The Java based installer now correctly handles GNU style long filenames in
   the installer package and thus does not corrupt the JavaDoc files anymore
-  (Bug #2327520 - Björn "Vampire" Kautler)
+  (#2327520 Björn "Vampire" Kautler)
 
 - Several message boxes were not being created on the EDT which would result in
-  tiny, non-resizable message boxes. (Bug #3441535, Dale Anson)
+  tiny, non-resizable message boxes. (#3441535 Dale Anson)
 
 }}}
 {{{ API Changes
@@ -51,7 +51,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
   createPopupMenu(MouseEvent evt) as before, but also call
   setRightClickPopupEnabled(true) in your constructor (Matthieu Casanova)
 
-- New jEdit.getCurrentLanguage() method that returns the language used  by jEdit.
+- New jEdit.getCurrentLanguage() method that returns the language used  by jEdit
   (Matthieu Casanova)
 
 - New method JEditBuffer.insert(int offset, CharSequence seq) to insert
@@ -109,46 +109,47 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ Editing
 
-- Scala mode added (#3501401 - Daniel Spiewak)
+- Scala mode added (#3501401 Daniel Spiewak)
 
 - logs edit mode added (Matthieu Casanova)
 
-- Dart mode added (Patch #3483431 - Chris Sullins)
+- Dart mode added (Patch #3483431 Chris Sullins)
 
-- Haskell mode:
-  - Removed the fixed 8 character indent and tab size, #3470636.
-  - Added some GHC extensions: recursive do and arrow notation -
-    patch #3470637 by Stephen Blackheath
+- Haskell mode: Removed the fixed 8 character indent and tab size
+  (patch #3470636)
 
-- New mxml.xml mode, and updates to ActionScript (#2913561 - Chris Hill)
+- Haskell mode: Added some GHC extensions: recursive do and arrow notation
+  (patch #3470637 Stephen Blackheath)
 
-- New metapost.xml mode (#1606258 - Kondr)
+- New mxml.xml mode, and updates to ActionScript (patch #2913561 Chris Hill)
 
-- Updated cobol.xml (#2654343 - Markus Röhner)
+- New metapost.xml mode (patch #1606258 Kondr)
 
-- fortran90.xml: new Fortran90 edit mode (#2406563 - Jonni Lehtiranta)
+- Updated cobol.xml (patch #2654343 Markus Röhner)
+
+- fortran90.xml: new Fortran90 edit mode (patch #2406563 Jonni Lehtiranta)
 
 - roff.xml: New ROFF/GROFF/TROFF edit mode
-  (#3081484 - Kostas Michalopoulos, Robert Schwenn)
+  (patch #3081484 Kostas Michalopoulos, Robert Schwenn)
 
-- nsis2.xml: Added Java/C style comments. (#2976473)
+- nsis2.xml: Added Java/C style comments. (patch #2976473)
 
 - Ruby Edit Mode: Improved Symbol Highlighting
-   (#1918110 - Ingo Tomahogh, Alan Ezust)
+  (patch #1918110 Ingo Tomahogh, Alan Ezust)
 
 - "velocity_pure.xml" edit mode to replace older sgml-based velocity.xml.
-   Velocity keywords nested within markup tags incorrectly highlighted.
-   (#1285741 - Robert Schwenn)
+  Velocity keywords nested within markup tags incorrectly highlighted.
+  (patch #1285741 Robert Schwenn)
 
-- Updated D edit mode (#3463009 - Olivier Pisano)
+- Updated D edit mode (patch #3463009 Olivier Pisano)
 
 - Removed special highlight for object access and creation in php edit mode
-  (#2985508, #3151072) (Matthieu Casanova)
+  (#2985508, #3151072 Matthieu Casanova)
 
 - Major simplification of phpdoc to make it look more like javadoc
-  (#1803310, #3029383, #3316733) (Matthieu Casanova)
+  (#1803310, #3029383, #3316733 Matthieu Casanova)
 
-- Added some missing keywords to vrml2 edit mode (patch #3471586) (Jimmy Chaw)
+- Added some missing keywords to vrml2 edit mode (patch #3471586 Jimmy Chaw)
 
 - Using no highlight or limited syntax highlight in large buffers now also
   disables soft wrap (Matthieu Casanova)
@@ -186,11 +187,12 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Added complete german translation (Robert Schwenn)
 
 - Text Area option for Search System Fonts in Font substitution
-  (#3479585 - Max Funk)
+  (#3479585 Max Funk)
 
-- Dialog titles in file system browser (SPennington - #2968930, #2807301)
+- Dialog titles in file system browser
+  (patch #2968930, request #2807301 SPennington)
 
-- Standarized Buffer Switcher combo (Jarek Czekalski - #3456572, #3408584)
+- Standarized Buffer Switcher combo (#3408584, patch #3456572 Jarek Czekalski)
 
 - If a Task is not cancellable, the cancel button of TaskMonitor is disabled
   (Matthieu Casanova)
@@ -198,40 +200,41 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Added Icons to the VFS Browser context menu (Matthieu Casanova)
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
-	obsolete, fixing auto resize dialog issue. (Alan Ezust - #3455602, #3449498)
+	obsolete, fixing auto resize dialog issue.
+	(#3449498, request #3455602 Alan Ezust)
 
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
 - Fixed keyboard handling of comboboxes in jedit's option panes.
-  (Bug #3415064 - Alan Ezust)
+  (#3415064 Alan Ezust)
 
 - Changed menus to use Mac-specific symbols for accelerator keys when using OS X
-  and the native look & feel (SF.net patch #1950147 - Nathan Gray)
+  and the native look & feel (patch #1950147 Nathan Gray)
 
 - Added an option (on by default) to use the native Quartz renderer on
   Mac OS X (Evan Wright)
 
 - Fixed keyboard handling of drop-down menus in File System Browser.
-  (#1571578 - Alan Ezust)
+  (#1571578 Alan Ezust)
 
 - Fixed "Use textarea colors" for dockables created in non-metal L&F.
-  (#1794400 - Alan Ezust)
+  (#1794400 Alan Ezust)
 
 - New option in Saving and Backup pane: Use File System Browser dir for
-  Save-As (# 1591441 - Alan Ezust)
+  Save-As (#1591441 Alan Ezust)
 
-- RegisterViewer:
-  - set initial focus to registerList, added key bindings for
-    inserting content, clearing a register and leaving the registerList
-    (#3437779 - Martin Raspe)
-  - close the floating window after inserting a clip, to make behaviour
-    consistent with Paste Previous window (#3478916 - Jarek Czekalski)
+- RegisterViewer: set initial focus to registerList, added key bindings for
+  inserting content, clearing a register and leaving the registerList
+  (#3437779 Martin Raspe)
+
+- RegisterViewer: close the floating window after inserting a clip, to make 
+  behaviour consistent with Paste Previous window (#3478916 Jarek Czekalski)
 
 }}}
 {{{ Miscellaneous
 
 - New FileOpenerService, Offered by FastOpen 2.5, used by ErrorList 2.0
-  (#3481157 - Alan Ezust)
+  (#3481157 Alan Ezust)
 
 - Macros folder can now be localized with properties
   macros.folder.[foldername].label (Matthieu Casanova)
@@ -249,12 +252,13 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - jEdit support for keymaps (Matthieu Casanova)
 
 - User Settings directory migrated to %APPDATA%/jEdit on Windows
-  (#2510763 - Alan Ezust)
+  (#2510763 Alan Ezust)
 
-- Added support for "Find Previous" when searching in multiple files (Evan Wright)
+- Added support for "Find Previous" when searching in multiple files
+  (Evan Wright)
 
 - Applied patch to Get_Class_Name macro from lxdyglt to find
-  classname for inner classes. (#3301598 - Dale Anson)
+  classname for inner classes. (#3301598 Dale Anson)
 
 - Fixed some edge cases in the Make_Get_and_Set_Methods macro, properly handle
   comments, multi-line variable declarations and multiple initializers.
@@ -262,7 +266,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 
 - Soft wrap now works at non-whitespace line breaks within some natural
   language texts; Japanese for example.
-  (SF.net patch #2483695 - Kazutoshi Satoda)
+  (patch #2483695 Kazutoshi Satoda)
 
 - Introduced glyph caching to lower CPU usage on text rendering and
   line wrapping. (Kazutoshi Satoda)
