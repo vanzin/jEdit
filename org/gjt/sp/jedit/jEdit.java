@@ -2879,10 +2879,11 @@ public class jEdit
 			EditBus.send(new EditorExiting(null));
 
 			// Save view properties here
-			if(view != null)
+			view = viewsFirst;
+			while(view != null)
 			{
-				view.close();
-				removeViewFromList(view);
+				closeView(view,false);
+				view = view.next;
 			}
 
 			// Stop autosave timer
