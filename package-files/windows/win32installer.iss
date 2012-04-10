@@ -62,6 +62,7 @@ Source: doc\*; DestDir: {app}\doc; Excludes: \doc\api\*; Flags: ignoreversion re
 Source: doc\api\*; DestDir: {app}\doc\api; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: apidoc
 Source: jars\QuickNotepad.jar; DestDir: {app}\jars; Flags: ignoreversion sortfilesbyextension sortfilesbyname; Components: main
 Source: macros\*; DestDir: {app}\macros; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: macros
+Source: keymaps\*; DestDir: {app}\keymaps; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: modes\*; DestDir: {app}\modes; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: properties\*; DestDir: {app}\properties; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: startup\*; DestDir: {app}\startup; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
