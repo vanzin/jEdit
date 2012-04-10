@@ -182,6 +182,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ UI
 
+- The Windows installer and windows integration are now localized in french
+  (patch #3513215 Jojaba)
+
 - The Error status bar widget now use a JEditEmbeddedTextArea instead of a
   simple swing TextArea to display exceptions (Matthieu Casanova)
 

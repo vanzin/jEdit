@@ -100,25 +100,36 @@ Name: sl; MessagesFile: compiler:Languages\Slovenian.isl
 Name: es; MessagesFile: compiler:Languages\Spanish.isl
 
 [CustomMessages]
+; Default messages
 APIDocumentation=API Documentation (for macro and plugin development)
-de.APIDocumentation=API Dokumentation (für Macro und Plugin Entwicklung)
 Macros=Default set of macros (highly recommended)
-de.Macros=Standard Makros (sehr empfohlen)
 AutostartJEditServer=Start jEdit Server automatically on system startup
-de.AutostartJEditServer=jEdit Server automatisch beim Hochfahren starten
 QuitProgram=Quit %1
-de.QuitProgram=%1 beenden
 OpenWithProgram=Open with %1
-de.OpenWithProgram=Mit %1 öffnen
 pleaseQuitJEdit=The installer will now try to quit a running instance of jEdit.%nPlease save your work and exit jEdit for the installation to continue.
-de.pleaseQuitJEdit=Die Installation wird nun versuchen eine laufende Instanz von jEdit zu beenden.%nBitte speichern Sie Ihre Arbeit und beenden Sie jEdit um mit der Installation fortzufahren.
 ViewFile=View %1
+; German messages
+de.APIDocumentation=API Dokumentation (für Macro und Plugin Entwicklung)
+de.Macros=Standard Makros (sehr empfohlen)
+de.AutostartJEditServer=jEdit Server automatisch beim Hochfahren starten
+de.QuitProgram=%1 beenden
+de.OpenWithProgram=Mit %1 öffnen
+de.pleaseQuitJEdit=Die Installation wird nun versuchen eine laufende Instanz von jEdit zu beenden.%nBitte speichern Sie Ihre Arbeit und beenden Sie jEdit um mit der Installation fortzufahren.
 de.ViewFile=%1 anzeigen
+; French messages
+fr.APIDocumentation=API Documentation (pour développement de Macro et Plugin)
+fr.Macros=Macros standards (vraiment recommandées)
+fr.AutostartJEditServer=Démarrer automatiquement le serveur jEdit au démarrage de l'ordinateur
+fr.QuitProgram=Quitter %1
+fr.OpenWithProgram=Ouvrir avec %1
+fr.pleaseQuitJEdit=L'installation va tenter à présent de quitter une instance de jEdit en cours.%nVeuillez enregistrer votre travail et quitter jEdit afin de poursuivre l'installation.
+fr.ViewFile=Afficher %1
 
 [Registry]
 Root: HKCR; Subkey: *\Shell; Flags: uninsdeletekeyifempty
 Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}; Flags: uninsdeletekey
 Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}\Command; ValueType: string; ValueData: """{app}\jedit.exe"" ""%1"""
+Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}; ValueName: Icon; ValueType: string; ValueData: "{app}\jedit.exe"
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: jEdit Server; ValueData: """{app}\jedit.exe"" -background -nogui --l4j-dont-wait"; Flags: uninsdeletevalue; Tasks: autostartserver
 
 [Run]
