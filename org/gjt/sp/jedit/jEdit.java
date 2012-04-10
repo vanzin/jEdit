@@ -3698,8 +3698,13 @@ public class jEdit
 	private static void initPLAF()
 	{
 		String lf = getProperty("lookAndFeel");
+		String sLfOld = null;
+		String sLfNew = null;
+		LookAndFeel lfOld = UIManager.getLookAndFeel();
+		if (lfOld != null)
+			sLfOld = lfOld.getClass().getName(); 
 
-		if (isStartupDone() && UIManager.getLookAndFeel().getClass().getName().equals(lf))
+		if (isStartupDone() && sLfOld != null && sLfOld.equals(lf))
 		{
 			return;
 		}
@@ -3763,6 +3768,20 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
 
+		LookAndFeel lfNew = UIManager.getLookAndFeel();
+		if (lfNew != null)
+			sLfNew = lfNew.getClass().getName();
+			Log.log(Log.DEBUG, jEdit.class,
+				"initPLAF " +
+				(EventQueue.isDispatchThread() ? "edt"
+				                               : "non-edt") +
+				" old=" + sLfOld +
+				" requested=" + lf + 
+				" new=" + sLfNew );
+		if (lf == null || !lf.equals(sLfNew))
+			Log.log(Log.WARNING, jEdit.class,
+				"inifPLAF failed to set required l&f");
+
 		UIDefaults defaults = UIManager.getDefaults();
 
 		// give all Swing components our colors
@@ -3815,12 +3834,23 @@ public class jEdit
 
 		if (isStartupDone())
 		{
+			int iWindow = 0;
 			for (Window window : Window.getWindows())
 			{
-				SwingUtilities.updateComponentTreeUI(window);
+				try
+				{
+					SwingUtilities.updateComponentTreeUI(window);
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR, jEdit.class,
+						"Window " + iWindow
+						+ ": " + window, e);
+					break;
+				}
+				iWindow++;
 			}
 		}
-		Log.log(Log.MESSAGE, jEdit.class, "InitPLAF: " + lf);
 
 	} //}}}
 
