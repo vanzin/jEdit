@@ -450,7 +450,6 @@ utils=vfs.browser \
       last-action \
       - \
       buffer-options \
-      global-options \
       combined-options \
       - \
       %quick-options
