@@ -49,7 +49,7 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 - Fixed jedit exit procedure. Now all views are closed. Earlier only
   the current view was properly closed. This may be important for plugins
   that were workarounding the issue, as now they will get more
-  ViewUpdate.CLOSED messages.
+  ViewUpdate.CLOSED messages. (Jarek Czekalski)
 
 - The JEditEmbeddedTextArea do not create an empty popup menu anymore.
   To add a context menu in your JEditEmbeddedTextArea, please override
