@@ -185,6 +185,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ UI
 
+- Changed error list dialog size to a fixed size of 80x25 characters.
+  (Jarek Czekalski)
+
 - The Windows installer and windows integration are now localized in french
   (patch #3513215 Jojaba)
 

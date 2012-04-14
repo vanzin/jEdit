@@ -101,6 +101,21 @@ public class ErrorListDialog extends EnhancedDialog
 		}
 	} //}}}
 
+	//{{{ JTextPaneSized class
+	/** This text pane sets its size to a constant amount of 80x25 chars,
+	    when used inside a scrollpane. */
+	protected class JTextPaneSized extends JTextPane
+	{
+		@Override
+		public Dimension getPreferredScrollableViewportSize()
+		{
+			FontMetrics metrics = getFontMetrics(getFont());
+			int width = 80 * metrics.charWidth('X');
+			int height = 25 * metrics.getHeight();
+			return new Dimension(width, height);
+		}
+	} //}}}
+
 	//{{{ ErrorListDialog constructor
 	public ErrorListDialog(Frame frame, String title, String caption,
 		Vector<ErrorEntry> messages, boolean pluginError)
@@ -122,7 +137,7 @@ public class ErrorListDialog extends EnhancedDialog
 		label.setBorder(new EmptyBorder(0,0,6,0));
 		centerPanel.add(BorderLayout.NORTH,label);
 
-		JTextPane errors = new JTextPane();
+		JTextPane errors = new JTextPaneSized();
 		errors.setEditable(false);
 		errors.setForeground(jEdit.getColorProperty("view.fgColor"));
 		errors.setBackground(jEdit.getColorProperty("view.bgColor"));
@@ -147,15 +162,7 @@ public class ErrorListDialog extends EnhancedDialog
 			}
 		}
 
-		// need this bullshit scroll bar policy for the preferred size
-		// hack to work
-		JScrollPane scrollPane = new JScrollPane(errors,
-			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		Dimension size = scrollPane.getPreferredSize();
-		size.width = Math.min(size.width,400);
-		scrollPane.setPreferredSize(size);
-
+		JScrollPane scrollPane = new JScrollPane(errors);
 		centerPanel.add(BorderLayout.CENTER,scrollPane);
 
 		content.add(BorderLayout.CENTER,centerPanel);
