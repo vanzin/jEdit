@@ -1,6 +1,6 @@
 /*
  * VFSManager.java - Main class of virtual filesystem
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2000, 2005 Slava Pestov
@@ -25,14 +25,17 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import javax.swing.JOptionPane;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -276,30 +279,8 @@ public class VFSManager
 
 			if(errors.size() == 1)
 			{
-				
-				// the call below must grant that the Runnable is not
-				// executed immedietaly, but through invokeLater
-				VFSManager.runInAWTThread(new Runnable()
-				{
-					public void run()
-					{
-						synchronized(errorLock)
-						{
-							String caption = jEdit.getProperty(
-								"ioerror.caption" + (errors.size() == 1
-								? "-1" : ""),new Integer[] {
-								Integer.valueOf(errors.size())});
-							new ErrorListDialog(
-								frame.isShowing()
-								? frame
-								: jEdit.getFirstView(),
-								jEdit.getProperty("ioerror.title"),
-								caption,errors,false);
-							errors.clear();
-							error = false;
-						}
-					}
-				});
+				if (!errorDisplayerActive)
+					ThreadUtilities.runInBackground(new ErrorDisplayer(frame));
 			}
 		}
 	} //}}}
@@ -389,6 +370,9 @@ public class VFSManager
 	private static final Vector<ErrorListDialog.ErrorEntry> errors;
 	private static final Object vfsUpdateLock = new Object();
 	private static final List<VFSUpdate> vfsUpdates;
+	// An indicator of whether ErrorDisplayer is active
+	// Should be accessed with synchronized(errorLock)
+	private static boolean errorDisplayerActive = false;
 	//}}}
 
 	//{{{ Class initializer
@@ -400,6 +384,112 @@ public class VFSManager
 		vfsUpdates = new ArrayList<VFSUpdate>(10);
 	} //}}}
 
+	//{{{ ErrorDisplayer class
+	private static class ErrorDisplayer implements Runnable
+	{
+		private Frame frame;
+		
+		public ErrorDisplayer(Frame frame)
+		{
+			this.frame = frame;
+		}
+		
+		private void showDialog(final Frame frame,
+			final Vector<ErrorListDialog.ErrorEntry> errors)
+		{
+			try
+			{
+				EventQueue.invokeAndWait(new Runnable() {
+					public void run()
+					{
+						String caption = jEdit.getProperty(
+							"ioerror.caption" + (errors.size() == 1
+							? "-1" : ""),new Integer[] {
+							Integer.valueOf(errors.size())});
+						new ErrorListDialog(
+							frame.isShowing()
+							? frame
+							: jEdit.getFirstView(),
+							jEdit.getProperty("ioerror.title"),
+							caption,errors,false);
+					}
+				});
+			}
+			catch (InterruptedException ie)
+			{
+				// preserve interruption flag, but don't stop
+				Thread.currentThread().interrupt();
+			}
+			catch (InvocationTargetException ite)
+			{
+				Log.log(Log.ERROR, ErrorDisplayer.class, ite);
+			}
+		}
+		
+		public void run()
+		{
+			synchronized(errorLock)
+			{
+				// 2 threads might have been spawn simultaneously
+				if (errorDisplayerActive)
+					return;
+				errorDisplayerActive = true;
+			}
+			
+			// The loop breaks only when errors.size() == 0
+			while (true)
+			{
+			
+				synchronized(errorLock)
+				{
+					if (errors.size() == 0) {
+						errorDisplayerActive = false;
+						break;
+					}
+				}
+
+				// We know that there are errors, but let's wait a bit.
+				// Maybe there are more accumulating?
+				// We'll stay here until they stop coming out.
+				int errCount1 = -1, errCount2 = 0;
+				while (errCount1 != errCount2) //{{{
+				{
+					// errors is a Vector and Vectors are synchronized
+					errCount1 = errors.size();
+					try
+					{
+						Thread.sleep(200);
+					}
+					catch(InterruptedException ie)
+					{
+						// We don't stop, we have to display errors.
+						// However the flag must be preserved.
+						Thread.currentThread().interrupt();
+						// But since someone breaks us, let's exit
+						// this waiting loop.
+						break;
+					}
+					errCount2 = errors.size();
+				} //}}}
+				
+				// For a while new errors didn't appear.
+				// Let's display those which we already have.
+				// While the dialog will be displayed,
+				// there may arrive the next, so we stay in
+				// the loop.
+				Vector<ErrorListDialog.ErrorEntry> errorsCopy;
+				synchronized(errorLock)
+				{
+					errorsCopy = new Vector(errors);
+					errors.clear();
+					error = false;
+				}
+				showDialog(frame, errorsCopy);
+			}
+			
+		}
+	} //}}}
+	
 	private VFSManager() {}
 	//}}}
 }
