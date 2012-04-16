@@ -185,6 +185,9 @@ Stephen Blackheath and Chris Sullins for contributing to this release.
 }}}
 {{{ UI
 
+- Reserve space for 4 digit in memory's status bar widget.
+  (patch #3518422 Makarius)
+
 - Changed error list dialog size to a fixed size of 80x25 characters.
   (Jarek Czekalski)
 

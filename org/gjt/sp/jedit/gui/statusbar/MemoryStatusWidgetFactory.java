@@ -1,6 +1,6 @@
 /*
  * MemoryStatusWidgetFactory.java - The memory status widget service
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2008 Matthieu Casanova
@@ -188,7 +188,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 				height);
 
 			String str = (used / 1024 / 1024) + "/"
-				+ (total / 1024 / 1024) + "Mb";
+				+ (total / 1024 / 1024) + "MB";
 
 			FontRenderContext frc = new FontRenderContext(null,false,false);
 
@@ -224,7 +224,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 		} //}}}
 
 		//{{{ Private members
-		private static final String memoryTestStr = "999/999Mb";
+		private static final String memoryTestStr = "9999/9999MB";
 
 		private final LineMetrics lm;
 		private final Color progressForeground;
