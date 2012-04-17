@@ -12,6 +12,8 @@ release.
 
 {{{ Bug fixes
 
+- Cannot DnD betweeen PingPongLists (#3501020 Jarek Czekalski)
+
 - Fixed freezes on hypersearch with encoding errors.
   (#3502585 Jarek Czekalski)
 
@@ -32,7 +34,7 @@ release.
 - Fixed rectangular selection constructor (patch #3440310 peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists
-  a suffix copy-n is added to avoid deleting the existing file 
+  a suffix copy-n is added to avoid deleting the existing file
   (#3470759 Matthieu Casanova)
 
 - Fixed Ctrl + key not working in completion popup (Matthieu Casanova)
@@ -245,7 +247,7 @@ release.
   inserting content, clearing a register and leaving the registerList
   (#3437779 Martin Raspe)
 
-- RegisterViewer: close the floating window after inserting a clip, to make 
+- RegisterViewer: close the floating window after inserting a clip, to make
   behaviour consistent with Paste Previous window (#3478916 Jarek Czekalski)
 
 }}}

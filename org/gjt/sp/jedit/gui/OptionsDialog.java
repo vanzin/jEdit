@@ -262,9 +262,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 		stage.revalidate();
 		stage.repaint();
 
-		if(!isShowing())
-			addNotify();
-
 		updateSize();
 
 		currentPane = optionPane;
