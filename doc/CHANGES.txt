@@ -57,7 +57,8 @@ release.
   that were workarounding the issue, as now they will get more
   ViewUpdate.CLOSED messages. (Jarek Czekalski)
 
-- The JEditEmbeddedTextArea do not create an empty popup menu anymore.
+- The JEditEmbeddedTextArea and StandaloneTextArea do not create an empty
+  popup menu anymore.
   To add a context menu in your JEditEmbeddedTextArea, please override
   createPopupMenu(MouseEvent evt) as before, but also call
   setRightClickPopupEnabled(true) in your constructor (Matthieu Casanova)

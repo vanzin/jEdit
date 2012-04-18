@@ -120,7 +120,6 @@ public class StandaloneTextArea extends TextArea
 	{
 		super(propertyManager, null);
 		this.propertyManager = propertyManager;
-		setRightClickPopupEnabled(true);
 		initInputHandler();
 
 		setMouseHandler(new TextAreaMouseHandler(this));
