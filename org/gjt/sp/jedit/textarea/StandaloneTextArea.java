@@ -28,7 +28,6 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -37,7 +36,6 @@ import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.WindowConstants;
 
 import org.gjt.sp.jedit.IPropertyManager;
@@ -528,23 +526,6 @@ public class StandaloneTextArea extends TextArea
 		}
 		buffer.propertiesChanged();
 	} // }}}
-
-	//{{{ createPopupMenu() method
-	/**
-	 * Creates the popup menu.
-	 * @since 4.3pre15
-	 */
-	@Override
-	public void createPopupMenu(MouseEvent evt)
-	{
-		popup = new JPopupMenu();
-		addMenuItem("undo", "Undo");
-		addMenuItem("redo", "Redo");
-		popup.addSeparator();
-		addMenuItem("cut", "Cut");
-		addMenuItem("copy", "Copy");
-		addMenuItem("paste", "Paste");
-	} //}}}
 
 	//{{{ addMenuItem() method
 	/**
