@@ -4913,7 +4913,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Returns true if the caret is visible, false otherwise.
 	 */
-	final boolean isCaretVisible()
+	public final boolean isCaretVisible()
 	{
 		return blink && hasFocus();
 	} //}}}

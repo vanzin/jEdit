@@ -52,6 +52,8 @@ release.
 }}}
 {{{ API Changes
 
+- TextArea.isCaretVisible became public (patch #3518424 Makarius)
+
 - Fixed jedit exit procedure. Now all views are closed. Earlier only
   the current view was properly closed. This may be important for plugins
   that were workarounding the issue, as now they will get more
