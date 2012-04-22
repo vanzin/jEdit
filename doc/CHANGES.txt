@@ -52,6 +52,9 @@ release.
 }}}
 {{{ API Changes
 
+- New public constructor for org.gjt.sp.jedit.gui.ErrorListDialog
+  allowing for specifying custom urgency (priority).
+
 - TextArea.isCaretVisible became public (patch #3518424 Makarius)
 
 - Fixed jedit exit procedure. Now all views are closed. Earlier only
@@ -190,6 +193,11 @@ release.
 
 }}}
 {{{ UI
+
+- Suppressed output to standard error of encoding problems on opening
+  files, which affects also hypersearch encoding errors. These errors are
+  now displayed in a dialog, but not sent to error output.
+  (request #3517116 Jarek Czekalski)  
 
 - Reserve space for 4 digit in memory's status bar widget.
   (patch #3518422 Makarius)

@@ -42,12 +42,21 @@ import org.gjt.sp.util.Log;
 public class ErrorListDialog extends EnhancedDialog
 {
 	//{{{ ErrorEntry class
+	
 	public static class ErrorEntry
 	{
 		String path;
 		String[] messages;
-
+		
+		/** An entry with default urgency <code>Log.ERROR</code> */
 		public ErrorEntry(String path, String messageProp, Object[] args)
+		{
+			this(path, messageProp, args, Log.ERROR);
+		}
+		
+		/** @since 5.0pre1 */
+		public ErrorEntry(String path, String messageProp, Object[] args,
+		                  int urgency)
 		{
 			this.path = path;
 
@@ -55,8 +64,8 @@ public class ErrorListDialog extends EnhancedDialog
 			if(message == null)
 				message = "Undefined property: " + messageProp;
 
-			Log.log(Log.ERROR,this,path + ":");
-			Log.log(Log.ERROR,this,message);
+			Log.log(urgency, this, path + ":");
+			Log.log(urgency, this, message);
 
 			Vector<String> tokenizedMessage = new Vector<String>();
 			int lastIndex = -1;

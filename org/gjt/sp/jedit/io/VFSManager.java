@@ -255,7 +255,7 @@ public class VFSManager
 
 	//{{{ error() method
 	/**
-	 * Reports an I/O error.
+	 * Reports an I/O error with default urgency, <code>Log.ERROR</code>
 	 *
 	 * @param comp The component
 	 * @param path The path name that caused the error
@@ -268,6 +268,25 @@ public class VFSManager
 		String messageProp,
 		Object[] args)
 	{
+		error(comp,path,messageProp,args,Log.ERROR);
+	}
+	
+	/**
+	 * Reports an I/O error.
+	 *
+	 * @param comp The component
+	 * @param path The path name that caused the error
+	 * @param messageProp The error message property name
+	 * @param args Positional parameters
+	 * @param urgency Logging urgency (level)
+	 * @since jEdit 5.0pre1
+	 */
+	public static void error(Component comp,
+		final String path,
+		String messageProp,
+		Object[] args,
+		int urgency)
+	{
 		final Frame frame = JOptionPane.getFrameForComponent(comp);
 
 		synchronized(errorLock)
@@ -275,7 +294,7 @@ public class VFSManager
 			error = true;
 
 			errors.add(new ErrorListDialog.ErrorEntry(
-				path,messageProp,args));
+				path,messageProp,args,urgency));
 
 			if(errors.size() == 1)
 			{

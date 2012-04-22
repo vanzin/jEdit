@@ -338,7 +338,7 @@ public class BufferLoadRequest extends BufferIORequest
 			{
 				pp[1] = "See details in Activity Log";
 			}
-			VFSManager.error(view,path,"ioerror.encoding-error",pp);
+			VFSManager.error(view,path,"ioerror.encoding-error",pp,Log.NOTICE);
 			markedStream = rewindContentsStream(markedStream, gzipped);
 			read(EncodingServer.getEncoding(
 				buffer.getStringProperty(JEditBuffer.ENCODING)
