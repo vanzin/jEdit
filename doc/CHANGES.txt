@@ -12,6 +12,9 @@ release.
 
 {{{ Bug fixes
 
+- Fixed NPE when opening View option pane for the first time on a fresh
+  installation (#3520577 Matthieu Casanova)
+
 - Cannot DnD betweeen PingPongLists (#3501020 Jarek Czekalski)
 
 - Fixed freezes on hypersearch with encoding errors.
