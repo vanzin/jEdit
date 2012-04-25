@@ -76,7 +76,7 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
  * <li>{@link org.gjt.sp.jedit.io.VFS}</li>
  * <li>{@link org.gjt.sp.jedit.io.Encoding}</li>
  * <li>{@link org.gjt.sp.jedit.io.EncodingDetector}</li>
- * <li>{@link org.gjt.sp.jedit.gui.statusbar.Widget}</li>
+ * <li>{@link org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory}</li>
  * <li>{@link org.gjt.sp.jedit.gui.DockingFrameworkProvider}</li>
  * <li>{@link org.gjt.sp.jedit.gui.tray.JEditTrayIcon}</li>
  * </ul>
