@@ -72,11 +72,11 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
  * Some core services are listed below:
  * <ul>
  * <li>{@link org.gjt.sp.jedit.buffer.FoldHandler}</li>
- * <li>{@link org.gjt.sp.jedit.buffer.FoldPainter}</li>
+ * <li>{@link org.gjt.sp.jedit.textarea.FoldPainter}</li>
  * <li>{@link org.gjt.sp.jedit.io.VFS}</li>
  * <li>{@link org.gjt.sp.jedit.io.Encoding}</li>
  * <li>{@link org.gjt.sp.jedit.io.EncodingDetector}</li>
- * <li>{@link org.gjt.sp.jedit.gui.statusbar.StatusWidget}</li>
+ * <li>{@link org.gjt.sp.jedit.gui.statusbar.Widget}</li>
  * <li>{@link org.gjt.sp.jedit.gui.DockingFrameworkProvider}</li>
  * <li>{@link org.gjt.sp.jedit.gui.tray.JEditTrayIcon}</li>
  * </ul>
