@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.gui.statusbar;
 
 import javax.swing.JComponent;
 
-/** Status Bar Widget interface. To add another status bar widget,
- * implement this interface and register via
+/** Status Bar Widget interface. 
+ * Implement this interface and register via
  * services.xml to add another status bar widget. 
  *
  * NOTE: The "name" of this service (in services.xml) is actually
