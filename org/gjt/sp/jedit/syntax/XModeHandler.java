@@ -372,7 +372,17 @@ public abstract class XModeHandler extends DefaultHandler
 			{
 				byte token = Token.stringToToken(tag.tagName);
 				if(token != -1)
-					addKeyword(tag.lastKeyword.toString(),token);
+				{
+					if (tag.lastKeyword == null
+						|| tag.lastKeyword.length() == 0)
+					{
+						error("empty-keyword", null);
+					}
+					else
+					{
+						addKeyword(tag.lastKeyword.toString(),token);
+					}
+				}
 			} //}}}
 		}
 		else
@@ -474,12 +484,6 @@ public abstract class XModeHandler extends DefaultHandler
 	//{{{ addKeyword() method
 	private void addKeyword(String k, byte id)
 	{
-		if(k == null)
-		{
-			error("empty-keyword",null);
-			return;
-		}
-
 		if (keywords == null) return;
 		keywords.add(k,id);
 	} //}}}

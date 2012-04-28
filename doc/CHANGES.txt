@@ -12,6 +12,9 @@ release.
 
 {{{ Bug fixes
 
+- Fixed NPE which was shown in place of a proper error message for empty
+  keyword elements in mode XML. (Kazutoshi Satoda)
+
 - Fixed NPE when opening View option pane for the first time on a fresh
   installation (#3520577 Matthieu Casanova)
 
