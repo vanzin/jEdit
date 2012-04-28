@@ -717,11 +717,17 @@ else if(msg instanceof ViewUpdate) {
 </programlisting>
         </informalexample>
 
-        <para>The object it returns tells Sidekick how it can parse files of a
-        specific type. The API docs for SideKickParser indicate exactly which
-        methods must be implemented in a plugin which offers this service. It
-        should be enough information to let Sidekick, which has its own
-        dockable, display the tree information in its own view.</para>
+        <para> The value of the <literal>CLASS=</literal> should be a
+        base-class or interface of the object that is returned by
+        executing the beanshell factory method enclosed in the
+        <literal>&lt;SERVICE&gt;</literal> tag.
+        </para>
+
+        <para>In the case above, the returned object
+        tells Sidekick how it can parse files of a
+        specific type. The API docs for <literal>SideKickParser</literal>
+        should indicate precisely which methods must be implemented in a plugin
+        which offers this service. </para>
 
         <para>For more information about services, refer to the <ulink
         url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink>
