@@ -181,8 +181,9 @@
                         <entry><varname>wordBreakChars</varname></entry>
 
                         <entry>Characters, in addition to spaces and tabs, at
-                        which lines may be split when word wrapping. See <xref
-                        linkend="entering-text" />.</entry>
+                        which lines may be split when the word wrap mode is set
+                        to <quote>hard</quote>. See <xref linkend="word-wrap"
+                        />.</entry>
                     </row>
 
                     <row>
