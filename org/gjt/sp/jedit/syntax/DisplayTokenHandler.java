@@ -1,7 +1,7 @@
 /*
  * DisplayTokenHandler.java - converts tokens to chunks
  * :tabSize=8:indentSize=8:noTabs=false:
- * :folding=explicit:collapseFolds=1:
+ * :folding=explicit:collapseFolds=1:encoding=utf-8:
  *
  * Copyright (C) 2003 Slava Pestov
  *
