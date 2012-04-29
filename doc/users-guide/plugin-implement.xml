@@ -708,12 +708,13 @@ else if(msg instanceof ViewUpdate) {
         <informalexample>
             <programlisting>
 &lt;!DOCTYPE SERVICES SYSTEM "services.dtd"&gt;
-
 &lt;SERVICES&gt;
-        &lt;SERVICE CLASS="sidekick.SideKickParser" NAME="xml"&gt;
-                new xml.parser.SAXParserImpl();
-        &lt;/SERVICE&gt;
+    &lt;SERVICE CLASS=&quot;sidekick.SideKickParser&quot; NAME=&quot;html&quot;&gt;
+        new sidekick.html.HtmlParser();
+    &lt;/SERVICE&gt;
+  [...]
 &lt;/SERVICES&gt;
+    
 </programlisting>
         </informalexample>
 
@@ -724,8 +725,8 @@ else if(msg instanceof ViewUpdate) {
         </para>
 
         <para>In the case above, the returned object
-        tells Sidekick how it can parse files of a
-        specific type. The API docs for <literal>SideKickParser</literal>
+        tells Sidekick how it can parse files of a specific type (HTML).
+        The API docs for <literal>SideKickParser</literal>
         should indicate precisely which methods must be implemented in a plugin
         which offers this service. </para>
 
