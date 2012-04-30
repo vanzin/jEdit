@@ -28,11 +28,6 @@ import org.gjt.sp.jedit.View;
  * 
  * Implement this interface and register via
  * services.xml to add another status bar widget. 
- *
- * NOTE: The "name" of this service (in services.xml) is actually
- * org.gjt.sp.jedit.gui.statusbar.StatusWidget, although there is no 
- * actual class or interface of that exact name. 
- *
  * 
  * @author Matthieu Casanova
  * @since jEdit 4.3pre14 
