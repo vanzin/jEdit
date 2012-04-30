@@ -510,41 +510,12 @@ public class FileVFS extends VFS
 	public void _backup(Object session, String path, Component comp)
 		throws IOException
 	{
-		// Fetch properties
-
-		String backupPrefix = jEdit.getProperty("backup.prefix");
-		String backupSuffix = jEdit.getProperty("backup.suffix");
-
-		String backupDirectory = jEdit.getProperty("backup.directory");
-
-		int backupTimeDistance = jEdit.getIntegerProperty("backup.minTime",0);
 		File file = new File(path);
 
 		if (!file.exists())
 			return;
 
-		// Check for backup.directory, and create that
-		// directory if it doesn't exist
-		if(backupDirectory == null || backupDirectory.length() == 0)
-			backupDirectory = file.getParent();
-		else
-		{
-			backupDirectory = MiscUtilities.constructPath(
-				System.getProperty("user.home"), backupDirectory);
-
-			// Perhaps here we would want to guard with
-			// a property for parallel backups or not.
-			backupDirectory = MiscUtilities.concatPath(
-				backupDirectory,file.getParent());
-
-			File dir = new File(backupDirectory);
-
-			if (!dir.exists())
-				dir.mkdirs();
-		}
-
-		MiscUtilities.saveBackup(file, jEdit.getIntegerProperty("backups",1), backupPrefix,
-			backupSuffix,backupDirectory,backupTimeDistance);
+		MiscUtilities.saveBackup(file);
 	} //}}}
 
 	//{{{ _createInputStream() method

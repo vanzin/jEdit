@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
@@ -568,7 +569,74 @@ public class MiscUtilities
 		return backupFile;
 	} //}}}
 	
-	//{{{ prepareBackupFile method
+	//{{{ prepareBackupDirectory method
+	/**
+	 * Prepares the directory to backup the specified file.
+	 * jedit property is used to determine the directory.
+	 * It is created if not exists.
+	 * @return Backup directory, never <code>null</code>.
+	 * @since 5.0pre1
+	 */
+	public static File prepareBackupDirectory(File file)
+	{
+		String backupDirectory = jEdit.getProperty("backup.directory");
+		File dir;
+
+		// Check for backup.directory, and create that
+		// directory if it doesn't exist
+		if(backupDirectory == null || backupDirectory.length() == 0)
+		{
+			backupDirectory = file.getParent();
+			dir = new File(backupDirectory);
+		}
+		else
+		{
+			backupDirectory = MiscUtilities.constructPath(
+				System.getProperty("user.home"), backupDirectory);
+
+			// Perhaps here we would want to guard with
+			// a property for parallel backups or not.
+			backupDirectory = MiscUtilities.concatPath(
+				backupDirectory,file.getParent());
+
+			dir = new File(backupDirectory);
+
+			if (!dir.exists())
+				dir.mkdirs();
+		}
+
+		return dir;
+	} //}}}
+
+	//{{{ prepareBackupFile methods
+	/**
+	 * Prepares the filename for performing backup of the given file.
+	 * In case of multiple backups does necessary backup renumbering.
+	 * Checks whether the last backup was not earlier than
+	 * <code>backup.minTime</code> (property) ms ago.
+	 * Uses jedit properties to determine backup parameters,
+	 * like prefix, suffix.
+	 * @param file The file to back up.
+	 * @param backupDir The directory, usually obtained from
+	 *                  <code>prepareBackupDirectory</code>.
+	 * @return File suitable for backup of <code>file</code>,
+	           or <code>null</code> if the last backup was
+	           less than <code>backup.minTime</code> ms ago.
+	 * @since 5.0pre1
+	 */
+	public static File prepareBackupFile(File file, File backupDir)
+	{
+		// read properties
+		int backups = jEdit.getIntegerProperty("backups",1);
+		String backupPrefix = jEdit.getProperty("backup.prefix");
+		String backupSuffix = jEdit.getProperty("backup.suffix");
+		int backupTimeDistance = jEdit.getIntegerProperty("backup.minTime",0);
+
+		return prepareBackupFile(file, backups, backupPrefix,
+				backupSuffix, backupDir.getPath(),
+				backupTimeDistance);
+	}
+	
 	/**
 	 * Prepares the filename for performing backup of the given file.
 	 * In case of multiple backups does necessary backup renumbering.
@@ -629,6 +697,23 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ saveBackup() methods
+	/**
+	 * Saves a backup (optionally numbered) of a file. Reads 
+	 * jedit properties to determine backup parameters, like
+	 * prefix, suffix, directory.
+	 * <p>This version calls
+	 * <code>prepareBackupDirectory</code>.
+	 * @param file A local file
+	 * @since jEdit 5.0pre1
+	 */
+	public static void saveBackup(File file)
+	{
+		File backupDir = prepareBackupDirectory(file);
+		File backupFile = prepareBackupFile(file, backupDir);
+		if (backupFile != null)
+			saveBackup(file, backupFile);
+	}
+
 	/**
 	 * Saves a backup (optionally numbered) of a file.
 	 * @param file A local file
