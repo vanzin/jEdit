@@ -638,17 +638,39 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				&& !Character.isWhitespace(next))
 			{
 				int beforeQuote = baseBreak - 2;
-				return beforeQuote < text.getBeginIndex()
-					|| Character.isWhitespace(charAt(text,
-						beforeQuote));
+				int beginIndex = text.getBeginIndex();
+				while (beforeQuote >= beginIndex)
+				{
+					char c = charAt(text, beforeQuote);
+					if (Character.isWhitespace(c))
+						return true;
+					if (Character.isLetterOrDigit(c))
+						return false;
+					// Look farther in case where the
+					// opening quote is enclosed by
+					// something like a opening parenthesis.
+					--beforeQuote;
+				}
+				return true;
 			}
 			else if (!Character.isWhitespace(prev)
 					&& "“„‘‚«‹".indexOf(next) >= 0)
 			{
 				int afterQuote = baseBreak + 1;
-				return afterQuote >= text.getEndIndex()
-					|| Character.isWhitespace(charAt(text,
-						afterQuote));
+				int endIndex = text.getEndIndex();
+				while (afterQuote < endIndex)
+				{
+					char c = charAt(text, afterQuote);
+					if (Character.isWhitespace(c))
+						return true;
+					if (Character.isLetterOrDigit(c))
+						return false;
+					// Look farther in case where the
+					// closing quote is enclosed by
+					// something like a closing parenthesis.
+					++afterQuote;
+				}
+				return true;
 			}
 			return false;
 		}
