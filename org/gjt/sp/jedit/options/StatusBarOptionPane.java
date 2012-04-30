@@ -431,7 +431,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 			widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
 
-			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidget");
+			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory");
 			Arrays.sort(allWidgets);
 			
 			boolean valueIsWidget = value != null && Arrays.binarySearch(allWidgets, value) >= 0;

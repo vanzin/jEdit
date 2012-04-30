@@ -58,6 +58,12 @@ release.
 }}}
 {{{ API Changes
 
+- The status bar widget service is now
+  org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory instead of
+  org.gjt.sp.jedit.gui.statusbar.StatusWidget (only the name in service.xml)
+  is modified, because the service class is a StatusWidgetFactory and not a
+  StatusWidget (#3521413 Matthieu Casanova)
+
 - New public constructor for org.gjt.sp.jedit.gui.ErrorListDialog
   allowing for specifying custom urgency (priority).
 

@@ -74,80 +74,80 @@
 
 
 	<!-- {{{ Status Bar widgets -->
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="mode">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="mode">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new ModeWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="fold">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="fold">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new FoldWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="encoding">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="encoding">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new EncodingWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="wrap">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="wrap">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new WrapWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="multiSelect">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="multiSelect">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new MultiSelectWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="rectSelect">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="rectSelect">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new RectSelectWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="overwrite">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="overwrite">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new OverwriteWidgetFactory();
 	</SERVICE>
 	
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="indent">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="indent">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new IndentWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="lineSep">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="lineSep">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new LineSepWidgetFactory();
 	</SERVICE>
 
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="memory-status">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="memory-status">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new MemoryStatusWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="clock">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="clock">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new ClockWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="errors">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="errors">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new ErrorsWidgetFactory();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="buffersets">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="buffersets">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new BufferSetWidgetFactory();
 	</SERVICE>
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="selection-length">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="selection-length">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new SelectionLengthWidgetFactory();
 	</SERVICE>
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="last-modified">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="last-modified">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new LastModifiedWidgetFactory();
 	</SERVICE>
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="task-monitor">
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="task-monitor">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new TaskMonitorWidgetFactory();
 	</SERVICE>

@@ -472,7 +472,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private Widget _getWidget(String name)
 	{
 		StatusWidgetFactory widgetFactory =
-		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidget", name);
+		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory", name);
 		if (widgetFactory == null)
 		{
 			return null;
