@@ -536,6 +536,98 @@ public class MiscUtilities
 		}
 	} //}}}
 
+	//{{{ getNthBackupFile method
+	/**
+	 * Gets the file to store the Nth backup of the given file.
+	 * @param name The last part of the filename of the file being
+	 *             backed up.
+	 * @param backup The number of the current backup.
+	 * @param backups Total number of backup copies.
+	 * @since 5.0pre1
+	 */
+	public static File getNthBackupFile(String name, int backup, 
+			int backups, String backupPrefix,
+			String backupSuffix, String backupDirectory)
+	{
+		File backupFile;
+		if(backupPrefix == null)
+			backupPrefix = "";
+		if(backupSuffix == null)
+			backupSuffix = "";
+		if(backups <= 1)
+		{
+			backupFile = new File(backupDirectory,
+				backupPrefix + name + backupSuffix);
+		}
+		else
+		{
+			backupFile = new File(backupDirectory,
+				backupPrefix + name + backupSuffix
+				+ backup + backupSuffix);
+		}
+		return backupFile;
+	} //}}}
+	
+	//{{{ prepareBackupFile method
+	/**
+	 * Prepares the filename for performing backup of the given file.
+	 * In case of multiple backups does necessary backup renumbering.
+	 * Checks whether the last backup was not earlier than
+	 * <code>backupTimeDistance</code> ms ago.
+	 * @param file The file to back up.
+	 * @param backups The number of backups. Must be >= 1. If > 1, backup
+	 * files will be numbered.
+	 * @param backupDirectory The directory determined externally or
+	 * obtained from <code>prepareBackupDirectory</code>.
+	 * @return File suitable for backup of <code>file</code>,
+	           or <code>null</code> if the last backup was
+	           less than <code>backupTimeDistance</code> ms ago.
+	 * @since 5.0pre1
+	 */
+	public static File prepareBackupFile(File file, int backups,
+		 String backupPrefix, String backupSuffix,
+		 String backupDirectory, int backupTimeDistance)
+	{
+		String name = file.getName();
+		File backupFile = getNthBackupFile(name, 1, backups,
+				backupPrefix, backupSuffix,
+				backupDirectory);
+
+		long modTime = backupFile.lastModified();
+		/* if backup file was created less than
+		* 'backupTimeDistance' ago, we do not
+		* create the backup */
+		if(System.currentTimeMillis() - modTime
+			< backupTimeDistance)
+		{
+			Log.log(Log.DEBUG,MiscUtilities.class,
+				"Backup not done because of backup.minTime");
+			return null;
+		}
+
+		File lastBackup = getNthBackupFile(name, backups, backups,
+				backupPrefix, backupSuffix,
+				backupDirectory);
+		lastBackup.delete();
+
+		if(backups > 1)
+		{
+			for(int i = backups - 1; i > 0; i--)
+			{
+				File backup1 = getNthBackupFile(name, i,
+					backups, backupPrefix,
+					backupSuffix, backupDirectory);
+				File backup2 = getNthBackupFile(name, i+1,
+					backups, backupPrefix,
+					backupSuffix, backupDirectory);
+				
+				backup1.renameTo(backup2);
+			}
+			
+		}
+		return backupFile;
+	} //}}}
+
 	//{{{ saveBackup() methods
 	/**
 	 * Saves a backup (optionally numbered) of a file.
@@ -556,7 +648,8 @@ public class MiscUtilities
 	}
 
 	/**
-	 * Saves a backup (optionally numbered) of a file.
+	 * Saves a backup (optionally numbered) of a file. Requires
+	 * specifying the backup directory and generates the backup filename.
 	 * @param file A local file
 	 * @param backups The number of backups. Must be >= 1. If > 1, backup
 	 * files will be numbered.
@@ -573,77 +666,32 @@ public class MiscUtilities
 			       String backupPrefix, String backupSuffix,
 			       String backupDirectory, int backupTimeDistance)
 	{
-		if(backupPrefix == null)
-			backupPrefix = "";
-		if(backupSuffix == null)
-			backupSuffix = "";
+		File backupFile = prepareBackupFile(file, backups,
+				backupPrefix, backupSuffix,
+				backupDirectory, backupTimeDistance);
+		if (backupFile == null)
+			return;
 
-		String name = file.getName();
+		saveBackup(file, backupFile);
+	}
 
-		// If backups is 1, create ~ file
-		if(backups == 1)
-		{
-			File backupFile = new File(backupDirectory,
-				backupPrefix + name + backupSuffix);
-			long modTime = backupFile.lastModified();
-			/* if backup file was created less than
-			 * 'backupTimeDistance' ago, we do not
-			 * create the backup */
-			if(System.currentTimeMillis() - modTime
-			   >= backupTimeDistance)
-			{
-				Log.log(Log.DEBUG,MiscUtilities.class,
-					"Saving backup of file \"" +
-					file.getAbsolutePath() + "\" to \"" +
-					backupFile.getAbsolutePath() + '"');
-				backupFile.delete();
-				if (!file.renameTo(backupFile))
-					IOUtilities.moveFile(file, backupFile);
-			}
-		}
-		// If backups > 1, move old ~n~ files, create ~1~ file
-		else
-		{
-			/* delete a backup created using above method */
-			new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ backups + backupSuffix).delete();
-
-			File firstBackup = new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ '1' + backupSuffix);
-			long modTime = firstBackup.lastModified();
-			/* if backup file was created less than
-			 * 'backupTimeDistance' ago, we do not
-			 * create the backup */
-			if(System.currentTimeMillis() - modTime
-			   >= backupTimeDistance)
-			{
-				for(int i = backups - 1; i > 0; i--)
-				{
-					File backup = new File(backupDirectory,
-						backupPrefix + name
-						+ backupSuffix + i
-						+ backupSuffix);
-
-					backup.renameTo(new File(backupDirectory,
-						backupPrefix + name
-						+ backupSuffix + (i + 1)
-						+ backupSuffix));
-				}
-
-				File backupFile = new File(backupDirectory,
-					backupPrefix + name + backupSuffix
-					+ '1' + backupSuffix);
-				Log.log(Log.DEBUG,MiscUtilities.class,
-					"Saving backup of file \"" +
-					file.getAbsolutePath() + "\" to \"" +
-					backupFile.getAbsolutePath() + '"');
-				if (!file.renameTo(backupFile))
-					IOUtilities.moveFile(file, backupFile);
-			}
-		}
-	} //}}}
+	/**
+	 * Saves a backup of a local file. Requires
+	 * specifying source and destination files.
+	 * @param file A local file
+	 * @param backupFile A local backup file.
+	 * @since jEdit 5.0pre1
+	 */
+	public static void saveBackup(File file, File backupFile)
+	{
+		Log.log(Log.DEBUG,MiscUtilities.class,
+			"Saving backup of file \"" +
+			file.getAbsolutePath() + "\" to \"" +
+			backupFile.getAbsolutePath() + '"');
+		if (!file.renameTo(backupFile))
+			IOUtilities.moveFile(file, backupFile);
+	}
+	//}}}
 
 	//{{{ isBinary() methods
 	/**
