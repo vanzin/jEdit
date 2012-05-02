@@ -196,9 +196,11 @@
              </para></listitem>
 
              <listitem><para><literal>ignoreWhitespace</literal>:
-             This property is off by default. Python language sets this to
-             on because of the special treatment
-             of whitespace lines. Note this example:
+             Ignore whitespace lines.
+             This property is on (<literal>true</literal>) by default.
+             Python language sets this to
+             <literal>false</literal> because of the special treatment
+             of whitespaces. Note this example:
              <programlisting>def fun1:
     a = 1
     b = 2
@@ -209,10 +211,10 @@ def fun2:
              (<guimenuitem>Indent Lines</guimenuitem> command) on
              the <literal>fun2</literal> line would usually indent this
              line and make it even with the <literal>b = 2</literal> line.
-             But with active <literal>ignoreWhitespace</literal> setting
+             But with switched off <literal>ignoreWhitespace</literal> setting
              the line will stay the way it was indented manually.
-             <literal>ignoreWhitespace</literal> setting prevents any forward
-             indentation after a whitespace line.
+             <literal>ignoreWhitespace=false</literal> setting prevents
+             any forward indentation after a whitespace line.
              </para></listitem>
 
         </itemizedlist>
