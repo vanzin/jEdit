@@ -687,6 +687,7 @@ about.text.contributors=Slava Pestov\n\
 	Mike Dillon\n\
 	Mike Gorski\n\
 	Mike Hansen\n\
+	Milan Černil\n\
 	Mirco Bova\n\
 	Nahuel Foronda\n\
 	Neil Bertram\n\
@@ -808,6 +809,7 @@ options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch
 #Japanese
 options.appearance.lang.ja=日本語
+options.appearance.lang.cs=Česky
 #}}}
 
 #{{{ Context Menu pane

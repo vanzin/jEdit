@@ -1,0 +1,2582 @@
+###
+### jEdit user interface definitions,
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+### :encoding=UTF-8:
+###
+### Copyright (C) 1998, 2005 Slava Pestov
+###
+
+#{{{ jEdit core (jedit_gui.props)
+
+#{{{ Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+#}}}
+
+#{{{ Common strings
+common.ok=OK
+common.cancel=Zrušit
+common.close=Zavřít
+common.error=Chyba
+common.apply=Použít
+common.more=Více...  
+common.insert=Vložit
+common.add=Přidat
+common.remove=Odebrat
+common.moveUp=Posunout nahoru
+common.moveDown=Posunout dolů
+common.clearAll=Vyčistit vše
+common.selectAll=Označit vše
+common.selectNone=Odznačit vše
+
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
+#}}}
+
+#{{{ Miscellaneous
+history.caption=Poslední vložené řetězce:
+
+action-set.jEdit=Vestavěné příkazy
+action-set.browser=Prohlížeč souborového systému
+action-set.macros=Makra
+action-set.plugin=Plugin: {0}
+
+macro-handler.beanshell.label=BeanShell skript
+macro-handler.beanshell.glob=*.bsh
+
+save-layout-failed.message=Nepovedlo se uložit dokovací rozmístění.
+load-layout.title=Načíst dokovací rozmístění
+load-layout.message=Dokovací rozmístění k načtení:
+save-layout.title=Uložit dokovací rozmístění
+save-layout.message=Dokovací rozmístění k uložení:
+#}}}
+
+#{{{ Tool bar
+view.search.find=Hledat:
+view.search.close-tooltip=Skrýt vyhledávací panel (ESCAPE)
+
+view.action.prompt=Akce:
+view.action.no-completions=Nenalezeny žádné odpovídající akce...
+view.action.close-tooltip=Schovat action panel (ESCAPE)
+#}}}
+
+#{{{ Context menu
+view.context.customize=Upravit toto menu...
+#}}}
+
+#{{{ System tray menu
+tray.newView.label=Nový pohled
+#upravit
+tray.newPlainView.label=New plain view
+tray.exit.label=Exit
+#}}}
+
+#{{{ Menu bar
+
+#upravit
+#{{{ File menu
+file.label=$Soubor
+new-file.label=$Nový
+new-file-in-mode.label=Nový v $režimu
+new-file-in-mode.dialog.title=Nový soubor
+new-file-in-mode.dialog.message=With Edit Mode: 
+open-file.label=$Otevřít...
+reload.label=$Znovunačíst
+reload-all.label=Znovunačíst $vše
+close-buffer.label=Zavřít
+close-buffer.tooltip=Close buffer in EditPane's BufferSet only
+global-close-buffer.label=Close (global)
+global-close-buffer.tooltip=Close buffer in all Views
+closeall-except-active.tooltip=Close others in EditPane's BufferSet
+closeall-except-active.label=Close O$thers
+closeall-bufferset.label=Clos$e All
+closeall-bufferset.tooltip=Clear Editpane's BufferSet
+bufferset-toggle-exclusive.label=Toggle E$xclusive BufferSets
+bufferset-toggle-exclusive.tooltip=When a buffer is opened, close it in other non-intersecting buffersets
+close-all.label=Close All (global)
+close-all.tooltip=Close all buffers in all Views
+save.label=$Uložit
+save-as.label=U$ložit jako...
+save-a-copy-as.label=Uložit kop$ii jako...
+save-a-copy-as.tooltip=Nezmění aktuální cestu bufferu...
+save-all.label=Uložit $vše...
+print.label=$Tisk...
+page-setup.label=Nastavení $stránky...
+# Print selection not yet implemented
+#print-selection.label=Prin$t Selection...
+exit.label=E$xit
+
+#{{{ Recent Files menu
+recent-files.label=Poslední $Soubory
+recent-files.textfield.tooltip=Prefix filtr nebo pattern můžete vložit sem...
+no-recent-files.label=Žádné nedávné soubory
+clear-recent-files.label=Pročistit nedávno otevřené soubory
+#}}}
+
+reload-encoding.label=Znovunačíst s kódováním
+reload-encoding.error={0} není validní kódování
+
+#}}}
+
+#{{{ Edit menu
+
+edit.label=$Upravit
+undo.label=$Zpět
+redo.label=Z$novu
+cut.label=V$yjmout
+copy.label=$Kopírovat
+paste.label=$Vložit
+select-all.label=Vy$brat vše
+word-count.label=$Počet slov...
+complete-word.label=Co$mplete Word
+expand-abbrev.label=$Rozbalit zkratku
+goto-line.label=$Jdi na řádek...
+
+#upravit
+#{{{ More Clipboard menu
+clipboard.label=More Clip$board
+cut-append.label=$Cut Append
+copy-append.label=C$opy Append
+vertical-paste.label=$Vertical Paste
+paste-previous.label=Paste Previo$us...
+paste-deleted.label=Paste $Deleted...
+paste-special.label=Paste Special...
+cut-string-register.label=Cu$t to Register
+copy-string-register.label=Co$py to Register
+paste-string-register.label=Paste $Register
+clear-string-register.label=Clear Register
+cut-append-string-register.label=Cut Appe$nd to Register
+copy-append-string-register.label=Copy $Append to Register
+vertical-paste-string-register.label=V$ertical Paste Register
+view-registers.label=Vie$w Registers
+#}}}
+
+#upravit
+#{{{ More Selection menu
+selection.label=More $Selection
+select-none.label=$Odznačit vše
+select-word.label=Vybrat $slovo
+select-line.label=Vybrat řád$ek
+select-paragraph.label=Vybrat o$dstavec
+invert-selection.label=$Invertovat výběr
+toggle-multi-select.label=$Multiple Selection
+toggle-rect-select.label=$Rectangular Selection
+select-line-range.label=Sele$ct Line Range...
+#}}}
+
+#{{{ Text menu
+text.label=$Text
+delete-line.label=$Smazat řádky
+delete-start-line.label=Smazat do $začátku řádky
+delete-end-line.label=Smazat do $konce řádky
+join-lines.label=S$pojit řádky
+delete-paragraph.label=Smazat $odstavec
+format-paragraph.label=$Formátovat odstavec
+to-lower.label=Na $malá písmena
+to-upper.label=Na $velká písmena
+#}}}
+
+#upravit
+#{{{ Indent menu
+indent.label=$Indent
+indent-lines.label=$Indent Lines
+shift-left.label=Shift Indent $Left
+shift-right.label=Shift Indent $Right
+remove-trailing-ws.label=Remove Trailing $Whitespace
+spaces-to-tabs.label=$Mezery na tabulátory (Tab)
+tabs-to-spaces.label=$Tabulátory (Tab) na mezery
+#}}}
+
+#{{{ Source menu
+source.label=Zdroj
+range-comment.label=Zakomentovat $výběr
+line-comment.label=$Zakomentovat řádek
+select-block.label=$Vybrat blok kódu
+match-bracket.label=Jdi na odpovídající závorku
+prev-bracket.label=Jdi na předchozí závorku
+next-bracket.label=Jdi na další závorku
+#}}}
+
+#}}}
+
+#upravit
+#{{{ Search menu
+search.label=$Hledat
+find.label=$Najít...
+find-next.label=Najít $další
+find-prev.label=Najít $předchozí
+search-in-open-buffers.label=Hledat v otevřechých $bufferech...
+search-in-directory.label=Hledat v $adresáři... <!-- or "Hledat v adresářích" -->
+replace-in-selection.label=$Nahradit vybrané
+replace-and-find-next.label=Nahradit and Najít $další
+replace-all.label=Nahradit $vše
+quick-search.label=$Incremental Search Bar
+hypersearch.label=$HyperSearch Bar
+quick-search-word.label=I$ncremental Search for Word
+hypersearch-word.label=H$yperSearch for Word
+whole-word.label=$Whole Word
+ignore-case.label=Ignorovat velikost písmen
+regexp.label=$Regulární výrazy
+hypersearch-results.label=HyperSearch Results
+#}}}
+
+#upravit
+#{{{ Markers menu
+markers.label=$Markers
+add-marker.label=$Add/Remove Marker
+add-marker-shortcut.label=Add Marker $With Shortcut
+remove-all-markers.label=Re$move All Markers
+goto-marker.label=$Go to Marker
+select-marker.label=$Select to Marker
+swap-marker.label=Swa$p Caret and Marker
+prev-marker.label=Go to $Previous Marker
+next-marker.label=Go to $Next Marker
+no-markers.label=No Markers
+markers.blank-line=[Blank line]
+#}}}
+
+#upravit
+#{{{ Folding menu
+folds.label=F$olding
+collapse-fold.label=$Collapse Fold
+expand-one-level.label=$Expand Fold One Level
+expand-fold.label=Expand $Fold Fully
+collapse-all-folds.label=Collapse $All Folds
+expand-folds.label=Expand Fo$lds With Level
+expand-all-folds.label=E$xpand All Folds
+select-fold.label=$Select Fold
+add-explicit-fold.label=A$dd Explicit Fold
+narrow-to-fold.label=Na$rrow to Fold
+narrow-to-selection.label=Narro$w to Selection
+parent-fold.label=$Go to Parent Fold
+prev-fold.label=Go to $Previous Fold
+next-fold.label=Go to $Next Fold
+#}}}
+
+#upravit
+#{{{ View menu
+view.label=$View
+new-view.label=New $View
+new-view.tooltip=New main window with dockables
+new-plain-view.label=Ne$w Plain View
+new-plain-view.tooltip=New main window with fewer toolbars and no dockables
+close-view.label=$Close View
+close-view.tooltip=Closes main window, and exits jEdit if this is the only View
+prev-buffer.label=Go to $Previous Buffer
+next-buffer.label=Go to $Next Buffer
+recent-buffer.label=Go to $Recent Buffer
+toggle-buffer-switcher.label=Toggle $Buffer Switcher
+focus-buffer-switcher.label=Focus on Buffer S$witcher
+toggle-line-numbers.label=Toggle $Line Numbers
+toggle-statusbar.label=Toggle S$tatus Bar
+toggle-gutter.label=Toggle $Gutter
+show-context-menu.label=Show Context Menu
+set-view-title.label=Set view title...
+set-view-title.tooltip=Set the title of the main window for easy identification from your desktop.
+toggle-full-screen.label=Toggle $full-screen mode
+
+#upravit
+#{{{ Scrolling menu
+scrolling.label=Posunování (skrolování)
+scroll-to-current-line.label=Posunout $na aktuální řádek
+scroll-and-center.label=$Scroll and Center Caret
+center-caret.label=$Center Caret on Screen
+scroll-up-line.label=Line Scroll $Up
+scroll-down-line.label=Line Scroll $Down
+scroll-up-page.label=Page Scroll U$p
+scroll-down-page.label=Page Scroll D$own
+#}}}
+
+#upravit
+#{{{ Splitting menu
+splitting.label=$Rozdělení
+split-horizontal.label=Rozdělit $horizontálně
+split-vertical.label=Rozdělit $vertikálně
+unsplit-current.label=$Odrozdělit aktuální
+unsplit.label=Odrozdělit $vše
+resplit.label=O$bnovit rozdělení
+prev-textarea.label=Jdi na $předchozí textové pole
+next-textarea.label=Jdi na $další textové pole
+buffersets.label=$Buffer sety
+global-bufferset.label=$Global Scope BufferSets
+global-bufferset.tooltip=All EditPanes share the same BufferSet.
+view-bufferset.label=$View Scope BufferSets
+view-bufferset.tooltip=EditPanes in the same View share the same BufferSet.
+editpane-bufferset.label=$EditPane Scope BufferSets
+editpane-bufferset.tooltip=Each Editpane has its own BufferSet.
+#}}}
+
+#{{{ Docking menu
+docking.label=$Dokování
+docking.menu.label=Dokovatelné $menu
+toggle-dock-areas.label=Přepnout dokované oblasti
+left-docking-area.label=Jdi na $levou dokovací oblast
+top-docking-area.label=Jdi na $vrchni dokovací oblast
+right-docking-area.label=Jdi na $pravou dokovací oblast
+bottom-docking-area.label=Jdi na $dolní dokovací oblast
+focus-textarea.label=Jdi na $textové pole
+close-docking-area.label=$Uzavři aktuální dokovací oblast
+layout-load.label=$Načti dokovací rozmístění ...
+layout-save.label=$Ulož dokovací rozmístění layout ...
+layout-load-current-mode.label=Načíst dokovací rozmístění aktuálního režimu
+layout-save-current-mode.label=Uložiz dokovací rozmístění aktuálního režimu
+#}}}
+
+#}}}
+
+#{{{ Utilities menu
+
+utils.label=$Utility
+vfs.browser.label=$Prohlížeč souborového systému
+action-bar.label=$Panel akcí
+last-action.label=Opakovat poslední akci
+buffer-options.label=Možnosti $bufferu...
+global-options.label=$Globální možnosti...
+combined-options.label=$Možnosti...
+
+#{{{ Recent Directories menu
+recent-directories.label=$Poslední adresáře
+no-recent-dirs.label=Žádné poslední adresáře...
+#}}}
+
+#{{{ Favorites menu
+favorites.label=$Oblíbené
+add-buffer-to-favorites.label=Přidat $buffer do Oblíbených
+add-dir-to-favorites.label=Přidat $adresář do Oblíbených
+edit-favorites.label=$Upravit Oblíbenvé
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=$Aktuální adresář
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=Domovský adresář $jEdit
+#}}}
+
+#upravit
+#{{{ Settings Directory menu
+settings-directory.label=$Settings Directory
+#}}}
+
+#{{{ BeanShell menu
+beanshell.label=B$eanShell
+eval.label=$Vyhodnotit BeanShell výraz...
+eval-for-selected-lines.label=Vyhodnotit $pro vybrané řádky...
+eval-selection.label=Vyhodnotit vý$běr
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting.label=$Troubleshooting
+log-viewer.label=Log $aktivit
+update-log.label=Aktualizuj Log aktivit na $disku
+io-progress-monitor.label=$I/O Postup
+task-monitor.label=$Monitor úloh
+keyboard-tester.label=Tester $klávesnice...
+memory-status.label=Status $paměti...
+reload-modes.label=Znovunačíst $režimy úprav
+#}}}
+
+#upravit
+#{{{ Quick options menu
+quick-options.label=$Rychlé nastavení
+edit-syntax-style.label=Edit syntax style of token under caret
+#}}}
+
+#}}}
+
+#{{{ Macros menu
+macros.label=Makro
+new-macro.label=Nové makro
+record-macro.label=Začít $nahrávat makro...
+stop-recording.label=$Zastavit nahrávání
+last-macro.label=Opakovat $poslední makro
+record-temp-macro.label=Nahrát $dočasné makro
+run-temp-macro.label=$Přehrát dočasné makro
+run-other-macro.label=Přehrát $jiné makro...
+rescan-macros.label=Aktualizovat makra
+no-macros.label=Žádná makra
+#}}}
+
+#{{{ Plugins menu
+plugins.label=$Pluginy
+plugin-manager.label=Plugin $manažer...
+plugin-options.label=Plugin $možnosti...
+no-plugins.label=Žádné pluginy nejsou nainstalovány
+#}}}
+
+#{{{ Help menu
+help-menu.label=$Pomoc
+about.label=$Něco o jEdit...
+help.label=jEdit $Help
+tip-of-the-day.label=$Tip dne
+userFeedback.label=Máte připomínky?...
+#}}}
+
+#}}}
+
+#{{{ Macro strings
+
+macro.temp.header=// Toto je dočasné makro. Nejprve zkontrolujte \n\
+                  // potřebné příkazy, abyste se ujistili, že makro \n\
+                  // odráží váš úmysl. Pokud chcete spustit makro,\n\
+                  // přepněte na příslušný buffer a zmáčkněte C+m C+p.\n\
+
+macro.header=// Toto je nahrané makro. Nejprve zkontrolujte \n\
+             // potřebné příkazy, abyste se ujistili, že makro \n\
+             // odráží váš úmysl. Následně uložte tento buffer. \n\
+             // Makro by se mělo objevit v Makro menu.\n\
+
+
+#}}}
+
+#upravit
+#{{{ Commands that don't appear in menus
+backspace-word.label=Smazat předchozí slovo
+backspace-word-std.label=Smazat předchozí slovo (Eat Whitespace)
+backspace-word-std-after.label=Smazat předchozí slovo (Eat Whitespace za slovem)
+backspace.label=Smazat předchozí znak
+delete-word.label=Smazat další slovo
+delete-word-std.label=Smazat další slovo (Est Whitespace)
+delete.label=Smazat další znak
+document-end.label=Jdi na konec bufferu
+document-home.label=Jdi na začátek bufferu
+end.label=End
+home.label=Home
+smart-end.label=Smart End
+smart-home.label=Smart Home
+insert-literal.label=Insert Next Character Literally
+insert-newline.label=Vložit nový řádek
+insert-newline-indent.label=Vložit nový řádek a odrážku
+insert-tab.label=Vložit tabulátor
+insert-tab-indent.label=Vložit tabulátor a odrážku
+line-end.label=Jdi na konec řádky
+line-home.label=Jdi na začátek řádky
+next-char.label=Jdi na další znak
+next-line.label=Jdi na další řádku
+next-page.label=Jdi na další stránku
+next-paragraph.label=Jdi na další odstavec
+next-word.label=Jdi na další slovo
+next-word-std.label=Jdi na další slovo (Eat Whitespace)
+overwrite.label=Přepisovací režim
+prev-char.label=Jdi na předchozí znak
+prev-line.label=Jdi na předchozí řádek
+prev-page.label=Jdi na předchozí stránku
+prev-paragraph.label=Jdi na předchozí odstavec
+prev-word.label=Jdi na předchozí slovo
+prev-word-std.label=Jdi na předchozí slovo (Eat Whitespace)
+prev-word-std-after.label=Jdi na předchozí slovo (Eat Whitespace za slovem)
+select-document-end.label=Vybrat do konce bufferu
+select-document-home.label=Vybrat po začátek bufferu
+select-end.label=Select to Smart End Position
+select-home.label=Select to Smart Home Position
+select-line-end.label=Vybrat po konec řádky
+select-line-home.label=Vybrat po začátek řádky
+select-next-char.label=Vybrat další znak
+select-next-line.label=Vybrat další řádek
+select-next-page.label=Vybrat další stránku
+select-next-paragraph.label=Vybrat další odstavec
+select-next-word.label=Vybrat další slovo
+select-next-word-std.label=Vybrat další slovo (Eat Whitespace)
+select-prev-char.label=Vybrat předchozí znak
+select-prev-line.label=Vybrat předchozí řádek
+select-prev-page.label=Vybrat předchozí stránku
+select-prev-paragraph.label=Vybrat předchozí odstavec
+select-prev-word.label=Vybrat předchozí slovo
+select-prev-word-std.label=Vybrat předchozí slovo (Eat Whitespace)
+select-prev-word-std-after.label=Vybrat předchozí slovo (Eat Whitespace za slovem)
+select-visible-end.label=Vybrat po poslední viditelnou řádku
+select-visible-home.label=Vybrat po první viditelnou řádku
+select-whitespace-end.label=Vybrat po konec White Space
+select-whitespace-home.label=Vybrat po začátek White Space
+toggle-line-separator.label=Přepnout řádkový oddělovač
+toggle-word-wrap.label=Přepnout zalamování řádků
+visible-end.label=Jdi na poslední viditelnou řádku
+visible-home.label=Jdi na první viditelnou řádku
+whitespace-end.label=Jdi na konec White Space
+whitespace-home.label=Jdi na začátek White Space
+#}}}
+
+#{{{ View stuff
+
+# Title
+view.title=jEdit -\u0020
+view.title.dirty=\ (změněno)
+
+view.docking.close-tooltip=Skryje aktuální dokované okno
+view.docking.menu-tooltip=Možnosti dokování
+view.docking.menu-floating=Floating
+view.docking.menu-top=Dokovat nahoře
+view.docking.menu-left=Dokovat vlevo
+view.docking.menu-bottom=Dokovat ve spodní části
+view.docking.menu-right=Dokovat vpravo
+view.docking.menu-clone=Nová Floating instance
+view.docking.menu-close=Zavřít
+view.docking.menu-undock=Oddokovat
+
+view.docking.toggle.label={0} (Přepnout)
+view.docking.float.label={0} (Nová Floating instance)
+
+directory.not-local=Nelze zobrazit adresáře na vzdáleném souborovém systému
+directory.no-files=Žádné soubory
+
+#upravit
+#{{{ Gutter highlight
+view.gutter.marker.no-name=Marker
+view.gutter.marker=Marker: {0}
+#}}}
+
+#upravit
+#{{{ Status messages
+view.status.add-marker=Shortcut for new marker? [{0}]
+view.status.auto-wrap=Search string not found; wrapping around!
+view.status.bracket=Matches line {0}: {1}
+view.status.caret-tooltip=Offset, line and column number (offset,line,column[-virtual] relative%)
+view.status.copy-append-string-register=Register name to copy append to? [{0}]
+view.status.copy-string-register=Register to copy to? [{0}]
+view.status.cut-append-string-register=Register to cut append to? [{0}]
+view.status.cut-string-register=Register to cut to? [{0}]
+view.status.expand-folds=Fold level? [1-9]
+view.status.goto-marker=Shortcut of marker to go to? [{0}]
+view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
+view.status.insert-literal=Key to insert literally?
+view.status.io-1=I/O: 1 operation in progress
+view.status.io.done=Input/output complete
+view.status.io=I/O: {0} operations in progress
+view.status.linesep-changed=Line separator set to {0}
+view.status.linesep-tooltip=Line separator (click to change)
+view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
+view.status.mode-tooltip=Current edit mode, fold mode, and encoding
+view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
+view.status.multi-tooltip=Multiple selection mode (click to change)
+view.status.narrow=Invoke "Expand All Folds" to make all text visible again
+view.status.no-markers=no markers set
+view.status.no-registers=no registers defined
+view.status.overwrite-changed=Overwrite mode is {0,choice,0#off|1#on}
+view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
+view.status.paste-string-register=Register to paste from? [{0}]
+view.status.print=Printing page {0}
+view.status.quick-copy=Quick copy mode - marked text will replace selection
+view.status.recording=Macro recording
+view.status.rect-select-changed=Rectangular selection is {0,choice,0#off|1#on}
+view.status.rect-tooltip=Rectangular selection mode (click to change)
+view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
+view.status.search-not-found=Search string not found!
+view.status.select-marker=Shortcut of marker to select to? [{0}]
+view.status.swap-marker=Shortcut of marker to swap caret position with? \
+	[{0}]
+view.status.vertical-paste-string-register=Register to vertical paste \
+	from? [{0}]
+view.status.wrap-changed=Word wrap mode is now "{0}"
+view.status.wrap-tooltip=<html>Word wrap mode is {0} (click to change)</html>
+view.status.indent-tooltip=Automatic indentation indicator (click to change)
+view.status.autoindent-changed=Automatic indentation status is now "{0}"
+view.status.bufferset-tooltip=BufferSet scope is {0}
+wrap.none=disabled
+wrap.hard=hard
+wrap.soft=soft
+#}}}
+
+#{{{ Status bar component visibility
+
+#}}}
+
+#}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: strana {1}
+
+print-error.title=Chyba tisku
+print-error.message=Při pokusu o tisk nastala chyba:\n\
+	{0}
+#}}}
+
+#{{{ Various dialog boxes
+
+#{{{ About dialog
+about.title=O jEdit
+about.version=jEdit {0} {1} režim, s použitím {2} Java {3}
+about.mode.standalone=Samostatný
+about.mode.server=server
+about.mode.server-background=server-background
+about.navigate=Využijte šipek pro navigaci v textu
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text.prefix=jEdit vám přináší
+about.text.suffix=Rád bych také poděkoval uživatelům za jejich\n\
+                    komentáře, feedback a bug reporty.
+#}}}
+
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=Plugin manažer
+#}}}
+
+#{{{
+#upravit
+largeBufferDialog.title=Velký buffer {0}
+largeBufferDialog.message=The buffer is very large and jEdit may become unresponsive\n\
+	due to syntax highlighting. You should consider the following options.\n\
+	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit \n\
+	may become very slow, this is not recommended.\n\
+	-Context insensitive syntax highlighting. In this case, jEdit will\n\
+	do fast highlighting, but the result may not be perfect. The\n\
+	buffer is highlighted line by line without checking context\n\
+	of the previous line. It is possible that the syntax is not accurate\n\
+	if you have tokens on multiple lines (multiline comments, xml tags ...)\n\
+	-Use 'text' mode of jEdit (no syntax highlighting)
+largeBufferDialog.fullSyntax=Úplné zvýraznění syntaxe
+largeBufferDialog.contextInsensitive=Context insensitive syntax highlight
+largeBufferDialog.defaultMode=Mód editace textu
+#}}}
+
+#{{{ I/O error dialog box
+ioerror.title=I/O Chyba
+ioerror.caption=Následující {0} I/O operace nemohly být dokončeny:
+ioerror.caption-1=Následující I/O operace nemohly být dokončeny:
+
+ioerror={0}
+ioerror.directory-error=Nelze vypsat adresář: {0}
+ioerror.directory-error-nomsg=Cannot list directory.
+ioerror.encoding-error=Soubor nelze načíst správně (některá data mohou být ztracena) \n\
+                     v kódování "{0}".\n\
+	({1})\n\
+        Zkuste vybrat jiné kódování.\n\
+        Můžete jej vybrat v menu Soubor->Znovunačíst s kódováním.\n\
+        Pokud toto chcete provést automaticky, přijdete kandidáty do \n\
+        "List of fallback encodings" in Encodings pane of Global Options. <!-- Upravit -->
+ioerror.write-encoding-error=Nepovedlo se zakódovat znak\n\
+	{3} ve sloupci {2}  na řádce {1} s kódováním "{0}".
+ioerror.read-error=Nelze načíst: {0}
+ioerror.write-error=Nelze uložit: {0}
+ioerror.unsupported-encoding-error={0} charset není podporován vaší JVM
+ioerror.open-directory=Nelze otevřít adresář jako buffer.
+#upravit
+ioerror.save-directory=Cannot save buffer over a directory.
+ioerror.no-read=Nedostatečná oprávnění pro načtení souboru.
+ioerror.no-write=Nedostatečná oprávnění pro uložení souboru.
+ioerror.write-error-readonly=Nelze uložit, soubor je pouze ke čtení.
+ioerror.save-readonly-twostagefail=Nelze uložit, soubor je pouze ke čtení a nelze jej uložit dvoufázově.
+ioerror.badurl=Vadná URL: {0}
+ioerror.delete-error=Nelze odstranit soubor.
+ioerror.rename-exists=Nelze přepsat existující soubor {0}.
+ioerror.rename-error=Nelze přejmenovat na {0}.
+ioerror.mkdir-error=Nelze vytvořit adresář.
+
+vfs.not-supported.list=Nelze procházet adresáře na "{0}" souborovém systému.
+vfs.not-supported.load=Nelze otevřít soubory na "{0}" souborovém systému.
+vfs.not-supported.save=Nelze uložit soubory na "{0}" souborovém systému.
+
+vfs.overwrite-readonly.title=Soubor je určen pouze ke čtení
+vfs.overwrite-readonly.message=Soubor {0} je určen pouze ke čtení.\n\
+        Chcete jej i tak uložit a resetovat atribut "pouze ke čtení"?\n\
+        Toto použije dvoufázové uložení(resetuje vlastníka souboru na Unix)
+
+vfs.twostageimpossible.title=Nelze použít dvoufázové uložení.
+vfs.twostageimpossible.message=Nelze použít dvoufázové uložení, chcete \n\
+	jej přesto uložit?
+
+out-of-memory-error=Nedostatek Java heap memory pro dokončení\n\
+        tohoto požadavku. Zkuste zvýšit maximální velikost heapu \n\
+        (haldy). \n\
+	\n\
+        Dokumentace týkající se změny velikosti Java heapu (haldy) \n\
+        můžete nalézt v sekci "Buffery", kapitola "jEdit Basics".
+
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=Vyskytla se I/O chyba ({0})
+
+read-error.title=Chyba ve čtení
+# {0} - the path name {1} - the error message
+read-error.message=Soubor {0}\n\
+	nemohl být načten z důvodu I/O chyby.\n\
+	({1})
+
+write-error.title=Chyba při zápisu
+# {0} - the path name {1} - the error message
+write-error.message=Soubor {0}\n\
+	nemohl být uložen z důvodu I/O chyby.\n\
+	({1})
+
+directory-error.title=Chyba v adresáři
+# {0} - the path name {1} - the error message
+directory-error.message=Adresář {0}\n\
+	nemohl být vypsát z důvodu I/O chyby.\n\
+	({1})
+
+directory-error-nomsg.title=Chyba v adresáři
+# {0} - the path name
+directory-error-nomsg.message=Adresář {0}\n\
+	nemohl být vypsán z důvodu I/O chyby.
+
+encoding-error.title=Nekompatibilní kódování
+encoding-error.message=Soubor {0}\n\
+	nemohl být načten s "{1}" kódováním.\n\
+	({2})\n\
+	\n\
+	Pro využití jiného kódování, zkuste příkazy v menu \n\
+        Soubor->Otevřít v kódování
+	\n\
+        Pokud jste opravdu zaseklí a nevíte kudy kam, zkuste \n\
+        kódování "ASCII" nebo "8859_1".
+
+open-directory.title=Nelze otevřít adresář
+open-directory.message={0} je adresář.\n\
+	Adresáře nelze otevřít pro úpravy.
+
+save-directory.title=Nelze uložit adresář
+save-directory.message={0} is a directory.\n\
+	Buffers cannot be saved over directories. <!-- Upravit -->
+
+no-read.title=Nelze otevřít soubor
+no-read.message=Nelze číst z {0}.\n\
+	Toto nejspíš znamená, že nemáte dostatečná oprávnění.
+
+no-write.title=Nelze uložit soubor
+no-write.message=Nezle uložit do {0}.\n\
+	Toto nejspíš znamená, že nemáte dostatečná oprávnění.
+
+badurl.title=Špatná URL
+# {0} - the URL
+# {1} - the error
+badurl.message=Následující URL není validní: {0}\n\
+	({1})
+#}}}
+
+#{{{ Go to line dialog
+goto-line.title=Jdi na řádku
+goto-line.message=Jdi na řádku:
+#}}}
+
+#{{{ Word count dialog
+wordcount.title=Počet slov
+# {0} - characters
+# {1} - words
+# {2} - lines
+wordcount.message=Znaky: {0}\nSlova: {1}\nŘádky: {2}
+#}}}
+
+#upravit
+#{{{ Set marker dialog
+setmarker.title=Set Marker
+setmarker.message=Marker name:
+#}}}
+
+#{{{ File not saved dialog
+notsaved.title=Soubor nebyl uložen
+# {0} - file name
+notsaved.message=Uložit změny do {0}?
+#}}}
+
+#{{{ File changed, still reload dialog
+changedreload.title=Soubor upraven
+changedreload.message=Soubor {0}\n\
+        byl změněn od posledního uložení; pokud budete \n\
+        pokračovat, veškeré změny budou ztraceny. Pokračovat?
+#}}}
+
+#{{{ Autosave file exists dialog
+autosave-found.title=Nalezen soubor s autosave
+# {0} - autosave file name
+autosave-found.message=Autosave soubor {0}\n\
+	byl nalezen. Toto nejspíš znamená, že jEdit spadnul dříve, než \n\
+        jste mohli cokoliv uložit. Chcete otevřít autosave soubor?
+
+autosave-loaded.title=Načten autosave soubor
+autosave-loaded.message=Autosave soubor {0}\n\
+        byl načten. Nyní byste měli zkontrolovat, zda neobsahuje vaše \n\
+        neuložená data. Chcete-li ponechat změny, uložte soubor. V opačném \n\
+        případě vyberte Soubor->Znovunačíst
+#}}}
+
+#{{{ Save all confirm dialog
+saveall.title=Uložit všechny buffery
+saveall.message=Opravdu chcete uložit všechny změněné buffery?
+#}}}
+
+#{{{ Reload all confirm dialog
+reload-all.title=Znovunačíst všechny buffery
+reload-all.message=Opravdu chcete znovunačíst všechny buffery z disku? \n\
+        Neuložené změny v jakémkoli otevřeném bufferu BUDOU ZTRACENY!
+#}}}
+
+#{{{ Encoding prompt
+encoding-prompt.title=Otevřít v jiném kódování
+encoding-prompt.message=Použít ke kódování znaků:
+#}}}
+
+#{{{ Macro recording already in progress dialog
+already-recording.title=Probíhá nahrávání
+already-recording.message=Nahrávání makra již probíhá
+#}}}
+
+#{{{ No temporary macro dialog
+no-temp-macro.title=Žádné dočasné makro
+no-temp-macro.message=Žádné dočasné makro nebylo nahráno.
+#}}}
+
+#{{{ Record macro dialog
+record.title=Nahrávání makra
+record.message=Název makra:
+#}}}
+
+#{{{ Some features don't work with -nosettings dialog
+no-settings.title=Feature vypnuta
+no-settings.message=jEdit byl spuštěn s přepínačem -nosettings. \n\
+        K použítí této feature musíte spustit jEdit bez tohoto přepínače.
+#}}}
+
+#{{{ Some features don't work with the web start version
+no-webstart.title=Feature vypnuta
+no-webstart.message=Tato feature není dostupná ve WebStart verzi jEditu.
+#}}}
+
+#{{{ Search and replace dialog
+search.title=Najít a Nahradit
+
+search.find=Najít:
+search.find.tooltip=PgUp/PgDown nebo pravý-klik pro vyvolání předchozího
+search.find.mnemonic=s
+search.replace=Nahradit za:
+search.replace.mnemonic=w
+search.string-replace-btn=Text
+#upravit
+search.beanshell-replace-btn=Return value of a BeanShell snippet
+
+search.settings=Nastavení:
+#upravit
+search.keep=Podržet dialog
+search.keep.mnemonic=k
+search.word=Celé slovo
+search.word.mnemonic=q
+search.case=Ignorovat velikost písmen
+search.case.mnemonic=i
+search.regexp=Regulární výrazy
+search.regexp.mnemonic=x
+search.hypersearch=HyperSearch
+search.hypersearch.mnemonic=h
+search.wrap=Automatické zalamování
+search.wrap.mnemonic=t
+
+search.direction=Směr:
+search.back=Vzad
+search.back.mnemonic=b
+search.forward=Vpřed
+search.forward.mnemonic=o
+
+search.fileset=Hledat ve:
+search.selection=Výběru
+search.selection.mnemonic=n
+search.current=Aktuálním bufferu
+search.current.mnemonic=c
+search.all=Všech bufferech
+search.all.mnemonic=l
+search.directory=Adresáři:
+search.directory.mnemonic=d
+search.skipHidden=Skip hiddens/backups
+search.skipBinary=Skip binary files <!-- Upravit -->
+search.skipHidden.mnemonic=h
+search.skipBinary.mnemonic=b
+
+search.directoryField=Adresář:
+search.directoryField.mnemonic=y
+search.filterField=Filtr:
+search.filterField.mnemonic=f
+glob.tooltip={*.c,*.h} pro více koncovek
+search.subdirs=Prohledat podadresáře
+search.subdirs.mnemonic=u
+search.choose=Vybrat...
+search.choose.mnemonic=e
+search.synchronize=Synchronizovat
+search.synchronize.mnemonic=z
+search.synchronize.tooltip=Nastaví filtr a adresář na aktuální buffer koncovku/umístění.  <!-- Upravit -->
+search.findBtn=Najít
+search.findBtn.mnemonic=f
+search.replaceBtn=Nahradit
+search.replaceAndFindBtn=Nahradit & Najít
+search.replaceAndFindBtn.mnemonic=r
+search.replaceAllBtn=Nahradit vše
+search.replaceAllBtn.mnemonic=a
+
+# Beep when searching automatically wraps?
+
+#}}}
+
+#{{{ Keep searching dialog
+keepsearching.title=Nenalezeny žádné další shody
+keepsearching.message=Nenalezeny žádné další shody. Pokračovat v hledání od\n\
+	{0,choice,0#beginning|1#end}?
+#}}}
+
+#upravit
+#{{{ HyperSearch results dialog
+hypersearch-results.title=HyperSearch Results
+hypersearch-results.result-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 file|1<{2,number,integer} files}'})
+hypersearch-results.open=Open
+hypersearch-results.open-view=Open in New View
+hypersearch-results.open-plain-view=Open in New Plain View
+hypersearch-results.open-split=Open in New Split
+hypersearch-results.remove-node=Remove Node
+hypersearch-results.new-search=New Search From Here
+hypersearch-results.expand-child-nodes=Expand Child Nodes
+hypersearch-results.collapse-child-nodes=Collapse Child Nodes
+hypersearch-results.copy-to-clipboard=Copy to clipboard
+hypersearch-results.redo=Redo HyperSearch
+hypersearch-results.tree-view=Toggle Tree View
+hypersearch-results.clear.label=Remove All Nodes
+hypersearch-results.stop.label=Stop HyperSearch and show current results
+hypersearch-results.multi.label=Toggle Multiple Results
+hypersearch-results.highlight.label=Set Match Highlight Style
+hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 line|1<{2,number,integer} lines}'})
+hypersearch-results.searching=Searching for "{0}"...
+hypersearch-results.no-results=No results found for "{0}".
+hypersearch-results.done=Results for "{0}":
+
+hypersearch-status=Hledání
+#}}}
+
+#{{{ HyperSearch too many results
+hypersearch.tooManyResults.label=Příliš mnoho výsledků
+hypersearch.tooManyResults.title=Příliš mnoho výsledků
+hypersearch.tooManyResults.message=Hledání, které jste provedli, vrátilo {0} \
+        výsledky, ale není ještě hotové. Chcete jej zastavit?
+#}}}
+
+
+#{{{ Search and replace error dialog
+searcherror.title=Chyba při Najít a Nahradit
+# {0} - error message
+searcherror.message=Při provádění této operace se vyskytla chyba.
+#}}}
+
+#{{{ Search and replace error dialog
+searcherror-bsh.title=Chyba při Najít a nahradit
+# {0} - error message
+searcherror-bsh.message=Při provádění této operace se vyskytla chyba.\n\
+        \n\
+        Ujistěte se, že nahrazovací režim je nastaven na "Text", pokud jste \n\
+        nezamýšleli nahradit string, který má být interpretován jako \n\
+        BeanShell výraz.
+#}}}
+
+#{{{ Empty fileset error dialog
+empty-fileset.title=Prázdná množina souborů
+empty-fileset.message=Vybrané hledání souborů nenalezlo žádné soubory. \n\
+        Ujistěte se, prosím, že hledané jméno souboru a adresáře je \n\
+        nastavené správně.
+#}}}
+
+#{{{ Can only search local directories dialog
+remote-dir-search.title=Vybrán nelokální adresář
+remote-dir-search.message=Pro hledání jste zvolili nelokální adresář\n\
+        Tato operace může být velice pomalá kvůli síťové latenci apod.\n\
+        Opravdu chcete pokračovat?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=Prázdný výběr
+search-no-selection.message=Prosím vyberte nějaký text nebo deaktivujte \n\
+        možnost "najít ve výběru".
+#}}}
+
+#{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<whitespace>
+paste-previous.title=Vložit předchozí
+paste-previous.caption=Nedávno kopírovaný a vložený text:
+paste-deleted.title=Vložit smazané
+paste-deleted.caption=Nedávno smazaný text:
+#}}}
+
+#{{{ File changed on disk dialog
+filechanged-save.title=Soubor na disku změněn
+filechanged-save.message=Soubor {0}\n\
+	byl na disku změněn jiným programem. Opravdu chcete soubor\n\
+        uložit?
+#}}}
+
+#{{{ File exists dialog
+fileexists.title=Soubor již existuje
+fileexists.message=Soubor {0} již existuje. Opravdu jej chcete\n\
+	přepsat?
+#}}}
+
+#{{{ Select line range dialog
+selectlinerange.title=Vyberte rozsah řádek
+selectlinerange.caption=Vyberte rozsah řádek:
+selectlinerange.start=Počáteční řádek:
+selectlinerange.end=Konečný řádek:
+#}}}
+  
+#upravit
+#{{{ View registers dialog
+view-registers.title=Registers
+view-registers.caption=Register:
+view-registers.clipboard=$ (clipboard)
+view-registers.selection=% (selection)
+view-registers.none=No registers defined
+view-registers.register=Register:
+view-registers.contents=Contents:
+view-registers.undefined=__UNDEFINED__
+#}}}
+
+#{{{ Close all buffers dialog
+close.title=Neuložené změny
+close.caption=Následující buffery obsahují neuložené změny:
+close.selectAll=Vybrat vše
+close.selectAll.mnemonic=a
+close.save=Uložit vybrané
+close.save.mnemonic=s
+close.discard=Zahodit vybrané
+close.discard.mnemonic=d
+#}}}
+
+#{{{ Files changed on disk dialog
+files-changed.title=Soubory na disku změněny
+files-changed.caption=Následující soubory byly změněny na disku jiným programem:
+files-changed.deleted=Smazáno na disku; uložte pro znovuvytvoření:
+files-changed.changed-auto=Automaticky znovunačteno:
+files-changed.changed=Změněno na disku:
+files-changed.changed-dirty-auto=Změnený buffer; nebylo znovunačteno:
+files-changed.changed-dirty=Změněný buffer a změněný soubor na disku:
+files-changed.select-all=Vybrat vše
+files-changed.select-all.mnemonic=a
+files-changed.reload=Znovunačíst
+files-changed.reload.mnemonic=r
+files-changed.ignore=Ignorovat
+files-changed.ignore.mnemonic=i
+#}}}
+
+#upravit
+#{{{ Abbrev dialogs
+add-abbrev.title=Přidat zkratku
+add-abbrev.mode=Přidat zkratku specifickou k režimu
+add-abbrev.global=Přidat globální zkratku
+
+edit-abbrev.title=Upravit zkratku
+
+edit-abbrev.duplicate.title=Duplikace zkratky
+edit-abbrev.duplicate.message=\
+	Rozšíření této zkraty již existuje.\n\
+	\n\
+	Chcete přepsat existující rozšíření zkratky?
+
+abbrev-editor.abbrev=Zkratka:
+abbrev-editor.before=Text to insert before caret:
+abbrev-editor.after=Text to insert after caret:
+#}}}
+
+#{{{ XMode errors
+xmode-error.title=Chyba v parsování XML
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message=Při parsování {0} se vyskytla chyba na řádce line {1}:\n\
+	{3}
+xmode-error.dtd=Soubor DTD nemohl být načten\n({0})
+xmode-error.termchar-invalid=Hodnota AT_CHAR atributu není validní ({0}) 
+xmode-error.doctype-invalid=Expected a document type of MODE, found {0}  <!-- Upravit -->
+xmode-error.empty-tag=Tag {0} nemůže být prázdný.
+xmode-error.token-invalid=Typ tokenu {0} není validní.
+xmode-error.empty-keyword=Klíčové slovo nemůže být prázdné.
+xmode-error.regexp=Nevadlidní regulární výraz\n({0})
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR a HASH_CHARS nebyly zpecifikovány
+xmode-error.delegate-invalid=Nevalidní delegate: {0}
+#}}}
+
+#{{{ JARClassLoader errors
+plugin-error.title=Chyba Pluginu
+plugin-error.caption=Následujicí pluginy nemohly být načteny:
+plugin-error.caption-1=Následujicí plugin nemohl být načten:
+
+plugin-error.load-error=Nelze načíst: {0}\n\
+	S největší pravděpodobností je poškozený JAR soubor; zkuste\n\
+	jej přeinstalovat. Zkuste Nástroje->Troubleshooting->Log aktivit\n\
+	pro úplný výpis stack trace (zásobník).
+plugin-error.start-error=Nelze spustit: {0}\n\
+	Zkuste updatovat plugin na novější verzi.
+plugin-error.already-loaded=Jsou nainstalovány dvě kopie. Odstraňte prosím \
+	jednu z nich.
+plugin-error.dep-jdk=Vyžaduje Java verze {0} nebo novější, ale vy máte pouze\n\
+			verzi {1}.
+plugin-error.dep-jedit=Vyžaduje jEdit {0} nebo novější, ale vy máte pouze \n\
+		verzi {1}.\n\
+		Stáhněte si novou verzi z <http://www.jedit.org>.
+plugin-error.dep-plugin.no-version=Potřebná verze {0} \
+	nebo novější {1},\n\
+	ale {1} není naistalována.
+plugin-error.dep-plugin.broken=Vyžaduje {0}, ale {0}\n\
+	nemohl být načten.
+plugin-error.dep-plugin=Vyžaduje verzi {0} nebo novější {1}, \
+	ale vy máte pouze {1} verze {2}.
+plugin-error.dep-class=Vyžaduje třídu {0}.\n\
+	Zkuste nainstalovat potřebný plugin nebo sadu knihoven.
+plugin-error.missing-jar=Vyžaduje JAR soubor {0}.\n\
+	Tento JAR soubor je součástí tohoto pluginu, ale nelze jej \n\
+	nalézt. Zkuste plugin přeinstalovat.
+plugin-error.not-42=Tento plugin nepodporuje dynamické načítání. \n\
+	Musíme restartovat jEdit po nainstlování nebo odstranění tohoto \n\
+	pluginu.
+
+plugin-error-download.title=Chyba v pluginu
+plugin-error-download.message=Při stahování pluginu se vyskytla chyba \n\
+	Zkuste prosím jiný mirror\n{0}
+#}}}
+
+#upravit
+#{{{ Macro dialogs
+macro-input.title=Macro Input
+macro-error.title=Macro Error
+macro-message.title=Macro Message
+macro-confirm.title=Macro Confirmation
+#}}}
+
+#upravit
+#{{{ BeanShell stuff
+beanshell-error.title=BeanShell Error
+beanshell-error.message=A BeanShell error occurred.
+
+beanshell-eval-input.title=Evaluate BeanShell Expression
+beanshell-eval-input.message=BeanShell expression:\n\
+	\n\
+	Variables:\n\
+	view - The current view instance\n\
+	editPane - The current edit pane instance\n\
+	textArea - The current text area instance\n\
+	buffer - The current buffer
+
+beanshell-eval.title=BeanShell Evaluation
+beanshell-eval.message={0}
+
+beanshell-eval-line.title=Evaluate BeanShell Expression
+beanshell-eval-line.message=BeanShell expression to evaluate for each \
+	selected line:\n\
+	\n\
+	Variables:\n\
+	line - The index of the line, from the start of the buffer\n\
+	index - The index of the line, from the start of the selection\n\
+	text - The text of the line\n\
+	view - The current view instance\n\
+	editPane - The current edit pane instance\n\
+	textArea - The current text area instance\n\
+	buffer - The current buffer
+#}}}
+
+#{{{ Macro not recording dialog
+macro-not-recording.title=Nenahrává se
+macro-not-recording.message=Makro není právě nahráváno.
+#}}}
+
+#{{{ Large repeat count warning
+large-repeat-count.title=Velký počet opakování
+large-repeat-count.message=Opravdu chcete vyvolat "{0}" {1} krát?
+
+large-repeat-count.user-input.title=Velký počet opakování
+large-repeat-count.user-input.message=Opravdu chcete vložit "{0}" \
+	{1} krát?
+#}}}
+
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=Špatný folding režim
+folding-not-explicit.message=Tento příkaz může být použit pouze \n\
+	v explicitním folding režimu.
+#}}}
+
+#{{{ Memory status dialog box
+memory-status.title=Java Heap Memory
+memory-status.gc=Garbage collection uvolnil {0} Kb.
+memory-status.use={0} Kb využito, {1} Kb celkově
+#}}}
+
+#{{{ Multiple I/O request errors
+#upravit
+buffer-multiple-io.title=I/O Chyba
+buffer-multiple-io.message=Each buffer can only execute one input/output\n\
+	operation at a time. Please wait until the current\n\
+	operation finishes (or abort it in the I/O progress monitor)\n\
+	before starting another one.
+
+browser-multiple-io.title=I/O Error
+browser-multiple-io.message=Each file system browser can only execute one input/output\n\
+	operation at a time. Please wait until the current operation\n\
+	finishes (or abort it in the I/O progress monitor) before starting\n\
+	another one.
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=Zalamovací okraj
+format-maxlinelen.message=Zalamovací okraj musí být nastaven na nenulovou \n\
+	aby tento příkaz pracoval.
+#}}}
+
+#upravit
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=Konfigurace způsobu syntaxe
+syntax-style-no-token.message=The text under the caret has no associated \
+	syntax style to configure.
+#}}}
+
+#{{{ View title dialog
+view.title.select=Zadejte prosím název pro tento pohled:
+#}}}
+#}}}
+
+#{{{ Buffer options dialog
+buffer-options.title=Možnosti bufferu
+buffer-options.caption=Toto dialogové okno mění nastavení pouze pro aktuální \n\
+	buffer. Chcete-li změnit výchozí nastavení pro režím úprav, zkuste \n\
+	Utility->Globální nastavení->Dialog úprav
+buffer-options.loading-saving=Načítání a ukládání
+buffer-options.lineSeparator=Oddělovač řádky:
+buffer-options.encoding=Kódování znaků:
+buffer-options.gzipped=GZIP (komprese) souboru na disk
+buffer-options.editing=Editování
+buffer-options.mode=Režim úprav:
+#}}}
+
+#{{{ Global options dialog
+options.title=Možnosti
+options.title-template={0}: {1}
+options.jedit.label=jEdit
+
+#upravit
+# Option pane to show by default
+options.last=editing
+
+#{{{ Options groups
+
+#}}}
+
+#upravit
+#{{{ General pane
+options.general.label=Obecné
+options.general.lineSeparator=Výchozí oddělovač řádek:
+options.general.encoding=Výchozí kódování znaků:
+options.general.encodingAutodetect=Pokud je to možné, detekovat kódování automaticky
+options.general.checkModStatus=Pokud jsou otevřené soubory změněny na disku:
+options.general.checkModStatus.nothing=nedělat nic
+options.general.checkModStatus.prompt=prompt
+options.general.checkModStatus.reload=Automaticky znovunačíst a upozornit uživatele
+options.general.checkModStatus.silentReload=Automaticky znovunačíst bez upozornění
+options.general.checkModStatusUpon=Kontrolovat změnu souboru pokud:
+options.general.checkModStatusUpon.focus=Aplikace má focus
+options.general.checkModStatusUpon.all=Aplikace má focus, buffer má focus nebo probíhá ukládání jakéhokoliv bufferu
+options.general.checkModStatusUpon.operations=buffer má focus nebo probíhá ukládání jakéholiv bufferu
+options.general.checkModStatusUpon.focusBuffer=visiting or saving the buffer
+options.general.checkModStatusUpon.none=ukládání bufferu
+options.general.recentFiles=Nedávné soubory k zapamatování:
+options.general.hypersearch.maxWarningResults=Max Hypersearch Results:
+options.general.sortRecent=Sort recent file list
+options.general.saveCaret=Save caret positions in recent file list
+options.general.persistentMarkers=Save marker positions
+options.general.resetUndo=Reset undo history on save
+options.general.restore=Restore previously open files on startup
+options.general.restore.splits=Restore split configuration
+options.general.restore.remote=... including remote files over VFS
+options.general.restore.cli=... including file names specified on the command line
+options.general.encodingDetectors=List of encoding autodetectors:
+options.general.fallbackEncodings=List of fallback encodings:
+options.general.fallbackEncodings.tooltip=A whitespace-separated list of encodings to try against encoding errors on loading
+options.general.systrayicon=Show the systray icon
+#}}}
+
+#{{{ Abbreviations pane
+options.abbrevs.label=Zkratky
+options.abbrevs.set=Sada zkratek:
+options.abbrevs.expandOnInput=Mezerník rozbaluje zkratky
+options.abbrevs.abbrev=Zkratka
+options.abbrevs.expand=Rozbalení
+options.abbrevs.add=Přidat...
+options.abbrevs.edit=Upravit...
+options.abbrevs.remove=Odebrat
+#}}}
+
+#upravit
+#{{{ Appearance pane
+options.appearance.label=Vzhled
+options.appearance.iconTheme=Téma ikon:
+options.appearance.fonts.antialias=Anti-alias Non-TextArea fonts
+options.appearance.lf=Swing look & feel:
+options.appearance.primaryFont=Font tlačítek, menu a popisků:
+options.appearance.secondaryFont=List and text field font:
+options.appearance.helpViewerFont=Font prohlížeče pomoci:
+options.appearance.history=History text field entries to remember:
+options.appearance.menuSpillover=Počet položek než menu přetečou:
+options.appearance.startup.label=Nastavení při spuštění
+options.appearance.showSplash=Ukázat úvodní obrazovku při spuštění
+options.appearance.showTips=Ukázat rady a tipy při spuštění
+options.appearance.experimental.label=Experimentální možnosti
+options.appearance.experimental.caption=Další tři možnosti nemusí pracovat \
+	správně s určitými\n\
+	verzemi Javy. Pokud se setkáte s problémy, vypněte tyto možnosti.
+
+options.appearance.textColors=Použít barvy jEdit textových polí na všechny \
+	textové komponenty
+options.appearance.decorateFrames=Vykreslovat okraje oken s použitím Swing look & feel
+options.appearance.decorateDialogs=Vykreslovat okraje dialogů s použitím Swing look & feel
+
+options.appearance.localization.section.label=Lokalizace
+options.appearance.usedefaultlocale.label=Využít výchozí lokální nastavení
+options.appearance.lang.label=Jazyk (projeví se po restartu aplikace)
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=Kontextové menu
+options.context.caption=Položky v textovém poli pro pravý klik:
+options.context.add=Přidat...
+options.context.remove=Odebrat
+options.context.moveUp=Jít nahoru
+options.context.moveDown=Jít dolu
+options.context.reset=Reset do výchozího
+options.context.add.title=Přidat do kontextového menu
+options.context.add.caption=Přidat do kontextového menu:
+options.context.add.separator=Oddělovač
+options.context.add.action=Přikaz nebo makro:
+
+options.context.reset.dialog.title=Resetovat do výchozího
+options.context.reset.dialog.message=Opravdu chcete resetovat kontextového menu do výchozího (instalačního) stavu?
+#}}}
+
+#{{{ Docking pane
+options.docking.label=Dokování
+options.docking.title=Okno
+options.docking.dockPosition=Dokovací pozice
+options.docking.selectFramework.label=Dokovací framework:
+options.docking.autoSaveModeLayout.label=Automaticky ukládat režimově-specifické dokovací rozmístění
+options.docking.autoLoadModeLayout.label=Automaticky načítat režimově-specifické dokovací rozmístění
+options.docking.selectSet.label=Množina dokovatelných oken:
+options.docking.system-change.note=(Experimentální) Restartovat jEdit kvůli aplikaci změn
+#}}}
+
+
+#{{{ Editing pane
+options.editing.label=Úpravy
+options.editing.defaultMode=Výchozí režim úprav:
+options.editing.undoCount=Počet "Zpět":
+options.editing.caption-0=\
+	Pro přizpůsobení režimově-specifických nastavení vyberte\n\
+	režim úprav z menu níže. Nyní jsou zobrazeny výchozí \n\
+	nastavení.
+options.editing.caption-1=\
+	Odstraňte zaškrtnutí "použít výchozí nastavení" pro \n\
+	přizpůsobení režimově-specifických nastavení. Jinak budou \n\
+	použita nastavení z globálně výchozí sekce.
+options.editing.mode=Změna nastavení pro režim:
+#upravit - global
+options.editing.global=<globálně výchozí>
+options.editing.useDefaults=Použít výchozí nastavení
+options.editing.filenameGlob=File name glob:
+options.editing.firstlineGlob=First line glob:
+options.editing.folding=Folding mode:
+options.editing.collapseFolds=Initially collapse folds with level:
+options.editing.wrap=Word wrap:
+options.editing.maxLineLen=Wrap margin:
+options.editing.maxLineLen.tooltip=Select 0 for text area width (soft wrap only)
+options.editing.tabSize=Tab width:
+options.editing.indentSize=Indent width:
+options.editing.noWordSep=Extra word characters:
+options.editing.camelCasedWords=Separate "CamelCased" words
+options.editing.noTabs=Soft (emulated with spaces) tabs
+options.editing.elasticTabstops=Indent using elastic tabstops
+options.editing.elasticTabstops.tooltip=(Experimental) - may cause instability in jEdit.
+options.editing.deepIndent=Deep indent
+options.editing.autoIndent=Automatic indentation
+options.editing.largefilemode.title=Large file mode
+options.editing.largefilemode=What should I do about very big files:
+options.editing.largefilemode.option.ask=<html><b>Ask</b> what to do when opening a large file</html>
+options.editing.largefilemode.option.full=<html><b>Keep Full syntax</b> : jEdit's syntax highlight will work as usual, jEdit \
+                                               	may become<br/><b>very slow, this is not recommended</b></html>
+options.editing.largefilemode.option.limited=<html><b>Context insensitive syntax highlight</b>: In this case jEdit will \
+		do fast highlighting, but the<br/>result may not be perfect. The \
+		buffer is highlighted line by line without taking care of the<br/>context \
+		of the previous line. It is possible that the syntax is not accurate \
+		if you have<br/>tokens on multiple lines (multiline comments, xml tags ...) \
+		Soft wrap is also deactivated<br/><b>(best choice)</b></html>
+options.editing.largefilemode.option.nohighlight=No syntax highlight, no soft wrap
+#}}}
+
+#{{{ Encodings pane
+options.encodings.label=Kódování
+options.encodings.selectEncodings=Vyberte kódování, která by se měla objevit v kódovacím dialozích:
+options.encodings.available=Dostupná/é kódování
+options.encodings.selected=Vybraná/é kódování
+options.encodings.available.tooltip=<html>Kódování v tomto sloupci <b>nebude</b> vypsáno v kódovacích dialozích.\
+  Přetáhněte je do pravého sloupce pro jejich aktivaci</html>
+options.encodings.selected.tooltip=Kódování v tomto sloupci budou obsažena v kódovacích dialozích.\
+  Přetáhněte je do levého sloupce pro jejich skrytí.
+#}}}
+
+#upravit
+#{{{ Gutter pane
+options.gutter.label=Gutter
+options.gutter.enabled=Show gutter
+options.gutter.optionalComponents=Optional gutter components
+options.gutter.lineNumbers=Line numbers
+options.gutter.minLineNumberDigits=Minimal number of digits to reserve for line numbers:
+options.gutter.selectionAreaEnabled=Line selection area when line numbers are not shown
+options.gutter.selectionAreaBgColor=Selection area background color:
+options.gutter.selectionAreaWidth=Selection area width (in pixels):
+options.gutter.font=Gutter font:
+options.gutter.foreground=Line number color:
+options.gutter.background=Background color:
+options.gutter.borderWidth=Gutter border width:
+options.gutter.numberAlignment=Line number alignment:
+options.gutter.interval-1=Highlight every\u0020
+options.gutter.interval-2=lines:
+options.gutter.currentLineHighlight=Highlight current line:
+options.gutter.structureHighlight=Show structure scope:
+options.gutter.markerHighlight=Show marker positions:
+options.gutter.foldColor=Fold markers:
+options.gutter.focusBorderColor=Focused gutter border:
+options.gutter.noFocusBorderColor=Unfocused gutter border:
+options.gutter.foldStyle.label=Fold style:
+options.gutter.foldStyleNames.Triangle=Triangle
+options.gutter.foldStyleNames.Square=Square
+options.gutter.foldStyleNames.Circle=Circle
+#}}}
+
+#upravit
+#{{{ Mouse pane
+options.mouse.label=Myš
+options.mouse.dragAndDrop=Drag and drop v textovém poli
+options.mouse.joinNonWordChars=Double-click drag spojí non-alfanumerické znaky
+options.mouse.middleMousePaste=Rychlé kopírování pomocí prostředního tlačítka myši
+options.mouse.ctrlForRectangularSelection=Přepnout na obdélníkový výběr, když je zmáčknutý Ctrl
+options.mouse.gutter.foldClick=Click in gutter:
+options.mouse.gutter.SfoldClick=Shift-click in gutter:
+options.mouse.gutter.toggle-fold=Sbalit/Rozbalit oblast
+options.mouse.gutter.toggle-fold-fully=Sbalit/Rozbalit oblast úplně
+#}}}
+
+#{{{ Plugin Manager pane
+options.plugin-manager.label=Plugin manažer
+options.plugin-manager.updateMirrors=Aktualizuj mirror seznam
+options.plugin-manager.workthread=Aktualizuji mirror seznam ...
+options.plugin-manager.downloadSource=Stáhnout zdrojový kód pluginu
+options.plugin-manager.deleteDownloads=Smazat stažené soubory \
+	z download adresáře po instalaci
+options.plugin-manager.mirror=Preferovaný mirror:
+options.plugin-manager.location=Instalovat pluginy do:
+options.plugin-manager.settings-dir=adresáře nastavení jEdit
+options.plugin-manager.app-dir=adresáře aplikace jEdit
+options.plugin-manager.none=Výchozí centrály pluginů
+#}}}
+
+#upravit
+#{{{ Printing pane
+options.print.label=Tisk
+options.print.font=Font tisku:
+options.print.fontstyle=Font style tisku:
+options.print.fontsize=Velikost fontu tisku:
+options.print.header=Tisknout v hlavičce název souboru
+options.print.footer=Tisknout záhlaví datum, čas a číslo stránky
+options.print.lineNumbers=Tisknout čísla řádek
+options.print.color=Barevný tisk
+options.print.tabSize=Šiřka tabulátoru (Tab) při tisku:
+options.print.workarounds=Zástupná řešení pro Java bugy
+options.print.glyphVector=Print spacing workaround (increases spool file size)
+options.print.force13=Use old printing API (enable this if jEdit hangs when \
+	printing)
+options.print.folds=Tisknout sbalené oblasti (folds)
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=Proxy servery
+options.firewall.http.enabled=Použít HTTP proxy server
+options.firewall.http.host=HTTP proxy host:
+options.firewall.http.port=HTTP proxy port:
+options.firewall.http.user=Username:
+options.firewall.http.password=Heslo:
+options.firewall.http.nonProxy=Připojit přímo na:
+options.firewall.socks.enabled=Použít SOCKS proxy server
+options.firewall.socks.host=SOCKS proxy host:
+options.firewall.socks.port=SOCKS proxy port:
+#}}}
+
+#{{{ Save & Backup pane
+options.save-back.label=Ukládání a zálohování
+
+options.save-back.autosave=Frekvence autosave (sekundy):
+options.save-back.backups=Maximální počet záloh:
+options.save-back.backupDirectory=Zálohování adresáře:
+options.save-back.backupPrefix=Zálohovat soubory s předponou:
+options.save-back.backupSuffix=Zálohovat soubory s příponou:
+options.save-back.backupEverySave=Zálohovat při každém uložení
+options.save-back.backupEverySave.tooltip=Resetuje oprávnění k souboru na některých souborových systémech
+options.save-back.twoStageSave=Dvoufázové uložení (bezpečnější, ale esetuje oprávnění k souboru na některých souborových systémech)
+options.save-back.twoStageSave.tooltip=Fáze 1: Vytvoří dočasný soubor a uloží do něj. Fáze 2: Přejmenuje dočasný soubor na jeho pravé jméno.
+options.save-back.confirmSaveAll="Uložit všechny buffery" žádá o potvrzení
+options.save-back.autosaveUntitled=Autosave nepojmenovaných bufferů
+options.save-back.suppressNotSavedConfirmUntitled=Nikdy neoznačovat nepojmenované buffery jako změněné.
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=Zaškrnete-li tuto možnost, znamená to, že nepojmenované buffery budou vymazány, kdykoliv je vytvořen nový.(je to feature!)
+options.save-back.useMD5forDirtyCalculation=Nikdy neoznačovat buffery jako změněné, pokud je obsah nezměněn.
+options.save-back.useMD5forDirtyCalculation.tooltip=Porovnáním délky a MD5 hashe bufferu v čase načtení se rozhodne, zda je upravený buffer stále změněný.
+options.save-back.saveAsUsesFSB=Prohlížeč souborového systému využívá jako výchozí uložení "Uložit jako"
+#}}}
+
+
+#upravit
+#{{{ Shortcuts pane
+options.shortcuts.deletekeymap.label=delete
+options.shortcuts.deletekeymap.dialog.label=Delete the keymap
+options.shortcuts.deletekeymap.dialog.title=Delete
+options.shortcuts.duplicatekeymap.label=duplicate
+options.shortcuts.duplicatekeymap.dialog.label=Choose the new keymap name
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=The name already exists, choose another one
+options.shortcuts.duplicatekeymap.dialog.title=keymap name
+options.shortcuts.resetkeymap.label=reset
+options.shortcuts.resetkeymap.dialog.label=Reset the keymap
+options.shortcuts.resetkeymap.dialog.title=reset keymap
+options.shortcuts.keymap.label=Choose keymap:
+options.shortcuts.label=Shortcuts
+options.shortcuts.select.label=Edit Shortcuts:
+options.shortcuts.select.tooltip=You can select globals, macros, or plugin shortcuts
+options.shortcuts.name=Command
+options.shortcuts.shortcut1=Primary shortcut
+options.shortcuts.shortcut2=Alternative shortcut
+options.shortcuts.filter.label=Filter:
+options.shortcuts.filter.tooltip=Show only actions whose name contains this text
+options.shortcuts.clear.label=Clear
+
+grab-key.title=Specify Shortcut
+grab-key.caption=Press the desired shortcut for "{0}", then click OK.
+grab-key.keyboard-test=Input the key strokes that are causing problems.
+grab-key.assigned-to=Currently assigned to: {0}
+grab-key.assigned-to.none=<none>
+grab-key.assigned-to.prefix={0} prefix
+grab-key.clear=Clear
+grab-key.remove=Remove Current
+
+grab-key.remove-ask.title=Remove Shortcut?
+grab-key.remove-ask.message=\
+	You didn't specify a new shortcut.\n\
+	Do you want to remove the current shortcut?
+
+grab-key.duplicate-alt-shortcut.title=Duplicate Shortcut
+grab-key.duplicate-alt-shortcut.message=\
+	The shortcut you selected duplicates the other\n\
+	shortcut for this item. Please choose another.
+
+grab-key.duplicate-shortcut.title=Duplicate Shortcut
+grab-key.duplicate-shortcut.message=\
+	This shortcut is already assigned to\n\
+	"{0}".\n\
+	\n\
+	Do you want to override this assignment?
+
+grab-key.prefix-shortcut.title=Invalid Shortcut
+grab-key.prefix-shortcut.message=\
+	You cannot use this shortcut, because\n\
+	it is a prefix to other shortcuts.\n\
+	Please choose another.
+#}}}
+
+#upravit
+#{{{ Status bar pane
+options.status.label=Stavový řádek
+options.status.visible=Zobrazit stavový řádek
+options.status.plainview.visible=Zobrazit stavový řádek v prostém pohledu
+options.status.foreground=Text stavového řádku:
+options.status.background=Pozadí stavového řádku:
+options.status.memory.foreground=Popředí indikátoru paměti:
+options.status.memory.background=Pozadí indikátoru paměti:
+options.status.edit.title=Upravit vstup stavového řádku
+options.status.edit.labelRadioButton=popisek
+options.status.edit.widgetRadioButton=widget
+options.status.edit.labelLabel=Zadejte popisek:
+options.status.edit.widgetLabel=Vyberte widget:
+options.status.caret.linenumber=Show caret line number
+options.status.caret.dot=Show caret offset from start of line
+options.status.caret.virtual=Show caret virtual offset from start of line
+options.status.caret.offset=Show caret offset from start of file
+options.status.caret.bufferlength=Show length of file
+options.status.caret.title=Caret position display options:
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=Zvýrazňování syntaxe
+options.syntax.object=Typ tokenu
+options.syntax.style=Styl textu
+options.syntax.foldLine.1=Sbalené fold řádky, úrovně 1
+options.syntax.foldLine.2=Sbalené fold řádky, úrovně 2
+options.syntax.foldLine.3=Sbalené fold řádky, úrovně 3
+options.syntax.foldLine.0=Sbalené fold řádky, úrovně > 3
+#}}}
+
+#upravit
+#{{{ Text Area pane
+options.textarea.label=Text Area
+options.textarea.font=Text font:
+options.textarea.fontSubst=Additional fonts with font substitution
+options.textarea.fontSubst.tooltip=Search other fonts for glyphs that may be missing from selected Text Font (instead of showing rectangles)
+options.textarea.fontSubstList=Font substitution: Preferred fonts:
+options.textarea.fontSubstSystemFonts=Font substitution: Search all system fonts
+options.textarea.fontSubstWarning.label=Font substitution
+options.textarea.fontSubstWarning=Without system fonts you will need preferred fonts.
+options.textarea.foreground=Text color:
+options.textarea.background=Background color:
+options.textarea.caret=Caret:
+options.textarea.blinkCaret=blinking
+options.textarea.blockCaret=block
+options.textarea.thickCaret=thick
+options.textarea.selection=Single selection:
+options.textarea.multipleSelection=Multiple selection:
+options.textarea.selectionFg=Selection foreground:
+options.textarea.lineHighlight=Highlight current line:
+options.textarea.structureHighlight=Highlight matching elements:
+options.textarea.eolMarkers=End of line markers:
+options.textarea.wrapGuide=Wrap guide:
+options.textarea.electricBorders=Electric (auto scroll) borders
+options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
+options.textarea.antiAlias=Anti Aliased smooth text
+options.textarea.antiAlias.tooltip=Slows down display on some systems
+options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
+	text display)
+options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
+options.textarea.stripTrailingEOL=Hide final end of line (if any)
+options.textarea.completeFromAllBuffers=Complete words from all open buffers (default is \
+    to limit search to currently visible buffers)
+options.textarea.lineSpacing.label=Extra vertical line spacing (in pixels):
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=Panel nástrojů
+options.toolbar.showToolbar=Zobrazit panel nástrojů
+options.toolbar.caption=Tlačítka k zobrazení v panelu nástrojů:
+options.toolbar.add=Přidat...
+options.toolbar.edit=Upravit...
+options.toolbar.remove=Odebrat
+options.toolbar.moveUp=Posun nahoru
+options.toolbar.moveDown=Posun dolů
+options.toolbar.reset=Resetovat do výchozího
+options.toolbar.edit.title=Upravit vstup panelu nástrojů
+options.toolbar.edit.caption=Typ:
+options.toolbar.edit.separator=Oddělovač
+options.toolbar.edit.action=Přikaz nebo makro:
+options.toolbar.edit.builtin=Použít vestavěnou ikonu:
+options.toolbar.edit.file=Načíst ikonu ze souboru:
+options.toolbar.edit.choose=Vybrat
+options.toolbar.edit.no-icon=Není vybrána žádná ikona
+
+options.toolbar.reset.dialog.title=Resetovat do výchozího
+options.toolbar.reset.dialog.message=Opravdu chcete resetovat panel nástrojů do výchozího instalačního stavu?
+#}}}
+
+
+#upravit
+#{{{ View pane
+options.view.label=View
+options.view.viewLayout=View layout
+options.view.floatableToolbars=Floatable Toolbars
+options.view.alternateDockingLayout=Alternate docked window placement
+options.view.alternateToolBarLayout=Alternate tool bar placement
+options.view.showFullPath=Show full path of buffer in title bar
+options.view.showSearchbar=Always show search bar
+options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
+options.view.showBufferSwitcher=Show buffer switcher
+options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
+options.view.sortBuffers=Sort buffer sets
+options.view.sortByName=Sort buffer sets by file name, instead of path name
+options.view.fullScreenIncludesMenu=Show the menu bar in full-screen mode
+options.view.fullScreenIncludesToolbar=Show the toolbars in full-screen mode
+options.view.fullScreenIncludesStatus=Show the status bar in full-screen mode
+options.bufferset.scope=BufferSet scope:
+options.editpane.bufferset.contain=New BufferSets contain:
+options.editpane.bufferset.newbufferset.copy=copy of current BufferSet
+options.editpane.bufferset.newbufferset.empty=an empty buffer
+options.editpane.bufferset.newbufferset.currentbuffer=current buffer only
+#}}}
+
+
+
+#{{{ File System Browser panes
+options.browser.label=Prohlížeč souborového systému
+
+options.browser.colors.label=Barvy
+options.browser.colors.glob=Globální název souboru
+options.browser.colors.color=Barva
+options.browser.colors.add=Přidat
+options.browser.colors.remove=Odebrat
+
+options.browser.general.label=Obecné
+options.browser.general.defaultPath=Výchozí cesta:
+options.browser.general.defaultPath.favorites=Oblíbené
+options.browser.general.defaultPath.home=Domácí adresář
+options.browser.general.defaultPath.last=Nedávno navštivané adresáře
+options.browser.general.defaultPath.buffer=Rodičovský adresář aktuálního bufferu
+options.browser.general.defaultPath.working=Pracovní adresaář jEdit procesu
+options.browser.general.showMenubar=Zobrazit nabídku menu
+options.browser.general.showToolbar=Zobrazit panel nástrojů
+options.browser.general.showIcons=Zobrazit ikony
+options.browser.general.showHiddenFiles=Zobrazit skryté soubory
+options.browser.general.sortIgnoreCase=Ignorovat velikost písmen při řazení
+options.browser.general.sortMixFilesAndDirs=Maximální počet souborů a adresářů
+options.browser.general.doubleClickClose=Dvojklik na otevřený soubor jej zavře
+options.browser.general.currentBufferFilter=Koncovka aktuálního bufferu slouží \
+	jako filtr souborů v dialozích
+options.browser.general.useDefaultIcons=Použít výchozí ikony
+#}}}
+
+#{{{ Browser Context Menu
+options.browser.custom.context.label=Kontextové menu
+options.browser.custom.context.caption=Položky v menu po kliku pravým tlačítkem:
+#}}}
+
+#{{{ Font selector
+font-selector.title=Font selektor
+font-selector.family=Font family:
+font-selector.size=Font size:
+font-selector.style=Font style:
+font-selector.plain=Prostě
+font-selector.bold=Tučně
+font-selector.italic=Kurzívou
+font-selector.bolditalic=Tučně kurzívou
+font-selector.preview=Náhled
+font-selector.long-text=Rychlá hnědá liška skáče přes líného psa.
+#}}}
+
+#{{{ Color chooser, used by options.syntaxs
+colorChooser.title=Vyberte barvu
+#}}}
+
+#{{{ Style editor, used by options.syntaxs
+style-editor.title=Editor stylu
+style-editor.tokenType=Typ tokenu:
+style-editor.italics=Kurzívou
+style-editor.bold=Tučně
+style-editor.fgColor=Barva textu:
+style-editor.bgColor=Barva pozadí:
+#}}}
+
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=Možnosti
+options.plugins.label=Pluginy
+options.no-plugins.label=Žádná nastavení pluginů
+#}}}
+
+#{{{ Help viewer
+helpviewer.title=jEdit Pomoc
+helpviewer.loading=Načítání...
+helpviewer.back.label=Zpět
+helpviewer.forward.label=Dopředu
+
+helpviewer.toc.loading=Načítání...
+helpviewer.toc.label=Obsah
+helpviewer.toc.welcome=Vítejte v jEdit
+helpviewer.toc.readme=Obecné informace
+helpviewer.toc.changes=Podrobný log změn
+helpviewer.toc.todo=To Do List a známé bugy
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.copying-apache=Apache License
+helpviewer.toc.copying-plugins=Plugin Licensing Amendment
+helpviewer.toc.plugins=Pluginy
+helpviewer.toc.online-apidocs=jEdit API Reference (Online)
+
+helpviewer.search.label=Hledat
+helpviewer.search.caption=Hledat:
+helpviewer.searching=Prohledávání...
+helpviewer.no-results=Žádné výsledky
+#}}}
+
+#{{{ Tip of the day window
+tip.title=Tip dne
+tip.caption=Věděli jste, že...
+tip.show-next-time=Zobrazovat tipy při spuštění
+tip.next-tip=Další tip
+
+tip.not-found=doc/tips adresář nebyl nalezen
+#}}}
+
+#upravit
+#{{{ Activity log
+log-viewer.title=Log aktivit
+log-viewer.caption=Celý text logu je uložen v {0}.
+log-viewer.copy=Kopírovat
+log-viewer.tail.label=Tail
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=$Zobrazit záložky
+view-markers.title=Záložka
+#}}}
+
+#{{{ I/O progress monitor
+io-progress-monitor.title=I/O progres monitor
+io-progress-monitor.caption={0} čekajících žádostí.
+io-progress-monitor.idle=Nečinné vlákno
+io-progress-monitor.abort=Přerušit
+
+#{{{ I/O abort dialog box
+abort.title=Přerušit I/O
+abort.message=Opravdu chcete přerušit aktuálně vykonávané\n\
+	vstupně/výstupní požadavky? Rozhodnete-li se přerušit ukládání\n\
+	souboru, můžete přijít o data.
+#}}}
+
+#}}}
+
+#{{{ Task  monitor
+task-monitor.title=Monitor úloh
+#}}}
+
+#{{{ VFS browser
+vfs.browser.title=Přohlížeč souborů
+vfs.browser.longtitle=Prohlížeč souborového systému
+vfs.browser.title.open=Prohlížeč souborů - Otevřít
+vfs.browser.title.save=Prohlížeč souborů - Uložit
+vfs.browser.title.dialog=Prohlížeč souborů - Otevřít
+vfs.browser.path=Cesta:
+vfs.browser.path.mnemonic=p
+vfs.browser.filter=Filtr:
+vfs.browser.tree.loading=Načítání...
+
+vfs.browser.name=Název
+vfs.browser.type=Typ
+vfs.browser.type.file=Soubor
+vfs.browser.type.directory=Adresář
+vfs.browser.type.filesystem=Souborový systém
+vfs.browser.status=Status
+vfs.browser.status.no=Bez přístupu
+vfs.browser.status.ro=Pouze pro čtení
+vfs.browser.status.append=Pouze pro přidání
+vfs.browser.status.rw=Čtení/zápis
+vfs.browser.size=Velikost
+vfs.browser.modified=Naposledy upraveno
+
+vfs.browser.file_filter.glob=Globální filtr souborů
+vfs.browser.file_filter.dir_only=Pouze adresáře
+
+#upravit
+#{{{ Actions
+vfs.browser.browse-window.label=Prohlížet v novém okně
+vfs.browser.browse.label=Přohlížet
+vfs.browser.close.label=Zavřít
+vfs.browser.copy-path.label=Kopírovat
+vfs.browser.delete.label=Smazat...
+vfs.browser.delete.shortcut=SMAZAT
+vfs.browser.home.label=Domovský adresář
+vfs.browser.home.shortcut=~
+vfs.browser.properties.label=Vlastnosti
+vfs.browser.properties.title=Vlastnosti souboru/adresáře
+vfs.browser.insert.label=Vložit
+vfs.browser.new-directory.label=Nový adresář...
+vfs.browser.new-directory.shortcut=VLOŽIT
+vfs.browser.new-file.label=Nový soubor
+vfs.browser.new-file.shortcut=C+n
+vfs.browser.open.label=Otevřít
+vfs.browser.open-desktop.label=Open in $Desktop
+vfs.browser.other-encoding-2.label=Other ({0})...
+vfs.browser.other-encoding.label=Other...
+vfs.browser.reload.label=Znovunačíst adresář
+vfs.browser.reload.shortcut=F5
+vfs.browser.rename.label=Přejmenovat...
+vfs.browser.rename.shortcut=F2
+vfs.browser.roots.label=Kořenový adresář
+vfs.browser.roots.shortcut=/
+vfs.browser.search-directory.label=Hledat v adresáři...
+vfs.browser.show-hidden-files.label=Zobrazit skryté souboru
+vfs.browser.synchronize.label=Adresář aktuálního bufferu
+vfs.browser.synchronize.shortcut=-
+vfs.browser.up.label=Rodičovský adresář
+vfs.browser.up.shortcut=A+Up
+vfs.browser.paste.label=Vložit
+vfs.browser.previous.label=Předchozí adresář
+vfs.browser.previous.shortcut=A+Left
+vfs.browser.next.label=Následující adresář
+vfs.browser.next.shortcut=A+Right
+#}}}
+
+#{{{ Tool bar
+
+#}}}
+
+#{{{ Commands menu
+vfs.browser.commands.label=Příkazy
+vfs.browser.commands.encoding.label=Kódování
+vfs.browser.commands.encoding.auto-detect=Autodetekce
+
+vfs.browser.open-in.label=Otevřít v
+vfs.browser.open-view.label=Nový pohled
+vfs.browser.open-plain-view.label=Nový prostý pohled
+vfs.browser.open-split.label=Nové rozdělení
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=Pluginy
+vfs.browser.plugins.plugin-manager.label=Manažer pluginů...
+vfs.browser.plugins.plugin-options.label=Plugin ...
+vfs.browser.plugins.no-plugins.label=Žádné pluginy
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=Oblíbené
+vfs.browser.favorites.add-to-favorites.label=Přidat do oblíbených
+vfs.browser.favorites.edit-favorites.label=Upravit oblíbené
+vfs.browser.favorites.no-favorites.label=Žádné položky v oblíbených
+#}}}
+
+vfs.browser.dialog.open=Otevřít
+vfs.browser.dialog.save=Uložit
+vfs.browser.dialog.choose-dir=Vybrat
+vfs.browser.dialog.filename=Název souboru:
+vfs.browser.dialog.filename.mnemonic=f
+
+#{{{ Dialogs
+vfs.browser.bad-filter.title=Nevalidní filtr
+vfs.browser.bad-filter.message=Filtr {0} není validní ({1})
+
+vfs.browser.recurse-favorites.title=Oblíbené nelze přidat do sebe
+vfs.browser.recurse-favorites.message=Seznam oblíbených nemůže být přidám do sebe.
+
+vfs.browser.delete-confirm.title=Potvrzení smazání souboru
+vfs.browser.delete-confirm.message=Opravdu chcete smazat následující {1}?\n\n\
+	{0}
+
+vfs.browser.delete-favorites.title=Odstranit z oblíbených
+vfs.browser.delete-favorites.message=Opravdu chcete odebrat následující soubory \
+	z oblíbených?\n\n\
+	{0}
+
+vfs.browser.rename.title=Přejmenovat soubor
+vfs.browser.rename.message=Zadejte nový název pro {0}:
+
+vfs.browser.mkdir.title=Nový adresář
+vfs.browser.mkdir.message=Název (nebo cesta) nového adresáře:
+#}}}
+
+#}}}
+
+#{{{ I/O status messages
+vfs.status.load=Načítám {0}
+vfs.status.load-markers=Načítám záložky pro {0}
+vfs.status.save=Ukládám {0}
+vfs.status.save-markers=Ukládám záložky pro {0}
+vfs.status.autosave=Autosaving {0}
+vfs.status.listing-directory=Listing {0}
+vfs.status.deleting=Mažu {0}
+vfs.status.renaming=Přejmenovávám {0} na {1}
+#}}}
+
+#{{{ Plugin manager
+
+plugin-manager.title=Manažer pluginů
+
+plugin-manager.hide-libraries=Ukrýt knihovny
+
+plugin-manager.mgr-options=Možnosti stahování...
+plugin-manager.plugin-options=Možnosti pluginu...
+plugin-manager.done=Zavřít
+
+plugin-manager.remove-confirm.title=Odebrat pluginy
+plugin-manager.remove-confirm.message=Opravdu chcete odebrat následující \
+	pluginy?
+
+plugin-manager.dependency.title=Závislosti pluginu
+plugin-manager.dependency.message={0} je vyžadován následujícími pluginy.\n\
+	Zrušením výběru {0} také zrušíte výběr následujících pluginů:
+
+plugin-manager.remove-dependencies.title=Závislosti pluginu
+plugin-manager.remove-dependencies.message=Odebrané pluginy jsou vyžadovány následujícími pluginy. \n\
+	Jejích odstranění zruší výběr následujících pluginů:
+
+plugin-manager.cleanup.label=Vyčištění
+plugin-manager.cleanup.title=Vyčistit data pluginů
+plugin-manager.cleanup.message=Odebrat data z následujicích pluginů:
+
+plugin-manager.noOrphan.label=Najít sirotka
+plugin-manager.noOrphan.title=Žádní .jar sirotci nenalezeni
+plugin-manager.noOrphan.message=Žádní .jar sirotci nenalezeni ve vaší instalaci jEdit
+
+plugin-manager.findOrphan.label=Najít sirotka
+plugin-manager.findOrphan.title=Najít .jar sirotka
+plugin-manager.findOrphan.message=Následující .jary nepatří do žádného pluginu\n\
+	Odebrat? \n (buďte opatrní, mohou být deklarovány dynamicky v některých\n\
+	pluginech - například JDBC ovladače):
+
+install-plugins.depend.title=Vyžadována závislost
+install-plugins.depend.message=Jeden nebo více pluginů, které instalujete,\n\
+	vyžadují další pluginy. Pokud budete pokračovat, budou\n\
+	automaticky nainstalovány.
+
+plugin-manager.status.loaded=Načteno
+plugin-manager.status.not-loaded=Nenačteno
+plugin-manager.status.error=Chyba
+
+plugin-manager.list-download-connect=Připojuji se k plugins.jedit.org
+plugin-manager.list-download=Stahuji seznam pluginů z plugins.jedit.org
+plugin-manager.list-download.need-password.title=HTTP Proxy vyžaduje heslo
+plugin-manager.list-download.need-password.message=HTTP Proxy vyžaduje heslo.\n\
+	Zadejte prosím správné username/heslo v "Možnosti stahování".
+plugin-manager.list-download.disconnected.title=Chyba při stahování seznamu pluginů
+plugin-manager.list-download.disconnected.message=Seznam pluginů nemohl být stažen:\n\
+	host {0} není dostupný. Zkuste zkontrolovat internetové připojení...
+plugin-manager.list-download.generic-error.title=Chyba při stahování seznamu pluginů
+plugin-manager.list-download.generic-error.message=Chyba při stahování seznamu pluginů:\n\
+	Chyba {0} - {1}
+plugin-manager.filterField=Zobrazit pouze pluginy jejich název obsahuje tento text
+
+#{{{ Plugin management
+manage-plugins.title=Spravovat
+
+manage-plugins.info.name=Název
+manage-plugins.info.version=Verze
+manage-plugins.info.status=Status
+manage-plugins.info.data=Data
+
+manage-plugins.data-size.unknown=<unknown>
+
+manage-plugins.remove=Odebrat...
+manage-plugins.help=Pomoc...
+plugin-load-error.message=Plugin nelze načíst
+plugin-load-error.title=Chyba při načítání pluginu
+#}}}
+
+#{{{ Plugin installation
+install-plugins.title=Instalovat
+
+install-plugins.info.name=Název
+install-plugins.info.size=Velikost
+install-plugins.info.releaseDate=Datum vydání
+install-plugins.info.version=Verze
+install-plugins.info.category=Kategorie
+
+install-plugins.totalSize={0} plugin(ů), celková velikost: {1}
+install-plugins.select-all=Vybrat vše
+install-plugins.install=Instalovat
+install-plugins.show-updates=Zobrazit updaty
+
+install-plugins.info=Autor: {0}\n\
+	Vydáno: {1}\n\
+	{2}
+
+update-plugins.title=Update
+
+plugin-manager.progress=Stahuji {0} z mirroru {1}
+plugin-manager.progress.title=Instaluji plugin(y)
+plugin-manager.progress.stop=Zastavit
+#}}}
+
+#{{{ Plugin remove error
+plugin-manager.remove-failed.title=Odebrání selhalo
+plugin-manager.remove-failed.message=Plugin {0}\n\
+	nemohl být odebrán.
+#}}}
+
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=Název
+fileprop.path=Cesta
+fileprop.lastmod=Poslední úprava
+fileprop.size=Velikost
+fileprop.properties=Vlastnosi
+fileprop.readable=Ke čtení
+fileprop.writeable=K zápisu
+fileprop.attribute=Atribut
+fileprop.okBtn=OK
+fileprop.cancelBtn=Ukončit
+fileprop.selectedFiles=Vybrané soubory
+fileprop.selectedDirectories=Vybrané adresáře
+#}}}
+
+#{{{ Activity log viewer
+log-viewer.dialog.title=Nastavení logu aktivit
+log-viewer.settings.label=Nastavení
+log-viewer.message.label=Zobrazená zpráva
+log-viewer.message.debug.label=Debug
+log-viewer.message.message.label=Zpráva
+log-viewer.message.notice.label=Upozornění
+log-viewer.message.warning.label=Varování
+log-viewer.message.error.label=Chyba
+#}}}
+
+logs-remove-all-errors.label=Odebrat všechny chyby
+
+taskmanager.remainingtasks.label={0} zbývajících úloh
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=Buffer edit mode (ex:java)
+statusbar.mode.sample=java
+statusbar.fold.label=Buffer fold handler (ex:explicit)
+statusbar.fold.sample=explicit
+statusbar.encoding.label=Buffer encoding (ex:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=Buffer wrapping mode (ex:N)
+statusbar.wrap.sample=N
+statusbar.indent.label=Automatic indentation (ex:F)
+statusbar.indent.sample=F
+statusbar.multiSelect.label=Buffer multiple selection mode (ex:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=Buffer rectangular selection mode (ex:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=Buffer overwrite (ex:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=Buffer line separator (ex:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=Memory status (ex:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=Clock (ex:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=Bufferset scope (ex:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=Selection's length (ex:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=Date of last modification on disk (ex:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+statusbar.task-monitor.label=Task monitor (ex: 7 task(s))
+statusbar.task-monitor.tooltip=Click to see running tasks dockable
+statusbar.task-monitor.sample=7 task(s)
+statusbar.task-monitor.template={0} task(s)
+#}}}
+
+killring.load-memoryerror.message=<html>Unable to load previously deleted text. Please increase your memory heap space.<br>\
+  Press <b>start</b> to start jEdit anyway, or <br><b>stop</b> to stop and change your settings. <br>You can also <b>delete the history file</b> and start jEdit</html>
+killring.load-memoryerror.title=Memory error
+killring.start=start
+killring.stop=stop
+killring.delete=delete killring and start
+
+#}}}
+
+#{{{ Macros                       
+
+#{{{ Properties used by macros     
+
+#{{{ common    
+macro.rs.general.ErrorNotEditableDialog.title=Write permission
+macro.rs.general.ErrorNotEditableDialog.message=Buffer is not editable!
+#}}}
+
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=Copy lines containing:
+macro.rs.CopyLinesContaining.LinesCopied.message=line(s) copied
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=Cut lines containing:
+macro.rs.CutLinesContaining.LinesCut.message=line(s) cut
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.ColumnBefore.label=Column (between 1 and
+macro.rs.GoToColumn.ColumnAfter.label=):
+#}}}
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=Converted Keywords to Upper Case
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=Buffer Mode Switcher
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=Enter buffer mode:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=Changing mode of buffer
+macro.rs.BufferModeSwitcher.To.label=to
+macro.rs.BufferModeSwitcher.Mode.label=Mode
+macro.rs.BufferModeSwitcher.NotFound.label=Not found
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=Line move does not work with multiple selection.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=Directory to browse:
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=open Buffers
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] Switch to; [SPACE] Switch to, keep dialog; [DEL] Close Buffer
+macro.rs.BufferSwitcher.Help1.label=Help for Buffer Switcher macro:
+macro.rs.BufferSwitcher.Help2.label=DELETE closes selected buffer.
+macro.rs.BufferSwitcher.Help3.label=ENTER switches to selected buffer, closes dialog.
+macro.rs.BufferSwitcher.Help4.label=ESCAPE closes dialog.
+macro.rs.BufferSwitcher.Help5.label=SPACE switches to selected buffer, does not close dialog.
+macro.rs.BufferSwitcher.Help6.label=NOTE: This dialog will only be displayed once
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=Buffer doesn't exist on disk.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=doesn't support deleting.
+macro.rs.DeleteCurrent.Deleted.message=Deleted:
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=Glob Pattern:
+macro.rs.GlobClose.ErrorGlobPattern.error=Error in glob pattern:
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=No other buffers are dirty
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=No buffers are dirty
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=Path name:
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=This macro only works on local files.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Windows, Unix, & MacOS X.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=Font size now:
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=Uneven number of type names and variables.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=This macro will not work when the Java interpreter
+macro.rs.GetPackageName.NotWorking2.error=loads jEdit with the '-jar' command line option.
+macro.rs.GetPackageName.NotFind.error=Could not find a package name.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=Infinite loop:
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=Generate Code
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Create Get Methods
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Create Set Methods
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Create Get and Set Methods
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error=The 'HyperSearch Results' window is not open.
+macro.rs.HyperSearchResults.NotMatch.error=No HyperSearch matches.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=BUFFERSET DEBUGGING
+macro.rs.DebugBuffersets.BufferCount.label=BufferCount:
+macro.rs.DebugBuffersets.BufferList.label=BUFFER LIST
+macro.rs.DebugBuffersets.EndBufferList.label=END BUFFER LIST
+macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LIST
+macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=Abbreviation
+macro.rs.DisplayAbbreviations.Expansion.label=Expansion
+macro.rs.DisplayAbbreviations.Close.label=Close
+macro.rs.DisplayAbbreviations.WriteSet.label=Write set
+macro.rs.DisplayAbbreviations.WriteAll.label=Write all
+macro.rs.DisplayAbbreviations.AbbreviationList.label=Abbreviation list
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=calling writeTableToNewBuffer for
+macro.rs.DisplayAbbreviations.SizeVector.label=size of vector:
+macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit Abbreviation Table
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=Abbreviation set:
+macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=Abbreviation    Expansion
+macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< No abbreviations >>
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=The jEdit action bar can be opened via the Utilities menu and is usually
+macro.rs.DisplayActions.jEditActionBar2.label=assigned to the C+ENTER keyboard shortcut.
+macro.rs.DisplayActions.NoLabel.label=<no label>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=Character at caret:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit Keyboard Shortcut Table
+macro.rs.DisplayShortcuts.Name.label=Name
+macro.rs.DisplayShortcuts.Shortcut1.label=Shortcut - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
+macro.rs.DisplayShortcuts.Close.label=Close
+macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
+macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
+macro.rs.DisplayShortcuts.Center.label=Center
+macro.rs.DisplayShortcuts.South.label=South
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=before:
+macro.rs.HexConvert.After.label=after:
+macro.rs.HexConvert.NotValidHex.label=is not valid hex string.
+macro.rs.HexConvert.ByteToString.label=Byte to String:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
+macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
+macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
+macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
+macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
+macro.rs.MakeBugReport.Error.label=[error]
+macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=Specify parameters for running script under
+macro.rs.RunScript.ScriptExecutionCancelled.message=Script execution was cancelled.
+macro.rs.RunScript.FileNotScript.error=The current file does not appear to be a script.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=daemon
+macro.rs.ShowThreads.Priority.label=prio
+macro.rs.ShowThreads.NotStarted.label=not started
+macro.rs.ShowThreads.Interrupted.label=interrupted
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] Close      [U] Update
+macro.rs.ShowThreads.CurrentThreads.label=Current Threads
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=Insert Buffer Local Properties
+macro.rs.InsertBufferProperties.Properties.label=Properties:
+macro.rs.InsertBufferProperties.Insert.label=Insert
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Note: Buffer Local properties must in the first or last 10 lines of a buffer to be recognized by jEdit.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--listing look and feel property names--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=System Properties
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=Add prefix and suffix to selected lines
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=Prefix to add:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=Suffix to add:
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=Color Picker
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=Internet Time
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=Enter name of tag:
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=LineFilter
+macro.rs.LineFilter.ignoreCaseCheckBox.label=Ignore case
+macro.rs.LineFilter.regexpPanelBorder.title=Pattern to compare (Regular Expression)
+macro.rs.LineFilter.processModeRadioButtonMatching.label=Matching
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=Not matching
+macro.rs.LineFilter.processModeOptionPanelBorder.title=Lines
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=Write to new buffer
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=Delete
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=Action
+
+macro.rs.LineFilter.DeleteActionDisabled.message=Delete is not available
+macro.rs.LineFilter.MultipleSelection.message=Multiple selection is not supported
+macro.rs.LineFilter.BlockSelection.message=Rectangular selection is not supported
+
+macro.rs.LineFilter.SummaryDeleted.label=Lines deleted!
+macro.rs.LineFilter.SummaryWritten.label=Lines written to a new buffer.
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=Invalid regular expression
+macro.rs.LineFilter.ErrorRegexpDialog.message=The regular expression is invalid!
+#}}}
+
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=Enter a character
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=Sorry, this macro doesn't work with Rectangular Selections.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=doesn't appear to be double-spaced:
+macro.rs.SingleSpaceBuffer.Line.message=Line
+macro.rs.SingleSpaceBuffer.NotBlank.message=isn't blank.
+#}}}
+
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C
+macros.folder.C.label=C
+
+C/Include_Guard.label=Include Guard
+C/Toggle_Header_Source.label=Toggle Header Source
+#}}}
+
+#{{{ Clipboard
+macros.folder.Clipboard.label=Clipboard
+
+Clipboard/Copy_Lines.label=Copy Lines
+Clipboard/Copy_Lines_Containing.label=Copy Lines Containing
+Clipboard/Copy_Visible_Lines.label=Copy Visible Lines
+Clipboard/Cut_Lines.label=Cut Lines
+Clipboard/Cut_Lines_Containing.label=Cut Lines Containing
+Clipboard/Paste_Indent.label=Paste Indent
+#}}}
+
+#{{{ Editing
+macros.folder.Editing.label=Editing
+
+Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
+Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
+Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Editing/Emacs_Next_Line.label=Emacs Next Line
+Editing/Emacs_Previous_Line.label=Emacs Previous Line
+Editing/Go_to_Column.label=Go To Column
+Editing/Greedy_Backspace.label=Greedy Backspace
+Editing/Greedy_Delete.label=Greedy Delete
+Editing/Greedy_Left.label=Greedy Left
+Editing/Greedy_Right.label=Greedy Right
+Editing/Keywords_to_Upper_Case.label=Keywords to Upper Case
+Editing/Mode_Switcher.label=Mode Switcher
+Editing/Move_Lines_Down.label=Move Lines Down
+Editing/Move_Lines_Up.label=Move Lines Up
+Editing/Open_Line_Above.label=Open Line Above
+Editing/Open_Line_Below.label=Open Line Below
+Editing/Toggle_Fold.label=Toggle Fold
+#}}}
+
+#{{{ Files
+macros.folder.Files.label=Files
+
+Files/Browse_Buffer_Directory.label=Browse Buffer Directory
+Files/Browse_Directory.label=Browse Directory
+Files/Buffer_Switcher.label=Buffer Switcher
+Files/Close_All_Except_Active.label=Close All Except Active
+Files/Copy_Name_to_Clipboard.label=Copy Name to Clipboard
+Files/Copy_Path_to_Clipboard.label=Copy Path to Clipboard
+Files/Delete_Current.label=Delete Current
+Files/Duplicate_Buffer.label=Duplicate Buffer
+Files/Glob_Close.label=Glob Close
+Files/Insert_Selection.label=Insert Selection
+Files/Next_Dirty_Buffer.label=Next Dirty Buffer
+Files/Open_Path.label=Open Path
+Files/Open_Selection.label=Open Selection
+Files/Send_Buffer_To_Next_Split.label=Send Buffer To Next Split
+Files/Toggle_ReadOnly.label=Toggle ReadOnly
+#}}}
+
+#{{{ Interface
+macros.folder.Interface.label=Interface
+
+Interface/Decrease_Font_Size.label=Decrease Font Size
+Interface/Increase_Font_Size.label=Increase Font Size
+Interface/Open_Context_Menu.label=Open Context Menu
+Interface/Reset_TextArea.label=Reset TextArea
+Interface/Splitpane_Grow.label=Splitpane Grow
+Interface/Toggle_Bottom_Docking_Area.label=Toggle Bottom Docking Area
+Interface/Toggle_Left_Docking_Area.label=Toggle Left Docking Area
+Interface/Toggle_Right_Docking_Area.label=Toggle Right Docking Area
+Interface/Toggle_Top_Docking_Area.label=Toggle Top Docking Area
+#}}}
+
+#{{{ Java
+macros.folder.Java.label=Java
+
+Java/Create_Constructor.label=Create Constructor
+Java/Get_Class_Name.label=Get Class Name
+Java/Get_Package_Name.label=Get Package Name
+Java/Java_File_Save.label=Java File Save
+Java/Make_Get_and_Set_Methods.label=Make Get and Set Methods
+Java/Preview_JavaDoc_Of_Current_Buffer.label=Preview JavaDoc Of Current Buffer
+#}}}
+
+#{{{ Misc
+macros.folder.Misc.label=Misc
+
+Misc/Buffer_to_HyperSearch_Results.label=Buffer to HyperSearch_Results
+Misc/Debug_BufferSets.label=Debug BufferSets
+Misc/Display_Abbreviations.label=Display Abbreviations
+Misc/Display_Actions.label=Display Actions
+Misc/Display_Character_Code.label=Display Character Code
+Misc/Display_Shortcuts.label=Display Shortcuts
+Misc/Evaluate_Buffer_in_BeanShell.label=Evaluate Buffer in BeanShell
+Misc/Hex_Convert.label=Hex Convert
+Misc/HyperSearch_Results_to_Buffer.label=HyperSearch Results to Buffer
+Misc/Make_Bug_Report.label=Make Bug Report
+Misc/Run_Script.label=Run Script
+Misc/Show_Threads.label=Show Threads
+#}}}
+
+#{{{ Properties
+macros.folder.Properties.label=Properties
+
+Properties/Create_Plugin_Announcement.label=Create Plugin Announcement
+Properties/Insert_Buffer_Properties.label=Insert Buffer Properties
+Properties/jEdit_Properties.label=jEdit Properties
+Properties/Look_and_Feel_Properties.label=Look and Feel Properties
+Properties/System_Properties.label=System Properties
+#}}}
+
+#{{{ Text 
+macros.folder.Text.label=Text
+
+Text/Add_Prefix_and_Suffix.label=Add Prefix and Suffix
+Text/Color_Picker.label=Color Picker
+Text/Compose_Tag.label=Compose Tag
+Text/Duplicate_Line.label=Duplicate Line
+Text/Insert_Date.label=Insert Date
+Text/Insert_Tag.label=Insert Tag
+Text/Line_Filter.label=Line Filter
+Text/Next_Char.label=Next Char
+Text/Reverse_Lines.label=Reverse Lines
+Text/Single_Space_Buffer.label=Single Space Buffer
+#}}}
+
+#}}}
