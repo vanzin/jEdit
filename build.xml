@@ -229,6 +229,10 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
+			<classpath id="classpath.compile">
+				<fileset dir="${lib.dir}/compile"
+					 includes="*.jar"/>
+			</classpath>
 			<include name="org/**"/>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
