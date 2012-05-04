@@ -925,8 +925,9 @@ public abstract class VFS
 
 	//{{{ _backup() method
 	/**
-	 * Backs up the specified file. This should only be overriden by
-	 * the local filesystem VFS.
+	 * Backs up the specified file. Default implementation in 5.0pre1
+	 * copies the file to the backup directory. Before 5.0pre1 it was
+	 * empty. 
 	 * @param session The VFS session
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
@@ -936,6 +937,65 @@ public abstract class VFS
 	public void _backup(Object session, String path, Component comp)
 		throws IOException
 	{
+		// File systems do not like some characters, which
+		// may be part of a general path. Let's get rid of them.
+		String sForeignChars = ":*?\"<>|";
+		// Construct a regex from sForeignChars
+		StringBuilder sbForeignCharsEsc = new StringBuilder(20);
+		for (int i = 0; i < sForeignChars.length(); i++)
+		{
+			sbForeignCharsEsc.append("\\");
+			sbForeignCharsEsc.append(sForeignChars.charAt(i));
+		}
+		
+		String pathNorm = path.replaceAll("[" + sbForeignCharsEsc + "]", "_");
+		
+		// maybe the file is not applicable to local filesystem
+		// but don't worry - for backup purposes it may be out
+		// of a real filesystem
+		File file = new File(pathNorm);
+		File backupDir = MiscUtilities.prepareBackupDirectory(file);
+		if (!backupDir.exists())
+		{
+			// Usually that means there is no specified backup
+			// directory.
+			Log.log(Log.WARNING, VFS.class, "Backup of file " + 
+				path + " failed. Directory " + backupDir +
+				" does not exist.");
+			return;
+		}
+		
+		File backupFile = MiscUtilities.prepareBackupFile(file, backupDir);
+		if (backupFile == null)
+		{
+			return;
+		}
+		
+		// do copy using VFS.copy
+		VFS vfsDst = VFSManager.getVFSForPath(backupFile.getPath());
+		Object sessionDst = vfsDst.createVFSSessionSafe(
+				backupFile.getPath(), comp);
+		if (sessionDst == null)
+			{
+			return;
+			}
+		try
+		{
+			VFS vfsSrc = VFSManager.getVFSForPath(path);
+			if (!copy(null, vfsSrc, session, path,
+				vfsDst, sessionDst, backupFile.getPath(),
+				comp, true))
+			{
+				Log.log(Log.WARNING, VFS.class, "Backup of file " + 
+					path + " failed. Copy to " + backupFile +
+					" failed.");
+			}
+		}
+		finally
+		{
+			vfsDst._endVFSSession(sessionDst, comp);
+		}
+		
 	} //}}}
 
 	//{{{ _createInputStream() method

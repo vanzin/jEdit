@@ -12,6 +12,9 @@ this release.
 
 {{{ Bug fixes
 
+- Added backup of remote files, for example opened with FTP plugin.
+  (#1525654 Jarek Czekalski)
+
 - Fixed NPE which was shown in place of a proper error message for empty
   keyword elements in mode XML. (Kazutoshi Satoda)
 
