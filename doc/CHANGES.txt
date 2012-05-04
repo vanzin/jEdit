@@ -58,6 +58,11 @@ this release.
 }}}
 {{{ API Changes
 
+- New VFS capability: NON_AWT_SESSION_CAP and a helper method
+  VFS.createVFSSessionSafe that frees the caller from entering the EDT
+  thread in most cases. All built-in filesystems have this capability set.
+  (Jarek Czekalski)
+
 - The status bar widget service is now
   org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory instead of
   org.gjt.sp.jedit.gui.statusbar.StatusWidget (only the name in service.xml)
@@ -65,7 +70,7 @@ this release.
   StatusWidget (#3521413 Matthieu Casanova)
 
 - New public constructor for org.gjt.sp.jedit.gui.ErrorListDialog
-  allowing for specifying custom urgency (priority).
+  allowing for specifying custom urgency (priority). (Jarek Czekalski)
 
 - TextArea.isCaretVisible became public (patch #3518424 Makarius)
 

@@ -41,6 +41,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkThread;
 //}}}
 
@@ -66,12 +67,15 @@ import org.gjt.sp.util.WorkThread;
  * persistence return a dummy object as a session.<p>
  *
  * Methods whose names are prefixed with "_" expect to be given a
- * previously-obtained session object. A session must be obtained from the AWT
- * thread this method:
+ * previously-obtained session object. A session must be obtained with
+ * this method:
  *
  * <ul>
  * <li>{@link #createVFSSession(String,Component)}</li>
  * </ul>
+ *
+ * That method should be called from the AWT (EDT) thread, unless
+ * the filesystem has <code>NON_AWT_SESSION_CAP</code> capability.<p>
  *
  * When done, the session must be disposed of using
  * {@link #_endVFSSession(Object,Component)}.<p>
@@ -81,7 +85,8 @@ import org.gjt.sp.util.WorkThread;
  * The following methods cannot be called from an I/O thread:
  *
  * <ul>
- * <li>{@link #createVFSSession(String,Component)}</li>
+ * <li>{@link #createVFSSession(String,Component)} - unless
+ *     <code>NON_AWT_SESSION_CAP</code> capability is set</li>
  * <li>{@link #insert(View,Buffer,String)}</li>
  * <li>{@link #load(View,Buffer,String)}</li>
  * <li>{@link #save(View,Buffer,String)}</li>
@@ -161,6 +166,16 @@ public abstract class VFS
 	 * @since jEdit 4.1pre1
 	 */
 	public static final int CASE_INSENSITIVE_CAP = 1 << 7;
+
+	/**
+	 * Sessions created outside Event Dispatching Thread -
+	 * file system capability. Set for the file system that does not
+	 * require that <code>createVFSSession</code> is called on edt.
+	 * All systems that do not implement <code>createVFSSession</code>
+	 * should set it, but others may too.
+	 * @since jEdit 5.0pre1
+	 */
+	public static final int NON_AWT_SESSION_CAP = 1 << 8;
 
 	//}}}
 
@@ -411,11 +426,13 @@ public abstract class VFS
 	 */
 	public void reloadDirectory(String path) {} //}}}
 
-	//{{{ createVFSSession() method
+	//{{{ createVFSSession() methods
 	/**
 	 * Creates a VFS session. This method is called from the AWT thread,
 	 * so it should not do any I/O. It could, however, prompt for
-	 * a login name and password, for example.
+	 * a login name and password, for example. A simpler filesystem
+	 * may set the <code>NON_AWT_SESSION_CAP</code> capability. When set,
+	 * sessions may be obtained from any thread.
 	 * @param path The path in question
 	 * @param comp The component that will parent any dialog boxes shown
 	 * @return The session. The session can be null if there were errors
@@ -424,7 +441,30 @@ public abstract class VFS
 	public Object createVFSSession(String path, Component comp)
 	{
 		return new Object();
-	} //}}}
+	}
+	
+	/**
+	* Same as {@link #createVFSSession}, but may be called fromy any
+	* thread. It first checks the <code>NON_AWT_SESSION_CAP</code>
+	* capability and enters EDT thread if necessary.
+	*/
+	public Object createVFSSessionSafe(final String path,
+	                                   final Component comp)
+	{
+		Object session = null;
+		if ((getCapabilities() & NON_AWT_SESSION_CAP) != 0)
+		{
+			session = createVFSSession(path, comp);
+		}
+		else
+		{
+			SessionGetter getter = new SessionGetter(path, comp);
+			ThreadUtilities.runInDispatchThreadAndWait(getter);
+			session = getter.get();
+		}
+		return session;
+	}
+	//}}}
 
 	//{{{ load() method
 	/**
@@ -1199,6 +1239,27 @@ public abstract class VFS
 			this.re = re;
 			this.color = color;
 		}
+	} //}}}
+
+	//{{{ SessionGetter class
+	private class SessionGetter implements Runnable
+	{
+		public SessionGetter(String path, Component comp)
+		{
+			this.path = path;
+			this.comp = comp;
+		}
+
+		private Object session;
+		private String path;
+		private Component comp;
+		
+		public void run()
+		{
+			session = createVFSSession(path, comp);
+		}
+		
+		public Object get() { return session; }
 	} //}}}
 
 	//}}}
