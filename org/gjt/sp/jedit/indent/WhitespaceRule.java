@@ -43,7 +43,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
  * @version $Id$
  * @since jEdit 4.3pre10
  */
-public class WhitespaceRule implements IndentRule
+public class WhitespaceRule extends IndentRule
 {
 
 	public void apply(JEditBuffer buffer, int thisLineIndex,

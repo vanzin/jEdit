@@ -6,6 +6,7 @@
  * Copyright (C) 1999, 2005 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  * Portions copyright (C) 2006 Matthieu Casanova
+ * Copyright (C) 2012 Kazutoshi Satoda
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1372,6 +1373,7 @@ public abstract class TextArea extends JComponent
 		buffer.getText(begin, end - begin, segment);
 	}//}}}
 
+	//{{{ getVisibleLineSegment() method
 	/**
 	 * Returns the visible part of the given line in a CharSequence.
 	 * The buffer data are not copied. so this should be used in EDT
@@ -1389,7 +1391,7 @@ public abstract class TextArea extends JComponent
 		int begin = xyToOffset(offset + point.x, point.y);
 		int end = xyToOffset(getPainter().getWidth(), point.y);
 		return buffer.getSegment(begin, end - begin);
-	}
+	} //}}}
 
 	//{{{ setText() method
 	/**
@@ -1409,8 +1411,6 @@ public abstract class TextArea extends JComponent
 			buffer.endCompoundEdit();
 		}
 	} //}}}
-
-	//}}}
 
 	//{{{ Selection
 
@@ -3396,13 +3396,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			delete();
 			break;
 		default:
-			boolean indent = buffer.isElectricKey(ch, caretLine) &&
-				"full".equals(buffer.getStringProperty("autoIndent"));
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
 				if(!doWordWrap(ch == ' '))
-					insert(str,indent);
+					insert(str,false);
+				if (buffer.isElectricKey(ch, caretLine))
+					buffer.indentLine(caretLine, true);
 			}
 			else
 				replaceSelection(str);
@@ -4454,8 +4454,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			String autoIndent = buffer.getStringProperty("autoIndent");
-			if ("full".equals(autoIndent) && buffer.isElectricKey('\n', caretLine))
+			if (buffer.isElectricKey('\n', caretLine))
 			{
 				buffer.indentLine(caretLine, true);
 			}
@@ -4465,6 +4464,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
 				
+				String autoIndent = buffer.getStringProperty("autoIndent");
 				if ("full".equals(autoIndent))
 					buffer.indentLine(caretLine, true);
 				else if ("simple".equals(autoIndent))

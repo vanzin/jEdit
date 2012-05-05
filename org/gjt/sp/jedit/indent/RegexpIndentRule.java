@@ -38,9 +38,23 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
  * @author Slava Pestov
  * @version $Id$
  */
-public class RegexpIndentRule implements IndentRule
+public class RegexpIndentRule extends IndentRule
 {
-	//{{{ RegexpIndentRule constructor
+	//{{{ RegexpIndentRule constructors
+	/**
+	 * Calls {@link #RegexpIndentRule(String, IndentAction, IndentAction,
+	 * IndentAction, boolean)} and sets <code>ruleName</code>.
+	 * @since 5.0pre1 
+	 */
+	public RegexpIndentRule(String ruleName,
+		String regexp, IndentAction prevPrev,
+		IndentAction prev, IndentAction thisLine, boolean collapse)
+	throws PatternSyntaxException
+	{
+		this(regexp, prevPrev, prev, thisLine, collapse);
+		this.ruleName = ruleName;
+	}
+
 	/**
 	 * @param collapse If true, then if the next indent rule is
 	 * an opening bracket, this rule will not increase indent.
@@ -87,12 +101,20 @@ public class RegexpIndentRule implements IndentRule
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + '[' + regexp + ']';
+		return getClass().getName()
+		+ ( ruleName != null ? "(" + ruleName + ")" : "" ) 
+		+ '[' + regexp + ']';
 	} //}}}
+	
+	@Override
+	public String getRuleName() { return ruleName; }
 
 	private IndentAction prevPrevAction, prevAction, thisAction;
 	private Pattern regexp;
 	private boolean collapse;
+	/** Property name for this indent rule, for example
+	 *  <code>indentNextLine</code>. */
+	private String ruleName;
 
 	//{{{ class TokenFilter
 	/**

@@ -12,6 +12,10 @@ this release.
 
 {{{ Bug fixes
 
+- Fixed 'too sensitive electric keys', making them work only when
+  a rule affecting the current line is found (unindentThisLine or
+  a closing bracket). (#1936678 Jarek Czekalski) 
+
 - Added backup of remote files, for example opened with FTP plugin.
   (#1525654 Jarek Czekalski)
 
@@ -60,6 +64,10 @@ this release.
 
 }}}
 {{{ API Changes
+
+- If electric key hit causes indentation, it is available as a separate
+  undoable event. So it's possible to revert the reindentation and not to
+  revert the character typed. (Jarek Czekalski)
 
 - New VFS capability: NON_AWT_SESSION_CAP and a helper method
   VFS.createVFSSessionSafe that frees the caller from entering the EDT

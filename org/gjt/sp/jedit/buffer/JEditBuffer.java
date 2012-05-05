@@ -1,10 +1,11 @@
 /*
  * JEditBuffer.java - jEdit buffer
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 2005 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
+ * Copyright (C) 2012 Jarek Czekalski <jarekczek@poczta.onet.pl>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1310,6 +1311,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?
+	 * <p>For a character to be an
+	 * effective electric key the following conditions must be met:
+	 * <ol><li>The key belongs to electric keys
+	 *     <li>The buffer is in full indentation mode
+	 *     <li>The line contains <code>unindentThisLine</code>
+	 *         rule token, or another rule affecting current line
+	 *         (for example <code>CloseBracketIndentRule</code>).</ol>
 	 * @since jEdit 4.3pre9
 	 */
 	public boolean isElectricKey(char ch, int line)
@@ -1320,7 +1328,41 @@ loop:		for(int i = 0; i < seg.count; i++)
 		// mode can be null, though that's probably an error "further up":
 		if (mode == null)
 			return false;
-		return mode.isElectricKey(ch);
+
+		// Quickly leave if a non-electric key was pressed or proceed to
+		// check the remaining conditions.
+		if (!mode.isElectricKey(ch))
+			return false;
+
+		boolean fullMode = "full".equals(
+				getStringProperty("autoIndent"));
+
+		boolean rulePresent = false;
+		// We'll try to apply dryly all the indent rules.
+		// If a rule provides actions, then we know it matches
+		// the line.
+		// This means duplicating the activities that are done in
+		// indentLine, but we do it only when user pressed an electric key,
+		// so no delay should be noticeable. This is not a critical section.
+		ArrayList<IndentAction> actions = new ArrayList<IndentAction>();
+		int prevLine = getPriorNonEmptyLine(line);
+		int prevLine2 = prevLine < 0 ? -1 : getPriorNonEmptyLine(prevLine);
+		for (IndentRule rule : getIndentRules(line))
+		{
+			actions.clear();
+			rule.apply(this, line, prevLine, prevLine2, actions);
+			if (actions.size() > 0)
+			{
+				String sRule = rule.getRuleName();
+				if ("unindentThisLine".equals(sRule)
+					|| "CloseBracketIndentRule".equals(sRule))
+				{
+					rulePresent = true;
+				}
+			}
+		}
+
+		return fullMode && rulePresent;
 	} //}}}
 
 	//}}}
