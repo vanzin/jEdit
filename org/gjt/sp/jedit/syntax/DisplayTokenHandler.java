@@ -264,17 +264,17 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		return true;
 	} //}}}
 
-	//{{{ countLeadingWhitespaces() method
-	private static int countLeadingWhitespaces(Segment lineText)
+	//{{{ endOffsetOfWhitespaces() method
+	private static int endOffsetOfWhitespaces(Segment lineText, int origin)
 	{
-		int count = 0;
-		while((count < lineText.count)
+		int offset = origin;
+		while((offset < lineText.count)
 			&& Character.isWhitespace(
-				lineText.array[lineText.offset + count]))
+				lineText.array[lineText.offset + offset]))
 		{
-			++count;
+			++offset;
 		}
-		return count;
+		return offset;
 	} //}}}
 
 	//{{{ makeScreenLineInWrapMargin() method
@@ -283,7 +283,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 */
 	private void makeScreenLineInWrapMargin(Chunk lineHead, Segment lineText)
 	{
-		final int endOfWhitespace = countLeadingWhitespaces(lineText);
+		final int endOfWhitespace = endOffsetOfWhitespaces(lineText, 0);
 		final float virtualIndentWidth = Chunk.offsetToX(lineHead, endOfWhitespace);
 		final LineBreaker lineBreaker = new LineBreaker(lineText, endOfWhitespace);
 		if(lineBreaker.currentBreak() == LineBreaker.DONE)
@@ -296,7 +296,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		{
 			final int offsetInMargin = Chunk.xToOffset(lineHead, wrapMargin, false);
 			assert offsetInMargin != -1;
-			lineBreaker.skipToNearest(offsetInMargin);
+			lineBreaker.skipToNearest(endOffsetOfWhitespaces(
+						lineText, offsetInMargin));
 			final int lineBreak = lineBreaker.currentBreak();
 			if(lineBreak == LineBreaker.DONE)
 			{
@@ -352,7 +353,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				{
 					final int offsetInRoom = lineEnd.xToOffset(processedWidth + remainingRoom, false);
 					assert offsetInRoom != -1;
-					lineBreaker.skipToNearest(offsetInRoom);
+					lineBreaker.skipToNearest(endOffsetOfWhitespaces(
+								lineText, offsetInRoom));
 					final int moreBreak = lineBreaker.currentBreak();
 					assert moreBreak != LineBreaker.DONE;
 					lineBreaker.advance();
