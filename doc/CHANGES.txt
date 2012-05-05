@@ -14,7 +14,9 @@ this release.
 
 - Fixed 'too sensitive electric keys', making them work only when
   a rule affecting the current line is found (unindentThisLine or
-  a closing bracket). (#1936678 Jarek Czekalski) 
+  a closing bracket). To trigger this behaviour the user needs to turn
+  electric keys mode to 'smart', in Editing options.
+  (#1936678 Jarek Czekalski) 
 
 - Added backup of remote files, for example opened with FTP plugin.
   (#1525654 Jarek Czekalski)
@@ -153,6 +155,12 @@ this release.
 
 }}}
 {{{ Editing
+
+- A new option (in Editing section) to control electric keys mode:
+  'on', 'smart', 'brackets only' or 'off'.
+  In smart mode electric keys work only if the current line matches
+  a rule that applies to the current line, like unindentThisLine.
+  (request #3514076 Jarek Czekalski)
 
 - Scala mode added (#3501401 Daniel Spiewak)
 

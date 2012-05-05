@@ -330,6 +330,12 @@
 
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
 
+            <para><literal>Electric keys</literal> may be used in different
+            operating modes. Most of them are self-explanatory.
+            <literal>smart</literal> mode means that electric keys will
+            work only if the current line matches one of the
+            rules affecting the current line. The rules are defined
+            in mode files.</para>
 
         </section>
 

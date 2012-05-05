@@ -1315,7 +1315,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * effective electric key the following conditions must be met:
 	 * <ol><li>The key belongs to electric keys
 	 *     <li>The buffer is in full indentation mode
-	 *     <li>The line contains <code>unindentThisLine</code>
+	 *     <li>Electric keys are not switched off
+	 *     <li>In smart electric keys mode:
+	 *         the line contains <code>unindentThisLine</code>
 	 *         rule token, or another rule affecting current line
 	 *         (for example <code>CloseBracketIndentRule</code>).</ol>
 	 * @since jEdit 4.3pre9
@@ -1324,18 +1326,22 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
 		Mode mode = ModeProvider.instance.getMode(ctx.rules.getModeName());
+		String keysMode = getStringProperty("electricKeysMode"); 
 
 		// mode can be null, though that's probably an error "further up":
 		if (mode == null)
 			return false;
 
-		// Quickly leave if a non-electric key was pressed or proceed to
-		// check the remaining conditions.
-		if (!mode.isElectricKey(ch))
+		if (!mode.isElectricKey(ch, keysMode))
 			return false;
 
-		boolean fullMode = "full".equals(
-				getStringProperty("autoIndent"));
+		if (!"full".equals(getStringProperty("autoIndent")))
+			return false;
+
+		if ("on".equals(keysMode))
+			return true;
+
+		// electric keys mode is set to "smart", so let's try to be smart
 
 		boolean rulePresent = false;
 		// We'll try to apply dryly all the indent rules.
@@ -1358,11 +1364,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 					|| "CloseBracketIndentRule".equals(sRule))
 				{
 					rulePresent = true;
+					break;
 				}
 			}
 		}
 
-		return fullMode && rulePresent;
+		return rulePresent;
 	} //}}}
 
 	//}}}

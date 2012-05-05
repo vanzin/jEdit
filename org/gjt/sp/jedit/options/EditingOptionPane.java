@@ -1,6 +1,6 @@
 /*
  * EditingOptionPane.java - Mode-specific options panel
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 2002 Slava Pestov
@@ -133,6 +133,11 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
 			"options.editing.deepIndent")));
 
+		String electricChoices = "on|smart|brackets only|off";
+		addComponent(
+			jEdit.getProperty("options.editing.electricKeysMode"),
+			electricKeysMode = new JComboBox(electricChoices.split("\\|")));
+
 		filenameGlob = new JTextField();
 		filenameGlob.setToolTipText(jEdit.getProperty("glob.tooltip"));
 		addComponent(jEdit.getProperty("options.editing.filenameGlob"),
@@ -256,6 +261,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JCheckBox elasticTabstops;
 	private JComboBox autoIndent;
 	private JCheckBox deepIndent;
+	private JComboBox electricKeysMode;
 	private JRadioButton largeFileMode;
 	private JRadioButton askLargeFileMode;
 	private JRadioButton noHighlightLargeFileMode;
@@ -281,6 +287,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		current.elasticTabstops = elasticTabstops.isSelected();
 		current.autoIndent = (String)autoIndent.getSelectedItem();
 		current.deepIndent = deepIndent.isSelected();
+		current.electricKeysMode = (String)electricKeysMode.getSelectedItem();
 	} //}}}
 
 	//{{{ selectMode() method
@@ -311,6 +318,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		elasticTabstops.setSelected(current.elasticTabstops);
 		autoIndent.setSelectedItem(current.autoIndent);
 		deepIndent.setSelected(current.deepIndent);
+		electricKeysMode.setSelectedItem(current.electricKeysMode);
 
 		updateEnabled();
 		revalidate();
@@ -348,6 +356,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		elasticTabstops.setEnabled(enabled);
 		autoIndent.setEnabled(enabled);
 		deepIndent.setEnabled(enabled);
+		electricKeysMode.setEnabled(enabled);
 	} //}}}
 
 	//}}}
@@ -395,6 +404,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		boolean elasticTabstops;
 		String autoIndent;
 		boolean deepIndent;
+		String electricKeysMode; 
 		//}}}
 
 		//{{{ ModeProperties constructor
@@ -436,6 +446,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				elasticTabstops = mode.getBooleanProperty("elasticTabstops");
 				autoIndent = mode.getProperty("autoIndent").toString();
 				deepIndent = mode.getBooleanProperty("deepIndent");
+				electricKeysMode = mode.getProperty("electricKeysMode").toString();
 			}
 			else
 			{
@@ -451,6 +462,8 @@ public class EditingOptionPane extends AbstractOptionPane
 				elasticTabstops= jEdit.getBooleanProperty("buffer.elasticTabstops");
 				autoIndent = jEdit.getProperty("buffer.autoIndent");
 				deepIndent = jEdit.getBooleanProperty("buffer.deepIndent");
+				electricKeysMode = jEdit.getProperty(
+					"buffer.electricKeysMode", "on");
 			}
 		} //}}}
 
@@ -488,6 +501,7 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "elasticTabstops");
 					jEdit.resetProperty(prefix + "autoIndent");
 					jEdit.resetProperty(prefix + "deepIndent");
+					jEdit.resetProperty(prefix + "electricKeysMode");
 
 					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
 						mode.getProperty("filenameGlob"))
@@ -530,6 +544,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
 			jEdit.setBooleanProperty(prefix + "elasticTabstops",elasticTabstops);
 			jEdit.setBooleanProperty(prefix + "deepIndent",deepIndent);
+			jEdit.setProperty(prefix + "electricKeysMode",electricKeysMode);
 		} //}}}
 	} //}}}
 }

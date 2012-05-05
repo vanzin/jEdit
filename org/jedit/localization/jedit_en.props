@@ -1351,6 +1351,7 @@ options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.elasticTabstops=Indent using elastic tabstops
 options.editing.elasticTabstops.tooltip=(Experimental) - may cause instability in jEdit.
 options.editing.deepIndent=Deep indent
+options.editing.electricKeysMode=Electric keys
 options.editing.autoIndent=Automatic indentation
 options.editing.largefilemode.title=Large file mode
 options.editing.largefilemode=What should I do about very big files:
