@@ -59,4 +59,17 @@ public abstract class IndentRule
 		ruleName = ruleName.replaceFirst("^.*\\.", "");
 		return ruleName;
 	}
+
+	/**
+	 * Whether the rule target is found in the given line.
+	 * Rule target is a bracket or a regular expression.
+	 * If a rule has no such a target, it also returns <code>false</code>.
+	 * @return <code>true</code> if line matches. Otherwise or if
+	 * not implemented - <code>false</code>.
+	 * @since 5.0pre1
+	 */
+	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
+	{
+		return false;
+	}
 }

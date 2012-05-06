@@ -174,7 +174,9 @@ public class RegexpIndentRule extends IndentRule
 	} //}}}
 
 	//{{{ lineMatches() method
-	private boolean lineMatches(JEditBuffer buffer, int lineIndex)
+	/** {@inheritDoc} */
+	@Override
+	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
 	{
 		TokenFilter filter
 			= new TokenFilter(buffer.getLineLength(lineIndex));

@@ -97,6 +97,14 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		}
 	} //}}}
 
+	//{{{ lineMatches() method
+	/** {@inheritDoc} */
+	@Override
+	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
+	{
+		return getBrackets(buffer, lineIndex).closeCount > 0;
+	} //}}}
+
 	private boolean aligned;
 
 	//{{{ AlignBracket class

@@ -1318,8 +1318,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 *     <li>Electric keys are not switched off
 	 *     <li>In smart electric keys mode:
 	 *         the line contains <code>unindentThisLine</code>
-	 *         rule token. Brackets are also treated as electric
-	 *         in this mode.
+	 *         (or other affecting current line) rule token.
 	 * </ol>
 	 * @since jEdit 4.3pre9
 	 */
@@ -1344,31 +1343,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		// Electric keys mode is set to "smart", so let's try to be smart.
 
-		// No smartness for brackets indentation, so these will pass always
-		if (mode.isElectricKey(ch, "brackets only"))
-			return true;
-
 		boolean rulePresent = false;
-		// We'll try to apply dryly all the indent rules.
-		// If a rule provides actions, then we know it matches
-		// the line.
-		// This means duplicating the activities that are done in
-		// indentLine, but we do it only when user pressed an electric key,
-		// so no delay should be noticeable. This is not a critical section.
-		ArrayList<IndentAction> actions = new ArrayList<IndentAction>();
-		int prevLine = getPriorNonEmptyLine(line);
-		int prevLine2 = prevLine < 0 ? -1 : getPriorNonEmptyLine(prevLine);
 		for (IndentRule rule : getIndentRules(line))
 		{
-			int cActionsBefore = actions.size();
-			// a rule being applied may increase or reduce the number
-			// of actions in the list, e.g. OpenBracketIndentRule
-			rule.apply(this, line, prevLine, prevLine2, actions);
-			int cActionsAfter = actions.size();
-			if (cActionsBefore != cActionsAfter)
+			String sRule = rule.getRuleName();
+			if ("unindentThisLine".equals(sRule)
+				|| "OpenBracketIndentRule".equals(sRule)
+				|| "CloseBracketIndentRule".equals(sRule))
 			{
-				String sRule = rule.getRuleName();
-				if ("unindentThisLine".equals(sRule))
+				if (rule.lineMatches(this, line))
 				{
 					rulePresent = true;
 					break;

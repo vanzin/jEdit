@@ -61,6 +61,14 @@ public class OpenBracketIndentRule extends BracketIndentRule
 		}
 	} //}}}
 
+	//{{{ lineMatches() method
+	/** {@inheritDoc} */
+	@Override
+	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
+	{
+		return getBrackets(buffer, lineIndex).openCount > 0;
+	} //}}}
+
 	//{{{ getOpenBracketCount() method
 	private int getOpenBracketCount(JEditBuffer buffer, int line)
 	{
