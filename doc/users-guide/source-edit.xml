@@ -236,7 +236,7 @@
             </para>
 
             <section id="autoindent-full">
-                <title>Automatic Indent Scheme: <quote>full</quote></title>
+                <title>Automatic Indent Scheme: full</title>
                 <para>
                 In this default scheme, the amount of indentation inserted is
                 mode-specific. In most edit modes, the indent of the previous
@@ -265,7 +265,7 @@
             </section>
 
             <section id="autoindent-simple">
-                <title>Automatic Indent Scheme: <quote>simple</quote></title>
+                <title>Automatic Indent Scheme: simple</title>
                 <para>
                 In this simplified automatic-indentation scheme, only two
                 actions trigger an indentation: pressing <keycap>ENTER</keycap>,
@@ -275,7 +275,7 @@
             </section>
 
             <section id="autoindent-none">
-                <title>Automatic Indent Scheme: <quote>none</quote></title>
+                <title>Automatic Indent Scheme: none</title>
                 <para>
                 In this automatic indentation scheme, no actions in the text
                 area will trigger a reindentation, and all lines start
