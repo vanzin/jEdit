@@ -262,6 +262,43 @@
                 Lines</guisubmenu> (shortcut: <keycap>C+i</keycap>) indents all
                 selected lines, or the current line if there is no selection, as
                 if in the <quote>full</quote> scheme.</para>
+
+                <section id="electric-keys">
+                <title>Electric keys</title>
+                
+                Electric keys cause reapplying of the indentation rules to
+                the current line. Thanks to the electric keys the following
+                code fragments are indented properly on-line:
+                <itemizedlist>
+                <listitem>
+                Java, C: brackets. If indenting brackets are defined for
+                the language, they are implicitly considered electric keys.
+                Thus a closing bracket is placed in its correct position
+                immediately after being typed.
+                </listitem>
+                <listitem>
+                Java, C: labels. Labels end with a colon and the colon is
+                included in electric keys for these languages. With
+                pressing the colon, the line is reindented and the labels
+                are indented a level to the left.
+                </listitem>
+                <listitem>
+                Basic: <literal>endif</literal>. Here <keycap>f</keycap>
+                letter is an electric key, that makes the line indented
+                to the left.
+                </listitem>
+                </itemizedlist>
+                Despite all the benefits of the electric keys feature,
+                they cause a lot of problems when the indentation is done
+                manually in an unusual way. It happens frequently with
+                long lines. When an electric key is pressed, the indentation
+                gets back to the state which the editor finds best.
+                In such cases it can be reverted with <guimenu>Undo</guimenu>
+                command. To counteract negative effects of the electric keys,
+                their activity may be limited through
+                <guimenu>Editing Options</guimenu>
+                (see <xref linkend="editing-pane" />).
+                </section>
             </section>
 
             <section id="autoindent-simple">

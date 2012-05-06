@@ -194,7 +194,8 @@
              the new line. To get this behavior, add the newline character to
              <literal>electricKeys</literal> in the xml-escaped form &amp;#xA;
              </para>
-             <para>Electric keys may be turned <literal>on</literal> or
+             <para>Electric keys (see <xref linkend="electric-keys" />)
+             may be turned <literal>on</literal> or
              <literal>off</literal> or put into other mode through
              <guimenu>Editing Options</guimenu>
              (see <xref linkend="editing-pane" />)
