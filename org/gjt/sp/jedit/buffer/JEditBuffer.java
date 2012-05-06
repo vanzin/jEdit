@@ -1368,7 +1368,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if (cActionsBefore != cActionsAfter)
 			{
 				String sRule = rule.getRuleName();
-				System.err.println(sRule);
 				if ("unindentThisLine".equals(sRule))
 				{
 					rulePresent = true;
