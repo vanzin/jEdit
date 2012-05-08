@@ -22,7 +22,7 @@
     </para></listitem>
 
     <listitem><para> Localization - jEdit now supports switching
-    between default locale, French, German and Japanese.
+    between default locale, French, German, Czech, and Japanese.
     Some translations for those locales are provided, containing
     common jEdit labels. It is also now possible to add new or contribute
     to existing translation property files for jEdit core
