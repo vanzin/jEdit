@@ -50,7 +50,7 @@ action-set.browser=Prohlížeč souborového systému
 action-set.macros=Makra
 action-set.plugin=Plugin: {0}
 
-macro-handler.beanshell.label=BeanShell skript
+macro-handler.beanshell.lahbel=BeanShell skript
 macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=Nepovedlo se uložit dokovací rozmístění.
@@ -74,10 +74,9 @@ view.context.customize=Upravit toto menu...
 #}}}
 
 #{{{ System tray menu
-tray.newView.label=Nový pohled
-#upravit
-tray.newPlainView.label=New plain view
-tray.exit.label=Exit
+tray.newView.label=Nové zobrazení
+tray.newPlainView.label=Nové prosté zobrazení
+tray.exit.label=Ukončit
 #}}}
 
 #{{{ Menu bar
@@ -160,17 +159,16 @@ vertical-paste-string-register.label=V$ertical Paste Register
 view-registers.label=Vie$w Registers
 #}}}
 
-#upravit
 #{{{ More Selection menu
-selection.label=More $Selection
+selection.label=Další $možnosti výběru
 select-none.label=$Odznačit vše
 select-word.label=Vybrat $slovo
 select-line.label=Vybrat řád$ek
 select-paragraph.label=Vybrat o$dstavec
 invert-selection.label=$Invertovat výběr
-toggle-multi-select.label=$Multiple Selection
-toggle-rect-select.label=$Rectangular Selection
-select-line-range.label=Sele$ct Line Range...
+toggle-multi-select.label=Ví$cenásobný výběr
+toggle-rect-select.label=O$bdélníkový výběr
+select-line-range.label=Vybrat $rozsah řádek...
 #}}}
 
 #{{{ Text menu
@@ -185,13 +183,12 @@ to-lower.label=Na $malá písmena
 to-upper.label=Na $velká písmena
 #}}}
 
-#upravit
 #{{{ Indent menu
-indent.label=$Indent
-indent-lines.label=$Indent Lines
-shift-left.label=Shift Indent $Left
-shift-right.label=Shift Indent $Right
-remove-trailing-ws.label=Remove Trailing $Whitespace
+indent.label=$Odsazení
+indent-lines.label=$Ododsadit řádky
+shift-left.label=Posunou odrážku v$levo
+shift-right.label=Posunout odrážku v$pravo
+remove-trailing-ws.label=Odebrat koncové whitespace
 spaces-to-tabs.label=$Mezery na tabulátory (Tab)
 tabs-to-spaces.label=$Tabulátory (Tab) na mezery
 #}}}
@@ -208,92 +205,89 @@ next-bracket.label=Jdi na další závorku
 
 #}}}
 
-#upravit
 #{{{ Search menu
 search.label=$Hledat
 find.label=$Najít...
 find-next.label=Najít $další
 find-prev.label=Najít $předchozí
 search-in-open-buffers.label=Hledat v otevřechých $bufferech...
-search-in-directory.label=Hledat v $adresáři... <!-- or "Hledat v adresářích" -->
+search-in-directory.label=Hledat v $adresáři...
 replace-in-selection.label=$Nahradit vybrané
 replace-and-find-next.label=Nahradit and Najít $další
 replace-all.label=Nahradit $vše
-quick-search.label=$Incremental Search Bar
-hypersearch.label=$HyperSearch Bar
-quick-search-word.label=I$ncremental Search for Word
-hypersearch-word.label=H$yperSearch for Word
-whole-word.label=$Whole Word
-ignore-case.label=Ignorovat velikost písmen
+quick-search.label=$Inkrementální vyhledávací panel
+hypersearch.label=Panel $hypervyhledávání
+quick-search-word.label=Inkrementální vyhledávání $slova
+hypersearch-word.label=Hypervyhledávání slova
+whole-word.label=$Celé slovo
+ignore-case.label=Ignorovat v$elikost písmen
 regexp.label=$Regulární výrazy
-hypersearch-results.label=HyperSearch Results
+hypersearch-results.label=Výsledky Hyperhledání
 #}}}
 
-#upravit
+#zkontrolovat
 #{{{ Markers menu
-markers.label=$Markers
-add-marker.label=$Add/Remove Marker
-add-marker-shortcut.label=Add Marker $With Shortcut
-remove-all-markers.label=Re$move All Markers
-goto-marker.label=$Go to Marker
-select-marker.label=$Select to Marker
-swap-marker.label=Swa$p Caret and Marker
-prev-marker.label=Go to $Previous Marker
-next-marker.label=Go to $Next Marker
-no-markers.label=No Markers
-markers.blank-line=[Blank line]
+markers.label=$Záložky
+add-marker.label=Přidat/$Odebrat Záložku
+add-marker-shortcut.label=Př$idat záložku se zkratkou
+remove-all-markers.label=$Odebrat všechny záložky
+goto-marker.label=$Jdi na záložku
+select-marker.label=$Vyber po záložku
+swap-marker.label=Prohodit záložku a $kurzor
+prev-marker.label=Jdi na $předchozí záložku
+next-marker.label=Jdi na $následujicí záložku
+no-markers.label=Žádné záložky
+markers.blank-line=[Prázdný řádek]
 #}}}
 
-#upravit
 #{{{ Folding menu
-folds.label=F$olding
-collapse-fold.label=$Collapse Fold
-expand-one-level.label=$Expand Fold One Level
-expand-fold.label=Expand $Fold Fully
-collapse-all-folds.label=Collapse $All Folds
-expand-folds.label=Expand Fo$lds With Level
-expand-all-folds.label=E$xpand All Folds
-select-fold.label=$Select Fold
-add-explicit-fold.label=A$dd Explicit Fold
-narrow-to-fold.label=Na$rrow to Fold
-narrow-to-selection.label=Narro$w to Selection
-parent-fold.label=$Go to Parent Fold
-prev-fold.label=Go to $Previous Fold
-next-fold.label=Go to $Next Fold
+folds.label=F$oldování
+collapse-fold.label=$Sbalit fold
+expand-one-level.label=$Rozbalit jednu úroveň foldu
+expand-fold.label=Rozbalit fold ú$plně
+collapse-all-folds.label=Sbalit $všechny foldy
+expand-folds.label=R$ozbalit foldy s úrovní
+expand-all-folds.label=Ro$zbalit všechny foldy
+select-fold.label=$Vybrat fold
+add-explicit-fold.label=$Přidat explicitní fold
+narrow-to-fold.label=Zúžit na $fold
+narrow-to-selection.label=Zúžit na vý$běr
+parent-fold.label=$Jdi na rodičovský fold
+prev-fold.label=Jdi na př$edchozí fold
+next-fold.label=Jdi na $následující fold
 #}}}
 
-#upravit
 #{{{ View menu
-view.label=$View
-new-view.label=New $View
-new-view.tooltip=New main window with dockables
-new-plain-view.label=Ne$w Plain View
-new-plain-view.tooltip=New main window with fewer toolbars and no dockables
-close-view.label=$Close View
-close-view.tooltip=Closes main window, and exits jEdit if this is the only View
-prev-buffer.label=Go to $Previous Buffer
-next-buffer.label=Go to $Next Buffer
-recent-buffer.label=Go to $Recent Buffer
-toggle-buffer-switcher.label=Toggle $Buffer Switcher
-focus-buffer-switcher.label=Focus on Buffer S$witcher
-toggle-line-numbers.label=Toggle $Line Numbers
-toggle-statusbar.label=Toggle S$tatus Bar
-toggle-gutter.label=Toggle $Gutter
-show-context-menu.label=Show Context Menu
-set-view-title.label=Set view title...
-set-view-title.tooltip=Set the title of the main window for easy identification from your desktop.
-toggle-full-screen.label=Toggle $full-screen mode
+view.label=$Zobrazení
+new-view.label=Nové $zobrazení 
+new-view.tooltip=Nové hlední okno s možností dokování
+new-plain-view.label=Nové $prosté zobrazení
+new-plain-view.tooltip=Nové hlavní okno s menším množstvím nástrojových panelů a žádným dokováním
+close-view.label=Z$avřít zobrazení
+close-view.tooltip=Zavře hlavní okno a jEdit také, pokud je to jediné zobrazení
+prev-buffer.label=Jdi na předchozí $buffer
+next-buffer.label=Jdi na další b$uffer
+recent-buffer.label=Jdi na poslední bu$ffer
+toggle-buffer-switcher.label=Zobrazit $selektor bufferu
+focus-buffer-switcher.label=$Focus na selektor bufferu
+toggle-line-numbers.label=Zobrazit čísla řádek
+toggle-statusbar.label=Zobrazit stavový řádek
+toggle-gutter.label=Zobrazit $Gutter
+show-context-menu.label=Zobrazit kontextové menu
+set-view-title.label=Nastavit $název zobrazení
+set-view-title.tooltip=Nastaví název hlavního okna pro jednoduchou identifikaci z plochy.
+toggle-full-screen.label=Zapnout "Na celou obrazovku"
 
 #upravit
 #{{{ Scrolling menu
 scrolling.label=Posunování (skrolování)
 scroll-to-current-line.label=Posunout $na aktuální řádek
-scroll-and-center.label=$Scroll and Center Caret
-center-caret.label=$Center Caret on Screen
-scroll-up-line.label=Line Scroll $Up
-scroll-down-line.label=Line Scroll $Down
-scroll-up-page.label=Page Scroll U$p
-scroll-down-page.label=Page Scroll D$own
+scroll-and-center.label=$Posunout na kurzor a vycentrovat obrazovku
+center-caret.label=$Posunout kurzor na střed obrazovky
+scroll-up-line.label=Posunout o řádek $nahoru
+scroll-down-line.label=Posunou o řádek $dolů
+scroll-up-page.label=Posunout o stránku n$ahoru
+scroll-down-page.label=Posunout o stránku d$olů
 #}}}
 
 #upravit
@@ -328,7 +322,7 @@ close-docking-area.label=$Uzavři aktuální dokovací oblast
 layout-load.label=$Načti dokovací rozmístění ...
 layout-save.label=$Ulož dokovací rozmístění layout ...
 layout-load-current-mode.label=Načíst dokovací rozmístění aktuálního režimu
-layout-save-current-mode.label=Uložiz dokovací rozmístění aktuálního režimu
+layout-save-current-mode.label=Uložit dokovací rozmístění aktuálního režimu
 #}}}
 
 #}}}
@@ -352,7 +346,7 @@ no-recent-dirs.label=Žádné poslední adresáře...
 favorites.label=$Oblíbené
 add-buffer-to-favorites.label=Přidat $buffer do Oblíbených
 add-dir-to-favorites.label=Přidat $adresář do Oblíbených
-edit-favorites.label=$Upravit Oblíbenvé
+edit-favorites.label=$Upravit Oblíbené
 #}}}
 
 #{{{ Current Directory menu
@@ -365,7 +359,7 @@ jedit-directory.label=Domovský adresář $jEdit
 
 #upravit
 #{{{ Settings Directory menu
-settings-directory.label=$Settings Directory
+settings-directory.label=$Nastavení adresáře
 #}}}
 
 #{{{ BeanShell menu
@@ -389,7 +383,7 @@ reload-modes.label=Znovunačíst $režimy úprav
 #upravit
 #{{{ Quick options menu
 quick-options.label=$Rychlé nastavení
-edit-syntax-style.label=Edit syntax style of token under caret
+edit-syntax-style.label=Upravit styl syntaxe tokenu pod kurzorem
 #}}}
 
 #}}}
@@ -415,9 +409,9 @@ no-plugins.label=Žádné pluginy nejsou nainstalovány
 #}}}
 
 #{{{ Help menu
-help-menu.label=$Pomoc
+help-menu.label=$Nápověda
 about.label=$Něco o jEdit...
-help.label=jEdit $Help
+help.label=jEdit $Nápověda
 tip-of-the-day.label=$Tip dne
 userFeedback.label=Máte připomínky?...
 #}}}
@@ -452,8 +446,8 @@ document-end.label=Jdi na konec bufferu
 document-home.label=Jdi na začátek bufferu
 end.label=End
 home.label=Home
-smart-end.label=Smart End
-smart-home.label=Smart Home
+smart-end.label=Chytrý End
+smart-home.label=Chytrý Home
 insert-literal.label=Insert Next Character Literally
 insert-newline.label=Vložit nový řádek
 insert-newline-indent.label=Vložit nový řádek a odrážku
@@ -529,16 +523,15 @@ view.docking.float.label={0} (Nová Floating instance)
 directory.not-local=Nelze zobrazit adresáře na vzdáleném souborovém systému
 directory.no-files=Žádné soubory
 
-#upravit
 #{{{ Gutter highlight
-view.gutter.marker.no-name=Marker
-view.gutter.marker=Marker: {0}
+view.gutter.marker.no-name=Záložka
+view.gutter.marker=Záložka: {0}
 #}}}
 
 #upravit
 #{{{ Status messages
-view.status.add-marker=Shortcut for new marker? [{0}]
-view.status.auto-wrap=Search string not found; wrapping around!
+view.status.add-marker=Zkratka pro novou záložku? [{0}]
+view.status.auto-wrap=Hledaný řetězec nebyl nalezen - zalamování textu okolo!
 view.status.bracket=Matches line {0}: {1}
 view.status.caret-tooltip=Offset, line and column number (offset,line,column[-virtual] relative%)
 view.status.copy-append-string-register=Register name to copy append to? [{0}]
@@ -625,21 +618,20 @@ error-list.plugin-manager=Plugin manažer
 #}}}
 
 #{{{
-#upravit
-largeBufferDialog.title=Velký buffer {0}
-largeBufferDialog.message=The buffer is very large and jEdit may become unresponsive\n\
-	due to syntax highlighting. You should consider the following options.\n\
-	-Keep Full syntax : jEdit's syntax highlight will work as usual, jEdit \n\
-	may become very slow, this is not recommended.\n\
-	-Context insensitive syntax highlighting. In this case, jEdit will\n\
-	do fast highlighting, but the result may not be perfect. The\n\
-	buffer is highlighted line by line without checking context\n\
-	of the previous line. It is possible that the syntax is not accurate\n\
-	if you have tokens on multiple lines (multiline comments, xml tags ...)\n\
-	-Use 'text' mode of jEdit (no syntax highlighting)
+largeBufferDialog.title=Rozsáhlý buffer {0}
+largeBufferDialog.message=Buffer je rozsáhlý a jEdit může přestat odpovídat\n\
+	kvůli zvýrazňování syntaxe. Měli byste zvážit následující možnosti.\n\
+	-Ponechat úplnou syntaxi: Zvýrazňování syntaxe bude pracovat jako obvykle,\n\
+	jEdit však může být velice pomalý, což nedoporučujeme. \n\
+	-Kontextově necitlivé zvýraznění syntaxe. V tomto případě bude jEdit \n\
+	provádět rychlé zvýrazňování, ale výsledek nemusí být dokonalý. Buffer \n\
+	bude zvýrazněn řádek po řádce bez kontroly kontextu předchozích řádek.\n\
+	Je možné že syntaxe nebude přesná, pokud máte tokeny na více řádkách (více-\n\
+	řádkové komentáře, xml tagy ...)\n\
+	-Použijte jEdit "text" režim (žádné zvýrazňování syntaxe)
 largeBufferDialog.fullSyntax=Úplné zvýraznění syntaxe
-largeBufferDialog.contextInsensitive=Context insensitive syntax highlight
-largeBufferDialog.defaultMode=Mód editace textu
+largeBufferDialog.contextInsensitive=Kontextově necitlivé zvýraznění syntaxe
+largeBufferDialog.defaultMode=Režím úpravy textu
 #}}}
 
 #{{{ I/O error dialog box
@@ -867,7 +859,7 @@ search.case=Ignorovat velikost písmen
 search.case.mnemonic=i
 search.regexp=Regulární výrazy
 search.regexp.mnemonic=x
-search.hypersearch=HyperSearch
+search.hypersearch=HyperHledání
 search.hypersearch.mnemonic=h
 search.wrap=Automatické zalamování
 search.wrap.mnemonic=t
@@ -888,7 +880,8 @@ search.all.mnemonic=l
 search.directory=Adresáři:
 search.directory.mnemonic=d
 search.skipHidden=Skip hiddens/backups
-search.skipBinary=Skip binary files <!-- Upravit -->
+#upravit
+search.skipBinary=Skip binary files
 search.skipHidden.mnemonic=h
 search.skipBinary.mnemonic=b
 
@@ -922,29 +915,28 @@ keepsearching.message=Nenalezeny žádné další shody. Pokračovat v hledání
 	{0,choice,0#beginning|1#end}?
 #}}}
 
-#upravit
 #{{{ HyperSearch results dialog
-hypersearch-results.title=HyperSearch Results
-hypersearch-results.result-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 file|1<{2,number,integer} files}'})
-hypersearch-results.open=Open
-hypersearch-results.open-view=Open in New View
-hypersearch-results.open-plain-view=Open in New Plain View
-hypersearch-results.open-split=Open in New Split
-hypersearch-results.remove-node=Remove Node
-hypersearch-results.new-search=New Search From Here
-hypersearch-results.expand-child-nodes=Expand Child Nodes
-hypersearch-results.collapse-child-nodes=Collapse Child Nodes
-hypersearch-results.copy-to-clipboard=Copy to clipboard
-hypersearch-results.redo=Redo HyperSearch
-hypersearch-results.tree-view=Toggle Tree View
-hypersearch-results.clear.label=Remove All Nodes
-hypersearch-results.stop.label=Stop HyperSearch and show current results
-hypersearch-results.multi.label=Toggle Multiple Results
-hypersearch-results.highlight.label=Set Match Highlight Style
-hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 line|1<{2,number,integer} lines}'})
-hypersearch-results.searching=Searching for "{0}"...
-hypersearch-results.no-results=No results found for "{0}".
-hypersearch-results.done=Results for "{0}":
+hypersearch-results.title=Výsledky hyperhledání
+hypersearch-results.result-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} výskytů v '{2,choice,1#1 file|1<{2,number,integer} souborech}'})
+hypersearch-results.open=Otevřít
+hypersearch-results.open-view=Otevřít v novém pohledu
+hypersearch-results.open-plain-view=Otevřít v novém prostém pohledu
+hypersearch-results.open-split=Otevřít v novém rozdělení
+hypersearch-results.remove-node=Odebrat uzel
+hypersearch-results.new-search=Nové hledání odsud
+hypersearch-results.expand-child-nodes=Rozbalit uzel potomka
+hypersearch-results.collapse-child-nodes=Sbalit uzel potomka
+hypersearch-results.copy-to-clipboard=Kopírovat do schránky
+hypersearch-results.redo=Znovu hyperhledání
+hypersearch-results.tree-view=Přepnout stromové zobrazení
+hypersearch-results.clear.label=Odebrat všechny uzly
+hypersearch-results.stop.label=Zastavít hyperhledání a zobrazit aktuální výsledky
+hypersearch-results.multi.label=Přepnout vícenásobné výsledky
+hypersearch-results.highlight.label=Nastavit zvýrazňování shod
+hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} výskytů na '{2,choice,1#1 line|1<{2,number,integer} řádkách}'})
+hypersearch-results.searching=Hledám "{0}"...
+hypersearch-results.no-results=Nenalezeny žádné výsledky pro "{0}".
+hypersearch-results.done=Výsledky pro "{0}":
 
 hypersearch-status=Hledání
 #}}}
@@ -1021,15 +1013,15 @@ selectlinerange.start=Počáteční řádek:
 selectlinerange.end=Konečný řádek:
 #}}}
   
-#upravit
+#zkontrolovat
 #{{{ View registers dialog
-view-registers.title=Registers
-view-registers.caption=Register:
-view-registers.clipboard=$ (clipboard)
-view-registers.selection=% (selection)
-view-registers.none=No registers defined
-view-registers.register=Register:
-view-registers.contents=Contents:
+view-registers.title=Registry
+view-registers.caption=Registr:
+view-registers.clipboard=$ (schránka)
+view-registers.selection=% (výběr)
+view-registers.none=Nedefinovány žádné registry
+view-registers.register=Registr:
+view-registers.contents=Obsah:
 view-registers.undefined=__UNDEFINED__
 #}}}
 
@@ -1060,7 +1052,6 @@ files-changed.ignore=Ignorovat
 files-changed.ignore.mnemonic=i
 #}}}
 
-#upravit
 #{{{ Abbrev dialogs
 add-abbrev.title=Přidat zkratku
 add-abbrev.mode=Přidat zkratku specifickou k režimu
@@ -1075,8 +1066,8 @@ edit-abbrev.duplicate.message=\
 	Chcete přepsat existující rozšíření zkratky?
 
 abbrev-editor.abbrev=Zkratka:
-abbrev-editor.before=Text to insert before caret:
-abbrev-editor.after=Text to insert after caret:
+abbrev-editor.before=Text k vložení před kurzor:
+abbrev-editor.after=Text k vložení za kurzor:
 #}}}
 
 #{{{ XMode errors
@@ -1090,7 +1081,7 @@ xmode-error.doctype-invalid=Expected a document type of MODE, found {0}  <!-- Up
 xmode-error.empty-tag=Tag {0} nemůže být prázdný.
 xmode-error.token-invalid=Typ tokenu {0} není validní.
 xmode-error.empty-keyword=Klíčové slovo nemůže být prázdné.
-xmode-error.regexp=Nevadlidní regulární výraz\n({0})
+xmode-error.regexp=Nevalidní regulární výraz\n({0})
 xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR a HASH_CHARS nebyly zpecifikovány
 xmode-error.delegate-invalid=Nevalidní delegate: {0}
 #}}}
@@ -1144,33 +1135,33 @@ macro-confirm.title=Macro Confirmation
 
 #upravit
 #{{{ BeanShell stuff
-beanshell-error.title=BeanShell Error
-beanshell-error.message=A BeanShell error occurred.
+beanshell-error.title=BeanShell Chyba
+beanshell-error.message=Vyskytla se BeanShell chyba.
 
-beanshell-eval-input.title=Evaluate BeanShell Expression
-beanshell-eval-input.message=BeanShell expression:\n\
+beanshell-eval-input.title=Vyhodnotit BeanShell výraz
+beanshell-eval-input.message=BeanShell výraz:\n\
 	\n\
-	Variables:\n\
-	view - The current view instance\n\
+	Proměnné:\n\
+	view - Aktuální instance pohledu\n\
 	editPane - The current edit pane instance\n\
 	textArea - The current text area instance\n\
-	buffer - The current buffer
+	buffer - Aktuální buffer
 
-beanshell-eval.title=BeanShell Evaluation
+beanshell-eval.title=BeanShell vyhodnocení
 beanshell-eval.message={0}
 
-beanshell-eval-line.title=Evaluate BeanShell Expression
-beanshell-eval-line.message=BeanShell expression to evaluate for each \
-	selected line:\n\
+beanshell-eval-line.title=Vyhodnotit BeanShell výraz
+beanshell-eval-line.message=BeanShell výraz k vyhodnocení pro každý řádek \
+	Vybraný řádek:\n\
 	\n\
-	Variables:\n\
-	line - The index of the line, from the start of the buffer\n\
-	index - The index of the line, from the start of the selection\n\
-	text - The text of the line\n\
-	view - The current view instance\n\
+	Proměnné:\n\
+	line - Index (číslo) řádky od počátku bufferu\n\
+	index - Číslo řádky od počátku výběru\n\
+	text - Text řádky\n\
+	view - Aktuální instance pohledu\n\
 	editPane - The current edit pane instance\n\
 	textArea - The current text area instance\n\
-	buffer - The current buffer
+	buffer - Aktuální buffer
 #}}}
 
 #{{{ Macro not recording dialog
@@ -1224,8 +1215,8 @@ format-maxlinelen.message=Zalamovací okraj musí být nastaven na nenulovou \n\
 #upravit
 #{{{ Text under caret does not have a syntax style (token type)
 syntax-style-no-token.title=Konfigurace způsobu syntaxe
-syntax-style-no-token.message=The text under the caret has no associated \
-	syntax style to configure.
+syntax-style-no-token.message=Text pod kurzorem nemá přiřazen žádný styl \
+	ke konfiguraci.
 #}}}
 
 #{{{ View title dialog
@@ -1277,13 +1268,13 @@ options.general.checkModStatusUpon.operations=buffer má focus nebo probíhá uk
 options.general.checkModStatusUpon.focusBuffer=visiting or saving the buffer
 options.general.checkModStatusUpon.none=ukládání bufferu
 options.general.recentFiles=Nedávné soubory k zapamatování:
-options.general.hypersearch.maxWarningResults=Max Hypersearch Results:
-options.general.sortRecent=Sort recent file list
-options.general.saveCaret=Save caret positions in recent file list
-options.general.persistentMarkers=Save marker positions
-options.general.resetUndo=Reset undo history on save
-options.general.restore=Restore previously open files on startup
-options.general.restore.splits=Restore split configuration
+options.general.hypersearch.maxWarningResults=Maximální počet výsledků hyperhledání:
+options.general.sortRecent=Seřadit seznam nedávných souborů
+options.general.saveCaret=Uložit pozici kurzoru v seznamu nedávných souborů
+options.general.persistentMarkers=Uložit pozici záložky
+options.general.resetUndo=Resetovat "Zpět" historii při uložení
+options.general.restore=Obnovit dříve otevřené soubory při spuštění
+options.general.restore.splits=Obnovit konfiguraci rozdělení
 options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
 options.general.encodingDetectors=List of encoding autodetectors:
@@ -1597,12 +1588,12 @@ options.status.edit.labelRadioButton=popisek
 options.status.edit.widgetRadioButton=widget
 options.status.edit.labelLabel=Zadejte popisek:
 options.status.edit.widgetLabel=Vyberte widget:
-options.status.caret.linenumber=Show caret line number
-options.status.caret.dot=Show caret offset from start of line
-options.status.caret.virtual=Show caret virtual offset from start of line
-options.status.caret.offset=Show caret offset from start of file
-options.status.caret.bufferlength=Show length of file
-options.status.caret.title=Caret position display options:
+options.status.caret.linenumber=Zobrazit číslo řádky kurzoru
+options.status.caret.dot=Zobrazit posun kurzoru od počátku řádky
+options.status.caret.virtual=Zobrazit virtuální posun kurzoru od počátku řádky
+options.status.caret.offset=Zobrazit posun kurzoru od počátku souboru
+options.status.caret.bufferlength=Zobrazit délku souboru
+options.status.caret.title=Možnosti zobrazení pozice kurzoru:
 #}}}
 
 #{{{ Syntax Highlighting pane
@@ -2109,6 +2100,7 @@ logs-remove-all-errors.label=Odebrat všechny chyby
 
 taskmanager.remainingtasks.label={0} zbývajících úloh
 
+#upravit
 #{{{ Statusbar Widgets
 # the widgets should have a label and a sample.
 # the label is displayed when choosing the list of widgets
