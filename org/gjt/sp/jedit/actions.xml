@@ -33,13 +33,13 @@
 
 <ACTION NAME="add-buffer-to-favorites">
 	<CODE>
-		FavoritesVFS.addToFavorites(buffer.getPath(),VFS.DirectoryEntry.FILE);
+		FavoritesVFS.addToFavorites(buffer.getPath(),VFSFile.FILE);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="add-dir-to-favorites">
 	<CODE>
-		FavoritesVFS.addToFavorites(buffer.getDirectory(),VFS.DirectoryEntry.DIRECTORY);
+		FavoritesVFS.addToFavorites(buffer.getDirectory(),VFSFile.DIRECTORY);
 	</CODE>
 </ACTION>
 

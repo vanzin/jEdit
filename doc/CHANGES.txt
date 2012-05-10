@@ -4,10 +4,12 @@ jEdit 4.5 version history
 
 {{{ Version 4.5.2
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to
+this release.
 
 {{{ Bug Fixes
 
+ - Fixed favorites menu actions (#3512250 Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
