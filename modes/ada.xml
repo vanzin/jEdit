@@ -37,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+		<!-- SPARK annotation comments. -->
+		<EOL_SPAN TYPE="COMMENT2">--#</EOL_SPAN>
 		<!-- Normal comments. -->
 		<EOL_SPAN TYPE="COMMENT1">--</EOL_SPAN>
 

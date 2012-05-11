@@ -156,7 +156,8 @@ for contributing to this release.
 }}}
 {{{ Editing
 
-- Ada mode improvements (patch #3523836 Peter C. Chapin)
+- Ada mode improvements (patch #3523836 Peter C. Chapin,
+  request #2860105 Britt)
 
 - A new option (in Editing section) to control electric keys mode:
   'on', 'smart', 'brackets only' or 'off'.
