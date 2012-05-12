@@ -334,33 +334,33 @@
             (see <xref linkend="electric-keys" />)
             may be used in different operating modes:
             <itemizedlist>
-            <listitem><literal>on</literal>:
+            <listitem><para><literal>on</literal>:
             Default mode of jEdit 4. Electric keys are active without
             limitations.
-            </listitem>
-            <listitem><literal>smart</literal>:
+            </para></listitem>
+            <listitem><para><literal>smart</literal>:
             Electric keys will
             work only if the current line matches one of the
             rules affecting the current line, for example
             <literal>unindentThisLine</literal> rule.
             This mode is reported to fail (bug #3523766)
             for lines starting with <literal>std::</literal> in C++.
-            </listitem>
-            <listitem><literal>brackets only</literal>:
+            </para></listitem>
+            <listitem><para><literal>brackets only</literal>:
             Only brackets are considered electric keys. This setting
             may be used if more electric keys are defined, but
             one wants to switch them off, leaving only brackets
             as electric keys. Indenting brackets are implicit
             electric keys.
-            </listitem>
-            <listitem><literal>off</literal>:
+            </para></listitem>
+            <listitem><para><literal>off</literal>:
             Electric keys are inactive. One needs to achieve
             the correct indentation using <guimenu>Indent</guimenu>
             command, preferrably assigned to a keyboard shortcut.
             Another handy feature in this mode is macro indenting
             both lines (not included), that could be assigned to the
             <keycap>ENTER</keycap> key.
-            </listitem>
+            </para></listitem>
             </itemizedlist>
             </para>
 
