@@ -343,8 +343,6 @@
             work only if the current line matches one of the
             rules affecting the current line, for example
             <literal>unindentThisLine</literal> rule.
-            This mode is reported to fail (bug #3523766)
-            for lines starting with <literal>std::</literal> in C++.
             </para></listitem>
             <listitem><para><literal>brackets only</literal>:
             Only brackets are considered electric keys. This setting

@@ -1,6 +1,6 @@
 /*
  * TextArea.java - Abstract jEdit Text Area component
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2005 Slava Pestov
@@ -3399,9 +3399,21 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
+				// It should be sufficient to check for electric key
+				// once, after inserting it. But smart UTL mode is adjusted
+				// to the current line contents and for better handling
+				// it should also check electric key before the insertion.
+				// See bug #3523766 (std:: case). 
+				boolean indent = false;
+				String keysMode =
+						buffer.getStringProperty("electricKeysMode");
+				if ("smart".equals(keysMode))
+					indent = buffer.isElectricKey(ch, caretLine); 
 				if(!doWordWrap(ch == ' '))
 					insert(str,false);
-				if (buffer.isElectricKey(ch, caretLine))
+				if (!indent)
+					indent = buffer.isElectricKey(ch, caretLine);
+				if (indent)
 					buffer.indentLine(caretLine, true);
 			}
 			else
