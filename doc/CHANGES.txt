@@ -1,5 +1,5 @@
 jEdit 5.0 version history
-       (changes since jEdit 4.5.1)
+       (changes since jEdit 4.5.2)
 :encoding=UTF-8:
 
 {{{ Version 5.0pre1
@@ -34,8 +34,6 @@ for contributing to this release.
 
 - Fixed IO error when changing VFS Browser filter content
   (#3502820 Matthieu Casanova)
-
-- Remove jar cache when unloading a plugin (#3514022 Matthieu Casanova)
 
 - Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
 
