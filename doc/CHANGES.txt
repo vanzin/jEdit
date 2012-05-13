@@ -11,6 +11,8 @@ this release.
 
  - Fixed favorites menu actions (#3512250 Matthieu Casanova)
 
+ - Remove jar cache when unloading a plugin (#3514022 - Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
