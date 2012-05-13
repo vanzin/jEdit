@@ -38,6 +38,8 @@ public class OpenBracketIndentRule extends BracketIndentRule
 		super(openBracket,
 			TextUtilities.getComplementaryBracket(openBracket,null));
 		this.aligned = aligned;
+		ruleName = "OpenBracketIndentRule-"
+		           + (this.aligned ? "aligned" : "unaligned");
 	} //}}}
 
 	//{{{ apply() method
@@ -60,6 +62,9 @@ public class OpenBracketIndentRule extends BracketIndentRule
 			handleCollapse(indentActions, false);
 		}
 	} //}}}
+
+	@Override
+	public String getRuleName() { return ruleName; }
 
 	//{{{ lineMatches() method
 	/** {@inheritDoc} */
@@ -96,4 +101,5 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	private boolean aligned;
+	private final String ruleName;
 }

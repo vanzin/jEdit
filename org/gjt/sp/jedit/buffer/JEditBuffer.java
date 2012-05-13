@@ -1348,8 +1348,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			String sRule = rule.getRuleName();
 			if ("unindentThisLine".equals(sRule)
-				|| "OpenBracketIndentRule".equals(sRule)
-				|| "CloseBracketIndentRule".equals(sRule))
+				|| "OpenBracketIndentRule-aligned".equals(sRule)
+				|| "CloseBracketIndentRule-aligned".equals(sRule))
 			{
 				if (rule.lineMatches(this, line))
 				{
