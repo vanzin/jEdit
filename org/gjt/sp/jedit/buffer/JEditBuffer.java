@@ -1449,7 +1449,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ createPosition() method
 	/**
-	 * Creates a floating position.
+	 * Creates a floating position (<code>javax.swing.text.Position</code>).
+	 * The position is retained despite text editions.
+	 * <p>No explicit removal of position is necessary, only dereferencing it.
 	 * @param offset The offset
 	 */
 	public Position createPosition(int offset)
