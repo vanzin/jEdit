@@ -73,6 +73,14 @@ Release procedure of jEdit
   This means each fix is reviewed by at least two persons. This reduces
   possibility of unexpected breakages, and achieves the stability of the
   release branch.
+  
+  An exception to the above rule:
+  If a submitted merge request is not applied for a month,
+  the submitter may boost the priority of the entry to 6.
+  If 2 weeks pass since the submitter boosted the priority, he
+  is entitled to do the merge himself. This is the last resort as
+  it's always better to have a second eye on the fix. Only
+  non-questioned merge requests may be merged by the submitter.
 
   During this process, some more preview builds may be made periodically.
 
