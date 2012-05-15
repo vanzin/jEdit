@@ -338,11 +338,17 @@
             Default mode of jEdit 4. Electric keys are active without
             limitations.
             </para></listitem>
-            <listitem><para><literal>smart</literal>:
+            <listitem><para><literal>smart UTL</literal>:
             Electric keys will
             work only if the current line matches one of the
             rules affecting the current line, for example
-            <literal>unindentThisLine</literal> rule.
+            <literal>unindentThisLine</literal> (UTL) rule.
+            This is experimental for jEdit 5.0.
+            </para></listitem>
+            <listitem><para><literal>smart DMI</literal>:
+            Electric keys work only if the current line has not
+            been manually indented recently (DMI - Disabled by Manual
+            Indentation). This is experimental for jEdit 5.0.
             </para></listitem>
             <listitem><para><literal>brackets only</literal>:
             Only brackets are considered electric keys. This setting

@@ -158,10 +158,10 @@ for contributing to this release.
   request #2860105 Britt)
 
 - A new option (in Editing section) to control electric keys mode:
-  'on', 'smart', 'brackets only' or 'off'.
-  In smart mode electric keys work only if the current line matches
-  a rule that applies to the current line, like unindentThisLine.
-  (request #3514076 Jarek Czekalski)
+  'on', 'smart UTL', 'smart DMI', 'brackets only' or 'off'.
+  For details see the manual: Using jEdit / Customizing jEdit / 
+  Global Options / Editing Pane.
+  (request #3514076, #3523811 Jarek Czekalski)
 
 - Scala mode added (#3501401 Daniel Spiewak)
 

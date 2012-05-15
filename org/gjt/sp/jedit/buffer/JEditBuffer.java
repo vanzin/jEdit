@@ -351,7 +351,8 @@ public class JEditBuffer
 	 * Returns the start offset of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
-	 * @return The start offset of the specified line
+	 * @return The start offset of the specified line, that is the offset
+	 * after the end-of-line character before that line.
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineStartOffset(int line)
@@ -378,8 +379,10 @@ public class JEditBuffer
 	 * Returns the end offset of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
-	 * @return The end offset of the specified line
-	 * invalid.
+	 * @return The end offset of the specified line, that is the offset 
+	 * after the end-of-line character. Note that
+	 * <code>buffer.getLineOfOffset(buffer.getLineEndOffset(x))</code>
+	 * does not return <code>x</code> but <code>x+1</code>.
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineEndOffset(int line)
@@ -1307,6 +1310,82 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
+	//{{{ isIndentArea method
+	/**
+	 * Whether the given offset lies in the indentation area, that is
+	 * before the first non-whitespace character in a line. Margins
+	 * allow for narrowing the acceptable indentation area, for example
+	 * <code>isIndentArea(offset, 0, 1)</code> will not treat the last
+	 * whitespace character before the text as indentation area.
+	 * @param leftMargin The number of characters at the start of line
+	 * excluded from the indentation area.
+	 * @param rightMargin The number of characters at the end of the
+	 * indentation area to exclude.
+	 * @since 5.0pre1
+	 */
+	public boolean isIndentArea(int offset, int leftMargin, int rightMargin)
+	{
+		int line = getLineOfOffset(offset);
+		int areaStart = getLineStartOffset(line);
+		CharSequence lineSeg = getLineSegment(line);
+		int areaLen = StandardUtilities.getLeadingWhiteSpace(lineSeg);
+		int areaEnd = areaStart + areaLen - rightMargin;
+		areaStart += leftMargin;
+		return (offset >= areaStart && offset <= areaEnd);
+	}
+
+	//{{{ manualIndentDone method
+	/**
+	 * Called by the user interface layer to notify the buffer that manual
+	 * indentation of the given line took place.
+	 * Buffer needs that information for proper handling of
+	 * the electric keys in smart DMI mode.
+	 * @see #isElectricKey
+	 * @since 5.0pre1
+	 */
+	public void manualIndentDone(int line)
+	{
+		Log.log(Log.DEBUG, this, "manualIndentDone at line "+(line+1));
+		setLastManIndLine(line);
+	} //}}}
+
+	//{{{ setLastManIndLine method
+	/**
+	 * Remembers the last manually indented line. This is used by
+	 * electric key check in smart DMI mode.
+	 * @param line Line index.
+	 * @see #isElectricKey
+	 * @since 5.0pre1
+	 */
+	private void setLastManIndLine(int line)
+	{
+		int oldLine = getLastManIndLine();
+		if (oldLine == line)
+			return;
+		if (lastManIndLine != null)
+			positionMgr.removePosition(lastManIndLine);
+		int offset = getLineEndOffset(line);
+		// getLineEndOffset returns the offset after the eol, so we must
+		// subtract 1
+		if (offset > 0)
+			offset--;
+		lastManIndLine = createPosition(offset);
+	} //}}}
+
+	//{{{ getLastManIndLine method
+	/**
+	 * Returns the index of the last manually indented line.
+	 * @return -1 if no such a line.
+	 * @since 5.0pre1
+	 */
+	private int getLastManIndLine()
+	{
+		if (lastManIndLine == null)
+			return -1;
+		int offset = lastManIndLine.getOffset();
+		return getLineOfOffset(offset);
+	} //}}}
+
 	//{{{ isElectricKey() methods
 	/**
 	 * Should inserting this character trigger a re-indent of
@@ -1316,9 +1395,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * <ol><li>The key belongs to electric keys
 	 *     <li>The buffer is in full indentation mode
 	 *     <li>Electric keys are not switched off
-	 *     <li>In smart electric keys mode:
+	 *     <li>In smart UTL electric keys mode:
 	 *         the line contains <code>unindentThisLine</code>
 	 *         (or other affecting current line) rule token.
+	 *     <li>In smart DMI electric keys mode:
+	 *         if the line was not indented manually.
 	 * </ol>
 	 * @since jEdit 4.3pre9
 	 */
@@ -1341,25 +1422,33 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if ("on".equals(keysMode))
 			return true;
 
-		// Electric keys mode is set to "smart", so let's try to be smart.
+		// Electric keys mode is set to "smart ...", so let's try to be smart.
 
-		boolean rulePresent = false;
-		for (IndentRule rule : getIndentRules(line))
-		{
-			String sRule = rule.getRuleName();
-			if ("unindentThisLine".equals(sRule)
-				|| "OpenBracketIndentRule-aligned".equals(sRule)
-				|| "CloseBracketIndentRule-aligned".equals(sRule))
+		if ("smart UTL".equals(keysMode)) {
+			boolean rulePresent = false;
+			for (IndentRule rule : getIndentRules(line))
 			{
-				if (rule.lineMatches(this, line))
+				String sRule = rule.getRuleName();
+				if ("unindentThisLine".equals(sRule)
+					|| "OpenBracketIndentRule-aligned".equals(sRule)
+					|| "CloseBracketIndentRule-aligned".equals(sRule))
 				{
-					rulePresent = true;
-					break;
+					if (rule.lineMatches(this, line))
+					{
+						rulePresent = true;
+						break;
+					}
 				}
 			}
+			return rulePresent;
 		}
+		
+		assert "smart DMI".equals(keysMode) :
+			"Invalid electric keys mode: " + keysMode;
+		// Only prevent the electric key from activation if the current
+		// line was manually indented recently.
+		return (getLastManIndLine() != line);
 
-		return rulePresent;
 	} //}}}
 
 	//}}}
@@ -2790,6 +2879,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private final Object propertyLock;
 	public boolean elasticTabstopsOn = false;
 	private ColumnBlock columnBlock;
+	/** The position of the last manually indented line. Updated with every
+	  * manual indentation. */
+	private Position lastManIndLine;
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)

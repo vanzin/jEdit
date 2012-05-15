@@ -269,6 +269,16 @@ public abstract class Selection implements Cloneable
 		@Override
 		int setText(JEditBuffer buffer, String text)
 		{
+			// If selection fits in indentation area of
+			// a single line, that's manual indentation.
+			int line = buffer.getLineOfOffset(start);
+			if (buffer.getLineOfOffset(end) == line)
+			{
+				if (buffer.isIndentArea(start, 0, 0)
+				    && buffer.isIndentArea(end, 0, 0))
+					buffer.manualIndentDone(line);
+			}
+
 			buffer.remove(start,end - start);
 			if(text != null && text.length() != 0)
 			{

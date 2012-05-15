@@ -2100,6 +2100,7 @@ forward_scan:	do
 	 * method can be passed as a parameter to such methods as
 	 * {@link JEditBuffer#getLineText(int)}.
 	 *
+	 * @return Non-null, non-zero sized array of line indexes.
 	 * @since jEdit 3.2pre1
 	 */
 	public int[] getSelectedLines()
@@ -3407,10 +3408,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				boolean indent = false;
 				String keysMode =
 						buffer.getStringProperty("electricKeysMode");
-				if ("smart".equals(keysMode))
+				if ("smart UTL".equals(keysMode))
 					indent = buffer.isElectricKey(ch, caretLine); 
 				if(!doWordWrap(ch == ' '))
+				{
 					insert(str,false);
+					if (Character.isWhitespace(ch))
+					{
+						if (buffer.isIndentArea(caret, 0, 0))
+							buffer.manualIndentDone(caretLine);
+					}
+					
+				}
 				if (!indent)
 					indent = buffer.isElectricKey(ch, caretLine);
 				if (indent)
@@ -4556,7 +4565,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			buffer.shiftIndentLeft(getSelectedLines());
+			int[] lines = getSelectedLines();
+			buffer.shiftIndentLeft(lines);
+			buffer.manualIndentDone(lines[lines.length - 1]);
 		}
 	} //}}}
 
@@ -4570,7 +4581,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(!buffer.isEditable())
 			getToolkit().beep();
 		else
-			buffer.shiftIndentRight(getSelectedLines());
+		{
+			int[] lines = getSelectedLines();
+			buffer.shiftIndentRight(lines);
+			buffer.manualIndentDone(lines[lines.length - 1]);
+		}
 	} //}}}
 
 	//{{{ joinLines() method
@@ -5502,6 +5517,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 			replaceSelection("\t");
+
+		// Actually only tab at the beginning of a line is manual
+		// indentation, but making things simpler shouldn't hurt much.
+		buffer.manualIndentDone(caretLine);
 	} //}}}
 
 	//{{{ userInputTab() method
@@ -5801,6 +5820,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private void deleteNextCharacter(int offset)
 	{
 		assert offset < buffer.getLength();
+		if (buffer.isIndentArea(offset, 0, 1))
+			buffer.manualIndentDone(buffer.getLineOfOffset(offset));
 		int length = getNextCharacterOffset(offset) - offset;
 		buffer.remove(offset, length);
 	} //}}}
@@ -5827,6 +5848,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				}
 			}
 		}
+		if (buffer.isIndentArea(offset, 1, 0))
+			buffer.manualIndentDone(buffer.getLineOfOffset(offset));
 		buffer.remove(offset - length, length);
 	} //}}}
 
