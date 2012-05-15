@@ -167,6 +167,9 @@ buffer.indentSize=8
 # Automatic indentation
 buffer.autoIndent=full
 
+# Electric keys mode
+buffer.electricKeysMode=on
+
 # Soft tabs
 buffer.noTabs=false
 

@@ -462,8 +462,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				elasticTabstops= jEdit.getBooleanProperty("buffer.elasticTabstops");
 				autoIndent = jEdit.getProperty("buffer.autoIndent");
 				deepIndent = jEdit.getBooleanProperty("buffer.deepIndent");
-				electricKeysMode = jEdit.getProperty(
-					"buffer.electricKeysMode", "on");
+				electricKeysMode = jEdit.getProperty("buffer.electricKeysMode");
 			}
 		} //}}}
 
