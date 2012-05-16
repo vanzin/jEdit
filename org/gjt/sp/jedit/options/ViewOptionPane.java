@@ -136,10 +136,10 @@ public class ViewOptionPane extends AbstractOptionPane
 		buffersetScope.addItem(BufferSet.Scope.global);
 		buffersetScope.addItem(BufferSet.Scope.view);
 		buffersetScope.addItem(BufferSet.Scope.editpane);
-		BufferSet.Scope scope = null;
+		BufferSet.Scope scope;
 		try
 		{
-			scope = BufferSet.Scope.valueOf(jEdit.getProperty("bufferset.scope"));
+			scope = BufferSet.Scope.valueOf(jEdit.getProperty("bufferset.scope", "global"));
 		}
 		catch (IllegalArgumentException e)
 		{
