@@ -32,9 +32,6 @@ for contributing to this release.
 - Fixed freezes on hypersearch with encoding errors.
   (#3502585 Jarek Czekalski)
 
-- Fixed IO error when changing VFS Browser filter content
-  (#3502820 Matthieu Casanova)
-
 - Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
 
 - Fixed favorites menu actions (#3512250 Matthieu Casanova)
