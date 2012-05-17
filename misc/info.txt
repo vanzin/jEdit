@@ -1,0 +1,2 @@
+This is a directory for various files that are not to be compiled
+or included in the release.
