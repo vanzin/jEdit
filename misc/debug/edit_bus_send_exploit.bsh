@@ -1,0 +1,42 @@
+import java.util.concurrent.CountDownLatch;
+
+signalStart = new CountDownLatch(1);
+signalSent = new CountDownLatch(1);
+
+class Handler implements EBComponent
+{
+  public void handleMessage(EBMessage message)
+  {
+    System.err.println("handling starts");
+    signalSent.countDown();
+    Thread.sleep(200);
+    // System.err.println(message.getClass().getName());
+    System.err.println("handling ends");
+  }
+}
+
+h = new Handler();
+EditBus.addToBus(h);
+
+th1 = new Thread(new Runnable() {
+  public void run()
+  {
+    signalStart.await();
+    System.err.println("th1 will send");
+    EditBus.send(new PropertiesChanged(null));
+    System.err.println("th1 after send");
+  }
+});
+th1.start();
+
+th2 = new Thread(new Runnable() {
+    public void run() {
+      signalSent.await();
+      th1.interrupt();
+      Thread.sleep(1000);
+      EditBus.removeFromBus(h);
+    }
+});
+th2.start();
+System.err.println("macro done");
+signalStart.countDown();
