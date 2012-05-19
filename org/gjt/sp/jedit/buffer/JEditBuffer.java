@@ -1029,6 +1029,7 @@ public class JEditBuffer
 		int idealIndent = getIdealIndentForLine(lineIndex, prevLineIndex,
 			prevLineIndent);
 
+		setLastAutoIndLine(lineIndex);
 		if (idealIndent == -1 || idealIndent == currentIndent ||
 			(!canDecreaseIndent && idealIndent < currentIndent))
 			return false;
@@ -1386,6 +1387,41 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return getLineOfOffset(offset);
 	} //}}}
 
+	//{{{ setLastAutoIndLine method
+	/**
+	 * Remembers the last automatically indented line. This is used by
+	 * electric key check in smart NLO mode.
+	 * @param line Line index.
+	 * @see #isElectricKey
+	 * @since 5.0pre1
+	 */
+	private void setLastAutoIndLine(int line)
+	{
+		if (lastAutoIndLine != null)
+			positionMgr.removePosition(lastAutoIndLine);
+		int offset = getLineEndOffset(line);
+		// getLineEndOffset returns the offset after the eol, so we must
+		// subtract 1
+		if (offset > 0)
+			offset--;
+		lastAutoIndLine = createPosition(offset);
+		Log.log(Log.DEBUG, this, "autoIndentDone at line "+(line+1));
+	} //}}}
+
+	//{{{ getLastAutoIndLine method
+	/**
+	 * Returns the index of the last automatically indented line.
+	 * @return -1 if no such a line.
+	 * @since 5.0pre1
+	 */
+	private int getLastAutoIndLine()
+	{
+		if (lastAutoIndLine == null)
+			return -1;
+		int offset = lastAutoIndLine.getOffset();
+		return getLineOfOffset(offset);
+	} //}}}
+
 	//{{{ isElectricKey() methods
 	/**
 	 * Should inserting this character trigger a re-indent of
@@ -1400,6 +1436,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 *         (or other affecting current line) rule token.
 	 *     <li>In smart DMI electric keys mode:
 	 *         if the line was not indented manually.
+	 *     <li>In smart NLO electric keys mode:
+	 *         if the line was indented automatically and not manually.
 	 * </ol>
 	 * @since jEdit 4.3pre9
 	 */
@@ -1443,12 +1481,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 			return rulePresent;
 		}
 		
-		assert "smart DMI".equals(keysMode) :
-			"Invalid electric keys mode: " + keysMode;
-		// Only prevent the electric key from activation if the current
-		// line was manually indented recently.
-		return (getLastManIndLine() != line);
+		if ("smart DMI".equals(keysMode))
+		{
+			// Only prevent the electric key from activation if the current
+			// line was manually indented recently.
+			return (getLastManIndLine() != line);
+		}
 
+		assert "smart NLO".equals(keysMode) :
+			"Invalid electric keys mode: " + keysMode;
+		return (line == getLastAutoIndLine() && line != getLastManIndLine());
 	} //}}}
 
 	//}}}
@@ -2882,6 +2924,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/** The position of the last manually indented line. Updated with every
 	  * manual indentation. */
 	private Position lastManIndLine;
+	/** The position of the last automatically indented line.
+	  * Updated with every auto-indentation. */
+	private Position lastAutoIndLine;
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)

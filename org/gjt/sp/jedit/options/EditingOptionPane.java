@@ -133,7 +133,8 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
 			"options.editing.deepIndent")));
 
-		String electricChoices = "on|smart UTL|smart DMI|brackets only|off";
+		String electricChoices =
+			"on|smart UTL|smart DMI|smart NLO|brackets only|off";
 		addComponent(
 			jEdit.getProperty("options.editing.electricKeysMode"),
 			electricKeysMode = new JComboBox(electricChoices.split("\\|")));

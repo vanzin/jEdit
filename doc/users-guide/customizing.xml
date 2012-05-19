@@ -350,6 +350,13 @@
             been manually indented recently (DMI - Disabled by Manual
             Indentation). This is experimental for jEdit 5.0.
             </para></listitem>
+            <listitem><para><literal>smart NLO</literal>:
+            More restrictive version of DMI mode.
+            Electric keys work only on the line that was last
+            indented automatically (assuming this is a new line)
+            and if it has not been indented manually.
+            (DMI - New Line Only). This is experimental for jEdit 5.0.
+            </para></listitem>
             <listitem><para><literal>brackets only</literal>:
             Only brackets are considered electric keys. This setting
             may be used if more electric keys are defined, but

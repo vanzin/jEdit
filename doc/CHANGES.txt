@@ -154,8 +154,7 @@ and Thomas Meyer for contributing to this release.
 - Ada mode improvements (patch #3523836 Peter C. Chapin,
   request #2860105 Britt)
 
-- A new option (in Editing section) to control electric keys mode:
-  'on', 'smart UTL', 'smart DMI', 'brackets only' or 'off'.
+- A new option (in Editing section) to control electric keys mode.
   For details see the manual: Using jEdit / Customizing jEdit / 
   Global Options / Editing Pane.
   (request #3514076, #3523811 Jarek Czekalski)
