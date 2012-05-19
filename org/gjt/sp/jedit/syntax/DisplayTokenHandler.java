@@ -357,6 +357,11 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 								lineText, offsetInRoom));
 					final int moreBreak = lineBreaker.currentBreak();
 					assert moreBreak != LineBreaker.DONE;
+					if (moreBreak >= (remaining.offset + remaining.length))
+					{
+						// This can happen if remaining ends with whitespaces.
+						break;
+					}
 					lineBreaker.advance();
 					final Chunk moreShortened = remaining.snippetBeforeLineOffset(moreBreak);
 					initChunk(moreShortened, virtualIndentWidth, lineText);
