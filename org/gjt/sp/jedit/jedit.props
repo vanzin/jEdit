@@ -174,7 +174,7 @@ buffer.electricKeysMode=on
 buffer.noTabs=false
 
 #elastic tabstops
-buffer.elasticTabstops=false 
+buffer.elasticTabstops=false
 
 # Default edit mode
 buffer.defaultMode=text

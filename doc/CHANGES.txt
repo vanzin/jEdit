@@ -7,8 +7,8 @@ jEdit 5.0 version history
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
 Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
-Stephen Blackheath, Milan Černil, Makarius, Chris Sullins and Peter C. Chapin
-for contributing to this release.
+Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin
+and Thomas Meyer for contributing to this release.
 
 {{{ Bug fixes
 
