@@ -125,13 +125,15 @@ public class Gutter extends JComponent implements SwingConstants
 			public void contentInserted(JEditBuffer buffer, int startLine,
 					int offset, int numLines, int length)
 			{
-				updateLineNumberWidth();
+				if (numLines != 0)
+					updateLineNumberWidth();
 			}
 
 			public void contentRemoved(JEditBuffer buffer, int startLine,
 					int offset, int numLines, int length) 
 			{
-				updateLineNumberWidth();
+				if (numLines != 0)
+					updateLineNumberWidth();
 			}
 		};
 
