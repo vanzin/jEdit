@@ -4833,12 +4833,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		char[] foo = new char[_tabSize];
 		for(int i = 0; i < foo.length; i++)
 			foo[i] = ' ';
-
 		tabSize = painter.getStringWidth(new String(foo));
 
+		// Calculate an average to use a reasonable value for
+		// propotional fonts.
+		String charWidthSample = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		charWidth = (int)Math.round(
-			painter.getFont().getStringBounds(foo,0,1,
-			painter.getFontRenderContext()).getWidth());
+			painter.getFont().getStringBounds(charWidthSample,
+				painter.getFontRenderContext()).getWidth() / charWidthSample.length());
 
 		String oldWrap = wrap;
 		wrap = buffer.getStringProperty("wrap");
@@ -5978,18 +5980,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			// stupidity
-			char[] foo = new char[maxLineLen];
-			for(int i = 0; i < foo.length; i++)
-			{
-				foo[i] = ' ';
-			}
-			int maxRenderedLineLen = (int)painter.getFont().getStringBounds(
-				foo,0,foo.length,
-				painter.getFontRenderContext())
-				.getWidth();
-
-			if (softWrap && painter.getWidth() < maxRenderedLineLen)
+			int estimate = charWidth * maxLineLen;
+			if (softWrap && painter.getWidth() < estimate)
 			{
 				wrapToWidth = true;
 				wrapMargin = painter.getWidth() - charWidth * 3;
@@ -5997,7 +5989,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			else
 			{
 				wrapToWidth = false;
-				wrapMargin = maxRenderedLineLen;
+				wrapMargin = estimate;
 			}
 		}
 	} //}}}

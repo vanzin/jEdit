@@ -337,6 +337,10 @@ and Thomas Meyer for contributing to this release.
 - Introduced glyph caching to lower CPU usage on text rendering and
   line wrapping. (Kazutoshi Satoda)
 
+- Changed calculation of wrap margin to be based on an average character
+  width instead of a width of a space which gave very narrow wrap margin
+  for proportional fonts. (Kazutoshi Satoda)
+
 - Updated Move Lines Up and Down macros to move whole lines regardless of
   selection. (Dale Anson)
 
