@@ -64,6 +64,7 @@ public class ThreadUtilities
 	//{{{ runInDispatchThreadAndWait() method
 	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
+		boolean interrupted = false;
 		MyRunnable run = new MyRunnable(runnable);
 		runInDispatchThread(run);
 		while (!run.done)
@@ -76,10 +77,12 @@ public class ThreadUtilities
 				}
 				catch (InterruptedException e)
 				{
-					Log.log(Log.ERROR, ThreadUtilities.class, e);
+					interrupted = true;
 				}
 			}
 		}
+		if (interrupted)
+			Thread.currentThread().interrupt();
 	} //}}}
 
 	//{{{ runInBackground() method
