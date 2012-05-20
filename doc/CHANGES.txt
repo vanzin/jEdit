@@ -229,6 +229,8 @@ Thomas Meyer and Tom Power for contributing to this release.
 }}}
 {{{ UI
 
+- File System Browser docked on left by default. (Alan Ezust)
+
 - Suppressed output to standard error of encoding problems on opening
   files, which affects also hypersearch encoding errors. These errors are
   now displayed in a dialog, but not sent to error output.
