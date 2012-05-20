@@ -7,8 +7,8 @@ jEdit 5.0 version history
 Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
 Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
-Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin
-and Thomas Meyer for contributing to this release.
+Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin,
+Thomas Meyer and Tom Power for contributing to this release.
 
 {{{ Bug fixes
 
@@ -150,6 +150,8 @@ and Thomas Meyer for contributing to this release.
 
 }}}
 {{{ Editing
+
+- Made markers list selectable with keyboard. (patch #3509642 Tom Power)
 
 - Ada mode improvements (patch #3523836 Peter C. Chapin,
   request #2860105 Britt)
