@@ -24,9 +24,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 - Fixed NPE which was shown in place of a proper error message for empty
   keyword elements in mode XML. (Kazutoshi Satoda)
 
-- Fixed NPE when opening View option pane for the first time on a fresh
-  installation (#3520577 Matthieu Casanova)
-
 - Cannot DnD betweeen PingPongLists (#3501020 Jarek Czekalski)
 
 - Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
@@ -297,8 +294,8 @@ Thomas Meyer and Tom Power for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- New FileOpenerService, Offered by FastOpen 2.5, used by ErrorList 2.0
-  (#3481157 Alan Ezust)
+- New FileOpenerService, Offered by FastOpen 2.5, SmartOpen 1.1.
+  Used by ErrorList 2.0 (#3481157 Alan Ezust)
 
 - Macros folder can now be localized with properties
   macros.folder.[foldername].label (Matthieu Casanova)
