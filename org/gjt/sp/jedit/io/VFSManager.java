@@ -205,7 +205,9 @@ public class VFSManager
 	//{{{ runInAWTThread() method
 	/**
 	 * Executes the specified runnable in the AWT thread once all
-	 * pending I/O requests are complete.
+	 * pending I/O requests are complete. Even if there are no requests
+	 * active, the <code>Runnable</code> is not executed immediately,
+	 * but through <code>invokeLater</code>.
 	 * @since jEdit 2.5pre1
 	 * @deprecated Using that method, when you run a task in AWT Thread,
 	 * it will wait for all background task causing some unwanted delays.
@@ -275,23 +277,27 @@ public class VFSManager
 			if(errors.size() == 1)
 			{
 				
-
+				// the call below must grant that the Runnable is not
+				// executed immedietaly, but through invokeLater
 				VFSManager.runInAWTThread(new Runnable()
 				{
 					public void run()
 					{
-						String caption = jEdit.getProperty(
-							"ioerror.caption" + (errors.size() == 1
-							? "-1" : ""),new Integer[] {
-							Integer.valueOf(errors.size())});
-						new ErrorListDialog(
-							frame.isShowing()
-							? frame
-							: jEdit.getFirstView(),
-							jEdit.getProperty("ioerror.title"),
-							caption,errors,false);
-						errors.clear();
-						error = false;
+						synchronized(errorLock)
+						{
+							String caption = jEdit.getProperty(
+								"ioerror.caption" + (errors.size() == 1
+								? "-1" : ""),new Integer[] {
+								Integer.valueOf(errors.size())});
+							new ErrorListDialog(
+								frame.isShowing()
+								? frame
+								: jEdit.getFirstView(),
+								jEdit.getProperty("ioerror.title"),
+								caption,errors,false);
+							errors.clear();
+							error = false;
+						}
 					}
 				});
 			}
