@@ -453,7 +453,7 @@ utils=vfs.browser \
       combined-options \
       - \
       %quick-options
-vfs.browser.icon.small=16x16/apps/system-file-manager.png
+
 buffer-options.icon.small=16x16/actions/document-properties.png
 global-options.icon.small=16x16/categories/preferences-system.png
 combined-options.icon.small=16x16/categories/preferences-system.png
@@ -914,6 +914,7 @@ tip.show=true
 vfs.browser.default-filter=*[^~#]
 vfs.browser.filter-enabled=true
 vfs.browser.file.icon=16x16/mimetypes/text-x-generic.png
+vfs.browser.icon.small=16x16/apps/system-file-manager.png
 vfs.browser.open-file.icon=16x16/actions/edit-select-all.png
 vfs.browser.dir.icon=16x16/places/folder.png
 vfs.browser.open-dir.icon=16x16/status/folder-open.png
@@ -921,6 +922,7 @@ vfs.browser.filesystem.icon=16x16/devices/drive-harddisk.png
 vfs.browser.loading.icon=16x16/status/image-loading.png
 vfs.browser.expand.icon=16x16/actions/group-expand.png
 vfs.browser.collapse.icon=16x16/actions/group-collapse.png
+vfs.browser.dock-position=left
 
 #{{{ Actions
 vfs.browser.delete.shortcut=DELETE
@@ -994,6 +996,3 @@ install-plugins.clear-plugin-set.icon=22x22/actions/edit-clear.png
 
 errorwidget.popupmenu=logs-remove-all-errors
 
-#{{{ Sensible Defaults department
-vfs.browser.dock-position=left
-}}}
