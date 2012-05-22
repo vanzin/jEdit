@@ -4,16 +4,13 @@ jEdit 4.5 version history
 
 {{{ Version 4.5.2
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, and Matthieu Casanova for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Jarek Czekalski, 
+and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fixed freezes on hypersearch with encoding errors.
   (#3502585 Jarek Czekalski)
-
-- Changed error list dialog size to a fixed size of 80x25 characters.
-  (Jarek Czekalski)
 
 - Fixed IO error when changing VFS Browser filter content
   (#3502820 Matthieu Casanova)
@@ -26,14 +23,13 @@ contributing to this release.
  - Remove jar cache when unloading a plugin (#3514022 Matthieu Casanova)
 
 }}}
-{{{ Miscellaneous
+{{{ UI 
 
-
-}}}
-{{{ API Changes
-
+- Changed error list dialog size to a fixed size of 80x25 characters.
+  (Jarek Czekalski)
 
 }}}
+
 {{{ Editing
 
 
