@@ -29,9 +29,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 - Cannot DnD betweeen PingPongLists (#3501020 Jarek Czekalski)
 
-- Fixed freezes on hypersearch with encoding errors.
-  (#3502585 Jarek Czekalski)
-
 - Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
 
 - Fixed favorites menu actions (#3512250 Matthieu Casanova)
@@ -238,9 +235,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 - Reserve space for 4 digit in memory's status bar widget.
   (patch #3518422 Makarius)
-
-- Changed error list dialog size to a fixed size of 80x25 characters.
-  (Jarek Czekalski)
 
 - The Windows installer and windows integration are now localized in french
   (patch #3513215 Jojaba)
