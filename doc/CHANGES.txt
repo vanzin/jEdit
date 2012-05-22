@@ -12,6 +12,9 @@ contributing to this release.
 - Fixed freezes on hypersearch with encoding errors.
   (#3502585 Jarek Czekalski)
 
+- Changed error list dialog size to a fixed size of 80x25 characters.
+  (Jarek Czekalski)
+
 - Fixed IO error when changing VFS Browser filter content
   (#3502820 Matthieu Casanova)
 
@@ -218,6 +221,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ API Changes
+
 
 - New method TextAreaPainter.getRenderingHints() expose the rendering
   hints (patch #2973861) (Anthony Keeley)
