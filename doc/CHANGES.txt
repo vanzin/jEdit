@@ -28,8 +28,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 - Fixed macros at menu split are unaccessible (#3512853 Jarek Czekalski)
 
-- Fixed favorites menu actions (#3512250 Matthieu Casanova)
-
 - If the same plugin is installed in home and install folder, only the newest
   is loaded. (#1848802 Matthieu Casanova)
 
