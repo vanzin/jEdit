@@ -601,7 +601,7 @@ public class VFSDirectoryEntryTable extends JTable
 				return;
 			Entry node = (Entry) getModel().getValueAt(ind, 0);
 			boolean isDir = node.dirEntry.getType() == VFSFile.DIRECTORY;
-			EditBus.send(new VFSPathSelected(jEdit.getActiveView(),
+			EditBus.send(new VFSPathSelected(browserView.getBrowser().getView(),
 							 node.dirEntry.getPath(), isDir));
 		}
 
