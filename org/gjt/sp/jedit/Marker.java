@@ -29,15 +29,10 @@ import javax.swing.text.Position;
  * as textual bookmarks.<p>
  *
  * A <code>Marker</code> has three key attributes: the
- * <code>Buffer</code> to which it relates, the offset to which
+ * <code>Buffer</code> to which it relates, the line number to which
  * the marker refers, and an optional shortcut character. The shortcut
- * identifies the key that can be pressed with the
+ * identifies the the key that can be pressed with the
  * <b>Markers</b>&gt;<b>Go To Marker</b> command.
- *
- * <p>After a marker is created using the constructor,
- * {@link #createPosition} should be called, to make the marker reflect
- * always the same place despite text editions. The position is maintained
- * by {@link PositionMgr} class, which is maintained by {@link JEditBuffer}.  
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)

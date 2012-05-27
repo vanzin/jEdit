@@ -1,12 +1,11 @@
 /*
  * TextArea.java - Abstract jEdit Text Area component
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2005 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  * Portions copyright (C) 2006 Matthieu Casanova
- * Copyright (C) 2012 Kazutoshi Satoda
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1373,7 +1372,6 @@ public abstract class TextArea extends JComponent
 		buffer.getText(begin, end - begin, segment);
 	}//}}}
 
-	//{{{ getVisibleLineSegment() method
 	/**
 	 * Returns the visible part of the given line in a CharSequence.
 	 * The buffer data are not copied. so this should be used in EDT
@@ -1391,7 +1389,7 @@ public abstract class TextArea extends JComponent
 		int begin = xyToOffset(offset + point.x, point.y);
 		int end = xyToOffset(getPainter().getWidth(), point.y);
 		return buffer.getSegment(begin, end - begin);
-	} //}}}
+	}
 
 	//{{{ setText() method
 	/**
@@ -1411,6 +1409,8 @@ public abstract class TextArea extends JComponent
 			buffer.endCompoundEdit();
 		}
 	} //}}}
+
+	//}}}
 
 	//{{{ Selection
 
@@ -2100,7 +2100,6 @@ forward_scan:	do
 	 * method can be passed as a parameter to such methods as
 	 * {@link JEditBuffer#getLineText(int)}.
 	 *
-	 * @return Non-null, non-zero sized array of line indexes.
 	 * @since jEdit 3.2pre1
 	 */
 	public int[] getSelectedLines()
@@ -3397,33 +3396,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			delete();
 			break;
 		default:
+			boolean indent = buffer.isElectricKey(ch, caretLine) &&
+				"full".equals(buffer.getStringProperty("autoIndent"));
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
-				// It should be sufficient to check for electric key
-				// once, after inserting it. But smart UTL mode is adjusted
-				// to the current line contents and for better handling
-				// it should also check electric key before the insertion.
-				// See bug #3523766 (std:: case). 
-				boolean indent = false;
-				String keysMode =
-						buffer.getStringProperty("electricKeysMode");
-				if ("smart UTL".equals(keysMode))
-					indent = buffer.isElectricKey(ch, caretLine); 
 				if(!doWordWrap(ch == ' '))
-				{
-					insert(str,false);
-					if (Character.isWhitespace(ch))
-					{
-						if (buffer.isIndentArea(caret, 0, 0))
-							buffer.manualIndentDone(caretLine);
-					}
-					
-				}
-				if (!indent)
-					indent = buffer.isElectricKey(ch, caretLine);
-				if (indent)
-					buffer.indentLine(caretLine, true);
+					insert(str,indent);
 			}
 			else
 				replaceSelection(str);
@@ -4475,7 +4454,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			if (buffer.isElectricKey('\n', caretLine))
+			String autoIndent = buffer.getStringProperty("autoIndent");
+			if ("full".equals(autoIndent) && buffer.isElectricKey('\n', caretLine))
 			{
 				buffer.indentLine(caretLine, true);
 			}
@@ -4485,7 +4465,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
 				
-				String autoIndent = buffer.getStringProperty("autoIndent");
 				if ("full".equals(autoIndent))
 					buffer.indentLine(caretLine, true);
 				else if ("simple".equals(autoIndent))
@@ -4565,9 +4544,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
-			int[] lines = getSelectedLines();
-			buffer.shiftIndentLeft(lines);
-			buffer.manualIndentDone(lines[lines.length - 1]);
+			buffer.shiftIndentLeft(getSelectedLines());
 		}
 	} //}}}
 
@@ -4581,11 +4558,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(!buffer.isEditable())
 			getToolkit().beep();
 		else
-		{
-			int[] lines = getSelectedLines();
-			buffer.shiftIndentRight(lines);
-			buffer.manualIndentDone(lines[lines.length - 1]);
-		}
+			buffer.shiftIndentRight(getSelectedLines());
 	} //}}}
 
 	//{{{ joinLines() method
@@ -5519,10 +5492,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 			replaceSelection("\t");
-
-		// Actually only tab at the beginning of a line is manual
-		// indentation, but making things simpler shouldn't hurt much.
-		buffer.manualIndentDone(caretLine);
 	} //}}}
 
 	//{{{ userInputTab() method
@@ -5822,8 +5791,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private void deleteNextCharacter(int offset)
 	{
 		assert offset < buffer.getLength();
-		if (buffer.isIndentArea(offset, 0, 1))
-			buffer.manualIndentDone(buffer.getLineOfOffset(offset));
 		int length = getNextCharacterOffset(offset) - offset;
 		buffer.remove(offset, length);
 	} //}}}
@@ -5850,8 +5817,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				}
 			}
 		}
-		if (buffer.isIndentArea(offset, 1, 0))
-			buffer.manualIndentDone(buffer.getLineOfOffset(offset));
 		buffer.remove(offset - length, length);
 	} //}}}
 

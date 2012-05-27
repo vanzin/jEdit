@@ -330,50 +330,6 @@
 
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
 
-            <para><literal>Electric keys</literal>
-            (see <xref linkend="electric-keys" />)
-            may be used in different operating modes:
-            <itemizedlist>
-            <listitem><para><literal>on</literal>:
-            Default mode of jEdit 4. Electric keys are active without
-            limitations.
-            </para></listitem>
-            <listitem><para><literal>smart UTL</literal>:
-            Electric keys will
-            work only if the current line matches one of the
-            rules affecting the current line, for example
-            <literal>unindentThisLine</literal> (UTL) rule.
-            This is experimental for jEdit 5.0.
-            </para></listitem>
-            <listitem><para><literal>smart DMI</literal>:
-            Electric keys work only if the current line has not
-            been manually indented recently (DMI - Disabled by Manual
-            Indentation). This is experimental for jEdit 5.0.
-            </para></listitem>
-            <listitem><para><literal>smart NLO</literal>:
-            More restrictive version of DMI mode.
-            Electric keys work only on the line that was last
-            indented automatically (assuming this is a new line)
-            and if it has not been indented manually.
-            (DMI - New Line Only). This is experimental for jEdit 5.0.
-            </para></listitem>
-            <listitem><para><literal>brackets only</literal>:
-            Only brackets are considered electric keys. This setting
-            may be used if more electric keys are defined, but
-            one wants to switch them off, leaving only brackets
-            as electric keys. Indenting brackets are implicit
-            electric keys.
-            </para></listitem>
-            <listitem><para><literal>off</literal>:
-            Electric keys are inactive. One needs to achieve
-            the correct indentation using <guimenu>Indent</guimenu>
-            command, preferrably assigned to a keyboard shortcut.
-            Another handy feature in this mode is macro indenting
-            both lines (not included), that could be assigned to the
-            <keycap>ENTER</keycap> key.
-            </para></listitem>
-            </itemizedlist>
-            </para>
 
         </section>
 

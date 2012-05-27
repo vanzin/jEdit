@@ -29,8 +29,7 @@ public class IndentRuleFactory
 	public static IndentRule indentNextLines(String regexp)
 		throws PatternSyntaxException
 	{
-		return new RegexpIndentRule("indentNextLines",
-			regexp,
+		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Increase(),
 			null,false);
@@ -39,8 +38,7 @@ public class IndentRuleFactory
 	public static IndentRule indentNextLine(String regexp)
 		throws PatternSyntaxException
 	{
-		return new RegexpIndentRule("indentNextLine",
-			regexp,
+		return new RegexpIndentRule(regexp,
 			new IndentAction.Decrease(),
 			new IndentAction.Increase(),
 			null,true);
@@ -49,8 +47,7 @@ public class IndentRuleFactory
 	public static IndentRule unindentThisLine(String regexp)
 		throws PatternSyntaxException
 	{
-		return new RegexpIndentRule("unindentThisLine",
-			regexp,
+		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Increase(),
 			new IndentAction.Decrease(),
@@ -60,8 +57,7 @@ public class IndentRuleFactory
 	public static IndentRule unindentNextLines(String regexp)
 		throws PatternSyntaxException
 	{
-		return new RegexpIndentRule("unindentNextLines",
-			regexp,
+		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Decrease(),
 			null,

@@ -375,50 +375,30 @@ public class Mode
 		return indentRules;
 	} //}}}
 
-	//{{{ isElectricKey() methods
-	public boolean isElectricKey(char ch)
+	//{{{ isElectricKey() method
+	public synchronized boolean isElectricKey(char ch)
 	{
-		return isElectricKey(ch, "on"); 
-	}
-
-	/**
-	 * Is <code>ch</code> an electric key?
-	 * @param keysMode <code>String</code> taken from property
-	 * <code>electricKeysMode</code> controlled by user options.
-	 * If equal to <code>"brackets only"</code>
-	 * then only brackets are considered electric.
-	 */
-	public synchronized boolean isElectricKey(char ch, String keysMode)
-	{
-		if ("off".equals(keysMode))
-			return false;
-
 		if (electricKeys == null)
 		{
-			String prop = (String) getProperty("electricKeys");
-			electricKeys = ( prop == null ? "" : prop );
-
 			String[] props = {
 				"indentOpenBrackets",
-				"indentCloseBrackets"
+				"indentCloseBrackets",
+				"electricKeys"
 			};
 
 			StringBuilder buf = new StringBuilder();
 			for(int i = 0; i < props.length; i++)
 			{
-				prop = (String) getProperty(props[i]);
+				String prop = (String) getProperty(props[i]);
 				if (prop != null)
 					buf.append(prop);
 			}
-			electricBrackets = buf.toString();
+
+			electricKeys = buf.toString();
 		}
 
-		boolean isElectric1 = (electricBrackets.indexOf(ch) >= 0);
-		boolean isElectric2 = (!"brackets only".equals(keysMode)
-			&& (electricKeys.indexOf(ch) >= 0 ));
-		return isElectric1 || isElectric2;
-	}
-	//}}}
+		return (electricKeys.indexOf(ch) >= 0);
+	} //}}}
 
 	//{{{ initIndentRules() method
 	private void initIndentRules()
@@ -543,15 +523,7 @@ public class Mode
 	private Pattern filepathRE;
 	protected TokenMarker marker;
 	private List<IndentRule> indentRules;
-	/** Electric keys loaded directly from rule properties.
-	  * Filled at first access. */
 	private String electricKeys;
-	/** Brackets treated also as electric keys. Filled at first access.
-	  * The 2 electric parts are separated because user setting
-	  * <code>electricKeysMode</code> may change after the mode is loaded.
-	  * If the user wants only braces, we must have them separately.
-	  */
-	private String electricBrackets;
 	private boolean ignoreWhitespace;
 	//}}}
 }

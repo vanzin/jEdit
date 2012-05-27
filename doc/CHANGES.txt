@@ -15,12 +15,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 - Fixed "Backup on every save" resets file permissions. Renaming of the file
   was replaced with copying. (#1803073 Jarek Czekalski)
 
-- Fixed 'too sensitive electric keys', making them work only when
-  a rule affecting the current line is found (unindentThisLine or
-  a closing bracket). To trigger this behaviour the user needs to turn
-  electric keys mode to 'smart', in Editing options.
-  (#1936678 Jarek Czekalski) 
-
 - Added backup of remote files, for example opened with FTP plugin.
   (#1525654 Jarek Czekalski)
 
@@ -58,10 +52,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 {{{ API Changes
 
 - New method ThreadUtilities.runInDispatchThreadNow() (Jarek Czekalski)
-
-- If electric key hit causes indentation, it is available as a separate
-  undoable event. So it's possible to revert the reindentation and not to
-  revert the character typed. (Jarek Czekalski)
 
 - New VFS capability: NON_AWT_SESSION_CAP and a helper method
   VFS.createVFSSessionSafe that frees the caller from entering the EDT
@@ -152,11 +142,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 - Ada mode improvements (patch #3523836 Peter C. Chapin,
   request #2860105 Britt)
-
-- A new option (in Editing section) to control electric keys mode.
-  For details see the manual: Using jEdit / Customizing jEdit / 
-  Global Options / Editing Pane.
-  (request #3514076, #3523811 Jarek Czekalski)
 
 - Scala mode added (#3501401 Daniel Spiewak)
 

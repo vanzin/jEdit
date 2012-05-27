@@ -38,23 +38,9 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
  * @author Slava Pestov
  * @version $Id$
  */
-public class RegexpIndentRule extends IndentRule
+public class RegexpIndentRule implements IndentRule
 {
-	//{{{ RegexpIndentRule constructors
-	/**
-	 * Calls {@link #RegexpIndentRule(String, IndentAction, IndentAction,
-	 * IndentAction, boolean)} and sets <code>ruleName</code>.
-	 * @since 5.0pre1 
-	 */
-	public RegexpIndentRule(String ruleName,
-		String regexp, IndentAction prevPrev,
-		IndentAction prev, IndentAction thisLine, boolean collapse)
-	throws PatternSyntaxException
-	{
-		this(regexp, prevPrev, prev, thisLine, collapse);
-		this.ruleName = ruleName;
-	}
-
+	//{{{ RegexpIndentRule constructor
 	/**
 	 * @param collapse If true, then if the next indent rule is
 	 * an opening bracket, this rule will not increase indent.
@@ -101,20 +87,12 @@ public class RegexpIndentRule extends IndentRule
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName()
-		+ ( ruleName != null ? "(" + ruleName + ")" : "" ) 
-		+ '[' + regexp + ']';
+		return getClass().getName() + '[' + regexp + ']';
 	} //}}}
-	
-	@Override
-	public String getRuleName() { return ruleName; }
 
 	private IndentAction prevPrevAction, prevAction, thisAction;
 	private Pattern regexp;
 	private boolean collapse;
-	/** Property name for this indent rule, for example
-	 *  <code>indentNextLine</code>. */
-	private String ruleName;
 
 	//{{{ class TokenFilter
 	/**
@@ -174,9 +152,7 @@ public class RegexpIndentRule extends IndentRule
 	} //}}}
 
 	//{{{ lineMatches() method
-	/** {@inheritDoc} */
-	@Override
-	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
+	private boolean lineMatches(JEditBuffer buffer, int lineIndex)
 	{
 		TokenFilter filter
 			= new TokenFilter(buffer.getLineLength(lineIndex));

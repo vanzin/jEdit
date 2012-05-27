@@ -39,8 +39,6 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		super(TextUtilities.getComplementaryBracket(closeBracket,null),
 			closeBracket);
 		this.aligned = aligned;
-		ruleName = "CloseBracketIndentRule-"
-		           + (this.aligned ? "aligned" : "unaligned");
 	} //}}}
 
 	//{{{ apply() method
@@ -99,19 +97,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		}
 	} //}}}
 
-	@Override
-	public String getRuleName() { return ruleName; }
-
-	//{{{ lineMatches() method
-	/** {@inheritDoc} */
-	@Override
-	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
-	{
-		return getBrackets(buffer, lineIndex).closeCount > 0;
-	} //}}}
-
 	private boolean aligned;
-	private final String ruleName;
 
 	//{{{ AlignBracket class
 	private static class AlignBracket implements IndentAction

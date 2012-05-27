@@ -25,12 +25,11 @@ package org.gjt.sp.jedit.indent;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
-/** Abstract Indentation Rule. Before jEdit 5.0pre1 it was an interface,
- *  then it became an abstract class.
+/** Abstract Indentation Rule 
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class IndentRule
+public interface IndentRule
 {
 	/**
 	 * Apply the indent rule to this line, and return an indent action.
@@ -44,32 +43,7 @@ public abstract class IndentRule
 	 * @param indentActions the indent actions list. The rule can add an action in it if
 	 * it is necessary
 	 */
-	public abstract void apply(JEditBuffer buffer, int thisLineIndex,
+	void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
 		List<IndentAction> indentActions);
-
-	/**
-	 * Gets the name of the rule. Defaults to the last component of
-	 * the class name.
-	 * @since 5.0pre1
-	 */
-	public String getRuleName()
-	{
-		String ruleName = this.getClass().getName();
-		ruleName = ruleName.replaceFirst("^.*\\.", "");
-		return ruleName;
-	}
-
-	/**
-	 * Whether the rule target is found in the given line.
-	 * Rule target is a bracket or a regular expression.
-	 * If a rule has no such a target, it also returns <code>false</code>.
-	 * @return <code>true</code> if line matches. Otherwise or if
-	 * not implemented - <code>false</code>.
-	 * @since 5.0pre1
-	 */
-	public boolean lineMatches(JEditBuffer buffer, int lineIndex)
-	{
-		return false;
-	}
 }

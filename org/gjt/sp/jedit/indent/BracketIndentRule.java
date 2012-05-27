@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class BracketIndentRule extends IndentRule
+public abstract class BracketIndentRule implements IndentRule
 {
 	//{{{ BracketIndentRule constructor
 	public BracketIndentRule(char openBracket, char closeBracket)

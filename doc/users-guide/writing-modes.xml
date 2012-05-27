@@ -193,14 +193,7 @@
              default, pressing "Enter" does not re-indent the current line, only
              the new line. To get this behavior, add the newline character to
              <literal>electricKeys</literal> in the xml-escaped form &amp;#xA;
-             </para>
-             <para>Electric keys (see <xref linkend="electric-keys" />)
-             may be turned <literal>on</literal> or
-             <literal>off</literal> or put into other mode through
-             <guimenu>Editing Options</guimenu>
-             (see <xref linkend="editing-pane" />)
-             </para>
-             </listitem>
+             </para></listitem>
 
              <listitem><para><literal>ignoreWhitespace</literal>:
              Ignore whitespace lines.

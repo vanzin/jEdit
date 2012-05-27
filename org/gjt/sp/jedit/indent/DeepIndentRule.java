@@ -39,7 +39,7 @@ import javax.swing.text.Segment;
  * @author Matthieu Casanova
  * @version $Id$
  */
-public class DeepIndentRule extends IndentRule
+public class DeepIndentRule implements IndentRule
 {
 	private final char openChar;
 	private final char closeChar;
