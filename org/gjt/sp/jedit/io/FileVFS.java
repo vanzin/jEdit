@@ -506,19 +506,6 @@ public class FileVFS extends VFS
 		return retVal;
 	} //}}}
 
-	//{{{ _backup() method
-	@Override
-	public void _backup(Object session, String path, Component comp)
-		throws IOException
-	{
-		File file = new File(path);
-
-		if (!file.exists())
-			return;
-
-		MiscUtilities.saveBackup(file);
-	} //}}}
-
 	//{{{ _createInputStream() method
 	@Override
 	public InputStream _createInputStream(Object session, String path,

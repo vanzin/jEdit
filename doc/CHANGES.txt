@@ -12,6 +12,9 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed "Backup on every save" resets file permissions. Renaming of the file
+  was replaced with copying. (#1803073 Jarek Czekalski)
+
 - Fixed 'too sensitive electric keys', making them work only when
   a rule affecting the current line is found (unindentThisLine or
   a closing bracket). To trigger this behaviour the user needs to turn
