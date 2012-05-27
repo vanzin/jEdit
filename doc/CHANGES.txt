@@ -341,4 +341,4 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 jEdit buffer local properties:
 :maxLineLen=80:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
-:folding=explicit:collapseFolds=2
+:folding=explicit:collapseFolds=2:
