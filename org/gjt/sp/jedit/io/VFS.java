@@ -937,6 +937,11 @@ public abstract class VFS
 	public void _backup(Object session, String path, Component comp)
 		throws IOException
 	{
+		VFS vfsSrc = VFSManager.getVFSForPath(path);
+		if (null == vfsSrc._getFile(session, path, comp))
+			// file to backup does not exist
+			return;
+
 		// File systems do not like some characters, which
 		// may be part of a general path. Let's get rid of them.
 		String sForeignChars = ":*?\"<>|";
@@ -981,7 +986,6 @@ public abstract class VFS
 			}
 		try
 		{
-			VFS vfsSrc = VFSManager.getVFSForPath(path);
 			if (!copy(null, vfsSrc, session, path,
 				vfsDst, sessionDst, backupFile.getPath(),
 				comp, true))
