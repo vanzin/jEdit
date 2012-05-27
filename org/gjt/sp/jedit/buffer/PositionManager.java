@@ -31,6 +31,10 @@ import org.gjt.sp.util.Log;
 /**
  * A class internal to jEdit's document model. You should not use it
  * directly.
+ * <p>Positions are created explicitly and removed implicitly, when
+ * there are no more references to it. For this implicit removal to work
+ * a top (referenced outside) and a bottom half (referenced internally)
+ * of the position are implemented separately.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -45,6 +49,7 @@ class PositionManager
 	} //}}}
 	
 	//{{{ createPosition() method
+	/** No explicit removal is required. Unreferencing is enough. */
 	public synchronized Position createPosition(int offset)
 	{
 		PosBottomHalf bh = new PosBottomHalf(offset);
@@ -105,6 +110,12 @@ class PositionManager
 	//{{{ Inner classes
 
 	//{{{ PosTopHalf class
+	/** A wrapper for real position handling done by
+	  * <code>PosBottomHalf</code>, so Top means the part that is
+	  * visible. When there are no more references
+	  * to <code>PosTopHalf</code> and garbage
+	  * collector eats it, the position is removed together with its
+	  * bottom half. */
 	class PosTopHalf implements Position
 	{
 		final PosBottomHalf bh;
@@ -134,6 +145,9 @@ class PositionManager
 	} //}}}
 
 	//{{{ PosBottomHalf class
+	/** 'bottom' means the part
+	  * that is not visible outside and stays only here in
+	  * <code>positions</code> map.*/
 	class PosBottomHalf implements Comparable<PosBottomHalf>
 	{
 		int offset;

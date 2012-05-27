@@ -1372,6 +1372,7 @@ public abstract class TextArea extends JComponent
 		buffer.getText(begin, end - begin, segment);
 	}//}}}
 
+	//{{{ getVisibleLineSegment() method
 	/**
 	 * Returns the visible part of the given line in a CharSequence.
 	 * The buffer data are not copied. so this should be used in EDT
@@ -1389,7 +1390,7 @@ public abstract class TextArea extends JComponent
 		int begin = xyToOffset(offset + point.x, point.y);
 		int end = xyToOffset(getPainter().getWidth(), point.y);
 		return buffer.getSegment(begin, end - begin);
-	}
+	} //}}}
 
 	//{{{ setText() method
 	/**
@@ -1409,8 +1410,6 @@ public abstract class TextArea extends JComponent
 			buffer.endCompoundEdit();
 		}
 	} //}}}
-
-	//}}}
 
 	//{{{ Selection
 
@@ -2100,6 +2099,7 @@ forward_scan:	do
 	 * method can be passed as a parameter to such methods as
 	 * {@link JEditBuffer#getLineText(int)}.
 	 *
+	 * @return Non-null, non-zero sized array of line indexes.
 	 * @since jEdit 3.2pre1
 	 */
 	public int[] getSelectedLines()

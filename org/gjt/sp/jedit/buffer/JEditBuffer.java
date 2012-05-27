@@ -350,7 +350,8 @@ public class JEditBuffer
 	 * Returns the start offset of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
-	 * @return The start offset of the specified line
+	 * @return The start offset of the specified line, that is the offset
+	 * after the end-of-line character before that line.
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineStartOffset(int line)
@@ -377,8 +378,10 @@ public class JEditBuffer
 	 * Returns the end offset of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
-	 * @return The end offset of the specified line
-	 * invalid.
+	 * @return The end offset of the specified line, that is the offset 
+	 * after the end-of-line character. Note that
+	 * <code>buffer.getLineOfOffset(buffer.getLineEndOffset(x))</code>
+	 * does not return <code>x</code> but <code>x+1</code>.
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineEndOffset(int line)
@@ -1410,7 +1413,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ createPosition() method
 	/**
-	 * Creates a floating position.
+	 * Creates a floating position (<code>javax.swing.text.Position</code>).
+	 * The position is retained despite text editions.
+	 * <p>No explicit removal of position is necessary, only dereferencing it.
 	 * @param offset The offset
 	 */
 	public Position createPosition(int offset)
