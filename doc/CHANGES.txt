@@ -12,6 +12,11 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 {{{ Bug fixes
 
+- Avoided annoying behavior of electric keys that canceled obvious
+  manual indentation. Now they take effect only when the current level
+  of indentation is same with automatic indentation.
+  (#1936678, #2332140 Jarek Czekalski, Kazutoshi Satoda)
+
 - Fixed "Backup on every save" resets file permissions. Renaming of the file
   was replaced with copying. (#1803073 Jarek Czekalski)
 

@@ -3396,13 +3396,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			delete();
 			break;
 		default:
-			boolean indent = buffer.isElectricKey(ch, caretLine) &&
-				"full".equals(buffer.getStringProperty("autoIndent"));
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
 				if(!doWordWrap(ch == ' '))
+				{
+					boolean indent = buffer.isElectricKey(ch, caretLine) &&
+						"full".equals(buffer.getStringProperty("autoIndent")) &&
+						/* if the line is not manually indented */
+						(buffer.getCurrentIndentForLine(caretLine, null) ==
+							buffer.getIdealIndentForLine(caretLine));
 					insert(str,indent);
+				}
 			}
 			else
 				replaceSelection(str);
