@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 
 /**
  * jEdit's global event notification mechanism.<p>
@@ -177,6 +178,9 @@ public class EditBus
 	 * The message is delivered to components in the AWT thread,
 	 * and this method will wait until all handlers receive the
 	 * message before returning.
+	 * <p>
+	 * This method uses {@link ThreadUtilities#runInDispatchThreadNow},
+	 * read the notes there for possible deadlocks.
 	 *
 	 * <p><b>NOTE:</b>
 	 * If the calling thread is not the AWT thread and the
@@ -200,35 +204,10 @@ public class EditBus
 		if (EventQueue.isDispatchThread())
 		{
 			sender.run();
-			return;
 		}
-
-		/*
-		 * We can't throw any checked exceptions from this
-		 * method. It will break all source that currently
-		 * expects this method to not throw them. So we catch
-		 * them and log them instead.
-		 */
-		boolean interrupted = false;
-		try
+		else
 		{
-			EventQueue.invokeAndWait(sender);
-		}
-		catch (InterruptedException ie)
-		{
-			interrupted = true;
-			Log.log(Log.ERROR, EditBus.class, ie);
-		}
-		catch (InvocationTargetException ite)
-		{
-			Log.log(Log.ERROR, EditBus.class, ite);
-		}
-		finally
-		{
-			if (interrupted)
-			{
-				Thread.currentThread().interrupt();
-			}
+			ThreadUtilities.runInDispatchThreadNow(sender);
 		}
 	} //}}}
 

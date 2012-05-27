@@ -51,6 +51,9 @@ Thomas Meyer and Tom Power for contributing to this release.
 }}}
 {{{ API Changes
 
+- Made EditBus.send uninterruptible, as it was before putting handling of
+  messages into EDT (r17139, to 4.4).
+
 - New method ThreadUtilities.runInDispatchThreadNow() (Jarek Czekalski)
 
 - New VFS capability: NON_AWT_SESSION_CAP and a helper method
