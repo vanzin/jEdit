@@ -24,6 +24,8 @@ package org.gjt.sp.util;
 
 //{{{ Imports
 import java.awt.EventQueue;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -62,23 +64,85 @@ public class ThreadUtilities
 	} //}}}
 
 	//{{{ runInDispatchThreadAndWait() method
+	/** Runs the runnable in EDT through <code>invokeLater</code>,
+	 *  but returns only after the runnable is executed.
+	 *  This method is uninterruptible.
+	 *  <p>Note the difference from <code>invokeAndWait</code>.
+	 *  If current thread is not EDT and there are runnables
+	 *  queued in EDT:
+	 *  <ul><li>this method runs the runnable after them</li>
+	 *  <li><code>invokeAndWait</code> runs the runnable before them
+	 *  </li></ul>
+	 */
 	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
 		boolean interrupted = false;
 		MyRunnable run = new MyRunnable(runnable);
 		runInDispatchThread(run);
-		while (!run.done)
+		while (run.done.getCount() > 0)
 		{
-			synchronized (run)
+			try
 			{
-				try
-				{
-					run.wait(1000L);
-				}
-				catch (InterruptedException e)
-				{
-					interrupted = true;
-				}
+				run.done.await();
+			}
+			catch (InterruptedException e)
+			{
+				interrupted = true;
+			}
+		}
+		if (interrupted)
+			Thread.currentThread().interrupt();
+	} //}}}
+
+	//{{{ runInDispatchThreadNow() method
+	/**
+	 * Runs the runnable in EDT through <code>invokeAndWait</code>.
+	 * Even if the thread gets interrupted, the call does not return
+	 * until the runnable finishes (uninterruptible method).
+	 * <p>
+	 * This method uses <code>EventQueue.invokeAndWait</code>, so
+	 * the following remark applies:
+	 * <p>If you use invokeAndWait(), make sure that the thread that calls
+	 * invokeAndWait() does not hold any locks that other threads might
+	 * need while the call is occurring.
+	 * From the article:
+	 * <a href="http://java.sun.com/products/jfc/tsc/articles/threads/threads1.html#event_dispatching">
+	 * Threads and Swing</a>
+	 */
+	public static void runInDispatchThreadNow(Runnable runnable)
+	{
+		boolean interrupted = false;
+		MyRunnable run = new MyRunnable(runnable);
+		try
+		{
+			EventQueue.invokeAndWait(run);
+		}
+		catch (InterruptedException e)
+		{
+			interrupted = true;
+		}
+		catch (InvocationTargetException ite)
+		{
+			Throwable cause = ite.getCause();
+			if (cause instanceof RuntimeException)
+				throw (RuntimeException)cause;
+			else
+			{
+				Log.log(Log.ERROR, ThreadUtilities.class,
+					"Invocation Target Exception:");
+				Log.log(Log.ERROR, runnable.getClass(),
+					cause);
+			}
+		}
+		while (run.done.getCount() > 0)
+		{
+			try
+			{
+				run.done.await();
+			}
+			catch (InterruptedException e)
+			{
+				interrupted = true;
 			}
 		}
 		if (interrupted)
@@ -161,7 +225,7 @@ public class ThreadUtilities
 	{
 		private final Runnable runnable;
 
-		private volatile boolean done;
+		private CountDownLatch done = new CountDownLatch(1);
 
 		private MyRunnable(Runnable runnable)
 		{
@@ -172,11 +236,7 @@ public class ThreadUtilities
 		public void run()
 		{
 			runnable.run();
-			done = true;
-			synchronized (this)
-			{
-				notifyAll();
-			}
+			done.countDown();
 		}
 	} //}}}
 
