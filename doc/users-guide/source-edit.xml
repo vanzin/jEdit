@@ -262,6 +262,42 @@
                 Lines</guisubmenu> (shortcut: <keycap>C+i</keycap>) indents all
                 selected lines, or the current line if there is no selection, as
                 if in the <quote>full</quote> scheme.</para>
+
+                <section id="electric-keys">
+                <title>Electric keys</title>
+                
+                <para>
+                Electric keys cause reapplying of the indentation rules to
+                the current line. Thanks to the electric keys the following
+                code fragments are indented properly on-line:</para>
+                <itemizedlist>
+                <listitem><para>
+                Java, C: brackets. If indenting brackets are defined for
+                the language, they are implicitly considered electric keys.
+                Thus a closing bracket is placed in its correct position
+                immediately after being typed.
+                </para></listitem>
+                <listitem><para>
+                Java, C: labels. Labels end with a colon and the colon is
+                included in electric keys for these languages. With
+                pressing the colon, the line is reindented and the labels
+                are indented a level to the left.
+                </para></listitem>
+                <listitem><para>
+                Basic: <literal>endif</literal>. Here <keycap>f</keycap>
+                letter is an electric key, that makes the line indented
+                to the left.
+                </para></listitem>
+                </itemizedlist>
+                <para>In jEdit 4 electric keys worked unconditionally.
+                As of jEdit 5 they trigger reindentation only if
+                the indentation of the line, before pressing a key,
+                is the same as jEdit would indent it using its rules.
+                This allows for specifying more electric keys in mode
+                files, because they don't cause unwanted indentation
+                like they did before. Electric keys including all letters
+                seem to be good solution for basic-like languages.</para>
+                </section>
             </section>
 
             <section id="autoindent-simple">
