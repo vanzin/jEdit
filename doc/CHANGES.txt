@@ -56,6 +56,8 @@ Thomas Meyer and Tom Power for contributing to this release.
 }}}
 {{{ API Changes
 
+- New method Debug.compDelay, for debugging purposes (Jarek Czekalski)
+
 - Made EditBus.send uninterruptible, as it was before putting handling of
   messages into EDT (r17139, to 4.4).
 
