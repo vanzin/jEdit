@@ -1,5 +1,5 @@
 /*
- * TabbedOptionDialog.java - Plugin options model
+ * TabbedOptionDialog.java - Options Dialog with tabs. 
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

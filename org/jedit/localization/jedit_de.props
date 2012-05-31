@@ -1468,7 +1468,6 @@ options.save-back.backups=Max. Anzahl von Backups:
 options.save-back.confirmSaveAll=Bestätigung für "Alle Dateien speichern"
 
 options.save-back.backupEverySave=Backup bei jedem Speichern
-options.save-back.backupEverySave.tooltip=Bei einigen Dateisystemenen werden Dateiberechtigungen zurückgesetzt
 options.save-back.twoStageSave=Zweistufiges Speichern (Sicherer, setzt aber bei einigen Dateisystemenen den Dateieigentümer zurück)
 options.save-back.twoStageSave.tooltip=Stufe 1: Anlegen einer temporären Datei und dahinein sichern. Stufe 2: Umbenennen der temporären Datei zum wirklichen Namen
 options.save-back.autosaveUntitled=Unbenannte Dateien automatisch speichern

@@ -1479,7 +1479,6 @@ options.save-back.backupDirectory=Zálohování adresáře:
 options.save-back.backupPrefix=Zálohovat soubory s předponou:
 options.save-back.backupSuffix=Zálohovat soubory s příponou:
 options.save-back.backupEverySave=Zálohovat při každém uložení
-options.save-back.backupEverySave.tooltip=Resetuje oprávnění k souboru na některých souborových systémech
 options.save-back.twoStageSave=Dvoufázové uložení (bezpečnější, ale esetuje oprávnění k souboru na některých souborových systémech)
 options.save-back.twoStageSave.tooltip=Fáze 1: Vytvoří dočasný soubor a uloží do něj. Fáze 2: Přejmenuje dočasný soubor na jeho pravé jméno.
 options.save-back.confirmSaveAll="Uložit všechny buffery" žádá o potvrzení

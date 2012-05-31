@@ -1470,7 +1470,6 @@ options.save-back.backupDirectory=バックアップディレクトリ:
 options.save-back.backupPrefix=バックアップファイル名プレフィクス:
 options.save-back.backupSuffix=バックアップファイル名サフィクス:
 options.save-back.backupEverySave=保存のたびにバックアップ
-options.save-back.backupEverySave.tooltip=ファイルシステムによってはファイル権限がリセットされます
 options.save-back.twoStageSave=ツー・ステージ セーブ (より安全ですが、Unixではファイル所有者がリセットされます)
 options.save-back.twoStageSave.tooltip=ステージ 1: 古いファイルをリネーム。 ステージ 2: その場に新規ファイルを作成。
 options.save-back.confirmSaveAll="すべて保存"コマンドは確認ダイアログを表示

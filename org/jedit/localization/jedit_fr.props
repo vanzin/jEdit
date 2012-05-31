@@ -1470,7 +1470,6 @@ options.save-back.backupDirectory=Dossier de sauvegarde :
 options.save-back.backupPrefix=Préfixe du nom de fichier de sauvegarde :
 options.save-back.backupSuffix=Suffixe du nom de fichier de sauvegarde :
 options.save-back.backupEverySave=Sauvegarde à chaque enregistrement
-options.save-back.backupEverySave.tooltip=Réinitialise les permissions d'accès auc fichiers dans certains systèmes de fichiers
 options.save-back.twoStageSave=Enregistrement à deux niveaux (plus sûr mais réinitialise le propriétaire du fichier sur certains systèmes de fichiers)
 options.save-back.twoStageSave.tooltip=Niveau 1 : Renomme l'ancien fichier. Niveau 2: créé un nouveau fichier qui le remplace.
 options.save-back.confirmSaveAll=Demander confirmation pour « Enregistrer tous les tampons »

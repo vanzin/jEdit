@@ -1469,7 +1469,6 @@ options.save-back.backupDirectory=Backup directory:
 options.save-back.backupPrefix=Backup filename prefix:
 options.save-back.backupSuffix=Backup filename suffix:
 options.save-back.backupEverySave=Backup on every save
-options.save-back.backupEverySave.tooltip=Resets file permissions on some file systems
 options.save-back.twoStageSave=Two-stage save (safer but resets file permissions owner on some filesystems)
 options.save-back.twoStageSave.tooltip=Stage 1: Create a temporary file and save to it. Stage 2: Rename the temporary file to the real name.
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
