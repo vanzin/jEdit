@@ -56,6 +56,9 @@ Thomas Meyer and Tom Power for contributing to this release.
 }}}
 {{{ API Changes
 
+- Implemented comparable in JEditBuffer and Buffer, to allow for
+  resource ordering. (Jarek Czekalski)
+
 - New method Debug.compDelay, for debugging purposes (Jarek Czekalski)
 
 - Made EditBus.send uninterruptible, as it was before putting handling of

@@ -43,6 +43,7 @@ import javax.swing.text.Segment;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 //}}}
@@ -63,6 +64,10 @@ import java.util.regex.Pattern;
  * more than one read, to ensure that  the buffer contents are not changed by
  * the AWT thread for the duration of the lock. Only methods whose descriptions
  * specify thread safety can be invoked from other threads.
+ * <li>After acquiring a buffer lock, thread must not enter EDT.
+ *     Possessing both resources is allowed only in reverse order.
+ * <li>When acquiring more than 1 buffer lock, it must be done in increasing
+ *     order determined by <code>compareTo</code>.
  * </ul>
  *
  * @author Slava Pestov
@@ -70,7 +75,7 @@ import java.util.regex.Pattern;
  *
  * @since jEdit 4.3pre3
  */
-public class JEditBuffer
+public class JEditBuffer implements Comparable<JEditBuffer>
 {
 	/**
 	 * Line separator property.
@@ -95,6 +100,7 @@ public class JEditBuffer
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
+		id = maxId.incrementAndGet();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Set<Map.Entry> set = props.entrySet();
@@ -126,6 +132,7 @@ public class JEditBuffer
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
+		id = maxId.incrementAndGet();
 
 		properties.put("wrap",new PropValue("none",false));
 		properties.put("folding",new PropValue("none",false));
@@ -294,6 +301,14 @@ public class JEditBuffer
 	{
 		lock.writeLock().unlock();
 	} //}}}
+
+	//{{{ compareTo method
+	/** Strict comparator, to allow for resource ordering. */
+	public int compareTo(JEditBuffer other)
+	{
+		assert(id != other.id);
+		return id > other.id ? 1 : -1;
+	}
 
 	//}}}
 
@@ -2754,6 +2769,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private final Object propertyLock;
 	public boolean elasticTabstopsOn = false;
 	private ColumnBlock columnBlock;
+	/** Id, unique across jvm, to allow for buffer ordering.
+	  * @see #compareTo */
+	private long id;
+	/** A counter for ids for created buffers, assigned
+	  * in constructors. */
+	private static AtomicLong maxId = new AtomicLong(0);
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)

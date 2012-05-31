@@ -86,6 +86,10 @@ import org.gjt.sp.util.ThreadUtilities;
  * more than one read, to ensure that  the buffer contents are not changed by
  * the AWT thread for the duration of the lock. Only methods whose descriptions
  * specify thread safety can be invoked from other threads.
+ * <li>After acquiring a buffer lock, thread must not enter EDT.
+ *     Possessing both resources is allowed only in reverse order.
+ * <li>When acquiring more than 1 buffer lock, it must be done in increasing
+ *     order determined by <code>compareTo</code>.
  * </ul>
 
  *
