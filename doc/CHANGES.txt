@@ -12,6 +12,12 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 {{{ Bug fixes
 
+- The mirror "Plugin Central default" now works as auto selecting
+  mirror and is used by default. Previous default was hardcoded "switch"
+  (mirror.switch.ch) as workaround, but one could easily stuck on broken
+  "Plugin Central default" and got strange errors.
+  (#2913393, #3501210 - Kazutoshi Satoda)
+
 - Avoided annoying behavior of electric keys that canceled obvious
   manual indentation. Now they take effect only when the current level
   of indentation is same with automatic indentation.

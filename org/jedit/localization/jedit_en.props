@@ -1966,6 +1966,10 @@ plugin-manager.status.error=Error
 
 plugin-manager.list-download-connect=Connecting to plugins.jedit.org
 plugin-manager.list-download=Downloading plugin list from plugins.jedit.org
+plugin-manager.list-download.mirror-autoselect-error.title=Error selecting mirror
+plugin-manager.list-download.mirror-autoselect-error.message=Error auto-selecting mirror:\n\
+	{0}\n\
+	Choosing a specific mirror may work.
 plugin-manager.list-download.need-password.title=HTTP Proxy needs password
 plugin-manager.list-download.need-password.message=HTTP Proxy needs password.\n\
 Please configure a valid username/password in "Download Options".
