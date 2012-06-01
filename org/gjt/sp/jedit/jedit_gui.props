@@ -7,7 +7,7 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
-#{{{ Common strings
+#{{{ Common icons
 common.add.icon=22x22/actions/list-add.png
 common.remove.icon=22x22/actions/list-remove.png
 common.moveUp.icon=22x22/actions/go-up.png
