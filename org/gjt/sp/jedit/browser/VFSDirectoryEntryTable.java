@@ -595,6 +595,7 @@ public class VFSDirectoryEntryTable extends JTable
 		public void mouseClicked(MouseEvent e)
 		{
 			super.mouseClicked(e);
+			if (browserView.getBrowser().getMode() != VFSBrowser.BROWSER) return;
 			int ind = getSelectionModel().getMinSelectionIndex();
 			if (ind == -1)
 				return;
