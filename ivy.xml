@@ -78,7 +78,7 @@
 		</dependency>
 
 		<dependency org="org.jedit.plugins" name="MacOSX" rev="1.2" conf="default-plugins"/>
-		<dependency org="org.jedit.plugins" name="QuickNotepad" rev="4.4" conf="default-plugins"/>
+		<dependency org="org.jedit.plugins" name="QuickNotepad" rev="5.0" conf="default-plugins"/>
 
 		<dependency org="bsf" name="bsf" rev="2.4.0" conf="scripting"/>
 		<dependency org="org.beanshell" name="bsh" rev="2.0b4" conf="scripting"/>
