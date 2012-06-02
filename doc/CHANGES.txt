@@ -39,8 +39,6 @@ Thomas Meyer and Tom Power for contributing to this release.
 - If the same plugin is installed in home and install folder, only the newest
   is loaded. (#1848802 Matthieu Casanova)
 
-- Fixed replace all on a directory that was broken (#3480583 Matthieu Casanova)
-
 - Fixed rectangular selection constructor (patch #3440310 peibl)
 
 - When copying a file in VFSBrowser, if a file with the same name already exists
