@@ -23,6 +23,8 @@ Release procedure of jEdit
   allowed on the branch.
     - Bumping up of the version number.
     - Changes under "doc" directory.
+    - Changes for translations under "org/jedit/localization" directory.
+      Note that jedit_en.props is not a translation.
     - Merging of reviewed changes from the trunk or a separate branch.
       See step 5 below for merging.
 
