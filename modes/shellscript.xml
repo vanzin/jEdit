@@ -13,7 +13,13 @@
 			VALUE="^\s*(fi|else|done|esac|[^(]*\).*)\s*(#.*)?$" />
 		<PROPERTY NAME="unindentNextLines"
 			VALUE="^\s*(fi|else|done|esac)\s*(#.*)?$" />
-		<PROPERTY NAME="electricKeys" VALUE=")iec" />
+		<!-- 3 possible values for electricKeys may be considered
+		  1. electric enter and the bracket: ")&#xA;"
+		  2. letters ending unindent rules ")iec"
+		  3. all letters ")abcdefghijklmnopqrstuvwxyz"
+		  details: http://jedit.9.n6.nabble.com/jEdit-devel-electric-keys-for-shell-mode-tp4998749.html
+		-->
+		<PROPERTY NAME="electricKeys" VALUE=")abcdefghijklmnopqrstuvwxyz" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" ESCAPE="\">
 		<!-- Comments -->
