@@ -22,8 +22,8 @@ defaultCatalog=<?xml version="1.0"?>\n\
 #}}}
 
 #{{{ Common strings
-common.ok=了解
-common.cancel=取消し
+common.ok=OK
+common.cancel=キャンセル
 common.close=閉じる
 common.error=エラー
 common.apply=適用
@@ -2119,13 +2119,13 @@ macro.rs.general.ErrorNotEditableDialog.message=バッファは編集可能で�
 #{{{ Clipboard
 
 #{{{ Copy Lines Containing
-macro.rs.CopyLinesContaining.CopyLinesContaining.label=Copy lines containing:
-macro.rs.CopyLinesContaining.LinesCopied.message=line(s) copied
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=次の内容を含む行をコピー:
+macro.rs.CopyLinesContaining.LinesCopied.message=行コピー
 #}}}
 
 #{{{ Cut Lines Containing
-macro.rs.CutLinesContaining.CutLinesContaining.label=Cut lines containing:
-macro.rs.CutLinesContaining.LinesCut.message=line(s) cut
+macro.rs.CutLinesContaining.CutLinesContaining.label=次の内容を含む行を切り取り:
+macro.rs.CutLinesContaining.LinesCut.message=行切り取り
 #}}}
 
 #}}}
@@ -2133,25 +2133,25 @@ macro.rs.CutLinesContaining.LinesCut.message=line(s) cut
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Column (between 1 and
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.ColumnBefore.label=列 ( 1 から
+macro.rs.GoToColumn.ColumnAfter.label=の間で指定):
 #}}}
 
 #{{{ Key Words to Uppercase
-macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=Converted Keywords to Upper Case
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=キーワードを大文字に変換
 #}}}
 
 #{{{ Mode Switcher
-macro.rs.BufferModeSwitcher.MainDialog.title=Buffer Mode Switcher
-macro.rs.BufferModeSwitcher.EnterBufferMode.label=Enter buffer mode:
-macro.rs.BufferModeSwitcher.ChangingBufferMode.label=Changing mode of buffer
-macro.rs.BufferModeSwitcher.To.label=to
-macro.rs.BufferModeSwitcher.Mode.label=Mode
-macro.rs.BufferModeSwitcher.NotFound.label=Not found
+macro.rs.BufferModeSwitcher.MainDialog.title=バッファモードスイッチャ
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=バッファモードを入力:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=バッファのモード変更
+macro.rs.BufferModeSwitcher.To.label=から
+macro.rs.BufferModeSwitcher.Mode.label=モード
+macro.rs.BufferModeSwitcher.NotFound.label=存在しません
 #}}}
 
 #{{{ Moves Lines Down - Move Lines Up
-macro.rs.MoveLines.NoMultipleSelection.error=Line move does not work with multiple selection.
+macro.rs.MoveLines.NoMultipleSelection.error=マルチ選択中は行移動できません。
 #}}}
 
 #}}}
@@ -2159,43 +2159,43 @@ macro.rs.MoveLines.NoMultipleSelection.error=Line move does not work with multip
 #{{{ Files
 
 #{{{ Browse Directory
-macro.rs.BrowseDirectory.DirectoryBrowse.label=Directory to browse:
+macro.rs.BrowseDirectory.DirectoryBrowse.label=ブラウズするディレクトリ:
 #}}}
 
 #{{{ Buffer Switcher
-macro.rs.BufferSwitcher.OpenBuffers.label=open Buffers
-macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] Switch to; [SPACE] Switch to, keep dialog; [DEL] Close Buffer
-macro.rs.BufferSwitcher.Help1.label=Help for Buffer Switcher macro:
-macro.rs.BufferSwitcher.Help2.label=DELETE closes selected buffer.
-macro.rs.BufferSwitcher.Help3.label=ENTER switches to selected buffer, closes dialog.
-macro.rs.BufferSwitcher.Help4.label=ESCAPE closes dialog.
-macro.rs.BufferSwitcher.Help5.label=SPACE switches to selected buffer, does not close dialog.
-macro.rs.BufferSwitcher.Help6.label=NOTE: This dialog will only be displayed once
+macro.rs.BufferSwitcher.OpenBuffers.label=バッファを開く
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] 切り替え; [SPACE] 切り替えてダイアログを維持; [DEL] バッフを閉じる
+macro.rs.BufferSwitcher.Help1.label=バッファスイッチャマクロのヘルプ:
+macro.rs.BufferSwitcher.Help2.label=DELETE は選択したバッファを閉じます。
+macro.rs.BufferSwitcher.Help3.label=ENTER は選択したバッファに切り替えて、ダイアログを閉じます。
+macro.rs.BufferSwitcher.Help4.label=ESCAPE はダイアログを閉じます。
+macro.rs.BufferSwitcher.Help5.label=SPACE は選択したバッファに切り替え、ダイアログを閉じません。
+macro.rs.BufferSwitcher.Help6.label=NOTE: このダイアログは一度だけ表示されます
 #}}}
 
 #{{{ Delete Current
-macro.rs.DeleteCurrent.NotOnDisk.error=Buffer doesn't exist on disk.
-macro.rs.DeleteCurrent.DeleteNotSupport.error=doesn't support deleting.
-macro.rs.DeleteCurrent.Deleted.message=Deleted:
+macro.rs.DeleteCurrent.NotOnDisk.error=バッファはディスク上に存在しません。
+macro.rs.DeleteCurrent.DeleteNotSupport.error=は削除をサポートしていません。
+macro.rs.DeleteCurrent.Deleted.message=削除されたもの:
 #}}}
 
 #{{{ Glob Close
-macro.rs.GlobClose.GlobPattern.label=Glob Pattern:
-macro.rs.GlobClose.ErrorGlobPattern.error=Error in glob pattern:
+macro.rs.GlobClose.GlobPattern.label=グロブパターン:
+macro.rs.GlobClose.ErrorGlobPattern.error=グロブパターンにエラー:
 #}}}
 
 #{{{ Next Dirty Buffer
-macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=No other buffers are dirty
-macro.rs.NextDirtyBuffer.NoBufferDirty.message=No buffers are dirty
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=他に編集中バッファはありません
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=編集中バッファはありません
 #}}}
 
 #{{{ open Path
-macro.rs.OpenPath.PathName.label=Path name:
+macro.rs.OpenPath.PathName.label=パス名:
 #}}}
 
 #{{{Toggle ReadOnly
-macro.rs.ToggleReadOnly.OnlyLocalFiles.error=This macro only works on local files.
-macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Windows, Unix, & MacOS X.
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=このマクロはローカルファイルでしか動きません。
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=このマクロは Windows か Unix か MacOS X でしか動きません。
 #}}}
 
 #}}}
@@ -2203,7 +2203,7 @@ macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=This macro only works on Wind
 #{{{ Interface
 
 #{{{ Decrease Font Size - Increase Font Size
-macro.rs.ChangeFontSize.FontSize.message=Font size now:
+macro.rs.ChangeFontSize.FontSize.message=現在のフォントサイズ:
 #}}}
 
 #}}}
@@ -2211,24 +2211,24 @@ macro.rs.ChangeFontSize.FontSize.message=Font size now:
 #{{{ Java
 
 #{{{ Create Constructor
-macro.rs.CreateConstructor.UnevenNumber.message=Uneven number of type names and variables.
+macro.rs.CreateConstructor.UnevenNumber.message=型名と値の数が不足しています。
 #}}}
 
 #{{{ Get Package Name
-macro.rs.GetPackageName.NotWorking1.error=This macro will not work when the Java interpreter
-macro.rs.GetPackageName.NotWorking2.error=loads jEdit with the '-jar' command line option.
-macro.rs.GetPackageName.NotFind.error=Could not find a package name.
+macro.rs.GetPackageName.NotWorking1.error=このマクロは '-jar' コマンドラインオプションで jEdit を
+macro.rs.GetPackageName.NotWorking2.error=ロードしている Java インタプリタの場合は動作しません。
+macro.rs.GetPackageName.NotFind.error=パッケージ名がありません。
 #}}}
 
 #{{{ Java File Save
-macro.rs.JavaFileSave.InfiniteLoop.error=Infinite loop:
+macro.rs.JavaFileSave.InfiniteLoop.error=無限ループ:
 #}}}
 
 #{{{Make Get and Set Methods
-macro.rs.MakeGetAndSetMethods.GenerateCode.label=Generate Code
-macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Create Get Methods
-macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Create Set Methods
-macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Create Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=コード生成
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Get メソッド生成
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Set メソッド生成
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Get および Set メソッド生成
 #}}}
 
 #}}}
@@ -2236,13 +2236,13 @@ macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Create Get and Set Me
 #{{{ Misc
 
 #{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
-macro.rs.HyperSearchResults.WindowNotOpen.error=The 'HyperSearch Results' window is not open.
-macro.rs.HyperSearchResults.NotMatch.error=No HyperSearch matches.
+macro.rs.HyperSearchResults.WindowNotOpen.error='ハイパーサーチ結果' ウィンドウが開いていません。
+macro.rs.HyperSearchResults.NotMatch.error=ハイパーサーチの一致結果がありません。
 #}}}
 
 #{{{ Debug BufferSets
 macro.rs.DebugBuffersets.BuffersetDebugging.label=BUFFERSET DEBUGGING
-macro.rs.DebugBuffersets.BufferCount.label=BufferCount:
+macro.rs.DebugBuffersets.BufferCount.label=バッファ数:
 macro.rs.DebugBuffersets.BufferList.label=BUFFER LIST
 macro.rs.DebugBuffersets.EndBufferList.label=END BUFFER LIST
 macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LIST
@@ -2250,73 +2250,73 @@ macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
 #}}}
 
 #{{{ Display Abbreviations
-macro.rs.DisplayAbbreviations.Abbreviation.label=Abbreviation
-macro.rs.DisplayAbbreviations.Expansion.label=Expansion
-macro.rs.DisplayAbbreviations.Close.label=Close
-macro.rs.DisplayAbbreviations.WriteSet.label=Write set
-macro.rs.DisplayAbbreviations.WriteAll.label=Write all
-macro.rs.DisplayAbbreviations.AbbreviationList.label=Abbreviation list
-macro.rs.DisplayAbbreviations.CallingWTTNB.label=calling writeTableToNewBuffer for
-macro.rs.DisplayAbbreviations.SizeVector.label=size of vector:
-macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit Abbreviation Table
-macro.rs.DisplayAbbreviations.AbbreviationSet.label=Abbreviation set:
-macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=Abbreviation    Expansion
-macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< No abbreviations >>
+macro.rs.DisplayAbbreviations.Abbreviation.label=略語
+macro.rs.DisplayAbbreviations.Expansion.label=展開
+macro.rs.DisplayAbbreviations.Close.label=閉じる
+macro.rs.DisplayAbbreviations.WriteSet.label=セットを書き出し
+macro.rs.DisplayAbbreviations.WriteAll.label=すべて書き出し
+macro.rs.DisplayAbbreviations.AbbreviationList.label=略語リスト
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=呼び出し中 writeTableToNewBuffer for
+macro.rs.DisplayAbbreviations.SizeVector.label=配列サイズ:
+macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit 略語表
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=略語セット:
+macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=略語    展開
+macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< 略語はありません >>
 #}}}
 
 #{{{ Display Actions
-macro.rs.DisplayActions.jEditActionBar1.label=The jEdit action bar can be opened via the Utilities menu and is usually
-macro.rs.DisplayActions.jEditActionBar2.label=assigned to the C+ENTER keyboard shortcut.
-macro.rs.DisplayActions.NoLabel.label=<no label>
+macro.rs.DisplayActions.jEditActionBar1.label=jEdit のアクションバーはユーティリティメニューから開くことができます。
+macro.rs.DisplayActions.jEditActionBar2.label=また、通常は C+ENTER キーボードショートカットに割り当てられています。
+macro.rs.DisplayActions.NoLabel.label=<ラベルなし>
 #}}}
 
 #{{{ Display Character Code
-macro.rs.DisplayCharacterCode.CharacterAtCaret.label=Character at caret:
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=キャレット位置の文字:
 #}}}
 
 #{{{ Display Shorcuts
-macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit Keyboard Shortcut Table
-macro.rs.DisplayShortcuts.Name.label=Name
-macro.rs.DisplayShortcuts.Shortcut1.label=Shortcut - 1
-macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
-macro.rs.DisplayShortcuts.Close.label=Close
-macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
-macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit キーボードショートカット表
+macro.rs.DisplayShortcuts.Name.label=名前
+macro.rs.DisplayShortcuts.Shortcut1.label=ショートカット - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=ショートカット - 2
+macro.rs.DisplayShortcuts.Close.label=閉じる
+macro.rs.DisplayShortcuts.WriteToBuffer.label=バッファに書き出し
+macro.rs.DisplayShortcuts.ShortcutList.label=キーボードショートカット リスト
 macro.rs.DisplayShortcuts.Center.label=Center
 macro.rs.DisplayShortcuts.South.label=South
 #}}}
 
 #{{{ Hex Convert
-macro.rs.HexConvert.Before.label=before:
-macro.rs.HexConvert.After.label=after:
-macro.rs.HexConvert.NotValidHex.label=is not valid hex string.
-macro.rs.HexConvert.ByteToString.label=Byte to String:
+macro.rs.HexConvert.Before.label=変換前:
+macro.rs.HexConvert.After.label=変換後:
+macro.rs.HexConvert.NotValidHex.label=は正しい16進数文字列ではありません。
+macro.rs.HexConvert.ByteToString.label=文字列化するバイト値:
 #}}}
 
 #{{{ Make Bug Report
-macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
+macro.rs.MakeBugReport.OpeningActivityLog.error=アクティビティログを開くときエラーが発生しました。
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
 macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
 macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
 macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
 macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
 macro.rs.MakeBugReport.Error.label=[error]
-macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
+macro.rs.MakeBugReport.ReadingActivityLog.error=アクティビティログ読み取りエラー
 #}}}
 
 #{{{ Run Script
-macro.rs.RunScript.SpecifyParametersForRunning.label=Specify parameters for running script under
-macro.rs.RunScript.ScriptExecutionCancelled.message=Script execution was cancelled.
-macro.rs.RunScript.FileNotScript.error=The current file does not appear to be a script.
+macro.rs.RunScript.SpecifyParametersForRunning.label=以下のスクリプトを実行するためのパラメータを指定してください
+macro.rs.RunScript.ScriptExecutionCancelled.message=スクリプトの実行はキャンセルされました。
+macro.rs.RunScript.FileNotScript.error=現在のファイルはスクリプトとして評価できません。
 #}}}
 
 #{{{ Show Threads
-macro.rs.ShowThreads.Daemon.label=daemon
-macro.rs.ShowThreads.Priority.label=prio
-macro.rs.ShowThreads.NotStarted.label=not started
-macro.rs.ShowThreads.Interrupted.label=interrupted
-macro.rs.ShowThreads.CloseUpdate.label=[Esc] Close      [U] Update
-macro.rs.ShowThreads.CurrentThreads.label=Current Threads
+macro.rs.ShowThreads.Daemon.label=デーモン
+macro.rs.ShowThreads.Priority.label=優先度
+macro.rs.ShowThreads.NotStarted.label=未スタート
+macro.rs.ShowThreads.Interrupted.label=割り込み発生中
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] 閉じる      [U] 更新
+macro.rs.ShowThreads.CurrentThreads.label=現在のスレッド
 #}}}
 
 #}}}
@@ -2324,18 +2324,18 @@ macro.rs.ShowThreads.CurrentThreads.label=Current Threads
 #{{{ Properties
 
 #{{{ Insert Buffer Properties
-macro.rs.InsertBufferProperties.InsertLocalProperties.label=Insert Buffer Local Properties
-macro.rs.InsertBufferProperties.Properties.label=Properties:
-macro.rs.InsertBufferProperties.Insert.label=Insert
-macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Note: Buffer Local properties must in the first or last 10 lines of a buffer to be recognized by jEdit.
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=バッファローカルプロパティの挿入
+macro.rs.InsertBufferProperties.Properties.label=プロパティ:
+macro.rs.InsertBufferProperties.Insert.label=挿入
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=ヒント: バッファローカルプロパティをjEditは認識させるには、先頭か末尾の10行内に書く必要があります。
 #}}}
 
 #{{{ Look and Feel Properties
-macro.rs.LookAndFeelProperties.Listing.label=--listing look and feel property names--
+macro.rs.LookAndFeelProperties.Listing.label=--ルック・アンド・フィールのプロパティ名一覧--
 #}}}
 
 #{{{ System Properties
-macro.rs.SystemProperties.SystemProperties.label=System Properties
+macro.rs.SystemProperties.SystemProperties.label=システムプロパティ
 #}}}
 
 #}}}
@@ -2343,21 +2343,21 @@ macro.rs.SystemProperties.SystemProperties.label=System Properties
 #{{{ Text
 
 #{{{ Add Prefix And Suffix
-macro.rs.AddPrefixAndSuffix.MainDialog.title=Add prefix and suffix to selected lines
-macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=Prefix to add:
-macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=Suffix to add:
+macro.rs.AddPrefixAndSuffix.MainDialog.title=選択行にプレフィクスとサフィックスを追加
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=追加するプレフィクス:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=追加するサフィックス:
 #}}}
 
 #{{{ Color Picker
-macro.rs.ColorPicker.ColorPicker.label=Color Picker
+macro.rs.ColorPicker.ColorPicker.label=カラーピッカー
 #}}}
 
 #{{{ Insert Date
-macro.rs.InsertDate.InternetTime.label=Internet Time
+macro.rs.InsertDate.InternetTime.label=インターネット時刻
 #}}}
 
 #{{{ Insert Tag
-macro.rs.InsertTag.EnterNameTag.label=Enter name of tag:
+macro.rs.InsertTag.EnterNameTag.label=タグ名の入力:
 #}}}
 
 #{{{ Line_Filter
@@ -2383,17 +2383,17 @@ macro.rs.LineFilter.ErrorRegexpDialog.message=正規表現が不正です!
 #}}}
 
 #{{{ Next Char
-macro.rs.InsertTag.EnterCharacter.label=Enter a character
+macro.rs.InsertTag.EnterCharacter.label=文字の入力
 #}}}
 
 #{{{ Reverse Lines
-macro.rs.ReverseLines.NotWorkingRectangularSelection.error=Sorry, this macro doesn't work with Rectangular Selections.
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=申し訳ありませんが、このマクロは矩形選択では動きません。
 #}}}
 
 #{{{ Single Space Buffer
-macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=doesn't appear to be double-spaced:
-macro.rs.SingleSpaceBuffer.Line.message=Line
-macro.rs.SingleSpaceBuffer.NotBlank.message=isn't blank.
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=ダブルスペースではないようです:
+macro.rs.SingleSpaceBuffer.Line.message=行
+macro.rs.SingleSpaceBuffer.NotBlank.message=は空ではありません。
 #}}}
 
 #}}}
@@ -2410,7 +2410,7 @@ C/Toggle_Header_Source.label=ヘッダとソースの切り替え
 #}}}
 
 #{{{ Clipboard
-macros.folder.Clipboard.label=Clipboard
+macros.folder.Clipboard.label=クリップボード
 
 Clipboard/Copy_Lines.label=行をコピー
 Clipboard/Copy_Lines_Containing.label=テキストを含む行をコピー
@@ -2421,7 +2421,7 @@ Clipboard/Paste_Indent.label=インデントして貼り付け
 #}}}
 
 #{{{ Editing
-macros.folder.Editing.label=Editing
+macros.folder.Editing.label=編集
 
 Editing/Duplicate_Lines_Above.label=上の行を複製
 Editing/Duplicate_Lines_Below.label=下の行を複製
@@ -2443,7 +2443,7 @@ Editing/Toggle_Fold.label=フォールド切り替え
 #}}}
 
 #{{{ Files
-macros.folder.Files.label=Files
+macros.folder.Files.label=ファイル
 
 Files/Browse_Buffer_Directory.label=バッファのディレクトリをブラウズ
 Files/Browse_Directory.label=ディレクトリをブラウズ
@@ -2463,7 +2463,7 @@ Files/Toggle_ReadOnly.label=読み込み専用の切り替え
 #}}}
 
 #{{{ Interface
-macros.folder.Interface.label=Interface
+macros.folder.Interface.label=インターフェース
 
 Interface/Decrease_Font_Size.label=フォントサイズを小さく
 Interface/Increase_Font_Size.label=フォントサイズを大きく
@@ -2488,7 +2488,7 @@ Java/Preview_JavaDoc_Of_Current_Buffer.label=現在のバッファの JavaDoc �
 #}}}
 
 #{{{ Misc
-macros.folder.Misc.label=Misc
+macros.folder.Misc.label=その他
 
 Misc/Buffer_to_HyperSearch_Results.label=バッファからハイパーサーチ結果へ
 Misc/Debug_BufferSets.label=バッファセットをデバッグ
@@ -2505,7 +2505,7 @@ Misc/Show_Threads.label=スレッドを表示
 #}}}
 
 #{{{ Properties
-macros.folder.Properties.label=Properties
+macros.folder.Properties.label=プロパティ
 
 Properties/Create_Plugin_Announcement.label=プラグインアナウンスを作成
 Properties/Insert_Buffer_Properties.label=バッファのプロパティを挿入
@@ -2515,7 +2515,7 @@ Properties/System_Properties.label=システムプロパティ
 #}}}
 
 #{{{ Text
-macros.folder.Text.label=Text
+macros.folder.Text.label=テキスト
 
 Text/Add_Prefix_and_Suffix.label=プレフィックスとサフィックスの追加
 Text/Color_Picker.label=カラーピッカー
