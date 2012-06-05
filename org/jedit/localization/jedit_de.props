@@ -2006,8 +2006,8 @@ install-Plugins.select-all=Alle wählen
 install-Plugins.install=Installieren
 install-Plugins.show-updates=Updates zeigen
 
-install-Plugins.info=Autor: {0}\n\
-  Fertiggestellt: {1}\n\
+install-Plugins.info=<b>Autor</b>: {0}\n\
+  <b>Fertiggestellt</b>: {1}\n\
   {2}
 
 update-Plugins.title=Update

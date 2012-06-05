@@ -2010,8 +2010,8 @@ install-plugins.select-all=すべて選択
 install-plugins.install=インストール
 install-plugins.show-updates=アップデートの表示
 
-install-plugins.info=作者: {0}\n\
-	リリース日: {1}\n\
+install-plugins.info=<b>作者</b>: {0}\n\
+	<b>リリース日</b>: {1}\n\
 	{2}
 
 update-plugins.title=アップデート

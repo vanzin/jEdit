@@ -12,6 +12,9 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 {{{ Bug fixes
 
+- The plugin description in install panel now supports html
+  (#3509183 Matthieu Casanova)
+
 - The mirror "Plugin Central default" now works as auto selecting
   mirror and is used by default. Previous default was hardcoded "switch"
   (mirror.switch.ch) as workaround, but one could easily stuck on broken

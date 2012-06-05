@@ -2007,8 +2007,8 @@ install-plugins.select-all=Tout sélectionner
 install-plugins.install=Installer
 install-plugins.show-updates=Afficher les mises à jour
 
-install-plugins.info=Auteur : {0}\n\
-	Mis à disposition : {1}\n\
+install-plugins.info=<b>Auteur</b>: {0}\n\
+	<b>Mis à disposition</b>: {1}\n\
 	{2}
 
 update-plugins.title=Mise à jour

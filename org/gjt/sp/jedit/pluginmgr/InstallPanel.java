@@ -811,7 +811,7 @@ class InstallPanel extends JPanel implements EBComponent
 	/**
 	 * @TODO refactor to use the PluginDetailPanel?
 	 */
-	private class PluginInfoBox extends JTextPane implements ListSelectionListener
+	private class PluginInfoBox extends JEditorPane implements ListSelectionListener
 	{
 		private final String[] params;
 		PluginInfoBox()
@@ -819,10 +819,8 @@ class InstallPanel extends JPanel implements EBComponent
 			setBackground(jEdit.getColorProperty("view.bgColor"));
 			setForeground(jEdit.getColorProperty("view.fgColor"));
 			putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+			setContentType("text/html");
 			setEditable(false);
-			setEditorKit(new HTMLEditorKit());
-//			setLineWrap(true);
-//			setWrapStyleWord(true);
 			params = new String[3];
 			table.getSelectionModel().addListSelectionListener(this);
 		}
@@ -841,7 +839,6 @@ class InstallPanel extends JPanel implements EBComponent
 				params[2] = entry.description;
 				text = jEdit.getProperty("install-plugins.info", params);
 				text = text.replace("\n", "<br>");
-				text = "<html>" + text + "</html>";
 			}
 			setText(text);
 			setCaretPosition(0);

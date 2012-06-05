@@ -2017,8 +2017,8 @@ install-plugins.select-all=Vybrat vše
 install-plugins.install=Instalovat
 install-plugins.show-updates=Zobrazit updaty
 
-install-plugins.info=Autor: {0}\n\
-	Vydáno: {1}\n\
+install-plugins.info=<b>Autor</b>: {0}\n\
+	<b>Vydáno</b>: {1}\n\
 	{2}
 
 update-plugins.title=Update

@@ -2010,8 +2010,8 @@ install-plugins.select-all=Select All
 install-plugins.install=Install
 install-plugins.show-updates=Show Updates
 
-install-plugins.info=Author: {0}\n\
-	Released: {1}\n\
+install-plugins.info=<b>Author</b>: {0}\n\
+	<b>Released</b>: {1}\n\
 	{2}
 
 update-plugins.title=Update
