@@ -844,7 +844,12 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		{
 			String dockable = windowList[i];
 			Entry entry = windows.get(dockable);
-
+			if (entry == null)
+			{
+				// this can happens during a plugin loading when a dockable has been registered but the window
+				// is not yet created if the plugin has some jars.
+				continue;
+			}
 			String newPosition = jEdit.getProperty(dockable
 				+ ".dock-position",FLOATING);
 			if(newPosition.equals(entry.position))
