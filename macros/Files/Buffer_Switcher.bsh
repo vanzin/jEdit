@@ -243,7 +243,7 @@ if(showHelp.equals("1"))
 		+ Help3Label + "\n"
 		+ Help4Label + "\n"
 		+ Help5Label + "\n\n"
-		+ Help6Label;
+		+ Help6Label);
 	jEdit.setProperty("macro.buffer_switcher.display-help","0");
 }
 // }}}
