@@ -8,7 +8,7 @@ Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
 Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
 Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin,
-Thomas Meyer and Tom Power for contributing to this release.
+Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 {{{ Bug fixes
 
@@ -157,6 +157,9 @@ Thomas Meyer and Tom Power for contributing to this release.
 
 }}}
 {{{ Editing
+
+- Nsis mode: added sectiongroup and deprecated subsection.
+  (patch #3531776 Uwe - donovaly)
 
 - Shellscript mode: changed electric keys to better fit current jEdit
   capabilities in this area. (Jarek Czekalski)

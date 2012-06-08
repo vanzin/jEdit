@@ -1,14 +1,28 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
-Nullsoft Scriptable Installation System mode by Ryan Grove 2003
-Updated by Uwe Stöhr (donovaly@users.sourceforge.net) 2007
+This is Nullsoft Scriptable Installation System mode by Ryan Grove 2003.
+Copyright (C) 2003 Ryan Grove
+Copyright (C) 2007 Uwe Stöhr (donovaly@users.sourceforge.net)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 Updated for 4.3pre9 by Alan Ezust 2007
 $Id$
-
-This file should be accurate as of the version of NSIS 2.30. If I've left something out, please let me know.
 -->
 
 <MODE>
@@ -55,6 +69,8 @@ This file should be accurate as of the version of NSIS 2.30. If I've left someth
 			<!-- Deprecated stuff -->
 			<INVALID>dim</INVALID>
 			<INVALID>uninstallexename</INVALID>
+			<INVALID>subsection</INVALID>
+			<INVALID>subsectionend</INVALID>
 
 			<!-- Global variables -->
 			<KEYWORD3>$0</KEYWORD3>
@@ -282,9 +298,9 @@ This file should be accurate as of the version of NSIS 2.30. If I've left someth
 			<KEYWORD1>function</KEYWORD1>
 			<KEYWORD1>functionend</KEYWORD1>
 			<KEYWORD1>section</KEYWORD1>
+			<KEYWORD1>sectiongroup</KEYWORD1>
 			<KEYWORD1>sectionend</KEYWORD1>
-			<KEYWORD1>subsection</KEYWORD1>
-			<KEYWORD1>subsectionend</KEYWORD1>
+			<KEYWORD1>sectiongroupend</KEYWORD1>
 
 			<!-- Instructions -->
 			<KEYWORD2>addbrandingimage</KEYWORD2>
