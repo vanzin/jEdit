@@ -822,6 +822,7 @@ options.context.remove.icon=22x22/actions/list-remove.png
 options.context.moveUp.icon=22x22/actions/go-up.png
 options.context.moveDown.icon=22x22/actions/go-down.png
 options.context.reset.icon=22x22/actions/edit-clear.png
+options.context.includeOptionsLink=true
 #}}}
 
 #{{{ Docking pane

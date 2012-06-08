@@ -1313,6 +1313,7 @@ options.context.add.title=Přidat do kontextového menu
 options.context.add.caption=Přidat do kontextového menu:
 options.context.add.separator=Oddělovač
 options.context.add.action=Přikaz nebo makro:
+options.context.includeOptionsLink.label=Patří "Upravit toto menu ..." odkaz
 
 options.context.reset.dialog.title=Resetovat do výchozího
 options.context.reset.dialog.message=Opravdu chcete resetovat kontextového menu do výchozího (instalačního) stavu?

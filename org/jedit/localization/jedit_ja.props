@@ -1305,6 +1305,7 @@ options.context.add.title=コンテキストメニューに追加
 options.context.add.caption=コンテキストメニューに追加:
 options.context.add.separator=セパレータ
 options.context.add.action=コマンド/マクロ:
+options.context.includeOptionsLink.label="このメニューをカスタマイズ..."を含むリンク
 
 options.context.reset.dialog.title=デフォルトに戻す
 options.context.reset.dialog.message=本当にコンテキストメニューをインストールデフォルトに戻しますか?

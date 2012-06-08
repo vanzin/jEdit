@@ -1305,6 +1305,7 @@ options.context.add.title=Ajout au menu contextuel
 options.context.add.caption=Ajouter au menu contextuel :
 options.context.add.separator=Séparateur
 options.context.add.action=Commande ou macro :
+options.context.includeOptionsLink.label=Inclure "Personnaliser ce menu ..." lien
 
 options.context.reset.dialog.title=Rétablissement des éléments par défaut
 options.context.reset.dialog.message=Souhaitez-vous vraiment rétablir le menu contextuel installé par défaut ?

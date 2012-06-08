@@ -1305,6 +1305,7 @@ options.context.add.title=Add to Context Menu
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
 options.context.add.action=Command or macro:
+options.context.includeOptionsLink.label=Include "Customize This Menu..." link
 
 options.context.reset.dialog.title=Reset to Default
 options.context.reset.dialog.message=Are you sure you want to reset the context menu to the installation default?

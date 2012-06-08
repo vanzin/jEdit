@@ -1320,6 +1320,7 @@ options.context.add.title=Hinzufügen zum Kontextmenü
 options.context.add.caption=Hinzufügen zum Kontextmenü:
 options.context.add.separator=Trennlinie
 options.context.add.action=Befehl oder Makro:
+options.context.includeOptionsLink.label=Include "Dieses Menü anpassen..." link
 
 options.context.reset=Standard wiederherstellen
 options.context.reset.dialog.title=Standardmenü

@@ -456,6 +456,8 @@ public class JEditTextArea extends TextArea
 	public void createPopupMenu(MouseEvent evt)
 	{
 		popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
+		if (!jEdit.getBooleanProperty("options.context.includeOptionsLink"))
+			return;
 		JMenuItem customize = new JMenuItem(jEdit.getProperty(
 			"view.context.customize"));
 		customize.addActionListener(new ActionListener()

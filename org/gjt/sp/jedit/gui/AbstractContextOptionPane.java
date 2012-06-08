@@ -118,6 +118,10 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 		buttons.add(moveDown);
 		buttons.add(Box.createGlue());
 
+		includeOptionsLink = new JCheckBox(jEdit.getProperty("options.context.includeOptionsLink.label"));
+		includeOptionsLink.setSelected(jEdit.getBooleanProperty("options.context.includeOptionsLink"));
+		buttons.add(includeOptionsLink);
+		
 		// add "reset to defaults" button
 		reset = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.reset.icon")));
 		reset.setToolTipText(jEdit.getProperty("options.context.reset"));
@@ -176,6 +180,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 			buf.append(((MenuItem) listModel.elementAt(i)).actionName);
 		}
 		saveContextMenu(buf.toString());
+		jEdit.setBooleanProperty("options.context.includeOptionsLink", includeOptionsLink.isSelected());
 	}
 
 	// private members
@@ -185,6 +190,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	private JButton remove;
 	private JButton moveUp, moveDown;
 	private JButton reset;
+	private JCheckBox includeOptionsLink;
 	private JLabel caption;
 	private JPanel buttons;
 

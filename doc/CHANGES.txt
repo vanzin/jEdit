@@ -237,6 +237,9 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 }}}
 {{{ UI
 
+- Made "Customize This Menu..." item in context menu optional.
+  (patch #3530786 Tom Power)
+
 - File System Browser docked on left by default. (Alan Ezust)
 
 - Suppressed output to standard error of encoding problems on opening
