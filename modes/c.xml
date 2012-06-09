@@ -46,7 +46,7 @@
             <BEGIN>L"</BEGIN>
             <END>"</END>
         </SPAN>
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="\">
+        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
             <BEGIN>"</BEGIN>
             <END>"</END>
         </SPAN>
