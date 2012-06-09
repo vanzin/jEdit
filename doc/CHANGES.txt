@@ -307,6 +307,9 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - RegisterViewer: close the floating window after inserting a clip, to make
   behaviour consistent with Paste Previous window (#3478916 Jarek Czekalski)
+  
+- Show a preview of the window rather than a low-resolution icon when minimizing
+  on Mac OS X (#3529980 Evan Wright)
 
 }}}
 {{{ Miscellaneous

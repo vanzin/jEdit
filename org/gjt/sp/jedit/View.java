@@ -1323,8 +1323,10 @@ public class View extends JFrame implements InputHandlerProvider
 		plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
-
-		setIconImage(GUIUtilities.getEditorIcon());
+		
+		// OS X users expect a preview of the window rather than an icon
+		if (!OperatingSystem.isMacOS())
+			setIconImage(GUIUtilities.getEditorIcon());
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
