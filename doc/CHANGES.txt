@@ -158,6 +158,9 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 }}}
 {{{ Editing
 
+- C/C++ mode: Now Recognizes \ at end of line inside quoted strings.
+  (# 1780785 Shlomy Reinstein)
+
 - Nsis mode: added sectiongroup and deprecated subsection.
   (patch #3531776 Uwe - donovaly)
 
