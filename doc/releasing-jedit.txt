@@ -109,8 +109,10 @@ Workflow
     - Open sftp://[sourceForgeUsername],jedit@web.sourceforge.net/home/project-web/jedit/htdocs/devel.html e. g. in jEdit with installed FTP plugin and add a line for [version] in the Release Schedule
 
 10. Update the plugin wizard
-     - Go to http://plugins.jedit.org/wiz/release_add.php?package_id=24
-     - Enter the Version "[version]"
+     - Go to http://plugins.jedit.org/wiz/release_list.php?package_id=24
+     - Find or create the entry for this jEdit Release
+          The entry may already exist but be incomplete 
+          if a plugin was released that depends on it. 
      - Switch "Head of Branch" to "[ifdevel]devel[/ifdevel][iffinal]main[/iffinal]"
      - Check the "Remove" checkbox for the jEdit dependency
      - Switch the "Low Version" of the JDK dependency to "1.6 [jdk-1.6]"
