@@ -4,7 +4,7 @@
      xmlns:xi="http://www.w3.org/2001/XInclude"
      xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
 
-    <title> What's new in jEdit 5.0 </title>
+    <title> What's new in jEdit 5.1 </title>
     <articleinfo>
         <author>
             <othername>The jEdit all-volunteer development team</othername>
@@ -17,30 +17,5 @@
     url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
 
-    <itemizedlist>
-    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
-    </para></listitem>
-
-    <listitem><para> Localization - jEdit now supports switching
-    between default locale, French, German, Czech, and Japanese.
-    Some translations for those locales are provided, containing
-    common jEdit labels. It is also now possible to add new or contribute
-    to existing translation property files for jEdit core
-    as well as for plugins.
-    </para></listitem>
-
-    <listitem><para> Keymaps - named collections of shortcuts. Example keymaps
-    for Emacs, MacOS, Intellij and classic jEdit are provided, and users can
-    create or customize them.
-    </para></listitem>
-
-    <listitem><para> New Editing options: Disable or simplified automatic
-    indentation, and default response when opening a large file.
-    </para></listitem>
-
-    <listitem><para> Added a dozen new edit modes, updated a dozen more.
-    </para></listitem>
-
-    </itemizedlist>
 <!-- :maxLineLen=80:wrap=hard: -->
 </article>

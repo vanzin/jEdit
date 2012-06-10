@@ -111,7 +111,7 @@ Workflow
 10. Update the plugin wizard
      - Go to http://plugins.jedit.org/wiz/release_list.php?package_id=24
      - Find or create the entry for this jEdit Release
-          The entry may already exist but be incomplete 
+          The entry may already exist but have an invalid date 
           if a plugin was released that depends on it. 
      - Switch "Head of Branch" to "[ifdevel]devel[/ifdevel][iffinal]main[/iffinal]"
      - Check the "Remove" checkbox for the jEdit dependency
