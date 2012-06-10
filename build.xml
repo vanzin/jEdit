@@ -757,7 +757,9 @@
 				       includeAntRuntime="true">
 					<compilerarg line="${config.build.compilerarg}"/>
 				</javac>
-				<javadoc sourcepath="${basedir}"
+				<javadoc
+					 locale="en"
+					 sourcepath="${basedir}"
 					 destdir="${classes.dir}/javadoc/api"
 					 packagenames="org.*"
 					 classpath="${classes.dir}/core"
@@ -767,7 +769,6 @@
 					 use="true"
 					 author="true"
 					 splitindex="true"
-					 locale="en"
 					 windowtitle="jEdit API Documentation"
 					 doctitle="jEdit API"
 					 failonerror="true"
