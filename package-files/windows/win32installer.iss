@@ -133,8 +133,8 @@ Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}; ValueName: Icon; ValueTy
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: jEdit Server; ValueData: """{app}\jedit.exe"" -background -nogui --l4j-dont-wait"; Flags: uninsdeletevalue; Tasks: autostartserver
 
 [Run]
-Filename: {app}\jedit.exe; Description: {cm:ViewFile,README}; Parameters: "--l4j-dont-wait -nosettings {app}\doc\README.txt"; WorkingDir: {app}; Flags: nowait postinstall skipifsilent
-Filename: {app}\jedit.exe; Description: {cm:ViewFile,CHANGES}; Parameters: "--l4j-dont-wait -nosettings {app}\doc\CHANGES.txt"; WorkingDir: {app}; Flags: nowait postinstall skipifsilent
+Filename: {app}\jedit.exe; Description: {cm:ViewFile,README}; Parameters: "--l4j-dont-wait -nosettings ""{app}\doc\README.txt"""; WorkingDir: {app}; Flags: nowait postinstall skipifsilent
+Filename: {app}\jedit.exe; Description: {cm:ViewFile,CHANGES}; Parameters: "--l4j-dont-wait -nosettings ""{app}\doc\CHANGES.txt"""; WorkingDir: {app}; Flags: nowait postinstall skipifsilent
 Filename: {app}\jedit.exe; Description: {cm:LaunchProgram,jEdit}; Parameters: "--l4j-dont-wait"; WorkingDir: {app}; Flags: nowait postinstall skipifsilent; Tasks: not autostartserver
 Filename: {app}\jedit.exe; Description: {cm:LaunchProgram,jEdit}; Parameters: "--l4j-dont-wait -background"; WorkingDir: {app}; Flags: nowait postinstall skipifsilent; Tasks: autostartserver
 
