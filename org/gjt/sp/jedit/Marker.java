@@ -34,11 +34,6 @@ import javax.swing.text.Position;
  * identifies the key that can be pressed with the
  * <b>Markers</b>&gt;<b>Go To Marker</b> command.
  *
- * <p>After a marker is created using the constructor,
- * {@link #createPosition} should be called, to make the marker reflect
- * always the same place despite text editions. The position is maintained
- * by {@link PositionMgr} class, which is maintained by {@link JEditBuffer}.  
- *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
  * @version $Id$
@@ -68,6 +63,13 @@ public class Marker
 	//{{{ Package-private members
 
 	//{{{ Marker constructor
+	/**
+	 * <p>After a marker is created using the constructor,
+	 * {@link #createPosition} should be called, to make the marker reflect
+	 * always the same place despite text editions. The position is maintained
+	 * by {@link org.gjt.sp.jedit.buffer.PositionManager} class, which is
+	 * maintained by {@link org.gjt.sp.jedit.buffer.JEditBuffer}.
+	 */
 	Marker(Buffer buffer, char shortcut, int position)
 	{
 		this.buffer = buffer;
