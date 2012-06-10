@@ -117,24 +117,7 @@
 <ACTION NAME="vfs.browser.open-desktop">
 	<CODE>
 	if (files.length != 1) return;
-	f = new java.io.File(files[0].getPath());
-	if (!f.exists()) return;
-	cmd = null;
-	if (OperatingSystem.isWindows()) {
-		cmd = "rundll32 SHELL32.DLL,ShellExec_RunDLL " + 
-		"\"" + f.getCanonicalPath() + "\"";
-	}
-	else if (OperatingSystem.isMacOS()) {
-		cmd = "open " + f.getCanonicalPath();
-	}
-	else if (OperatingSystem.isX11()) {
-		cmd = "xdg-open " + f.getCanonicalPath();
-	}
-	else {
-		java.awt.Desktop.getDesktop().open(f);
-		return;
-	}
-	Runtime.getRuntime().exec(cmd);
+	MiscUtilities.openInDesktop(files[0].getPath());
 	</CODE>
 </ACTION>
 
