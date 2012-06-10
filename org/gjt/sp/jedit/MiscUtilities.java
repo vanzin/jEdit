@@ -580,9 +580,6 @@ public class MiscUtilities
 	*/
 	public static void openInDesktop(String path) throws IOException
 	{
-		path = canonPath(path);
-		File f = new File(path);
-		if (!f.exists()) return;
 		StringList sl = new StringList();
 		if (OperatingSystem.isWindows())
 		{
@@ -598,7 +595,7 @@ public class MiscUtilities
 			sl.add(path);
 			Runtime.getRuntime().exec(sl.toArray());
 		}
-		else java.awt.Desktop.getDesktop().open(f);
+		else java.awt.Desktop.getDesktop().open(new File(path));
 	}// }}}
 
 	//{{{ prepareBackupDirectory method
