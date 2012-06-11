@@ -18,20 +18,15 @@ and Matthieu Casanova for contributing to this release.
 - Fixed NPE when opening View option pane for the first time on a fresh
   installation (#3520577 Matthieu Casanova)
 
- - Fixed favorites menu actions (#3512250 Matthieu Casanova)
+- Fixed favorites menu actions (#3512250 Matthieu Casanova)
 
- - Remove jar cache when unloading a plugin (#3514022 Matthieu Casanova)
+- Remove jar cache when unloading a plugin (#3514022 Matthieu Casanova)
 
 }}}
-{{{ UI 
+{{{ UI
 
 - Changed error list dialog size to a fixed size of 80x25 characters.
   (Jarek Czekalski)
-
-}}}
-
-{{{ Editing
-
 
 }}}
 
