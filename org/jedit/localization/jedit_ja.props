@@ -70,7 +70,7 @@ view.action.close-tooltip=アクションバーを隠す (ESC)
 #}}}
 
 #{{{ Context menu
-view.context.customize=メニューをカスタマイズ...
+view.context.customize=このメニューをカスタマイズ...
 #}}}
 
 #{{{ System tray menu
@@ -1305,7 +1305,7 @@ options.context.add.title=コンテキストメニューに追加
 options.context.add.caption=コンテキストメニューに追加:
 options.context.add.separator=セパレータ
 options.context.add.action=コマンド/マクロ:
-options.context.includeOptionsLink.label="このメニューをカスタマイズ..."を含むリンク
+options.context.includeOptionsLink.label="このメニューをカスタマイズ..." へのリンクを含む
 
 options.context.reset.dialog.title=デフォルトに戻す
 options.context.reset.dialog.message=本当にコンテキストメニューをインストールデフォルトに戻しますか?
@@ -1504,7 +1504,7 @@ options.shortcuts.filter.tooltip=名称がこの文字列を含むアクショ�
 options.shortcuts.clear.label=クリア
 
 grab-key.title=ショートカットを指定してください
-grab-key.caption="{0}"に割当てたいショートカットキーを押し、了解をクリックしてください。
+grab-key.caption="{0}"に割当てたいショートカットキーを押し、OKをクリックしてください。
 grab-key.keyboard-test=問題を起こしているキーストロークを入力してください。
 grab-key.assigned-to=現在の割当: {0}
 grab-key.assigned-to.none=<なし>
@@ -2039,8 +2039,8 @@ fileprop.properties=プロパティ
 fileprop.readable=読込み可能
 fileprop.writeable=書込み可能
 fileprop.attribute=属性
-fileprop.okBtn=了解
-fileprop.cancelBtn=取消し
+fileprop.okBtn=OK
+fileprop.cancelBtn=キャンセル
 fileprop.selectedFiles=選択されたファイル
 fileprop.selectedDirectories=選択されたディレクトリ
 #}}}
