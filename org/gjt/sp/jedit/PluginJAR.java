@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collection;
@@ -59,6 +60,7 @@ import org.gjt.sp.jedit.buffer.DummyFoldHandler;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
+import org.gjt.sp.jedit.io.CharsetEncoding;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
@@ -1354,7 +1356,9 @@ public class PluginJAR
 					try
 					{
 						in = classLoader.getResourceAsStream(name);
-						props.load(in);
+						CharsetEncoding utf8 = new CharsetEncoding("UTF-8");
+						Reader utf8in = utf8.getTextReader(in);
+						props.load(utf8in);
 						localizationProperties.put(languageName, props);
 					}
 					finally
