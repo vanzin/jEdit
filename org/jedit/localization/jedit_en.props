@@ -31,6 +31,7 @@ common.more=More
 common.insert=Insert
 common.add=Add
 common.remove=Remove
+common.removeCurrent=Remove Current
 common.moveUp=Move Up
 common.moveDown=Move Down
 common.clearAll=Clear All

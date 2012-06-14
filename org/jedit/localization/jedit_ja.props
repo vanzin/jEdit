@@ -31,6 +31,7 @@ common.more=さらに
 common.insert=挿入
 common.add=追加
 common.remove=削除
+common.removeCurrent=現在のものを削除
 common.moveUp=上へ
 common.moveDown=下へ
 common.clearAll=すべてクリア
@@ -1510,12 +1511,12 @@ grab-key.assigned-to=現在の割当: {0}
 grab-key.assigned-to.none=<なし>
 grab-key.assigned-to.prefix={0} プレフィクス
 grab-key.clear=クリア
-grab-key.remove=割当の解除
+grab-key.remove=現在のものを削除
 
-grab-key.remove-ask.title=ショートカットを解除しますか?
+grab-key.remove-ask.title=ショートカットを削除しますか?
 grab-key.remove-ask.message=\
 	新たなショートカットが指定されませんでした。\n\
-	現在のショートカットを解除しますか?
+	現在のショートカットを削除しますか?
 
 grab-key.duplicate-alt-shortcut.title=重複ショートカット
 grab-key.duplicate-alt-shortcut.message=\

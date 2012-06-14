@@ -233,7 +233,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			Box buttons = new Box(BoxLayout.X_AXIS);
 			buttons.add(Box.createGlue());
 
-			buttons.add(removeThisError = new JButton(jEdit.getProperty("common.remove")));
+			buttons.add(removeThisError = new JButton(jEdit.getProperty("common.removeCurrent")));
 			buttons.add(Box.createHorizontalStrut(6));
 			buttons.add(removeAllErrors = new JButton(jEdit.getProperty("common.clearAll")));
 

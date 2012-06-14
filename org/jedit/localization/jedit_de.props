@@ -116,6 +116,7 @@ common.more=Mehr
 common.insert=Einfügen
 common.add=Hinzufügen
 common.remove=Entfernen
+common.removeCurrent=aktuelle Zuordnung entfernen
 common.moveUp=Nach oben
 common.moveDown=Nach unten
 common.clearAll=Alle löschen
