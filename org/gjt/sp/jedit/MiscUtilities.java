@@ -574,7 +574,14 @@ public class MiscUtilities
 
 	// {{{ openInDesktop() method
 	/** Opens a file using the desktop file associations.
-		The way it works depends on the platform.
+		<p>
+		Uses native desktop commands for each platform, which ask the user to choose an
+		association for files that do not already have one, using the desktop's
+		dialog, in contrast to Desktop.open() which just throws an IOException
+		for unknown types. 
+		
+		@throws IOException if the path is not valid or something else is not working
+		@param path path or URL of thing to open 
 		@author Alan Ezust
 		@since jEdit 5.1
 	*/
@@ -595,6 +602,7 @@ public class MiscUtilities
 			sl.add(path);
 			Runtime.getRuntime().exec(sl.toArray());
 		}
+		// I don't know what platform it is...
 		else java.awt.Desktop.getDesktop().open(new File(path));
 	}// }}}
 
