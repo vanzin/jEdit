@@ -128,13 +128,7 @@ class ContentManager
 	public void insert(int start, String str)
 	{
 		int len = str.length();
-		moveGapStart(start);
-		if(gapEnd - gapStart < len)
-		{
-			ensureCapacity(length + len + 1024);
-			moveGapEnd(start + len + 1024);
-		}
-
+		prepareGapForInsertion(start, len);
 		str.getChars(0,len,text,start);
 		gapStart += len;
 		length += len;
@@ -148,13 +142,7 @@ class ContentManager
 	public void insert(int start, CharSequence str)
 	{
 		int len = str.length();
-		moveGapStart(start);
-		if(gapEnd - gapStart < len)
-		{
-			ensureCapacity(length + len + 1024);
-			moveGapEnd(start + len + 1024);
-		}
-
+		prepareGapForInsertion(start, len);
 		for (int i = 0; i < len; i++)
 		{
 			text[start+i] = str.charAt(i);
@@ -165,13 +153,7 @@ class ContentManager
 
 	public void insert(int start, Segment seg)
 	{
-		moveGapStart(start);
-		if(gapEnd - gapStart < seg.count)
-		{
-			ensureCapacity(length + seg.count + 1024);
-			moveGapEnd(start + seg.count + 1024);
-		}
-
+		prepareGapForInsertion(start, seg.count);
 		System.arraycopy(seg.array,seg.offset,text,start,seg.count);
 		gapStart += seg.count;
 		length += seg.count;
@@ -238,6 +220,18 @@ class ContentManager
 			char[] textN = new char[capacity * 2];
 			System.arraycopy(text,0,textN,0,length + (gapEnd - gapStart));
 			text = textN;
+		}
+	} //}}}
+
+	//{{{ prepareGapForInsertion() method
+	private void prepareGapForInsertion(int start, int len)
+	{
+		moveGapStart(start);
+		if(gapEnd - gapStart < len)
+		{
+			int gapSize = len + 1024;
+			ensureCapacity(length + gapSize);
+			moveGapEnd(start + gapSize);
 		}
 	} //}}}
 
