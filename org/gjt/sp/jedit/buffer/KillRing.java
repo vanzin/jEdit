@@ -175,15 +175,13 @@ public class KillRing implements MutableListModel
 	{
 		if(rem.inKillRing)
 		{
-			// compare existing entries' hashcode with this
+			// compare existing entries with this
 			int length = (wrap ? ring.length : count);
 			int kill = -1;
 
 			for(int i = 0; i < length; i++)
 			{
-				if(ring[i] != rem
-					&& ring[i].hashcode == rem.hashcode
-					&& ring[i].str.equals(rem.str))
+				if(ring[i].str.equals(rem.str))
 				{
 					// we don't want duplicate
 					// entries in the kill ring
@@ -202,19 +200,15 @@ public class KillRing implements MutableListModel
 	//{{{ add() method
 	void add(UndoManager.RemovedContent rem)
 	{
-		// compare existing entries' hashcode with this
+		// compare existing entries with this
 		int length = (wrap ? ring.length : count);
 		for(int i = 0; i < length; i++)
 		{
-			if(ring[i].hashcode == rem.hashcode)
+			if(ring[i].str.equals(rem.str))
 			{
-				// strings might be equal!
-				if(ring[i].str.equals(rem.str))
-				{
-					// we don't want duplicate entries
-					// in the kill ring
-					return;
-				}
+				// we don't want duplicate entries
+				// in the kill ring
+				return;
 			}
 		}
 

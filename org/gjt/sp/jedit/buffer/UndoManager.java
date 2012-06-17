@@ -213,14 +213,12 @@ public class UndoManager
 			if(rem.offset == offset)
 			{
 				rem.content.str = rem.content.str.concat(text);
-				rem.content.hashcode = rem.content.str.hashCode();
 				KillRing.getInstance().changed(rem.content);
 				return;
 			}
 			else if(offset + length == rem.offset)
 			{
 				rem.content.str = text.concat(rem.content.str);
-				rem.content.hashcode = rem.content.str.hashCode();
 				rem.offset = offset;
 				KillRing.getInstance().changed(rem.content);
 				return;
@@ -396,13 +394,11 @@ public class UndoManager
 	public static class RemovedContent
 	{
 		String str;
-		int hashcode;
 		boolean inKillRing;
 
 		public RemovedContent(String str)
 		{
 			this.str = str;
-			this.hashcode = str.hashCode();
 		}
 
 		public String toString()
