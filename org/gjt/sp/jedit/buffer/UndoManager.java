@@ -212,15 +212,17 @@ public class UndoManager
 			Remove rem = (Remove)toMerge;
 			if(rem.offset == offset)
 			{
-				rem.content.str = rem.content.str.concat(text);
-				KillRing.getInstance().changed(rem.content);
+				String newStr = rem.str.concat(text);
+				KillRing.getInstance().changed(rem.str, newStr);
+				rem.str = newStr;
 				return;
 			}
 			else if(offset + length == rem.offset)
 			{
-				rem.content.str = text.concat(rem.content.str);
-				rem.offset = offset;
-				KillRing.getInstance().changed(rem.content);
+				String newStr = text.concat(rem.str);
+				KillRing.getInstance().changed(rem.str, newStr);
+ 				rem.offset = offset;
+				rem.str = newStr;
 				return;
 			}
 		}
@@ -240,7 +242,7 @@ public class UndoManager
 			addEdit(rem);
 		}
 
-		KillRing.getInstance().add(rem.content);
+		KillRing.getInstance().add(rem.str);
 	} //}}}
 
 	//{{{ resetClearDirty method
@@ -389,23 +391,6 @@ public class UndoManager
 		String str;
 	} //}}}
 
-	//{{{ RemovedContent clas
-	// This class is held in KillRing.
-	public static class RemovedContent
-	{
-		String str;
-
-		public RemovedContent(String str)
-		{
-			this.str = str;
-		}
-
-		public String toString()
-		{
-			return str;
-		}
-	}// }}}
-
 	//{{{ Remove class
 	static class Remove extends Edit
 	{
@@ -414,22 +399,22 @@ public class UndoManager
 		{
 			this.mgr = mgr;
 			this.offset = offset;
-			this.content = new RemovedContent(str);
+			this.str = str;
 		} //}}}
 
 		//{{{ undo() method
 		int undo()
 		{
-			mgr.buffer.insert(offset,content.str);
+			mgr.buffer.insert(offset,str);
 			if(mgr.undoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset + content.str.length();
+			return offset + str.length();
 		} //}}}
 
 		//{{{ redo() method
 		int redo()
 		{
-			mgr.buffer.remove(offset,content.str.length());
+			mgr.buffer.remove(offset,str.length());
 			if(mgr.redoClearDirty == this)
 				mgr.buffer.setDirty(false);
 			return offset;
@@ -437,7 +422,7 @@ public class UndoManager
 
 		UndoManager mgr;
 		int offset;
-		final RemovedContent content;
+		String str;
 	} //}}}
 
 	//{{{ CompoundEdit class
