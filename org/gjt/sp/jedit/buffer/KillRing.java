@@ -181,7 +181,8 @@ public class KillRing implements MutableListModel
 
 			for(int i = 0; i < length; i++)
 			{
-				if(ring[i].str.equals(rem.str))
+				if(ring[i] != rem
+					&& ring[i].str.equals(rem.str))
 				{
 					// we don't want duplicate
 					// entries in the kill ring
