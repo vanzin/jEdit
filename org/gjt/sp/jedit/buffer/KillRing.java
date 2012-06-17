@@ -173,29 +173,33 @@ public class KillRing implements MutableListModel
 	//{{{ changed() method
 	void changed(UndoManager.RemovedContent rem)
 	{
-		if(rem.inKillRing)
+		// compare existing entries with this
+		int length = (wrap ? ring.length : count);
+		boolean inKillRing = false;
+		int kill = -1;
+		for(int i = 0; i < length; i++)
 		{
-			// compare existing entries with this
-			int length = (wrap ? ring.length : count);
-			int kill = -1;
-
-			for(int i = 0; i < length; i++)
+			if(ring[i] == rem)
 			{
-				if(ring[i] != rem
-					&& ring[i].str.equals(rem.str))
-				{
-					// we don't want duplicate
-					// entries in the kill ring
-					kill = i;
-					break;
-				}
+				inKillRing = true;
 			}
-
+			else if(ring[i].str.equals(rem.str))
+			{
+				// we don't want duplicate
+				// entries in the kill ring
+				assert(kill == -1);
+				kill = i;
+			}
+		}
+		if(inKillRing)
+		{
 			if(kill != -1)
 				remove(kill);
 		}
 		else
+		{
 			add(rem);
+		}
 	} //}}}
 
 	//{{{ add() method
@@ -227,11 +231,6 @@ public class KillRing implements MutableListModel
 		if(allWhitespace)
 			return;
 
-		rem.inKillRing = true;
-
-		if(ring[count] != null)
-			ring[count].inKillRing = false;
-
 		ring[count] = rem;
 		if(++count >= ring.length)
 		{
@@ -254,7 +253,6 @@ public class KillRing implements MutableListModel
 
 				if(i == index)
 				{
-					ring[index].inKillRing = false;
 					continue;
 				}
 

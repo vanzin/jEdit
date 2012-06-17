@@ -394,7 +394,6 @@ public class UndoManager
 	public static class RemovedContent
 	{
 		String str;
-		boolean inKillRing;
 
 		public RemovedContent(String str)
 		{
