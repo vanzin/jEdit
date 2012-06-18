@@ -36,6 +36,8 @@ class PropertyManager
 			total.putAll(plugin);
 		total.putAll(site);
 		total.putAll(localization);
+		for (Properties pluginLocalization : pluginLocalizations)
+			total.putAll(pluginLocalization);
 		total.putAll(user);
 		return total;
 	} //}}}
@@ -106,12 +108,41 @@ class PropertyManager
 		plugins.remove(props);
 	} //}}}
 
+	//{{{ loadPluginLocalizationProps() method
+	Properties loadPluginLocalizationProps(Reader in)
+		throws IOException
+	{
+		Properties pluginLocalization = new Properties();
+		loadProps(pluginLocalization,in);
+		pluginLocalizations.add(pluginLocalization);
+		return pluginLocalization;
+	} //}}}
+
+	//{{{ addPluginLocalizationProps() method
+	void addPluginLocalizationProps(Properties props)
+	{
+		pluginLocalizations.add(props);
+	} //}}}
+
+	//{{{ removePluginLocalizationProps() method
+	void removePluginLocalizationProps(Properties props)
+	{
+		pluginLocalizations.remove(props);
+	} //}}}
+
 	//{{{ getProperty() method
 	String getProperty(String name)
 	{
 		String value = user.getProperty(name);
 		if(value != null)
 			return value;
+
+		for (Properties pluginLocalization : pluginLocalizations)
+		{
+			value = pluginLocalization.getProperty(name);
+			if (value != null)
+				return value;
+		}
 
 		value = localization.getProperty(name);
 		if (value != null)
@@ -175,6 +206,7 @@ class PropertyManager
 	private final List<Properties> plugins = new LinkedList<Properties>();
 	private final Properties site = new Properties();
 	private final Properties localization = new Properties();
+	private final List<Properties> pluginLocalizations = new LinkedList<Properties>();
 	private final Properties user = new Properties();
 
 	//{{{ getDefaultProperty() method

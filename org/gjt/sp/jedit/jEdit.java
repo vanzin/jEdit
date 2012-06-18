@@ -3067,6 +3067,18 @@ public class jEdit
 		propMgr.removePluginProps(map);
 	} //}}}
 
+	//{{{ addPluginLocalizationProps() method
+	static void addPluginLocalizationProps(Properties map)
+	{
+		propMgr.addPluginLocalizationProps(map);
+	} //}}}
+
+	//{{{ removePluginLocalizationProps() method
+	static void removePluginLocalizationProps(Properties map)
+	{
+		propMgr.removePluginLocalizationProps(map);
+	} //}}}
+
 	//{{{ pluginError() method
 	/**
 	 * @param path

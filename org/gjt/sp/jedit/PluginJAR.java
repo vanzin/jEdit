@@ -1196,7 +1196,7 @@ public class PluginJAR
 			Properties langProperties = localizationProperties.get(currentLanguage);
 			if (langProperties != null)
 			{
-				jEdit.addPluginProps(langProperties);
+				jEdit.addPluginLocalizationProps(langProperties);
 			}
 		}
 
@@ -1382,7 +1382,7 @@ public class PluginJAR
 			Properties langProperties = localizationProperties.get(currentLanguage);
 			if (langProperties != null)
 			{
-				jEdit.addPluginProps(langProperties);
+				jEdit.addPluginLocalizationProps(langProperties);
 			}
 		}
 
