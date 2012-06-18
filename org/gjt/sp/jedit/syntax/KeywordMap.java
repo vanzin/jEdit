@@ -1,6 +1,6 @@
 /*
  * KeywordMap.java - Fast keyword->id map
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 2002 Slava Pestov

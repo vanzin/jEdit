@@ -572,7 +572,7 @@ public class MiscUtilities
 		return backupFile;
 	} //}}}
 
-	// {{{ openInDesktop() method
+	//{{{ openInDesktop() method
 	/** Opens a file using the desktop file associations.
 		<p>
 		Uses native desktop commands for each platform, which ask the user to choose an
@@ -596,14 +596,13 @@ public class MiscUtilities
 		else if (OperatingSystem.isMacOS())
 			sl.add("open");
 		else if (OperatingSystem.isX11())
-			sl.add("xdg-open");
-		if (!sl.isEmpty())
-		{
+			sl.add("xdg-open");		
+		if (sl.isEmpty()) // I don't know what platform it is
+			java.awt.Desktop.getDesktop().open(new File(path));
+		else {
 			sl.add(path);
 			Runtime.getRuntime().exec(sl.toArray());
 		}
-		// I don't know what platform it is...
-		else java.awt.Desktop.getDesktop().open(new File(path));
 	}// }}}
 
 	//{{{ prepareBackupDirectory method

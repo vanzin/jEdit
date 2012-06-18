@@ -1,6 +1,6 @@
 /*
  * FavoritesProvider.java - Favorites list menu
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2003 Slava Pestov

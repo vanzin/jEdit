@@ -1,6 +1,6 @@
 /*
  * BufferSetAdapter.java - the default implementation for the bufferSet listener
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2008 Matthieu Casanova

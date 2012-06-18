@@ -1,7 +1,7 @@
 /*
  * SelectionLengthWidgetFactory.java - A status bar widget that displays
  * the length of the selection at caret
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2008 Matthieu Casanova

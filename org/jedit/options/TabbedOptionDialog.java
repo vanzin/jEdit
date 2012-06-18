@@ -1,6 +1,6 @@
 /*
  * TabbedOptionDialog.java - Options Dialog with tabs. 
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2005 Slava Pestov

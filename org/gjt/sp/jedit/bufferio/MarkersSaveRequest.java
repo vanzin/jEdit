@@ -1,5 +1,5 @@
 /* {{{ MarkersSaveRequest.java - I/O request
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * based on jEdit.buffer.BufferSaveRequest (Copyright (C) 2000, 2005 Slava Pestov)

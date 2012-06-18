@@ -1,6 +1,6 @@
 /*
  * XModeHandler.java - XML handler for mode files
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999 mike dillon

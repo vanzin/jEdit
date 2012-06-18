@@ -1,6 +1,6 @@
 /*
  * SettingsReloader.java - Utility class reloads macros and modes when necessary
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001, 2003 Slava Pestov

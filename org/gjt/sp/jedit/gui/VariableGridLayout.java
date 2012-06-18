@@ -1,6 +1,6 @@
 /*
  * VariableGridLayout.java - a grid layout manager with variable cell sizes
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  *
  * Originally written by Dirk Moebius for the jEdit project. This work has been
  * placed into the public domain. You may use this work in any way and for any

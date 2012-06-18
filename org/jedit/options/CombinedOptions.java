@@ -1,6 +1,6 @@
 /*
  * CombinedOptions.java - Combined options dialog
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:
  *
  * Copyright (C) 2011 Alan Ezust

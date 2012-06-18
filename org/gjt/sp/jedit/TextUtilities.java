@@ -1,7 +1,7 @@
 /*
  * TextUtilities.java - Various text functions
  * Copyright (C) 1998, 2005 Slava Pestov
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * This program is free software; you can redistribute it and/or

@@ -1,7 +1,7 @@
 /*
  * ExtendedGridLayout.java - a grid layout manager with variable cell sizes
  * that supports colspans and rowspans
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Originally written by Björn Kautler for the jEdit project. This work has been

@@ -1,6 +1,6 @@
 /*
  * OptionGroupPane.java - A Pane (view) for displaying/selecting OptionGroups.
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:
  *
  * Copyright (C) 2005 Slava Pestov
