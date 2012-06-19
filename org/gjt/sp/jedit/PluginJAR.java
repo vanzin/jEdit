@@ -1122,7 +1122,7 @@ public class PluginJAR
 				Collection<Properties> values = localizationProperties.values();
 				for (Properties value : values)
 				{
-					jEdit.removePluginProps(value);
+					jEdit.removePluginLocalizationProps(value);
 				}
 			}
 			try
