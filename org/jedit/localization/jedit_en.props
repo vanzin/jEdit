@@ -1854,7 +1854,7 @@ vfs.browser.next.shortcut=A+Right
 #}}}
 
 #{{{ Commands menu
-vfs.browser.commands.label=Commands
+vfs.browser.commands.label=$Commands
 vfs.browser.commands.encoding.label=Encoding
 vfs.browser.commands.encoding.auto-detect=Auto-detect
 
@@ -1865,14 +1865,14 @@ vfs.browser.open-split.label=New Split
 #}}}
 
 #{{{ Plugins menu
-vfs.browser.plugins.label=Plugins
+vfs.browser.plugins.label=$Plugins
 vfs.browser.plugins.plugin-manager.label=Plugin Manager...
 vfs.browser.plugins.plugin-options.label=Plugin Options...
 vfs.browser.plugins.no-plugins.label=No Plugins
 #}}}
 
 #{{{ Favorites menu
-vfs.browser.favorites.label=Favorites
+vfs.browser.favorites.label=Fa$vorites
 vfs.browser.favorites.add-to-favorites.label=Add to Favorites
 vfs.browser.favorites.edit-favorites.label=Edit Favorites
 vfs.browser.favorites.no-favorites.label=No Favorites

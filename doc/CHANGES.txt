@@ -4,19 +4,20 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre1
 
-Thanks to (...) for contributing to this release.
+Thanks to Jarek Czekalski for contributing to this release.
 
 {{{ Bug fixes
 
 }}}
 {{{ API Changes
-
+- New method GUIUtilities.setAutoMnemonic(AbstractButton) (Jarek Czekalski)
 }}}
 {{{ Editing
 
 }}}
 {{{ UI
-
+- Added mnemonics for popup menus in File System Browser (Commands, Plugins,
+  Favorites). (Jarek Czekalski)
 }}}
 {{{ Miscellaneous
 

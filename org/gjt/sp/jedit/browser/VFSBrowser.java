@@ -1770,6 +1770,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			addKeyListener(this);
 			if(OperatingSystem.isMacOSLF())
 				putClientProperty("JButton.buttonType","toolbar");
+			setAction(new Action());
 		} //}}}
 
 		public void keyReleased(KeyEvent e) {}
@@ -1803,6 +1804,15 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				}
 			}
 		} //}}}
+		
+		//{{{ Action class
+		class Action extends AbstractAction
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				doPopup();
+			}
+		} //}}}
 	} //}}}
 
 
@@ -1814,6 +1824,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		CommandsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
+			GUIUtilities.setAutoMnemonic(this);
 			setName("commands");
 			popup = new BrowserCommandsMenu(VFSBrowser.this, null);
 		} //}}}
@@ -1834,7 +1845,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		PluginsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
-
+			GUIUtilities.setAutoMnemonic(this);
 			setName("plugins");
 
 			setMargin(new Insets(1,1,1,1));
@@ -1874,6 +1885,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		FavoritesMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
+			GUIUtilities.setAutoMnemonic(this);
 			setName("favorites");
 			createPopupMenu();
 
