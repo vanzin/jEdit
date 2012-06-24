@@ -977,7 +977,7 @@ public class View extends JFrame implements InputHandlerProvider
 		Buffer[] bufs = new Buffer[retval.size()];
 		retval.toArray(bufs);
 		return bufs;
-	}
+	}//}}}
 	
 	//{{{ setBuffer() method
 	/**

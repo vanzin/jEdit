@@ -2228,8 +2228,9 @@ public class jEdit
 
 	//{{{ getBuffers() method
 	/**
-	 * Returns an array of open buffers.
-	 * @return  an array of all open buffers
+	 * Returns an array of all open buffers from any View.
+	 * @return  an array of all open buffers 
+	 * @see View#getBuffers()
 	 */
 	public static Buffer[] getBuffers()
 	{

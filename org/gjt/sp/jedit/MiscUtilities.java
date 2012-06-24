@@ -599,7 +599,8 @@ public class MiscUtilities
 			sl.add("xdg-open");		
 		if (sl.isEmpty()) // I don't know what platform it is
 			java.awt.Desktop.getDesktop().open(new File(path));
-		else {
+		else 
+		{
 			sl.add(path);
 			Runtime.getRuntime().exec(sl.toArray());
 		}
