@@ -10,7 +10,11 @@ Thanks to Jarek Czekalski for contributing to this release.
 
 }}}
 {{{ API Changes
+
 - New method GUIUtilities.setAutoMnemonic(AbstractButton) (Jarek Czekalski)
+
+- New method: View.getBuffers(), aware of bufferset scope. (Alan Ezust)
+
 }}}
 {{{ Editing
 

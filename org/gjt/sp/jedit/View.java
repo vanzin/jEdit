@@ -957,6 +957,28 @@ public class View extends JFrame implements InputHandlerProvider
 			return editPane.getBuffer();
 	} //}}}
 
+	//{{{ getBuffers() method
+	/**
+	 * Returns all Buffers opened in this View.
+	 * @since jEdit 5.1
+	 */
+	public Buffer[] getBuffers() {
+		BufferSetManager mgr = jEdit.getBufferSetManager();
+		HashSet<Buffer> retval = new HashSet<Buffer>();
+		for (EditPane ep: getEditPanes()) {
+			BufferSet bs = ep.getBufferSet();
+			for (Buffer b: bs.getAllBuffers()) 
+				retval.add(b);
+			// If scope is not editpane, then all buffersets 
+			// are the same and we got what we need. 
+			if (mgr.getScope() != BufferSet.Scope.editpane)
+				break;	
+		}
+		Buffer[] bufs = new Buffer[retval.size()];
+		retval.toArray(bufs);
+		return bufs;
+	}
+	
 	//{{{ setBuffer() method
 	/**
 	 * Sets the current edit pane's buffer.
