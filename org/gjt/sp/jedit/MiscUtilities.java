@@ -580,12 +580,11 @@ public class MiscUtilities
 		dialog, in contrast to Desktop.open() which just throws an IOException
 		for unknown types. 
 		
-		@throws IOException if the path is not valid or something else is not working
-		@param path path or URL of thing to open 
+		@param path path or URL (supported on Linux, anyway) of thing to open  
 		@author Alan Ezust
 		@since jEdit 5.1
 	*/
-	public static void openInDesktop(String path) throws IOException
+	public static void openInDesktop(String path) 
 	{
 		StringList sl = new StringList();
 		if (OperatingSystem.isWindows())
@@ -596,13 +595,20 @@ public class MiscUtilities
 		else if (OperatingSystem.isMacOS())
 			sl.add("open");
 		else if (OperatingSystem.isX11())
-			sl.add("xdg-open");		
-		if (sl.isEmpty()) // I don't know what platform it is
-			java.awt.Desktop.getDesktop().open(new File(path));
-		else 
+			sl.add("xdg-open");
+		try 
+		{		
+			if (sl.isEmpty()) // I don't know what platform it is
+				java.awt.Desktop.getDesktop().open(new File(path));
+			else 
+			{
+				sl.add(path);
+				Runtime.getRuntime().exec(sl.toArray());
+			}
+		}
+		catch (IOException ioe) 
 		{
-			sl.add(path);
-			Runtime.getRuntime().exec(sl.toArray());
+			Log.log(Log.ERROR, MiscUtilities.class, "openInDesktop failed: " + path, ioe);	
 		}
 	}// }}}
 
