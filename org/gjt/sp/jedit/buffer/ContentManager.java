@@ -47,13 +47,13 @@ class ContentManager
 	public String getText(int start, int len)
 	{
 		if(start >= gapStart)
-			return new String(text,start + gapEnd - gapStart,len);
+			return new String(text,start + gapLength(),len);
 		else if(start + len <= gapStart)
 			return new String(text,start,len);
 		else
 		{
 			return new String(text,start,gapStart - start)
-				.concat(new String(text,gapEnd,start + len - gapStart));
+				.concat(new String(text,gapEnd(),start + len - gapStart));
 		}
 	}
 
@@ -75,7 +75,7 @@ class ContentManager
 		if(start >= gapStart)
 		{
 			seg.array = text;
-			seg.offset = start + gapEnd - gapStart;
+			seg.offset = start + gapLength();
 			seg.count = len;
 		}
 		else if(start + len <= gapStart)
@@ -92,7 +92,7 @@ class ContentManager
 			System.arraycopy(text,start,seg.array,0,gapStart - start);
 
 			// copy text after gap
-			System.arraycopy(text,gapEnd,seg.array,gapStart - start,
+			System.arraycopy(text,gapEnd(),seg.array,gapStart - start,
 				len + start - gapStart);
 
 			seg.offset = 0;
@@ -114,13 +114,13 @@ class ContentManager
 	public CharSequence getSegment(int start, int len)
 	{
 		if(start >= gapStart)
-			return new BufferSegment(text,start + gapEnd - gapStart,len);
+			return new BufferSegment(text,start + gapLength(),len);
 		else if(start + len <= gapStart)
 			return new BufferSegment(text,start,len);
 		else
 		{
 			return new BufferSegment(text,start,gapStart - start,
-				new BufferSegment(text,gapEnd,start + len - gapStart));
+				new BufferSegment(text,gapEnd(),start + len - gapStart));
 		}
 	} //}}}
 
@@ -162,8 +162,10 @@ class ContentManager
 	//{{{ _setContent() method
 	public void _setContent(char[] text, int length)
 	{
+		assert text != null;
+		assert text.length >= length;
 		this.text = text;
-		this.gapStart = this.gapEnd = 0;
+		this.gapStart = length;
 		this.length = length;
 	} //}}}
 
@@ -171,19 +173,31 @@ class ContentManager
 	public void remove(int start, int len)
 	{
 		moveGapStart(start);
-		gapEnd += len;
 		length -= len;
 	} //}}}
 
 	//{{{ Private members
-	private char[] text;
+	private static final char[] EMPTY_TEXT = new char[0];
+	private char[] text = EMPTY_TEXT;
 	private int gapStart;
-	private int gapEnd;
 	private int length;
+
+	//{{{ gapEnd() method
+	private int gapEnd()
+	{
+		return gapStart + gapLength();
+	} //}}}
+
+	//{{{ gapLength() method
+	private int gapLength()
+	{
+		return text.length - length;
+	} //}}}
 
 	//{{{ moveGapStart() method
 	private void moveGapStart(int newStart)
 	{
+		int gapEnd = gapEnd();
 		int newEnd = gapEnd + (newStart - gapStart);
 
 		if(newStart == gapStart)
@@ -202,14 +216,6 @@ class ContentManager
 		}
 
 		gapStart = newStart;
-		gapEnd = newEnd;
-	} //}}}
-
-	//{{{ moveGapEnd() method
-	private void moveGapEnd(int newEnd)
-	{
-		System.arraycopy(text,gapEnd,text,newEnd,length - gapStart);
-		gapEnd = newEnd;
 	} //}}}
 
 	//{{{ ensureCapacity() method
@@ -217,9 +223,14 @@ class ContentManager
 	{
 		if(capacity >= text.length)
 		{
+			int gapEndOld = gapEnd();
+
 			char[] textN = new char[capacity * 2];
-			System.arraycopy(text,0,textN,0,length + (gapEnd - gapStart));
+			System.arraycopy(text,0,textN,0,text.length);
 			text = textN;
+
+			int gapEndNew = gapEnd();
+			System.arraycopy(text,gapEndOld,text,gapEndNew,text.length - gapEndNew);
 		}
 	} //}}}
 
@@ -227,12 +238,8 @@ class ContentManager
 	private void prepareGapForInsertion(int start, int len)
 	{
 		moveGapStart(start);
-		if(gapEnd - gapStart < len)
-		{
-			int gapSize = len + 1024;
-			ensureCapacity(length + gapSize);
-			moveGapEnd(start + gapSize);
-		}
+		if(gapLength() < len)
+			ensureCapacity(length + len);
 	} //}}}
 
 	//}}}

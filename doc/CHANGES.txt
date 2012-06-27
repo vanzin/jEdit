@@ -9,6 +9,9 @@ release.
 
 {{{ Bug fixes
 
+- Fixed unreasonable quadratic operations which could be observable on
+  big search&replace-all. (Patch #3533838 by Thomas Meyer)
+
 - Avoided unreasonable memory consumption by duplicate String instances
   that could be allocated for each occurrence in a big
   search&replace-all. (Patch #3528619 by Thomas Meyer)
