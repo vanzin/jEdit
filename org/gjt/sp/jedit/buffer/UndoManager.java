@@ -225,7 +225,10 @@ public class UndoManager
 			}
 		}
 
-		Remove rem = new Remove(this,offset,text);
+		// use String.intern() here as new Strings are created in
+		// JEditBuffer.remove() via undoMgr.contentRemoved(... getText() ...);
+		Remove rem = new Remove(this,offset,text.intern());
+
 		if(clearDirty)
 		{
 			redoClearDirty = getLastEdit();
