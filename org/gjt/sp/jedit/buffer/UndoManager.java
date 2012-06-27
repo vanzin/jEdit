@@ -77,7 +77,7 @@ public class UndoManager
 			reviseUndoId();
 			undoCount--;
 
-			int caret = undosLast.undo();
+			int caret = undosLast.undo(this);
 			redosFirst = undosLast;
 			undosLast = undosLast.prev;
 			if(undosLast == null)
@@ -105,7 +105,7 @@ public class UndoManager
 			reviseUndoId();
 			undoCount++;
 
-			int caret = redosFirst.redo();
+			int caret = redosFirst.redo(this);
 			undosLast = redosFirst;
 			if(undosFirst == null)
 				undosFirst = undosLast;
@@ -182,7 +182,7 @@ public class UndoManager
 			}
 		}
 
-		Insert ins = new Insert(this,offset,text);
+		Insert ins = new Insert(offset,text);
 
 		if(clearDirty)
 		{
@@ -227,7 +227,7 @@ public class UndoManager
 
 		// use String.intern() here as new Strings are created in
 		// JEditBuffer.remove() via undoMgr.contentRemoved(... getText() ...);
-		Remove rem = new Remove(this,offset,text.intern());
+		Remove rem = new Remove(offset,text.intern());
 
 		if(clearDirty)
 		{
@@ -348,11 +348,11 @@ public class UndoManager
 		Edit prev, next;
 
 		//{{{ undo() method
-		abstract int undo();
+		abstract int undo(UndoManager mgr);
 		//}}}
 
 		//{{{ redo() method
-		abstract int redo();
+		abstract int redo(UndoManager mgr);
 		//}}}
 	} //}}}
 
@@ -360,15 +360,14 @@ public class UndoManager
 	private static class Insert extends Edit
 	{
 		//{{{ Insert constructor
-		Insert(UndoManager mgr, int offset, String str)
+		Insert(int offset, String str)
 		{
-			this.mgr = mgr;
 			this.offset = offset;
 			this.str = str;
 		} //}}}
 
 		//{{{ undo() method
-		int undo()
+		int undo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,str.length());
 			if(mgr.undoClearDirty == this)
@@ -377,7 +376,7 @@ public class UndoManager
 		} //}}}
 
 		//{{{ redo() method
-		int redo()
+		int redo(UndoManager mgr)
 		{
 			mgr.buffer.insert(offset,str);
 			if(mgr.redoClearDirty == this)
@@ -385,7 +384,6 @@ public class UndoManager
 			return offset + str.length();
 		} //}}}
 
-		UndoManager mgr;
 		int offset;
 		String str;
 	} //}}}
@@ -394,15 +392,14 @@ public class UndoManager
 	private static class Remove extends Edit
 	{
 		//{{{ Remove constructor
-		Remove(UndoManager mgr, int offset, String str)
+		Remove(int offset, String str)
 		{
-			this.mgr = mgr;
 			this.offset = offset;
 			this.str = str;
 		} //}}}
 
 		//{{{ undo() method
-		int undo()
+		int undo(UndoManager mgr)
 		{
 			mgr.buffer.insert(offset,str);
 			if(mgr.undoClearDirty == this)
@@ -411,7 +408,7 @@ public class UndoManager
 		} //}}}
 
 		//{{{ redo() method
-		int redo()
+		int redo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,str.length());
 			if(mgr.redoClearDirty == this)
@@ -419,7 +416,6 @@ public class UndoManager
 			return offset;
 		} //}}}
 
-		UndoManager mgr;
 		int offset;
 		String str;
 	} //}}}
@@ -428,26 +424,26 @@ public class UndoManager
 	private static class CompoundEdit extends Edit
 	{
 		//{{{ undo() method
-		public int undo()
+		public int undo(UndoManager mgr)
 		{
 			int retVal = -1;
 			Edit edit = last;
 			while(edit != null)
 			{
-				retVal = edit.undo();
+				retVal = edit.undo(mgr);
 				edit = edit.prev;
 			}
 			return retVal;
 		} //}}}
 
 		//{{{ redo() method
-		public int redo()
+		public int redo(UndoManager mgr)
 		{
 			int retVal = -1;
 			Edit edit = first;
 			while(edit != null)
 			{
-				retVal = edit.redo();
+				retVal = edit.redo(mgr);
 				edit = edit.next;
 			}
 			return retVal;
