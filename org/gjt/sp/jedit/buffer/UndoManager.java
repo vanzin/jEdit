@@ -340,12 +340,10 @@ public class UndoManager
 		undoId = new Object();
 	} //}}}
 
-	//}}}
-
 	//{{{ Inner classes
 
 	//{{{ Edit class
-	abstract static class Edit
+	private abstract static class Edit
 	{
 		Edit prev, next;
 
@@ -359,7 +357,7 @@ public class UndoManager
 	} //}}}
 
 	//{{{ Insert class
-	static class Insert extends Edit
+	private static class Insert extends Edit
 	{
 		//{{{ Insert constructor
 		Insert(UndoManager mgr, int offset, String str)
@@ -393,7 +391,7 @@ public class UndoManager
 	} //}}}
 
 	//{{{ Remove class
-	static class Remove extends Edit
+	private static class Remove extends Edit
 	{
 		//{{{ Remove constructor
 		Remove(UndoManager mgr, int offset, String str)
@@ -427,7 +425,7 @@ public class UndoManager
 	} //}}}
 
 	//{{{ CompoundEdit class
-	static class CompoundEdit extends Edit
+	private static class CompoundEdit extends Edit
 	{
 		//{{{ undo() method
 		public int undo()
@@ -470,6 +468,8 @@ public class UndoManager
 
 		Edit first, last;
 	} //}}}
+
+	//}}}
 
 	//}}}
 }
