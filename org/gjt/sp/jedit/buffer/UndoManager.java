@@ -164,7 +164,6 @@ public class UndoManager
 	//{{{ contentInserted() method
 	public void contentInserted(int offset, int length, String text, boolean clearDirty)
 	{
-		Edit last = getLastEdit();
 		Edit toMerge = getMergeEdit();
 
 		if(!clearDirty && toMerge instanceof Insert
@@ -187,7 +186,7 @@ public class UndoManager
 
 		if(clearDirty)
 		{
-			redoClearDirty = last;
+			redoClearDirty = getLastEdit();
 			undoClearDirty = ins;
 		}
 
@@ -203,7 +202,6 @@ public class UndoManager
 	//{{{ contentRemoved() method
 	public void contentRemoved(int offset, int length, String text, boolean clearDirty)
 	{
-		Edit last = getLastEdit();
 		Edit toMerge = getMergeEdit();
 
 		if(!clearDirty && toMerge instanceof Remove
@@ -230,7 +228,7 @@ public class UndoManager
 		Remove rem = new Remove(this,offset,text);
 		if(clearDirty)
 		{
-			redoClearDirty = last;
+			redoClearDirty = getLastEdit();
 			undoClearDirty = rem;
 		}
 
