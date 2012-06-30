@@ -96,8 +96,7 @@ public class PluginManager extends JFrame
 	{
 		if (instance == null)
 			instance = new PluginManager(parent);
-		else
-			instance.toFront();
+		instance.toFront();
 	} //}}}
 
 	//{{{ ok() method
