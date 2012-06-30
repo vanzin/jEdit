@@ -309,8 +309,7 @@ public class UndoManager
 	//{{{ getMergeEdit() method
 	private Edit getMergeEdit()
 	{
-		Edit last = getLastEdit();
-		return (compoundEdit != null ? compoundEdit.last : last);
+		return (compoundEdit != null ? compoundEdit.last : getLastEdit());
 	} //}}}
 
 	//{{{ getLastEdit() method
