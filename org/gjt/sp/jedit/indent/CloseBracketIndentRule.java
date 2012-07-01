@@ -69,7 +69,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		if(closeCount != 0)
 		{
 			AlignBracket alignBracket
-				= new AlignBracket(buffer,index,offset);
+				= new AlignBracket(buffer,index,offset,aligned);
 			/*
 			Consider the following Common Lisp code (with one more opening
 			bracket than closing):
@@ -85,7 +85,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			corresponding opening bracket from line 1.
 			*/
 			int openLine = alignBracket.getOpenBracketLine();
-			if(openLine != -1)
+			if(openLine != -1 && alignBracket.getExtraIndent() == 0)
 			{
 				int column = alignBracket.getOpenBracketColumn();
 				alignBracket.setExtraIndent(
@@ -93,7 +93,10 @@ public class CloseBracketIndentRule extends BracketIndentRule
 						0, column).openCount);
 			}
 
-			indentActions.add(alignBracket);
+			if (aligned)
+				indentActions.add(alignBracket);
+			else
+				indentActions.add(0, alignBracket);
 		}
 	} //}}}
 
@@ -102,19 +105,22 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	//{{{ AlignBracket class
 	private static class AlignBracket implements IndentAction
 	{
+		private final boolean aligned;
 		private int line, offset;
 		private int openBracketLine;
 		private int openBracketColumn;
 		private CharSequence openBracketLineText;
 		private int extraIndent;
 
-		public AlignBracket(JEditBuffer buffer, int line, int offset)
+		public AlignBracket(JEditBuffer buffer, int line, int offset, boolean aligned)
 		{
+			this.aligned = aligned;
 			this.line = line;
 			this.offset = offset;
 
 			int openBracketIndex = TextUtilities.findMatchingBracket(
 				buffer,this.line,this.offset);
+
 			if(openBracketIndex == -1)
 				openBracketLine = -1;
 			else
@@ -124,6 +130,72 @@ public class CloseBracketIndentRule extends BracketIndentRule
 					buffer.getLineStartOffset(openBracketLine);
 				openBracketLineText = buffer.getLineSegment(openBracketLine);
 			}
+
+			if (aligned)
+				findUnalignedBracket(buffer);
+			else
+				findAlignedBracket(buffer);
+		}
+
+		/**
+		 * When matching aligned brackets, the actual start of
+		 * the statement which defines the indent of the closing
+		 * bracket may be on a different line, because of
+		 * multi-line conditions. So, if the mode defines
+		 * unaligned brackets, used those to try to find the
+		 * actual start line from which to base the indent.
+		 */
+		private void findUnalignedBracket(JEditBuffer buffer)
+		{
+			int bracketIndex = -1;
+			String unaligned = (String) buffer.getMode()
+				.getProperty("unalignedCloseBrackets");
+			if (unaligned == null)
+				return;
+			for (int i = 0; i < unaligned.length(); i++)
+			{
+				char c = unaligned.charAt(i);
+				int cIdx = StandardUtilities.lastIndexOf(openBracketLineText, c);
+				bracketIndex = Math.max(bracketIndex, cIdx);
+			}
+
+			if (bracketIndex > -1)
+			{
+				int startIndex = TextUtilities.findMatchingBracket(
+					buffer, openBracketLine, bracketIndex);
+				if (startIndex > -1)
+				{
+					openBracketLine = buffer.getLineOfOffset(startIndex);
+					openBracketLineText = buffer.getLineSegment(openBracketLine);
+				}
+			}
+		}
+
+		/**
+		 * When matching unaligned brackets, we may need to
+		 * increase the indent the following line if there is no
+		 * aligned bracket. Think of conditional constructs in
+		 * C/Java where the conditional block is not enclosed in
+		 * curly braces.
+		 */
+		private void findAlignedBracket(JEditBuffer buffer)
+		{
+			String aligned = (String) buffer.getMode()
+				.getProperty("indentOpenBrackets");
+			if (aligned == null)
+				return;
+
+			CharSequence lineText = buffer.getLineSegment(line);
+			for (int i = 0; i < aligned.length(); i++)
+			{
+				char c = aligned.charAt(i);
+				int cIdx = StandardUtilities.lastIndexOf(lineText, c);
+				if (cIdx > -1)
+				{
+					return;
+				}
+			}
+			extraIndent = 1;
 		}
 
 		public int getExtraIndent()
@@ -151,17 +223,20 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		{
 			if(openBracketLineText == null)
 				return newIndent;
-			else
+			else if (aligned)
 			{
 				return StandardUtilities.getLeadingWhiteSpaceWidth(
 					openBracketLineText,buffer.getTabSize())
 					+ (extraIndent * buffer.getIndentSize());
 			}
+			else
+				return buffer.getCurrentIndentForLine(openBracketLine, null)
+					+ (extraIndent * buffer.getIndentSize());
 		}
 
 		public boolean keepChecking()
 		{
-			return false;
+			return !aligned;
 		}
 	} //}}}
 }

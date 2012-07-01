@@ -733,6 +733,27 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 	} //}}}
 
+	//{{{ lastIndexOf() method
+	/**
+	 * Implementation of String.lastIndexOf() for CharSequence.
+	 *
+	 * @param seq The CharSequence.
+	 * @param chr The character to look for.
+	 * @return Last index of the character, or -1 if not found.
+	 *
+	 * @since jEdit 5.0pre2
+	 */
+	public static int lastIndexOf(CharSequence seq, char chr)
+	{
+		int i = seq.length() - 1;
+		for (; i >= 0; i--)
+		{
+			if (seq.charAt(i) == chr)
+				break;
+		}
+		return i;
+	} //}}}
+
 	private StandardUtilities(){}
 
 	// {{{ MD5 sum method
