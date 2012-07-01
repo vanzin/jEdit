@@ -3,7 +3,8 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002 Kris Kopicki
+ * Copyright (C) 2002-2012 Slava Pestov, Matthieu Casanova, Kris Kopicki,
+ 	Shlomy Reinstein, Alan Ezust
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,12 @@ import java.awt.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
+import org.gjt.sp.jedit.pluginmgr.PluginList.Branch;
+import org.gjt.sp.jedit.pluginmgr.PluginList.Dependency;
+import org.gjt.sp.jedit.pluginmgr.PluginList.Plugin;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 //}}}
@@ -267,8 +273,49 @@ public class PluginManager extends JFrame
 				});
 			}
 		});
+				
+		
+		
 	} //}}}
 
+	//{{{ checkForObsoletePlugins()
+	private void checkForObsoletePlugins() 
+	{
+		if ((pluginList == null) || (pluginList.plugins == null)) return;
+		// for each plugin that is installed
+		for (PluginJAR jar: jEdit.getPluginJARs()) 
+		{
+			EditPlugin eplugin = jar.getPlugin();
+			if(eplugin == null) continue;
+			String installedVersion = jEdit.getProperty("plugin." + eplugin.getClassName() + ".version");					 
+			// find corresponding entry in pluginList
+			for (Plugin plugin: pluginList.plugins) 
+			{
+				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath()))) 
+				{
+					// Find the branch we are using in that list
+					for (Branch branch: plugin.branches) 
+						if (branch.version.equals(installedVersion)) 
+						{
+							for (Dependency dep: branch.deps) 
+								if (dep.what.equals("jedit") && (dep.to != null)) 
+									if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0) 
+									{ 
+										Log.log(Log.ERROR, this, "Plugin: " + plugin.name + " " + installedVersion +
+											" is not supported on this version of jEdit! Disabling plugin.");
+										jEdit.removePluginJAR(jar,false);
+										// TODO: properly mark it red or completely remove it?
+										String jarName = MiscUtilities.getFileName(jar.getPath());
+										jEdit.setBooleanProperty("plugin-blacklist."+ jarName,true);
+										jEdit.setBooleanProperty("plugin." + jarName + ".disabled", true);
+										jEdit.propertiesChanged();
+									}
+						}
+				}
+			}		
+		}
+	} //}}}
+	
 	//{{{ processKeyEvent() method
 	private void pluginListUpdated()
 	{
@@ -278,6 +325,7 @@ public class PluginManager extends JFrame
 			installer.updateModel();
 			updater.updateModel();
 		}
+		checkForObsoletePlugins();
 	} //}}}
 
 	//{{{ processKeyEvent() method

@@ -34,6 +34,7 @@ this release.
   Favorites). (Jarek Czekalski)
 }}}
 {{{ Miscellaneous
+- Implemented Feature request #2931321 - Disable obsolete plugins (Alan Ezust) 
 
 }}}
 

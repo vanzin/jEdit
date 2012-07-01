@@ -294,6 +294,7 @@ public class ManagePanel extends JPanel
 		static final String ERROR = "error";
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
+		static final String DISABLED = "disabled";
 
 		final String status;
 		/** The jar path. */
@@ -323,7 +324,9 @@ public class ManagePanel extends JPanel
 			jars = new LinkedList<String>();
 			this.jar = jar;
 			jars.add(this.jar);
-			status = NOT_LOADED;
+			if (jEdit.getBooleanProperty("plugin." + MiscUtilities.getFileName(jar) + ".disabled")) 
+				status = DISABLED;		
+			else status = NOT_LOADED;
 		}
 
 		/**
@@ -457,7 +460,8 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return Boolean.valueOf(!entry.status.equals(Entry.NOT_LOADED));
+					return Boolean.valueOf(!entry.status.equals(Entry.NOT_LOADED) &&
+							!entry.status.equals(Entry.DISABLED));
 				case 1:
 					if(entry.name == null)
 					{
@@ -726,7 +730,7 @@ public class ManagePanel extends JPanel
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			Entry entry = pluginModel.getEntry(row);
-			if (entry.status.equals(Entry.ERROR))
+			if (entry.status.equals(Entry.ERROR) || entry.status.equals(Entry.DISABLED))
 				tcr.setForeground(Color.red);
 			else
 				tcr.setForeground(UIManager.getColor("Table.foreground"));
@@ -901,7 +905,7 @@ public class ManagePanel extends JPanel
 			for(int i = 0; i < selected.length; i++)
 			{
 				Entry entry = pluginModel.getEntry(selected[i]);
-				if (entry.status.equals(Entry.NOT_LOADED))
+				if (entry.status.equals(Entry.NOT_LOADED) || entry.status.equals(Entry.DISABLED))
 				{
 					if (entry.jar != null)
 					{

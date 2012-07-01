@@ -1184,7 +1184,9 @@ public class jEdit
 		jars.addElement(jar);
 		if (jar.init())
 		{
-			jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(path));
+			String jarName = MiscUtilities.getFileName(path);
+			jEdit.unsetProperty("plugin-blacklist."+jarName);
+			jEdit.unsetProperty("plugin." + jarName + ".disabled");
 			EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
 			if(!isMainThread())
 			{
