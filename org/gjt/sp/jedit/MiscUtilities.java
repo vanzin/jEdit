@@ -582,7 +582,7 @@ public class MiscUtilities
 		
 		@param path path or URL (supported on Linux, anyway) of thing to open  
 		@author Alan Ezust
-		@since jEdit 5.1
+		@since jEdit 5.0
 	*/
 	public static void openInDesktop(String path) 
 	{
