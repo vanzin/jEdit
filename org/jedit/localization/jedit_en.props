@@ -1962,7 +1962,7 @@ install-plugins.depend.message=One or more of the plugins you are installing\n\
 	installed if you continue.
 
 plugin-manager.status.loaded=Loaded
-plugin-manager.status.disabled=Disabled
+plugin-manager.status.disabled=Unsupported
 plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error
 
