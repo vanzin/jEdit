@@ -1,6 +1,6 @@
 /*
  * MiscUtilities.java - Various miscellaneous utility functions
- * :tabSize=8:indentSize=8:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2005 Slava Pestov
@@ -27,6 +27,8 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
@@ -40,6 +42,7 @@ import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.StringList;
 //}}}
 
 /**
@@ -139,8 +142,8 @@ public class MiscUtilities
 	 */
 	public static String expandVariables(String arg)
 	{
-		if (arg.startsWith("~/") || arg.startsWith("~\\")) 
-			return System.getProperty("user.home") + arg.substring(1);			
+		if (arg.startsWith("~/") || arg.startsWith("~\\"))
+			return System.getProperty("user.home") + arg.substring(1);
 		Pattern p = varPattern;
 		Matcher m = p.matcher(arg);
 		if (!m.find())
@@ -546,7 +549,7 @@ public class MiscUtilities
 	 * @param backups Total number of backup copies.
 	 * @since 5.0pre1
 	 */
-	public static File getNthBackupFile(String name, int backup, 
+	public static File getNthBackupFile(String name, int backup,
 			int backups, String backupPrefix,
 			String backupSuffix, String backupDirectory)
 	{
@@ -568,7 +571,47 @@ public class MiscUtilities
 		}
 		return backupFile;
 	} //}}}
-	
+
+	//{{{ openInDesktop() method
+	/** Opens a file using the desktop file associations.
+		<p>
+		Uses native desktop commands for each platform, which ask the user to choose an
+		association for files that do not already have one, using the desktop's
+		dialog, in contrast to Desktop.open() which just throws an IOException
+		for unknown types. 
+		
+		@param path path or URL (supported on Linux, anyway) of thing to open  
+		@author Alan Ezust
+		@since jEdit 5.0
+	*/
+	public static void openInDesktop(String path) 
+	{
+		StringList sl = new StringList();
+		if (OperatingSystem.isWindows())
+		{
+			sl.add("rundll32");
+			sl.add("SHELL32.DLL,ShellExec_RunDLL");
+		}
+		else if (OperatingSystem.isMacOS())
+			sl.add("open");
+		else if (OperatingSystem.isX11())
+			sl.add("xdg-open");
+		try 
+		{		
+			if (sl.isEmpty()) // I don't know what platform it is
+				java.awt.Desktop.getDesktop().open(new File(path));
+			else 
+			{
+				sl.add(path);
+				Runtime.getRuntime().exec(sl.toArray());
+			}
+		}
+		catch (IOException ioe) 
+		{
+			Log.log(Log.ERROR, MiscUtilities.class, "openInDesktop failed: " + path, ioe);	
+		}
+	}// }}}
+
 	//{{{ prepareBackupDirectory method
 	/**
 	 * Prepares the directory to backup the specified file.
@@ -636,7 +679,7 @@ public class MiscUtilities
 				backupSuffix, backupDir.getPath(),
 				backupTimeDistance);
 	}
-	
+
 	/**
 	 * Prepares the filename for performing backup of the given file.
 	 * In case of multiple backups does necessary backup renumbering.
@@ -688,17 +731,17 @@ public class MiscUtilities
 				File backup2 = getNthBackupFile(name, i+1,
 					backups, backupPrefix,
 					backupSuffix, backupDirectory);
-				
+
 				backup1.renameTo(backup2);
 			}
-			
+
 		}
 		return backupFile;
 	} //}}}
 
 	//{{{ saveBackup() methods
 	/**
-	 * Saves a backup (optionally numbered) of a file. Reads 
+	 * Saves a backup (optionally numbered) of a file. Reads
 	 * jedit properties to determine backup parameters, like
 	 * prefix, suffix, directory.
 	 * <p>This version calls

@@ -66,6 +66,8 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 }}}
 {{{ API Changes
 
+- New method MiscUtilities.openInDesktop() (Alan Ezust)
+
 - New method Debug.compDelay, for debugging purposes (Jarek Czekalski)
 
 - Made EditBus.send uninterruptible, as it was before putting handling of
