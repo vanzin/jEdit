@@ -36,6 +36,8 @@ import java.io.StringReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -962,13 +964,14 @@ public class View extends JFrame implements InputHandlerProvider
 	 * Returns all Buffers opened in this View.
 	 * @since jEdit 5.1
 	 */
-	public Buffer[] getBuffers() {
+	public Buffer[] getBuffers()
+	{
 		BufferSetManager mgr = jEdit.getBufferSetManager();
-		HashSet<Buffer> retval = new HashSet<Buffer>();
-		for (EditPane ep: getEditPanes()) {
+		Collection<Buffer> retval = new HashSet<Buffer>();
+		for (EditPane ep: getEditPanes())
+		{
 			BufferSet bs = ep.getBufferSet();
-			for (Buffer b: bs.getAllBuffers()) 
-				retval.add(b);
+			Collections.addAll(retval, bs.getAllBuffers());
 			// If scope is not editpane, then all buffersets 
 			// are the same and we got what we need. 
 			if (mgr.getScope() != BufferSet.Scope.editpane)
