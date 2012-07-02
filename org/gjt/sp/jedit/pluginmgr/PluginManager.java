@@ -47,7 +47,7 @@ import org.gjt.sp.util.ThreadUtilities;
  */
 public class PluginManager extends JFrame
 {
-	
+
 	//{{{ getInstance() method
 	/**
 	 * Returns the currently visible plugin manager window, or null.
@@ -166,7 +166,7 @@ public class PluginManager extends JFrame
 	private void init()
 	{
 		EditBus.addToBus(this);
-		
+
 
 		/* Setup panes */
 		JPanel content = new JPanel(new BorderLayout(12,12));
@@ -273,48 +273,63 @@ public class PluginManager extends JFrame
 				});
 			}
 		});
-				
-		
-		
+
+
+
 	} //}}}
 
 	//{{{ checkForObsoletePlugins()
-	private void checkForObsoletePlugins() 
+	/** Checks for obsolete plugins, and marks them as unsupported.
+	 *  An obsolete plugin can be marked as obsolete in plugin manager,
+	 *  or it can have a max jEdit version that is lower than the running version.
+	  * @since jEdit 5.1pre1
+	  * @author Alan Ezust
+    */
+	public void checkForObsoletePlugins()
 	{
 		if ((pluginList == null) || (pluginList.plugins == null)) return;
 		// for each plugin that is installed
-		for (PluginJAR jar: jEdit.getPluginJARs()) 
+		for (PluginJAR jar: jEdit.getPluginJARs())
 		{
 			EditPlugin eplugin = jar.getPlugin();
 			if(eplugin == null) continue;
-			String installedVersion = jEdit.getProperty("plugin." + eplugin.getClassName() + ".version");					 
+			String installedVersion = jEdit.getProperty("plugin." + eplugin.getClassName() + ".version");
 			// find corresponding entry in pluginList
-			for (Plugin plugin: pluginList.plugins) 
+			for (Plugin plugin: pluginList.plugins)
 			{
-				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath()))) 
+				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath())))
 				{
 					// Find the branch we are using in that list
-					for (Branch branch: plugin.branches) 
-						if (branch.version.equals(installedVersion)) 
+					for (Branch branch: plugin.branches)
+						if (branch.version.equals(installedVersion))
 						{
-							for (Dependency dep: branch.deps) 
-								if (dep.what.equals("jedit") && (dep.to != null)) 
-									if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0) 
-									{ 
-										Log.log(Log.ERROR, this, "Plugin: " + plugin.name + " " + installedVersion +
-											" is not supported on this version of jEdit! Disabling plugin.");
-										jEdit.removePluginJAR(jar,false);
-										// TODO: properly mark it red or completely remove it?
-										String jarName = MiscUtilities.getFileName(jar.getPath());
-										jEdit.setBooleanProperty("plugin-blacklist."+ jarName,true);
-										jEdit.setBooleanProperty("plugin." + jarName + ".disabled", true);
-										jEdit.propertiesChanged();
-									}
+							if (branch.obsolete) 
+								disablePlugin(jar, plugin, installedVersion);							
+							else for (Dependency dep: branch.deps)
+								// if there is a max jedit version, check if we're higher:
+								if (dep.what.equals("jedit") && (dep.to != null))
+									if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0)
+										disablePlugin(jar, plugin, installedVersion);
+									
 						}
 				}
-			}		
+			}
 		}
 	} //}}}
+
+	//{{{disablePlugin()
+	private void disablePlugin(PluginJAR jar, Plugin plugin, String installedVersion) 
+	{
+		Log.log(Log.ERROR, this, "Plugin: " + plugin.name + " " + installedVersion +
+			" is not supported on this version of jEdit! Disabling plugin.");
+		jEdit.removePluginJAR(jar,false);
+		String jarName = MiscUtilities.getFileName(jar.getPath());
+		// Stop it from getting loaded:
+		jEdit.setBooleanProperty("plugin-blacklist."+ jarName,true);
+		// show as 'Unsupported' in Manage Panel:
+		jEdit.setBooleanProperty("plugin." + jarName + ".disabled", true);
+		jEdit.propertiesChanged();		
+	}//}}}
 	
 	//{{{ processKeyEvent() method
 	private void pluginListUpdated()
