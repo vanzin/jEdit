@@ -256,6 +256,10 @@
 <MODE NAME="io"			FILE="io.xml"
 				FILE_NAME_GLOB="*.io" />
 
+<MODE NAME="jamon"
+      FILE="jamon.xml"
+      FILE_NAME_GLOB="*.jamon" />
+
 <MODE NAME="javacc"		FILE="javacc.xml"
 				FILE_NAME_GLOB="*.{jj,jjt}"/>
 
