@@ -661,23 +661,35 @@ public abstract class VFS
 		throws IOException
 	{
 		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
-		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
-		if (sourceSession == null)
-		{
-			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS +
-							" for path " + sourcePath);
-			return false;
-		}
 		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
-		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
-		if (targetSession == null)
+		Object sourceSession = null;
+		Object targetSession = null;
+		try
 		{
-			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS +
-							" for path " + targetPath);
-			return false;
+			sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
+			if (sourceSession == null)
+			{
+				Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS +
+												" for path " + sourcePath);
+				return false;
+			}
+			targetSession = targetVFS.createVFSSession(targetPath, comp);
+			if (targetSession == null)
+			{
+				Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS +
+												" for path " + targetPath);
+				return false;
+			}
+			return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath,
+						comp,canStop, sendVFSUpdate);
 		}
-		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath,
-			    comp,canStop, sendVFSUpdate);
+		finally
+		{
+			if (sourceSession != null)
+				sourceVFS._endVFSSession(sourceSession, comp);
+			if (targetSession != null)
+				targetVFS._endVFSSession(targetSession, comp);
+		}
 	}
 
 	/**

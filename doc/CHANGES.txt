@@ -4,8 +4,8 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre1
 
-Thanks to Jarek Czekalski, Thomas Meyer and Alan Ezust for contributing to
-this release.
+Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova and
+Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
@@ -15,6 +15,8 @@ this release.
 - Avoided unreasonable memory consumption by duplicate String instances
   that could be allocated for each occurrence in a big
   search&replace-all. (Patch #3528619 by Thomas Meyer)
+
+- Fixed VFS session not ended in VFS.copy() api (#3522406 Matthieu Casanova)
 
 }}}
 {{{ API Changes
