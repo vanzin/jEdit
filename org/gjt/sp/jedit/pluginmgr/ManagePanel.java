@@ -291,9 +291,11 @@ public class ManagePanel extends JPanel
 	//{{{ Entry class
 	static class Entry
 	{
-		static final String ERROR = "error";
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
+		/** Partially loaded, and marked as "error" due to unsatisfied depends. */
+		static final String ERROR = "error";	
+		/** Not loaded, marked Unsupported in plugin manager. */
 		static final String DISABLED = "disabled";
 
 		final String status;

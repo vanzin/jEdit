@@ -280,8 +280,10 @@ public class PluginManager extends JFrame
 
 	//{{{ checkForObsoletePlugins()
 	/** Checks for obsolete plugins, and marks them as unsupported.
-	 *  An obsolete plugin can be marked as obsolete in plugin manager,
-	 *  or it can have a max jEdit version that is lower than the running version.
+	 *  <p>
+	 *  An obsolete plugin branch can be marked as inactive,
+	 *  or its release can have a max jEdit version that is 
+	 *  lower than the running version.
 	  * @since jEdit 5.1pre1
 	  * @author Alan Ezust
     */
@@ -292,19 +294,16 @@ public class PluginManager extends JFrame
 		for (PluginJAR jar: jEdit.getPluginJARs())
 		{
 			EditPlugin eplugin = jar.getPlugin();
-			if(eplugin == null) continue;
+			if (eplugin == null) continue;
 			String installedVersion = jEdit.getProperty("plugin." + eplugin.getClassName() + ".version");
 			// find corresponding entry in pluginList
 			for (Plugin plugin: pluginList.plugins)
-			{
-				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath())))
-				{
-					// Find the branch we are using in that list
+				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath())))				
+					// Find the branch we are using
 					for (Branch branch: plugin.branches)
 						if (branch.version.equals(installedVersion))
 						{
-							if (branch.obsolete) 
-								disablePlugin(jar, plugin, installedVersion);							
+							if (branch.obsolete) disablePlugin(jar, plugin, installedVersion);							
 							else for (Dependency dep: branch.deps)
 								// if there is a max jedit version, check if we're higher:
 								if (dep.what.equals("jedit") && (dep.to != null))
@@ -312,8 +311,6 @@ public class PluginManager extends JFrame
 										disablePlugin(jar, plugin, installedVersion);
 									
 						}
-				}
-			}
 		}
 	} //}}}
 
@@ -331,7 +328,7 @@ public class PluginManager extends JFrame
 		jEdit.propertiesChanged();		
 	}//}}}
 	
-	//{{{ processKeyEvent() method
+	//{{{ pluginListUpdated() method
 	private void pluginListUpdated()
 	{
 		Component selected = tabPane.getSelectedComponent();
