@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -681,7 +683,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		EditPane newEditPane = createEditPane(oldEditPane);
+		EditPane newEditPane = createEditPane(oldEditPane.getBufferSet(), oldEditPane.getBuffer());
 //		setEditPane(newEditPane);
 		newEditPane.loadCaretInfo();
 
@@ -1990,20 +1992,14 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ createEditPane() methods
-	private EditPane createEditPane(Buffer buffer)
+	private EditPane createEditPane(@Nonnull Buffer buffer)
 	{
-		EditPane editPane = new EditPane(this, null, buffer);
-		JEditTextArea textArea = editPane.getTextArea();
-		textArea.addFocusListener(new FocusHandler());
-		textArea.addCaretListener(new CaretHandler());
-		textArea.addScrollListener(new ScrollHandler());
-		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
-		return editPane;
+		return createEditPane(null, buffer);
 	}
 
-	private EditPane createEditPane(EditPane oldEditPane)
+	private EditPane createEditPane(@Nullable BufferSet bufferSetSource, @Nonnull Buffer buffer)
 	{
-		EditPane editPane = new EditPane(this, oldEditPane.getBufferSet(), oldEditPane.getBuffer());
+		EditPane editPane = new EditPane(this, bufferSetSource, buffer);
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
 		textArea.addCaretListener(new CaretHandler());
