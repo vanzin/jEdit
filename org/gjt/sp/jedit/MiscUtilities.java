@@ -130,6 +130,7 @@ public class MiscUtilities
 
 	/** Accepts a string from the user which may contain variables of various syntaxes.
 	 *  The function supports the following expansion syntaxes:
+	 *     ~/ or ~\   expand to user.home
 	 *     $varname
 	 *     ${varname} (on non-windows)
 	 *     %varname% (on Windows)

@@ -19,7 +19,7 @@ this release.
 }}}
 {{{ API Changes
 
-- New method MiscUtilities.openInDesktop() (Alan Ezust)
+- New method MiscUtilities.openInDesktop() [5.0pre2] (Alan Ezust)
 
 - New method GUIUtilities.setAutoMnemonic(AbstractButton) (Jarek Czekalski)
 
@@ -30,11 +30,14 @@ this release.
 
 }}}
 {{{ UI
+
 - Added mnemonics for popup menus in File System Browser (Commands, Plugins,
   Favorites). (Jarek Czekalski)
+
 }}}
 {{{ Miscellaneous
-- Implemented Feature request #2931321 - Disable obsolete plugins (Alan Ezust) 
+
+- Feature request #2931321 - Disable obsolete plugins (Alan Ezust)
 
 }}}
 
