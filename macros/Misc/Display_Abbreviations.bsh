@@ -64,7 +64,6 @@ final static String AbbreviationListLabel = jEdit.getProperty("macro.rs.DisplayA
 final static String CallingWTTNBLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.CallingWTTNB.label", "calling writeTableToNewBuffer for");
 final static String SizeVectorLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.SizeVector.label", "size of vector =");
 final static String jEditAbbreviationTableLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label", "jEdit Abbreviation Table");
-final static String AbbreviationSetLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.AbbreviationSet.label", "Abbreviation set:");
 final static String AbbreviationExpansionLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.AbbreviationExpansion.label", "Abbreviation    Expansion");
 final static String NoAbbreviationsLabel = jEdit.getProperty("macro.rs.DisplayAbbreviations.NoAbbreviations.label", "<< No abbreviations >>");
 

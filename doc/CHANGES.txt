@@ -21,6 +21,8 @@ Alan Ezust for contributing to this release.
 - Use of a scrollable list for delete dialog confirmation
   (#2911520 Matthieu Casanova)
 
+- The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
+
 }}}
 {{{ API Changes
 
