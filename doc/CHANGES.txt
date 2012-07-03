@@ -44,7 +44,7 @@ Alan Ezust for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- Feature request #2931321 - Disable obsolete plugins (Alan Ezust)
+- New option: Disable obsolete plugins (#2931321 Alan Ezust)
 
 }}}
 
