@@ -23,9 +23,6 @@ Alan Ezust for contributing to this release.
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
 
-- Fix for View that do not remember their position if they are maximized
-  (#3474127 Matthieu Casanova)
-
 }}}
 {{{ API Changes
 

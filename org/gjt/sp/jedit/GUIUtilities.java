@@ -2202,7 +2202,6 @@ public class GUIUtilities
 					jEdit.setIntegerProperty(name + ".height",bounds.height);
 					break;
 
-				case Frame.MAXIMIZED_BOTH:
 				case Frame.NORMAL:
 					saveGeometry(frame,parent,name );
 					break;
