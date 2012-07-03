@@ -1883,13 +1883,11 @@ vfs.browser.recurse-favorites.title=Rekursive Favoriten...
 vfs.browser.recurse-favorites.message=Die Favoritenliste kann nicht zu sich selbst hinzugefügt werden
 
 vfs.browser.delete-confirm.title=Datei löschen
-vfs.browser.delete-confirm.message=Möchten Sie die folgenden Dateien wirklich löschen?\n\n\
-  {0}
+vfs.browser.delete-confirm.message=Möchten Sie die folgenden Dateien wirklich löschen?
 
 vfs.browser.delete-favorites.title=Löschen von Favoriten
 vfs.browser.delete-favorites.message=Möchten Sie die folgenden Dateien wirklich \
-  aus der favoritenliste löschen?\n\n\
-  {0}
+  aus der favoritenliste löschen?
 
 vfs.browser.rename.title=Datei umbenennen
 vfs.browser.rename.message=Neuer Name für {0}:

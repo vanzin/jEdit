@@ -1892,13 +1892,11 @@ vfs.browser.recurse-favorites.title=Cannot Add Favorites to Itself
 vfs.browser.recurse-favorites.message=The favorites list cannot be added to itself.
 
 vfs.browser.delete-confirm.title=Delete File Confirmation
-vfs.browser.delete-confirm.message=Are you sure you want to delete the following {1}?\n\n\
-	{0}
+vfs.browser.delete-confirm.message=Are you sure you want to delete the following {1}?
 
 vfs.browser.delete-favorites.title=Delete From Favorites
 vfs.browser.delete-favorites.message=Are you sure you want to remove the following files \
-	from the favorites?\n\n\
-	{0}
+	from the favorites?
 
 vfs.browser.rename.title=Rename File
 vfs.browser.rename.message=Enter a new name for {0}:

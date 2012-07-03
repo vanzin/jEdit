@@ -1893,13 +1893,11 @@ vfs.browser.recurse-favorites.title=Impossible d'ajouter des favoris à eux-mêm
 vfs.browser.recurse-favorites.message=La liste des favoris ne peut être ajoutée à elle-même.
 
 vfs.browser.delete-confirm.title=Confirmation de suppression de fichiers
-vfs.browser.delete-confirm.message=Souhaitez-vous vraiment supprimer les fichiers suivants {1}?\n\n\
-	{0}
+vfs.browser.delete-confirm.message=Souhaitez-vous vraiment supprimer les fichiers suivants?
 
 vfs.browser.delete-favorites.title=Retirer des favoris
 vfs.browser.delete-favorites.message=Souhaitez-vous vraiment supprimer les dossiers/fichiers suivants \
-	de la liste des favoris ?\n\n\
-	{0}
+	de la liste des favoris ?
 
 vfs.browser.rename.title=Renommer le fichier
 vfs.browser.rename.message=Indiquez le nouveau nom pour {0} :

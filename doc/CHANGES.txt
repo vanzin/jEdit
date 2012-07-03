@@ -18,6 +18,9 @@ Alan Ezust for contributing to this release.
 
 - Fixed VFS session not ended in VFS.copy() api (#3522406 Matthieu Casanova)
 
+- Use of a scrollable list for delete dialog confirmation
+  (#2911520 Matthieu Casanova)
+
 }}}
 {{{ API Changes
 

@@ -1903,13 +1903,11 @@ vfs.browser.recurse-favorites.title=Oblíbené nelze přidat do sebe
 vfs.browser.recurse-favorites.message=Seznam oblíbených nemůže být přidám do sebe.
 
 vfs.browser.delete-confirm.title=Potvrzení smazání souboru
-vfs.browser.delete-confirm.message=Opravdu chcete smazat následující {1}?\n\n\
-	{0}
+vfs.browser.delete-confirm.message=Opravdu chcete smazat následující ?
 
 vfs.browser.delete-favorites.title=Odstranit z oblíbených
 vfs.browser.delete-favorites.message=Opravdu chcete odebrat následující soubory \
-	z oblíbených?\n\n\
-	{0}
+	z oblíbených?
 
 vfs.browser.rename.title=Přejmenovat soubor
 vfs.browser.rename.message=Zadejte nový název pro {0}:

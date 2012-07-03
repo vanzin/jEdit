@@ -674,21 +674,29 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			dialogType = "vfs.browser.delete-confirm";
 		}
 
-		StringBuilder buf = new StringBuilder();
 		String typeStr = "files";
 		for(int i = 0; i < files.length; i++)
 		{
-			buf.append(files[i].getPath());
-			buf.append('\n');
 			if (files[i].getType() == VFSFile.DIRECTORY)
+			{
 				typeStr = "directories and their contents";
+				break;
+			}
 		}
 
-		Object[] args = { buf.toString(), typeStr};
+		// In the previous version the first argument was the file list, now it is a list so the file list is not
+		// created anymore. But for compatibility an empty string is used.
+		Object[] args = { "", typeStr };
 
-		int result = GUIUtilities.confirm(this,dialogType,args,
-			JOptionPane.YES_NO_OPTION,
-			JOptionPane.WARNING_MESSAGE);
+		JList list = new JList(files);
+		list.setVisibleRowCount(10);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(new JScrollPane(list));
+		panel.add(new JLabel(jEdit.getProperty(dialogType+".message", args)), BorderLayout.PAGE_START);
+		int result = JOptionPane
+			.showConfirmDialog(this, panel, jEdit.getProperty(dialogType+".title"),
+							   JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
