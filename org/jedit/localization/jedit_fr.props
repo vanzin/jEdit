@@ -1890,7 +1890,7 @@ vfs.browser.bad-filter.title=Filtre invalide
 vfs.browser.bad-filter.message=Le filtre {0} est invalide ({1})
 
 vfs.browser.recurse-favorites.title=Impossible d'ajouter des favoris à eux-mêmes
-vfs.browser.recurse-favorites.message=La liste des favoris ne peut étre ajoutée à elle-même.
+vfs.browser.recurse-favorites.message=La liste des favoris ne peut être ajoutée à elle-même.
 
 vfs.browser.delete-confirm.title=Confirmation de suppression de fichiers
 vfs.browser.delete-confirm.message=Souhaitez-vous vraiment supprimer les fichiers suivants {1}?\n\n\
