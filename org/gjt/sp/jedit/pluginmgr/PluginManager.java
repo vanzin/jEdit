@@ -284,7 +284,8 @@ public class PluginManager extends JFrame
 	 *  <p>
 	 *  An obsolete plugin branch can be marked as inactive, or
 	 *  an individual release can have a max jEdit version that is 
-	 *  lower than the running version. 
+	 *  lower than the running version. If no later version/branch exists
+	 *  that supports this jEdit version, the plugin is unsupported.
 	 * @since jEdit 5.1pre1
 	 * @author Alan Ezust
     */
@@ -299,31 +300,44 @@ public class PluginManager extends JFrame
 			String installedVersion = jEdit.getProperty("plugin." + eplugin.getClassName() + ".version");
 			// find corresponding entry in pluginList:
 			for (Plugin plugin: pluginList.plugins)
-				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath()))) 
-					for (Branch branch: plugin.branches) 
-						// Find the branch we are using:						
-						if (branch.version.equals(installedVersion))
-						{
-							if (branch.obsolete) disablePlugin(jar, plugin.name, installedVersion);							
-							else for (Dependency dep: branch.deps)
-								// if there is a max jedit version, check if we're higher:
-								if (dep.what.equals("jedit") && (dep.to != null))
-									if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0)
-										disablePlugin(jar, plugin.name, installedVersion);
-									
-						}
+				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath())))
+				{
+					// find the latest branch with version greater than or equal to installedVersion
+					Branch lastBranch = null;
+					String latestVersion = "";
+					for (Branch branch: plugin.branches)
+					{
+						// found a branch greater or equal to our own version:
+						if (StandardUtilities.compareStrings(branch.version, installedVersion, false) >= 0) 
+							if (StandardUtilities.compareStrings(branch.version, latestVersion, false) >= 0) 
+							{
+								latestVersion = branch.version;
+								lastBranch = branch;
+							}
+						
+					}
+					if (lastBranch != null) 
+						if (lastBranch.obsolete) disablePlugin(jar, plugin.name);	
+						else for (Dependency dep: lastBranch.deps)
+							// if there is a max jedit version, check if we're higher:
+							if (dep.what.equals("jedit") && (dep.to != null))
+								if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0)
+									disablePlugin(jar, plugin.name);
+					
+				}
 		}
 	} //}}}
 
 	//{{{ disablePlugin()
-	private void disablePlugin(PluginJAR jar, String name, String installedVersion) 
+	private void disablePlugin(PluginJAR jar, String name) 
 	{
-		Log.log(Log.ERROR, this, "Plugin: " + name + " " + installedVersion +
-			" is not supported on this version of jEdit! Disabling plugin.");
+		Log.log(Log.ERROR, this, "Plugin: " + name + 
+			" is not supported on this version of jEdit! ");
+		if (!jEdit.getBooleanProperty("plugin-manager.disable-obsolete", true)) return;
 		jEdit.removePluginJAR(jar,false);
 		String jarName = MiscUtilities.getFileName(jar.getPath());
 		// Stop it from getting loaded on startup:
-		jEdit.setBooleanProperty("plugin-blacklist."+ jarName,true);
+		jEdit.setBooleanProperty("plugin-blacklist."+ jarName, true);
 		// show as 'Unsupported' in Manage Panel:
 		jEdit.setBooleanProperty("plugin." + jarName + ".disabled", true);
 		jEdit.propertiesChanged();		

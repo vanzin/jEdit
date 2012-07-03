@@ -1430,6 +1430,7 @@ options.plugin-manager.location=Install plugins in:
 options.plugin-manager.settings-dir=jEdit settings directory
 options.plugin-manager.app-dir=jEdit application directory
 options.plugin-manager.none=Plugin Central default
+options.plugin-manager.disable-obsolete=Disable obsolete plugins
 #}}}
 
 #{{{ Printing pane

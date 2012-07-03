@@ -112,8 +112,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		downloadSource.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(downloadSource);
 
-		buttonPanel.add(Box.createVerticalStrut(6));
-
 		/* Delete downloaded files */
 		deleteDownloads = new JCheckBox(jEdit.getProperty(
 			"options.plugin-manager.deleteDownloads"));
@@ -121,6 +119,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		deleteDownloads.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(deleteDownloads);
 
+		/* Disable obsolete plugins */
+		disableObsolete = new JCheckBox(jEdit.getProperty(
+			"options.plugin-manager.disable-obsolete"));
+		disableObsolete.setSelected(jEdit.getBooleanProperty("plugin-manager.disable-obsolete", true));
+		disableObsolete.setAlignmentX(Component.LEFT_ALIGNMENT);
+		buttonPanel.add(disableObsolete);
+
+		
 		buttonPanel.add(Box.createVerticalStrut(6));
 
 		/* Install location */
@@ -160,6 +166,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.deleteDownloads",deleteDownloads.isSelected());
 		jEdit.setIntegerProperty("plugin-manager.list-cache.minutes", spinnerModel.getNumber().intValue());
+		jEdit.setBooleanProperty("plugin-manager.disable-obsolete", disableObsolete.isSelected());
 		if(miraList.getSelectedIndex() != -1)
 		{
 			String currentMirror = miraModel.getID(miraList.getSelectedIndex());
@@ -180,6 +187,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	//{{{ Instance variables
 	private JLabel mirrorLabel;
 
+	private JCheckBox disableObsolete;
 	private JRadioButton settingsDir;
 	private JCheckBox downloadSource;
 	private JCheckBox deleteDownloads;
