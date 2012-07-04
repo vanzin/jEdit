@@ -754,6 +754,32 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return i;
 	} //}}}
 
+	//{{{ indexOf() method
+	/**
+	 * Implementation of String.indexOf() for CharSequence.
+	 *
+	 * @param seq The CharSequence.
+	 * @param sub The substring to look for.
+	 * @return Index of the start of the substring in the input, or -1 if not found.
+	 *
+	 * @since jEdit 5.0pre2
+	 */
+	public static int indexOf(CharSequence seq, String sub)
+	{
+		for (int idx = 0; seq.length() - idx >= sub.length(); idx++)
+		{
+			int i;
+			for (i = 0; i < sub.length(); i++)
+			{
+				if (seq.charAt(idx + i) != sub.charAt(i))
+					break;
+			}
+			if (i == sub.length())
+				return idx;
+		}
+		return -1;
+	} //}}}
+
 	private StandardUtilities(){}
 
 	// {{{ MD5 sum method

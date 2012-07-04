@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.indent;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
 
-/** Abstract Indentation Action 
+/** Abstract Indentation Action
  * @author Slava Pestov
  * @version $Id$
  */
@@ -201,6 +201,31 @@ public interface IndentAction
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * Use to force a base indent level based on an existing line.
+	 */
+	class SetBaseIndent implements IndentAction
+	{
+		SetBaseIndent(int baseLine)
+		{
+			this.baseLine = baseLine;
+		}
+
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+				           int newIndent)
+		{
+			return StandardUtilities.getLeadingWhiteSpaceWidth(
+					buffer.getLineSegment(baseLine),buffer.getTabSize());
+		}
+
+		public boolean keepChecking()
+		{
+			return true;
+		}
+
+		private final int baseLine;
 	}
 
 	/**
