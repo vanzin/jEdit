@@ -762,7 +762,6 @@
 					 sourcepath="${basedir}"
 					 destdir="${classes.dir}/javadoc/api"
 					 packagenames="org.*"
-					 classpath="${classes.dir}/core"
 					 doclet="doclet.GenerateTocXML"
 					 docletpath="${classes.dir}/javadoc"
 					 version="true"
@@ -784,6 +783,12 @@
 					       packages="org.gjt.sp.jedit.bsh*"/>
 					<tag name="todo" scope="all" description="To do:"/>
 					<tag name="example" scope="all" description="Example:"/>
+						<classpath>
+							<fileset dir="${classes.dir}/core/"
+								includes="*.class"/>
+							<fileset dir="${lib.dir}/compile"
+								includes="*.jar"/>
+						</classpath>
 				</javadoc>
 			</contrib:else>
 		</contrib:if>
