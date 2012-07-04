@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.gjt.sp.jedit.indent.CommentIndentRule;
 import org.gjt.sp.jedit.indent.DeepIndentRule;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
@@ -456,6 +457,12 @@ public class Mode
 						rules.add(new DeepIndentRule(openChar, closeChar));
 				}
 			}
+		}
+
+		String commentStart = (String) getProperty("commentStart");
+		String commentEnd = (String) getProperty("commentEnd");
+		if (commentStart != null && commentEnd != null) {
+			rules.add(new CommentIndentRule(commentStart, commentEnd));
 		}
 
 		if (!getIgnoreWhitespace())
