@@ -375,7 +375,7 @@ public class JEditBuffer
 	 * Returns the end offset of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
-	 * @return The end offset of the specified line, that is the offset 
+	 * @return The end offset of the specified line, that is the offset
 	 * after the end-of-line character. Note that
 	 * <code>buffer.getLineOfOffset(buffer.getLineEndOffset(x))</code>
 	 * does not return <code>x</code> but <code>x+1</code>.
@@ -432,9 +432,9 @@ public class JEditBuffer
 		}
 
 		int returnValue = -1;
+		Segment seg = new Segment();
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
-			Segment seg = new Segment();
 			getLineText(i,seg);
 			if(seg.count != 0)
 				returnValue = i;
