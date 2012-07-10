@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.indent.CommentIndentRule;
 import org.gjt.sp.jedit.indent.DeepIndentRule;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
+import org.gjt.sp.jedit.indent.PreviousStatementIndentRule;
 import org.gjt.sp.jedit.indent.WhitespaceRule;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.ModeProvider;
@@ -463,6 +464,14 @@ public class Mode
 		String commentEnd = (String) getProperty("commentEnd");
 		if (commentStart != null && commentEnd != null) {
 			rules.add(new CommentIndentRule(commentStart, commentEnd));
+		}
+
+		String statementSeparator =
+			(String) getProperty("statementSeparator");
+		if (statementSeparator != null) {
+			rules.add(new PreviousStatementIndentRule(statementSeparator,
+				(String) getProperty("indentOpenBrackets"),
+				(String) getProperty("indentCloseBrackets")));
 		}
 
 		if (!getIgnoreWhitespace())

@@ -459,9 +459,9 @@ public class JEditBuffer
 		}
 
 		int returnValue = -1;
+		Segment seg = new Segment();
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
-			Segment seg = new Segment();
 			getLineText(i,seg);
 			if(seg.count != 0)
 				returnValue = i;
