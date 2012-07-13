@@ -9,6 +9,9 @@ Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix pressing return in parent files of the VFS browser that do not
+  browse the selected folder as it should (patch #3543499 by Eric Le Lay)
+
 - Fixed unreasonable quadratic operations which could be observable on
   big search&replace-all. (Patch #3533838 by Thomas Meyer)
 
