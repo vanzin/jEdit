@@ -64,7 +64,8 @@ public class AntiAlias
 	}
 
 	/** @return corresponding text antialias value from RenderingHints class */
-	public Object renderHint() {
+	public Object renderHint()
+	{
 		return renderHints[m_val];
 	}
 	
