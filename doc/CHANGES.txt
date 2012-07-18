@@ -9,6 +9,9 @@ Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix high memory usage for large search&replace all operations.
+  (Patch #3531515 by Thomas Meyer)
+
 - Fix pressing return in parent files of the VFS browser that do not
   browse the selected folder as it should (patch #3543499 by Eric Le Lay)
 
