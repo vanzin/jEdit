@@ -1670,7 +1670,7 @@
 						<filter token="deb.installed.size"
 							value="${deb.installed.size}"/>
 						<filter token="deb.repository.file"
-							value="./jedit/${jedit.version}/jedit_${jedit.version}_all.deb"/>
+							value="jedit/${jedit.version}/jedit_${jedit.version}_all.deb"/>
 						<filter token="deb.size"
 							value="${deb.size}"/>
 						<filter token="deb.md5"
