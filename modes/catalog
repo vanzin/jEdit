@@ -392,7 +392,7 @@
 				FILE_NAME_GLOB="*.{diff,patch}" />
 
 <MODE NAME="perl"		FILE="perl.xml"
-				FILE_NAME_GLOB="*.p[lm]"
+				FILE_NAME_GLOB="*.p[lmh]"
 				FIRST_LINE_GLOB="#!/*perl*" />
 
 <MODE NAME="php"		FILE="php.xml"
