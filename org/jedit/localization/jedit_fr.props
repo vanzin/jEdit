@@ -613,16 +613,16 @@ largeBufferDialog.title=Tampon volumineux {0}
 largeBufferDialog.message=Le tampon est très volumineux et jEdit risque de ne plus répondre\n\
 	à cause de la coloration syntaxique. Vous devriez prendre en considération les options suivantes.\n\
 	-Conserver la coloration complète : la coloration syntaxique fonctionnera comme habituellement\n\
-	jEdit ralentira probablement, ceci n''est pas recommandé.\n\
+	jEdit ralentira probablement, ceci n'est pas recommandé.\n\
 	-Coloration syntaxique hors contexte. Dans ce cas, jEdit procédera\n\
 	à une coloration rapide, mais le résultat ne sera pas parfait. Le\n\
 	tampon est coloré ligne par ligne sans vérification du contexte\n\
 	de la ligne précédente. Il est possible que la coloration ne soit pas précise\n\
 	si vous avez des portions de code sur plusieurs lignes (commentaires, balises xml...)\n\
-	-Utilisez le mode d''édition brut de jEdit (pas de coloration syntaxique)
+	-Utilisez le mode d'édition brut de jEdit (pas de coloration syntaxique)
 largeBufferDialog.fullSyntax=Coloration syntaxique complète
 largeBufferDialog.contextInsensitive=Coloration syntaxique hors contexte
-largeBufferDialog.defaultMode=Mode d''édition brut
+largeBufferDialog.defaultMode=Mode d'édition brut
 #}}}
 
 #{{{ I/O error dialog box
@@ -636,7 +636,7 @@ ioerror.directory-error-nomsg=Impossible de lister les fichiers de dossier.
 ioerror.encoding-error=Chargement correct du fichier impossible (des données ont pu être perdues) en utilisant\n\
 	un encodage « {0} ».\n\
 	({1})\n\
-	Esssayez de choisir un encodage différent.\n\
+	Essayez de choisir un encodage différent.\n\
 	Pour ce faire allez dans Fichier->Recharger avec encodage.\n\
 	Si vous souhaitez que cela se fasse automatiquement, ajoutez les éléments\n\
 	dans la "Liste des encodages ajoutés" dans le panneau encodage des options générales.
