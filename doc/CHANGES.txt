@@ -4,10 +4,12 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre2
 
-Thanks to Jarek Czekalski and Alan Ezust for contributing to
+Thanks to Jarek Czekalski, Matthieu Casanova, and Alan Ezust for contributing to
 this release.
 
 {{{ Bug fixes
+
+- The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
 
 }}}
 {{{ API
