@@ -658,7 +658,7 @@ loop:			for(;;)
 			endOfLine = true;
 		}
 
-		String noWordSep = (String) buffer.getMode().getProperty("noWordSep");
+		String noWordSep = buffer.getStringProperty("noWordSep");
 		matcher.setNoWordSep(noWordSep);
 		SearchMatcher.Match match = matcher.nextMatch(text,
 			startOfLine,endOfLine,firstTime,reverse);

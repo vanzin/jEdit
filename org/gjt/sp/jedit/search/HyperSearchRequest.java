@@ -241,7 +241,7 @@ class HyperSearchRequest extends Task
 	private int doHyperSearch(Buffer buffer, int start, int end,
 		DefaultMutableTreeNode bufferNode)
 	{
-		String noWordSep = (String) buffer.getMode().getProperty("noWordSep");
+		String noWordSep = buffer.getStringProperty("noWordSep");
 		matcher.setNoWordSep(noWordSep);
 		int resultCount = 0;
 		JEditTextArea textArea = jEdit.getActiveView().getTextArea();
