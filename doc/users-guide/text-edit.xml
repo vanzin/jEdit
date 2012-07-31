@@ -936,6 +936,12 @@
             <quote>Hello</quote> will match <quote>hello</quote>,
             <quote>HELLO</quote> and <quote>HeLlO</quote>.</para>
 
+            <para>After selecting the <guibutton>Whole word</guibutton>
+            check box, searching respects the <guibutton>Extra word
+            characters</guibutton> setting from the editing options
+            for recognizing words.
+            </para>
+
             <para>To search for special characters (such as newlines or
             non-printable characters), inexact sequences of text, or strings
             that span multiple lines, we use
