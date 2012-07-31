@@ -4,12 +4,15 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre2
 
-Thanks to Jarek Czekalski, Matthieu Casanova, and Alan Ezust for contributing to
-this release.
+Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, and Alan Ezust for
+contributing to this release.
 
 {{{ Bug fixes
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
+
+- Fix pressing return in parent files of the VFS browser that do not
+  browse the selected folder as it should (patch #3543499 by Eric Le Lay)
 
 }}}
 {{{ API
