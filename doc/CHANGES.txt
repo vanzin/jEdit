@@ -12,8 +12,8 @@ Alan Ezust for contributing to this release.
 - Fix high memory usage for large search&replace all operations.
   (Patch #3531515 by Thomas Meyer)
 
-- Fix pressing return in parent files of the VFS browser that do not
-  browse the selected folder as it should (patch #3543499 by Eric Le Lay)
+- Fix pressing return in parent files of the VFS browser that do not browse 
+  the selected folder as it should (patch #3543499 by Eric Le Lay) [5.0pre2]
 
 - Fixed unreasonable quadratic operations which could be observable on
   big search&replace-all. (Patch #3533838 by Thomas Meyer)
@@ -28,6 +28,7 @@ Alan Ezust for contributing to this release.
   (#2911520 Matthieu Casanova)
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
+  [5.0pre2]
 
 }}}
 {{{ API Changes
@@ -50,7 +51,7 @@ Alan Ezust for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- New option: Disable obsolete plugins (#2931321 Alan Ezust)
+- New Plugin Manager option: Disable obsolete plugins (#2931321 Alan Ezust)
 
 }}}
 
