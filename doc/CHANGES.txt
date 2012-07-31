@@ -4,10 +4,13 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre1
 
-Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova and
-Alan Ezust for contributing to this release.
+Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust and
+Malathi for contributing to this release.
 
 {{{ Bug fixes
+
+- Recognizing "Extra word characters" in "Whole word" option in
+  searches (bug #3522497, patch #3543524 Malathi)
 
 - Fix high memory usage for large search&replace all operations.
   (Patch #3531515 by Thomas Meyer)
