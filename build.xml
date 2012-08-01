@@ -107,7 +107,7 @@
 
 	<target name="init-ivy"
 		depends="init,download-ivy"
-		unless="ivy.done">
+		unless="${ivy.done}">
 		<property name="ivy.retrieve.pattern"
 			  value="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"/>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml"
@@ -120,7 +120,7 @@
 	<target name="retrieve"
 		description="retrieve the dependencies"
 		depends="init,init-ivy"
-		unless="ivy.done">
+		unless="${ivy.done}">
 		<ivy:retrieve sync="true"/>
 		<ivy:retrieve pattern="${lib.dir}/ivy/[artifact]-[revision].[ext]"
 			      organisation="org.apache.ivy"
