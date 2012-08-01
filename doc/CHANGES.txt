@@ -4,10 +4,13 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre1
 
-Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust and
-Malathi for contributing to this release.
+Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust,
+Malathi and Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
+
+- Filter not synchronizing in search dialog when
+  "All buffers" is selected. (bug #1646584, patch #3549905 Eric Le Lay)
 
 - Recognizing "Extra word characters" in "Whole word" option in
   searches (bug #3522497, patch #3543524 Malathi)

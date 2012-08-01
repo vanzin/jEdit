@@ -1015,21 +1015,15 @@ public class SearchDialog extends EnhancedDialog
 		//{{{ synchronizeMultiFileSettings() method
 		private void synchronizeMultiFileSettings()
 		{
-			directory.setText(view.getBuffer().getDirectory());
-
-			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-
-			if(fileset instanceof AllBufferSet)
+			// don't sync search directory when "search all buffers" is active
+			if(searchDirectory.isSelected())
 			{
-				filter.setText(((AllBufferSet)fileset)
-					.getFileFilter());
+				directory.setText(view.getBuffer().getDirectory());
 			}
-			else
-			{
-				filter.setText('*' + MiscUtilities
-					.getFileExtension(view.getBuffer()
-					.getName()));
-			}
+			
+			filter.setText('*' + MiscUtilities
+				.getFileExtension(view.getBuffer()
+				.getName()));
 		} //}}}
 	} //}}}
 
