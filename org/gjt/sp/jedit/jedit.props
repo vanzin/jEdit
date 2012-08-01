@@ -497,6 +497,7 @@ bufferSwitcher.maxRowCount=10
 showTooltips=true
 ioThreadCount=4
 server.brokenToFront=false
+search.dontSyncFilter=false
 #}}}
 
 # restore remote VFS files by default (new option)

@@ -51,6 +51,10 @@ Malathi and Eric Le Lay for contributing to this release.
 }}}
 {{{ UI
 
+- Added a possibility to suppress synchronization of the filter in search
+  dialog, using a hidden setting in jedit.props: search.dontSyncFilter.
+  (Jarek Czekalski)
+
 - Added mnemonics for popup menus in File System Browser (Commands, Plugins,
   Favorites). (Jarek Czekalski)
 

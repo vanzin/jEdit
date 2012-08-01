@@ -1021,9 +1021,12 @@ public class SearchDialog extends EnhancedDialog
 				directory.setText(view.getBuffer().getDirectory());
 			}
 			
-			filter.setText('*' + MiscUtilities
-				.getFileExtension(view.getBuffer()
-				.getName()));
+			if (!jEdit.getBooleanProperty("search.dontSyncFilter", false))
+			{
+				filter.setText('*' + MiscUtilities
+					.getFileExtension(view.getBuffer()
+						.getName()));
+			}
 		} //}}}
 	} //}}}
 
