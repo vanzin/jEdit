@@ -798,10 +798,12 @@ public class SearchDialog extends EnhancedDialog
 				if(fileset instanceof DirectoryListSet)
 				{
 					DirectoryListSet dset = (DirectoryListSet)fileset;
+					// dset may be a subclass of DirectoryListSet so
+					// we can't create a new DirectoryListSet object here
+					// as it's done with other filesets (#3549670)
 					dset.setDirectory(directory);
 					dset.setFileFilter(filter);
 					dset.setRecursive(recurse);
-					EditBus.send(new SearchSettingsChanged(null));
 				}
 				else
 					fileset = new DirectoryListSet(directory,filter,recurse);
@@ -810,6 +812,9 @@ public class SearchDialog extends EnhancedDialog
 			{
 				// can't happen
 				fileset = null;
+				throw new IllegalStateException("One of search Selection, " +
+					"current Buffer, directory, " +
+					"all buffers must be selected!");
 			}
 
 			jEdit.setBooleanProperty("search.subdirs.toggle",

@@ -45,8 +45,6 @@ public class DirectoryListSet extends BufferListSet
 		this.directory = directory;
 		this.glob = glob;
 		this.recurse = recurse;
-		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
-		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 	} //}}}
 
 
@@ -112,6 +110,7 @@ public class DirectoryListSet extends BufferListSet
 	@Override
 	protected String[] _getFiles(final Component comp)
 	{
+		boolean skipBinary, skipHidden;
 		skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
 		skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 		final VFS vfs = VFSManager.getVFSForPath(directory);
@@ -168,7 +167,5 @@ public class DirectoryListSet extends BufferListSet
 	private String directory;
 	private String glob;
 	private boolean recurse;
-	private boolean skipHidden;
-	private boolean skipBinary;
 	//}}}
 }
