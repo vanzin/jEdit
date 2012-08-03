@@ -53,7 +53,8 @@ import static java.text.DateFormat.MEDIUM;
  *
  * Logging of exception tracebacks is supported.<p>
  *
- * This class can also optionally redirect standard output and error to the log.
+ * This class can also optionally redirect standard output and error
+ * to the log, see {@link #init}.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -107,9 +108,13 @@ public class Log
 	/**
 	 * Initializes the log.
 	 * @param stdio If true, standard output and error will be
-	 * sent to the log
+	 * intercepted and sent to the log. The <code>urgency</code>
+	 * for these implicit log entries is <code>NOTICE</code>
+	 * and <code>ERROR</code> accordingly. Note that in such a situation
+	 * <code>System.out.print()</code> calls will not appear on standard
+	 * output, if default output level is higher than <code>NOTICE</code>.
 	 * @param level Messages with this log level or higher will
-	 * be printed to the system console
+	 * be printed to the system console.
 	 * @since jEdit 3.2pre4
 	 */
 	public static void init(boolean stdio, int level)
