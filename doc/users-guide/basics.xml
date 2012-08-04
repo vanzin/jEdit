@@ -42,8 +42,8 @@
         displays a popup menu which also facilitates quick access to various
         commands. Both the tool bar and the right-click menu can be completely
         customized to suit your tastes in the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref linkend="context-pane" />
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref linkend="context-pane" />
         and <xref linkend="toolbar-pane" />.</para>
 
         <para>Most of the View is taken up by the TextArea. If you've ever used
@@ -60,8 +60,8 @@
         invoked. Note this menu toggle action has the side-effect of changing the
         persistent jEdit properties for the Gutter, which can also
         be set from the <guilabel>Gutter</guilabel> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box.</para>
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box.</para>
 
         <para> The gutter is divided into two sections. Right-clicking on the left side
         gives you a context menu, while right-clicking on the right side (where line numbers might be)
@@ -167,8 +167,8 @@
 
         <para>If you decide to use one of these plugins, you can hide the popup
         menu buffer switcher in the <guilabel>View</guilabel> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box.</para>
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box.</para>
 
         <para>A number of plugins that implement fast keyboard-based buffer
         switching are available as well:</para>
@@ -218,7 +218,9 @@
             </para></listitem>
         </orderedlist>
 
-        <para> Bufferset scope can be set from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt;
+        <para> Bufferset scope can be set from <guimenu>Utilities</guimenu>
+        &gt;<guimenuitem>Options</guimenuitem> &gt;
+        <guimenuitem>View</guimenuitem> &gt;
         <guilabel>BufferSet scope:</guilabel>.
         </para>
 
@@ -443,8 +445,8 @@
 
         <para>The visibility of each of the above items can be controlled in the
         <guibutton>Status Bar</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="status-bar-pane" />.</para>
     </section>
 
@@ -481,8 +483,8 @@
 
         <para>For example, entering <userinput>l-o</userinput> will match
         <userinput>global-options</userinput>, which has the same effect as
-        invoking <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem>.</para>
+        invoking <guimenu>Utilities</guimenu>&gt;
+        <guimenuitem>Options</guimenuitem>.</para>
 
         <bridgehead>Buffer-local properties</bridgehead>
 
