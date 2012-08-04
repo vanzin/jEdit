@@ -40,7 +40,7 @@
     between editing sessions, so you can get back to work immediately after
     starting jEdit. This feature can be disabled in the
     <guibutton>General</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
     dialog box see <xref linkend="general-pane" />.</para>
 
     <sidebar>
@@ -182,9 +182,9 @@
                             is the default. This feature can also be set
                             permanently in the <guibutton>General</guibutton>
                             pane of the
-                            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                            Options</guimenuitem> dialog box; see <xref
-                            linkend="general-pane" />.</entry>
+                            <guimenu>Utilities</guimenu>&gt;
+                            <guimenuitem>Options</guimenuitem> dialog box;
+                            see <xref linkend="general-pane" />.</entry>
                         </row>
 
                         <row>

@@ -220,8 +220,10 @@
     <section id="global-opts">
         <title>The Global Options Dialog Box</title>
 
-        <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> displays the global options dialog box. The dialog
+        <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        displays the options dialog box.
+        It has 2 tabs, the first one is <guimenu>Global Options</guimenu>.
+        The dialog
         box is divided into several panes, each pane containing a set of related
         options. Use the list on the left of the dialog box to switch between
         panes. Only panes created by jEdit are described here; some plugins add

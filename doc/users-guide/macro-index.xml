@@ -65,8 +65,8 @@
                 clipboard. Some editors have this has the default copy behavior.
                 To achieve the same effect in jEdit, bind this macro to
                 <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton>
-                pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box.</para>
+                pane of the <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem> dialog box.</para>
             </listitem>
 
             <listitem>
@@ -77,8 +77,8 @@
                 Some editors have this has the default cut behavior. To achieve
                 the same effect in jEdit, bind this macro to
                 <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton>
-                pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box.</para>
+                pane of the <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem> dialog box.</para>
             </listitem>
 
             <listitem>

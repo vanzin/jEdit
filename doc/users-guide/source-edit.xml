@@ -27,9 +27,10 @@
 
             <para>File name and first line matching is done using glob patterns
             similar to those used in Unix shells. Glob patterns associated with
-            edit modes can be changed in the <guibutton>Editing</guibutton> pane
-            of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box. Note that the glob patterns must
+            edit modes can be changed in the <guibutton>Editing</guibutton>
+            pane of the <guimenu>Utilities</guimenu>&gt;
+            <guimenuitem>Options</guimenuitem>
+            dialog box. Note that the glob patterns must
             match the file name or first line exactly; so to match files whose
             first line contains <literal>begin</literal>, you must use a first
             line glob of <literal>*begin*</literal>. See <xref
@@ -61,9 +62,10 @@
             highlighting.</para>
 
             <para>The colors and styles used to highlight syntax tokens can be
-            changed in the <guibutton>Syntax Highlighting</guibutton> pane of
-            the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            changed in the <guibutton>Syntax Highlighting</guibutton>
+            pane of the <guimenu>Utilities</guimenu>&gt;
+            <guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="syntax-hilite-pane" />.</para>
         </section>
     </section>
@@ -81,9 +83,9 @@
             <listitem>
                 <para>On a global or mode-specific basis in the
                 <guibutton>Editing</guibutton> pane of the the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box. See <xref
-                linkend="editing-pane" />.</para>
+                <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem> dialog box.
+                See <xref linkend="editing-pane" />.</para>
             </listitem>
 
             <listitem>
@@ -136,8 +138,9 @@
                 <listitem>
                     <para>On a global or mode-specific basis in the
                     <guibutton>Editing</guibutton> pane of the
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem> dialog box. See <xref
+                    <guimenu>Utilities</guimenu>&gt;
+                    <guimenuitem>Options</guimenuitem>
+                    dialog box. See <xref
                     linkend="editing-pane" />.</para>
                 </listitem>
 
@@ -193,8 +196,8 @@
                 <listitem>
                     <para>On a global or mode-specific basis in the
                     <guibutton>Editing</guibutton> pane of the
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem> dialog box. See <xref
+                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+                    dialog box. See <xref
                     linkend="editing-pane" />.</para>
                 </listitem>
 
@@ -229,8 +232,8 @@
             <quote>simple</quote>, and <quote>none</quote>. The scheme can be
             chosen on a global or per-edit mode basis using the
             <guibutton>Editing</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog. It can also be changed for a specific
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog. It can also be changed for a specific
             buffer using the <guimenuitem>Buffer Options</guimenuitem> dialog,
             or with a buffer-local property. (see <xref linkend="buffer-local"/>)
             </para>
@@ -324,8 +327,8 @@
                 <para>The behavior of the <keycap>ENTER</keycap> and
                 <keycap>TAB</keycap> keys can be configured in the
                 <guibutton>Shortcuts</guibutton> pane of the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog. box, just as with any other key.
+                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+                dialog. box, just as with any other key.
                 The <keycap>ENTER</keycap> key can be bound to one of the
                 following, or indeed any other command or macro:</para>
 
@@ -451,8 +454,8 @@
         <para>Bracket highlighting in the text area and bracket scope display in
         the gutter can be customized in the <guibutton>Text Area</guibutton> and
         <guibutton>Gutter</guibutton> panes of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="global-opts" />.</para>
 
         <tip>
@@ -474,8 +477,8 @@
         can enter the text to insert before and after the caret. After the
         abbreviation is created, it can be viewed or edited from the
         <guibutton>Abbreviations</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="abbrevs-pane" />.</para>
 
         <para>Using abbreviations reduces the time spent typing long but
@@ -495,8 +498,8 @@
 
         <para>Automatic abbreviation expansion can be enabled in the
         <guibutton>Abbreviations</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box. If enabled, pressing the space bar
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box. If enabled, pressing the space bar
         after entering an abbreviation will automatically expand it.</para>
 
         <para>If automatic expansion is enabled, a space can be inserted without
@@ -586,8 +589,9 @@ With text inside it.
             <listitem>
                 <para>On a global or mode-specific basis in the
                 <guibutton>Editing</guibutton> pane of the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box. See <xref
+                <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem>
+                dialog box. See <xref
                 linkend="editing-pane" />.</para>
             </listitem>
 
@@ -704,9 +708,9 @@ With text inside it.
                 <listitem>
                     <para>On a global or mode-specific basis in the
                     <guibutton>Editing</guibutton> pane of the
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem> dialog box. See <xref
-                    linkend="editing-pane" />.</para>
+                    <guimenu>Utilities</guimenu>&gt;
+                    <guimenuitem>Options</guimenuitem> dialog box.
+                    See <xref linkend="editing-pane" />.</para>
                 </listitem>
 
                 <listitem>

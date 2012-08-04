@@ -9,7 +9,7 @@
     <para>This appendix documents the "jEdit" keymap of keyboard shortcuts.
     Keymaps can be created and customized to suit your taste in the
     <guibutton>Shortcuts</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
     dialog box; see <xref linkend="shortcuts-pane" />.</para>
 
     <bridgehead>Files</bridgehead>

@@ -124,8 +124,8 @@
         a keyboard shortcut, toolbar button or context menu using the
         <guimenuitem>Macro Shortcuts</guimenuitem>, <guimenuitem>Tool
         Bar</guimenuitem> or <guimenuitem>Context Menu</guimenuitem> panes of
-        the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog; see <xref linkend="global-opts" />.</para>
+        the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog; see <xref linkend="global-opts" />.</para>
     </section>
 
     <section id="organizing-macros">

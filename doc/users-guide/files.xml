@@ -37,8 +37,8 @@
         that file. The number of recent files to remember can be changed and
         caret position saving can be disabled in the
         <guibutton>General</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="general-pane" />.</para>
 
         <para>The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Current
@@ -88,8 +88,8 @@
         (shortcut: <keycap>C+e C+s</keycap>) saves all open buffers to disk,
         asking for confirmation first. The confirmation dialog can be disabled
         in the <guilabel>General</guilabel> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box.</para>
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box.</para>
 
         <section>
             <title>Two-Stage Save</title>
@@ -107,8 +107,8 @@
             it is a hard link the link is broken. The <quote>two-stage
             save</quote> feature can be disabled in the
             <guibutton>General</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="general-pane" />.</para>
         </section>
 
@@ -132,8 +132,8 @@
 
             <para>The autosave interval can be changed in the
             <guibutton>Autosave and Backup</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="autosave-backups-pane" />.</para>
         </section>
 
@@ -147,8 +147,8 @@
 
             <para>The behavior of the backup feature is specified in the
             <guibutton>Autosave and Backup</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="autosave-backups-pane" />.`</para>
 
             <para>The default behavior is to back up the original contents to
@@ -237,8 +237,9 @@
                 <para>From the keyboard, if a keyboard shortcut has been
                 assigned to the <guimenuitem>Toggle Line Separator</guimenuitem>
                 command in the <guibutton>Shortcuts</guibutton> pane of the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box. By default, this command does
+                <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem>
+                dialog box. By default, this command does
                 not have a keyboard shortcut.</para>
             </listitem>
         </itemizedlist>
@@ -246,8 +247,8 @@
         <para>By default, new files are saved with your operating system's
         native line separator. This can be changed in the
         <guibutton>Encodings</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref linkend="encodings-pane" />.
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref linkend="encodings-pane" />.
         Note that changing this setting has no effect on existing files.</para>
     </section>
 
@@ -271,8 +272,9 @@
         <para>The default encoding, used to load files for which no other
         encoding is specified, can be set in the
         <guibutton>Encodings</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref linkend="encodings-pane" />.
+        <guimenu>Utilities</guimenu>&gt;
+        <guimenuitem>Options</guimenuitem>
+        dialog box; see <xref linkend="encodings-pane" />.
         Unless you change this setting, it will be your operating system's
         native encoding, for example <literal>MacRoman</literal> on the MacOS,
         <literal>windows-1252</literal> on Windows, and
@@ -392,8 +394,8 @@
         linkend="docking" />.</para>
 
         <para>The FSB can be customized in the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="vfs-browser-pane" />.</para>
 
         <section>
@@ -421,8 +423,8 @@
             colors depending on what glob patterns their names match. The
             patterns and colors can be customized in the <guibutton>File System
             Browser</guibutton>&gt;<guibutton>Colors</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box.</para>
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box.</para>
 
             <para>The <guibutton>Path:</guibutton> Text Box can be used to
             navigate to a specific directory. Environment variables are expanded
@@ -601,8 +603,8 @@
         changes are automatically reloaded. This feature can be disabled, or
         changed to prompt if files should be reloaded first, in the
         <guibutton>General</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="global-opts" />.</para>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Reload</guimenuitem> can
@@ -638,7 +640,7 @@
    to four buffers can be loaded or saved simultaneously. The number of
    threads can be changed in the
    <guibutton>Loading and Saving</guibutton> pane of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />. Setting the number to zero
    disables multi-threaded I/O completely; doing this is not recommended.
   </para> -->
@@ -656,8 +658,8 @@
 
         <para>The print output can be customized in the
         <guibutton>Printing</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref linkend="printing-pane" />.
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref linkend="printing-pane" />.
         The following settings can be changed:</para>
 
         <itemizedlist>

@@ -9,7 +9,7 @@
     browser, incremental search bar, and action bar, all remember the last 20
     entered strings by default. The number of strings to remember can be changed
     in the <guibutton>Appearance</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
     dialog box; see <xref linkend="appearance-pane" />.</para>
 
     <para>Pressing <keycap>UP</keycap> recalls previous strings. Pressing

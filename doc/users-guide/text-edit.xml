@@ -47,8 +47,8 @@
             <keycap>HOME</keycap> and <keycap>END</keycap> keys, you can
             reassign the respective keyboard shortcuts in the
             <guibutton>Shortcuts</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem>; see <xref linkend="shortcuts-pane" />.</para>
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>;
+            see <xref linkend="shortcuts-pane" />.</para>
 
             <para>By default, the shortcuts are assigned as follows:</para>
 
@@ -196,8 +196,9 @@
                 as you might expect if a proportional-width font is being used
                 or if soft wrap is enabled. The text area font can be changed in
                 the <guibutton>Text Area</guibutton> pane of the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box. For information about soft
+                <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem>
+                dialog box. For information about soft
                 wrap, see <xref linkend="word-wrap" />.</para>
             </note>
         </section>
@@ -330,8 +331,9 @@
         <para>By default, the last 100 edits is retained; older edits cannot be
         undone. The maximum number of undos and whether undos are reset when a
         buffer is saved can be changed in the <guibutton>Editing</guibutton>
-        pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        pane of the <guimenu>Utilities</guimenu>&gt;
+        <guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="editing-pane" />.</para>
     </section>
 
@@ -402,8 +404,8 @@
             these keystrokes to alternative actions whose names end with
             <guimenuitem>(Eat Whitespace)</guimenuitem> in the
             <guibutton>Shortcuts</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="shortcuts-pane" />.</para>
         </section>
     </section>
@@ -502,9 +504,9 @@
             <listitem>
                 <para>On a global or mode-specific basis in the
                 <guibutton>Editing</guibutton> pane of the
-                <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                Options</guimenuitem> dialog box. See <xref
-                linkend="editing-pane" />.</para>
+                <guimenu>Utilities</guimenu>&gt;
+                <guimenuitem>Options</guimenuitem> dialog box.
+                See <xref linkend="editing-pane" />.</para>
             </listitem>
 
             <listitem>
@@ -528,8 +530,9 @@
                         assigned to the <guimenuitem>Toggle Word
                         Wrap</guimenuitem> command in the
                         <guibutton>Shortcuts</guibutton> pane of the
-                        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                        Options</guimenuitem> dialog box. By default, this
+                        <guimenu>Utilities</guimenu>&gt;
+                        <guimenuitem>Options</guimenuitem>
+                        dialog box. By default, this
                         command does not have a keyboard shortcut.</para>
                     </listitem>
                 </itemizedlist>
@@ -560,8 +563,8 @@
 
             <para>If end of line markers are enabled in the <guibutton>Text
             Area</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box, a colon (<quote>:</quote>) is
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box, a colon (<quote>:</quote>) is
             painted at the end of wrapped lines. See <xref
             linkend="text-area-pane" />.</para>
         </section>
@@ -581,8 +584,8 @@
             positions, so it might not behave like you expect if a
             proportional-width font is being used. The text area font can be
             changed in the <guibutton>Text Area</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box.</para>
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box.</para>
         </section>
     </section>
 
@@ -714,8 +717,8 @@
             <para>The quick copy feature is usually found in Unix text editors.
             Quick copy is disabled by default, but it can be enabled in the
             <guibutton>Mouse</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box.</para>
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box.</para>
 
             <para>The quick copy feature is accessed using the middle mouse
             button. If you do not have a three-button mouse, then either
@@ -844,8 +847,8 @@
         the buffer. (The dot prefix makes the markers file hidden on Unix
         systems.) Marker saving can be disabled in the
         <guibutton>General</guibutton> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+        dialog box; see <xref
         linkend="general-pane" />.</para>
 
         <para><guimenu>Markers</guimenu>&gt;<guimenuitem>Add/Remove
@@ -1202,9 +1205,10 @@
 
             <para>By default, the search bar remains hidden until one of the
             quick search commands (described below) is invoked; however you can
-            choose to have it always visible in the <guibutton>View</guibutton>
-            pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-            Options</guimenuitem> dialog box; see <xref
+            choose to have it always visible in the
+            <guibutton>View</guibutton> pane of the
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
+            dialog box; see <xref
             linkend="view-pane" />.</para>
 
             <para><guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search
