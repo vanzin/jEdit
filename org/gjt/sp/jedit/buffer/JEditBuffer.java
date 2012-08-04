@@ -2752,6 +2752,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean io;
 	private final Map<Object, PropValue> properties;
 	private final Object propertyLock;
+	/** This field should be read instead of "elasticTabstops" property
+	  * when efficiency matters. */
+	// synchronization done in TextArea.propertiesChanged()
 	public boolean elasticTabstopsOn = false;
 	private ColumnBlock columnBlock;
 

@@ -60,7 +60,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	public void contentInserted(JEditBuffer buffer, int startLine, int offset,
 			int numLines, int length) 
 	{
-		if(!buffer.getBooleanProperty("elasticTabstops"))
+		if(!buffer.elasticTabstopsOn)
 		{
 			return;
 		}
@@ -227,7 +227,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	public void contentRemoved(JEditBuffer buffer, int startLine, int offset,
 		int numLines, int length)
 	{
-		if(!buffer.getBooleanProperty("elasticTabstops"))
+		if(!buffer.elasticTabstopsOn)
 		{
 			return;
 		}
@@ -508,7 +508,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	//{{{ preContentInserted() method
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
-		if(!buffer.getBooleanProperty("elasticTabstops"))
+		if(!buffer.elasticTabstopsOn)
 		{
 			return;
 		}
@@ -521,7 +521,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	public void preContentRemoved(JEditBuffer buffer, int startLine, int offset,
 		int numLines, int length) 
 	{
-		if(!buffer.getBooleanProperty("elasticTabstops"))
+		if(!buffer.elasticTabstopsOn)
 		{
 			return;
 		}
