@@ -93,6 +93,9 @@
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.c" />
 
+<MODE NAME="cfscript"		FILE="cfscript.xml"
+				FILE_NAME_GLOB="*.cfc" />
+
 <MODE NAME="chill"		FILE="chill.xml"
 				FILE_NAME_GLOB="*.{chl,mpol}" />
 

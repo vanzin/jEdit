@@ -48,6 +48,8 @@ Malathi and Eric Le Lay for contributing to this release.
 }}}
 {{{ Editing
 
+- Updated ColdFusion mode (#3518536 Darien Brown)
+
 }}}
 {{{ UI
 

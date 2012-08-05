@@ -1,0 +1,436 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+		
+		<!-- Auto indent -->
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{[" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="]}" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+		<PROPERTY NAME="indentNextLine"
+			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+		<PROPERTY NAME="unindentThisLine"
+			VALUE="^.*(default:\s*|case.*:.*)$" />
+		<PROPERTY NAME="electricKeys" VALUE=":" />
+	</PROPS>
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
+		<SPAN TYPE="COMMENT3" DELEGATE="CFDOC">
+			<BEGIN>/**</BEGIN>
+			<END>*/</END>
+		</SPAN>
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
+		
+		
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
+		
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">,</SEQ>
+		<SEQ TYPE="OPERATOR">;</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
+			MATCH_TYPE="OPERATOR"
+			TYPE="LABEL">:</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+		
+		<KEYWORDS>
+			<!-- common keywords -->
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>delete</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>finally</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>in</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>typeof</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>with</KEYWORD1>
+			
+			<!-- context literals -->
+			<LITERAL2>this</LITERAL2>
+			<LITERAL2>super</LITERAL2>
+			
+			<!-- value literals -->
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+			<LITERAL2>yes</LITERAL2>
+			<LITERAL2>no</LITERAL2>
+			
+			<!-- CF Types -->
+			<KEYWORD3>boolean</KEYWORD3>
+			<KEYWORD3>struct</KEYWORD3>
+			<KEYWORD3>string</KEYWORD3>
+			<KEYWORD3>numeric</KEYWORD3>
+			<KEYWORD3>array</KEYWORD3>
+			<KEYWORD3>any</KEYWORD3>
+			<KEYWORD3>query</KEYWORD3>
+			<KEYWORD3>void</KEYWORD3>
+			
+			<!-- component related -->
+			<KEYWORD3>component</KEYWORD3>
+			<KEYWORD1>implements</KEYWORD1>
+			<KEYWORD1>extends</KEYWORD1>
+			<KEYWORD1>include</KEYWORD1>
+			
+			<!-- access types -->
+			<KEYWORD1>private</KEYWORD1>
+			<KEYWORD1>protected</KEYWORD1>
+			<KEYWORD1>public</KEYWORD1>
+			<KEYWORD1>remote</KEYWORD1>
+			<KEYWORD1>required</KEYWORD1>
+			
+			<KEYWORD1>property</KEYWORD1>
+			
+			<!-- ColdFusion Arrays -->
+			<FUNCTION>ArrayAppend</FUNCTION>
+			<FUNCTION>ArrayAvg</FUNCTION>
+			<FUNCTION>ArrayClear</FUNCTION>
+			<FUNCTION>ArrayDeleteAt</FUNCTION>
+			<FUNCTION>ArrayInsertAt</FUNCTION>
+			<FUNCTION>ArrayIsEmpty</FUNCTION>
+			<FUNCTION>ArrayLen</FUNCTION>
+			<FUNCTION>ArrayMax</FUNCTION>
+			<FUNCTION>ArrayMin</FUNCTION>
+			<FUNCTION>ArrayNew</FUNCTION>
+			<FUNCTION>ArrayPrepend</FUNCTION>
+			<FUNCTION>ArrayResize</FUNCTION>
+			<FUNCTION>ArraySet</FUNCTION>
+			<FUNCTION>ArraySort</FUNCTION>
+			<FUNCTION>ArraySum</FUNCTION>
+			<FUNCTION>ArraySwap</FUNCTION>
+			<FUNCTION>ArrayToList</FUNCTION>
+			<FUNCTION>IsArray</FUNCTION>
+			<FUNCTION>ListToArray</FUNCTION>
+			
+			<!-- ColdFusion Dates -->
+			<FUNCTION>CreateDate</FUNCTION>
+			<FUNCTION>CreateDateTime</FUNCTION>
+			<FUNCTION>CreateODBCTime</FUNCTION>
+			<FUNCTION>CreateODBCDate</FUNCTION>
+			<FUNCTION>CreateODBCDateTime</FUNCTION>
+			<FUNCTION>CreateTime</FUNCTION>
+			<FUNCTION>CreateTimeSpan</FUNCTION>
+			<FUNCTION>DateAdd</FUNCTION>
+			<FUNCTION>DateCompare</FUNCTION>
+			<FUNCTION>DateDiff</FUNCTION>
+			<FUNCTION>DatePart</FUNCTION>
+			<FUNCTION>Day</FUNCTION>
+			<FUNCTION>DayOfWeek</FUNCTION>
+			<FUNCTION>DayOfWeekAsString</FUNCTION>
+			<FUNCTION>DayOfYear</FUNCTION>
+			<FUNCTION>DaysInMonth</FUNCTION>
+			<FUNCTION>DaysInYear</FUNCTION>
+			<FUNCTION>FirstDayOfMonth</FUNCTION>
+			<FUNCTION>Hour</FUNCTION>
+			<FUNCTION>Minute</FUNCTION>
+			<FUNCTION>Month</FUNCTION>
+			<FUNCTION>MonthAsString</FUNCTION>
+			<FUNCTION>Now</FUNCTION>
+			<FUNCTION>ParseDateTime</FUNCTION>
+			<FUNCTION>Quarter</FUNCTION>
+			<FUNCTION>Second</FUNCTION>
+			<FUNCTION>Week</FUNCTION>
+			<FUNCTION>Year</FUNCTION>
+			
+			<!-- ColdFusion Type Checks -->
+			<FUNCTION>IsArray</FUNCTION>
+			<FUNCTION>IsAuthenticated</FUNCTION>
+			<FUNCTION>IsAuthorized</FUNCTION>
+			<FUNCTION>IsBoolean</FUNCTION>
+			<FUNCTION>IsDate</FUNCTION>
+			<FUNCTION>IsDebugMode</FUNCTION>
+			<FUNCTION>IsDefined</FUNCTION>
+			<FUNCTION>IsLeapYear</FUNCTION>
+			<FUNCTION>IsNumeric</FUNCTION>
+			<FUNCTION>IsNumericDate</FUNCTION>
+			<FUNCTION>IsQuery</FUNCTION>
+			<FUNCTION>IsSimpleValue</FUNCTION>
+			<FUNCTION>IsStruct</FUNCTION>
+
+			<!-- ColdFusion Formats -->
+			<FUNCTION>DateFormat</FUNCTION>
+			<FUNCTION>DecimalFormat</FUNCTION>
+			<FUNCTION>DollarFormat</FUNCTION>
+			<FUNCTION>FormatBaseN</FUNCTION>
+			<FUNCTION>HTMLCodeFormat</FUNCTION>
+			<FUNCTION>HTMLEditFormat</FUNCTION>
+			<FUNCTION>NumberFormat</FUNCTION>
+			<FUNCTION>ParagraphFormat</FUNCTION>
+			<FUNCTION>TimeFormat</FUNCTION>
+			<FUNCTION>YesNoFormat</FUNCTION>
+
+			<FUNCTION>DE</FUNCTION>
+			<FUNCTION>Evaluate</FUNCTION>
+			<FUNCTION>IIf</FUNCTION>
+			<FUNCTION>SetVariable</FUNCTION>
+
+			<!-- ColdFusion Lists -->
+			<FUNCTION>ArrayToList</FUNCTION>
+			<FUNCTION>ListAppend</FUNCTION>
+			<FUNCTION>ListChangeDelims</FUNCTION>
+			<FUNCTION>ListContains</FUNCTION>
+			<FUNCTION>ListContainsNoCase</FUNCTION>
+			<FUNCTION>ListDeleteAt</FUNCTION>
+			<FUNCTION>ListFind</FUNCTION>
+			<FUNCTION>ListFindNoCase</FUNCTION>
+			<FUNCTION>ListFirst</FUNCTION>
+			<FUNCTION>ListGetAt</FUNCTION>
+			<FUNCTION>ListInsertAt</FUNCTION>
+			<FUNCTION>ListLast</FUNCTION>
+			<FUNCTION>ListLen</FUNCTION>
+			<FUNCTION>ListPrepend</FUNCTION>
+			<FUNCTION>ListRest</FUNCTION>
+			<FUNCTION>ListSetAt</FUNCTION>
+			<FUNCTION>ListToArray</FUNCTION>
+
+			<!-- ColdFusion Structs -->
+			<FUNCTION>StructClear</FUNCTION>
+			<FUNCTION>StructCopy</FUNCTION>
+			<FUNCTION>StructCount</FUNCTION>
+			<FUNCTION>StructDelete</FUNCTION>
+			<FUNCTION>StructFind</FUNCTION>
+			<FUNCTION>StructInsert</FUNCTION>
+			<FUNCTION>StructIsEmpty</FUNCTION>
+			<FUNCTION>StructKeyExists</FUNCTION>
+			<FUNCTION>StructNew</FUNCTION>
+			<FUNCTION>StructUpdate</FUNCTION>
+
+			<!-- ColdFusion Locale -->
+			<FUNCTION>GetLocale</FUNCTION>
+			<FUNCTION>LSCurrencyFormat</FUNCTION>
+			<FUNCTION>LSDateFormat</FUNCTION>
+			<FUNCTION>LSIsCurrency</FUNCTION>
+			<FUNCTION>LSIsDate</FUNCTION>
+			<FUNCTION>LSIsNumeric</FUNCTION>
+			<FUNCTION>LSNumberFormat</FUNCTION>
+			<FUNCTION>LSParseCurrency</FUNCTION>
+			<FUNCTION>LSParseDateTime</FUNCTION>
+			<FUNCTION>LSParseNumber</FUNCTION>
+			<FUNCTION>LSTimeFormat</FUNCTION>
+			<FUNCTION>SetLocale</FUNCTION>
+
+			<!-- ColdFusion Maths -->
+			<FUNCTION>Abs</FUNCTION>
+			<FUNCTION>Atn</FUNCTION>
+			<FUNCTION>BitAnd</FUNCTION>
+			<FUNCTION>BitMaskClear</FUNCTION>
+			<FUNCTION>BitMaskRead</FUNCTION>
+			<FUNCTION>BitMaskSet</FUNCTION>
+			<FUNCTION>BitNot</FUNCTION>
+			<FUNCTION>BitOr</FUNCTION>
+			<FUNCTION>BitSHLN</FUNCTION>
+			<FUNCTION>BitSHRN</FUNCTION>
+			<FUNCTION>BitXor</FUNCTION>
+			<FUNCTION>Ceiling</FUNCTION>
+			<FUNCTION>Cos</FUNCTION>
+			<FUNCTION>DecrementValue</FUNCTION>
+			<FUNCTION>Exp</FUNCTION>
+			<FUNCTION>Fix</FUNCTION>
+			<FUNCTION>IncrementValue</FUNCTION>
+			<FUNCTION>InputBaseN</FUNCTION>
+			<FUNCTION>Int</FUNCTION>
+			<FUNCTION>Log</FUNCTION>
+			<FUNCTION>Log10</FUNCTION>
+			<FUNCTION>Max</FUNCTION>
+			<FUNCTION>Min</FUNCTION>
+			<FUNCTION>Pi</FUNCTION>
+			<FUNCTION>Rand</FUNCTION>
+			<FUNCTION>Randomize</FUNCTION>
+			<FUNCTION>RandRange</FUNCTION>
+			<FUNCTION>Round</FUNCTION>
+			<FUNCTION>Sgn</FUNCTION>
+			<FUNCTION>Sin</FUNCTION>
+			<FUNCTION>Sqr</FUNCTION>
+			<FUNCTION>Tan</FUNCTION>
+
+			<!-- ColdFusion Strings -->
+			<FUNCTION>Asc</FUNCTION>
+			<FUNCTION>Chr</FUNCTION>
+			<FUNCTION>CJustify</FUNCTION>
+			<FUNCTION>Compare</FUNCTION>
+			<FUNCTION>CompareNoCase</FUNCTION>
+			<FUNCTION>Find</FUNCTION>
+			<FUNCTION>FindNoCase</FUNCTION>
+			<FUNCTION>FindOneOf</FUNCTION>
+			<FUNCTION>GetToken</FUNCTION>
+			<FUNCTION>Insert</FUNCTION>
+			<FUNCTION>LCase</FUNCTION>
+			<FUNCTION>Left</FUNCTION>
+			<FUNCTION>Len</FUNCTION>
+			<FUNCTION>LJustify</FUNCTION>
+			<FUNCTION>LTrim</FUNCTION>
+			<FUNCTION>Mid</FUNCTION>
+			<FUNCTION>REFind</FUNCTION>
+			<FUNCTION>REFindNoCase</FUNCTION>
+			<FUNCTION>RemoveChars</FUNCTION>
+			<FUNCTION>RepeatString</FUNCTION>
+			<FUNCTION>Replace</FUNCTION>
+			<FUNCTION>ReplaceList</FUNCTION>
+			<FUNCTION>ReplaceNoCase</FUNCTION>
+			<FUNCTION>REReplace</FUNCTION>
+			<FUNCTION>REReplaceNoCase</FUNCTION>
+			<FUNCTION>Reverse</FUNCTION>
+			<FUNCTION>Right</FUNCTION>
+			<FUNCTION>RJustify</FUNCTION>
+			<FUNCTION>RTrim</FUNCTION>
+			<FUNCTION>SpanExcluding</FUNCTION>
+			<FUNCTION>SpanIncluding</FUNCTION>
+			<FUNCTION>Trim</FUNCTION>
+			<FUNCTION>UCase</FUNCTION>
+			<FUNCTION>Val</FUNCTION>
+
+			<!-- ColdFusion Files -->
+			<FUNCTION>DirectoryExists</FUNCTION>
+			<FUNCTION>ExpandPath</FUNCTION>
+			<FUNCTION>FileExists</FUNCTION>
+			<FUNCTION>GetDirectoryFromPath</FUNCTION>
+			<FUNCTION>GetFileFromPath</FUNCTION>
+			<FUNCTION>GetTempDirectory</FUNCTION>
+			<FUNCTION>GetTempFile</FUNCTION>
+			<FUNCTION>GetTemplatePath</FUNCTION>
+
+			<!-- ColdFusion Queries -->
+			<FUNCTION>QueryAddRow</FUNCTION>
+			<FUNCTION>QueryNew</FUNCTION>
+			<FUNCTION>QuerySetCell</FUNCTION>
+
+			<!-- ColdFusion Utils -->
+			<FUNCTION>Decrypt</FUNCTION>
+			<FUNCTION>DeleteClientVariable</FUNCTION>
+			<FUNCTION>Encrypt</FUNCTION>
+			<FUNCTION>GetBaseTagData</FUNCTION>
+			<FUNCTION>GetBaseTagList</FUNCTION>
+			<FUNCTION>GetClientVariablesList</FUNCTION>
+			<FUNCTION>GetTickCount</FUNCTION>
+			<FUNCTION>PreserveSingleQuotes</FUNCTION>
+			<FUNCTION>QuotedValueList</FUNCTION>
+			<FUNCTION>StripCR</FUNCTION>
+			<FUNCTION>URLEncodedFormat</FUNCTION>
+			<FUNCTION>ValueList</FUNCTION>
+			<FUNCTION>WriteOutput</FUNCTION>
+
+			<FUNCTION>ParameterExists</FUNCTION>
+			
+			<!-- Scopes -->
+			<KEYWORD2>Variables</KEYWORD2>
+			<KEYWORD2>Arguments</KEYWORD2>
+			<KEYWORD2>Request</KEYWORD2>
+			<KEYWORD2>Session</KEYWORD2>
+			<KEYWORD2>Local</KEYWORD2>
+			<KEYWORD2>Form</KEYWORD2>
+			<KEYWORD2>CGI</KEYWORD2>
+			<KEYWORD2>URL</KEYWORD2>
+			<KEYWORD2>Attributes</KEYWORD2>
+			<KEYWORD2>Application</KEYWORD2>
+			<KEYWORD2>Cookie</KEYWORD2>
+			
+			
+			<!-- ColdFusion Operators -->
+			<OPERATOR>IS</OPERATOR>
+			<OPERATOR>EQ</OPERATOR>
+			<OPERATOR>NEQ</OPERATOR>
+			<OPERATOR>GT</OPERATOR>
+			<OPERATOR>GTE</OPERATOR>
+			<OPERATOR>LT</OPERATOR>
+			<OPERATOR>LTE</OPERATOR>
+	
+			<OPERATOR>LESS</OPERATOR>
+			<OPERATOR>GREATER</OPERATOR>
+			<OPERATOR>THAN</OPERATOR>
+			
+			<OPERATOR>AND</OPERATOR>
+			<OPERATOR>OR</OPERATOR>
+			<OPERATOR>NOT</OPERATOR>
+			<OPERATOR>XOR</OPERATOR>
+		</KEYWORDS>
+	</RULES>
+	
+	<RULES SET="CFDOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
+		<MARK_FOLLOWING TYPE="LITERAL3">@</MARK_FOLLOWING>
+		
+		<KEYWORDS>
+			<LITERAL1>@hint</LITERAL1>
+			<LITERAL1>@displayname</LITERAL1>
+			<LITERAL1>@output</LITERAL1>
+			<LITERAL1>@access</LITERAL1>
+			<LITERAL1>@accessors</LITERAL1>
+			<LITERAL1>@returntype</LITERAL1>
+			<LITERAL1>@roles</LITERAL1>
+			<LITERAL1>@default</LITERAL1>
+			<LITERAL1>@required</LITERAL1>
+			<LITERAL1>@extends</LITERAL1>
+			<LITERAL1>@implements</LITERAL1>
+			
+			<!-- entity related -->
+			<LITERAL2>@update</LITERAL2>
+			<LITERAL2>@insert</LITERAL2>
+			<LITERAL2>@formula</LITERAL2>
+			<LITERAL2>@dbdefault</LITERAL2>
+			<LITERAL2>@persistent</LITERAL2>
+			<LITERAL2>@optimisticlock</LITERAL2>
+			<LITERAL2>@unique</LITERAL2>
+			<LITERAL2>@uniquekey</LITERAL2>
+			<LITERAL2>@sqltype</LITERAL2>
+			<LITERAL2>@generator</LITERAL2>
+			<LITERAL2>@generated</LITERAL2>
+			<LITERAL2>@notnull</LITERAL2>
+			<LITERAL2>@length</LITERAL2>
+			<LITERAL2>@scale</LITERAL2>
+			<LITERAL2>@precision</LITERAL2>
+			<LITERAL2>@fieldtype</LITERAL2>
+			<LITERAL2>@ormtype</LITERAL2>
+			<LITERAL2>@column</LITERAL2>
+		</KEYWORDS>
+		
+		
+	</RULES>
+</MODE>
