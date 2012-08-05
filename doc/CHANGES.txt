@@ -50,6 +50,8 @@ Malathi and Eric Le Lay for contributing to this release.
 
 - Updated ColdFusion mode (#3518536 Darien Brown)
 
+- Updated Verilog mode (#3536967 Steve snarum-micron)
+
 }}}
 {{{ UI
 
