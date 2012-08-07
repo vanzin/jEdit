@@ -4,10 +4,12 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre2
 
-Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, and Alan Ezust for
-contributing to this release.
+Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power,
+and Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
+
+- Fix "Customize This Menu..." item in context menu options (#3554895 Tom Power)
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
 
@@ -264,7 +266,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 - Suppressed output to standard error of encoding problems on opening
   files, which affects also hypersearch encoding errors. These errors are
   now displayed in a dialog, but not sent to error output.
-  (request #3517116 Jarek Czekalski)  
+  (request #3517116 Jarek Czekalski)
 
 - Reserve space for 4 digit in memory's status bar widget.
   (patch #3518422 Makarius)
@@ -326,7 +328,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - RegisterViewer: close the floating window after inserting a clip, to make
   behaviour consistent with Paste Previous window (#3478916 Jarek Czekalski)
-  
+
 - Show a preview of the window rather than a low-resolution icon when minimizing
   on Mac OS X (#3529980 Evan Wright)
 
