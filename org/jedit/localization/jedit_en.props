@@ -2055,6 +2055,9 @@ log-viewer.message.message.label=Message
 log-viewer.message.notice.label=Notice
 log-viewer.message.warning.label=Warning
 log-viewer.message.error.label=Error
+# This one should be actually placed in Debugging options, but
+# we don't have such a pane yet
+debug.beepOnOutput.label=Beep on output
 #}}}
 
 logs-remove-all-errors.label=Remove all errors

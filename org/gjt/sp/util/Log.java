@@ -23,6 +23,7 @@
 package org.gjt.sp.util;
 
 //{{{ Imports
+import java.awt.Toolkit;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -186,6 +187,26 @@ public class Log
 		Log.stream = stream;
 	} //}}}
 
+	//{{{ get/setBeepOnOutput method
+	/**
+	 * @since jEdit 5.1pre1
+	 */
+	public static boolean getBeepOnOutput()
+	{
+		return beepOnOutput;
+	}
+
+	/**
+	 * When <code>beepOnOutput</code> is set, every output going to standard
+	 * error is signaled by a standard beep. This is intended for debugging
+	 * purposes, to allow for immediate problem detection.
+	 * @since jEdit 5.1pre1
+	 */
+	public static void setBeepOnOutput(boolean beepOnOutput)
+	{
+		Log.beepOnOutput = beepOnOutput;
+	} //}}}
+
 	//{{{ flushStream() method
 	/**
 	 * Flushes the log stream.
@@ -340,6 +361,10 @@ public class Log
 	private static final DateFormat timeFormat;
 	private static final int MAX_THROWABLES = 10;
 	public static final List<Throwable> throwables;
+	// initialized externally through setBeepOnOutput method
+	private static boolean beepOnOutput = false;
+	// to prevent too much beeping we remember last beep time
+	private static long lastBeepTime = 0;
 	//}}}
 
 	//{{{ Class initializer
@@ -421,6 +446,17 @@ public class Log
 				realErr.println(fullMessage);
 			else
 				realOut.println(fullMessage);
+
+			if (beepOnOutput)
+			{
+				long time = System.currentTimeMillis();
+				
+				if (time - lastBeepTime > 1000)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					lastBeepTime = System.currentTimeMillis();
+				}
+			}
 		}
 	} //}}}
 

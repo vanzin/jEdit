@@ -52,10 +52,20 @@
     automatically updated on disk when jEdit exits.</para>
 
     <para>
-    The "Settings" button in the Activity Log window shows a dialog that lets
+    The <guibutton>Settings</guibutton> button in the Activity Log window
+    shows a dialog that lets
     you adjust the output colors, filter the messages by type, and lets you set
     the maximum number of lines to display.  Note that larger numbers will 
     decrease the overall performance of jEdit since these lines are kept in
     memory.
+    </para>
+
+    <para>In the <guibutton>Settings</guibutton> pane there is also
+    a debugging option, <guibutton>Beep on output</guibutton>.
+    It allows for catching problems right after they show up.
+    Each error message entry is accompanied by a system beep.
+    Lower priority entries may be alerted this way, if the
+    <userinput>log</userinput> option is used, 
+    see <xref linkend="cli-usage" />.
     </para>
 </appendix>

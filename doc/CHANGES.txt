@@ -65,6 +65,9 @@ Malathi and Eric Le Lay for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Beep on output option in Activity log settings
+  (request #3551931 Jarek Czekalski)
+
 - New Plugin Manager option: Disable obsolete plugins (#2931321 Alan Ezust)
 
 }}}

@@ -483,6 +483,11 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 						GridBagConstraints.REMAINDER);
 
 					addComponent(Box.createVerticalStrut(11));
+					beep = new JCheckBox(jEdit.getProperty("debug.beepOnOutput.label"),
+						jEdit.getBooleanProperty("debug.beepOnOutput", false));
+					addComponent(beep);
+
+					addComponent(Box.createVerticalStrut(11));
 
 					JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 					JButton okButton = new JButton(jEdit.getProperty("common.ok"));
@@ -533,7 +538,14 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 					jEdit.setColorProperty("log-viewer.message.warning.color", warningColor.getSelectedColor());
 					jEdit.setColorProperty("log-viewer.message.error.color", errorColor.getSelectedColor());
 
+					jEdit.setBooleanProperty("debug.beepOnOutput", beep.isSelected());
+
 					setFilter();
+					// it would be most clean to call jEdit.propertiesChanged() now
+					// which is needed since global debug.beepOnOutput flag is attached to this pane;
+					// but to avoid extra log entries, we workaround it by direct Log access
+					Log.setBeepOnOutput(beep.isSelected());
+					// jEdit.propertiesChanged();
 				}
 			};
 			setContentPane(pane);
@@ -554,6 +566,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		private ColorWellButton noticeColor;
 		private ColorWellButton warningColor;
 		private ColorWellButton errorColor;
+		private JCheckBox beep;
 
 	} //}}}
 }

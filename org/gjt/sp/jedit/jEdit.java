@@ -1014,6 +1014,7 @@ public class jEdit
 		HistoryModel.setDefaultMaxSize(getIntegerProperty("historyMaxSize", 5000000));
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 		Chunk.propertiesChanged(propertyManager);
+		Log.setBeepOnOutput(jEdit.getBooleanProperty("debug.beepOnOutput"));
 
 		if (getBooleanProperty("systrayicon"))
 		{
