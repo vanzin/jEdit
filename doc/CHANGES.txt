@@ -4,12 +4,15 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre2
 
-Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power,
+Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power, Malathi, 
 and Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
 - Fix "Customize This Menu..." item in context menu options (#3554895 Tom Power)
+
+- Recognizing "Extra word characters" in "Whole word" option in
+  searches (bug #3522497, patch #3543524 Malathi)
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
 

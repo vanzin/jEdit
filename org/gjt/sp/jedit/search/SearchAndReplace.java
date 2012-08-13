@@ -1194,8 +1194,8 @@ loop:			while(path != null)
 		boolean smartCaseReplace)
 		throws Exception
 	{
-		String wordBreakChars = (String) buffer.getMode().getProperty("wordBreakChars");
-		matcher.setNoWordSep(wordBreakChars);
+		String noWordSep = buffer.getStringProperty("noWordSep");
+		matcher.setNoWordSep(noWordSep);
 		int occurCount = 0;
 
 		boolean endOfLine = (buffer.getLineEndOffset(
