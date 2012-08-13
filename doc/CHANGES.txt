@@ -13,7 +13,7 @@ Malathi and Eric Le Lay for contributing to this release.
   "All buffers" is selected. (bug #1646584, patch #3549905 Eric Le Lay)
 
 - Recognizing "Extra word characters" in "Whole word" option in
-  searches (bug #3522497, patch #3543524 Malathi)
+  searches (bug #3522497, patch #3543524 Malathi) [5.0pre2]
 
 - Fix high memory usage for large search&replace all operations.
   (Patch #3531515 by Thomas Meyer)
