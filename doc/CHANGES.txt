@@ -5,7 +5,7 @@ jEdit 5.1 version history
 {{{ Version 5.1pre1
 
 Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust,
-Malathi and Eric Le Lay for contributing to this release.
+Malathi, Vladimir Avdonin and Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
 
@@ -54,6 +54,8 @@ Malathi and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ UI
+
+- Added russian localization (patch #3544154 Vladimir Avdonin)
 
 - Added a possibility to suppress synchronization of the filter in search
   dialog, using a hidden setting in jedit.props: search.dontSyncFilter.

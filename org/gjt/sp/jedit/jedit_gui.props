@@ -577,7 +577,7 @@ about.text.contributors=Slava Pestov\n\
 	Bernhard Walle\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bj\u00F6rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -625,7 +625,7 @@ about.text.contributors=Slava Pestov\n\
 	Ian Maclean\n\
 	Igor Lesik\n\
 	Israel Olalla\n\
-	Jakub Roztočil\n\
+	Jakub Rozto\u010Dil\n\
 	Jamie LaScolea\n\
 	Jarek Czekalski\n\
 	Jason Ginchereau\n\
@@ -638,7 +638,7 @@ about.text.contributors=Slava Pestov\n\
 	Jim Morris\n\
 	Jim Wissner\n\
 	Jimmy Chaw\n\
-	Jörg Spieler\n\
+	J\u00F6rg Spieler\n\
 	John Gellene\n\
 	John Perry\n\
 	Jojaba\n\
@@ -687,7 +687,7 @@ about.text.contributors=Slava Pestov\n\
 	Mike Dillon\n\
 	Mike Gorski\n\
 	Mike Hansen\n\
-	Milan Černil\n\
+	Milan \u010Cernil\n\
 	Mirco Bova\n\
 	Nahuel Foronda\n\
 	Neil Bertram\n\
@@ -750,11 +750,12 @@ about.text.contributors=Slava Pestov\n\
 	Trevor Harmon\n\
 	Vicente Salvador\n\
 	Vinod Kiran\n\
+	Vladimir Avdonin\n\
 	Will Sargent\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-Töpfer
+	Wolfgang Chico-T\u00F6pfer
 #}}}
 
 #{{{ Search and replace dialog
@@ -808,11 +809,12 @@ options.appearance.code=new AppearanceOptionPane();
 # here (not in localized .props) to catch eyes of non-English users more
 # friendly.
 options.appearance.lang.en=English
-options.appearance.lang.fr=Français
+options.appearance.lang.fr=Fran\u00E7ais
 options.appearance.lang.de=Deutsch
 #Japanese
-options.appearance.lang.ja=日本語
-options.appearance.lang.cs=Česky
+options.appearance.lang.ja=\u65E5\u672C\u8A9E
+options.appearance.lang.cs=\u010Cesky
+options.appearance.lang.ru=\u0420\u0443\u0441\u0441\u043A\u0438\u0439
 #}}}
 
 #{{{ Context Menu pane
