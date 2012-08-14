@@ -683,8 +683,16 @@ public class PluginJAR
   				listModel.add(jarPath);
   				PluginJAR jar = jEdit.getPluginJAR(
   					jarPath);
-  				transitiveClosure(jar.getDependentPlugins(),
-  					listModel);
+				if (jar == null)
+				{
+					Log.log(Log.WARNING, PluginJAR.class, "The jar file " + jarPath +
+						" doesn't exist, the plugin may have been partially removed");
+				}
+				else
+				{
+					transitiveClosure(jar.getDependentPlugins(),
+									  listModel);
+				}
   			}
   		}
   	} //}}}
