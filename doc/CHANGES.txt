@@ -9,6 +9,9 @@ Malathi, Vladimir Avdonin and Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed shellscript do escape single quote with backslash
+  (#3557453 Matthieu Casanova)
+
 - Fix a case where a NPE occurs when removing a plugin
   (#3557441 Matthieu Casanova)
 
