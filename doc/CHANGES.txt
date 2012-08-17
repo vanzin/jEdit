@@ -9,6 +9,9 @@ Malathi, Vladimir Avdonin and Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
 
+- Added a right click popup menu with a copy action in the Error dialog
+  (#3557023 Matthieu Casanova)
+
 - Fixed shellscript do escape single quote with backslash
   (#3557453 Matthieu Casanova)
 

@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -210,6 +212,21 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			printStream = new PrintStream(byteArrayOutputStream);
 			throwables = Log.throwables.toArray();
 			textArea = new JEditEmbeddedTextArea();
+
+			JPopupMenu menu = new JPopupMenu();
+			JMenuItem copy = new JMenuItem(jEdit.getProperty("copy.label").replace("$",""));
+			copy.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					Registers.copy(textArea, '$');
+				}
+			});
+			menu.add(copy);
+			textArea.setRightClickPopup(menu);
+			textArea.setRightClickPopupEnabled(true);
+
 			textArea.getBuffer().setMode(jEdit.getMode("logs"));
 			if (throwables.length != 0)
 			{
