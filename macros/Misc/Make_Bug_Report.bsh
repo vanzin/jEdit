@@ -101,6 +101,7 @@ makeBugReport()
 	report.append(lastError.toString());
 	newBuffer = jEdit.newFile(view);
 	newBuffer.insert(0, report.toString());
+	newBuffer.setMode(jEdit.getMode("logs"));
 }
 
 makeBugReport();
