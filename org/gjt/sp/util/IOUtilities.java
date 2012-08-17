@@ -283,6 +283,48 @@ public class IOUtilities
 				//ignore
 			}
 		}
+	}
+
+	/**
+	 * Method that will close an {@link ObjectInput} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param in the closeable to close.
+	 * @since jEdit 5.1pre1
+	 */
+	public void closeQuietly(ObjectInput in)
+	{
+		if (in != null)
+		{
+			try
+			{
+				in.close();
+			}
+			catch (IOException e)
+			{
+				// ignore
+			}
+		}
+	}
+
+	/**
+	 * Method that will close an {@link ObjectOutput} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param out the closeable to close.
+	 * @since jEdit 5.1pre1
+	 */
+	public void closeQuietly(ObjectOutput out)
+	{
+		if (out != null)
+		{
+			try
+			{
+				out.close();
+			}
+			catch (IOException e)
+			{
+				// ignore
+			}
+		}
 	} //}}}
 
 	//{{{ IOUtilities() constructor
