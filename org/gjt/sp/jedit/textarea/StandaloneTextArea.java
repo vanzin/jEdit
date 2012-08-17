@@ -527,28 +527,6 @@ public class StandaloneTextArea extends TextArea
 		buffer.propertiesChanged();
 	} // }}}
 
-	//{{{ addMenuItem() method
-	/**
-	 * Adds a menu item from the action context to the popup menu and returns the item.
-	 * @return the menu item added
-	 */
-	public JMenuItem addMenuItem(String action, String label)
-	{
-		final JEditBeanShellAction shellAction = getActionContext().getAction(action);
-		if (shellAction == null)
-			return null ;
-		JMenuItem item = new JMenuItem();
-		item.setAction(new AbstractAction(label)
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				shellAction.invoke(StandaloneTextArea.this);
-			}
-		});
-		popup.add(item);
-		return item;
-	} //}}}
-
 	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
