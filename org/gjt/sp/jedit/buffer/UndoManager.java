@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.textarea.Selection;
 //}}}
 
 /**
@@ -66,24 +67,24 @@ public class UndoManager
 	} //}}}
 
 	//{{{ undo() method
-	public int undo()
+	public Selection[] undo()
 	{
 		if(insideCompoundEdit())
 			throw new InternalError("Unbalanced begin/endCompoundEdit()");
 
 		if(undosLast == null)
-			return -1;
+			return null;
 		else
 		{
 			reviseUndoId();
 			undoCount--;
 
-			int caret = undosLast.undo(this);
+			Selection s[] = undosLast.undo(this);
 			redosFirst = undosLast;
 			undosLast = undosLast.prev;
 			if(undosLast == null)
 				undosFirst = null;
-			return caret;
+			return s;
 		}
 	} //}}}
 
@@ -94,24 +95,24 @@ public class UndoManager
 	} //}}}
 
 	//{{{ redo() method
-	public int redo()
+	public Selection[] redo()
 	{
 		if(insideCompoundEdit())
 			throw new InternalError("Unbalanced begin/endCompoundEdit()");
 
 		if(redosFirst == null)
-			return -1;
+			return null;
 		else
 		{
 			reviseUndoId();
 			undoCount++;
 
-			int caret = redosFirst.redo(this);
+			Selection[] s = redosFirst.redo(this);
 			undosLast = redosFirst;
 			if(undosFirst == null)
 				undosFirst = undosLast;
 			redosFirst = redosFirst.next;
-			return caret;
+			return s;
 		}
 	} //}}}
 
@@ -415,11 +416,31 @@ public class UndoManager
 		Edit prev, next;
 
 		//{{{ undo() method
-		abstract int undo(UndoManager mgr);
+		/**
+		 * Returns the selection that should be active after performing
+		 * the operation. If no selection should be active, a 0 length
+		 * selection should be returned, pointing the caret location
+		 * to set after the operation.
+		 * <p>Implementation note: undo manager does not receive the actual
+		 * selection, when it records the operations. That's because
+		 * the operations are recorded by <code>Buffer</code>
+		 * class, and this class has no selections,
+		 * which are kept by <code>TextArea</code> class instances.
+		 * So the <code>Selection[]</code>s returned are simply guessed,
+		 * contain the inserted text.
+		 */
+		abstract Selection[] undo(UndoManager mgr);
 		//}}}
 
 		//{{{ redo() method
-		abstract int redo(UndoManager mgr);
+		/**
+		 * @return See {@link #undo}.
+		 * <p>Implementation note: redo always returns caret location only,
+		 * because the actual selection is unknown and we guess it from
+		 * the remove/insert operations. Usually after an action
+		 * the selection becomes empty, so such is the guess.</p>
+		 */
+		abstract Selection[] redo(UndoManager mgr);
 		//}}}
 	} //}}}
 
@@ -434,21 +455,24 @@ public class UndoManager
 		} //}}}
 
 		//{{{ undo() method
-		int undo(UndoManager mgr)
+		@Override
+		Selection[] undo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,str.length());
 			if(mgr.undoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset;
+			return new Selection[] { new Selection.Range(offset, offset) };
 		} //}}}
 
 		//{{{ redo() method
-		int redo(UndoManager mgr)
+		@Override
+		Selection[] redo(UndoManager mgr)
 		{
 			mgr.buffer.insert(offset,str);
 			if(mgr.redoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset + str.length();
+			int caret = offset + str.length();
+			return new Selection[] { new Selection.Range(caret, caret) };
 		} //}}}
 
 		int offset;
@@ -466,21 +490,25 @@ public class UndoManager
 		} //}}}
 
 		//{{{ undo() method
-		int undo(UndoManager mgr)
+		@Override
+		Selection[] undo(UndoManager mgr)
 		{
 			mgr.buffer.insert(offset,str);
 			if(mgr.undoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset + str.length();
+			return new Selection[] {
+				new Selection.Range(offset, offset + str.length())
+			};
 		} //}}}
 
 		//{{{ redo() method
-		int redo(UndoManager mgr)
+		@Override
+		Selection[] redo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,str.length());
 			if(mgr.redoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset;
+			return new Selection[] { new Selection.Range(offset, offset) };
 		} //}}}
 
 		int offset;
@@ -499,22 +527,27 @@ public class UndoManager
 		} //}}}
 
 		//{{{ undo() method
-		int undo(UndoManager mgr)
+		@Override
+		Selection[] undo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,strInsert.length());
 			mgr.buffer.insert(offset,strRemove);
 			assert mgr.undoClearDirty != this;
-			return offset + strRemove.length();
+			return new Selection[] {
+				new Selection.Range(offset, offset + strRemove.length())
+			};
 		} //}}}
 
 		//{{{ redo() method
-		int redo(UndoManager mgr)
+		@Override
+		Selection[] redo(UndoManager mgr)
 		{
 			mgr.buffer.remove(offset,strRemove.length());
 			mgr.buffer.insert(offset,strInsert);
 			if(mgr.redoClearDirty == this)
 				mgr.buffer.setDirty(false);
-			return offset + strInsert.length();
+			int caret = offset + strInsert.length();
+			return new Selection[] { new Selection.Range(caret, caret) };
 		} //}}}
 
 		int offset;
@@ -544,27 +577,29 @@ public class UndoManager
 		} //}}}
 
 		//{{{ undo() method
-		int undo(UndoManager mgr)
+		@Override
+		Selection[] undo(UndoManager mgr)
 		{
-			int caret = -1;
+			Selection[] s = null;
 			for(int i = offsets.getSize() - 1; i >= 0; i--)
 			{
 				offset = offsets.get(i);
-				caret = super.undo(mgr);
+				s = super.undo(mgr);
 			}
-			return caret;
+			return s;
 		} //}}}
 
 		//{{{ redo() method
-		int redo(UndoManager mgr)
+		@Override
+		Selection[] redo(UndoManager mgr)
 		{
-			int caret = -1;
+			Selection[] s = null;
 			for(int i = 0; i < offsets.getSize(); i++)
 			{
 				offset = offsets.get(i);
-				caret = super.redo(mgr);
+				s = super.redo(mgr);
 			}
-			return caret;
+			return s;
 		} //}}}
 
 		IntegerArray offsets;
@@ -574,9 +609,10 @@ public class UndoManager
 	private static class CompoundEdit extends Edit
 	{
 		//{{{ undo() method
-		public int undo(UndoManager mgr)
+		@Override
+		public Selection[] undo(UndoManager mgr)
 		{
-			int retVal = -1;
+			Selection[] retVal = null;
 			Edit edit = last;
 			while(edit != null)
 			{
@@ -587,9 +623,10 @@ public class UndoManager
 		} //}}}
 
 		//{{{ redo() method
-		public int redo(UndoManager mgr)
+		@Override
+		public Selection[] redo(UndoManager mgr)
 		{
-			int retVal = -1;
+			Selection[] retVal = null;
 			Edit edit = first;
 			while(edit != null)
 			{

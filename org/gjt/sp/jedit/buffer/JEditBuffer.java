@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.ColumnBlock;
 import org.gjt.sp.jedit.textarea.ColumnBlockLine;
 import org.gjt.sp.jedit.textarea.Node;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
@@ -2106,12 +2107,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			undoInProgress = true;
 			fireBeginUndo();
-			int caret = undoMgr.undo();
-			if(caret == -1)
+			Selection[] s = undoMgr.undo();
+			if(s == null || s.length == 0)
 				textArea.getToolkit().beep();
 			else
-				textArea.setCaretPosition(caret);
-
+			{
+				textArea.setCaretPosition(s[s.length - 1].getEnd());
+				textArea.setSelection(s);
+			}
 			fireEndUndo();
 			fireTransactionComplete();
 		}
@@ -2146,11 +2149,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			undoInProgress = true;
 			fireBeginRedo();
-			int caret = undoMgr.redo();
-			if(caret == -1)
+			Selection[] s = undoMgr.redo();
+			if(s == null || s.length == 0)
 				textArea.getToolkit().beep();
 			else
-				textArea.setCaretPosition(caret);
+			{
+				textArea.setCaretPosition(s[s.length - 1].getEnd());
+				textArea.setSelection(s);
+			}
 
 			fireEndRedo();
 			fireTransactionComplete();
