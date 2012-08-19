@@ -11,6 +11,9 @@ and Alan Ezust for contributing to this release.
 
 - Fix "Customize This Menu..." item in context menu options (#3554895 Tom Power)
 
+- Fix a case where a NPE occurs when removing a plugin
+  (#3557441 Matthieu Casanova)
+
 - Recognizing "Extra word characters" in "Whole word" option in
   searches (bug #3522497, patch #3543524 Malathi)
 
