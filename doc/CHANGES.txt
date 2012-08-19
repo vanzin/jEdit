@@ -21,7 +21,7 @@ for contributing to this release.
   (#3557453 Matthieu Casanova)
 
 - Fix a case where a NPE occurs when removing a plugin
-  (#3557441 Matthieu Casanova)
+  (#3557441 Matthieu Casanova) [5.0pre2]
 
 - Filter not synchronizing in search dialog when
   "All buffers" is selected. (bug #1646584, patch #3549905 Eric Le Lay)
