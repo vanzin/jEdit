@@ -97,7 +97,7 @@ global-close-buffer.label=Fermer (général)
 global-close-buffer.tooltip=Fermer le tampon dans tous les panneaux d'édition et fenêtres
 closeall-except-active.tooltip=Effacer le jeu de tampons dans le panneau d'édition courant à l'exception du(des) tampon(s) affichés
 closeall-except-active.label=Fermer les au$tres
-closeall-bufferset.label=Tou&t fermer
+closeall-bufferset.label=Tou$t fermer
 closeall-bufferset.tooltip=Fermer le jeu de tampons dans le panneau d'édition
 bufferset-toggle-exclusive.label=Basculer vers les jeux de tampons exclusifs
 bufferset-toggle-exclusive.tooltip=Lorsqu'un tampon est ouvert, le fermer dans d'autres jeux de tampons non inclus.
@@ -372,7 +372,7 @@ io-progress-monitor.label=Progression $I/O
 task-monitor.label=Gestionnaire des $tâches
 keyboard-tester.label=$Tester un raccourci clavier...
 memory-status.label=Utilisation de la $mémoire...
-reload-modes.label=$Recharger l'éditeur de modes
+reload-modes.label=$Recharger les mode de coloration syntaxique
 #}}}
 
 #{{{ Quick options menu
