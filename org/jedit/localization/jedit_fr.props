@@ -372,7 +372,7 @@ io-progress-monitor.label=Progression $I/O
 task-monitor.label=Gestionnaire des $tâches
 keyboard-tester.label=$Tester un raccourci clavier...
 memory-status.label=Utilisation de la $mémoire...
-reload-modes.label=$Recharger les mode de coloration syntaxique
+reload-modes.label=$Recharger les modes de coloration syntaxique
 #}}}
 
 #{{{ Quick options menu
