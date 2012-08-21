@@ -214,7 +214,7 @@ plugin.QuickNotepadPlugin.author=John Gellene
 plugin.QuickNotepadPlugin.usePluginHome=true
 plugin.QuickNotepadPlugin.version=4.5
 plugin.QuickNotepadPlugin.docs=index.html
-
+# see jEdit.getBuild() to understand jEdit's version convention:
 plugin.QuickNotepadPlugin.depend.0=jedit 04.05.99.00
 plugin.QuickNotepadPlugin.depend.1=jdk 1.6
 plugin.QuickNotepadPlugin.description=This plugin provides a dockable "scratch pad" for writing and displaying notes, to do lists or similar items as unformatted text.

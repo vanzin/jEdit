@@ -38,7 +38,8 @@ import org.gjt.sp.util.Log;
 /**
  * Inter-process communication.<p>
  *
- * The edit server protocol is very simple. <code>$HOME/.jedit/server</code>
+ * The edit server protocol is very simple.
+ * <code><i>jEditSettingsDir</i>/server</code>
  * is an ASCII file containing two lines, the first being the port number,
  * the second being the authorization key.<p>
  *
