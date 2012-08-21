@@ -2487,11 +2487,10 @@ public class jEdit
 			View newView = new View(buffer,config);
 			addViewToList(newView);
 
-			newView.pack();
-			newView.adjust(view, config);
-
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
+			newView.pack();
+			newView.adjust(view, config);
 			newView.setVisible(true);
 
 			if(!config.plainView)
