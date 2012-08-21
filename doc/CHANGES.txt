@@ -5,8 +5,8 @@ jEdit 5.1 version history
 {{{ Version 5.1pre1
 
 Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust,
-Malathi, Vladimir Avdonin, Eric Le Lay and Maik Nijhuis
-for contributing to this release.
+Malathi, Vladimir Avdonin, Eric Le Lay, Darien Brown, Steve snarum-micron,
+and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
