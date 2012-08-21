@@ -75,6 +75,8 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
+- Avoid trouble with horizontal scrolling (Patch #3134788, EdorFaus)
+
 - Enable ContextMenu via keyboard to VFS-BrowserView (#3560239, Thomas Meyer)
 
 - Added russian localization (patch #3544154 Vladimir Avdonin)

@@ -50,6 +50,13 @@ public class MouseHandler extends TextAreaMouseHandler
 	{
 		showCursor();
 
+		if (evt.getButton() == MouseEvent.NOBUTTON)
+		{
+			// Suppress presses with no button, to avoid
+			// problems due to horizontal scrolling.
+			return;
+		}
+
 		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
 			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
@@ -134,6 +141,13 @@ public class MouseHandler extends TextAreaMouseHandler
 	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
+		if (evt.getButton() == MouseEvent.NOBUTTON)
+		{
+			// Suppress releases with no button, to avoid
+			// problems due to horizontal scrolling.
+			return;
+		}
+
 		// middle mouse button drag inserts selection
 		// at caret position
 		Selection sel = textArea.getSelectionAtOffset(dragStart);
