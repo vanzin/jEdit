@@ -70,6 +70,7 @@ class BrowserView extends JPanel
 
 		table = new VFSDirectoryEntryTable(this);
 		table.addMouseListener(new TableMouseHandler());
+		table.addKeyListener(new TableKeyListener());
 		table.setName("file");
 		JScrollPane tableScroller = new JScrollPane(table);
 		tableScroller.setMinimumSize(new Dimension(0,0));
@@ -511,6 +512,48 @@ class BrowserView extends JPanel
 					}
 				}
 			}
+		}
+	} //}}}
+
+	//{{{ TableKeyListener class
+	private class TableKeyListener implements KeyListener
+	{
+
+		@Override
+		public void keyTyped(KeyEvent e)
+		{
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e)
+		{
+			switch(e.getKeyCode())
+			{
+				case KeyEvent.VK_CONTEXT_MENU :
+					if(popup != null && popup.isVisible())
+					{
+						popup.setVisible(false);
+						popup = null;
+						return;
+					}
+
+					int row = table.getSelectedRow();
+					Point pos = new Point(0, row * table.getRowHeight());
+					if(row == -1)
+						showFilePopup(null,table,pos);
+					else
+					{
+						if(!table.getSelectionModel().isSelectedIndex(row))
+							table.getSelectionModel().setSelectionInterval(row,row);
+						showFilePopup(getSelectedFiles(),table,pos);
+					}
+					break;
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
 		}
 	} //}}}
 
