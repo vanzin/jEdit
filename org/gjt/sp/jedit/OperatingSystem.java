@@ -302,36 +302,33 @@ public class OperatingSystem
 	//{{{ Class initializer
 	static
 	{
-		if(System.getProperty("mrj.version") != null)
+		String osName = System.getProperty("os.name");
+		if(osName.contains("Windows 9")
+			|| osName.contains("Windows M"))
+		{
+			os = WINDOWS_9x;
+		}
+		else if(osName.contains("Windows"))
+		{
+			os = WINDOWS_NT;
+		}
+		else if(osName.contains("VMS"))
+		{
+			os = VMS;
+		}
+		else if(osName.contains("OS X"))
 		{
 			os = MAC_OS_X;
 		}
+		else if(File.separatorChar == '/')
+		{
+			os = UNIX;
+		}
 		else
 		{
-			String osName = System.getProperty("os.name");
-			if(osName.contains("Windows 9")
-				|| osName.contains("Windows M"))
-			{
-				os = WINDOWS_9x;
-			}
-			else if(osName.contains("Windows"))
-			{
-				os = WINDOWS_NT;
-			}
-			else if(osName.contains("VMS"))
-			{
-				os = VMS;
-			}
-			else if(File.separatorChar == '/')
-			{
-				os = UNIX;
-			}
-			else
-			{
-				os = UNKNOWN;
-				Log.log(Log.WARNING,OperatingSystem.class,
-					"Unknown operating system: " + osName);
-			}
+			os = UNKNOWN;
+			Log.log(Log.WARNING,OperatingSystem.class,
+				"Unknown operating system: " + osName);
 		}
 
 		// for debugging, make jEdit think its using a different
