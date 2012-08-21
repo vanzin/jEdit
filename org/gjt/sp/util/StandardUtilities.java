@@ -735,14 +735,19 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Returns the md5sum for given string. Or dummy byte array on error
 	 * Suppress NoSuchAlgorithmException because MD5 algorithm always present in JRE
-	 * @param s Given string
+	 * @param charSequence Given string
 	 * @return md5 sum of given string
 	 */
-	public static byte[] md5(String s) {
+	public static byte[] md5(CharSequence charSequence) {
 		final byte[] dummy = new byte[1];
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
-			digest.update(s.getBytes());
+			for(int i = 0, n = charSequence.length(); i < n; i++)
+			{
+				char cp = charSequence.charAt(i);
+				byte ba[] = { (byte)(cp & 0xff), (byte)(cp >> 8 & 0xff) };
+				digest.update(ba);
+			}
 			return digest.digest();
 		} catch (NoSuchAlgorithmException e) {
 			Log.log(Log.ERROR, StandardUtilities.class, "Can't Calculate MD5 hash!", e);

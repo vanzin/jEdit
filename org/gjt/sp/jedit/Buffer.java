@@ -2034,7 +2034,7 @@ public class Buffer extends JEditBuffer
 		final byte[] dummy = new byte[1];
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 			return dummy;
-		return StandardUtilities.md5(getText());
+		return StandardUtilities.md5(getSegment(0, getLength()));
 	}
 
 	/** Update the buffer's members with the current hash and length,

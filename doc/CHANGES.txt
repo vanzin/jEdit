@@ -10,6 +10,8 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix memory usage of Buffer.calculateHash() (patch# 3560429, Thomas Meyer)
+
 - Undo restores selection state in simple cases (deletions, replaces
   on simple range selections). (patch #1570553 Maik Nijhuis, Thomas Meyer,
   Jarek Czekalski)
