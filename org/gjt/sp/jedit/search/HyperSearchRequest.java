@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.tree.*;
 import javax.swing.*;
 
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.Buffer;
@@ -138,7 +139,13 @@ class HyperSearchRequest extends Task
 
 					Buffer buffer = jEdit.openTemporary(null,null,file,false);
 					if(buffer != null)
+					{
+						// Wait for the buffer to load
+						if(!buffer.isLoaded())
+							VFSManager.waitForRequests();
+
 						resultCount += doHyperSearch(buffer, 0, buffer.getLength());
+					}
 				}
 				Log.log(Log.MESSAGE, this, resultCount +" OCCURENCES");
 			}
