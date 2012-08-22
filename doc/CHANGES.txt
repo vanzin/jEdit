@@ -10,17 +10,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
-- Fix memory usage of Buffer.calculateHash() (patch# 3560429, Thomas Meyer)
-
 - Undo restores selection state in simple cases (deletions, replaces
   on simple range selections). (patch #1570553 Maik Nijhuis, Thomas Meyer,
   Jarek Czekalski)
-
-- Added a right click popup menu with a copy action in the Error dialog
-  (#3557023 Matthieu Casanova)
-
-- Fixed shellscript do escape single quote with backslash
-  (#3557453 Matthieu Casanova)
 
 - Fix a case where a NPE occurs when removing a plugin
   (#3557441 Matthieu Casanova) [5.0pre2]
@@ -31,18 +23,8 @@ and Maik Nijhuis for contributing to this release.
 - Recognizing "Extra word characters" in "Whole word" option in
   searches (bug #3522497, patch #3543524 Malathi) [5.0pre2]
 
-- Fix high memory usage for large search&replace all operations.
-  (Patch #3531515 by Thomas Meyer)
-
 - Fix pressing return in parent files of the VFS browser that do not browse 
   the selected folder as it should (patch #3543499 by Eric Le Lay) [5.0pre2]
-
-- Fixed unreasonable quadratic operations which could be observable on
-  big search&replace-all. (Patch #3533838 by Thomas Meyer)
-
-- Avoided unreasonable memory consumption by duplicate String instances
-  that could be allocated for each occurrence in a big
-  search&replace-all. (Patch #3528619 by Thomas Meyer)
 
 - Fixed VFS session not ended in VFS.copy() api (#3522406 Matthieu Casanova)
 
@@ -68,12 +50,18 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Editing
 
+- Fixed shellscript do escape single quote with backslash
+  (#3557453 Matthieu Casanova)
+
 - Updated ColdFusion mode (#3518536 Darien Brown)
 
 - Updated Verilog mode (#3536967 Steve snarum-micron)
 
 }}}
 {{{ UI
+
+- Added a right click popup menu with a copy action in the Error dialog
+  (#3557023 Matthieu Casanova)
 
 - Avoid trouble with horizontal scrolling (Patch #3134788, EdorFaus)
 
@@ -90,6 +78,18 @@ and Maik Nijhuis for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Fixed unreasonable quadratic operations which could be observable on
+  big search&replace-all. (Patch #3533838 by Thomas Meyer)
+
+- Avoided unreasonable memory consumption by duplicate String instances
+  that could be allocated for each occurrence in a big
+  search&replace-all. (Patch #3528619 by Thomas Meyer)
+
+- Fix high memory usage for large search&replace all operations.
+  (Patch #3531515 by Thomas Meyer)
+
+- Fix memory usage of Buffer.calculateHash() (patch# 3560429, Thomas Meyer)
 
 - Make_Bug_Report macro now use logs edit mode to have a little coloring
   in the result (Matthieu Casanova)
