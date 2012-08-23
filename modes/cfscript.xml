@@ -130,12 +130,26 @@
 			
 			<KEYWORD1>property</KEYWORD1>
 			
-			<!-- ColdFusion Arrays -->
+			<!-- All functions -->
+			<FUNCTION>ACos</FUNCTION>
+			<FUNCTION>ASin</FUNCTION>
+			<FUNCTION>Abort</FUNCTION>
+			<FUNCTION>Abs</FUNCTION>
+			<FUNCTION>AddSOAPRequestHeader</FUNCTION>
+			<FUNCTION>AddSOAPResponseHeader</FUNCTION>
+			<FUNCTION>AjaxLink</FUNCTION>
+			<FUNCTION>AjaxOnLoad</FUNCTION>
+			<FUNCTION>ApplicationStop</FUNCTION>
 			<FUNCTION>ArrayAppend</FUNCTION>
 			<FUNCTION>ArrayAvg</FUNCTION>
 			<FUNCTION>ArrayClear</FUNCTION>
+			<FUNCTION>ArrayContains</FUNCTION>
+			<FUNCTION>ArrayDelete</FUNCTION>
 			<FUNCTION>ArrayDeleteAt</FUNCTION>
+			<FUNCTION>ArrayFind</FUNCTION>
+			<FUNCTION>ArrayFindNoCase</FUNCTION>
 			<FUNCTION>ArrayInsertAt</FUNCTION>
+			<FUNCTION>ArrayIsDefined</FUNCTION>
 			<FUNCTION>ArrayIsEmpty</FUNCTION>
 			<FUNCTION>ArrayLen</FUNCTION>
 			<FUNCTION>ArrayMax</FUNCTION>
@@ -148,20 +162,51 @@
 			<FUNCTION>ArraySum</FUNCTION>
 			<FUNCTION>ArraySwap</FUNCTION>
 			<FUNCTION>ArrayToList</FUNCTION>
-			<FUNCTION>IsArray</FUNCTION>
-			<FUNCTION>ListToArray</FUNCTION>
-			
-			<!-- ColdFusion Dates -->
+			<FUNCTION>Asc</FUNCTION>
+			<FUNCTION>Atn</FUNCTION>
+			<FUNCTION>BinaryDecode</FUNCTION>
+			<FUNCTION>BinaryEncode</FUNCTION>
+			<FUNCTION>BitAnd</FUNCTION>
+			<FUNCTION>BitMaskClear</FUNCTION>
+			<FUNCTION>BitMaskRead</FUNCTION>
+			<FUNCTION>BitMaskSet</FUNCTION>
+			<FUNCTION>BitNot</FUNCTION>
+			<FUNCTION>BitOr</FUNCTION>
+			<FUNCTION>BitSHLN</FUNCTION>
+			<FUNCTION>BitSHRN</FUNCTION>
+			<FUNCTION>BitXor</FUNCTION>
+			<FUNCTION>CJustify</FUNCTION>
+			<FUNCTION>CacheGet</FUNCTION>
+			<FUNCTION>CacheGetAllIds</FUNCTION>
+			<FUNCTION>CacheGetMetadata</FUNCTION>
+			<FUNCTION>CacheGetProperties</FUNCTION>
+			<FUNCTION>CacheGetSession</FUNCTION>
+			<FUNCTION>CachePut</FUNCTION>
+			<FUNCTION>CacheRemove</FUNCTION>
+			<FUNCTION>CacheSetProperties</FUNCTION>
+			<!--FUNCTION>Catch</FUNCTION-->
+			<FUNCTION>Ceiling</FUNCTION>
+			<FUNCTION>CharsetDecode</FUNCTION>
+			<FUNCTION>CharsetEncode</FUNCTION>
+			<FUNCTION>Chr</FUNCTION>
+			<FUNCTION>Compare</FUNCTION>
+			<FUNCTION>CompareNoCase</FUNCTION>
+			<FUNCTION>Cos</FUNCTION>
 			<FUNCTION>CreateDate</FUNCTION>
 			<FUNCTION>CreateDateTime</FUNCTION>
-			<FUNCTION>CreateODBCTime</FUNCTION>
 			<FUNCTION>CreateODBCDate</FUNCTION>
 			<FUNCTION>CreateODBCDateTime</FUNCTION>
+			<FUNCTION>CreateODBCTime</FUNCTION>
+			<FUNCTION>CreateObject</FUNCTION>
 			<FUNCTION>CreateTime</FUNCTION>
 			<FUNCTION>CreateTimeSpan</FUNCTION>
+			<FUNCTION>CreateUUID</FUNCTION>
+			<FUNCTION>DE</FUNCTION>
 			<FUNCTION>DateAdd</FUNCTION>
 			<FUNCTION>DateCompare</FUNCTION>
+			<FUNCTION>DateConvert</FUNCTION>
 			<FUNCTION>DateDiff</FUNCTION>
+			<FUNCTION>DateFormat</FUNCTION>
 			<FUNCTION>DatePart</FUNCTION>
 			<FUNCTION>Day</FUNCTION>
 			<FUNCTION>DayOfWeek</FUNCTION>
@@ -169,52 +214,213 @@
 			<FUNCTION>DayOfYear</FUNCTION>
 			<FUNCTION>DaysInMonth</FUNCTION>
 			<FUNCTION>DaysInYear</FUNCTION>
+			<FUNCTION>DecimalFormat</FUNCTION>
+			<FUNCTION>DecrementValue</FUNCTION>
+			<FUNCTION>Decrypt</FUNCTION>
+			<FUNCTION>DecryptBinary</FUNCTION>
+			<FUNCTION>DeleteClientVariable</FUNCTION>
+			<FUNCTION>DeserializeJSON</FUNCTION>
+			<FUNCTION>DirectoryCreate</FUNCTION>
+			<FUNCTION>DirectoryDelete</FUNCTION>
+			<FUNCTION>DirectoryExists</FUNCTION>
+			<FUNCTION>DirectoryList</FUNCTION>
+			<FUNCTION>DirectoryRename</FUNCTION>
+			<FUNCTION>DollarFormat</FUNCTION>
+			<FUNCTION>DotNetToCFType</FUNCTION>
+			<FUNCTION>Duplicate</FUNCTION>
+			<FUNCTION>Encrypt</FUNCTION>
+			<FUNCTION>EncryptBinary</FUNCTION>
+			<FUNCTION>EntityDelete</FUNCTION>
+			<FUNCTION>EntityLoad</FUNCTION>
+			<FUNCTION>EntityLoadByExample</FUNCTION>
+			<FUNCTION>EntityLoadByPK</FUNCTION>
+			<FUNCTION>EntityMerge</FUNCTION>
+			<FUNCTION>EntityNew</FUNCTION>
+			<FUNCTION>EntityReload</FUNCTION>
+			<FUNCTION>EntitySave</FUNCTION>
+			<FUNCTION>EntitytoQuery</FUNCTION>
+			<FUNCTION>Evaluate</FUNCTION>
+			<FUNCTION>Exp</FUNCTION>
+			<FUNCTION>ExpandPath</FUNCTION>
+			<FUNCTION>FileClose</FUNCTION>
+			<FUNCTION>FileCopy</FUNCTION>
+			<FUNCTION>FileDelete</FUNCTION>
+			<FUNCTION>FileExists</FUNCTION>
+			<FUNCTION>FileIsEOF</FUNCTION>
+			<FUNCTION>FileMove</FUNCTION>
+			<FUNCTION>FileOpen</FUNCTION>
+			<FUNCTION>FileRead</FUNCTION>
+			<FUNCTION>FileReadBinary</FUNCTION>
+			<FUNCTION>FileReadLine</FUNCTION>
+			<FUNCTION>FileSeek</FUNCTION>
+			<FUNCTION>FileSetAccessMode</FUNCTION>
+			<FUNCTION>FileSetAttribute</FUNCTION>
+			<FUNCTION>FileSetLastModified</FUNCTION>
+			<FUNCTION>FileSkipBytes</FUNCTION>
+			<FUNCTION>FileUpload</FUNCTION>
+			<FUNCTION>FileUploadAll</FUNCTION>
+			<FUNCTION>FileWrite</FUNCTION>
+			<FUNCTION>Find</FUNCTION>
+			<FUNCTION>FindNoCase</FUNCTION>
+			<FUNCTION>FindOneOf</FUNCTION>
 			<FUNCTION>FirstDayOfMonth</FUNCTION>
+			<FUNCTION>Fix</FUNCTION>
+			<FUNCTION>FormatBaseN</FUNCTION>
+			<FUNCTION>GenerateSecretKey</FUNCTION>
+			<FUNCTION>GetAuthUser</FUNCTION>
+			<FUNCTION>GetBaseTagData</FUNCTION>
+			<FUNCTION>GetBaseTagList</FUNCTION>
+			<FUNCTION>GetBaseTemplatePath</FUNCTION>
+			<FUNCTION>GetClientVariablesList</FUNCTION>
+			<FUNCTION>GetComponentMetaData</FUNCTION>
+			<FUNCTION>GetContextRoot</FUNCTION>
+			<FUNCTION>GetCurrentTemplatePath</FUNCTION>
+			<FUNCTION>GetDirectoryFromPath</FUNCTION>
+			<FUNCTION>GetEncoding</FUNCTION>
+			<FUNCTION>GetException</FUNCTION>
+			<FUNCTION>GetFileFromPath</FUNCTION>
+			<FUNCTION>GetFileInfo</FUNCTION>
+			<FUNCTION>GetFunctionCalledName</FUNCTION>
+			<FUNCTION>GetFunctionList</FUNCTION>
+			<FUNCTION>GetGatewayHelper</FUNCTION>
+			<FUNCTION>GetHttpRequestData</FUNCTION>
+			<FUNCTION>GetHttpTimeString</FUNCTION>
+			<FUNCTION>GetLocalHostIP</FUNCTION>
+			<FUNCTION>GetLocale</FUNCTION>
+			<FUNCTION>GetLocaleDisplayName</FUNCTION>
+			<FUNCTION>GetMetaData</FUNCTION>
+			<FUNCTION>GetMetricData</FUNCTION>
+			<FUNCTION>GetPageContext</FUNCTION>
+			<FUNCTION>GetPrinterInfo</FUNCTION>
+			<FUNCTION>GetProfileSections</FUNCTION>
+			<FUNCTION>GetProfileString</FUNCTION>
+			<FUNCTION>GetReadableImageFormats</FUNCTION>
+			<FUNCTION>GetSOAPRequest</FUNCTION>
+			<FUNCTION>GetSOAPRequestHeader</FUNCTION>
+			<FUNCTION>GetSOAPResponse</FUNCTION>
+			<FUNCTION>GetSOAPResponseHeader</FUNCTION>
+			<FUNCTION>GetTempDirectory</FUNCTION>
+			<FUNCTION>GetTempFile</FUNCTION>
+			<FUNCTION>GetTemplatePath</FUNCTION>
+			<FUNCTION>GetTickCount</FUNCTION>
+			<FUNCTION>GetTimeZoneInfo</FUNCTION>
+			<FUNCTION>GetToken</FUNCTION>
+			<FUNCTION>GetUserRoles</FUNCTION>
+			<FUNCTION>GetWriteableImageFormats</FUNCTION>
+			<FUNCTION>HTMLCodeFormat</FUNCTION>
+			<FUNCTION>HTMLEditFormat</FUNCTION>
+			<FUNCTION>Hash</FUNCTION>
 			<FUNCTION>Hour</FUNCTION>
-			<FUNCTION>Minute</FUNCTION>
-			<FUNCTION>Month</FUNCTION>
-			<FUNCTION>MonthAsString</FUNCTION>
-			<FUNCTION>Now</FUNCTION>
-			<FUNCTION>ParseDateTime</FUNCTION>
-			<FUNCTION>Quarter</FUNCTION>
-			<FUNCTION>Second</FUNCTION>
-			<FUNCTION>Week</FUNCTION>
-			<FUNCTION>Year</FUNCTION>
-			
-			<!-- ColdFusion Type Checks -->
+			<FUNCTION>IIf</FUNCTION>
+			<FUNCTION>ImageAddBorder</FUNCTION>
+			<FUNCTION>ImageBlur</FUNCTION>
+			<FUNCTION>ImageClearRect</FUNCTION>
+			<FUNCTION>ImageCopy</FUNCTION>
+			<FUNCTION>ImageCrop</FUNCTION>
+			<FUNCTION>ImageDrawArc</FUNCTION>
+			<FUNCTION>ImageDrawBeveledRect</FUNCTION>
+			<FUNCTION>ImageDrawCubicCurve</FUNCTION>
+			<FUNCTION>ImageDrawLine</FUNCTION>
+			<FUNCTION>ImageDrawLines</FUNCTION>
+			<FUNCTION>ImageDrawOval</FUNCTION>
+			<FUNCTION>ImageDrawPoint</FUNCTION>
+			<FUNCTION>ImageDrawQuadraticCurve</FUNCTION>
+			<FUNCTION>ImageDrawRect</FUNCTION>
+			<FUNCTION>ImageDrawRoundRect</FUNCTION>
+			<FUNCTION>ImageDrawText</FUNCTION>
+			<FUNCTION>ImageFlip</FUNCTION>
+			<FUNCTION>ImageGetBlob</FUNCTION>
+			<FUNCTION>ImageGetBufferedImage</FUNCTION>
+			<FUNCTION>ImageGetEXIFTag</FUNCTION>
+			<FUNCTION>ImageGetHeight</FUNCTION>
+			<FUNCTION>ImageGetIPTCTag</FUNCTION>
+			<FUNCTION>ImageGetWidth</FUNCTION>
+			<FUNCTION>ImageGrayscale</FUNCTION>
+			<FUNCTION>ImageInfo</FUNCTION>
+			<FUNCTION>ImageNegative</FUNCTION>
+			<FUNCTION>ImageNew</FUNCTION>
+			<FUNCTION>ImageOverlay</FUNCTION>
+			<FUNCTION>ImagePaste</FUNCTION>
+			<FUNCTION>ImageRead</FUNCTION>
+			<FUNCTION>ImageReadBase64</FUNCTION>
+			<FUNCTION>ImageResize</FUNCTION>
+			<FUNCTION>ImageRotate</FUNCTION>
+			<FUNCTION>ImageRotateDrawingAxis</FUNCTION>
+			<FUNCTION>ImageScaleToFit</FUNCTION>
+			<FUNCTION>ImageSetAntialiasing</FUNCTION>
+			<FUNCTION>ImageSetBackgroundColor</FUNCTION>
+			<FUNCTION>ImageSetDrawingColor</FUNCTION>
+			<FUNCTION>ImageSetDrawingStroke</FUNCTION>
+			<FUNCTION>ImageSetDrawingTransparency</FUNCTION>
+			<FUNCTION>ImageSharpen</FUNCTION>
+			<FUNCTION>ImageShear</FUNCTION>
+			<FUNCTION>ImageShearDrawingAxis</FUNCTION>
+			<FUNCTION>ImageTranslate</FUNCTION>
+			<FUNCTION>ImageTranslateDrawingAxis</FUNCTION>
+			<FUNCTION>ImageWrite</FUNCTION>
+			<FUNCTION>ImageWriteBase64</FUNCTION>
+			<FUNCTION>ImageXORDrawingMode</FUNCTION>
+			<FUNCTION>IncrementValue</FUNCTION>
+			<FUNCTION>InputBaseN</FUNCTION>
+			<FUNCTION>Insert</FUNCTION>
+			<FUNCTION>Int</FUNCTION>
 			<FUNCTION>IsArray</FUNCTION>
-			<FUNCTION>IsAuthenticated</FUNCTION>
-			<FUNCTION>IsAuthorized</FUNCTION>
+			<FUNCTION>IsBinary</FUNCTION>
 			<FUNCTION>IsBoolean</FUNCTION>
+			<FUNCTION>IsCustomFunction</FUNCTION>
+			<FUNCTION>IsDDX</FUNCTION>
 			<FUNCTION>IsDate</FUNCTION>
 			<FUNCTION>IsDebugMode</FUNCTION>
 			<FUNCTION>IsDefined</FUNCTION>
+			<FUNCTION>IsImage</FUNCTION>
+			<FUNCTION>IsImageFile</FUNCTION>
+			<FUNCTION>IsInstanceOf</FUNCTION>
+			<FUNCTION>IsJSON</FUNCTION>
+			<FUNCTION>IsK2ServerABroker</FUNCTION>
+			<FUNCTION>IsK2ServerDocCountExceeded</FUNCTION>
+			<FUNCTION>IsK2ServerOnline</FUNCTION>
 			<FUNCTION>IsLeapYear</FUNCTION>
+			<FUNCTION>IsLocalHost</FUNCTION>
+			<FUNCTION>IsNull</FUNCTION>
 			<FUNCTION>IsNumeric</FUNCTION>
 			<FUNCTION>IsNumericDate</FUNCTION>
+			<FUNCTION>IsObject</FUNCTION>
+			<FUNCTION>IsPDFFile</FUNCTION>
+			<FUNCTION>IsPDFObject</FUNCTION>
 			<FUNCTION>IsQuery</FUNCTION>
+			<FUNCTION>IsSOAPRequest</FUNCTION>
 			<FUNCTION>IsSimpleValue</FUNCTION>
 			<FUNCTION>IsStruct</FUNCTION>
-
-			<!-- ColdFusion Formats -->
-			<FUNCTION>DateFormat</FUNCTION>
-			<FUNCTION>DecimalFormat</FUNCTION>
-			<FUNCTION>DollarFormat</FUNCTION>
-			<FUNCTION>FormatBaseN</FUNCTION>
-			<FUNCTION>HTMLCodeFormat</FUNCTION>
-			<FUNCTION>HTMLEditFormat</FUNCTION>
-			<FUNCTION>NumberFormat</FUNCTION>
-			<FUNCTION>ParagraphFormat</FUNCTION>
-			<FUNCTION>TimeFormat</FUNCTION>
-			<FUNCTION>YesNoFormat</FUNCTION>
-
-			<FUNCTION>DE</FUNCTION>
-			<FUNCTION>Evaluate</FUNCTION>
-			<FUNCTION>IIf</FUNCTION>
-			<FUNCTION>SetVariable</FUNCTION>
-
-			<!-- ColdFusion Lists -->
-			<FUNCTION>ArrayToList</FUNCTION>
+			<FUNCTION>IsUserInAnyRole</FUNCTION>
+			<FUNCTION>IsUserInRole</FUNCTION>
+			<FUNCTION>IsUserLoggedIn</FUNCTION>
+			<FUNCTION>IsValid</FUNCTION>
+			<FUNCTION>IsWDDX</FUNCTION>
+			<FUNCTION>IsXML</FUNCTION>
+			<FUNCTION>IsXmlAttribute</FUNCTION>
+			<FUNCTION>IsXmlDoc</FUNCTION>
+			<FUNCTION>IsXmlElem</FUNCTION>
+			<FUNCTION>IsXmlNode</FUNCTION>
+			<FUNCTION>IsXmlRoot</FUNCTION>
+			<FUNCTION>JSStringFormat</FUNCTION>
+			<FUNCTION>JavaCast</FUNCTION>
+			<FUNCTION>LCase</FUNCTION>
+			<FUNCTION>LJustify</FUNCTION>
+			<FUNCTION>LSCurrencyFormat</FUNCTION>
+			<FUNCTION>LSDateFormat</FUNCTION>
+			<FUNCTION>LSEuroCurrencyFormat</FUNCTION>
+			<FUNCTION>LSIsCurrency</FUNCTION>
+			<FUNCTION>LSIsDate</FUNCTION>
+			<FUNCTION>LSIsNumeric</FUNCTION>
+			<FUNCTION>LSNumberFormat</FUNCTION>
+			<FUNCTION>LSParseCurrency</FUNCTION>
+			<FUNCTION>LSParseDateTime</FUNCTION>
+			<FUNCTION>LSParseEuroCurrency</FUNCTION>
+			<FUNCTION>LSParseNumber</FUNCTION>
+			<FUNCTION>LSTimeFormat</FUNCTION>
+			<FUNCTION>LTrim</FUNCTION>
+			<FUNCTION>Left</FUNCTION>
+			<FUNCTION>Len</FUNCTION>
 			<FUNCTION>ListAppend</FUNCTION>
 			<FUNCTION>ListChangeDelims</FUNCTION>
 			<FUNCTION>ListContains</FUNCTION>
@@ -228,137 +434,174 @@
 			<FUNCTION>ListLast</FUNCTION>
 			<FUNCTION>ListLen</FUNCTION>
 			<FUNCTION>ListPrepend</FUNCTION>
+			<FUNCTION>ListQualify</FUNCTION>
 			<FUNCTION>ListRest</FUNCTION>
 			<FUNCTION>ListSetAt</FUNCTION>
+			<FUNCTION>ListSort</FUNCTION>
 			<FUNCTION>ListToArray</FUNCTION>
-
-			<!-- ColdFusion Structs -->
-			<FUNCTION>StructClear</FUNCTION>
-			<FUNCTION>StructCopy</FUNCTION>
-			<FUNCTION>StructCount</FUNCTION>
-			<FUNCTION>StructDelete</FUNCTION>
-			<FUNCTION>StructFind</FUNCTION>
-			<FUNCTION>StructInsert</FUNCTION>
-			<FUNCTION>StructIsEmpty</FUNCTION>
-			<FUNCTION>StructKeyExists</FUNCTION>
-			<FUNCTION>StructNew</FUNCTION>
-			<FUNCTION>StructUpdate</FUNCTION>
-
-			<!-- ColdFusion Locale -->
-			<FUNCTION>GetLocale</FUNCTION>
-			<FUNCTION>LSCurrencyFormat</FUNCTION>
-			<FUNCTION>LSDateFormat</FUNCTION>
-			<FUNCTION>LSIsCurrency</FUNCTION>
-			<FUNCTION>LSIsDate</FUNCTION>
-			<FUNCTION>LSIsNumeric</FUNCTION>
-			<FUNCTION>LSNumberFormat</FUNCTION>
-			<FUNCTION>LSParseCurrency</FUNCTION>
-			<FUNCTION>LSParseDateTime</FUNCTION>
-			<FUNCTION>LSParseNumber</FUNCTION>
-			<FUNCTION>LSTimeFormat</FUNCTION>
-			<FUNCTION>SetLocale</FUNCTION>
-
-			<!-- ColdFusion Maths -->
-			<FUNCTION>Abs</FUNCTION>
-			<FUNCTION>Atn</FUNCTION>
-			<FUNCTION>BitAnd</FUNCTION>
-			<FUNCTION>BitMaskClear</FUNCTION>
-			<FUNCTION>BitMaskRead</FUNCTION>
-			<FUNCTION>BitMaskSet</FUNCTION>
-			<FUNCTION>BitNot</FUNCTION>
-			<FUNCTION>BitOr</FUNCTION>
-			<FUNCTION>BitSHLN</FUNCTION>
-			<FUNCTION>BitSHRN</FUNCTION>
-			<FUNCTION>BitXor</FUNCTION>
-			<FUNCTION>Ceiling</FUNCTION>
-			<FUNCTION>Cos</FUNCTION>
-			<FUNCTION>DecrementValue</FUNCTION>
-			<FUNCTION>Exp</FUNCTION>
-			<FUNCTION>Fix</FUNCTION>
-			<FUNCTION>IncrementValue</FUNCTION>
-			<FUNCTION>InputBaseN</FUNCTION>
-			<FUNCTION>Int</FUNCTION>
+			<FUNCTION>ListValueCount</FUNCTION>
+			<FUNCTION>ListValueCountNoCase</FUNCTION>
+			<FUNCTION>Location</FUNCTION>
 			<FUNCTION>Log</FUNCTION>
 			<FUNCTION>Log10</FUNCTION>
 			<FUNCTION>Max</FUNCTION>
-			<FUNCTION>Min</FUNCTION>
-			<FUNCTION>Pi</FUNCTION>
-			<FUNCTION>Rand</FUNCTION>
-			<FUNCTION>Randomize</FUNCTION>
-			<FUNCTION>RandRange</FUNCTION>
-			<FUNCTION>Round</FUNCTION>
-			<FUNCTION>Sgn</FUNCTION>
-			<FUNCTION>Sin</FUNCTION>
-			<FUNCTION>Sqr</FUNCTION>
-			<FUNCTION>Tan</FUNCTION>
-
-			<!-- ColdFusion Strings -->
-			<FUNCTION>Asc</FUNCTION>
-			<FUNCTION>Chr</FUNCTION>
-			<FUNCTION>CJustify</FUNCTION>
-			<FUNCTION>Compare</FUNCTION>
-			<FUNCTION>CompareNoCase</FUNCTION>
-			<FUNCTION>Find</FUNCTION>
-			<FUNCTION>FindNoCase</FUNCTION>
-			<FUNCTION>FindOneOf</FUNCTION>
-			<FUNCTION>GetToken</FUNCTION>
-			<FUNCTION>Insert</FUNCTION>
-			<FUNCTION>LCase</FUNCTION>
-			<FUNCTION>Left</FUNCTION>
-			<FUNCTION>Len</FUNCTION>
-			<FUNCTION>LJustify</FUNCTION>
-			<FUNCTION>LTrim</FUNCTION>
 			<FUNCTION>Mid</FUNCTION>
+			<FUNCTION>Min</FUNCTION>
+			<FUNCTION>Minute</FUNCTION>
+			<FUNCTION>Month</FUNCTION>
+			<FUNCTION>MonthAsString</FUNCTION>
+			<FUNCTION>Now</FUNCTION>
+			<FUNCTION>NumberFormat</FUNCTION>
+			<FUNCTION>ORMClearSession</FUNCTION>
+			<FUNCTION>ORMCloseSession</FUNCTION>
+			<FUNCTION>ORMEvictCollection</FUNCTION>
+			<FUNCTION>ORMEvictEntity</FUNCTION>
+			<FUNCTION>ORMEvictQueries</FUNCTION>
+			<FUNCTION>ORMExecuteQuery</FUNCTION>
+			<FUNCTION>ORMFlush</FUNCTION>
+			<FUNCTION>ORMGetSession</FUNCTION>
+			<FUNCTION>ORMGetSessionFactory</FUNCTION>
+			<FUNCTION>ORMReload</FUNCTION>
+			<FUNCTION>ObjectEquals</FUNCTION>
+			<FUNCTION>ObjectLoad</FUNCTION>
+			<FUNCTION>ObjectSave</FUNCTION>
+			<FUNCTION>ParagraphFormat</FUNCTION>
+			<FUNCTION>ParseDateTime</FUNCTION>
+			<FUNCTION>Pi</FUNCTION>
+			<FUNCTION>PrecisionEvaluate</FUNCTION>
+			<FUNCTION>PreserveSingleQuotes</FUNCTION>
+			<FUNCTION>Quarter</FUNCTION>
+			<FUNCTION>QueryAddColumn</FUNCTION>
+			<FUNCTION>QueryAddRow</FUNCTION>
+			<FUNCTION>QueryConvertForGrid</FUNCTION>
+			<FUNCTION>QueryNew</FUNCTION>
+			<FUNCTION>QuerySetCell</FUNCTION>
+			<FUNCTION>QuotedValueList</FUNCTION>
 			<FUNCTION>REFind</FUNCTION>
 			<FUNCTION>REFindNoCase</FUNCTION>
+			<FUNCTION>REMatch</FUNCTION>
+			<FUNCTION>REMatchNoCase</FUNCTION>
+			<FUNCTION>REReplace</FUNCTION>
+			<FUNCTION>REReplaceNoCase</FUNCTION>
+			<FUNCTION>RJustify</FUNCTION>
+			<FUNCTION>RTrim</FUNCTION>
+			<FUNCTION>Rand</FUNCTION>
+			<FUNCTION>RandRange</FUNCTION>
+			<FUNCTION>Randomize</FUNCTION>
+			<FUNCTION>ReleaseComObject</FUNCTION>
 			<FUNCTION>RemoveChars</FUNCTION>
 			<FUNCTION>RepeatString</FUNCTION>
 			<FUNCTION>Replace</FUNCTION>
 			<FUNCTION>ReplaceList</FUNCTION>
 			<FUNCTION>ReplaceNoCase</FUNCTION>
-			<FUNCTION>REReplace</FUNCTION>
-			<FUNCTION>REReplaceNoCase</FUNCTION>
 			<FUNCTION>Reverse</FUNCTION>
 			<FUNCTION>Right</FUNCTION>
-			<FUNCTION>RJustify</FUNCTION>
-			<FUNCTION>RTrim</FUNCTION>
+			<FUNCTION>Round</FUNCTION>
+			<FUNCTION>Second</FUNCTION>
+			<FUNCTION>SendGatewayMessage</FUNCTION>
+			<FUNCTION>SerializeJSON</FUNCTION>
+			<FUNCTION>SetLocale</FUNCTION>
+			<FUNCTION>SetProfileString</FUNCTION>
+			<FUNCTION>SetVariable</FUNCTION>
+			<FUNCTION>Sgn</FUNCTION>
+			<FUNCTION>Sin</FUNCTION>
+			<FUNCTION>Sleep</FUNCTION>
 			<FUNCTION>SpanExcluding</FUNCTION>
 			<FUNCTION>SpanIncluding</FUNCTION>
+			<FUNCTION>SpreadsheetAddColumn</FUNCTION>
+			<FUNCTION>SpreadsheetAddFreezePane</FUNCTION>
+			<FUNCTION>SpreadsheetAddImage</FUNCTION>
+			<FUNCTION>SpreadsheetAddInfo</FUNCTION>
+			<FUNCTION>SpreadsheetAddRow</FUNCTION>
+			<FUNCTION>SpreadsheetAddRows</FUNCTION>
+			<FUNCTION>SpreadsheetAddSplitPane</FUNCTION>
+			<FUNCTION>SpreadsheetCreateSheet</FUNCTION>
+			<FUNCTION>SpreadsheetDeleteColumn</FUNCTION>
+			<FUNCTION>SpreadsheetDeleteColumns</FUNCTION>
+			<FUNCTION>SpreadsheetDeleteRow</FUNCTION>
+			<FUNCTION>SpreadsheetDeleteRows</FUNCTION>
+			<FUNCTION>SpreadsheetFormatCell</FUNCTION>
+			<FUNCTION>SpreadsheetFormatCellRange</FUNCTION>
+			<FUNCTION>SpreadsheetFormatColumn</FUNCTION>
+			<FUNCTION>SpreadsheetFormatColumns</FUNCTION>
+			<FUNCTION>SpreadsheetFormatRow</FUNCTION>
+			<FUNCTION>SpreadsheetFormatRows</FUNCTION>
+			<FUNCTION>SpreadsheetGetCellComment</FUNCTION>
+			<FUNCTION>SpreadsheetGetCellFormula</FUNCTION>
+			<FUNCTION>SpreadsheetGetCellValue</FUNCTION>
+			<FUNCTION>SpreadsheetInfo</FUNCTION>
+			<FUNCTION>SpreadsheetMergeCells</FUNCTION>
+			<FUNCTION>SpreadsheetNew</FUNCTION>
+			<FUNCTION>SpreadsheetRead</FUNCTION>
+			<FUNCTION>SpreadsheetReadBinary</FUNCTION>
+			<FUNCTION>SpreadsheetRemoveSheet</FUNCTION>
+			<FUNCTION>SpreadsheetSetActiveSheet</FUNCTION>
+			<FUNCTION>SpreadsheetSetActiveSheetNumber</FUNCTION>
+			<FUNCTION>SpreadsheetSetCellComment</FUNCTION>
+			<FUNCTION>SpreadsheetSetCellFormula</FUNCTION>
+			<FUNCTION>SpreadsheetSetCellValue</FUNCTION>
+			<FUNCTION>SpreadsheetSetColumnWidth</FUNCTION>
+			<FUNCTION>SpreadsheetSetFooter</FUNCTION>
+			<FUNCTION>SpreadsheetSetHeader</FUNCTION>
+			<FUNCTION>SpreadsheetSetRowHeight</FUNCTION>
+			<FUNCTION>SpreadsheetShiftColumns</FUNCTION>
+			<FUNCTION>SpreadsheetShiftRows</FUNCTION>
+			<FUNCTION>SpreadsheetWrite</FUNCTION>
+			<FUNCTION>Sqr</FUNCTION>
+			<FUNCTION>StripCR</FUNCTION>
+			<FUNCTION>StructAppend</FUNCTION>
+			<FUNCTION>StructClear</FUNCTION>
+			<FUNCTION>StructCopy</FUNCTION>
+			<FUNCTION>StructCount</FUNCTION>
+			<FUNCTION>StructDelete</FUNCTION>
+			<FUNCTION>StructFind</FUNCTION>
+			<FUNCTION>StructFindKey</FUNCTION>
+			<FUNCTION>StructFindValue</FUNCTION>
+			<FUNCTION>StructGet</FUNCTION>
+			<FUNCTION>StructInsert</FUNCTION>
+			<FUNCTION>StructIsEmpty</FUNCTION>
+			<FUNCTION>StructKeyArray</FUNCTION>
+			<FUNCTION>StructKeyExists</FUNCTION>
+			<FUNCTION>StructKeyList</FUNCTION>
+			<FUNCTION>StructNew</FUNCTION>
+			<FUNCTION>StructSort</FUNCTION>
+			<FUNCTION>StructUpdate</FUNCTION>
+			<FUNCTION>Tan</FUNCTION>
+			<!---FUNCTION>Throw</FUNCTION-->
+			<FUNCTION>TimeFormat</FUNCTION>
+			<FUNCTION>ToBase64</FUNCTION>
+			<FUNCTION>ToBinary</FUNCTION>
+			<FUNCTION>ToScript</FUNCTION>
+			<FUNCTION>ToString</FUNCTION>
+			<FUNCTION>Trace</FUNCTION>
+			<!--FUNCTION>Try</FUNCTION-->
+			<FUNCTION>TransactionCommit</FUNCTION>
+			<FUNCTION>TransactionRollback</FUNCTION>
+			<FUNCTION>TransactionSetSavePoint</FUNCTION>
 			<FUNCTION>Trim</FUNCTION>
 			<FUNCTION>UCase</FUNCTION>
-			<FUNCTION>Val</FUNCTION>
-
-			<!-- ColdFusion Files -->
-			<FUNCTION>DirectoryExists</FUNCTION>
-			<FUNCTION>ExpandPath</FUNCTION>
-			<FUNCTION>FileExists</FUNCTION>
-			<FUNCTION>GetDirectoryFromPath</FUNCTION>
-			<FUNCTION>GetFileFromPath</FUNCTION>
-			<FUNCTION>GetTempDirectory</FUNCTION>
-			<FUNCTION>GetTempFile</FUNCTION>
-			<FUNCTION>GetTemplatePath</FUNCTION>
-
-			<!-- ColdFusion Queries -->
-			<FUNCTION>QueryAddRow</FUNCTION>
-			<FUNCTION>QueryNew</FUNCTION>
-			<FUNCTION>QuerySetCell</FUNCTION>
-
-			<!-- ColdFusion Utils -->
-			<FUNCTION>Decrypt</FUNCTION>
-			<FUNCTION>DeleteClientVariable</FUNCTION>
-			<FUNCTION>Encrypt</FUNCTION>
-			<FUNCTION>GetBaseTagData</FUNCTION>
-			<FUNCTION>GetBaseTagList</FUNCTION>
-			<FUNCTION>GetClientVariablesList</FUNCTION>
-			<FUNCTION>GetTickCount</FUNCTION>
-			<FUNCTION>PreserveSingleQuotes</FUNCTION>
-			<FUNCTION>QuotedValueList</FUNCTION>
-			<FUNCTION>StripCR</FUNCTION>
+			<FUNCTION>URLDecode</FUNCTION>
 			<FUNCTION>URLEncodedFormat</FUNCTION>
+			<FUNCTION>URLSessionFormat</FUNCTION>
+			<FUNCTION>Val</FUNCTION>
 			<FUNCTION>ValueList</FUNCTION>
+			<FUNCTION>VerifyClient</FUNCTION>
+			<FUNCTION>Week</FUNCTION>
+			<FUNCTION>Wrap</FUNCTION>
+			<FUNCTION>WriteDump</FUNCTION>
+			<FUNCTION>WriteLog</FUNCTION>
 			<FUNCTION>WriteOutput</FUNCTION>
-
-			<FUNCTION>ParameterExists</FUNCTION>
+			<FUNCTION>XmlChildPos</FUNCTION>
+			<FUNCTION>XmlElemNew</FUNCTION>
+			<FUNCTION>XmlFormat</FUNCTION>
+			<FUNCTION>XmlGetNodeType</FUNCTION>
+			<FUNCTION>XmlNew</FUNCTION>
+			<FUNCTION>XmlParse</FUNCTION>
+			<FUNCTION>XmlSearch</FUNCTION>
+			<FUNCTION>XmlTransform</FUNCTION>
+			<FUNCTION>XmlValidate</FUNCTION>
+			<FUNCTION>Year</FUNCTION>
+			<FUNCTION>YesNoFormat</FUNCTION>
 			
 			<!-- Scopes -->
 			<KEYWORD2>Variables</KEYWORD2>

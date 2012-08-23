@@ -55,7 +55,7 @@ and Maik Nijhuis for contributing to this release.
 - Fixed shellscript do escape single quote with backslash
   (#3557453 Matthieu Casanova)
 
-- Updated ColdFusion mode (#3518536 Darien Brown)
+- Updated ColdFusion mode (#3518536, #3561048 Darien Brown)
 
 - Updated Verilog mode (#3536967 Steve snarum-micron)
 
