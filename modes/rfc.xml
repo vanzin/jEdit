@@ -13,6 +13,7 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
+		<SEQ_REGEXP TYPE="MARKUP" AT_LINE_START="TRUE">\d.*</SEQ_REGEXP>
 		<KEYWORDS>
 			<!--{{{ Keyword list from RFC2119 -->
 			<KEYWORD1>MUST</KEYWORD1>

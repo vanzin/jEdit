@@ -50,6 +50,8 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Editing
 
+- Added highlight of chapter title in rfc edit mode (Matthieu Casanova)
+
 - Fixed shellscript do escape single quote with backslash
   (#3557453 Matthieu Casanova)
 
