@@ -29,7 +29,6 @@ import javax.swing.*;
 
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -516,20 +515,14 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ TableKeyListener class
-	private class TableKeyListener implements KeyListener
+	private class TableKeyListener extends KeyAdapter
 	{
-
-		@Override
-		public void keyTyped(KeyEvent e)
-		{
-		}
-
 		@Override
 		public void keyPressed(KeyEvent e)
 		{
 			switch(e.getKeyCode())
 			{
-				case KeyEvent.VK_CONTEXT_MENU :
+				case KeyEvent.VK_CONTEXT_MENU:
 					if(popup != null && popup.isVisible())
 					{
 						popup.setVisible(false);
@@ -549,11 +542,6 @@ class BrowserView extends JPanel
 					}
 					break;
 			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e)
-		{
 		}
 	} //}}}
 
