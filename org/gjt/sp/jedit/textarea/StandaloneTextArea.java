@@ -27,15 +27,12 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.swing.AbstractAction;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.WindowConstants;
 
 import org.gjt.sp.jedit.IPropertyManager;
@@ -61,7 +58,6 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
-
 //}}}
 
 /** jEdit's standalone text component.
