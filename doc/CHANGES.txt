@@ -21,10 +21,10 @@ and Maik Nijhuis for contributing to this release.
   (#3557441 Matthieu Casanova) [5.0pre2]
 
 - Filter not synchronizing in search dialog when
-  "All buffers" is selected. (bug #1646584, patch #3549905 Eric Le Lay)
+  "All buffers" is selected. (#1646584, patch #3549905 Eric Le Lay)
 
 - Recognizing "Extra word characters" in "Whole word" option in
-  searches (bug #3522497, patch #3543524 Malathi) [5.0pre2]
+  searches (#3522497, patch #3543524 Malathi) [5.0pre2]
 
 - Fix pressing return in parent files of the VFS browser that do not browse 
   the selected folder as it should (patch #3543499 by Eric Le Lay) [5.0pre2]
