@@ -10,6 +10,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- The .jedit/modes/catalog is now written using UTF-8 instead of default
+  OS encoding (#3560800 Matthieu Casanova)
+
 - Undo restores selection state in simple cases (deletions, replaces
   on simple range selections). (patch #1570553 Maik Nijhuis, Thomas Meyer,
   Jarek Czekalski)

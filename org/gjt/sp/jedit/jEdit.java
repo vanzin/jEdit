@@ -1395,10 +1395,11 @@ public class jEdit
 			if(!userCatalog.exists())
 			{
 				// create dummy catalog
-				FileWriter out = null;
+				BufferedWriter out = null;
 				try
 				{
-					out = new FileWriter(userCatalog);
+
+					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(userCatalog), "UTF-8"));
 					out.write(jEdit.getProperty("defaultCatalog"));
 				}
 				catch(IOException io)
