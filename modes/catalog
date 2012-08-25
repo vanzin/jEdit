@@ -392,7 +392,8 @@
 				FILE_NAME_GLOB="*.{pas,dpr,dpk}" />
 
 <MODE NAME="patch"		FILE="patch.xml"
-				FILE_NAME_GLOB="*.{diff,patch}" />
+				FILE_NAME_GLOB="*.{diff,patch}"
+				FIRST_LINE_GLOB="{# HG changeset patch,diff --git *}" />
 
 <MODE NAME="perl"		FILE="perl.xml"
 				FILE_NAME_GLOB="*.p{[lmh],od}"
