@@ -185,6 +185,11 @@ public class EditPane extends JPanel implements BufferSetListener
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
 				.BUFFER_CHANGED));
+
+			int check = jEdit.getIntegerProperty("checkFileStatus");
+			if ((check > 0) && (check < 4)) {
+				jEdit.checkBufferStatus(view, true);				
+			}
 		}
 
 		if (requestFocus)

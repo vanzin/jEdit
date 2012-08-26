@@ -10,6 +10,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- File status checking after buffer switch doesn't always work
+  (#1871440 - Alan Ezust)
+
 - The .jedit/modes/catalog is now written using UTF-8 instead of default
   OS encoding (#3560800 Matthieu Casanova)
 
