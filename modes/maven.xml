@@ -364,9 +364,6 @@
     </RULES>
 	<!-- }}} -->
 
-    <RULES SET="BACK_TO_XML" DEFAULT="MARKUP">
-        <SEQ TYPE="MARKUP" DELEGATE="maven::TAGS">&gt;</SEQ>
-    </RULES>
 </MODE>
 
  	  	 
