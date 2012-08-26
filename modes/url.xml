@@ -32,11 +32,11 @@ http://www.example.com/p/t/f?id=2&var=true ('&' and 'var' do not get marked)
 		<MARK_PREVIOUS TYPE='LITERAL2' MATCH_TYPE='OPERATOR'>:</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE='LITERAL2' MATCH_TYPE='OPERATOR'>/</MARK_PREVIOUS>
 
-		<SPAN_REGEXP DELEGATE='unwritten_AUTHORITY' MATCH_TYPE='LITERAL2' NO_LINE_BREAK='TRUE' NO_WORD_BREAK='TRUE'>
+		<SPAN_REGEXP MATCH_TYPE='LITERAL2' NO_LINE_BREAK='TRUE' NO_WORD_BREAK='TRUE'>
 			<BEGIN>(?=\b[\w.:-]+@(\b))</BEGIN> <!-- Why doesn't this match at the *boundary* between :// and <username>?  It's wrapped in a (?=<look ahead assertion>) -->
 			<END>$1</END>
 		</SPAN_REGEXP>
-		<SPAN_REGEXP DELEGATE='unwritten_HOSTNAME' MATCH_TYPE='LITERAL1' NO_LINE_BREAK='TRUE' NO_WORD_BREAK='TRUE'>
+		<SPAN_REGEXP MATCH_TYPE='LITERAL1' NO_LINE_BREAK='TRUE' NO_WORD_BREAK='TRUE'>
 			<BEGIN>(\b)[\w.-]+((?=/))</BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
