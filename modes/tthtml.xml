@@ -2,6 +2,8 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 <MODE>
 	<!--
+		Edit mode for the Perl Template Toolkit
+		http://template-toolkit.org/index.html
 		Made by Krassimir Berov: k.berov@gmail.com
 	-->
 	<PROPS>
@@ -101,7 +103,8 @@
 			HIGHLIGHT_DIGITS="TRUE"
 			DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+		<!-- example: [% users.${me.id}.name %] -->
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="perl::VARIABLE">
 			<BEGIN>${</BEGIN>
 			<END>}</END>
 		</SPAN>
