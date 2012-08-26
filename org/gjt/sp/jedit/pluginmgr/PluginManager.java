@@ -35,7 +35,6 @@ import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.pluginmgr.PluginList.Branch;
 import org.gjt.sp.jedit.pluginmgr.PluginList.Dependency;
 import org.gjt.sp.jedit.pluginmgr.PluginList.Plugin;
-import org.gjt.sp.jedit.pluginmgr.PluginList.PluginSet;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
