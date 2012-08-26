@@ -225,13 +225,13 @@
 		<!-- XXX: this is wrong, {@link ..} is correct, see below -->
 		<!--<SEQ TYPE="COMMENT3">{</SEQ>-->
 
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" NO_WORD_BREAK="FALSE" DELEGATE="VALADOC_PARAM">
 			<BEGIN>\{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 
 		<!-- for the common usage of the cvs keyword $Id: java.xml 19829 2011-08-24 09:32:24Z kpouer $ -->
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@version" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@version" NO_WORD_BREAK="FALSE" DELEGATE="VALADOC_PARAM">
 			<BEGIN>@version\s+\$</BEGIN>
 			<END>$</END>
 		</SPAN_REGEXP>
@@ -239,7 +239,7 @@
 		<!-- This works only when you use the same whitespace before and after the param's name,
 			 eg. a tab before and after, but mixing space and tab won't work.
 			 The reason is that you can't enter a regexp in END, except for the backreference operator $n -->
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" NO_WORD_BREAK="FALSE" DELEGATE="VALADOC_PARAM">
 			<BEGIN>@(?:param|throws|exception|serialField)(\s)</BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
@@ -310,5 +310,8 @@
 			<KEYWORD4>@values</KEYWORD4>
 		</KEYWORDS>
 	</RULES>
+	<!-- just a dummy which makes use of the default token type COMMENT4 for highlighting the word after @param in javadoc -->
+	<RULES SET="VALADOC_PARAM" DEFAULT="COMMENT4" IGNORE_CASE="TRUE" />
+
 </MODE>
 
