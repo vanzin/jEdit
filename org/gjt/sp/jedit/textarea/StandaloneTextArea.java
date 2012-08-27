@@ -27,6 +27,8 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -551,9 +553,23 @@ public class StandaloneTextArea extends TextArea
 	private static Properties loadProperties(String fileName)
 	{
 		Properties props = new Properties();
-		InputStream in = TextArea.class.getResourceAsStream(fileName);
+		File file;
+		if (fileName.charAt(0) == '/')
+			file = new File(fileName.substring(1));
+		else
+			file = new File(fileName);
+
+		InputStream in = null;
 		try
 		{
+			if (file.isFile())
+			{
+				in = new FileInputStream(file);
+			}
+			else
+			{
+				in = TextArea.class.getResourceAsStream(fileName);
+			}
 			props.load(in);
 		}
 		catch (IOException e)

@@ -10,6 +10,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed the StandaloneTextArea that cannot load keymaps
+  (#3562023 Matthieu Casanova)
+
 - File status checking after buffer switch doesn't always work
   (#1871440 - Alan Ezust)
 
