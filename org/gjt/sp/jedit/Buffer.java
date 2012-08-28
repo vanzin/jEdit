@@ -454,8 +454,7 @@ public class Buffer extends JEditBuffer
 		{
 			long newModTime = file.lastModified();
 
-			if(newModTime != modTime
-				&& jEdit.getBooleanProperty("view.checkModStatus"))
+			if(newModTime != modTime)
 			{
 				Object[] args = { this.path };
 				int result = GUIUtilities.confirm(view,

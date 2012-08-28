@@ -10,6 +10,8 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- File status checking before save (#3562315, Alan Ezust)
+
 - Fixed the StandaloneTextArea that cannot load keymaps
   (#3562023 Matthieu Casanova)
 
