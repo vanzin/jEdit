@@ -454,7 +454,7 @@ public class Buffer extends JEditBuffer
 		{
 			long newModTime = file.lastModified();
 
-			if(newModTime != modTime)
+			if((newModTime != modTime) && (jEdit.getBooleanProperty("autoReload") || jEdit.getBooleanProperty("autoReloadDialog")))
 			{
 				Object[] args = { this.path };
 				int result = GUIUtilities.confirm(view,
