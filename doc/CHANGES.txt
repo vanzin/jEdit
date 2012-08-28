@@ -15,9 +15,6 @@ and Maik Nijhuis for contributing to this release.
 - Fixed the StandaloneTextArea that cannot load keymaps
   (#3562023 Matthieu Casanova)
 
-- File status checking after buffer switch doesn't always work
-  (#1871440 - Alan Ezust)
-
 - The .jedit/modes/catalog is now written using UTF-8 instead of default
   OS encoding (#3560800 Matthieu Casanova)
 
