@@ -2,6 +2,7 @@
  * Open_Selection.bsh - a BeanShell macro script for the
  * jEdit text editor - opens file named by selected text
  * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2012 Jarek Czekalski
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,17 +24,59 @@
  *
  */
 
-void openSelection()
+String getBrowserPath() //{{{
+{
+	// copied from VFSBrowser constructor
+	HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
+	if(pathModel.getSize() == 0)
+		return null;
+	else
+		return pathModel.getItem(0);
+} //}}}
+
+/** tryPath {{{
+ * Tries to open a file built as concatenation of <code>sParent</code>
+ * and <code>sPath</code> paths. If file does not exist, no action is done.
+ * @return <code>true</code> if file exists, <code>false</code> otherwise.
+ */
+boolean tryPath(String sParent, String sPath)
+{
+	File f = new File(sParent, sPath);
+	if (f.exists())
+	{
+		jEdit.openFile(view, f.getPath());
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+} //}}}
+
+/**
+ * Tries to find an existing file using current java directory and
+ * last browser directory as parents of the filename contained
+ * in selection. If this succeeds, the file is opened.
+ * Otherwise direct <code>jEdit.openFile</code> call is done on selection.
+ */
+void openSelection() //{{{
 {
 	Selection[] selection = textArea.getSelection();
-	if(selection == null)
+	if(selection == null || selection.length == 0)
 		view.getToolkit().beep();
 	else
 	{
 		for(i = 0; i < selection.length; i++)
-			jEdit.openFile(view,textArea.getSelectedText(selection[i]));
+		{
+			sSel = textArea.getSelectedText(selection[i]);
+			if (!tryPath("", sSel) &&
+				!tryPath(getBrowserPath(), sSel))
+			{
+				jEdit.openFile(view,textArea.getSelectedText(selection[i]));
+			}
+		}
 	}
-}
+} //}}}
 
 openSelection();
 
@@ -52,3 +95,4 @@ openSelection();
 
 // end Open_Selection.bsh
 
+// :noTabs=false:tabSize=4:indentSize=4:folding=explicit:

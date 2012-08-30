@@ -89,6 +89,9 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Open Selection macro improvement: an attempt is made to use current
+  VFS browser directory as a parent for highlighted filename.
+
 - Fixed unreasonable quadratic operations which could be observable on
   big search&replace-all. (Patch #3533838 by Thomas Meyer)
 

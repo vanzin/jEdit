@@ -340,7 +340,8 @@
                 <para><filename>Open_Selection.bsh</filename></para>
 
                 <para>Opens the file named by the current buffer's selected
-                text.</para>
+                text. Current VFS browser directory is also tried as
+                a parent of the filename, but only as a local path.</para>
             </listitem>
 
             <listitem>
