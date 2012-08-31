@@ -31,6 +31,9 @@
                 linkend="opening" />)</para>
             </listitem>
 
+            <listitem><para> Whether to show a dialog or auto-reload when 
+            open buffers are changed on disk. </para></listitem>
+
             <listitem>
                 <para>The edit mode (see <xref linkend="modes" />)</para>
             </listitem>
@@ -81,7 +84,7 @@
         <screen>:indentSize=4:noTabs=true:mode=perl:</screen>
 
         <para>Adding buffer-local properties to a buffer takes effect after the
-        next time the buffer is saved.</para>
+        the buffer is saved and loaded again.</para>
 
         <para>The following table describes each buffer-local property in
         detail.</para>
@@ -234,10 +237,30 @@
             <title>The General Pane</title>
             <para>The <guibutton>General</guibutton> pane contains various
             settings, such as
-            the number of recent files to remember,
-            how often to check for changed files,
-            if the recent file list should be sorted,
-            if previously open files or split configurations should be restored on startup, and so on.</para>
+            the number of recent files to remember, when to check for changed files,
+            if the recent file list should be sorted, what current locale to use, 
+            if caret positions or markers in buffers should be saved, 
+            if previously open files or split configurations should be restored on startup, 
+            and so on.</para>
+
+            <formalpara><title> If Open Buffers Are Changed On Disk... </title>
+            <para> If <guilabel>Do Nothing</guilabel> is selected, then modifications from
+            jEdit will silently clobber changes made from other processes during saves.
+            Don't use this option unless you know what you are doing! Also, changing this
+            option here only affects newly opened buffers, not the ones that are currently 
+            open. You can also change this setting for individual buffers from 
+            Buffer Options. <xref linkend="buffer-opts"/> </para>
+            </formalpara>
+
+            <formalpara><title> Check for changed buffers upon... </title>
+            <para> This option allows you choose additional times that jEdit checks for
+            changed files on disk. For slow or remote file systems, removing unnecessary
+            file status checks might improve performance. 
+            Regardless of the choice here, files are still checked before
+            save, unless <guilabel>Do Nothing</guilabel> is also selected 
+            for the previous option. </para>
+            </formalpara>
+
         </section>
 
         <section id="abbrevs-pane">
