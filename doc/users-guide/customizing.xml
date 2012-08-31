@@ -32,7 +32,7 @@
             </listitem>
 
             <listitem><para> Whether to show a dialog or auto-reload when 
-            open buffers are changed on disk. </para></listitem>
+            this buffer's file is changed on disk. </para></listitem>
 
             <listitem>
                 <para>The edit mode (see <xref linkend="modes" />)</para>
