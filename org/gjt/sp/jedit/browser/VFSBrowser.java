@@ -368,11 +368,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			}
 			else if("last".equals(defaultPath))
 			{
-				HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
-				if(pathModel.getSize() == 0)
+				path = getLastVisitedPath();
+				if (path == null)
 					path = "~";
-				else
-					path = pathModel.getItem(0);
 			}
 			else if("favorites".equals(defaultPath))
 				path = "favorites:";
@@ -605,6 +603,21 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		}
 	}
 	// }}}
+
+	//{{{ getLastVisitedPath() method
+	/**
+	 * Returns the last path visited by VFSBrowser. If no path was ever
+	 * visited, returns <code>null</code>,
+	 * @since 5.1
+	 */
+	public static String getLastVisitedPath()
+	{
+		HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
+		if(pathModel.getSize() == 0)
+			return null;
+		else
+			return pathModel.getItem(0);
+	} //}}}
 
 	//{{{ setDirectory() method
 	public void setDirectory(String path)

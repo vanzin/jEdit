@@ -27,6 +27,7 @@
 String getBrowserPath() //{{{
 {
 	// copied from VFSBrowser constructor
+	// in 5.1 there will be VFSBrowser.getLastVisitedPath() api for that
 	HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
 	if(pathModel.getSize() == 0)
 		return null;

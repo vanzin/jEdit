@@ -45,6 +45,8 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ API Changes
 
+- New method VFSBrowser.getLastVisitedPath() (Jarek Czekalski)
+
 - New method IOUtilities.closeQuietly(ObjectInput) (Matthieu Casanova)
 
 - New method IOUtilities.closeQuietly(ObjectOutput) (Matthieu Casanova)
