@@ -89,14 +89,14 @@ public class TaskMonitor extends JPanel implements TaskListener
 	@Override
 	public void addNotify()
 	{
-		TaskManager.instance.visit(new TaskManager.TaskVisitor()
+		TaskManager.INSTANCE.visit(new TaskManager.TaskVisitor()
 		{
 			public void visit(Task task)
 			{
 				model.addTask(task);
 			}
 		});
-		TaskManager.instance.addTaskListener(this);
+		TaskManager.INSTANCE.addTaskListener(this);
 		super.addNotify();
 	} //}}}
 
@@ -104,7 +104,7 @@ public class TaskMonitor extends JPanel implements TaskListener
 	@Override
 	public void removeNotify()
 	{
-		TaskManager.instance.removeTaskListener(this);
+		TaskManager.INSTANCE.removeTaskListener(this);
 		super.removeNotify();
 		model.removeAll();
 	} //}}}

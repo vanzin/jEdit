@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+import javax.annotation.concurrent.ThreadSafe;
 import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -35,6 +36,8 @@ import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.Task;
+import org.gjt.sp.util.TaskManager;
 import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
@@ -68,7 +71,6 @@ public class VFSManager
 	 */
 	public static void init()
 	{
-		ioThreadPool = WorkThreadPool.INSTANCE;
 	} //}}}
 
 	//{{{ start() method
@@ -77,7 +79,7 @@ public class VFSManager
 	 */
 	public static void start()
 	{
-		ioThreadPool.start();
+		WorkThreadPool.INSTANCE.start();
 	} //}}}
 
 	//{{{ VFS methods
@@ -168,7 +170,7 @@ public class VFSManager
 	 */
 	public static WorkThreadPool getIOThreadPool()
 	{
-		return ioThreadPool;
+		return WorkThreadPool.INSTANCE;
 	} //}}}
 
 	//{{{ waitForRequests() method
@@ -182,7 +184,7 @@ public class VFSManager
 		if(EventQueue.isDispatchThread() != true)
 			throw new IllegalStateException();
 
-		ioThreadPool.waitForRequests();
+		TaskManager.INSTANCE.waitForIoTasks();
 	} //}}}
 
 	//{{{ errorOccurred() method
@@ -200,7 +202,7 @@ public class VFSManager
 	 */
 	public static int getRequestCount()
 	{
-		return ioThreadPool.getRequestCount();
+		return TaskManager.INSTANCE.countIoTasks();
 	} //}}}
 
 	//{{{ runInAWTThread() method
@@ -221,7 +223,7 @@ public class VFSManager
 	@Deprecated
 	public static void runInAWTThread(Runnable run)
 	{
-		ioThreadPool.addWorkRequest(run,true);
+		WorkThreadPool.INSTANCE.addWorkRequest(run,true);
 	} //}}}
 
 	//{{{ runInWorkThread() method
@@ -234,9 +236,12 @@ public class VFSManager
 	 * @see org.gjt.sp.util.ThreadUtilities#runInBackground(Runnable)
 	 */
 	@Deprecated
-	public static void runInWorkThread(Runnable run)
+	public static void runInWorkThread(Task run)
 	{
-		ioThreadPool.addWorkRequest(run,false);
+		if(!run.getIoTask())
+			throw new IllegalArgumentException();
+
+		ThreadUtilities.runInBackground(run);
 	} //}}}
 
 	//}}}
@@ -380,7 +385,6 @@ public class VFSManager
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS;
 	private static VFS urlVFS;
 	private static boolean error;

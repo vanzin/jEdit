@@ -31,18 +31,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author Matthieu Casanova
  */
-public class TaskManager
+public enum TaskManager
 {
-	public static final TaskManager instance = new TaskManager();
+	INSTANCE;
 
 	private final List<TaskListener> listeners;
 
 	private final List<Task> tasks;
+	private final List<Task> ioTasks;
+	private final Object ioWaitLock;
 
 	private TaskManager()
 	{
 		listeners = new CopyOnWriteArrayList<TaskListener>();
 		tasks = Collections.synchronizedList(new ArrayList<Task>());
+		ioTasks = Collections.synchronizedList(new ArrayList<Task>());
+		ioWaitLock = new Object();
 	}
 
 	/**
@@ -56,6 +60,17 @@ public class TaskManager
 		return tasks.size();
 	}
 
+	/**
+	 * Return the number of IO tasks in queue.
+	 *
+	 * @return the number of IO tasks in queue
+	 * @since jEdit 5.1pre1
+	 */
+	public int countIoTasks()
+	{
+		return ioTasks.size();
+	}
+
 	public void addTaskListener(TaskListener listener)
 	{
 		if (!listeners.contains(listener))
@@ -67,12 +82,18 @@ public class TaskManager
 	public void removeTaskListener(TaskListener listener)
 	{
 		if (listeners.contains(listener))
+		{
 			listeners.remove(listener);
+		}
 	}
 
 	void fireWaiting(Task task)
 	{
-		tasks.add(task);
+		if(task.getIoTask())
+			ioTasks.add(task);
+		else
+			tasks.add(task);
+
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
 		{
@@ -91,11 +112,25 @@ public class TaskManager
 
 	void fireDone(Task task)
 	{
-		tasks.remove(task);
+		if(task.getIoTask())
+			ioTasks.remove(task);
+		else
+			tasks.remove(task);
+
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
 		{
 			listener.done(task);
+		}
+
+		if(task.getIoTask())
+		{
+			WorkThreadPool.INSTANCE.queueAWTRunner();
+
+			synchronized (ioWaitLock)
+			{
+				ioWaitLock.notifyAll();
+			}
 		}
 	}
 
@@ -141,6 +176,25 @@ public class TaskManager
 				visitor.visit(task);
 			}
 		}
+	}
+
+	public void waitForIoTasks()
+	{
+		synchronized (ioWaitLock)
+		{
+			while(countIoTasks() > 0)
+			{
+				try
+				{
+					ioWaitLock.wait();
+				} catch (InterruptedException e)
+				{
+					Log.log(Log.ERROR,this,e);
+				}
+			}
+		}
+
+		WorkThreadPool.INSTANCE.queueAWTRunnerAndWait();
 	}
 
 	/**

@@ -63,7 +63,7 @@ public class BufferLoadRequest extends BufferIORequest
 	{
 		try
 		{
-			setAbortable(true);
+			setCancellable(true);
 			if(!buffer.isTemporary())
 			{
 				String[] args = { vfs.getFileName(path) };
@@ -85,7 +85,7 @@ public class BufferLoadRequest extends BufferIORequest
 					String[] args = { vfs.getFileName(path) };
 					if(!buffer.isTemporary())
 						setStatus(jEdit.getProperty("vfs.status.load-markers",args));
-					setAbortable(true);
+					setCancellable(true);
 
 					markers = vfs._createInputStream(session,markersPath,true,view);
 					if(markers != null)
@@ -100,6 +100,11 @@ public class BufferLoadRequest extends BufferIORequest
 					IOUtilities.closeQuietly(markers);
 				}
 			}
+		}
+		catch(InterruptedException e)
+		{
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			Thread.currentThread().interrupt();
 		}
 		catch(Exception e)
 		{
@@ -116,10 +121,6 @@ public class BufferLoadRequest extends BufferIORequest
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
-		catch(WorkThread.Abort a)
-		{
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
 		finally
 		{
 			try
@@ -132,10 +133,6 @@ public class BufferLoadRequest extends BufferIORequest
 				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
 
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
@@ -218,8 +215,9 @@ public class BufferLoadRequest extends BufferIORequest
 	 *   - The encoding
 	 * If fallback encodings are specified, they are used on
 	 * encoding errors.
+	 * @throws InterruptedException 
 	 */
-	private void readContents() throws IOException
+	private void readContents() throws IOException, InterruptedException
 	{
 		long length = getContentLength();
 
@@ -357,7 +355,7 @@ public class BufferLoadRequest extends BufferIORequest
 
 	//{{{ readMarkers() method
 	private static void readMarkers(Buffer buffer, InputStream _in)
-		throws IOException
+		throws IOException, InterruptedException
 	{
 		// For `reload' command
 		buffer.removeAllMarkers();
@@ -369,6 +367,9 @@ public class BufferLoadRequest extends BufferIORequest
 			String line;
 			while((line = in.readLine()) != null)
 			{
+				if(Thread.interrupted())
+					throw new InterruptedException();
+
 				// malformed marks file?
 				if(line.length() == 0)
 					continue;

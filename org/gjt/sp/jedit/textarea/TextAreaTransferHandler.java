@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.Task;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -482,13 +482,14 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ DraggedURLLoader class
-	private static class DraggedURLLoader extends WorkRequest
+	private static class DraggedURLLoader extends Task
 	{
 		private final JEditTextArea textArea;
 		private final String url;
 		
 		DraggedURLLoader(JEditTextArea textArea, String url)
 		{
+			super(true);
 			this.textArea = textArea;
 			this.url = url;
 		}

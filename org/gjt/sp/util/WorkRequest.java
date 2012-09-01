@@ -23,7 +23,6 @@
 package org.gjt.sp.util;
 
 import javax.annotation.concurrent.GuardedBy;
-import org.gjt.sp.util.WorkThread.Abort;
 
 /**
  * A subclass of the Runnable interface.
@@ -33,211 +32,29 @@ import org.gjt.sp.util.WorkThread.Abort;
  * @version $Id$
  */
 @Deprecated
-public abstract class WorkRequest implements Runnable, ProgressObserver
+public class WorkRequest
 {
-	/**
-	 * If the max value is greater that <code>Integer.MAX_VALUE</code> this 
-	 * will be true and all values will be divided by 1024.
-	 * @since jEdit 4.3pre3
-	 */
-	private volatile boolean largeValues;
-	@GuardedBy("this") private String status;
-	@GuardedBy("this") private int progressValue;
-	@GuardedBy("this") private int progressMaximum;
-	@GuardedBy("this") private int runNo;   // final
-	@GuardedBy("this") private boolean isRunning;
-
-	public void workRequestStart()
+	public boolean isRequestRunning()
 	{
-		int runNo = WorkThreadPool.INSTANCE.workRequestStart(this);
-		synchronized (this)
-		{
-			this.runNo = runNo;
-			this.isRunning = true;
-		}
-		WorkThreadPool.INSTANCE.fireStatusChanged(this);
+		return false;
 	}
 
-	public void workRequestEnd()
+	public int getProgressMaximum()
 	{
-		WorkThreadPool.INSTANCE.workRequestEnd(this);
-
-		Thread thread = Thread.currentThread();
-		if(thread instanceof WorkThread)
-			((WorkThread)thread).resetAbortable();
-
-		synchronized (this)
-		{
-			status = null;
-			progressValue = 0;
-			progressMaximum = 0;
-			isRunning = false;
-		}
-		WorkThreadPool.INSTANCE.fireProgressChanged(this);
-		WorkThreadPool.INSTANCE.fireStatusChanged(this);
+		return 0;
 	}
 
-	/**
-	 * Sets if the request can be aborted.
-	 */
-	public void setAbortable(boolean abortable)
+	public String getStatus()
 	{
-		Thread thread = Thread.currentThread();
-		if(thread instanceof WorkThread)
-			((WorkThread)thread).setAbortable(abortable);
+		return "";
 	}
 
-	/**
-	 * Aborts the currently running request, if allowed.
-	 * @since jEdit 2.6pre1
-	 */
+	public int getProgressValue()
+	{
+		return 0;
+	}
+
 	public void abortRequest()
 	{
-		Thread thread = Thread.currentThread();
-		if(thread instanceof WorkThread)
-			((WorkThread)thread).abortCurrentRequest();
-	}
-	/**
-	 * Sets the status text.
-	 * @param status The status text
-	 */
-	public void setStatus(String status)
-	{
-		synchronized (this)
-		{
-			this.status = status;
-		}
-		WorkThreadPool.INSTANCE.fireProgressChanged(this);
-	}
-
-	/**
-	 * Sets the progress value.
-	 * @param value The progress value.
-	 * @deprecated use {@link #setValue(long)}
-	 */
-	public void setProgressValue(int value)
-	{
-		synchronized (this)
-		{
-			this.progressValue = value;
-		}
-		WorkThreadPool.INSTANCE.fireProgressChanged(this);
-	}
-
-	/**
-	 * Sets the maximum progress value.
-	 * @param value The progress value.
-	 * @deprecated use {@link #setMaximum(long)}
-	 */
-	public void setProgressMaximum(int value)
-	{
-		synchronized (this)
-		{
-			this.progressMaximum = value;
-		}
-		WorkThreadPool.INSTANCE.fireProgressChanged(this);
-	}
-
-	//{{{ setValue() method
-	/**
-	 * Update the progress value.
-	 *
-	 * @param value the new value
-	 * @since jEdit 4.3pre3
-	 */
-	public void setValue(long value)
-	{
-		if (largeValues)
-		{
-			setProgressValue((int) (value >> 10));
-		}
-		else
-		{
-			setProgressValue((int) value);
-		}
-	} //}}}
-
-	//{{{ setValue() method
-	/**
-	 * Update the maximum value.
-	 *
-	 * @param value the new maximum value
-	 * @since jEdit 4.3pre3
-	 */
-	public void setMaximum(long value)
-	{
-		if (value > Integer.MAX_VALUE)
-		{
-			largeValues = true;
-			setProgressMaximum((int) (value >> 10));
-		}
-		else
-		{
-			largeValues = false;
-			setProgressMaximum((int) value);
-		}
-	} //}}}
-
-	//{{{ run() method
-	public void run()
-	{
-		Log.log(Log.DEBUG,this,"Running in thread: " + Thread.currentThread());
-
-		workRequestStart();
-		try
-		{
-			_run();
-		}
-		catch(Abort a)
-		{
-			Log.log(Log.ERROR,this,"Unhandled abort", a);
-		}
-		catch(Throwable th)
-		{
-			Log.log(Log.ERROR,this,"Exception in work thread: ", th);
-		}
-		finally
-		{
-			workRequestEnd();
-		}
-	} //}}}
-
-	/**
-	 * Returns the status text.
-	 * @return the status label
-	 */
-	public synchronized String getStatus()
-	{
-		return status;
-	}
-
-	/**
-	 * Returns the progress value.
-	 * @return the progress value
-	 */
-	public synchronized int getProgressValue()
-	{
-		return progressValue;
-	}
-
-	/**
-	 * Returns the progress maximum.
-	 * @return the maximum value of the progression
-	 */
-	public synchronized int getProgressMaximum()
-	{
-		return progressMaximum;
-	}
-
-	abstract public void _run();
-
-	public synchronized int getRunNo()
-	{
-		return runNo;
-	}
-
-	public synchronized boolean isRequestRunning()
-	{
-		return isRunning;
 	}
 }

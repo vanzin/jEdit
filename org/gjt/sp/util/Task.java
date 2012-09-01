@@ -40,7 +40,8 @@ public abstract class Task implements Runnable, ProgressObserver
 	 * The thread in which the task is running.
 	 * It is set automatically when the task starts.
 	 */
-	private Thread thread;
+	private volatile Thread thread;
+	private final boolean ioTask;
 
 	private SwingWorker.StateValue state;
 
@@ -49,7 +50,13 @@ public abstract class Task implements Runnable, ProgressObserver
 	//{{{ Task Constructor
 	protected Task()
 	{
+		this(false);
+	}
+
+	protected Task(boolean ioTask)
+	{
 		state = SwingWorker.StateValue.PENDING;
+		this.ioTask = ioTask;
 	} //}}}
 
 	//{{{ run() method
@@ -57,7 +64,7 @@ public abstract class Task implements Runnable, ProgressObserver
 	public final void run()
 	{
 		state = SwingWorker.StateValue.STARTED;
-		TaskManager.instance.fireRunning(this);
+		TaskManager.INSTANCE.fireRunning(this);
 		try
 		{
 			thread = Thread.currentThread();
@@ -69,7 +76,7 @@ public abstract class Task implements Runnable, ProgressObserver
 			Log.log(Log.ERROR, this, t);
 		}
 		state = SwingWorker.StateValue.DONE;
-		TaskManager.instance.fireDone(this);
+		TaskManager.INSTANCE.fireDone(this);
 	} //}}}
 
 	/**
@@ -82,21 +89,21 @@ public abstract class Task implements Runnable, ProgressObserver
 	public final void setValue(long value)
 	{
 		this.value = value;
-		TaskManager.instance.fireValueUpdated(this);
+		TaskManager.INSTANCE.fireValueUpdated(this);
 	}
 
 	@Override
 	public final void setMaximum(long maximum)
 	{
 		this.maximum = maximum;
-		TaskManager.instance.fireMaximumUpdated(this);
+		TaskManager.INSTANCE.fireMaximumUpdated(this);
 	}
 
 	@Override
 	public void setStatus(String status)
 	{
 		this.status = status;
-		TaskManager.instance.fireStatusUpdated(this);
+		TaskManager.INSTANCE.fireStatusUpdated(this);
 	}
 
 	public long getValue()
@@ -112,6 +119,11 @@ public abstract class Task implements Runnable, ProgressObserver
 	public long getMaximum()
 	{
 		return maximum;
+	}
+
+	public boolean getIoTask()
+	{
+		return ioTask;
 	}
 
 	public SwingWorker.StateValue getState()
@@ -148,7 +160,6 @@ public abstract class Task implements Runnable, ProgressObserver
 		if (cancellable && thread != null)
 			thread.interrupt();
 	} //}}}
-
 
 	@Override
 	public String toString()

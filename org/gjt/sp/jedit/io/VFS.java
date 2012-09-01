@@ -41,9 +41,9 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkRequest;
-import org.gjt.sp.util.WorkThread;
 //}}}
 
 /**
@@ -490,7 +490,7 @@ public abstract class VFS
 		if((getCapabilities() & WRITE_CAP) == 0)
 			buffer.setReadOnly(true);
 
-		WorkRequest request = new BufferLoadRequest(view, buffer, session, this, path);
+		Task request = new BufferLoadRequest(view, buffer, session, this, path);
 		if(buffer.isTemporary())
 			// this makes HyperSearch much faster
 			request.run();
@@ -1214,14 +1214,6 @@ public abstract class VFS
 			}
 		}
 
-		Thread ct = Thread.currentThread();
-		WorkThread wt = null;
-		if (ct instanceof WorkThread)
-		{
-			wt = (WorkThread) ct;
-		}
-
-
 		VFSFile[] _files = _listFiles(session,directory,
 			comp);
 		if(_files == null || _files.length == 0)
@@ -1229,7 +1221,7 @@ public abstract class VFS
 
 		for(int i = 0; i < _files.length; i++)
 		{
-			if (wt != null && wt.isAborted() || ct.isInterrupted())
+			if (Thread.currentThread().isInterrupted())
 				break;
 			VFSFile file = _files[i];
 			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName())))

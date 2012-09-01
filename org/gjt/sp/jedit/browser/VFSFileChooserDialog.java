@@ -536,7 +536,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			{
 				public void run()
 				{
-					int requestCount = threadPool.getRequestCount();
+					int requestCount = VFSManager.getRequestCount();
 					if(requestCount == 0)
 					{
 						getContentPane().setCursor(
@@ -559,7 +559,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ GetFileTypeRequest class
-	private class GetFileTypeRequest implements Runnable
+	private class GetFileTypeRequest extends Task
 	{
 		VFS    vfs;
 		Object session;
@@ -569,13 +569,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		GetFileTypeRequest(VFS vfs, Object session,
 			String path, int[] type)
 		{
+			super(true);
 			this.vfs     = vfs;
 			this.session = session;
 			this.path    = path;
 			this.type    = type;
 		}
 
-		public void run()
+		public void _run()
 		{
 			try
 			{

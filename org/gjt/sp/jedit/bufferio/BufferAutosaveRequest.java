@@ -62,7 +62,7 @@ public class BufferAutosaveRequest extends BufferIORequest
 			setStatus(jEdit.getProperty("vfs.status.autosave",args));
 
 			// the entire save operation can be aborted...
-			setAbortable(true);
+			setCancellable(true);
 
 			try
 			{
@@ -85,38 +85,45 @@ public class BufferAutosaveRequest extends BufferIORequest
 			{
 				Log.log(Log.WARNING,this,"Unable to save " + e.getMessage());
 			}
+			catch(InterruptedException e)
+			{
+				cleanUpIncomplete(out);
+				Thread.currentThread().interrupt();
+			}
 			catch(Exception e)
 			{
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.write-error",pp);
 
-				// Incomplete autosave file should not exist.
-				if(out != null)
-				{
-					try
-					{
-						out.close();
-						out = null;
-						vfs._delete(session,path,view);
-					}
-					catch(IOException ioe)
-					{
-						Log.log(Log.ERROR,this,ioe);
-					}
-				}
+				cleanUpIncomplete(out);
 			}
 			//finally
 			//{
 				//buffer.readUnlock();
 			//}
 		}
-		catch(WorkThread.Abort a)
-		{
-		}
 		finally
 		{
 			IOUtilities.closeQuietly(out);
 		}
 	} //}}}
+
+	private void cleanUpIncomplete(OutputStream out)
+	{
+		// Incomplete autosave file should not exist.
+		if(out != null)
+		{
+			try
+			{
+				out.close();
+				out = null;
+				vfs._delete(session,path,view);
+			}
+			catch(IOException ioe)
+			{
+				Log.log(Log.ERROR,this,ioe);
+			}
+		}
+	}
 }

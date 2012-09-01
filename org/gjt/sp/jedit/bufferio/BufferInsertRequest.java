@@ -59,7 +59,7 @@ public class BufferInsertRequest extends BufferIORequest
 		{
 			String[] args = { vfs.getFileName(path) };
 			setStatus(jEdit.getProperty("vfs.status.load",args));
-			setAbortable(true);
+			setCancellable(true);
 
 			path = vfs._canonPath(session,path,view);
 
@@ -89,16 +89,17 @@ public class BufferInsertRequest extends BufferIORequest
 				}
 			});
 		}
+		catch(InterruptedException e)
+		{
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			Thread.currentThread().interrupt();
+		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
 			String[] pp = { e.toString() };
 			VFSManager.error(view,path,"ioerror.read-error",pp);
 
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
-		catch(WorkThread.Abort a)
-		{
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
@@ -114,10 +115,6 @@ public class BufferInsertRequest extends BufferIORequest
 				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
 
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}

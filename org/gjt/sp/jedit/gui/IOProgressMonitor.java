@@ -97,8 +97,7 @@ public class IOProgressMonitor extends JPanel
 	//{{{ updateCaption() method
 	private void updateCaption()
 	{
-		String[] args = { String.valueOf(VFSManager.getIOThreadPool()
-			.getRequestCount()) };
+		String[] args = { String.valueOf(VFSManager.getRequestCount()) };
 		caption.setText(jEdit.getProperty("io-progress-monitor.caption",args));
 	} //}}}
 

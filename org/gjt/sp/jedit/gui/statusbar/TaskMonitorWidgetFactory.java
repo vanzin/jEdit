@@ -72,7 +72,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         public void addNotify()
         {
             super.addNotify();
-            TaskManager.instance.addTaskListener(this);
+            TaskManager.INSTANCE.addTaskListener(this);
             update();
         }
 
@@ -80,7 +80,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         public void removeNotify()
         {
             super.removeNotify();
-            TaskManager.instance.removeTaskListener(this);
+            TaskManager.INSTANCE.removeTaskListener(this);
         }
 
         @Override
@@ -97,7 +97,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         @Override
         public void update()
         {
-            int count = TaskManager.instance.countTasks();
+            int count = TaskManager.INSTANCE.countTasks();
             if (count == 0)
             {
                 setText(null);

@@ -79,7 +79,7 @@ public class BufferSaveRequest extends BufferIORequest
 			setStatus(jEdit.getProperty("vfs.status.save",args));
 
 			// the entire save operation can be aborted...
-			setAbortable(true);
+			setCancellable(true);
 
 			path = vfs._canonPath(session,path,view);
 			if(!MiscUtilities.isURL(path))
@@ -139,6 +139,11 @@ public class BufferSaveRequest extends BufferIORequest
 					buffer.readUnlock();
 				}
 			}
+			catch(InterruptedException e)
+			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+				Thread.currentThread().interrupt();
+			}
 			finally
 			{
 				IOUtilities.closeQuietly(out);
@@ -178,10 +183,6 @@ public class BufferSaveRequest extends BufferIORequest
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
-		catch(WorkThread.Abort a)
-		{
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
 		finally
 		{
 			try
@@ -202,10 +203,6 @@ public class BufferSaveRequest extends BufferIORequest
 				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.write-error",pp);
 
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}

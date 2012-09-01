@@ -729,7 +729,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			}
 
 			final Task task = new DeleteBrowserTask(this, session, vfs, files[i].getDeletePath());
-			TaskManager.instance.addTaskListener(new TaskAdapter()
+			TaskManager.INSTANCE.addTaskListener(new TaskAdapter()
 			{
 				@Override
 				public void done(Task t)
@@ -737,7 +737,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 					if (task == t)
 					{
 						latch.countDown();
-						TaskManager.instance.removeTaskListener(this);
+						TaskManager.INSTANCE.removeTaskListener(this);
 					}
 				}
 			});

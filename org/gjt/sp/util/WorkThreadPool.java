@@ -26,13 +26,7 @@ package org.gjt.sp.util;
 import javax.annotation.concurrent.GuardedBy;
 import javax.swing.event.EventListenerList;
 
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.util.WorkThreadFactory;
-
 import java.awt.EventQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 //}}}
 
@@ -47,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Deprecated
 public enum WorkThreadPool
 {
-	INSTANCE("jEdit I/O", jEdit.getIntegerProperty("ioThreadCount", 4));
+	INSTANCE("jEdit I/O");
 
 	//{{{ WorkThreadPool constructor
 	/**
@@ -56,32 +50,15 @@ public enum WorkThreadPool
 	 * @param name The thread name prefix
 	 * @param count The number of work threads
 	 */
-	private WorkThreadPool(String name, int count)
+	private WorkThreadPool(String name)
 	{
-		if(count <= 0)
-			throw new IllegalArgumentException();
-
 		listenerList = new EventListenerList();
-
-		ThreadFactory threadFactory = new WorkThreadFactory(name);
-		threadPool = Executors.newFixedThreadPool(count, threadFactory);
-		workRequests = new WorkRequest[count];
-		nopWorkRequest = new WorkRequest() {
-
-			@Override
-			public void _run() {
-			}
-
-			@Override
-			public boolean isRequestRunning() {
-				return false;
-			}
-		};
+//		jEdit.getIntegerProperty("ioThreadCount", 4)
 	} //}}}
 
 	//{{{ start() method
 	/**
-	 * Starts all the threads in this thread pool.
+	 * Queue the AWT runner for the first time.
 	 */
 	public void start()
 	{
@@ -110,7 +87,7 @@ public enum WorkThreadPool
 			synchronized(lock)
 			{
 				//{{{ if there are no requests, execute AWT requests immediately
-				if(started && requestCount.get() == 0 && awtRequestCount == 0)
+				if(started && TaskManager.INSTANCE.countIoTasks() == 0 && awtRequestCount == 0)
 				{
 //					Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 
@@ -134,66 +111,7 @@ public enum WorkThreadPool
 			// queue AWT request
 			queueAWTRunner();
 		} else
-		{
-			WorkRequest wr;
-			if (run instanceof WorkRequest)
-			{
-				wr = (WorkRequest) run;
-			}
-			else
-			{
-//				Log.log(Log.DEBUG,this,"Runnable " + run + " in VFS background queue is not a WorkRequest!");
-				wr = decorate(run);
-			}
-			requestCount.incrementAndGet();
-			threadPool.execute(wr);
-		}
-	} //}}}
-
-	private WorkRequest decorate(Runnable run)
-	{
-		return new AbstractWorkRequest(run);
-	}
-
-	private static class AbstractWorkRequest extends WorkRequest
-	{
-		private final Runnable runnable;
-
-		private AbstractWorkRequest(Runnable runnable)
-		{
-			this.runnable = runnable;
-		}
-
-		@Override
-		public void _run()
-		{
-			runnable.run();
-		}
-	}
-
-	//{{{ waitForRequests() method
-	/**
-	 * Waits until all requests are complete.
-	 */
-	public void waitForRequests()
-	{
-		synchronized(waitForAllLock)
-		{
-			while(requestCount.get() != 0)
-			{
-				try
-				{
-					waitForAllLock.wait();
-				}
-				catch(InterruptedException ie)
-				{
-					Log.log(Log.ERROR,this,ie);
-				}
-			}
-		}
-
-		// do any queued AWT runnables
-		doAWTRequests();
+			throw new IllegalArgumentException();
 	} //}}}
 
 	//{{{ getRequestCount() method
@@ -203,7 +121,7 @@ public enum WorkThreadPool
 	 */
 	public int getRequestCount()
 	{
-		return requestCount.get();
+		return TaskManager.INSTANCE.countIoTasks();
 	} //}}}
 
 	//{{{ getThreadCount() method
@@ -213,57 +131,12 @@ public enum WorkThreadPool
 	 */
 	public int getThreadCount()
 	{
-		return workRequests.length;
+		return 0;
 	} //}}}
-
-	public int workRequestStart(WorkRequest workRequest)
-	{
-		int i = 0;
-		synchronized(lock)
-		{
-			for(int n = workRequests.length; i < n ; i++)
-			{
-				if(workRequests[i] == null)
-					break;
-			}
-			workRequests[i] = workRequest;
-		}
-
-		return i;
-	}
-
-	public void workRequestEnd(WorkRequest workRequest)
-	{
-		if(Thread.currentThread() instanceof WorkThread)
-			requestCount.decrementAndGet();
-		else
-			Log.log(Log.DEBUG,this,"WorkRequest run in non-WorkThread thread!");
-
-		int runNo = workRequest.getRunNo();
-		synchronized(lock)
-		{
-			workRequests[runNo] = null;
-		}
-
-		synchronized(waitForAllLock)
-		{
-			// notify a running waitForRequests() method
-			waitForAllLock.notifyAll();
-		}
-
-		queueAWTRunner();
-	}
 
 	public WorkRequest getWorkRequestWithRunNo(int index)
 	{
-		synchronized(lock)
-		{
-			WorkRequest workRequest = workRequests[index];
-			if(workRequest == null) {
-				return nopWorkRequest;
-			} else
-				return workRequest;
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	//{{{ addProgressListener() method
@@ -286,23 +159,13 @@ public enum WorkThreadPool
 		listenerList.remove(WorkThreadProgressListener.class,listener);
 	} //}}}
 
-	//{{{ Package-private members
-
-	//}}}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private final ExecutorService threadPool;
 	private final EventListenerList listenerList;
-	// map requst to old static thread id for IOProgressMonitor
-	@GuardedBy("lock") private final WorkRequest[] workRequests;
-	private final WorkRequest nopWorkRequest;
+	private final Object lock = new Object();
 
 	@GuardedBy("lock") private boolean started;
-
-	// Request queue
-	private final AtomicInteger requestCount = new AtomicInteger();
 
 	// AWT thread queue
 	@GuardedBy("lock") private boolean awtRunnerQueued;
@@ -310,56 +173,13 @@ public enum WorkThreadPool
 	@GuardedBy("lock") private Request lastAWTRequest;
 	@GuardedBy("lock") private int awtRequestCount;
 
-	private static AtomicInteger requstCounter = new AtomicInteger();
-
 	//}}}
-
-	private final Object lock = new Object();
-	private final Object waitForAllLock = new Object();
-
-	//{{{ fireStatusChanged() method
-	void fireStatusChanged(WorkRequest workRequest)
-	{
-		final Object[] listeners = listenerList.getListenerList();
-		if(listeners.length != 0)
-		{
-			int index = workRequest.getRunNo();
-
-			for(int i = listeners.length - 2; i >= 0; i--)
-			{
-				if(listeners[i] == WorkThreadProgressListener.class)
-				{
-					((WorkThreadProgressListener)listeners[i+1])
-						.statusUpdate(WorkThreadPool.this,index);
-				}
-			}
-		}
-	} //}}}
-
-	//{{{ fireProgressChanged() method
-	void fireProgressChanged(WorkRequest workRequest)
-	{
-		final Object[] listeners = listenerList.getListenerList();
-		if(listeners.length != 0)
-		{
-			int index = workRequest.getRunNo();
-
-			for(int i = listeners.length - 2; i >= 0; i--)
-			{
-				if(listeners[i] == WorkThreadProgressListener.class)
-				{
-					((WorkThreadProgressListener)listeners[i+1])
-						.progressUpdate(WorkThreadPool.this,index);
-				}
-			}
-		}
-	} //}}}
 
 	//{{{ doAWTRequests() method
 	private void doAWTRequests()
 	{
 		Request req = null;
-		while(requestCount.get() == 0)
+		while(TaskManager.INSTANCE.countIoTasks() == 0)
 		{
 			synchronized (lock)
 			{
@@ -387,9 +207,9 @@ public enum WorkThreadPool
 		}
 		catch(Throwable t)
 		{
-			Log.log(Log.ERROR,WorkThread.class,"Exception "
+			Log.log(Log.ERROR,this,"Exception "
 				+ "in AWT thread:");
-			Log.log(Log.ERROR,WorkThread.class,t);
+			Log.log(Log.ERROR,this,t);
 		}
 
 		synchronized(lock)
@@ -399,8 +219,7 @@ public enum WorkThreadPool
 	} //}}}
 
 	//{{{ queueAWTRunner() method
-	/** Must always be called with the lock held. */
-	private void queueAWTRunner()
+	public void queueAWTRunner()
 	{
 		boolean queueAwtRunner = false;
 		synchronized (lock)
@@ -416,6 +235,12 @@ public enum WorkThreadPool
 			EventQueue.invokeLater(new RunRequestsInAWTThread());
 //			Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
+	} //}}}
+
+	//{{{ queueAWTRunnerNowandWait() method
+	public void queueAWTRunnerAndWait()
+	{
+		ThreadUtilities.runInDispatchThreadAndWait(new RunRequestsInAWTThread());
 	} //}}}
 
 	//{{{ getNextAWTRequest() method
@@ -446,6 +271,8 @@ public enum WorkThreadPool
 	} //}}}
 
 	//}}}
+
+	private static AtomicInteger requstCounter = new AtomicInteger();
 
 	//{{{ Request class
 	private static class Request

@@ -199,7 +199,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					&& !currentMessageIsIO)
 					return;
 
-				int requestCount = threadPool.getRequestCount();
+				int requestCount = VFSManager.getRequestCount();
 				if(requestCount == 0)
 				{
 					setMessageAndClear(jEdit.getProperty(
