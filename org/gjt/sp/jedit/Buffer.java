@@ -623,11 +623,6 @@ public class Buffer extends JEditBuffer
 				}
 			});
 
-		int check = jEdit.getIntegerProperty("checkFileStatus");
-		if(!disableFileStatusCheck && (check == GeneralOptionPane.checkFileStatus_all ||
-					       check == GeneralOptionPane.checkFileStatus_operations))
-			jEdit.checkBufferStatus(view,false);
-
 		return true;
 	} //}}}
 

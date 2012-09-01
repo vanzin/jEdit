@@ -45,6 +45,7 @@ import org.gjt.sp.jedit.msg.BufferChanging;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
 import org.gjt.sp.jedit.options.GutterOptionPane;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.AntiAlias;
@@ -216,6 +217,10 @@ public class EditPane extends JPanel implements BufferSetListener
 					// see bug #834338
 					if(buffer == getBuffer())
 						loadCaretInfo();
+					// This must happen after loadCaretInfo. Why? 
+					int check = jEdit.getIntegerProperty("checkFileStatus");
+					if (jEdit.isStartupDone() && (check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0);
+						jEdit.checkBufferStatus(view, true);
 				}
 			});
 		}

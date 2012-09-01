@@ -128,8 +128,8 @@ autoReloadDialog=true
 # If this is true, auto reload; if false, use 'reload' button in dialog
 autoReload=true
 
-# When to check file status on disk (0 = upon app focus; 1 = upon app focus, visiting the buffer or saving any buffer; 2 = upon visiting the buffer or saving any buffer; 3 = visiting the buffer; 4 = upon saving the buffer)
-checkFileStatus=0
+# When to check file status on disk: 1=view focus
+checkFileStatus=1
 
 # Encoding detectors
 encodingDetectors=BOM XML-PI html python buffer-local-property

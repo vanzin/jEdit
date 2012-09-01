@@ -42,17 +42,13 @@ import java.awt.event.ActionListener;
 public class GeneralOptionPane extends AbstractOptionPane
 {
 	//{{{ checkFileStatus options
-	// Check the buffer status when the view got the focus
-	public static final int checkFileStatus_focus = 0;
-	// Check the file status when the view got the status
-	// or when saving or visiting the buffer
-	public static final int checkFileStatus_all = 1;
-	// Check the file status when visiting or saving <b>any</b> buffer
-	public static final int checkFileStatus_operations = 2;
-	// Check the file status when visiting or saving the buffer
-	public static final int checkFileStatus_focusBuffer = 3;
-	// Check the file status when saving the buffer
-	public static final int checkFileStatus_none = 4;
+	public static final int checkFileStatus_none = 0;
+	/** Check the buffer status when the view gets focus */
+	public static final int checkFileStatus_focus = 1;
+	/** Check the file status when visiting the buffer */
+	public static final int checkFileStatus_focusBuffer = 2;
+	/** Check the file status when the view gets focus, or when buffer visited */
+	public static final int checkFileStatus_all = 3;	
 	//}}}
 
 	//{{{ Private members
@@ -113,11 +109,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		/* Check mod status upon */
 		String[] modCheckUponOptions = {
+			jEdit.getProperty("options.general.checkModStatusUpon.none"),
 			jEdit.getProperty("options.general.checkModStatusUpon.focus"),
-			jEdit.getProperty("options.general.checkModStatusUpon.all"),
-			jEdit.getProperty("options.general.checkModStatusUpon.operations"),
-			jEdit.getProperty("options.general.checkModStatusUpon.focusBuffer"),
-			jEdit.getProperty("options.general.checkModStatusUpon.none")
+			jEdit.getProperty("options.general.checkModStatusUpon.visitBuffer"),
+			jEdit.getProperty("options.general.checkModStatusUpon.all")
 		};
 		checkModStatusUpon = new JComboBox(modCheckUponOptions);
 

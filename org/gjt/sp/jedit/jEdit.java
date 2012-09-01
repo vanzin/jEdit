@@ -1482,7 +1482,7 @@ public class jEdit
 		}
 
 		if(view != null && retVal != null)
-			view.setBuffer(retVal,true);
+			view.setBuffer(retVal);
 
 		return retVal;
 	} //}}}
@@ -2132,14 +2132,14 @@ public class jEdit
 			if(buffer.isDirty())
 			{
 				if(buffer.isNewFile())
-					view.setBuffer(buffer,true);
+					view.setBuffer(buffer);
 				buffer.save(view,null,true,true);
 			}
 
 			buffer = buffer.next;
 		}
 
-		view.setBuffer(current,true);
+		view.setBuffer(current);
 	} //}}}
 
 	//{{{ reloadAllBuffers() method
@@ -2335,6 +2335,9 @@ public class jEdit
 	 */
 	public static void checkBufferStatus(View view, boolean currentBuffer)
 	{
+		Log.log(Log.DEBUG, jEdit.class, "checkBufferStatus for " + 
+			(currentBuffer ? "current buffer: " + view.getBuffer() : "all buffers"));
+
 		// still need to call the status check even if the option is
 		// off, so that the write protection is updated if it changes
 		// on disk
@@ -4090,7 +4093,7 @@ public class jEdit
 					}
 
 					if(buffer != null)
-						view.setBuffer(buffer,true);
+						view.setBuffer(buffer);
 				}
 				else
 				{

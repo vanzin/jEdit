@@ -991,38 +991,7 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public void setBuffer(Buffer buffer)
 	{
-		setBuffer(buffer,false);
-	} //}}}
-
-	//{{{ setBuffer() method
-	/**
-	 * Sets the current edit pane's buffer.
-	 * @param buffer The buffer
-	 * @param disableFileStatusCheck Disables file status checking
-	 * regardless of the state of the checkFileStatus property
-	 */
-	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck)
-	{
-		setBuffer(buffer, disableFileStatusCheck, true);
-	} //}}}
-
-	//{{{ setBuffer() method
-	/**
-	 * Sets the current edit pane's buffer.
-	 * @param buffer The buffer
-	 * @param disableFileStatusCheck Disables file status checking
-	 * regardless of the state of the checkFileStatus property
-	 * @param focus Whether the textarea should request focus
-	 * @since jEdit 4.3pre13
-	 */
-	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck, boolean focus)
-	{
-		editPane.setBuffer(buffer, focus);
-		int check = jEdit.getIntegerProperty("checkFileStatus");
-		if(!disableFileStatusCheck && (check == GeneralOptionPane.checkFileStatus_all ||
-						  check == GeneralOptionPane.checkFileStatus_operations ||
-						  check == GeneralOptionPane.checkFileStatus_focusBuffer))
-			jEdit.checkBufferStatus(this, true);
+		editPane.setBuffer(buffer);
 	} //}}}
 
 	//{{{ goToBuffer() method
@@ -1645,7 +1614,7 @@ public class View extends JFrame implements InputHandlerProvider
 			}
 		}
 
-		setBuffer(buffer,false, focus);
+		editPane.setBuffer(buffer, focus);
 		return editPane;
 	} //}}}
 
@@ -2023,6 +1992,7 @@ loop:		while (true)
 		EditBus.send(new ViewUpdate(this,ViewUpdate.EDIT_PANE_CHANGED));
 	} //}}}
 
+	
 	//{{{ handleBufferUpdate() method
 	@EBHandler
 	public void handleBufferUpdate(BufferUpdate msg)
@@ -2060,6 +2030,24 @@ loop:		while (true)
 		}
 	} //}}}
 
+	//{{{ handleViewUpdate() method
+	@EBHandler
+	public void handleViewUpdate(ViewUpdate msg) 
+	{
+		// only have my view handle each update message
+		if (msg.getView() == null || msg.getView() != this) return;
+		final int check = jEdit.getIntegerProperty("checkFileStatus");
+		if ((check == 0) || !jEdit.isStartupDone()) return;
+		// "buffer visit" also includes checking the buffer when you change editpanes.
+		if ((msg.getWhat() == ViewUpdate.EDIT_PANE_CHANGED) && 
+			((check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0))
+			jEdit.checkBufferStatus(View.this, true);
+		else if ((msg.getWhat() == ViewUpdate.ACTIVATED) && 
+			(check & GeneralOptionPane.checkFileStatus_focus) > 0)
+				jEdit.checkBufferStatus(View.this,
+					(check != GeneralOptionPane.checkFileStatus_focus));
+	}//}}}
+	
 	//{{{ closeDuplicateBuffers() method
 	private void closeDuplicateBuffers(EditPaneUpdate epu)
 	{
@@ -2075,7 +2063,6 @@ loop:		while (true)
 		if (view != this)
 			return;
 		final Buffer b = ep.getBuffer();
-
 		jEdit.visit(new JEditVisitorAdapter()
 		{
 			@Override
@@ -2190,32 +2177,21 @@ loop:		while (true)
 		@Override
 		public void windowActivated(WindowEvent evt)
 		{
-			boolean editPaneChanged =
-				jEdit.getActiveViewInternal() != View.this;
+			boolean appFocus = false;
+			boolean viewChanged = false;
+			View oldView = jEdit.getActiveViewInternal();
+			// check if view is changed			
+			if (oldView != View.this) viewChanged = true;
+			/* ACTIVATED currently means whenever the View gets focus. 
+			Ideally it should be only when the View changes or we are
+			focusing on a View after previously using in another application.
+			Currently, we also get ACTIVATED messages after a closed jEdit dialog.
+			I consider this a bug which we should fix some day. */
+			if (evt.getOppositeWindow() == null) appFocus = true;
 			jEdit.setActiveView(View.this);
-
-			// People have reported hangs with JDK 1.4; might be
-			// caused by modal dialogs being displayed from
-			// windowActivated()
-			EventQueue.invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					int check = jEdit.getIntegerProperty("checkFileStatus");
-					if(check == GeneralOptionPane.checkFileStatus_focus ||
-					   check == GeneralOptionPane.checkFileStatus_all)
-						jEdit.checkBufferStatus(View.this,false);
-					else if(check == GeneralOptionPane.checkFileStatus_focusBuffer)
-						jEdit.checkBufferStatus(View.this,true);
-				}
-			});
-
-			if (editPaneChanged)
-			{
-				EditBus.send(new ViewUpdate(View.this,ViewUpdate
-					.ACTIVATED));
-			}
+//			Log.log(Log.DEBUG, this, "appFocus:" + appFocus + " viewChanged:" + viewChanged);
+			if (appFocus || viewChanged) 
+				EditBus.send(new ViewUpdate(View.this, ViewUpdate.ACTIVATED));
 		}
 
 		@Override

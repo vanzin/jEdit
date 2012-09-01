@@ -665,7 +665,7 @@ loop:			for(;;)
 		if(match != null)
 		{
 			jEdit.commitTemporary(buffer);
-			view.setBuffer(buffer,true);
+			view.setBuffer(buffer);
 			JEditTextArea textArea = view.getTextArea();
 
 			if(reverse)
