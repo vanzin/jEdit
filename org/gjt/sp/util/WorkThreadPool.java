@@ -88,10 +88,13 @@ public class WorkThreadPool
 
 	//{{{ addWorkRequest() method
 	/**
-	 * Adds a work request to the queue.
+	 * Adds a work request to the queue. Only in one case the
+	 * <code>Runnable</code> is executed directly: if <code>inAWT</code>
+	 * is <code>true</code> and the queue is empty
+	 * at the moment of call.
 	 * @param run The runnable
 	 * @param inAWT If true, will be executed in AWT thread. Otherwise,
-	 * will be executed in work thread. It is never executed directly.
+	 * will be executed in work thread.
 	 */
 	public void addWorkRequest(Runnable run, boolean inAWT)
 	{

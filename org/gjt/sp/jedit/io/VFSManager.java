@@ -208,9 +208,10 @@ public class VFSManager
 	//{{{ runInAWTThread() method
 	/**
 	 * Executes the specified runnable in the AWT thread once all
-	 * pending I/O requests are complete. Even if there are no requests
-	 * active, the <code>Runnable</code> is not executed immediately,
-	 * but through <code>invokeLater</code>.
+	 * pending I/O requests are complete. Only in one case the
+	 * <code>Runnable</code> is executed directly: when the current thread
+	 * is EDT and there are no I/O requests active or queued
+	 * at the moment of call.
 	 * @since jEdit 2.5pre1
 	 * @deprecated Using that method, when you run a task in AWT Thread,
 	 * it will wait for all background task causing some unwanted delays.
