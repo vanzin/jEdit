@@ -23,8 +23,17 @@
 package org.gjt.sp.util;
 
 //{{{ Imports
+import javax.annotation.concurrent.GuardedBy;
 import javax.swing.event.EventListenerList;
+
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.WorkThreadFactory;
+
 import java.awt.EventQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 //}}}
 
 /**
@@ -36,8 +45,10 @@ import java.awt.EventQueue;
  * @since jEdit 2.6pre1
  */
 @Deprecated
-public class WorkThreadPool
+public enum WorkThreadPool
 {
+	INSTANCE("jEdit I/O", jEdit.getIntegerProperty("ioThreadCount", 4));
+
 	//{{{ WorkThreadPool constructor
 	/**
 	 * Creates a new work thread pool with the specified number of
@@ -45,21 +56,27 @@ public class WorkThreadPool
 	 * @param name The thread name prefix
 	 * @param count The number of work threads
 	 */
-	public WorkThreadPool(String name, int count)
+	private WorkThreadPool(String name, int count)
 	{
+		if(count <= 0)
+			throw new IllegalArgumentException();
+
 		listenerList = new EventListenerList();
 
-		if(count != 0)
-		{
-			threadGroup = new ThreadGroup(name);
-			threads = new WorkThread[count];
-			for(int i = 0; i < threads.length; i++)
-			{
-				threads[i] = new WorkThread(this,threadGroup,name + " #" + (i+1));
+		ThreadFactory threadFactory = new WorkThreadFactory(name);
+		threadPool = Executors.newFixedThreadPool(count, threadFactory);
+		workRequests = new WorkRequest[count];
+		nopWorkRequest = new WorkRequest() {
+
+			@Override
+			public void _run() {
 			}
-		}
-		else
-			Log.log(Log.WARNING,this,"Async I/O disabled");
+
+			@Override
+			public boolean isRequestRunning() {
+				return false;
+			}
+		};
 	} //}}}
 
 	//{{{ start() method
@@ -68,21 +85,10 @@ public class WorkThreadPool
 	 */
 	public void start()
 	{
-		/* not really needed since threads don't start until after */
 		synchronized(lock)
 		{
 			started = true;
-
-			if(awtRequestCount != 0 && requestCount == 0)
-				queueAWTRunner();
-		}
-
-		if(threads != null)
-		{
-			for(int i = 0; i < threads.length; i++)
-			{
-				threads[i].start();
-			}
+			queueAWTRunner();
 		}
 	} //}}}
 
@@ -98,28 +104,22 @@ public class WorkThreadPool
 	 */
 	public void addWorkRequest(Runnable run, boolean inAWT)
 	{
-		if(threads == null)
+
+		if(inAWT)
 		{
-			run.run();
-			return;
-		}
-
-		synchronized(lock)
-		{
-			//{{{ if there are no requests, execute AWT requests immediately
-			if(started && inAWT && requestCount == 0 && awtRequestCount == 0)
+			synchronized(lock)
 			{
-//				Log.log(Log.DEBUG,this,"AWT immediate: " + run);
+				//{{{ if there are no requests, execute AWT requests immediately
+				if(started && requestCount.get() == 0 && awtRequestCount == 0)
+				{
+//					Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 
-				ThreadUtilities.runInDispatchThread(run);
-				return;
-			} //}}}
+					ThreadUtilities.runInDispatchThread(run);
+					return;
+				} //}}}
 
-			Request request = new Request(run);
-
-			//{{{ Add to AWT queue...
-			if(inAWT)
-			{
+				Request request = new Request(run);
+	
 				if(firstAWTRequest == null && lastAWTRequest == null)
 					firstAWTRequest = lastAWTRequest = request;
 				else
@@ -127,32 +127,49 @@ public class WorkThreadPool
 					lastAWTRequest.next = request;
 					lastAWTRequest = request;
 				}
-
+	
 				awtRequestCount++;
+			}
 
-				// if no requests are running, requestDone()
-				// will not be called, so we must queue the
-				// AWT runner ourselves.
-				if(started && requestCount == 0)
-					queueAWTRunner();
-			} //}}}
-			//{{{ Add to work thread queue...
+			// queue AWT request
+			queueAWTRunner();
+		} else
+		{
+			WorkRequest wr;
+			if (run instanceof WorkRequest)
+			{
+				wr = (WorkRequest) run;
+			}
 			else
 			{
-				if(firstRequest == null && lastRequest == null)
-					firstRequest = lastRequest = request;
-				else
-				{
-					lastRequest.next = request;
-					lastRequest = request;
-				}
-
-				requestCount++;
-			} //}}}
-
-			lock.notifyAll();
+//				Log.log(Log.DEBUG,this,"Runnable " + run + " in VFS background queue is not a WorkRequest!");
+				wr = decorate(run);
+			}
+			requestCount.incrementAndGet();
+			threadPool.execute(wr);
 		}
 	} //}}}
+
+	private WorkRequest decorate(Runnable run)
+	{
+		return new AbstractWorkRequest(run);
+	}
+
+	private static class AbstractWorkRequest extends WorkRequest
+	{
+		private final Runnable runnable;
+
+		private AbstractWorkRequest(Runnable runnable)
+		{
+			this.runnable = runnable;
+		}
+
+		@Override
+		public void _run()
+		{
+			runnable.run();
+		}
+	}
 
 	//{{{ waitForRequests() method
 	/**
@@ -160,12 +177,9 @@ public class WorkThreadPool
 	 */
 	public void waitForRequests()
 	{
-		if(threads == null)
-			return;
-
 		synchronized(waitForAllLock)
 		{
-			while(requestCount != 0)
+			while(requestCount.get() != 0)
 			{
 				try
 				{
@@ -178,22 +192,8 @@ public class WorkThreadPool
 			}
 		}
 
-		if(EventQueue.isDispatchThread())
-		{
-			// do any queued AWT runnables
-			doAWTRequests();
-		}
-		else
-		{
-			try
-			{
-				EventQueue.invokeAndWait(new RunRequestsInAWTThread());
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-		}
+		// do any queued AWT runnables
+		doAWTRequests();
 	} //}}}
 
 	//{{{ getRequestCount() method
@@ -203,7 +203,7 @@ public class WorkThreadPool
 	 */
 	public int getRequestCount()
 	{
-		return requestCount;
+		return requestCount.get();
 	} //}}}
 
 	//{{{ getThreadCount() method
@@ -213,22 +213,58 @@ public class WorkThreadPool
 	 */
 	public int getThreadCount()
 	{
-		if(threads == null)
-			return 0;
-		else
-			return threads.length;
+		return workRequests.length;
 	} //}}}
 
-	//{{{ getThread() method
-	/**
-	 * Returns the specified thread.
-	 * @param index The index of the thread
-	 * @return a WorkThread
-	 */
-	public WorkThread getThread(int index)
+	public int workRequestStart(WorkRequest workRequest)
 	{
-		return threads[index];
-	} //}}}
+		int i = 0;
+		synchronized(lock)
+		{
+			for(int n = workRequests.length; i < n ; i++)
+			{
+				if(workRequests[i] == null)
+					break;
+			}
+			workRequests[i] = workRequest;
+		}
+
+		return i;
+	}
+
+	public void workRequestEnd(WorkRequest workRequest)
+	{
+		if(Thread.currentThread() instanceof WorkThread)
+			requestCount.decrementAndGet();
+		else
+			Log.log(Log.DEBUG,this,"WorkRequest run in non-WorkThread thread!");
+
+		int runNo = workRequest.getRunNo();
+		synchronized(lock)
+		{
+			workRequests[runNo] = null;
+		}
+
+		synchronized(waitForAllLock)
+		{
+			// notify a running waitForRequests() method
+			waitForAllLock.notifyAll();
+		}
+
+		queueAWTRunner();
+	}
+
+	public WorkRequest getWorkRequestWithRunNo(int index)
+	{
+		synchronized(lock)
+		{
+			WorkRequest workRequest = workRequests[index];
+			if(workRequest == null) {
+				return nopWorkRequest;
+			} else
+				return workRequest;
+		}
+	}
 
 	//{{{ addProgressListener() method
 	/**
@@ -251,24 +287,43 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ Package-private members
-	final Object lock = new Object();
-	final Object waitForAllLock = new Object();
+
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private final ExecutorService threadPool;
+	private final EventListenerList listenerList;
+	// map requst to old static thread id for IOProgressMonitor
+	@GuardedBy("lock") private final WorkRequest[] workRequests;
+	private final WorkRequest nopWorkRequest;
+
+	@GuardedBy("lock") private boolean started;
+
+	// Request queue
+	private final AtomicInteger requestCount = new AtomicInteger();
+
+	// AWT thread queue
+	@GuardedBy("lock") private boolean awtRunnerQueued;
+	@GuardedBy("lock") private Request firstAWTRequest;
+	@GuardedBy("lock") private Request lastAWTRequest;
+	@GuardedBy("lock") private int awtRequestCount;
+
+	private static AtomicInteger requstCounter = new AtomicInteger();
+
+	//}}}
+
+	private final Object lock = new Object();
+	private final Object waitForAllLock = new Object();
 
 	//{{{ fireStatusChanged() method
-	void fireStatusChanged(WorkThread thread)
+	void fireStatusChanged(WorkRequest workRequest)
 	{
 		final Object[] listeners = listenerList.getListenerList();
 		if(listeners.length != 0)
 		{
-			int index = 0;
-			for(int i = 0; i < threads.length; i++)
-			{
-				if(threads[i] == thread)
-				{
-					index = i;
-					break;
-				}
-			}
+			int index = workRequest.getRunNo();
 
 			for(int i = listeners.length - 2; i >= 0; i--)
 			{
@@ -282,20 +337,12 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ fireProgressChanged() method
-	void fireProgressChanged(WorkThread thread)
+	void fireProgressChanged(WorkRequest workRequest)
 	{
 		final Object[] listeners = listenerList.getListenerList();
 		if(listeners.length != 0)
 		{
-			int index = 0;
-			for(int i = 0; i < threads.length; i++)
-			{
-				if(threads[i] == thread)
-				{
-					index = i;
-					break;
-				}
-			}
+			int index = workRequest.getRunNo();
 
 			for(int i = listeners.length - 2; i >= 0; i--)
 			{
@@ -308,86 +355,26 @@ public class WorkThreadPool
 		}
 	} //}}}
 
-	//{{{ requestDone() method
-	void requestDone()
-	{
-		synchronized(lock)
-		{
-			requestCount--;
-
-			if(requestCount == 0 && firstAWTRequest != null)
-				queueAWTRunner();
-		}
-	} //}}}
-
-	//{{{ getNextRequest() method
-	Request getNextRequest()
-	{
-		synchronized(lock)
-		{
-			Request request = firstRequest;
-			if(request == null)
-				return null;
-
-			firstRequest = firstRequest.next;
-			if(firstRequest == null)
-				lastRequest = null;
-
-			if(request.alreadyRun)
-				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
-			request.alreadyRun = true;
-
-			/* StringBuffer buf = new StringBuffer("request queue is now: ");
-			Request _request = request.next;
-			while(_request != null)
-			{
-				buf.append(_request.id);
-				if(_request.next != null)
-					buf.append(",");
-				_request = _request.next;
-			}
-			Log.log(Log.DEBUG,this,buf.toString()); */
-
-			return request;
-		}
-	} //}}}
-
-	//}}}
-
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private boolean started;
-	private ThreadGroup threadGroup;
-	private WorkThread[] threads;
-
-	// Request queue
-	private Request firstRequest;
-	private Request lastRequest;
-	private int requestCount;
-
-	// AWT thread magic
-	private boolean awtRunnerQueued;
-	private Request firstAWTRequest;
-	private Request lastAWTRequest;
-	private int awtRequestCount;
-
-	private final EventListenerList listenerList;
-	//}}}
-
 	//{{{ doAWTRequests() method
-	/** Must always be called with the lock held. */
 	private void doAWTRequests()
 	{
-		while(requestCount == 0 && firstAWTRequest != null)
+		Request req = null;
+		while(requestCount.get() == 0)
 		{
-			doAWTRequest(getNextAWTRequest());
+			synchronized (lock)
+			{
+				if(firstAWTRequest != null)
+				{
+					req = getNextAWTRequest();
+				} else
+					break;
+			}
+			doAWTRequest(req);
 		}
 	} //}}}
 
 	//{{{ doAWTRequest() method
 	/**
-	 * Must always be called with the lock held.
 	 * @param request the request to run
 	 */
 	private void doAWTRequest(Request request)
@@ -405,22 +392,34 @@ public class WorkThreadPool
 			Log.log(Log.ERROR,WorkThread.class,t);
 		}
 
-		awtRequestCount--;
+		synchronized(lock)
+		{
+			awtRequestCount--;
+		}
 	} //}}}
 
 	//{{{ queueAWTRunner() method
 	/** Must always be called with the lock held. */
 	private void queueAWTRunner()
 	{
-		if(!awtRunnerQueued)
+		boolean queueAwtRunner = false;
+		synchronized (lock)
 		{
-			awtRunnerQueued = true;
+			if(started && !awtRunnerQueued && firstAWTRequest != null)
+			{
+				queueAwtRunner = this.awtRunnerQueued = true;
+			}
+		}
+
+		if(queueAwtRunner)
+		{
 			EventQueue.invokeLater(new RunRequestsInAWTThread());
 //			Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
 	} //}}}
 
 	//{{{ getNextAWTRequest() method
+	/** Must always be called with the lock held. */
 	private Request getNextAWTRequest()
 	{
 		Request request = firstAWTRequest;
@@ -448,12 +447,10 @@ public class WorkThreadPool
 
 	//}}}
 
-	static int ID;
-
 	//{{{ Request class
-	static class Request
+	private static class Request
 	{
-		int id = ++ID;
+		int id = requstCounter.incrementAndGet();
 
 		Runnable run;
 
@@ -473,16 +470,15 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ RunRequestsInAWTThread class
-	class RunRequestsInAWTThread implements Runnable
+	private class RunRequestsInAWTThread implements Runnable
 	{
 		public void run()
 		{
 			synchronized(lock)
 			{
 				awtRunnerQueued = false;
-				if(requestCount == 0)
-					doAWTRequests();
 			}
+			doAWTRequests();
 		}
 	} //}}}
 }

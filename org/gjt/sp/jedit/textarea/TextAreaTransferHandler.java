@@ -492,7 +492,7 @@ public class TextAreaTransferHandler extends TransferHandler
 			this.textArea = textArea;
 			this.url = url;
 		}
-		public void run()
+		public void _run()
 		{
 			EditPane editPane = EditPane.get(textArea);
 			jEdit.openFile(editPane,url);

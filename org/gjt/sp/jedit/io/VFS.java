@@ -42,6 +42,7 @@ import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
+import org.gjt.sp.util.WorkRequest;
 import org.gjt.sp.util.WorkThread;
 //}}}
 
@@ -489,7 +490,7 @@ public abstract class VFS
 		if((getCapabilities() & WRITE_CAP) == 0)
 			buffer.setReadOnly(true);
 
-		BufferIORequest request = new BufferLoadRequest(view, buffer, session, this, path);
+		WorkRequest request = new BufferLoadRequest(view, buffer, session, this, path);
 		if(buffer.isTemporary())
 			// this makes HyperSearch much faster
 			request.run();

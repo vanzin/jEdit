@@ -68,13 +68,7 @@ public class VFSManager
 	 */
 	public static void init()
 	{
-		int count = jEdit.getIntegerProperty("ioThreadCount",4);
-		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
-		JARClassLoader classLoader = new JARClassLoader();
-		for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
-		{
-			ioThreadPool.getThread(i).setContextClassLoader(classLoader);
-		}
+		ioThreadPool = WorkThreadPool.INSTANCE;
 	} //}}}
 
 	//{{{ start() method
@@ -180,10 +174,14 @@ public class VFSManager
 	//{{{ waitForRequests() method
 	/**
 	 * Returns when all pending requests are complete.
+	 * Must be called in the Event Dispatch Thread
 	 * @since jEdit 2.5pre1
 	 */
 	public static void waitForRequests()
 	{
+		if(EventQueue.isDispatchThread() != true)
+			throw new IllegalStateException();
+
 		ioThreadPool.waitForRequests();
 	} //}}}
 

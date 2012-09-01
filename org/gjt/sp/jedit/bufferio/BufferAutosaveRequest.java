@@ -52,7 +52,7 @@ public class BufferAutosaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	public void _run()
 	{
 		OutputStream out = null;
 

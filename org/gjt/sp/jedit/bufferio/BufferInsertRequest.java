@@ -52,7 +52,7 @@ public class BufferInsertRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	public void _run()
 	{
 		InputStream in = null;
 		try

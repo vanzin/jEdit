@@ -59,7 +59,7 @@ public class BufferLoadRequest extends BufferIORequest
 	} //}}}
 	
 	//{{{ run() method
-	public void run()
+	public void _run()
 	{
 		try
 		{

@@ -159,25 +159,25 @@ public class IOProgressMonitor extends JPanel
 		//{{{ update() method
 		public void update()
 		{
-			WorkThread thread = VFSManager.getIOThreadPool().getThread(index);
-			if(thread.isRequestRunning())
+			WorkRequest workRequest = VFSManager.getIOThreadPool().getWorkRequestWithRunNo(index);
+			if(workRequest.isRequestRunning())
 			{
 				if (progress.isIndeterminate())
 				{
-					if (thread.getProgressMaximum() != 0)
+					if (workRequest.getProgressMaximum() != 0)
 						progress.setIndeterminate(false);
 				}
-				else if (thread.getProgressMaximum() == 0)
+				else if (workRequest.getProgressMaximum() == 0)
 					progress.setIndeterminate(true);
 				
 				abort.setEnabled(true);
-				String status = thread.getStatus();
+				String status = workRequest.getStatus();
 				if(status == null)
 					status = "";
 				progress.setString(status);
-				progress.setMaximum(thread.getProgressMaximum());
+				progress.setMaximum(workRequest.getProgressMaximum());
 				//System.err.println("value: " + thread.getProgressValue());
-				progress.setValue(thread.getProgressValue());
+				progress.setValue(workRequest.getProgressValue());
 			}
 			else
 			{
@@ -208,8 +208,8 @@ public class IOProgressMonitor extends JPanel
 						JOptionPane.QUESTION_MESSAGE);
 					if(result == JOptionPane.YES_OPTION)
 					{
-						VFSManager.getIOThreadPool().getThread(index)
-							.abortCurrentRequest();
+						VFSManager.getIOThreadPool().getWorkRequestWithRunNo(index)
+							.abortRequest();
 					}
 				}
 			}
