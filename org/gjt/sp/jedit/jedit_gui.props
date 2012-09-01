@@ -638,7 +638,7 @@ about.text.contributors=Slava Pestov\n\
 	Jim Morris\n\
 	Jim Wissner\n\
 	Jimmy Chaw\n\
-	J\u00F6rg Spieler\n\
+	Jörg Spieler\n\
 	John Gellene\n\
 	John Perry\n\
 	Jojaba\n\
@@ -687,7 +687,7 @@ about.text.contributors=Slava Pestov\n\
 	Mike Dillon\n\
 	Mike Gorski\n\
 	Mike Hansen\n\
-	Milan \u010Cernil\n\
+	Milan Černil\n\
 	Mirco Bova\n\
 	Nahuel Foronda\n\
 	Neil Bertram\n\
@@ -755,7 +755,7 @@ about.text.contributors=Slava Pestov\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00F6pfer
+	Wolfgang Chico-Töpfer
 #}}}
 
 #{{{ Search and replace dialog
@@ -809,12 +809,12 @@ options.appearance.code=new AppearanceOptionPane();
 # here (not in localized .props) to catch eyes of non-English users more
 # friendly.
 options.appearance.lang.en=English
-options.appearance.lang.fr=Fran\u00E7ais
+options.appearance.lang.fr=Français
 options.appearance.lang.de=Deutsch
 #Japanese
-options.appearance.lang.ja=\u65E5\u672C\u8A9E
-options.appearance.lang.cs=\u010Cesky
-options.appearance.lang.ru=\u0420\u0443\u0441\u0441\u043A\u0438\u0439
+options.appearance.lang.ja=日本語
+options.appearance.lang.cs=Česky
+options.appearance.lang.ru=Русский
 #}}}
 
 #{{{ Context Menu pane
