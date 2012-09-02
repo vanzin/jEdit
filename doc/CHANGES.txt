@@ -11,6 +11,9 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 - Fix "Customize This Menu..." item in context menu options (#3554895 Tom Power)
 
+- Fixed the StandaloneTextArea that cannot load keymaps
+  (#3562023 Matthieu Casanova)
+
 - The .jedit/modes/catalog is now written using UTF-8 instead of default
   OS encoding (#3560800 Matthieu Casanova)
 
