@@ -11,6 +11,9 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 - Fix "Customize This Menu..." item in context menu options (#3554895 Tom Power)
 
+- The .jedit/modes/catalog is now written using UTF-8 instead of default
+  OS encoding (#3560800 Matthieu Casanova)
+
 - Fix a case where a NPE occurs when removing a plugin
   (#3557441 Matthieu Casanova)
 
@@ -28,7 +31,6 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 - New method MiscUtilities.openInDesktop() (Alan Ezust)
 
 }}}
-
 {{{ UI
 
 - Added russian localization (patch #3544154 Vladimir Avdonin)
