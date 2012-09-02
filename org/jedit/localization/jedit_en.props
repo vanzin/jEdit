@@ -1429,6 +1429,7 @@ options.plugin-manager.location=Install plugins in:
 options.plugin-manager.settings-dir=jEdit settings directory
 options.plugin-manager.app-dir=jEdit application directory
 options.plugin-manager.none=Plugin Central default
+options.plugin-manager.disable-obsolete=Disable obsolete plugins
 #}}}
 
 #{{{ Printing pane
@@ -1961,6 +1962,7 @@ install-plugins.depend.message=One or more of the plugins you are installing\n\
 	installed if you continue.
 
 plugin-manager.status.loaded=Loaded
+plugin-manager.status.disabled=Unsupported
 plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error
 

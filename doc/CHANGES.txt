@@ -35,6 +35,12 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 }}}
 
+{{{ Miscellaneous
+
+- Feature request #2931321 - Disable obsolete plugins (Alan Ezust)
+
+}}}
+
 }}}
 
 
@@ -394,6 +400,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - Updated Move Lines Up and Down macros to move whole lines regardless of
   selection. (Dale Anson)
+
 
 }}}
 
