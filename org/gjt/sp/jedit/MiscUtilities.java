@@ -596,7 +596,14 @@ public class MiscUtilities
 		else if (OperatingSystem.isMacOS())
 			sl.add("open");
 		else if (OperatingSystem.isX11())
-			sl.add("xdg-open");
+		{
+			/* For kde or gnome, use gnome-open.
+			   xdg-open opens some filetypes via the web browser instead of running
+			   the gnome/kde preferred app directly */
+			File f = new File("/usr/bin/gnome-open");
+			if (f.exists()) sl.add("gnome-open");
+			else sl.add("xdg-open");
+		}
 		try 
 		{		
 			if (sl.isEmpty()) // I don't know what platform it is
@@ -604,6 +611,7 @@ public class MiscUtilities
 			else 
 			{
 				sl.add(path);
+				Log.log(Log.DEBUG, MiscUtilities.class, "openInDesktop: " + sl.join(" "));
 				Runtime.getRuntime().exec(sl.toArray());
 			}
 		}
