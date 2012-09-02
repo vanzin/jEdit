@@ -5,7 +5,7 @@ jEdit 5.0 version history
 {{{ Version 5.0pre2
 
 Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power, Malathi, 
-and Alan Ezust for contributing to this release.
+Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
@@ -24,8 +24,17 @@ and Alan Ezust for contributing to this release.
 
 }}}
 {{{ API
+
 - New method MiscUtilities.openInDesktop() (Alan Ezust)
+
 }}}
+
+{{{ UI
+
+- Added russian localization (patch #3544154 Vladimir Avdonin)
+
+}}}
+
 }}}
 
 

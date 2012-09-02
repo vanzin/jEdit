@@ -750,6 +750,7 @@ about.text.contributors=Slava Pestov\n\
 	Trevor Harmon\n\
 	Vicente Salvador\n\
 	Vinod Kiran\n\
+	Vladimir Avdonin\n\
 	Will Sargent\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
@@ -813,6 +814,7 @@ options.appearance.lang.de=Deutsch
 #Japanese
 options.appearance.lang.ja=日本語
 options.appearance.lang.cs=Česky
+options.appearance.lang.ru=Русский
 #}}}
 
 #{{{ Context Menu pane
