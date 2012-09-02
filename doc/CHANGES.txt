@@ -63,6 +63,14 @@ and Maik Nijhuis for contributing to this release.
 
 - New method: View.getBuffers(), aware of bufferset scope. (Alan Ezust)
 
+- Removed View.setBuffer(Buffer, boolean, boolean) and
+  View.setBuffer(Buffer, boolean): methods that had disableFileCheck flag in
+  since View no longer checks file status there. (#1871440 Alan Ezust)
+
+- AllBufferSet.AllBufferSet(String glob, View v) - additional required
+  argument for View in constructor argument list. (#3423442 Alan Ezust)
+
+
 }}}
 {{{ Editing
 
