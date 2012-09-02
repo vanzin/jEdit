@@ -4,7 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2002-2012 Slava Pestov, Matthieu Casanova, Kris Kopicki,
- 	Shlomy Reinstein, Alan Ezust
+ * 				Shlomy Reinstein, Alan Ezust
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,7 +146,7 @@ public class PluginManager extends JFrame
 	//{{{ pluginRemoved() method
 	/**
 	 * A callback called by the @link ManagePanel} when a plugin is removed.
-	 * In that case, if the plugin had an update, the updated has to remove it,
+	 * In that case, if the plugin had an update, the updater has to remove it,
 	 * and the installer panel has to show the plugin again.
 	 */
 	void pluginRemoved()
@@ -302,24 +302,20 @@ public class PluginManager extends JFrame
 			for (Plugin plugin: pluginList.plugins)
 				if (MiscUtilities.pathsEqual(plugin.jar, MiscUtilities.getFileName(jar.getPath())))
 				{
-					// find the latest branch with version greater than or equal to installedVersion
+					// find the branch with latest version greater than or equal to installedVersion
 					Branch lastBranch = null;
-					String latestVersion = "";
+					String latestVersion = "0";
 					for (Branch branch: plugin.branches)
-					{
-						// found a branch greater or equal to our own version:
 						if (StandardUtilities.compareStrings(branch.version, installedVersion, false) >= 0) 
 							if (StandardUtilities.compareStrings(branch.version, latestVersion, false) >= 0) 
 							{
 								latestVersion = branch.version;
 								lastBranch = branch;
-							}
-						
-					}
+							}					
 					if (lastBranch != null) 
 						if (lastBranch.obsolete) disablePlugin(jar, plugin.name);	
 						else for (Dependency dep: lastBranch.deps)
-							// if there is a max jedit version, check if we're higher:
+							// if there is a max jEdit version, check if we're higher:
 							if (dep.what.equals("jedit") && (dep.to != null))
 								if (StandardUtilities.compareStrings(jEdit.getBuild(), dep.to, false) > 0)
 									disablePlugin(jar, plugin.name);
