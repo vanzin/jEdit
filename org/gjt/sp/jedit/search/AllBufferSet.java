@@ -33,7 +33,7 @@ import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
- * A file set for searching all open buffers.
+ * A file set for searching all open buffers in a view.
  * @author Slava Pestov
  * @version $Id$
  */
@@ -41,15 +41,17 @@ public class AllBufferSet extends BufferListSet
 {
 	//{{{ AllBufferSet constructor
 	/**
-	 * Creates a new all buffer set.
+	 * Creates a view buffer set.
 	 * @param glob The filename glob
-	 * @since jEdit 2.7pre3
+	 * @param view The view to check for open buffers
+	 * @since jEdit 5.1pre1
 	 */
-	public AllBufferSet(String glob)
+	public AllBufferSet(String glob, View v)
 	{
 		this.glob = glob;
+		this.view = v;
 	} //}}}
-
+	
 	//{{{ getFileFilter() method
 	/**
 	 * Returns the filename filter.
@@ -68,19 +70,20 @@ public class AllBufferSet extends BufferListSet
 	@Override
 	public String getCode()
 	{
-		return "new AllBufferSet(\"" + StandardUtilities.charsToEscapes(glob)
-			+ "\")";
+		return "new AllBufferSet(\"" + StandardUtilities.charsToEscapes(glob) 
+		+ "\", view)";
 	} //}}}
 
 	//{{{ Instance variables
 	private String glob;
+	private View view;
 	//}}}
 
 	//{{{ _getFiles() method
 	@Override
 	protected String[] _getFiles(Component comp)
 	{
-		Buffer[] buffers = jEdit.getBuffers();
+		Buffer[] buffers = view.getBuffers();
 		List<String> returnValue = new ArrayList<String>(buffers.length);
 
 		Pattern filter;

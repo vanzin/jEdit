@@ -773,7 +773,7 @@ public class SearchDialog extends EnhancedDialog
 					hyperSearch.isSelected());
 			}
 			else if(searchAllBuffers.isSelected())
-				fileset = new AllBufferSet(filter);
+				fileset = new AllBufferSet(filter, view);
 			else if(searchDirectory.isSelected())
 			{
 				String directory = this.directory.getText();

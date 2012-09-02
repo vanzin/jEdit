@@ -10,6 +10,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Search all buffers now observes current BufferSet scope and can be restricted
+  to the current view's buffersets when scope is not global. (#3423442 Alan Ezust)
+
 - Fix File status checking after buffer switch (#1871440 Alan Ezust)
 
 - Fix File status checking before save (#3562315 Alan Ezust)
