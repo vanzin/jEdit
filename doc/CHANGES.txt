@@ -15,10 +15,10 @@ and Maik Nijhuis for contributing to this release.
 - Fix File status checking before save (#3562315 Alan Ezust)
 
 - Fixed the StandaloneTextArea that cannot load keymaps
-  (#3562023 Matthieu Casanova)
+  (#3562023 Matthieu Casanova) [5.0pre2]
 
 - The .jedit/modes/catalog is now written using UTF-8 instead of default
-  OS encoding (#3560800 Matthieu Casanova)
+  OS encoding (#3560800 Matthieu Casanova) [5.0pre2]
 
 - Undo restores selection state in simple cases (deletions, replaces
   on simple range selections). (patch #1570553 Maik Nijhuis, Thomas Meyer,
