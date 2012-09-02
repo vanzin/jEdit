@@ -51,6 +51,9 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ API Changes
 
+- New class: OneTimeMigrationStep, for adding property migration services
+(used by fix for #1871440 Alan Ezust)
+
 - New method VFSBrowser.getLastVisitedPath() (Jarek Czekalski)
 
 - New method IOUtilities.closeQuietly(ObjectInput) (Matthieu Casanova)

@@ -34,6 +34,7 @@ package org.jedit.core;
  * <br />
  * Concrete instances need to gurantee that the migration itself is only done
  * once.
+ * @see OneTimeMigrationService
  *
  * @author Matthieu Casanova
  */

@@ -174,4 +174,9 @@
 	<SERVICE CLASS="org.jedit.core.MigrationService" NAME="keymap">
 		new org.jedit.migration.KeymapMigration();
 	</SERVICE>
+	
+	<SERVICE CLASS="org.jedit.migration.OneTimeMigrationService" NAME="checkFileStatus" >
+	  new org.jedit.migration.CheckFileStatus();
+	</SERVICE>
+	
 </SERVICES>

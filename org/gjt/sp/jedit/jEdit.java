@@ -26,6 +26,7 @@ import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
 import org.gjt.sp.util.StringList;
 import org.jedit.core.MigrationService;
+import org.jedit.migration.OneTimeMigrationService;
 import org.jedit.keymap.KeymapManager;
 import org.jedit.keymap.KeymapManagerImpl;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
@@ -354,7 +355,6 @@ public class jEdit
 		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
 			GUIUtilities.showSplashScreen();
 		logTime("after splash screen activation");
-
 		//{{{ Settings migration code.
 		// Windows check introduced in 5.0pre1.
 		// MacOS check introduced in 4.3.
@@ -495,6 +495,10 @@ public class jEdit
 		KillRing.setInstance(new JEditKillRing());
 		KillRing.getInstance().load();
 		GUIUtilities.advanceSplashProgress("init various properties");
+
+		// other one-time migration services. 
+		OneTimeMigrationService.execute();
+
 		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress("init modes");
