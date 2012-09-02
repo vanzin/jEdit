@@ -2049,6 +2049,7 @@ loop:		while (true)
 	}//}}}
 	
 	//{{{ closeDuplicateBuffers() method
+	/** Used if exclusive buffersets are enabled */
 	private void closeDuplicateBuffers(EditPaneUpdate epu)
 	{
 		if (!jEdit.getBooleanProperty("buffersets.exclusive"))
@@ -2063,6 +2064,7 @@ loop:		while (true)
 		if (view != this)
 			return;
 		final Buffer b = ep.getBuffer();
+		if (b.isDirty()) return;
 		jEdit.visit(new JEditVisitorAdapter()
 		{
 			@Override
