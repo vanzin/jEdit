@@ -52,6 +52,12 @@ public class AllBufferSet extends BufferListSet
 		this.view = v;
 	} //}}}
 	
+	//{{{ getView() method
+	public View getView() 
+	{
+		return view;
+	}//}}}
+	
 	//{{{ getFileFilter() method
 	/**
 	 * Returns the filename filter.
