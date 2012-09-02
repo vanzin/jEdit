@@ -15,26 +15,27 @@ and Maik Nijhuis for contributing to this release.
 - Fix File status checking before save (#3562315 Alan Ezust)
 
 - Fixed the StandaloneTextArea that cannot load keymaps
-  (#3562023 Matthieu Casanova) [5.0pre2]
+  (#3562023 Matthieu Casanova) [merged into 5.0.x]
 
 - The .jedit/modes/catalog is now written using UTF-8 instead of default
-  OS encoding (#3560800 Matthieu Casanova) [5.0pre2]
+  OS encoding (#3560800 Matthieu Casanova) [merged into 5.0.x]
 
 - Undo restores selection state in simple cases (deletions, replaces
   on simple range selections). (patch #1570553 Maik Nijhuis, Thomas Meyer,
   Jarek Czekalski)
 
 - Fix a case where a NPE occurs when removing a plugin
-  (#3557441 Matthieu Casanova) [5.0pre2]
+  (#3557441 Matthieu Casanova) [merged into 5.0.x]
 
 - Filter not synchronizing in search dialog when
   "All buffers" is selected. (#1646584, patch #3549905 Eric Le Lay)
 
 - Recognizing "Extra word characters" in "Whole word" option in
-  searches (#3522497, patch #3543524 Malathi) [5.0pre2]
+  searches (#3522497, patch #3543524 Malathi) [merged into 5.0.x]
 
 - Fix pressing return in parent files of the VFS browser that do not browse 
-  the selected folder as it should (patch #3543499 by Eric Le Lay) [5.0pre2]
+  the selected folder as it should (patch #3543499 by Eric Le Lay)
+  [merged into 5.0.x]
 
 - Fixed VFS session not ended in VFS.copy() api (#3522406 Matthieu Casanova)
 
@@ -42,7 +43,7 @@ and Maik Nijhuis for contributing to this release.
   (#2911520 Matthieu Casanova)
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
-  [5.0pre2]
+  [merged into 5.0.x]
 
 }}}
 {{{ API Changes
@@ -53,7 +54,7 @@ and Maik Nijhuis for contributing to this release.
 
 - New method IOUtilities.closeQuietly(ObjectOutput) (Matthieu Casanova)
 
-- New method MiscUtilities.openInDesktop() [5.0pre2] (Alan Ezust)
+- New method MiscUtilities.openInDesktop() (Alan Ezust) [merged into 5.0.x]
 
 - New method GUIUtilities.setAutoMnemonic(AbstractButton) (Jarek Czekalski)
 
@@ -81,7 +82,8 @@ and Maik Nijhuis for contributing to this release.
 
 - Enable ContextMenu via keyboard to VFS-BrowserView (#3560239, Thomas Meyer)
 
-- Added russian localization (patch #3544154 Vladimir Avdonin) [5.0pre2]
+- Added russian localization (patch #3544154 Vladimir Avdonin)
+  [merged into 5.0.x]
 
 - Added a possibility to suppress synchronization of the filter in search
   dialog, using a hidden setting in jedit.props: search.dontSyncFilter.
