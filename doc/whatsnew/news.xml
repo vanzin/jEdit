@@ -42,5 +42,13 @@
     </para></listitem>
 
     </itemizedlist>
+
+    <itemizedlist>
+      <listitem><para> New option to check for and disable obsolete plugins. Enabled by
+      default, this will ensure that old unsupported plugins do not interfere
+      with the running operation of jEdit. </para> 
+    </listitem>
+    </itemizedlist>
+
 <!-- :maxLineLen=80:wrap=hard: -->
 </article>

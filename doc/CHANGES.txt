@@ -28,13 +28,11 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 - New method MiscUtilities.openInDesktop() (Alan Ezust)
 
 }}}
-
 {{{ UI
 
 - Added russian localization (patch #3544154 Vladimir Avdonin)
 
 }}}
-
 {{{ Miscellaneous
 
 - Feature request #2931321 - Disable obsolete plugins (Alan Ezust)
