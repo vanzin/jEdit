@@ -454,8 +454,7 @@ public class Buffer extends JEditBuffer
 		{
 			long newModTime = file.lastModified();
 
-			if(newModTime != modTime
-				&& jEdit.getBooleanProperty("view.checkModStatus"))
+			if((newModTime != modTime) && (getAutoReload() || getAutoReloadDialog()))
 			{
 				Object[] args = { this.path };
 				int result = GUIUtilities.confirm(view,
@@ -638,8 +637,8 @@ public class Buffer extends JEditBuffer
 	public static final int FILE_DELETED = 2;
 	/**
 	 * Check if the buffer has changed on disk.
-	 * @return One of <code>NOT_CHANGED</code>, <code>CHANGED</code>, or
-	 * <code>DELETED</code>.
+	 * @return One of <code>FILE_NOT_CHANGED</code>, <code>FILE_CHANGED</code>, or
+	 * <code>FILE_DELETED</code>.
 	 *
 	 * @since jEdit 4.2pre1
 	 */
