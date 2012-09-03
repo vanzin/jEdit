@@ -33,7 +33,7 @@ import org.jedit.core.MigrationService;
     jEdit will call doMigration() on each object, which will skip the ones that
     have been done before.
     <p> 
-    The time that these services are automatically executed by jEdit are during the
+    The time that these services are automatically executed by jEdit is during the
     "initializing properties" step. This means that implementations that need to
     update or remove certain properties during upgrades can take advantage of this class. 
     <p>
@@ -48,11 +48,11 @@ import org.jedit.core.MigrationService;
 */ 
 abstract public class OneTimeMigrationService implements MigrationService 
 {
+	/** Performs doMigrate() on each installed 
+		OneTimeMigrationService */
 	public static void execute()
 	{
 		String[] migrations = ServiceManager.getServiceNames(OneTimeMigrationService.class);
-
-		// No installed finders, do nothing
 		if (migrations.length == 0) return;
 		for (String migration: migrations)
 		{
@@ -71,6 +71,7 @@ abstract public class OneTimeMigrationService implements MigrationService
 		this.name = name;
 	}
 	
+	/** Calls migrate() but only once per installation. */
 	public void doMigration() 
 	{
 		if (!jEdit.getBooleanProperty("migration.step." + name)) {
