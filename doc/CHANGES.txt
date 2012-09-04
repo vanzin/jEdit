@@ -47,10 +47,10 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 {{{ Version 5.0pre1
 
-Thanks to Bjﾃｶrn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
+Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
 Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
-Stephen Blackheath, Milan ﾄ憩rnil, Makarius, Chris Sullins, Peter C. Chapin,
+Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin,
 Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 {{{ Bug fixes
@@ -101,7 +101,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - The Java based installer now correctly handles GNU style long filenames in
   the installer package and thus does not corrupt the JavaDoc files anymore
-  (#2327520 Bjﾃｶrn "Vampire" Kautler)
+  (#2327520 Björn "Vampire" Kautler)
 
 - Several message boxes were not being created on the EDT which would result in
   tiny, non-resizable message boxes. (#3441535 Dale Anson)
@@ -228,7 +228,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - New metapost.xml mode (patch #1606258 Kondr)
 
-- Updated cobol.xml (patch #2654343 Markus Rﾃｶhner)
+- Updated cobol.xml (patch #2654343 Markus Röhner)
 
 - fortran90.xml: new Fortran90 edit mode (patch #2406563 Jonni Lehtiranta)
 
@@ -305,7 +305,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - Added german translation (Robert Schwenn)
 
-- Added czech translation (patch #3523511 Milan ﾄ憩rnil)
+- Added czech translation (patch #3523511 Milan Černil)
 
 - Text Area option for Search System Fonts in Font substitution
   (#3479585 Max Funk)
@@ -371,7 +371,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 
 - OS/2 tasks were removed from the Java installer as OS/2 does not
   have a working Java 6 implementation and probably never will have
-  (Bjﾃｶrn "Vampire" Kautler)
+  (Björn "Vampire" Kautler)
 
 - jEdit support for keymaps (Matthieu Casanova)
 
