@@ -63,11 +63,11 @@
 		</SPAN_REGEXP>
 
 		<!-- NOTE: no ESCAPE for quotes, at least for attributes; e.g onclick="alert(\"foo\");" is invalid! -->
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="STRING">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="STRING">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
@@ -210,4 +210,11 @@
 	<RULES SET="CSS" DEFAULT="MARKUP">
 		<SEQ TYPE="MARKUP" DELEGATE="css::MAIN">&gt;</SEQ>
 	</RULES>
+	
+ 	<RULES SET="STRING" DEFAULT="LITERAL1">
+ 		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+ 			<BEGIN>&amp;</BEGIN>
+ 			<END>;</END>
+ 		</SPAN>
+ 	</RULES>	
 </MODE>
