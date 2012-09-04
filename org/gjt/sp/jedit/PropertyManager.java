@@ -42,13 +42,7 @@ class PropertyManager
 		return total;
 	} //}}}
 
-	//{{{ loadSystemProps() methods
-	void loadSystemProps(InputStream in)
-		throws IOException
-	{
-		loadProps(system,in);
-	}
-
+	//{{{ loadSystemProps() method
 	void loadSystemProps(Reader in)
 		throws IOException
 	{
