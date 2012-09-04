@@ -46,13 +46,14 @@ public class AllBufferSet extends BufferListSet
 	 * @param view The view to check for open buffers
 	 * @since jEdit 5.1pre1
 	 */
-	public AllBufferSet(String glob, View v)
+	public AllBufferSet(String glob, View view)
 	{
 		this.glob = glob;
-		this.view = v;
+		this.view = view;
 	} //}}}
 	
 	//{{{ getView() method
+	/** @since jEdit 5.1pre1 */
 	public View getView() 
 	{
 		return view;
@@ -100,7 +101,7 @@ public class AllBufferSet extends BufferListSet
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,this,e);
+			Log.log(Log.ERROR,this, "Error compiling Glob Pattern: " + glob, e);
 			return null;
 		}
 

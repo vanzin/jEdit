@@ -21,8 +21,6 @@
 package org.jedit.core;
 
 /** A Migration service.
- * There is currently only one concrete implementation of this interface and no
- * general way to add new MigrationServices yet.
  * <br />
  * The goal of migration is usually to replace old properties or data files
  * with a new set, located elsewhere. The fact is that depending on where
@@ -34,7 +32,7 @@ package org.jedit.core;
  * <br />
  * Concrete instances need to gurantee that the migration itself is only done
  * once.
- * @see OneTimeMigrationService
+ * @see org.jedit.migration.OneTimeMigrationService
  *
  * @author Matthieu Casanova
  */

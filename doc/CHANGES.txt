@@ -11,11 +11,11 @@ and Maik Nijhuis for contributing to this release.
 {{{ Bug fixes
 
 - Search all buffers now observes current BufferSet scope and can be restricted
-  to the current view's buffersets when scope is not global. (#3423442 Alan Ezust)
+  to the current view's buffers when scope is not global. (#3423442 Alan Ezust)
 
 - Fix File status checking after buffer switch (#1871440 Alan Ezust)
 
-- Fix File status checking before save (#3562315 Alan Ezust)
+- Fix File status checking before save (#3562315 Alan Ezust) [merged into 5.0.x]
 
 - Fixed the StandaloneTextArea that cannot load keymaps
   (#3562023 Matthieu Casanova) [merged into 5.0.x]
@@ -52,7 +52,7 @@ and Maik Nijhuis for contributing to this release.
 {{{ API Changes
 
 - New class: OneTimeMigrationStep, for adding property migration services
-(used by fix for #1871440 Alan Ezust)
+  (used by fix for #1871440 Alan Ezust)
 
 - New method VFSBrowser.getLastVisitedPath() (Jarek Czekalski)
 
