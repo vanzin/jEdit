@@ -318,6 +318,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 	{
 		JMenu pluginMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.plugins.label"));
+		GUIUtilities.setAutoMnemonic(pluginMenu);
 		return (JMenu)browser.createPluginsMenu(pluginMenu,false);
 
 	} //}}}
