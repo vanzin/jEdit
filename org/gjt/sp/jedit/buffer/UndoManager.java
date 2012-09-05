@@ -393,16 +393,14 @@ public class UndoManager
 			if(lastElement instanceof CompressedReplace)
 			{
 				rep = (CompressedReplace) lastElement;
-				rep.add((Replace) newElement);
-				return rep;
+				return rep.add((Replace) newElement);
 			}
 	
 			// try to create a compressed Replace
 			if(lastElement instanceof Replace)
 			{
 				rep = new CompressedReplace((Replace)lastElement);
-				rep.add((Replace) newElement);
-				return rep;
+				return rep.add((Replace) newElement);
 			}
 		}
 		return null;

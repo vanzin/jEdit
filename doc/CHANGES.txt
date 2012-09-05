@@ -10,6 +10,9 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed undo after replace all with beanshell only first occurance
+  (#3551910 Thomas Meyer)
+
 - Search all buffers now observes current BufferSet scope and can be restricted
   to the current view's buffers when scope is not global. (#3423442 Alan Ezust)
 
