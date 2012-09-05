@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.TaskManager;
 //}}}
 
 /**
@@ -204,7 +205,7 @@ public class VFSFileNameField extends HistoryTextField
 				return;
 
 			browser.setDirectory(dir);
-			VFSManager.waitForRequests();
+			TaskManager.INSTANCE.waitForIoTasks();
 
 			if(index == -1)
 			{
@@ -223,7 +224,7 @@ public class VFSFileNameField extends HistoryTextField
 					return;
 
 				browser.setDirectory(dir);
-				VFSManager.waitForRequests();
+				TaskManager.INSTANCE.waitForIoTasks();
 
 				currentText = currentText.substring(index + 1);
 			}
@@ -274,7 +275,7 @@ public class VFSFileNameField extends HistoryTextField
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
 		{
-			VFSManager.waitForRequests();
+			TaskManager.INSTANCE.waitForIoTasks();
 			setText(name);
 			browser.getBrowserView().getTable().doTypeSelect(
 				name,browser.getMode() == VFSBrowser

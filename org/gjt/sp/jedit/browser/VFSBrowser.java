@@ -1122,7 +1122,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		setDirectory(MiscUtilities.getParentOfPath(path));
 		// Do not change this until all VFS Browser tasks are
 		// done in ThreadUtilities
-		VFSManager.runInAWTThread(new Runnable()
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 		{
 			public void run()
 			{
@@ -1655,7 +1655,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			{
 				// Do not change this until all VFS Browser tasks are
 				// done in ThreadUtilities
-				VFSManager.runInAWTThread(new Runnable()
+				AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 				{
 					public void run()
 					{

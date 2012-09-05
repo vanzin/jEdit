@@ -80,7 +80,7 @@ public class BufferInsertRequest extends BufferIORequest
 
 			/* we don't do this in Buffer.insert() so that
 			   we can insert multiple files at once */
-			VFSManager.runInAWTThread(new Runnable()
+			AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 			{
 				public void run()
 				{

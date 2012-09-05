@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.TaskManager;
 //}}}
 
 /** Close all buffers dialog
@@ -183,7 +184,7 @@ public class CloseDialog extends EnhancedDialog
 					Buffer buffer = jEdit.getBuffer(path);
 					if(!buffer.save(view,null,true,true))
 						return;
-					VFSManager.waitForRequests();
+					TaskManager.INSTANCE.waitForIoTasks();
 					if(buffer.getBooleanProperty(BufferIORequest
 						.ERROR_OCCURRED))
 						return;

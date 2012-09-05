@@ -57,6 +57,7 @@ import org.gjt.sp.jedit.syntax.TokenHandler;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
+import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -302,7 +303,7 @@ public class Buffer extends JEditBuffer
 		if(getFlag(TEMPORARY))
 			runnable.run();
 		else
-			VFSManager.runInAWTThread(runnable);
+			AwtRunnableQueue.INSTANCE.runAfterIoTasks(runnable);
 
 		return true;
 	} //}}}
@@ -356,7 +357,7 @@ public class Buffer extends JEditBuffer
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.runInWorkThread(new BufferAutosaveRequest(
+		ThreadUtilities.runInBackground(new BufferAutosaveRequest(
 			null,this,null,VFSManager.getFileVFS(),
 			autosaveFile.getPath()));
 	} //}}}
@@ -610,7 +611,7 @@ public class Buffer extends JEditBuffer
 		}
 
 		// Once save is complete, do a few other things
-		VFSManager.runInAWTThread(new Runnable()
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 			{
 				public void run()
 				{
@@ -1903,7 +1904,7 @@ public class Buffer extends JEditBuffer
 
 			// show this message when all I/O requests are
 			// complete
-			VFSManager.runInAWTThread(new Runnable()
+			AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 			{
 				public void run()
 				{

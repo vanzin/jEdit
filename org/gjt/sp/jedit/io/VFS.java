@@ -43,7 +43,6 @@ import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
-import org.gjt.sp.util.WorkRequest;
 //}}}
 
 /**
@@ -498,7 +497,7 @@ public abstract class VFS
 			// BufferLoadRequest can cause UI interations (for example FTP connection dialog),
 			// so it should be runned in Dispatch thread
 			//ThreadUtilities.runInDispatchThread(request);
-			VFSManager.runInWorkThread(request);
+			ThreadUtilities.runInBackground(request);
 
 		return true;
 	} //}}}
@@ -531,7 +530,7 @@ public abstract class VFS
 		if(!path.equals(buffer.getPath()))
 			buffer.unsetProperty(Buffer.BACKED_UP);
 
-		VFSManager.runInWorkThread(new BufferSaveRequest(
+		ThreadUtilities.runInBackground(new BufferSaveRequest(
 			view,buffer,session,this,path));
 		return true;
 	} //}}}
@@ -732,7 +731,7 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new BufferInsertRequest(
+		ThreadUtilities.runInBackground(new BufferInsertRequest(
 			view,buffer,session,this,path));
 		return true;
 	} //}}}

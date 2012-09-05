@@ -29,8 +29,10 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.Task;
+import org.gjt.sp.util.ThreadUtilities;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -231,7 +233,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						}
 						else
 						{
-							VFSManager.runInAWTThread(new DraggedURLLoader(textArea,uri.getPath()));
+							AwtRunnableQueue.INSTANCE.runAfterIoTasks(new DraggedURLLoader(textArea,uri.getPath()));
 						}
 						found = true;
 					}
@@ -287,7 +289,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						str0 = str0.substring(7);
 					}
 
-					VFSManager.runInWorkThread(new DraggedURLLoader(textArea, str0));
+					ThreadUtilities.runInBackground(new DraggedURLLoader(textArea, str0));
 				}
 				found = true;
 

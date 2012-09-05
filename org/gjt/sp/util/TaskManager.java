@@ -23,6 +23,8 @@ package org.gjt.sp.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -125,7 +127,7 @@ public enum TaskManager
 
 		if(task.getIoTask())
 		{
-			WorkThreadPool.INSTANCE.queueAWTRunner();
+			AwtRunnableQueue.INSTANCE.queueAWTRunner(false);
 
 			synchronized (ioWaitLock)
 			{
@@ -194,7 +196,7 @@ public enum TaskManager
 			}
 		}
 
-		WorkThreadPool.INSTANCE.queueAWTRunnerAndWait();
+		AwtRunnableQueue.INSTANCE.queueAWTRunner(true);
 	}
 
 	/**

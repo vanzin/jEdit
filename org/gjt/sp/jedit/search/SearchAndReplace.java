@@ -510,7 +510,7 @@ loop:			for(;;)
 
 					// Wait for the buffer to load
 					if(!buffer.isLoaded())
-						VFSManager.waitForRequests();
+						TaskManager.INSTANCE.waitForIoTasks();
 
 					int start;
 
@@ -912,7 +912,7 @@ loop:			while(path != null)
 
 				// Wait for buffer to finish loading
 				if(buffer.isPerformingIO())
-					VFSManager.waitForRequests();
+					TaskManager.INSTANCE.waitForIoTasks();
 
 				if(!buffer.isEditable())
 					continue loop;

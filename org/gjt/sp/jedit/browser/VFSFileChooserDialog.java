@@ -119,7 +119,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
-		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
+		TaskManager.INSTANCE.removeTaskListener(ioTaskHandler);
 		super.dispose();
 	} //}}}
 
@@ -175,9 +175,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(session == null)
 			return;
 
-		VFSManager.runInWorkThread(new GetFileTypeRequest(
+		ThreadUtilities.runInBackground(new GetFileTypeRequest(
 			vfs,session,path,type));
-		VFSManager.runInAWTThread(new Runnable()
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 		{
 			public void run()
 			{
@@ -257,7 +257,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
-	private WorkThreadHandler workThreadHandler;
+	private TaskListener ioTaskHandler;
 	//}}}
 
 	//{{{ getDefaultTitle() method
@@ -373,8 +373,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		content.add(BorderLayout.SOUTH,panel);
 
-		VFSManager.getIOThreadPool().addProgressListener(
-			workThreadHandler = new WorkThreadHandler());
+		TaskManager.INSTANCE.addTaskListener(
+				ioTaskHandler = new IoTaskHandler());
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
@@ -498,7 +498,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				return;
 			}
 
-			for(int i = 0; i < files.length; i++)
+			for(int i = 0, n = files.length; i < n; i++)
 			{
 				if(files[i].getType() == VFSFile.FILE)
 				{
@@ -525,36 +525,60 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		} //}}}
 	} //}}}
 
-	//{{{ WorkThreadListener class
-	private class WorkThreadHandler implements WorkThreadProgressListener
+	//{{{ IoTaskListener class
+	private class IoTaskHandler implements TaskListener
 	{
-		//{{{ statusUpdate() method
-		public void statusUpdate(final WorkThreadPool threadPool,
-			int threadIndex)
+		private final Runnable cursorStatus = new Runnable()
 		{
-			SwingUtilities.invokeLater(new Runnable()
+			public void run()
 			{
-				public void run()
+				int requestCount = TaskManager.INSTANCE.countIoTasks();
+				if(requestCount == 0)
 				{
-					int requestCount = VFSManager.getRequestCount();
-					if(requestCount == 0)
-					{
-						getContentPane().setCursor(
-							Cursor.getDefaultCursor());
-					}
-					else if(requestCount >= 1)
-					{
-						getContentPane().setCursor(
-							Cursor.getPredefinedCursor(
-							Cursor.WAIT_CURSOR));
-					}
+					getContentPane().setCursor(
+						Cursor.getDefaultCursor());
 				}
-			});
+				else if(requestCount >= 1)
+				{
+					getContentPane().setCursor(
+						Cursor.getPredefinedCursor(
+						Cursor.WAIT_CURSOR));
+				}
+			}
+		};
+
+		//{{{ waiting() method
+		public void waiting(Task task)
+		{
+			SwingUtilities.invokeLater(cursorStatus);
+		} //}}}
+	
+		//{{{ running() method
+		public void running(Task task)
+		{
+			SwingUtilities.invokeLater(cursorStatus);
+		} //}}}
+	
+		//{{{ done() method
+		public void done(Task task)
+		{
+			SwingUtilities.invokeLater(cursorStatus);
+		} //}}}
+
+		//{{{ statusUpdated() method
+		public void statusUpdated(Task task)
+		{
+		} //}}}
+
+		//{{{ maximumUpdated() method
+		public void maximumUpdated(Task task)
+		{
 		} //}}}
 
 		//{{{ progressUpdate() method
-		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+		public void valueUpdated(Task task)
 		{
+			SwingUtilities.invokeLater(cursorStatus);
 		} //}}}
 	} //}}}
 

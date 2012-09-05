@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.TaskManager;
 //}}}
 
 /**
@@ -317,7 +318,7 @@ public class BeanShell
 					null,path,false);
 
 				if(!buffer.isLoaded())
-					VFSManager.waitForRequests();
+					TaskManager.INSTANCE.waitForIoTasks();
 
 				in = new StringReader(buffer.getText(0,
 					buffer.getLength()));

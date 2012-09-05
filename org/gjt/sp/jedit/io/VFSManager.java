@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import javax.annotation.concurrent.ThreadSafe;
 import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -39,7 +38,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskManager;
 import org.gjt.sp.util.ThreadUtilities;
-import org.gjt.sp.util.WorkThreadPool;
+import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -79,7 +78,7 @@ public class VFSManager
 	 */
 	public static void start()
 	{
-		WorkThreadPool.INSTANCE.start();
+		AwtRunnableQueue.INSTANCE.start();
 	} //}}}
 
 	//{{{ VFS methods
@@ -164,15 +163,6 @@ public class VFSManager
 
 	//{{{ I/O request methods
 
-	//{{{ getIOThreadPool() method
-	/**
-	 * Returns the I/O thread pool.
-	 */
-	public static WorkThreadPool getIOThreadPool()
-	{
-		return WorkThreadPool.INSTANCE;
-	} //}}}
-
 	//{{{ waitForRequests() method
 	/**
 	 * Returns when all pending requests are complete.
@@ -223,7 +213,7 @@ public class VFSManager
 	@Deprecated
 	public static void runInAWTThread(Runnable run)
 	{
-		WorkThreadPool.INSTANCE.addWorkRequest(run,true);
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(run);
 	} //}}}
 
 	//{{{ runInWorkThread() method
@@ -351,7 +341,7 @@ public class VFSManager
 					// we were the first to add an update;
 					// add update sending runnable to AWT
 					// thread
-					VFSManager.runInAWTThread(new SendVFSUpdatesSafely());
+					AwtRunnableQueue.INSTANCE.runAfterIoTasks(new SendVFSUpdatesSafely());
 				}
 			}
 		}
@@ -502,7 +492,7 @@ public class VFSManager
 				Vector<ErrorListDialog.ErrorEntry> errorsCopy;
 				synchronized(errorLock)
 				{
-					errorsCopy = new Vector(errors);
+					errorsCopy = new Vector<ErrorListDialog.ErrorEntry>(errors);
 					errors.clear();
 					error = false;
 				}

@@ -63,8 +63,10 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.TaskManager;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
@@ -1871,7 +1873,7 @@ public class jEdit
 		// Wait for pending I/O requests
 		if(buffer.isPerformingIO())
 		{
-			VFSManager.waitForRequests();
+			TaskManager.INSTANCE.waitForIoTasks();
 			if(VFSManager.errorOccurred())
 				return false;
 		}
@@ -1887,7 +1889,7 @@ public class jEdit
 				if(!buffer.save(view,null,true))
 					return false;
 
-				VFSManager.waitForRequests();
+				TaskManager.INSTANCE.waitForIoTasks();
 				if(buffer.getBooleanProperty(BufferIORequest
 					.ERROR_OCCURRED))
 				{
@@ -2055,7 +2057,7 @@ public class jEdit
 		}
 
 		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
+		TaskManager.INSTANCE.waitForIoTasks();
 		if(VFSManager.errorOccurred())
 			return false;
 
@@ -2834,7 +2836,7 @@ public class jEdit
 			view = activeView;
 
 		// Wait for pending I/O requests
-		VFSManager.waitForRequests();
+		TaskManager.INSTANCE.waitForIoTasks();
 
 		// Create a new EditorExitRequested
 		EditorExitRequested eer = new EditorExitRequested(view);
@@ -4190,7 +4192,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	private static void gotoMarker(final View view, final Buffer buffer,
 		final String marker)
 	{
-		VFSManager.runInAWTThread(new Runnable()
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 		{
 			@Override
 			public void run()

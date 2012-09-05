@@ -77,7 +77,7 @@ public class ThreadUtilities
 	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
 		boolean interrupted = false;
-		MyRunnable run = new MyRunnable(runnable);
+		CountDownLatchRunnable run = new CountDownLatchRunnable(runnable);
 		runInDispatchThread(run);
 		while (run.done.getCount() > 0)
 		{
@@ -112,7 +112,7 @@ public class ThreadUtilities
 	public static void runInDispatchThreadNow(Runnable runnable)
 	{
 		boolean interrupted = false;
-		MyRunnable run = new MyRunnable(runnable);
+		CountDownLatchRunnable run = new CountDownLatchRunnable(runnable);
 		try
 		{
 			EventQueue.invokeAndWait(run);
@@ -201,7 +201,7 @@ public class ThreadUtilities
 		public Thread newThread(Runnable r)
 		{
 			Thread t = new Thread(threadGroup, r);
-			t.setName("jEdit Worker #" +threadIDs.getAndIncrement());
+			t.setName("jEdit Worker #" + threadIDs.getAndIncrement());
 			return t;
 		}
 
@@ -221,13 +221,13 @@ public class ThreadUtilities
 	}
 
 	//{{{ MyRunnable class
-	private static class MyRunnable implements Runnable
+	private static class CountDownLatchRunnable implements Runnable
 	{
 		private final Runnable runnable;
 
 		private CountDownLatch done = new CountDownLatch(1);
 
-		private MyRunnable(Runnable runnable)
+		private CountDownLatchRunnable(Runnable runnable)
 		{
 			this.runnable = runnable;
 		}

@@ -81,7 +81,6 @@ public class TaskMonitor extends JPanel implements TaskListener
 		panel.add(scroll);
 		updateTasksCount();
 
-		add(new IOProgressMonitor(), BorderLayout.NORTH);
 		add(panel);
 	} //}}}
 
