@@ -114,6 +114,9 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- jeditresource:/ URL handler now also checks jEditHome for files so 
+  it can be used to link to core documentation. (#3565139 Alan Ezust)
+
 - Open Selection macro improvement: an attempt is made to use current
   VFS browser directory as a parent for highlighted filename.
 

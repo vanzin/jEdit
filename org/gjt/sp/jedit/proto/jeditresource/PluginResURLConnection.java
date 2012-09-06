@@ -23,10 +23,16 @@
 package org.gjt.sp.jedit.proto.jeditresource;
 
 //{{{ Imports
-import java.io.*;
-import java.net.*;
-import org.gjt.sp.jedit.*;
-//}}}
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.PluginJAR;
+import org.gjt.sp.jedit.jEdit;
 
 public class PluginResURLConnection extends URLConnection
 {
@@ -76,19 +82,20 @@ public class PluginResURLConnection extends URLConnection
 					String jarName =MiscUtilities.getFileName(jar.getPath()).toLowerCase(); 
 					if(plugin.equalsIgnoreCase(jarName))
 					{
-						in = jar.getClassLoader()
-						            .getResourceAsStream(resource);
+						in = jar.getClassLoader().getResourceAsStream(resource);
 						break;
 					}
 				}
 			}
 
-			if(in == null)
+			if((in == null) && (plugin == null))
 			{
-				throw new IOException("Resource not found: " + plugin + "!" 
-					+ resource);
+				// can't find it in jEdit.jar, look for file in jEditHome(). 
+				File f = new File(jEdit.getJEditHome(), resource);
+				if (f.exists()) 
+					in = new FileInputStream(f);
+			if (in == null) throw new IOException("Resource not found: " + plugin + "!" + resource);
 			}
-
 			connected = true;
 		}
 	}
