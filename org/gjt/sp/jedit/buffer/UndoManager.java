@@ -349,7 +349,7 @@ public class UndoManager
 		{
 			// don't fold a undoClearDirty Remove Edit, because
 			// it's the identity is significant.
-			if(lastElement == undoClearDirty)
+			if(lastElement == undoClearDirty || newElement == undoClearDirty)
 				return null;
 
 			/* newElement is guaranteed to be an Compound-Insert Edit, redoClearDirty will be an Normal-Insert, Normal-Remove,
@@ -365,10 +365,6 @@ public class UndoManager
 			 */  
 			assert newElement  != redoClearDirty;
 			assert lastElement != redoClearDirty;
-			/* search for nothing (via regexp) will results just in Insert-Edits.
-			 * So we won't get here as lastElement will be an Insert, too
-			 */
-			assert newElement  != undoClearDirty;
 
 			Remove rem = (Remove) lastElement;
 			Insert ins = (Insert) newElement;

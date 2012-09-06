@@ -10,6 +10,8 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Undomanager: Don't compact significant edits (#patch 3560615 Thomas Meyer) 
+
 - Fixed undo after replace all with beanshell only first occurance
   (#3551910 Thomas Meyer)
 
