@@ -78,6 +78,20 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 - AllBufferSet.AllBufferSet(String glob, View v) - additional required
   argument for View in constructor argument list. (#3423442 Alan Ezust)
 
+- Removed classes: IOProgressMonitor, WorkRequest, WorkThreadPool,
+  WorkThreadProgressListener (Thomas Meyer)
+
+- Removed VFSManager.getIOThreadPool() (Thomas Meyer)
+
+- Converted BufferIORequest, VFSFileChooserDialog.GetFileTypeRequest and
+  TextAreaTransferHandler.DraggedURLLoader to a Task (Thomas Meyer)
+
+- Converted TaskManager to an enum singelton (Thomas Meyer)
+
+- Changed VFSManager.runInWorkThread(Runnable) to
+  VFSManager.runInWorkThread(Task) and made it accept only IO tasks
+
+- New class: AwtRunnableQueue (Thomas Meyer)
 
 }}}
 {{{ Editing
