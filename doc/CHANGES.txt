@@ -363,9 +363,6 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 - jeditresource:/ URL handler now also checks jEditHome for files so 
   it can be used to link to core documentation. (#3565139 Alan Ezust)
 
-- Open Selection macro improvement: an attempt is made to use current
-  VFS browser directory as a parent for highlighted filename.
-
 - Macros folder can now be localized with properties
   macros.folder.[foldername].label (Matthieu Casanova)
 
