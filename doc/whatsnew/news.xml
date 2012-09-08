@@ -18,6 +18,12 @@
     but here are some of the major features of this version. </para>
 
     <itemizedlist>
+      <listitem><para>VFS WorkThreads have been rewritten into Tasks, making it 
+      possible to completely remove the old "I/O Progress Monitor" and the 
+      wasteful space it took up in the Task Monitor. Old deprecated
+      classes related to WorkThread and WorkThreadPool have been removed.
+      </para></listitem>
+
       <listitem><para> New option to check for and disable obsolete plugins. Enabled by
       default, this will ensure that old unsupported plugins do not interfere
       with the running operation of jEdit. </para> 
