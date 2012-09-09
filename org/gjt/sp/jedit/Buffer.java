@@ -50,7 +50,6 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.options.GeneralOptionPane;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
 import org.gjt.sp.jedit.syntax.TokenHandler;
