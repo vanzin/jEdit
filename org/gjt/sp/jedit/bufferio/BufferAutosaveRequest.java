@@ -66,20 +66,11 @@ public class BufferAutosaveRequest extends BufferIORequest
 
 			try
 			{
-				//buffer.readLock();
-
-				if(!buffer.isDirty())
-				{
-					// buffer has been saved while we
-					// were waiting.
-					return;
-				}
-
-				out = vfs._createOutputStream(session,path,view);
-				if(out == null)
-					return;
-
-				write(buffer,out);
+				buffer.readLock();
+				if(buffer.isDirty())
+					out = vfs._createOutputStream(session,path,view);
+				if(out != null)
+					write(buffer,out);
 			}
 			catch (FileNotFoundException e)
 			{
@@ -98,10 +89,10 @@ public class BufferAutosaveRequest extends BufferIORequest
 
 				cleanUpIncomplete(out);
 			}
-			//finally
-			//{
-				//buffer.readUnlock();
-			//}
+			finally
+			{
+				buffer.readUnlock();
+			}
 		}
 		finally
 		{
