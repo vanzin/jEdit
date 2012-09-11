@@ -41,13 +41,16 @@ import java.awt.event.ActionListener;
 
 public class GeneralOptionPane extends AbstractOptionPane
 {
-	//{{{ checkFileStatus options
+	//{{{ checkFileStatus bit flags:
 	public static final int checkFileStatus_none = 0;
-	/** Check the buffer status when the view gets focus */
+	
+	/** Check the buffer status when the view gets focus (low bit) */
 	public static final int checkFileStatus_focus = 1;
-	/** Check the file status when visiting the buffer */
+	
+	/** Check the file status when visiting the buffer (second bit) */
 	public static final int checkFileStatus_focusBuffer = 2;
-	/** Check the file status when the view gets focus, or when buffer visited */
+	
+	/** This is actually a bitwise OR: (view focus | buffer focus) */ 
 	public static final int checkFileStatus_all = 3;	
 	//}}}
 
