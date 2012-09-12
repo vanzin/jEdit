@@ -416,6 +416,10 @@
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
 			<compilerarg line="${config.build.compilerarg}"/>
+            <classpath id="classpath.compile">
+				<fileset dir="${lib.dir}/compile"
+					 includes="*.jar"/>
+			</classpath>
 		</javac>
 	</target>
 
