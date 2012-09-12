@@ -392,6 +392,7 @@
 				<include name="org/gjt/sp/util/Task.java"/>
 				<include name="org/gjt/sp/util/TaskManager.java"/>
 				<include name="org/gjt/sp/util/TaskListener.java"/>
+				<include name="org/gjt/sp/util/AwtRunnableQueue.java"/>
 				<include name="org/gjt/sp/util/ThreadUtilities.java"/>
 				<include name="org/gjt/sp/util/SyntaxUtilities.java"/>
 				<include name="org/gjt/sp/util/XMLUtilities.java"/>
