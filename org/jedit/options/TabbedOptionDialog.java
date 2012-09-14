@@ -95,7 +95,7 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 	} // }}}
 
 	// {{{ setSelectedIndex()
-	void setSelectedIndex(int index)
+	public void setSelectedIndex(int index)
 	{
 		tabs.setSelectedIndex(index);
 		
