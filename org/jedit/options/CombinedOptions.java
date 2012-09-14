@@ -51,7 +51,7 @@ public class CombinedOptions extends TabbedOptionDialog
 	 */
 	public static CombinedOptions combinedOptions(Frame parent) 
 	{
-		int startingIndex = jEdit.getIntegerProperty("optional.last.tab", 0);
+		int startingIndex = jEdit.getIntegerProperty("options.last.tab", 0);
 		return new CombinedOptions(parent, startingIndex);
 	}
 	
