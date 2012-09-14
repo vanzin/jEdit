@@ -229,7 +229,7 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 
 		OptionPane op = (OptionPane) tabs.getSelectedComponent();
 		shownPanes.add(op);
-		jEdit.setIntegerProperty("options.last.tab", tabs.getSelectedIndex());
+		jEdit.setIntegerProperty("optional.last.tab", tabs.getSelectedIndex());
 		setTitle(op.getName());
 	} // }}}
 
