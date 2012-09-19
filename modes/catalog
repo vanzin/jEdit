@@ -512,8 +512,11 @@
 <MODE NAME="sas"		FILE="sas.xml"
 				FILE_NAME_GLOB="*.sas" />
 
+<MODE NAME="sbt" FILE="scala.xml"
+        FILE_NAME_GLOB="*.sbt" />
+
 <MODE NAME="scala"  	FILE="scala.xml"
-    			FILE_NAME_GLOB="*.scala" />
+        FILE_NAME_GLOB="*.scala" />
 
 <MODE NAME="scheme"		FILE="scheme.xml"
 				FILE_NAME_GLOB="*.scm" />
