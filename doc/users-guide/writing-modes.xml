@@ -859,6 +859,20 @@ def fun2:
     </section>
     <section id="mode-syntax-tokens">
         <title>Token Types</title>
+        <para>The various token types are used to syntax highlight particular
+        words in a language. This makes code easier to read. There is a wide
+        latitude in the usage of the token types, and really it depends on the
+        specifics of the language as to which token represents which type. Some
+        examples are given below, but these are just guidelines, not hard and
+        fast rules.</para>
+        <para>Many languages include constructs from other languages. One common
+        example is html files can include javascript and css blocks. Several of 
+        the mode tags support a DELEGATE attribute, which will allow a section
+        of text to be passed to a different mode for highlighting. The html mode
+        delegates to the javascript mode for javascript blocks and to the css
+        mode for style blocks. Use of the DELEGATE attribute is highly encouraged 
+        when appropriate since it makes writing modes easier, reduces duplication,
+        and promotes visual consistency across languages.</para>
         <para>Parser rules can highlight tokens using any of the following token
         types:</para>
         <itemizedlist>
@@ -877,18 +891,34 @@ def fun2:
             </listitem>
             <listitem>
                 <para><literal>COMMENT4</literal></para>
+                <para>jEdit supports four different types of comment tokens.
+                Generally, comments are programmer-readable constructs that are
+                ignored by compilers and interpreters. As an example, the lisp
+                mode defines four comment types:
+                </para>
+                <para>&lt;EOL_SPAN TYPE="COMMENT4"&gt;;;;;&lt;/EOL_SPAN&gt;</para>
+                <para>&lt;EOL_SPAN TYPE="COMMENT3"&gt;;;;&lt;/EOL_SPAN&gt;</para>
+                <para>&lt;EOL_SPAN TYPE="COMMENT2"&gt;;;&lt;/EOL_SPAN&gt;</para>
+                <para>&lt;EOL_SPAN TYPE="COMMENT1"&gt;;&lt;/EOL_SPAN&gt;</para>
             </listitem>
             <listitem>
                 <para><literal>FUNCTION</literal></para>
+                <para>The function token is intended to identify functions, methods,
+                procedures, routines, or named subprograms.</para>
             </listitem>
             <listitem>
                <para><literal>DIGIT</literal></para>
+               <para>The digit token is to identify numbers.</para>
             </listitem>
             <listitem>
                 <para><literal>INVALID</literal><!--  - tokens of this type are
   automatically added if a <literal>NO_WORD_BREAK</literal> or
   <literal>NO_LINE_BREAK</literal> <literal>SPAN</literal> spans more than
   one word or line, respectively. --></para>
+                <para>The invalid type is to indicate that particular words are
+                not to be used, for example, the java mode defined both "goto"
+                and "const" as invalid words. These are words that are defined
+                by the language, but are not to be used.</para>
             </listitem>
             <listitem>
                 <para><literal>KEYWORD1</literal></para>
@@ -901,9 +931,18 @@ def fun2:
             </listitem>
             <listitem>
                 <para><literal>KEYWORD4</literal></para>
+                <para>
+                    Keywords are used to identify well-defined words within a
+                    language. Some languages naturally divide keywords into 
+                    groups, for example, the pascal mode identifies "for" as a
+                    KEYWORD1, "private" as a KEYWORD2, and "int" as a KEYWORD3.
+                </para>
             </listitem>
             <listitem>
                 <para><literal>LABEL</literal></para>
+                <para>A label is generally a named position within a source, for
+                example, the ada mode defined a label as &lt;&lt;foo&gt;&gt;. 
+                </para>
             </listitem>
             <listitem>
                 <para><literal>LITERAL1</literal></para>
@@ -916,12 +955,29 @@ def fun2:
             </listitem>
             <listitem>
                 <para><literal>LITERAL4</literal></para>
+                <para>
+                    Literals are usually, but not always, uninterpreted strings,
+                    for example, "foo" or 'bar'. There are a wide variety of
+                    usages of literals in the mode files.
+                </para>
             </listitem>
             <listitem>
                 <para><literal>MARKUP</literal></para>
+                <para>
+                    The markup token is generally used in the various "markup"
+                    languages, such as xml and html. Markup is used for those
+                    elements that are not specified as words belonging to the
+                    language. For example, in html, &lt;body&gt; would be 
+                    considered a keyword, where &lt;foo&gt; would be considered
+                    markup. 
+                </para>
             </listitem>
             <listitem>
                 <para><literal>OPERATOR</literal></para>
+                <para>
+                    Common examples of operators are the math symbols, such as
+                    '+', '-', and so on. 
+                </para>
             </listitem>
         </itemizedlist>
     </section>
