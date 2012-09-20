@@ -321,10 +321,21 @@ public class Mode
 	 */
 	public boolean acceptIdentical(String filePath, String fileName)
 	{
-		return ((filePath != null) && filePath.equals(getProperty("filenameGlob"))
-		        && (filepathRE == null || filepathRE.matcher(filePath).matches()))
-		       || ((fileName != null) && fileName.equals(getProperty("filenameGlob"))
-		           && (filepathRE == null || filepathRE.matcher(fileName).matches()));
+		String filenameGlob = (String)getProperty("filenameGlob");
+		
+		boolean accept = false;
+		if (fileName != null) 
+		{
+			accept = fileName.equalsIgnoreCase(filenameGlob);	
+		}
+		
+		if (!accept && filePath != null) 
+		{
+			String filename = MiscUtilities.getFileName(filePath);
+			accept = filename != null && filename.equalsIgnoreCase(filenameGlob);
+		}
+		
+		return accept;
 	} //}}}
 
 	//{{{ acceptFirstLine() method

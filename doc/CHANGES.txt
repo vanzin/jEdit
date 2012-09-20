@@ -54,6 +54,8 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 
 - The macro Display_Abbreviations is broken (#3539691 Matthieu Casanova)
   [merged into 5.0.x]
+  
+- Fix selecting mode based on exact filename match. (#3562935 Dale Anson)  
 
 }}}
 {{{ API Changes
