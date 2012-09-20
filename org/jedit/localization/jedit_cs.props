@@ -842,6 +842,7 @@ search.settings=Nastavení:
 search.keep=Podržet dialog
 search.keep.mnemonic=k
 search.word=Celé slovo
+search.word.bar=Celé slovo
 search.word.mnemonic=q
 search.case=Ignorovat velikost písmen
 search.case.mnemonic=i

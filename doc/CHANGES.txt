@@ -112,6 +112,9 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
+- Use separate (shorter) label for "whole word search" in the search bar.
+  (Shlomy Reinstein)
+
 - Added a right click popup menu with a copy action in the Error dialog
   (#3557023 Matthieu Casanova)
 

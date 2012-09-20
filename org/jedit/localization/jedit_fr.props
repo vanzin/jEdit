@@ -841,6 +841,7 @@ search.settings=Paramètres :
 search.keep=Laisser la boîte ouverte
 search.keep.mnemonic=o
 search.word=Mot entier
+search.word.bar=Mot entier
 search.word.mnemonic=e
 search.case=Ignorer la casse
 search.case.mnemonic=i

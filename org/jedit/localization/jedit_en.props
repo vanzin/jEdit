@@ -841,6 +841,7 @@ search.settings=Settings:
 search.keep=Keep dialog
 search.keep.mnemonic=k
 search.word=Whole word (q)
+search.word.bar=Whole word
 search.word.mnemonic=q
 search.case=Ignore case
 search.case.mnemonic=i

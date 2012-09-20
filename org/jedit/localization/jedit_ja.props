@@ -841,6 +841,7 @@ search.settings=オプション:
 search.keep=ダイアログを維持(K)
 search.keep.mnemonic=K
 search.word=完全一致単語のみ(Q)
+search.word.bar=完全一致単語のみ
 search.word.mnemonic=Q
 search.case=大文字小文字を区別しない(I)
 search.case.mnemonic=I

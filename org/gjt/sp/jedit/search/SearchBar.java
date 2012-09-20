@@ -99,7 +99,7 @@ public class SearchBar extends JToolBar
 		hyperSearch.setRequestFocusEnabled(false);
 
 		add(wholeWord = new JCheckBox(jEdit.getProperty(
-			"search.word")));
+			"search.word.bar")));
 		wholeWord.addActionListener(actionHandler);
 		wholeWord.setMargin(margin);
 		wholeWord.setOpaque(false);

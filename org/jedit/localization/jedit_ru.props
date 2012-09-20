@@ -837,6 +837,7 @@ search.settings=Настройки:
 search.keep=Не убирать диалог
 search.keep.mnemonic=k
 search.word=Слово целиком (q)
+search.word.bar=Слово целиком
 search.word.mnemonic=q
 search.case=Без учета размера букв
 search.case.mnemonic=i
