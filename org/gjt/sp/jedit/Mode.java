@@ -331,13 +331,19 @@ public class Mode
 		
 		if (!accept && filePath != null) 
 		{
-			String filename = MiscUtilities.getFileName(filePath);
+			// get the filename from the path
+			// NOTE: can't use MiscUtilities.getFileName here as that breaks
+			// the stand-alone text area build.
+			int lastUnixPos = filePath.lastIndexOf('/');
+			int lastWindowsPos = filePath.lastIndexOf('\\');
+			int index = Math.max(lastUnixPos, lastWindowsPos);
+			String filename = filePath.substring(index + 1);
 			accept = filename != null && filename.equalsIgnoreCase(filenameGlob);
 		}
 		
 		return accept;
 	} //}}}
-
+	
 	//{{{ acceptFirstLine() method
 	/**
 	 * Returns true if the first line matches the first line glob.
