@@ -2239,7 +2239,6 @@ macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
 #{{{ Display Abbreviations
 macro.rs.DisplayAbbreviations.Abbreviation.label=Abréviation
 macro.rs.DisplayAbbreviations.Expansion.label=Expansion
-macro.rs.DisplayAbbreviations.AbbreviationSet.label=Jeu d'abréviations :
 macro.rs.DisplayAbbreviations.Close.label=Fermer
 macro.rs.DisplayAbbreviations.WriteSet.label=Afficher le jeu
 macro.rs.DisplayAbbreviations.WriteAll.label=Tout afficher
