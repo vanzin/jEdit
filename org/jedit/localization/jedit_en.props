@@ -1817,37 +1817,26 @@ vfs.browser.browse.label=Browse
 vfs.browser.close.label=Close
 vfs.browser.copy-path.label=Copy
 vfs.browser.delete.label=Delete...
-vfs.browser.delete.shortcut=DELETE
 vfs.browser.home.label=Home Directory
-vfs.browser.home.shortcut=~
 vfs.browser.properties.label=Properties
 vfs.browser.properties.title=File/Directory Properties
 vfs.browser.insert.label=Insert
 vfs.browser.new-directory.label=New Directory...
-vfs.browser.new-directory.shortcut=INSERT
 vfs.browser.new-file.label=New File
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Open
 vfs.browser.open-desktop.label=Open in $Desktop
 vfs.browser.other-encoding-2.label=Other ({0})...
 vfs.browser.other-encoding.label=Other...
 vfs.browser.reload.label=Reload Directory
-vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=Rename...
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.label=Root Directory
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.label=Search in Directory...
 vfs.browser.show-hidden-files.label=Show Hidden Files
 vfs.browser.synchronize.label=Directory of Current Buffer
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.label=Parent Directory
-vfs.browser.up.shortcut=A+Up
 vfs.browser.paste.label=Paste
 vfs.browser.previous.label=Previous Directory
-vfs.browser.previous.shortcut=A+Left
 vfs.browser.next.label=Next Directory
-vfs.browser.next.shortcut=A+Right
 #}}}
 
 #{{{ Tool bar

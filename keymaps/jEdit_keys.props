@@ -224,3 +224,17 @@ copy.shortcut2=C+INSERT
 paste.shortcut2=S+INSERT
 cut.shortcut2=S+DELETE
 #}}}
+
+#{{{ VFS browser
+vfs.browser.delete.shortcut=DELETE
+vfs.browser.home.shortcut=~
+vfs.browser.new-directory.shortcut=INSERT
+vfs.browser.new-file.shortcut=C+n
+vfs.browser.reload.shortcut=F5
+vfs.browser.rename.shortcut=F2
+vfs.browser.roots.shortcut=/
+vfs.browser.synchronize.shortcut=-
+vfs.browser.up.shortcut=A+Up
+vfs.browser.previous.shortcut=A+Left
+vfs.browser.next.shortcut=A+Right
+#}}}

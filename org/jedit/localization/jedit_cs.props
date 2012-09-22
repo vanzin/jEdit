@@ -27,7 +27,7 @@ common.cancel=Zrušit
 common.close=Zavřít
 common.error=Chyba
 common.apply=Použít
-common.more=Více...  
+common.more=Více...
 common.insert=Vložit
 common.add=Přidat
 common.remove=Odebrat
@@ -87,7 +87,7 @@ file.label=$Soubor
 new-file.label=$Nový
 new-file-in-mode.label=Nový v $režimu
 new-file-in-mode.dialog.title=Nový soubor
-new-file-in-mode.dialog.message=S režimem úprav: 
+new-file-in-mode.dialog.message=S režimem úprav:
 open-file.label=$Otevřít...
 reload.label=$Znovunačíst
 reload-all.label=Znovunačíst $vše
@@ -100,7 +100,7 @@ closeall-except-active.label=Zavřít o$statní
 closeall-bufferset.label=Zavřít vš$e
 closeall-bufferset.tooltip=Vyčistí EditPanelovou buffer sadu
 bufferset-toggle-exclusive.label=Zapnout exkluzivní buffer sadu
-bufferset-toggle-exclusive.tooltip=Je-li buffer nově otevřen, zavře se v jiné nekřížící se buffer sadě 
+bufferset-toggle-exclusive.tooltip=Je-li buffer nově otevřen, zavře se v jiné nekřížící se buffer sadě
 close-all.label=Zavřít vše (globálně)
 close-all.tooltip=Zavře všechny buffery ve všech pohledech
 save.label=$Uložit
@@ -257,7 +257,7 @@ next-fold.label=Jdi na $následující fold
 
 #{{{ View menu
 view.label=$Pohledy
-new-view.label=Nový $pohled 
+new-view.label=Nový $pohled
 new-view.tooltip=Nové hlavní okno s možností $dokování
 new-plain-view.label=Nový $prostý pohled
 new-plain-view.tooltip=Nové hlavní okno s menším množstvím nástrojových panelů a s žádným dokováním
@@ -884,7 +884,7 @@ search.choose=Vybrat...
 search.choose.mnemonic=e
 search.synchronize=Synchronizovat
 search.synchronize.mnemonic=z
-search.synchronize.tooltip=Nastaví filtr a adresář na aktuálníkoncovku/umístění bufferu. 
+search.synchronize.tooltip=Nastaví filtr a adresář na aktuálníkoncovku/umístění bufferu.
 search.findBtn=Najít
 search.findBtn.mnemonic=f
 search.replaceBtn=Nahradit
@@ -1000,7 +1000,7 @@ selectlinerange.caption=Vyberte rozsah řádek:
 selectlinerange.start=Počáteční řádek:
 selectlinerange.end=Konečný řádek:
 #}}}
-  
+
 #{{{ View registers dialog
 view-registers.title=Registry
 view-registers.caption=Registr:
@@ -1063,7 +1063,7 @@ xmode-error.title=Chyba v parsování XML
 xmode-error.message=Při parsování {0} se vyskytla chyba na řádce line {1}:\n\
 	{3}
 xmode-error.dtd=Soubor DTD nemohl být načten\n({0})
-xmode-error.termchar-invalid=Hodnota AT_CHAR atributu není validní ({0}) 
+xmode-error.termchar-invalid=Hodnota AT_CHAR atributu není validní ({0})
 xmode-error.doctype-invalid=Očekáván dokument typu MODE, nalezen {0}
 xmode-error.empty-tag=Tag {0} nemůže být prázdný.
 xmode-error.token-invalid=Typ tokenu {0} není validní.
@@ -1368,7 +1368,7 @@ options.editing.largefilemode=Co mám dělat v případě rozsáhlých souborů:
 options.editing.largefilemode.option.ask=<html><b>Dotázat se</b> co dělat při otevírání rozsáhlého souboru</html>
 options.editing.largefilemode.option.full=<html><b>Ponechat plnou syntaxi</b> : zvýrazňování syntaxe jEditu bude pracovak jako obvykle,\
 						ale jEdit se může stát <br/><b>velice pomalým, toto není doporučeno</b></html>
-						
+
 options.editing.largefilemode.option.limited=<html><b>Kontextově necitlivé zvýraznění syntaxe</b>: V tomto případě bude jEdit \
 		provádět rychlé zvýrazňování, </br>ale výsledek nemusí být dokonalý. \
 		Buffer bude zvýrazněn řádek po řádce bez kontroly kontextu <br/> \
@@ -1605,7 +1605,7 @@ options.textarea.electricBorders=Elektrické okraje (auto skrolování)
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Vyhlazený hladký text
 options.textarea.antiAlias.tooltip=Zpomaluje zobrazování na některých systémech
-options.textarea.fracFontMetrics=Částečné písmové metriky (pro lepší hladké \ 
+options.textarea.fracFontMetrics=Částečné písmové metriky (pro lepší hladké \
 	zobrazení textu)
 options.textarea.fracFontMetrics.tooltip=Není doporučeno se subpixelovým vyhlazováním
 options.textarea.stripTrailingEOL=Skrýt poslední konec řádku (pokud je)
@@ -1828,37 +1828,26 @@ vfs.browser.browse.label=Přohlížet
 vfs.browser.close.label=Zavřít
 vfs.browser.copy-path.label=Kopírovat
 vfs.browser.delete.label=Smazat...
-vfs.browser.delete.shortcut=SMAZAT
 vfs.browser.home.label=Domovský adresář
-vfs.browser.home.shortcut=~
 vfs.browser.properties.label=Vlastnosti
 vfs.browser.properties.title=Vlastnosti souboru/adresáře
 vfs.browser.insert.label=Vložit
 vfs.browser.new-directory.label=Nový adresář...
-vfs.browser.new-directory.shortcut=VLOŽIT
 vfs.browser.new-file.label=Nový soubor
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Otevřít
 vfs.browser.open-desktop.label=Otevřít na $ploše
 vfs.browser.other-encoding-2.label=Jiné ({0})...
 vfs.browser.other-encoding.label=Jiné...
 vfs.browser.reload.label=Znovunačíst adresář
-vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=Přejmenovat...
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.label=Kořenový adresář
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.label=Hledat v adresáři...
 vfs.browser.show-hidden-files.label=Zobrazit skryté souboru
 vfs.browser.synchronize.label=Adresář aktuálního bufferu
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.label=Rodičovský adresář
-vfs.browser.up.shortcut=A+Up
 vfs.browser.paste.label=Vložit
 vfs.browser.previous.label=Předchozí adresář
-vfs.browser.previous.shortcut=A+Left
 vfs.browser.next.label=Následující adresář
-vfs.browser.next.shortcut=A+Right
 #}}}
 
 #{{{ Tool bar
@@ -2116,11 +2105,11 @@ killring.delete=smazat killring a spustit(start)
 
 #}}}
 
-#{{{ Macros                       
+#{{{ Macros
 
-#{{{ Properties used by macros     
+#{{{ Properties used by macros
 
-#{{{ common    
+#{{{ common
 macro.rs.general.ErrorNotEditableDialog.title=Právo zápisu
 macro.rs.general.ErrorNotEditableDialog.message=Buffer není upravitelný!
 #}}}
@@ -2336,7 +2325,7 @@ macro.rs.ShowThreads.CurrentThreads.label=Aktuální vlákna
 macro.rs.InsertBufferProperties.InsertLocalProperties.label=Vložit lokální vlastnosti bufferu
 macro.rs.InsertBufferProperties.Properties.label=Vlastnosti:
 macro.rs.InsertBufferProperties.Insert.label=Vložit
-macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Poznámka: Lokální vlastnosti bufferu musí být na první nebo posledních 10 řádkách bufferu, aby mohly být rozpoznány jEditem. 
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=Poznámka: Lokální vlastnosti bufferu musí být na první nebo posledních 10 řádkách bufferu, aby mohly být rozpoznány jEditem.
 #}}}
 
 #{{{ Look and Feel Properties
@@ -2523,7 +2512,7 @@ Properties/Look_and_Feel_Properties.label=Vlastnosti Look and Feel
 Properties/System_Properties.label=Vlastnosti systému
 #}}}
 
-#{{{ Text 
+#{{{ Text
 macros.folder.Text.label=Text
 
 Text/Add_Prefix_and_Suffix.label=Přidat předponu a příponu

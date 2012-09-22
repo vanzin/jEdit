@@ -1818,37 +1818,26 @@ vfs.browser.browse.label=Explorer
 vfs.browser.close.label=Fermer
 vfs.browser.copy-path.label=Copier le chemin
 vfs.browser.delete.label=Supprimer...
-vfs.browser.delete.shortcut=SUPPR
 vfs.browser.home.label=Dossier utilisateur
-vfs.browser.home.shortcut=~
 vfs.browser.properties.label=Propriétés
 vfs.browser.properties.title=Propriétés de fichier/dossier
 vfs.browser.insert.label=Insérer
 vfs.browser.new-directory.label=Nouveau dossier...
-vfs.browser.new-directory.shortcut=INSERT
 vfs.browser.new-file.label=Nouveau fichier
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Ouvrir
 vfs.browser.open-desktop.label=Ouvrir sur le $Bureau
 vfs.browser.other-encoding-2.label=Autre ({0})...
 vfs.browser.other-encoding.label=Autre...
 vfs.browser.reload.label=Actualiser le dossier
-vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=Renommer...
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.label=Répertoire racine
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.label=Rechercher dans le dossier...
 vfs.browser.show-hidden-files.label=Afficher les fichiers cachés
 vfs.browser.synchronize.label=Dossier du tampon courant
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.label=Dossier parent
-vfs.browser.up.shortcut=A+Flèche haut
 vfs.browser.paste.label=Coller le fichier ici
 vfs.browser.previous.label=Dossier précédent
-vfs.browser.previous.shortcut=A+Flèche gauche
 vfs.browser.next.label=Dossier suivant
-vfs.browser.next.shortcut=A+Flèche droite
 #}}}
 
 #{{{ Tool bar

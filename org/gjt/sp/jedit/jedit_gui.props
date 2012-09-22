@@ -928,25 +928,14 @@ vfs.browser.collapse.icon=16x16/actions/group-collapse.png
 vfs.browser.dock-position=left
 
 #{{{ Actions
-vfs.browser.delete.shortcut=DELETE
 vfs.browser.home.icon=22x22/actions/go-home.png
-vfs.browser.home.shortcut=~
 vfs.browser.new-directory.icon=22x22/actions/folder-new.png
-vfs.browser.new-directory.shortcut=INSERT
 vfs.browser.new-file.icon=22x22/actions/document-new.png
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.reload.icon=22x22/actions/view-refresh.png
-vfs.browser.reload.shortcut=F5
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.icon=22x22/devices/drive-harddisk.png
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.icon=22x22/actions/edit-find-in-folder.png
 vfs.browser.synchronize.icon=22x22/status/folder-visiting.png
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.icon=22x22/actions/go-parent.png
-vfs.browser.up.shortcut=A+Up
-vfs.browser.previous.shortcut=A+Left
-vfs.browser.next.shortcut=A+Right
 vfs.browser.next.icon=22x22/actions/go-next.png
 vfs.browser.previous.icon=22x22/actions/go-previous.png
 #}}}

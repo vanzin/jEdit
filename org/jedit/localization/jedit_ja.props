@@ -1179,7 +1179,7 @@ browser-multiple-io.title=I/O エラー
 browser-multiple-io.message=各ファイルシステムブラウザは、いちどにひとつの入出力操作しかできません。\n\
 	他の操作を開始するのは、現在の操作が完了（もしくはI/O\n\
 	進捗モニタで中止）するまで待ってください。
-	
+
 #}}}
 
 #{{{ maxLineLen=0 warning
@@ -1817,37 +1817,26 @@ vfs.browser.browse.label=ブラウズ
 vfs.browser.close.label=閉じる
 vfs.browser.copy-path.label=コピー
 vfs.browser.delete.label=削除...
-vfs.browser.delete.shortcut=DELETE
 vfs.browser.home.label=ホームディレクトリ
-vfs.browser.home.shortcut=~
 vfs.browser.properties.label=プロパティ
 vfs.browser.properties.title=ファイル/ディレクトリ プロパティ
 vfs.browser.insert.label=挿入
 vfs.browser.new-directory.label=新規ディレクトリ...
-vfs.browser.new-directory.shortcut=INSERT
 vfs.browser.new-file.label=新規ファイル
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=開く
 vfs.browser.open-desktop.label=デスクトップに開く($D)
 vfs.browser.other-encoding-2.label=その他 ({0})...
 vfs.browser.other-encoding.label=その他...
 vfs.browser.reload.label=ディレクトリの再読み込み
-vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=名前の変更...
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.label=ルートディレクトリ
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.label=ディレクトリ内検索...
 vfs.browser.show-hidden-files.label=隠しファイルの表示
 vfs.browser.synchronize.label=現在のバッファのディレクトリ
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.label=親ディレクトリ
-vfs.browser.up.shortcut=A+Up
 vfs.browser.paste.label=貼り付け
 vfs.browser.previous.label=前のディレクトリ
-vfs.browser.previous.shortcut=A+Left
 vfs.browser.next.label=次のディレクトリ
-vfs.browser.next.shortcut=A+Right
 #}}}
 
 #{{{ Tool bar

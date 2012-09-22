@@ -122,7 +122,7 @@ clear-recent-files.label=Очистить Список Файлов
 #}}}
 
 reload-encoding.label=Перезагрузить с новой кодировкой
-reload-encoding.error=Нет кодировки {0} 
+reload-encoding.error=Нет кодировки {0}
 
 #}}}
 
@@ -300,7 +300,7 @@ buffersets.label=Наборы буферов
 global-bufferset.label=Глобальный набор
 global-bufferset.tooltip=Один набор на все панели редактирования.
 view-bufferset.label=Набор окна
-view-bufferset.tooltip=Свой набор для всех панелей редактирования в окне. 
+view-bufferset.tooltip=Свой набор для всех панелей редактирования в окне.
 editpane-bufferset.label=Набор панели
 editpane-bufferset.tooltip=Свой набор для каждой панели редактирования.
 #}}}
@@ -600,7 +600,7 @@ about.navigate=Нажмите любую клавишу для просмотр�
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
-about.text.prefix=jEdit был создан следующими разработчиками: 
+about.text.prefix=jEdit был создан следующими разработчиками:
 about.text.suffix=Отдельная благодарность пользователям\n\
                   	за их коментарии, предложения и доклады об ошибках.
 #}}}
@@ -610,7 +610,7 @@ error-list.plugin-manager=Управление модулями
 #}}}
 
 #{{{
-largeBufferDialog.title=Буфер{0} слишком велик 
+largeBufferDialog.title=Буфер{0} слишком велик
 largeBufferDialog.message=Этот буфер слишком велик, что может привести к\n\
 	замдлению работы программы из-за цветового подсвечивания синтаксиса.\n\
 	Следующие дейтвия могут помочь:\n\
@@ -1013,7 +1013,7 @@ close.selectAll=Выбрать все
 close.selectAll.mnemonic=a
 close.save=Сохранить выбранные
 close.save.mnemonic=s
-close.discard=Выбросить выбранные 
+close.discard=Выбросить выбранные
 close.discard.mnemonic=d
 #}}}
 
@@ -1346,7 +1346,7 @@ options.editing.indentSize=Размер отступа:
 options.editing.noWordSep=Дополнителые символы слова:
 options.editing.camelCasedWords=Разделять слова в "ВерблюжемРегистре"
 options.editing.noTabs=Использовать пробелы для табуляции
-options.editing.elasticTabstops=Эластичных шаги для отступа 
+options.editing.elasticTabstops=Эластичных шаги для отступа
 options.editing.elasticTabstops.tooltip=(Эксперимент) - может привести к нестабильности
 options.editing.deepIndent=Глубокий отступ
 options.editing.autoIndent=Автоматический отступ
@@ -1812,37 +1812,26 @@ vfs.browser.browse.label=Просмотр
 vfs.browser.close.label=Закрыть
 vfs.browser.copy-path.label=Копия
 vfs.browser.delete.label=Удалить...
-vfs.browser.delete.shortcut=DELETE
 vfs.browser.home.label=Домашняя директория
-vfs.browser.home.shortcut=~
 vfs.browser.properties.label=Свойства
 vfs.browser.properties.title=Свойства файля/директории
 vfs.browser.insert.label=Вставить
 vfs.browser.new-directory.label=Новая директория...
-vfs.browser.new-directory.shortcut=INSERT
 vfs.browser.new-file.label=Новый файл
-vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Открыть
 vfs.browser.open-desktop.label=Отркыть на Столе
 vfs.browser.other-encoding-2.label=Открыть ({0})...
 vfs.browser.other-encoding.label=Ещё...
 vfs.browser.reload.label=Перегрузить директорию
-vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=Переименовать...
-vfs.browser.rename.shortcut=F2
 vfs.browser.roots.label=Корневая директория
-vfs.browser.roots.shortcut=/
 vfs.browser.search-directory.label=Поиск в директории...
 vfs.browser.show-hidden-files.label=Показывать скрытые файлы
 vfs.browser.synchronize.label=Директория текущего буфера
-vfs.browser.synchronize.shortcut=-
 vfs.browser.up.label=Содержащая директория
-vfs.browser.up.shortcut=A+Up
 vfs.browser.paste.label=Вставить
 vfs.browser.previous.label=Предыдущая директория
-vfs.browser.previous.shortcut=A+Left
 vfs.browser.next.label=Следующая директория
-vfs.browser.next.shortcut=A+Right
 #}}}
 
 #{{{ Tool bar
@@ -2127,7 +2116,7 @@ macro.rs.CutLinesContaining.LinesCut.message=строк вырезано
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Столбец (межды 1 и 
+macro.rs.GoToColumn.ColumnBefore.label=Столбец (межды 1 и
 macro.rs.GoToColumn.ColumnAfter.label=):
 #}}}
 
@@ -2442,7 +2431,7 @@ macros.folder.Files.label=Файлы
 Files/Browse_Buffer_Directory.label=Показать директорию буфера
 Files/Browse_Directory.label=Показать Директорию
 Files/Buffer_Switcher.label=Переключатель Буфера
-Files/Close_All_Except_Active.label=Закрыть все кроме активного 
+Files/Close_All_Except_Active.label=Закрыть все кроме активного
 Files/Copy_Name_to_Clipboard.label=Копировать имя в буфер обмена
 Files/Copy_Path_to_Clipboard.label=Копировать путь в буфер обмена
 Files/Delete_Current.label=Удалить текущий
