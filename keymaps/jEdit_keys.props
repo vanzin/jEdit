@@ -85,7 +85,7 @@ line-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 add-marker.shortcut=C+e C+m
 center-caret.shortcut=C+e C+n
-scroll-and-center=C+l
+scroll-and-center.shortcut=C+l
 open-path.shortcut=C+e C+o
 vertical-paste.shortcut=C+e C+p
 replace-in-selection.shortcut=C+e C+r
@@ -144,7 +144,7 @@ record-temp-macro.shortcut=C+m C+m
 run-temp-macro.shortcut=C+m C+p
 record-macro.shortcut=C+m C+r
 stop-recording.shortcut=C+m C+s
-last-macro.shortuct=C+m C+l
+last-macro.shortcut=C+m C+l
 #}}}
 
 #{{{ C+r C+X
