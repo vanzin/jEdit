@@ -457,6 +457,21 @@
             chooser for the desired download mirror, as well as various settings
             such as the directory where plugins are to be installed. In addition, you can set the time in minutes that the pluginlist can be cached from jedit.org, helping to reduce the server load. See <xref
             linkend="using-plugins" />.</para>
+            
+            <para> If the option "disable obsolete plugins" is enabled, then plugins
+            that were released on Plugin Manager will be checked against the plugins you have
+            installed, for those with a maximum jEdit version that is lower than the one you are 
+            running. Plugins are marked with a maximum version when they are found to be broken or somehow
+            incompatible with a given jEdit release. 
+            Until an update is made available for such a plugin
+            on Plugin Manager, these plugins are automatically unloaded and marked unsupported. </para>
+            
+            <para> If you re-enable a plugin that was disabled this way, it will remain loaded until the
+            next time the plugin list checked - whenever the user
+            selects the Update or Install tab from Plugin Manager. If you un-check this option,
+            then obsolete plugins will not be automatically disabled in this way. </para>
+            
+            
         </section>
 
         
