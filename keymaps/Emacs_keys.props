@@ -1,5 +1,4 @@
 #jEdit's keymap Emacs
-#Wed Dec 07 12:46:21 PST 2011
 action-bar.shortcut=C+ENTER
 activator.reloader.shortcut=CA+r
 backspace.shortcut=BACK_SPACE
@@ -247,8 +246,6 @@ toggle-dock-areas.shortcut=F12
 toggle-dual-diff.shortcut=C+q d
 toggle-full-screen.shortcut=F11
 toggle-rect-select.shortcut=A+BACK_SLASH
-to-lower.shortcut2=A+l
-to-upper.shortcut2=A+u
 transpose-chars.shortcut=C+t
 undo.shortcut=C+z
 undo.shortcut2=C+SLASH

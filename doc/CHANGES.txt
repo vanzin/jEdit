@@ -6,7 +6,7 @@ jEdit 5.1 version history
 
 Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust,
 Malathi, Vladimir Avdonin, Eric Le Lay, Darien Brown, Steve snarum-micron,
-EdorFaus, and Maik Nijhuis for contributing to this release.
+EdorFaus, Brian Clapper, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
@@ -113,6 +113,8 @@ EdorFaus, and Maik Nijhuis for contributing to this release.
 
 }}}
 {{{ UI
+
+- Emacs macros and keymap updates. (Brian Clapper)
 
 - Use separate (shorter) label for "whole word search" in the search bar.
   (Shlomy Reinstein)
