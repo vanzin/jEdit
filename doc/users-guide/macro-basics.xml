@@ -374,11 +374,6 @@ org.gjt.sp.util</programlisting>
                 <para><varname>scriptPath</varname> - set to the full path of
                 the script currently being executed.</para>
             </listitem>
-
-            <listitem>
-                <para><varname>scriptPath</varname> - set to the full path of
-                the script currently being executed.</para>
-            </listitem>
         </itemizedlist>
 
         <para>Note that these variables are set at the beginning of macro
