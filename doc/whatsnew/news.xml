@@ -24,9 +24,10 @@
       classes related to WorkThread and WorkThreadPool have been removed.
       </para></listitem>
 
-      <listitem><para> New option to check for and disable obsolete plugins. Enabled by
-      default, this will ensure that old unsupported plugins do not interfere
-      with the running operation of jEdit. </para> 
+      <listitem><para> New Plugin Manager option to check for and disable
+      obsolete plugins. 
+      Enabled by default, this will ensure that old unsupported plugins do not
+      interfere with the running operation of jEdit. </para> 
     </listitem>
     </itemizedlist>
     

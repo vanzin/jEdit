@@ -540,49 +540,19 @@
         <qandadiv id="emacs-tricks">
             <title>Tips for Emacs users</title>
 
-            <para>For more emacs help, check out <ulink
-            url="http://www.clapper.org/software/jedit/">this site</ulink> for
-            more emacs macros.</para>
-
-            <qandaentry>
-                <question id="settings-emacstab">
-                    <para>Can I have an emacs style tab key (tab anywhere in a
-                    line re-indents it)?</para>
-                </question>
-
-                <answer>
-                    <para>Yes. You can do this by rebinding the
-                    <keycode>tab</keycode> key to <command>Indent Selected
-                    Lines</command> in the <guimenuitem>Global
-                    Options</guimenuitem>.</para>
-                </answer>
-            </qandaentry>
-
             <qandaentry>
                 <question id="settings-emacsctrle">
-                    <para>How do I map Ctrl-E to go to the end of the
-                    line?</para>
+                    <para>How do I get Emacs-like key bindings out of the box? </para>
                 </question>
 
                 <answer>
-                    <para>Start with a keymap that does not contain any
-                    multiple-key shortcuts beginning with Ctrl-E, such as the
-                    "Emacs" Keymap which binds Ctrl-E
-                    to "smart end", and customize it by setting your own shortcuts to make it more like your flavor of emacs.
+                    <para>Start with the "Emacs" Keymap and customize it by setting 
+                    your own shortcuts to make it more like your flavor of Emacs.
+                    Emacs macros are contributed by Brian Clapper. 
                     </para>
                 </answer>
             </qandaentry>
 
-            <qandaentry>
-                <question id="emacs-ctrl-k">
-                    <para>What about ctrl-K?</para>
-                </question>
-
-                <answer>
-                    <para>Check out <literal>macros/Editing/Emacs_Ctrl_K.bsh</literal>.
-                    Bind it to Ctrl-k from the shortcuts option pane.</para>
-                </answer>
-            </qandaentry>
         </qandadiv>
 
         <qandadiv id="customize-other">
