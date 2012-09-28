@@ -119,6 +119,9 @@ for contributing to this release.
 }}}
 {{{ UI
 
+- Add a "German Keyboard" keymap that replaces shortcuts that are not reachable
+  on a german keyboard by reachable ones. (Björn "Vampire" Kautler)
+
 - Emacs macros and keymap updates. (Brian Clapper)
 
 - Use separate (shorter) label for "whole word search" in the search bar.

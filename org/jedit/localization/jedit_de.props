@@ -23,7 +23,7 @@
 #{{{ ToDo, Comments
 #
 # Translations to check again:
-#   - Dockable                => Dockbereich, Dock-Fenster, Dockfähige Fenster
+#   - Dockable                => Dockbereich, Dock-Fenster, Dockf\u00E4hige Fenster
 #   - Fractional font metrics => Teilschriftformen ?
 #   - Gutter                     (no translation)
 #   - Parse                      (no translation), parsen, durchsuchen
@@ -65,61 +65,22 @@
 #}}}
 # -------------------------------------------------------------------------------------------------
 
-
-#{{{ Special German Shortcuts
-
-#{{{ Deactivating alternative shortcuts to get to main menu items via ALT + underlined_key
-
-# Action                  Primary Shortcut    Alternative Shortcut (deactivating)
-# -------------------------------------------------------------------------------
-# Go to Next Character    RIGHT               A+l
-# Go to Next Page         PAGE_DOWN           A+a
-# Delete Next Character   DELETE              A+d
-
-next-char.shortcut2=
-next-page.shortcut2=
-delete.shortcut2=
-#}}}
-
-#{{{ Changing shortcuts that are unreachable on german keyboards
-
-# Action                  Original Shortcut      Changed Shortcut
-# ---------------------------------------------------------------
-# Expand Abbreviation     C+SEMICOLON            CA+SPACE
-# Multiple Selection      C+BACK_SLASH           C+NUMBER_SIGN
-# Rectangular Selection   A+BACK_SLASH           A+NUMBER_SIGN
-# Select Code Block       C+OPEN_BRACKET         C+8
-# Go to Matching Bracket  C+CLOSE_BRACKET        C+9
-# Go to Previous Bracket  C+e C+OPEN_BRACKET     C+e C+8
-# Go to Next Bracket      C+e C+CLOSE_BRACKET    C+e C+9
-
-expand-abbrev.shortcut=CA+SPACE
-toggle-rect-select.shortcut=A+NUMBER_SIGN
-toggle-multi-select.shortcut=C+NUMBER_SIGN
-select-block.shortcut=C+8
-match-bracket.shortcut=C+9
-next-bracket.shortcut=C+e C+9
-prev-bracket.shortcut=C+e C+8
-#}}}
-
-#}}}
-
 #{{{ jEdit core (jedit_gui.props)
 
 #{{{ Common strings
 common.ok=OK
 common.cancel=Abbruch
-common.close=Schließen
+common.close=Schlie\u00DFen
 common.error=Fehler
 common.apply=Anwenden
 common.more=Mehr
-common.insert=Einfügen
-common.add=Hinzufügen
+common.insert=Einf\u00FCgen
+common.add=Hinzuf\u00FCgen
 common.remove=Entfernen
 common.removeCurrent=aktuelle Zuordnung entfernen
 common.moveUp=Nach oben
 common.moveDown=Nach unten
-common.clearAll=Alle löschen
+common.clearAll=Alle l\u00F6schen
 #}}}
 
 #{{{ Miscellaneous
@@ -142,7 +103,7 @@ save-layout.message=Zu speicherndes Dock-Layout:
 #{{{ Menus (only menu names and special strings)
 
 #{{{ Context menu
-view.context.customize=Dieses Menü anpassen...
+view.context.customize=Dieses Men\u00FC anpassen...
 #}}}
 
 #{{{ Menu Bar
@@ -150,11 +111,11 @@ view.context.customize=Dieses Menü anpassen...
 #{{{ File menu
 file.label=$Datei
 recent-files.label=Let$zte Dateien
-recent-files.textfield.tooltip=Ein Filter-Präfix oder Glob-Muster kann hier eingegeben werden
+recent-files.textfield.tooltip=Ein Filter-Pr\u00E4fix oder Glob-Muster kann hier eingegeben werden
 no-recent-files.label=Keine letzten Dateien
-clear-recent-files.label=Letzte Dateien löschen
+clear-recent-files.label=Letzte Dateien l\u00F6schen
 reload-encoding.label=Erneut laden mit Zeichenkodierung
-reload-encoding.error={0} ist keine gültige Zeichenkodierung
+reload-encoding.error={0} ist keine g\u00FCltige Zeichenkodierung
 #}}}
 
 #{{{ Edit menu
@@ -162,7 +123,7 @@ edit.label=$Bearbeiten
 clipboard.label=Mehr $Zwischenablage
 selection.label=$Mehr Auswahl
 text.label=$Text
-indent.label=Einrü$ckung
+indent.label=Einr\u00FC$ckung
 source.label=$Quellkode
 #}}}
 
@@ -184,7 +145,7 @@ view.label=$Ansicht
 scrolling.label=Sc$rollen
 splitting.label=$Teilen
 docking.label=An$docken
-buffersets.label=D$ateisätze
+buffersets.label=D$ateis\u00E4tze
 #}}}
 
 #{{{ Utilities menu
@@ -218,63 +179,63 @@ help-menu.label=$Hilfe
 #}}}
 
 #{{{ Macro Strings
-macro.temp.header=// Dies ist ein temporäres Makro. Überprüfen Sie zuerst alle Kommandos,\n\
-                  // um sicher zu gehen, dass die beabsichtigten Aktionen ausgeführt werden.\n\
+macro.temp.header=// Dies ist ein tempor\u00E4res Makro. \u00DCberpr\u00FCfen Sie zuerst alle Kommandos,\n\
+                  // um sicher zu gehen, dass die beabsichtigten Aktionen ausgef\u00FChrt werden.\n\
                   // Um das Makro zu starten, aktivieren Sie die Datei,\n\
-                  // in der das Makro arbeiten soll und drücken C+m C+p.
+                  // in der das Makro arbeiten soll und dr\u00FCcken C+m C+p.
 
-macro.header=// Dies ist ein aufgenommenes Makro. Überprüfen Sie zuerst alle Kommandos,\n\
-             // um sicher zu gehen, dass die beabsichtigten Aktionen ausgeführt werden.\n\
+macro.header=// Dies ist ein aufgenommenes Makro. \u00DCberpr\u00FCfen Sie zuerst alle Kommandos,\n\
+             // um sicher zu gehen, dass die beabsichtigten Aktionen ausgef\u00FChrt werden.\n\
              // Um das Makro zu starten, aktivieren Sie die Datei,\n\
-             // in der das Makro arbeiten soll und drücken C+m C+p.
+             // in der das Makro arbeiten soll und dr\u00FCcken C+m C+p.
 #}}}
 
 #{{{ Commands, wether they do or do not appear in menus
-backspace-word-std.label=Löschen voriges Wort (Leerräume entfernen)
-backspace-word-std-after.label=Löschen voriges Wort (Leerräume nach dem Wort entfernen)
-backspace-word.label=Löschen voriges Wort
-backspace.label=Löschen voriges Zeichen
-delete-word-std.label=Löschen nächstes Wort (Leerräume entfernen)
-delete-word.label=Löschen nächstes Wort
-delete.label=Löschen nächstes Zeichen
+backspace-word-std.label=L\u00F6schen voriges Wort (Leerr\u00E4ume entfernen)
+backspace-word-std-after.label=L\u00F6schen voriges Wort (Leerr\u00E4ume nach dem Wort entfernen)
+backspace-word.label=L\u00F6schen voriges Wort
+backspace.label=L\u00F6schen voriges Zeichen
+delete-word-std.label=L\u00F6schen n\u00E4chstes Wort (Leerr\u00E4ume entfernen)
+delete-word.label=L\u00F6schen n\u00E4chstes Wort
+delete.label=L\u00F6schen n\u00E4chstes Zeichen
 document-end.label=Gehe zum Dateiende
 document-home.label=Gehe zum Dateianfang
 end.label=Ende
 home.label=Home
 smart-end.label=Smart End
 smart-home.label=Smart Home
-insert-literal.label=Einfügen - Nächstes Zeichen als Literal
-insert-newline-indent.label=Einfügen - Zeilenumbruch und Einrückung
-insert-newline.label=Einfügen - Zeilenumbruch
-insert-tab-indent.label=Einfügen - Tabulator und Einrückung
-insert-tab.label=Einfügen - Tabulator
+insert-literal.label=Einf\u00FCgen - N\u00E4chstes Zeichen als Literal
+insert-newline-indent.label=Einf\u00FCgen - Zeilenumbruch und Einr\u00FCckung
+insert-newline.label=Einf\u00FCgen - Zeilenumbruch
+insert-tab-indent.label=Einf\u00FCgen - Tabulator und Einr\u00FCckung
+insert-tab.label=Einf\u00FCgen - Tabulator
 line-end.label=Gehe zum Zeilenende
 line-home.label=Gehe zum Zeilenanfang
-logs-remove-all-errors.label=Alle Fehler löschen
+logs-remove-all-errors.label=Alle Fehler l\u00F6schen
 new-file.label=$Neu
 new-file-in-mode.label=Neu mit $Modus
 new-plain-view.label=Neue $einfache Ansicht
 new-view.label=$Neue Ansicht
-next-bracket.label=Gehe zur $nächsten Klammer
-next-buffer.label=$Gehe zur nächsten Datei
-next-char.label=Gehe zum nächsten Zeichen
-next-fold.label=Gehe zur $nächsten Falte
-next-line.label=Gehe zur nächsten Zeile
-next-marker.label=Gehe zum $nächsten Lesezeichen
-next-page.label=Gehe zur nächsten Seite
-next-paragraph.label=Gehe zum nächsten Absatz
-next-textarea.label=Gehe zum $nächsten Textbereich
-next-word-std.label=Gehe zum nächsten Wort (Leerräume entfernen)
-next-word.label=Gehe zum nächsten Wort
-open-file.label=Ö$ffnen...
-overwrite.label=Überschreib-Modus
+next-bracket.label=Gehe zur $n\u00E4chsten Klammer
+next-buffer.label=$Gehe zur n\u00E4chsten Datei
+next-char.label=Gehe zum n\u00E4chsten Zeichen
+next-fold.label=Gehe zur $n\u00E4chsten Falte
+next-line.label=Gehe zur n\u00E4chsten Zeile
+next-marker.label=Gehe zum $n\u00E4chsten Lesezeichen
+next-page.label=Gehe zur n\u00E4chsten Seite
+next-paragraph.label=Gehe zum n\u00E4chsten Absatz
+next-textarea.label=Gehe zum $n\u00E4chsten Textbereich
+next-word-std.label=Gehe zum n\u00E4chsten Wort (Leerr\u00E4ume entfernen)
+next-word.label=Gehe zum n\u00E4chsten Wort
+open-file.label=\u00D6$ffnen...
+overwrite.label=\u00DCberschreib-Modus
 page-setup.label=Seite $einrichten...
-parent-fold.label=Gehe zur nächst $höheren Falte
-paste-deleted.label=Einfügen aus zuletzt gelöschten...
-paste-special.label=Einfügen Spezial...
-paste-previous.label=Einfügen aus zuletzt eingefügten...
-paste-string-register.label=Einfügen aus Register
-paste.label=$Einfügen
+parent-fold.label=Gehe zur n\u00E4chst $h\u00F6heren Falte
+paste-deleted.label=Einf\u00FCgen aus zuletzt gel\u00F6schten...
+paste-special.label=Einf\u00FCgen Spezial...
+paste-previous.label=Einf\u00FCgen aus zuletzt eingef\u00FCgten...
+paste-string-register.label=Einf\u00FCgen aus Register
+paste.label=$Einf\u00FCgen
 prev-bracket.label=Gehe zur $vorigen Klammer
 prev-buffer.label=Gehe zur $vorigen Datei
 prev-char.label=Gehe zum vorigen Zeichen
@@ -284,8 +245,8 @@ prev-marker.label=Gehe zum $vorigen Lesezeichen
 prev-page.label=Gehe zur vorigen Seite
 prev-paragraph.label=Gehe zum vorigen Absatz
 prev-textarea.label=Gehe zum v$origen Textbereich
-prev-word-std.label=Gehe zum vorigen Wort (Leerräume entfernen)
-prev-word-std-after.label=Gehe zum vorigen Wort (Leerräume nach dem Wort entfernen)
+prev-word-std.label=Gehe zum vorigen Wort (Leerr\u00E4ume entfernen)
+prev-word-std-after.label=Gehe zum vorigen Wort (Leerr\u00E4ume nach dem Wort entfernen)
 prev-word.label=Gehe zum vorigen Wort
 print.label=$Drucken...
 quick-search-word.label=Schnellsuche nach W$ort
@@ -294,10 +255,10 @@ range-comment.label=$Block-Kommentar
 toggle-line-numbers.label=$Zeilennummern Ein/Aus
 toggle-statusbar.label=$Statuszeile Ein/Aus
 toggle-gutter.label=G$utter Ein/Aus
-set-view-title.label=Setze Titel für Ansicht...
+set-view-title.label=Setze Titel f\u00FCr Ansicht...
 set-view-title.tooltip=Setzt den Titel eines Hauptfensters zwecks einfacher Identifizierung auf dem Desktop
 toggle-full-screen.label=Voll$bildmodus Ein/Aus
-show-context-menu.label=Zeige Kontextmenü
+show-context-menu.label=Zeige Kontextmen\u00FC
 toggle-line-separator.label=Zeilenendezeichen Ein/Aus
 toggle-multi-select.label=$Mehrfachauswahl Ein/Aus
 toggle-rect-select.label=$Spaltenauswahl Ein/Aus
@@ -314,61 +275,61 @@ scroll-up-line.label=Zeile nach $oben scrollen
 scroll-up-page.label=Seite nach o$ben scrollen
 search-in-directory.label=Suche in Ver$zeichnis...
 search-in-open-buffers.label=Suche in offenen $Dateien...
-select-all.label=A$lles auswählen
-select-block.label=$Kode-Block auswählen
-select-document-end.label=Auswählen bis Datei$ende
-select-document-home.label=Auswählen bis Datei$anfang
-select-end.label=Auswählen bis Smart End Position
-select-fold.label=Falte aus$wählen
-select-home.label=Auswählen bis Smart Home Position
-select-line-end.label=Auswählen bis Zeilenende
-select-line-home.label=Auswählen bis Zeilenanfang
-select-line-range.label=Zeilen$bereich auswählen...
-select-line.label=$Zeile auswählen
-select-marker.label=Auswählen bis Lesezeichen
-select-next-bracket.label=Auswählen bis zur nächsten Klammer
-select-next-char.label=Auswählen bis zum nächsten Zeichen
-select-next-line.label=Auswählen bis zur nächsten Zeile
-select-next-marker.label=Auswählen bis zum nächsten Lesezeichen
-select-next-page.label=Auswählen bis zur nächsten Seite
-select-next-paragraph.label=Auswählen bis zum nächsten Absatz
-select-next-word-std.label=Auswählen bis zum nächsten Wort (Leerräume entfernen)
-select-next-word.label=Auswählen bis zum nächsten Wort
+select-all.label=A$lles ausw\u00E4hlen
+select-block.label=$Kode-Block ausw\u00E4hlen
+select-document-end.label=Ausw\u00E4hlen bis Datei$ende
+select-document-home.label=Ausw\u00E4hlen bis Datei$anfang
+select-end.label=Ausw\u00E4hlen bis Smart End Position
+select-fold.label=Falte aus$w\u00E4hlen
+select-home.label=Ausw\u00E4hlen bis Smart Home Position
+select-line-end.label=Ausw\u00E4hlen bis Zeilenende
+select-line-home.label=Ausw\u00E4hlen bis Zeilenanfang
+select-line-range.label=Zeilen$bereich ausw\u00E4hlen...
+select-line.label=$Zeile ausw\u00E4hlen
+select-marker.label=Ausw\u00E4hlen bis Lesezeichen
+select-next-bracket.label=Ausw\u00E4hlen bis zur n\u00E4chsten Klammer
+select-next-char.label=Ausw\u00E4hlen bis zum n\u00E4chsten Zeichen
+select-next-line.label=Ausw\u00E4hlen bis zur n\u00E4chsten Zeile
+select-next-marker.label=Ausw\u00E4hlen bis zum n\u00E4chsten Lesezeichen
+select-next-page.label=Ausw\u00E4hlen bis zur n\u00E4chsten Seite
+select-next-paragraph.label=Ausw\u00E4hlen bis zum n\u00E4chsten Absatz
+select-next-word-std.label=Ausw\u00E4hlen bis zum n\u00E4chsten Wort (Leerr\u00E4ume entfernen)
+select-next-word.label=Ausw\u00E4hlen bis zum n\u00E4chsten Wort
 select-none.label=Auswahl auf$heben
-select-paragraph.label=$Absatz auswählen
-select-prev-bracket.label=Auswählen bis zur vorigen Klammer
-select-prev-char.label=Auswählen bis zum vorigen Zeichen
-select-prev-line.label=Auswählen bis zur vorigen Zeile
-select-prev-marker.label=Auswählen bis zum vorigen Lesezeichen
-select-prev-page.label=Auswählen bis zur vorigen Seite
-select-prev-paragraph.label=Auswählen bis zum vorigen Absatz
-select-prev-word-std.label=Auswählen bis zum vorigen Wort (Leerräume entfernen)
-select-prev-word-std-after.label=Auswählen bis zum vorigen Wort (Leerräume nach dem Wort entfernen)
-select-prev-word.label=Auswählen bis zum vorigen Wort
-select-visible-end.label=Auswählen bis zur letzten sichtbaren Zeile
-select-visible-home.label=Auswählen bis zur ersten sichtbaren Zeile
-select-whitespace-end.label=Auswählen bis zum Ende des Leerraumes
-select-whitespace-home.label=Auswählen bis zum Anfang des Leerraumes
-select-word.label=$Wort auswählen
-shift-left.label=Einrückung nach $links verschieben
-shift-right.label=Einrückung nach $rechts verschieben
+select-paragraph.label=$Absatz ausw\u00E4hlen
+select-prev-bracket.label=Ausw\u00E4hlen bis zur vorigen Klammer
+select-prev-char.label=Ausw\u00E4hlen bis zum vorigen Zeichen
+select-prev-line.label=Ausw\u00E4hlen bis zur vorigen Zeile
+select-prev-marker.label=Ausw\u00E4hlen bis zum vorigen Lesezeichen
+select-prev-page.label=Ausw\u00E4hlen bis zur vorigen Seite
+select-prev-paragraph.label=Ausw\u00E4hlen bis zum vorigen Absatz
+select-prev-word-std.label=Ausw\u00E4hlen bis zum vorigen Wort (Leerr\u00E4ume entfernen)
+select-prev-word-std-after.label=Ausw\u00E4hlen bis zum vorigen Wort (Leerr\u00E4ume nach dem Wort entfernen)
+select-prev-word.label=Ausw\u00E4hlen bis zum vorigen Wort
+select-visible-end.label=Ausw\u00E4hlen bis zur letzten sichtbaren Zeile
+select-visible-home.label=Ausw\u00E4hlen bis zur ersten sichtbaren Zeile
+select-whitespace-end.label=Ausw\u00E4hlen bis zum Ende des Leerraumes
+select-whitespace-home.label=Ausw\u00E4hlen bis zum Anfang des Leerraumes
+select-word.label=$Wort ausw\u00E4hlen
+shift-left.label=Einr\u00FCckung nach $links verschieben
+shift-right.label=Einr\u00FCckung nach $rechts verschieben
 # obsolete as of 4.3pre18
 show-buffer-switcher.label=Datei-U$mschalter Ein/Aus
 # new in 4.3pre18
 focus-buffer-switcher.label=$Fokus auf Datei-Umschalter
 toggle-buffer-switcher.label=Datei-U$mschalter Ein/Aus
 #
-add-buffer-to-favorites.label=Datei zu Favoriten hinzufügen
-add-dir-to-favorites.label=Verzeichnis zu Favoriten hinzufügen
-add-explicit-fold.label=E$xplizite Faltung hinzufügen
-add-marker-shortcut.label=Lesezeichen hinzufügen mit Tastaturkürzel
-add-marker.label=$Lesezeichen hinzufügen/entfernen
-close-all.label=Alle sc$hließen
-close-buffer.label=S$chließen
+add-buffer-to-favorites.label=Datei zu Favoriten hinzuf\u00FCgen
+add-dir-to-favorites.label=Verzeichnis zu Favoriten hinzuf\u00FCgen
+add-explicit-fold.label=E$xplizite Faltung hinzuf\u00FCgen
+add-marker-shortcut.label=Lesezeichen hinzuf\u00FCgen mit Tastaturk\u00FCrzel
+add-marker.label=$Lesezeichen hinzuf\u00FCgen/entfernen
+close-all.label=Alle sc$hlie\u00DFen
+close-buffer.label=S$chlie\u00DFen
 close-buffer.tooltip=Datei wird nur im Dateisatz dieses Editorpanels geschlossen
 global-close-buffer.tooltip=Datei wird in allen Editorpanelen und Ansichten geschlossen
-close-docking-area.label=$Aktiven Dockbereich schließen
-close-view.label=Ansi$cht schließen
+close-docking-area.label=$Aktiven Dockbereich schlie\u00DFen
+close-view.label=Ansi$cht schlie\u00DFen
 bottom-docking-area.label=Gehe zum un$teren Dockbereich
 left-docking-area.label=Gehe zum l$inken Dockbereich
 right-docking-area.label=Gehe zum $rechten Dockbereich
@@ -378,38 +339,38 @@ layout-load.label=Dock-Layout $Laden ...
 layout-save.label=Dock-Layout $Speichern ...
 layout-load-current-mode.label=Dock-Layout des aktiven Modus Laden ...
 layout-save-current-mode.label=Dock-Layout des aktiven Modus Speichern ...
-about.label=ü$ber jEdit...
+about.label=\u00FC$ber jEdit...
 action-bar.label=$Kommandozeile
 buffer-options.label=$Datei-Optionen...
 center-caret.label=$Cursor im Bildschirm zentrieren
-complete-word.label=Wort $vervollständigen
+complete-word.label=Wort $vervollst\u00E4ndigen
 collapse-all-folds.label=A$lle Falten einklappen
 collapse-fold.label=Falte $einklappen
-copy-append-string-register.label=Kopieren (Anfügen an ein Register)
-copy-append.label=Kopieren (Anfügen an Zwischenablage)
+copy-append-string-register.label=Kopieren (Anf\u00FCgen an ein Register)
+copy-append.label=Kopieren (Anf\u00FCgen an Zwischenablage)
 copy-string-register.label=Kopieren in ein Register
 copy.label=$Kopieren
-cut-append-string-register.label=Ausschneiden (Anfügen an ein Register)
-cut-append.label=Ausschneiden (Anfügen an Zwischenablage)
+cut-append-string-register.label=Ausschneiden (Anf\u00FCgen an ein Register)
+cut-append.label=Ausschneiden (Anf\u00FCgen an Zwischenablage)
 cut-string-register.label=Ausschneiden in ein Register
 cut.label=$Ausschneiden
-delete-end-line.label=Löschen bis Zeil$enende
-delete-line.label=$Zeile löschen
-delete-paragraph.label=A$bsatz löschen
-delete-start-line.label=Löschen bis Zeilen$anfang
+delete-end-line.label=L\u00F6schen bis Zeil$enende
+delete-line.label=$Zeile l\u00F6schen
+delete-paragraph.label=A$bsatz l\u00F6schen
+delete-start-line.label=L\u00F6schen bis Zeilen$anfang
 edit-favorites.label=Favoriten bearbeiten
 edit-syntax-style.label=Syntax-Stil des Token-Typs unter dem Cursor bearbeiten
-eval-for-selected-lines.label=BeanShell-Ausdruck auswerten - ausgewählte $Zeilen
+eval-for-selected-lines.label=BeanShell-Ausdruck auswerten - ausgew\u00E4hlte $Zeilen
 eval-selection.label=BeanShell-Ausdruck auswerten - Aus$wahl
 eval.label=BeanShell-Ausdruck $auswerten
 exit.label=$Beenden
-expand-abbrev.label=A$bkürzung erweitern
+expand-abbrev.label=A$bk\u00FCrzung erweitern
 expand-all-folds.label=$Alle Zeilen anzeigen
 expand-fold.label=Falte $komplett ausklappen
 expand-folds.label=Alle Falten einer Stufe ausklappen
 expand-one-level.label=Falte eine $Stufe ausklappen
-find-next.label=Weitersuchen $vorwärts
-find-prev.label=Weitersuchen $rückwärts
+find-next.label=Weitersuchen $vorw\u00E4rts
+find-prev.label=Weitersuchen $r\u00FCckw\u00E4rts
 find.label=$Suche
 format-paragraph.label=Absatz $formatieren
 global-options.label=Gl$obale Optionen...
@@ -419,8 +380,8 @@ help.label=jEdit $Hilfe
 hypersearch-results.label=Hypersuche Ergebnisse
 hypersearch-word.label=HyperSuche nach Worten
 hypersearch.label=Schnell-$Hypersuche
-ignore-case.label=Groß-/Klein-Schreibung $ignorieren
-indent-lines.label=$Ausgewählte Zeilen einrücken
+ignore-case.label=Gro\u00DF-/Klein-Schreibung $ignorieren
+indent-lines.label=$Ausgew\u00E4hlte Zeilen einr\u00FCcken
 invert-selection.label=Auswahl $umkehren
 io-progress-monitor.label=$I/O-Thread-Monitor
 task-monitor.label=T$ask-Monitor
@@ -431,32 +392,32 @@ last-macro.label=Letztes Makro $wiederholen
 line-comment.label=$Zeilen-Kommentar
 match-bracket.label=Gehe zur $passenden Klammer
 memory-status.label=$Speicher Status...
-narrow-to-fold.label=Alles ausblenden außer $Falte
-narrow-to-selection.label=Alles a$usblenden außer Auswahl
+narrow-to-fold.label=Alles ausblenden au\u00DFer $Falte
+narrow-to-selection.label=Alles a$usblenden au\u00DFer Auswahl
 plugin-manager.label=Plugin $Manager...
 plugin-options.label=Plugin $Optionen...
 recent-buffer.label=Gehe zur $letzten Datei
 record-macro.label=$Makro aufnehmen...
-#record-temp-macro.label=Temporäres Makro a$ufnehmen...
+#record-temp-macro.label=Tempor\u00E4res Makro a$ufnehmen...
 record-temp-macro.label=Temp. Makro a$ufnehmen...
 redo.label=$Wiederholen
-regexp.label=Re$guläre Ausdrücke Ein/Aus
+regexp.label=Re$gul\u00E4re Ausdr\u00FCcke Ein/Aus
 reload-all.label=Alle erneut Laden
 reload-modes.label=$Bearbeitungsmodi neu laden
 reload.label=Erneut $Laden
 remove-all-markers.label=Alle Lesezeichen $entfernen
 remove-marker.label=Lesezeichen entfernen
-remove-trailing-ws.label=Leerräume an $Zeilenenden entfernen
+remove-trailing-ws.label=Leerr\u00E4ume an $Zeilenenden entfernen
 replace-all.label=$Alle ersetzen
 replace-and-find-next.label=$Ersetzen
 replace-in-selection.label=Ersetzen in Aus$wahl
-rescan-macros.label=Makro-Menü $neu aufbauen
+rescan-macros.label=Makro-Men\u00FC $neu aufbauen
 resplit.label=$Letzte Teilung wiederherstellen
-run-other-macro.label=$Anderes Makro ausführen...
-#run-temp-macro.label=Temporäres Makro aus$führen
-run-temp-macro.label=Temp. Makro aus$führen
+run-other-macro.label=$Anderes Makro ausf\u00FChren...
+#run-temp-macro.label=Tempor\u00E4res Makro aus$f\u00FChren
+run-temp-macro.label=Temp. Makro aus$f\u00FChren
 save-a-copy-as.label=$Kopie speichern unter...
-save-a-copy-as.tooltip=... diese Kopie wird nicht geöffnet
+save-a-copy-as.tooltip=... diese Kopie wird nicht ge\u00F6ffnet
 save-all.label=$Alle speichern
 save-as.label=Speichern $unter...
 save.label=$Speichern
@@ -469,14 +430,14 @@ tabs-to-spaces.label=$Tabulatoren zu Leerzeichen
 tip-of-the-day.label=$Tip des Tages
 to-lower.label=Zu $Kleinbuchstaben
 to-upper.label=Zu $Grossbuchstaben
-undo.label=$Rückgängig
+undo.label=$R\u00FCckg\u00E4ngig
 unsplit-current.label=Aktive $Teilung aufheben
 unsplit.label=$Alle Teilungen aufheben
 update-log.label=Activity Log auf $Festplatte aktualisieren
-vertical-paste-string-register.label=Vertikal Einfügen aus Register
-vertical-paste.label=$Vertikal Einfügen
+vertical-paste-string-register.label=Vertikal Einf\u00FCgen aus Register
+vertical-paste.label=$Vertikal Einf\u00FCgen
 view-registers.label=$Register ansehen...
-word-count.label=W$orte zählen...
+word-count.label=W$orte z\u00E4hlen...
 
 editpane-bufferset.label=Dateisatz-Modus => $Editorpanel
 editpane-bufferset.tooltip=Jedes Editorpanel hat seinen eigenen Dateisatz
@@ -484,11 +445,11 @@ global-bufferset.label=Dateisatz-Modus => $Global
 global-bufferset.tooltip=Alle Editorpanele haben einen gemeinsamen Dateisatz
 view-bufferset.label=Dateisatz-Modus => $Ansicht
 view-bufferset.tooltip=Editorpanele innerhalb des gleichen Ansichtsfensters haben einen gemeinsamen Dateisatz
-closeall-except-active.label=Alle ande$ren schließen
-closeall-except-active.tooltip=Dateisatz dieses Editorpanels leeren außer Dateien, die gerade angezeigt werden
-bufferset-toggle-exclusive.label=$Exclusive Dateisätze Ein/Aus
-bufferset-toggle-exclusive.tooltip=Wenn eine Datei geöffnet wird, soll sie in anderen nicht überlappenden Dateisätzen geschlossen werden
-global-close-buffer.label=Schließen ($global)
+closeall-except-active.label=Alle ande$ren schlie\u00DFen
+closeall-except-active.tooltip=Dateisatz dieses Editorpanels leeren au\u00DFer Dateien, die gerade angezeigt werden
+bufferset-toggle-exclusive.label=$Exclusive Dateis\u00E4tze Ein/Aus
+bufferset-toggle-exclusive.tooltip=Wenn eine Datei ge\u00F6ffnet wird, soll sie in anderen nicht \u00FCberlappenden Dateis\u00E4tzen geschlossen werden
+global-close-buffer.label=Schlie\u00DFen ($global)
 
 #}}}
 
@@ -496,9 +457,9 @@ global-close-buffer.label=Schließen ($global)
 
 # Title
 view.title=jEdit -\u0020
-view.title.dirty=\ (geändert)
+view.title.dirty=\ (ge\u00E4ndert)
 
-view.docking.close-tooltip=Schließt den Dockbereich
+view.docking.close-tooltip=Schlie\u00DFt den Dockbereich
 view.docking.menu-tooltip=Dock-Optionen
 view.docking.menu-floating=Abdocken
 view.docking.menu-top=Oben andocken
@@ -506,14 +467,14 @@ view.docking.menu-left=Links andocken
 view.docking.menu-bottom=Unten andocken
 view.docking.menu-right=Rechts andocken
 view.docking.menu-clone=Neues schwebendes Fenster
-view.docking.menu-close=Schließen
-view.docking.menu-undock=Abdocken + schließen
+view.docking.menu-close=Schlie\u00DFen
+view.docking.menu-undock=Abdocken + schlie\u00DFen
 
-# Globale Vorlage für alle Dock-Menüs
+# Globale Vorlage f\u00FCr alle Dock-Men\u00FCs
 view.docking.toggle.label={0} (Umschalten)
 view.docking.float.label={0} (Neues schwebendes Fenster)
 
-directory.not-local=Verzeichnisse entfernter Dateisystemene können nicht gelistet werden
+directory.not-local=Verzeichnisse entfernter Dateisystemene k\u00F6nnen nicht gelistet werden
 directory.no-files=Keine Dateien
 
 #{{{ Gutter highlight
@@ -522,45 +483,45 @@ view.gutter.marker=Lesezeichen: {0}
 #}}}
 
 #{{{ Status messages
-view.status.add-marker=Kürzel für neues Lesezeichen? [{0}]
+view.status.add-marker=K\u00FCrzel f\u00FCr neues Lesezeichen? [{0}]
 view.status.auto-wrap=Suchtext nicht gefunden; Es geht am anderen Ende weiter!
 view.status.bracket=Passende Klammer in Zeile {0}: {1}
-view.status.caret-tooltip=Position der Einfügemarke (Absolut,Zeile,Spalte relativ%)
-view.status.copy-append-string-register=Kopieren/Anhängen an Register? [{0}]
+view.status.caret-tooltip=Position der Einf\u00FCgemarke (Absolut,Zeile,Spalte relativ%)
+view.status.copy-append-string-register=Kopieren/Anh\u00E4ngen an Register? [{0}]
 view.status.copy-string-register=Kopieren in Register? [{0}]
-view.status.cut-append-string-register=Ausschneiden/Anhängen an Register? [{0}]
+view.status.cut-append-string-register=Ausschneiden/Anh\u00E4ngen an Register? [{0}]
 view.status.cut-string-register=Ausschneiden in Register? [{0}]
 view.status.expand-folds=Falt-Ebene? [1-9]
-view.status.goto-marker=Gehe zu Lesezeichen mit Kürzel? [{0}]
+view.status.goto-marker=Gehe zu Lesezeichen mit K\u00FCrzel? [{0}]
 view.status.incomplete-abbrev={0} Parameter angegeben, aber {1} erforderlich!
-view.status.insert-literal=Einzufügendes Literal?
+view.status.insert-literal=Einzuf\u00FCgendes Literal?
 view.status.io-1=I/O: 1 Operation in Arbeit
-view.status.io.done=Ein-/Ausgabeoperation vollständig
+view.status.io.done=Ein-/Ausgabeoperation vollst\u00E4ndig
 view.status.io=I/O: {0} Operationen in Arbeit
 view.status.linesep-changed=Zeilenende-Zeichen gesetzt auf "{0}"
-view.status.linesep-tooltip=Zeilenende-Zeichen (zum ändern klicken)
+view.status.linesep-tooltip=Zeilenende-Zeichen (zum \u00E4ndern klicken)
 view.status.memory-tooltip=Java Heap-Speicher: {0}Kb/{1}Kb
 view.status.mode-tooltip=Bearbeitungsmodus, Faltmodus,  Zeichenkodierung
 view.status.multi-changed=Mehrfachauswahl-Modus ist "{0,choice,0#Aus|1#Ein}"
-view.status.multi-tooltip=Mehrfachauswahl-Modus (zum ändern klicken)
-view.status.narrow=Menüpunkt "Alle Zeilen anzeigen" wählen, um den gesamten Text wieder sichtbar zu machen
+view.status.multi-tooltip=Mehrfachauswahl-Modus (zum \u00E4ndern klicken)
+view.status.narrow=Men\u00FCpunkt "Alle Zeilen anzeigen" w\u00E4hlen, um den gesamten Text wieder sichtbar zu machen
 view.status.no-markers=keine Lesezeichen gesetzt
 view.status.no-registers=keine Register definiert
-view.status.overwrite-changed=Überschreib-Modus ist "{0,choice,0#Aus|1#Ein}"
-view.status.overwrite-tooltip=Überschreib-Modus (zum ändern klicken)
-view.status.paste-string-register=Einfügen aus Register? [{0}]
+view.status.overwrite-changed=\u00DCberschreib-Modus ist "{0,choice,0#Aus|1#Ein}"
+view.status.overwrite-tooltip=\u00DCberschreib-Modus (zum \u00E4ndern klicken)
+view.status.paste-string-register=Einf\u00FCgen aus Register? [{0}]
 view.status.print=Seite {0} wird gedruckt
 view.status.quick-copy=Schnellkopier-Modus - markierter Text ersetzt Auswahl
 view.status.recording=Makro wird aufgenommen
 view.status.rect-select-changed=Spaltenauswahl ist "{0,choice,0#Aus|1#Ein}"
-view.status.rect-tooltip=Spaltenauswahl-Modus (zum ändern klicken)
+view.status.rect-tooltip=Spaltenauswahl-Modus (zum \u00E4ndern klicken)
 view.status.replace-all={0} Fundstelle(n) in {1} Datei(en) ersetzt
 view.status.search-not-found=Suchtext nicht gefunden!
-view.status.select-marker=Auswählen bis Lesezeichen mit Kürzel? [{0}]
-view.status.swap-marker=Cursor-Position tauschen mit Lesezeichen: Kürzel? [{0}]
-view.status.vertical-paste-string-register=Vertikal einfügen aus Register ? [{0}]
+view.status.select-marker=Ausw\u00E4hlen bis Lesezeichen mit K\u00FCrzel? [{0}]
+view.status.swap-marker=Cursor-Position tauschen mit Lesezeichen: K\u00FCrzel? [{0}]
+view.status.vertical-paste-string-register=Vertikal einf\u00FCgen aus Register ? [{0}]
 view.status.wrap-changed=Wortumbruch-Modus ist jetzt "{0}"
-view.status.wrap-tooltip=<html>Wortumbruch-Modus ist {0} (zum ändern klicken)</html>
+view.status.wrap-tooltip=<html>Wortumbruch-Modus ist {0} (zum \u00E4ndern klicken)</html>
 view.status.bufferset-tooltip=Dateisatz-Modus ist {0}
 wrap.none=ausgeschaltet
 wrap.hard=hart
@@ -582,7 +543,7 @@ new-file-in-mode.dialog.message=Mit Bearbeitungsmodus:
 #}}}
 
 #{{{ About dialog
-about.title=über jEdit
+about.title=\u00FCber jEdit
 
 # jEdit 4.2final
 #about.version=jEdit {0}
@@ -596,10 +557,10 @@ about.title=über jEdit
 # jEdit 4.4
 about.version=jEdit {0}, Modus: {1}, benutzt {2} Java {3}
 
-about.mode.standalone=selbständig
+about.mode.standalone=selbst\u00E4ndig
 about.mode.server=Server
 about.mode.server-background=Server (bleibt im Hintergrund)
-about.navigate=Pfeil-Tasten ändern Geschwindigkeit und Richtung des laufenden Textes
+about.navigate=Pfeil-Tasten \u00E4ndern Geschwindigkeit und Richtung des laufenden Textes
 # Scrolling Text kept original.
 #}}}
 
@@ -619,45 +580,45 @@ ioerror.directory-error-nomsg=Kann Verzeichnis nicht auflisten.
 ioerror.encoding-error=Die Datei konnte nicht korrekt (ohne eventuellen Datenverlust) \n\
   geladen werden mit Zeichenkodierung "{0}".\n\
   ({1})\n\
-  Versuchen Sie eine andere Kodierung zu wählen.\n\
-  Sie kann eingestellt werden mit dem Menüpunkt "Datei -> Erneut laden mit Zeichenkodierung".\n\
-  Wenn dies künftig automatisch geschehen soll, fügen Sie die Kandidaten der\n\
-  "Liste der Rückfall-Kodierungen" hinzu (Extras -> Globale Optionen -> Zeichenkodierungen)
+  Versuchen Sie eine andere Kodierung zu w\u00E4hlen.\n\
+  Sie kann eingestellt werden mit dem Men\u00FCpunkt "Datei -> Erneut laden mit Zeichenkodierung".\n\
+  Wenn dies k\u00FCnftig automatisch geschehen soll, f\u00FCgen Sie die Kandidaten der\n\
+  "Liste der R\u00FCckfall-Kodierungen" hinzu (Extras -> Globale Optionen -> Zeichenkodierungen)
 ioerror.write-encoding-error=Fehler beim Kodieren des Zeichens\n\
   {3} in Spalte {2} der Zeile {1} mit der Zeichenkodierung "{0}".
 
-ioerror.read-error=Laden nicht möglich: {0}
-ioerror.write-error=Speichern nicht möglich: {0}
-ioerror.unsupported-encoding-error={0} Zeichensatz wird durch die aktive JVM nicht unterstützt
-ioerror.open-directory=Öffnen eines Verzeichnisses als Datei nicht möglich.
-ioerror.save-directory=Speichern eines Verzeichnisses als Datei nicht möglich.
+ioerror.read-error=Laden nicht m\u00F6glich: {0}
+ioerror.write-error=Speichern nicht m\u00F6glich: {0}
+ioerror.unsupported-encoding-error={0} Zeichensatz wird durch die aktive JVM nicht unterst\u00FCtzt
+ioerror.open-directory=\u00D6ffnen eines Verzeichnisses als Datei nicht m\u00F6glich.
+ioerror.save-directory=Speichern eines Verzeichnisses als Datei nicht m\u00F6glich.
 ioerror.no-read=Unzureichende Rechte, um Datei zu laden.
 ioerror.no-write=Unzureichende Rechte, um Datei zu speichern.
-ioerror.save-readonly-twostagefail=Die Datei ist schreibgeschützt und zweistufiges Speichern ist nicht möglich
-ioerror.badurl=Ungültige Schreibweise der URL: {0}
-ioerror.delete-error=Datei löschen nicht möglich.
-ioerror.rename-exists=$überschreiben der existierenden Datei "{0}" nicht möglich.
-ioerror.rename-error=Umbenennen nach "{0}" nicht möglich.
-ioerror.mkdir-error=Anlegen des Verzeichnisses nicht möglich.
+ioerror.save-readonly-twostagefail=Die Datei ist schreibgesch\u00FCtzt und zweistufiges Speichern ist nicht m\u00F6glich
+ioerror.badurl=Ung\u00FCltige Schreibweise der URL: {0}
+ioerror.delete-error=Datei l\u00F6schen nicht m\u00F6glich.
+ioerror.rename-exists=$\u00FCberschreiben der existierenden Datei "{0}" nicht m\u00F6glich.
+ioerror.rename-error=Umbenennen nach "{0}" nicht m\u00F6glich.
+ioerror.mkdir-error=Anlegen des Verzeichnisses nicht m\u00F6glich.
 
-vfs.not-supported.list=Verzeichnisse des "{0}"-Dateisystems können nicht aufgelistet werden.
-vfs.not-supported.load=Dateien des "{0}"-Dateisystems können nicht geöffnet werden.
-vfs.not-supported.save=Dateien können nicht gespeichert werden in das "{0}"-Dateisystem.
+vfs.not-supported.list=Verzeichnisse des "{0}"-Dateisystems k\u00F6nnen nicht aufgelistet werden.
+vfs.not-supported.load=Dateien des "{0}"-Dateisystems k\u00F6nnen nicht ge\u00F6ffnet werden.
+vfs.not-supported.save=Dateien k\u00F6nnen nicht gespeichert werden in das "{0}"-Dateisystem.
 
-vfs.overwrite-readonly.title=Datei ist schreibgeschützt
-vfs.overwrite-readonly.message=Die Datei "{0}" ist schreibgeschützt.\n\
+vfs.overwrite-readonly.title=Datei ist schreibgesch\u00FCtzt
+vfs.overwrite-readonly.message=Die Datei "{0}" ist schreibgesch\u00FCtzt.\n\
   Soll sie trotzdem gespeichert werden?\n\
-  Dafür wird das zweistufige Speichern verwendet (Dateieigentümer \
-  in Unix wird zurückgesetzt)?
+  Daf\u00FCr wird das zweistufige Speichern verwendet (Dateieigent\u00FCmer \
+  in Unix wird zur\u00FCckgesetzt)?
 
-vfs.twostageimpossible.title=Zweistufiges Speichern nicht möglich
+vfs.twostageimpossible.title=Zweistufiges Speichern nicht m\u00F6glich
 vfs.twostageimpossible.message=Zweistufiges Speichern kann nicht angewandt werden, trotzdem speichern?
 
-out-of-memory-error=Es ist nicht genügend Java Heap-Speicher vorhanden, \n\
-  um diese Aufgabe abzuschließen. Versuchen Sie, die maximale Größe des \
-   Heap-Speichers zu erhöhen.\n\
+out-of-memory-error=Es ist nicht gen\u00FCgend Java Heap-Speicher vorhanden, \n\
+  um diese Aufgabe abzuschlie\u00DFen. Versuchen Sie, die maximale Gr\u00F6\u00DFe des \
+   Heap-Speichers zu erh\u00F6hen.\n\
   \n\
-  Dokumentation bezüglich Änderung der Größe des Java Heap-Speichers: siehe\n\
+  Dokumentation bez\u00FCglich \u00C4nderung der Gr\u00F6\u00DFe des Java Heap-Speichers: siehe\n\
   Benutzerhandbuch, Kapitel "jEdit Basics", Abschnitt "Buffers".
 #}}}
 
@@ -693,31 +654,31 @@ encoding-error.message=Die Datei "{0}"\n\
   ({2})\n\
   \n\
   Um eine andere Zeichenkodierung zu verwenden, versuchen Sie diese\n\
-  im Befehle-Menü des Dateisystem-Browser zu wählen.\n\
+  im Befehle-Men\u00FC des Dateisystem-Browser zu w\u00E4hlen.\n\
   \n\
   Wenn Sie nicht wissen, welche Zeichenkodierung zu verwenden ist,\n\
   versuchen Sie "ASCII" oder "8859_1".
 
-open-directory.title=Verzeichnis öffnen nicht möglich.
+open-directory.title=Verzeichnis \u00F6ffnen nicht m\u00F6glich.
 open-directory.message="{0}" ist ein Verzeichnis.\n\
-  Verzeichnisse können nicht zum Bearbeiten geöffnet werden.
+  Verzeichnisse k\u00F6nnen nicht zum Bearbeiten ge\u00F6ffnet werden.
 
-save-directory.title=Verzeichnis speichern nicht möglich.
+save-directory.title=Verzeichnis speichern nicht m\u00F6glich.
 save-directory.message="{0}" ist ein Verzeichnis.\n\
-  Dateien können nicht als Verzeichnisse gespeichert werden.
+  Dateien k\u00F6nnen nicht als Verzeichnisse gespeichert werden.
 
-no-read.title=Datei öffnen nicht möglich
-no-read.message=Lesen der Datei "{0}" nicht möglich.\n\
-  Möglicherweise haben Sie nicht genügend Rechte.
+no-read.title=Datei \u00F6ffnen nicht m\u00F6glich
+no-read.message=Lesen der Datei "{0}" nicht m\u00F6glich.\n\
+  M\u00F6glicherweise haben Sie nicht gen\u00FCgend Rechte.
 
-no-write.title=Datei speichern nicht möglich
-no-write.message=Speichern der Datei "{0}" nicht möglich.\n\
-  Möglicherweise haben Sie nicht genügend Rechte.
+no-write.title=Datei speichern nicht m\u00F6glich
+no-write.message=Speichern der Datei "{0}" nicht m\u00F6glich.\n\
+  M\u00F6glicherweise haben Sie nicht gen\u00FCgend Rechte.
 
-badurl.title=Ungültige URL
+badurl.title=Ung\u00FCltige URL
 # {0} - the URL
 # {1} - the error
-badurl.message=Die folgende URL ist ungültig: "{0}"\n\
+badurl.message=Die folgende URL ist ung\u00FCltig: "{0}"\n\
   ({1})
 #}}}
 
@@ -727,7 +688,7 @@ goto-line.message=Gehe zu Zeile:
 #}}}
 
 #{{{ Word count dialog
-wordcount.title=Worte zählen
+wordcount.title=Worte z\u00E4hlen
 # {0} - characters
 # {1} - words
 # {2} - lines
@@ -736,61 +697,61 @@ wordcount.message=Zeichen: {0}\nWorte: {1}\nZeilen: {2}
 
 #{{{ Set marker dialog
 setmarker.title=Lesezeichen setzen
-setmarker.message=Name für das Lesezeichen:
+setmarker.message=Name f\u00FCr das Lesezeichen:
 #}}}
 
 #{{{ File not saved dialog
 notsaved.title=Nicht gespeicherte Datei
 # {0} - file name
-notsaved.message=Änderungen speichern nach "{0}"?
+notsaved.message=\u00C4nderungen speichern nach "{0}"?
 #}}}
 
 #{{{ File changed, still reload dialog
-changedreload.title=Geänderte Datei
+changedreload.title=Ge\u00E4nderte Datei
 changedreload.message="{0}"\n\
-  wurde seit dem letzten Speichern geändert. Wenn sie neu geladen wird,\n\
-  gehen diese Änderungen verloren. Fortfahren?
+  wurde seit dem letzten Speichern ge\u00E4ndert. Wenn sie neu geladen wird,\n\
+  gehen diese \u00C4nderungen verloren. Fortfahren?
 #}}}
 
 #{{{ Autosave file exists dialog
 autosave-found.title=Autosave-Datei gefunden
 # {0} - autosave file name
 autosave-found.message=Die Autosave-Datei "{0}"\n\
-  wurde gefunden! Möglicherweise ist jEdit abgestürzt, bevor Sie\n\
-  speichern konnten. Möchten Sie die Autosave-Datei öffnen?
+  wurde gefunden! M\u00F6glicherweise ist jEdit abgest\u00FCrzt, bevor Sie\n\
+  speichern konnten. M\u00F6chten Sie die Autosave-Datei \u00F6ffnen?
 
 autosave-loaded.title=Autosave-Datei geladen
 autosave-loaded.message=Die Autosave-Datei "{0}"\n\
-  wurde geladen. Sie sollten nun prüfen, ob sie Ihre ungespeicherten Daten\n\
-  enthält. Wenn Sie die automatisch gesicherten Änderungen behalten möchten, \
+  wurde geladen. Sie sollten nun pr\u00FCfen, ob sie Ihre ungespeicherten Daten\n\
+  enth\u00E4lt. Wenn Sie die automatisch gesicherten \u00C4nderungen behalten m\u00F6chten, \
   speichern Sie die Datei.\n\
-  Wenn Sie sie verwerfen möchten, wählen Sie Datei->Erneut laden.
+  Wenn Sie sie verwerfen m\u00F6chten, w\u00E4hlen Sie Datei->Erneut laden.
 #}}}
 
 #{{{ Save all confirm dialog
 saveall.title=Alle Dateien speichern
-saveall.message=Alle geänderten Dateien speichern?
+saveall.message=Alle ge\u00E4nderten Dateien speichern?
 #}}}
 
 #{{{ Reload all confirm dialog
 reload-all.title=Alle Dateien erneut laden
 reload-all.message=Alle Dateien erneut von der Festplatte laden?\n\
-  Ungespeicherte Änderungen in allen Dateien WERDEN VERLOREN GEHEN!
+  Ungespeicherte \u00C4nderungen in allen Dateien WERDEN VERLOREN GEHEN!
 #}}}
 
 #{{{ Encoding prompt
-encoding-prompt.title=Öffnen mit anderer Zeichenkodierung
+encoding-prompt.title=\u00D6ffnen mit anderer Zeichenkodierung
 encoding-prompt.message=Zu verwendende Zeichenkodierung:
 #}}}
 
 #{{{ Macro recording already in progress dialog
-already-recording.title=Aufzeichnung läuft bereits
-already-recording.message=Die Aufzeichnung eines Makros läuft bereits.
+already-recording.title=Aufzeichnung l\u00E4uft bereits
+already-recording.message=Die Aufzeichnung eines Makros l\u00E4uft bereits.
 #}}}
 
 #{{{ No temporary macro dialog
-no-temp-macro.title=Kein temporäres Makro
-no-temp-macro.message=Es wurde kein temporäres Makro aufgezeichnet.
+no-temp-macro.title=Kein tempor\u00E4res Makro
+no-temp-macro.message=Es wurde kein tempor\u00E4res Makro aufgezeichnet.
 #}}}
 
 #{{{ Record macro dialog
@@ -801,32 +762,32 @@ record.message=Name des Makros:
 #{{{ Some features don't work with -nosettings dialog
 no-settings.title=Feature ausgeschaltet.
 no-settings.message=jEdit wurde gestartet mit dem Schalter "-nosettings".\n\
-  Um dieses Feature nutzen zu können, muss jEdit ohne diesen Schalter gestartet werden.
+  Um dieses Feature nutzen zu k\u00F6nnen, muss jEdit ohne diesen Schalter gestartet werden.
 #}}}
 
 #{{{ Some features don't work with the web start version
 no-webstart.title=Feature ausgeschaltet
-no-webstart.message=Dieses Feature ist nicht verfügbar\n\
+no-webstart.message=Dieses Feature ist nicht verf\u00FCgbar\n\
   in der WebStart-Version von jEdit.
 #}}}
 
 #{{{ Search and replace dialog
 search.title=Suchen und Ersetzen
 
-search.find=Suchen nach: (Rechtsklick für letzte Eingaben)
+search.find=Suchen nach: (Rechtsklick f\u00FCr letzte Eingaben)
 search.find.tooltip=Bild hoch/Bild runter = letzte Eingaben, STRG+ENTER = Zeilenumbruch
 search.find.mnemonic=s
 search.replace=Ersetzen mit:
 search.replace.mnemonic=e
 search.string-replace-btn=Text
-search.beanshell-replace-btn=Rückgabewert eines BeanShell-Schnipsels
+search.beanshell-replace-btn=R\u00FCckgabewert eines BeanShell-Schnipsels
 
 search.settings=Einstellungen:
-search.keep=Dialog nicht schließen
+search.keep=Dialog nicht schlie\u00DFen
 search.keep.mnemonic=b
-search.case=Groß-/Klein ignorieren
+search.case=Gro\u00DF-/Klein ignorieren
 search.case.mnemonic=i
-search.regexp=Reguläre Ausdrücke
+search.regexp=Regul\u00E4re Ausdr\u00FCcke
 search.regexp.mnemonic=g
 search.hypersearch=HyperSuche
 search.hypersearch.mnemonic=h
@@ -834,9 +795,9 @@ search.wrap=Rundum
 search.wrap.mnemonic=m
 
 search.direction=Richtung:
-search.back=Rückwärts
+search.back=R\u00FCckw\u00E4rts
 search.back.mnemonic=w
-search.forward=Vorwärts
+search.forward=Vorw\u00E4rts
 search.forward.mnemonic=v
 
 search.fileset=Suchen in:
@@ -849,7 +810,7 @@ search.all.mnemonic=d
 search.directory=Verzeichnis:
 search.directory.mnemonic=z
 search.skipHidden=keine versteckten/Backups
-search.skipBinary=keine Binärdateien
+search.skipBinary=keine Bin\u00E4rdateien
 search.skipHidden.mnemonic=p
 search.skipBinary.mnemonic=t
 
@@ -858,7 +819,7 @@ search.directoryField.mnemonic=c
 search.filterField=Filter:
 search.filterField.mnemonic=f
 search.subdirs=Unterverzeichnisse durchsuchen
-search.choose=wählen...
+search.choose=w\u00E4hlen...
 search.choose.mnemonic=n
 search.synchronize=von aktiver Datei
 search.synchronize.mnemonic=o
@@ -873,27 +834,27 @@ search.replaceAllBtn=Alle ersetzen
 search.replaceAllBtn.mnemonic=a
 
 # bis jEdit 4.3pre9
-search.filterField.tooltip={*.c,*.h} für mehrere Extensionen
+search.filterField.tooltip={*.c,*.h} f\u00FCr mehrere Extensionen
 # ab jEdit 4.3pre10
-glob.tooltip={*.c,*.h} für mehrere Extensionen
+glob.tooltip={*.c,*.h} f\u00FCr mehrere Extensionen
 #}}}
 
 #{{{ Keep searching dialog
-keepsearching.title=Keine weiteren übereinstimmungen gefunden
-keepsearching.message=Es wurden keine weiteren übereinstimmungen gefunden.\n\
+keepsearching.title=Keine weiteren \u00FCbereinstimmungen gefunden
+keepsearching.message=Es wurden keine weiteren \u00FCbereinstimmungen gefunden.\n\
  Suche am {0,choice,0#Beginn|1#Ende} fortsetzen?
 #}}}
 
 #{{{ Search and replace error dialog
 searcherror.title=Fehler bei Suchen und Ersetzen
 # {0} - error message
-searcherror.message=Ein Fehler trat auf bei der Ausführung dieser Operation.
+searcherror.message=Ein Fehler trat auf bei der Ausf\u00FChrung dieser Operation.
 #}}}
 
 #{{{ Search and replace error dialog
 searcherror-bsh.title=Fehler bei Suchen und Ersetzen
 # {0} - error message
-searcherror-bsh.message=Ein Fehler trat auf bei der Ausführung dieser Operation.\n\
+searcherror-bsh.message=Ein Fehler trat auf bei der Ausf\u00FChrung dieser Operation.\n\
   \n\
   Setzen Sie den Ersetzen-Modus auf "Text", wenn der Ersatztext\n\
   nicht als Beanshell-Ausdruck interpretiert werden soll.
@@ -902,78 +863,78 @@ searcherror-bsh.message=Ein Fehler trat auf bei der Ausführung dieser Operation
 #{{{ Empty fileset error dialog
 empty-fileset.title=Leere Dateiliste
 empty-fileset.message=Die angegebene Liste der zu durchsuchenden Dateien ist leer.\n\
-  Bitte sorgen Sie dafür, dass der Dateifilter und\n\
+  Bitte sorgen Sie daf\u00FCr, dass der Dateifilter und\n\
   das Verzeichnis korrekt gesetzt sind.
 #}}}
 
 #{{{ Reverse regular expression search not supported dialog
 # obsolete as of jEdit 4.3pre16
-regexp-reverse.title=Nicht unterstützt
-regexp-reverse.message=Nach Regulären Ausdrücken kann nicht rückwärts gesucht werden.\n\
-  Entweder vorwärts suchen oder Reguläre Ausdrücke ausschalten.
+regexp-reverse.title=Nicht unterst\u00FCtzt
+regexp-reverse.message=Nach Regul\u00E4ren Ausdr\u00FCcken kann nicht r\u00FCckw\u00E4rts gesucht werden.\n\
+  Entweder vorw\u00E4rts suchen oder Regul\u00E4re Ausdr\u00FCcke ausschalten.
 #}}}
 
 #{{{ Can only search local directories dialog
-remote-dir-search.title=Nicht-lokales Verzeichnis gewählt
-remote-dir-search.message=Sie möchten ein nicht lokal existierendes Verzeichnis durchsuchen.\n\
+remote-dir-search.title=Nicht-lokales Verzeichnis gew\u00E4hlt
+remote-dir-search.message=Sie m\u00F6chten ein nicht lokal existierendes Verzeichnis durchsuchen.\n\
   Dies kann sehr langsam sein wegen Latenz-Zeiten im Netzwerk usw.\n\
-  Sind Sie sicher, dass Sie fortfahren möchten?
+  Sind Sie sicher, dass Sie fortfahren m\u00F6chten?
 #}}}
 
 #{{{ "Search in selection" active but nothing selected in text area
 search-no-selection.title=Nichts selektiert
-search-no-selection.message=Bitte wählen Sie einigen Text aus oder deaktivieren Sie\n\
+search-no-selection.message=Bitte w\u00E4hlen Sie einigen Text aus oder deaktivieren Sie\n\
   zuerst die Option "Suche in Auswahl".
 #}}}
 
 #{{{ Paste previous and paste deleted dialogs
 paste-from-list.whitespace=<Leerraum>
-paste-previous.title=Einfügen voriger ...
-paste-previous.caption=Zuletzt kopierte und eingefügte Texte:
-paste-deleted.title=Einfügen gelöschter ...
-paste-deleted.caption=Zuletzt gelöschte Texte:
+paste-previous.title=Einf\u00FCgen voriger ...
+paste-previous.caption=Zuletzt kopierte und eingef\u00FCgte Texte:
+paste-deleted.title=Einf\u00FCgen gel\u00F6schter ...
+paste-deleted.caption=Zuletzt gel\u00F6schte Texte:
 #}}}
 
 #{{{ File changed on disk dialog
-filechanged-save.title=Datei auf Festplatte ist geändert
+filechanged-save.title=Datei auf Festplatte ist ge\u00E4ndert
 filechanged-save.message=Die Datei "{0}"\n\
-  wurde von einem anderen Programm auf der Festplatte geändert.\n\
+  wurde von einem anderen Programm auf der Festplatte ge\u00E4ndert.\n\
   Datei wirklich speichern?
 #}}}
 
 #{{{ File exists dialog
 fileexists.title=Datei existiert
 fileexists.message=Die Datei "{0}" existiert bereits.\n\
-  überschreiben?
+  \u00FCberschreiben?
 #}}}
 
 #{{{ Select line range dialog
-selectlinerange.title=Zeilenbereich auswählen
-selectlinerange.caption=Zeilenbereich auswählen:
+selectlinerange.title=Zeilenbereich ausw\u00E4hlen
+selectlinerange.caption=Zeilenbereich ausw\u00E4hlen:
 selectlinerange.start=Startzeile:
 selectlinerange.end=Endzeile:
 #}}}
 
 #{{{ Close all buffers dialog
-close.title=Nicht gespeicherte Änderungen
-close.caption=Die folgenden Dateien enthalten noch nicht gespeicherte Änderungen:
-close.selectAll=Alle wählen
+close.title=Nicht gespeicherte \u00C4nderungen
+close.caption=Die folgenden Dateien enthalten noch nicht gespeicherte \u00C4nderungen:
+close.selectAll=Alle w\u00E4hlen
 close.selectAll.mnemonic=a
-close.save=Gewählte speichern
+close.save=Gew\u00E4hlte speichern
 close.save.mnemonic=s
-close.discard=Gewählte verwerfen
+close.discard=Gew\u00E4hlte verwerfen
 close.discard.mnemonic=v
 #}}}
 
 #{{{ Files changed on disk dialog
-files-changed.title=Dateien auf Festplatte geändert
-files-changed.caption=Die folgenden Dateien wurden von einem anderen Programm auf der Festplatte geändert:
-files-changed.deleted=Auf der Festplatte gelöscht; Speichern zum Wiederherstellen:
+files-changed.title=Dateien auf Festplatte ge\u00E4ndert
+files-changed.caption=Die folgenden Dateien wurden von einem anderen Programm auf der Festplatte ge\u00E4ndert:
+files-changed.deleted=Auf der Festplatte gel\u00F6scht; Speichern zum Wiederherstellen:
 files-changed.changed-auto=Automatisch neu geladen:
-files-changed.changed=Auf Festplatte geändert:
-files-changed.changed-dirty-auto=Datei im Editor ist auch geändert; nicht neu geladen:
-files-changed.changed-dirty=Datei ist im Editor und auf der Festplatte geändert:
-files-changed.select-all=Alle wählen
+files-changed.changed=Auf Festplatte ge\u00E4ndert:
+files-changed.changed-dirty-auto=Datei im Editor ist auch ge\u00E4ndert; nicht neu geladen:
+files-changed.changed-dirty=Datei ist im Editor und auf der Festplatte ge\u00E4ndert:
+files-changed.select-all=Alle w\u00E4hlen
 files-changed.select-all.mnemonic=a
 files-changed.reload=Neu laden
 files-changed.reload.mnemonic=l
@@ -982,21 +943,21 @@ files-changed.ignore.mnemonic=i
 #}#}}}
 
 #{{{ Abbrev dialogs
-add-abbrev.title=Abkürzung hinzufügen
-add-abbrev.mode=Hinzufügen (abhängig vom Bearbeitungsmodus)
-add-abbrev.global=Hinzufügen global
+add-abbrev.title=Abk\u00FCrzung hinzuf\u00FCgen
+add-abbrev.mode=Hinzuf\u00FCgen (abh\u00E4ngig vom Bearbeitungsmodus)
+add-abbrev.global=Hinzuf\u00FCgen global
 
-edit-abbrev.title=Abkürzung bearbeiten
+edit-abbrev.title=Abk\u00FCrzung bearbeiten
 
-edit-abbrev.duplicate.title=Abkürzung duplizieren
+edit-abbrev.duplicate.title=Abk\u00FCrzung duplizieren
 edit-abbrev.duplicate.message=\
-  Es existiert bereits eine andere Erweiterung mit dieser Abkürzung.\n\
+  Es existiert bereits eine andere Erweiterung mit dieser Abk\u00FCrzung.\n\
   \n\
-  Existierende Erweiterung überschreiben?
+  Existierende Erweiterung \u00FCberschreiben?
 
-abbrev-editor.abbrev=Abkürzung:
-abbrev-editor.before=Text, der vor dem Cursor einzufügen ist:
-abbrev-editor.after=Text, der nach dem Cursor einzufügen ist:
+abbrev-editor.abbrev=Abk\u00FCrzung:
+abbrev-editor.before=Text, der vor dem Cursor einzuf\u00FCgen ist:
+abbrev-editor.after=Text, der nach dem Cursor einzuf\u00FCgen ist:
 #}}}
 
 #{{{ XMode errors
@@ -1006,13 +967,13 @@ xmode-error.message=Ein Fehler trat auf beim Parsen von "{0}", Zeile {1}:\n\
   {3}
 
 xmode-error.dtd=Die DTD konnte nicht geladen werden\n({0})
-xmode-error.termchar-invalid=Der Wert des AT_CHAR-Attributes ist ungültig ({0})
+xmode-error.termchar-invalid=Der Wert des AT_CHAR-Attributes ist ung\u00FCltig ({0})
 xmode-error.doctype-invalid=Erwartet wurde "MODE" als "document type", gefunden wurde "{0}"
 xmode-error.empty-tag=Das Tag "{0}" darf nicht leer sein
-xmode-error.token-invalid=Der TOKEN-Typ "{0}" ist ungültig
+xmode-error.token-invalid=Der TOKEN-Typ "{0}" ist ung\u00FCltig
 xmode-error.empty-keyword=Das "keyword"-Tag darf nicht leer sein
-xmode-error.regexp=Ungültiger Regulärer Ausdruck\n({0})
-xmode-error.delegate-invalid=Ungültiges "delegate": "{0}"
+xmode-error.regexp=Ung\u00FCltiger Regul\u00E4rer Ausdruck\n({0})
+xmode-error.delegate-invalid=Ung\u00FCltiges "delegate": "{0}"
 
 # until 4.3pre8
 xmode-error.hash-char-invalid=HASH_CHAR muss genau ein Zeichen sein
@@ -1025,22 +986,22 @@ plugin-error.title=Plugin Fehler
 plugin-error.caption=Die folgenden Plugins konnten nicht geladen werden:
 plugin-error.caption-1=Das folgende Plugin konnte nicht geladen werden:
 
-plugin-error.load-error=Laden von "{0}" nicht möglich.\n\
-  Der wahrscheinlichste Grund dafür ist, dass die JAR-Datei defekt ist;\n\
+plugin-error.load-error=Laden von "{0}" nicht m\u00F6glich.\n\
+  Der wahrscheinlichste Grund daf\u00FCr ist, dass die JAR-Datei defekt ist;\n\
   Versuchen Sie, diese neu zu installieren. Siehe Extras->Troubleshooting->Activity Log\n\
-  für eine vollständige Verfolgung der Debug-Meldungen.
+  f\u00FCr eine vollst\u00E4ndige Verfolgung der Debug-Meldungen.
 plugin-error.start-error=Fehler beim Starten: "{0}".\n\
   Versuchen Sie ein Update auf eine neuere Version des Plugins.
 plugin-error.already-loaded=Zwei Kopien installiert. Bitte entferne Sie eine der beiden Kopien.
-plugin-error.dep-jdk=Erfordert Java {0} oder höer, aber Sie haben nur Version {1}.
-plugin-error.dep-jedit=Erfordert jEdit {0} oder höer, aber Sie haben nur Version {1}.\n\
+plugin-error.dep-jdk=Erfordert Java {0} oder h\u00F6er, aber Sie haben nur Version {1}.
+plugin-error.dep-jedit=Erfordert jEdit {0} oder h\u00F6er, aber Sie haben nur Version {1}.\n\
   Laden Sie neue Versionen von jEdit herunter von <http://www.jedit.org>.
 plugin-error.dep-Plugin.no-version=Erfordert Version {0} \
-  oder höer von {1},\n\
+  oder h\u00F6er von {1},\n\
   aber {1} ist nicht installiert.
 plugin-error.dep-Plugin.broken=Erfordert {0}, aber {0}\n\
-  kann´nicht geladen werden.
-plugin-error.dep-Plugin=Erfordert Version {0} oder höer von {1}, \
+  kann\u00B4nicht geladen werden.
+plugin-error.dep-Plugin=Erfordert Version {0} oder h\u00F6er von {1}, \
   aber Sie haben nur {1} in Version {2}.
 plugin-error.dep-class=Erfordert die Klasse {0}.\n\
   Versuchen Sie, das erforderliche Plugin bzw. die erforderliche Klassenbibliothek zu installieren.
@@ -1048,8 +1009,8 @@ plugin-error.missing-jar=Erfordert JAR-Datei "{0}".\n\
   Diese JAR-Datei ist Bestandteil dieses Plugins, kann aber nicht gefunden werden.\n\
   Versuchen Sie, dieses Plugin neu zu installieren.
 plugin-error.obsolete=Dieses Plugin ist veraltet. Bitte entfernen Sie es.
-plugin-error.not-42=Dieses Plugin unterstützt kein dynamisches Laden.\n\
-  Sie müssen jEdit neu starten nach Entfernen oder Installieren dieses Plugins.
+plugin-error.not-42=Dieses Plugin unterst\u00FCtzt kein dynamisches Laden.\n\
+  Sie m\u00FCssen jEdit neu starten nach Entfernen oder Installieren dieses Plugins.
 
 plugin-error-download.title=Plugin-Fehler
 plugin-error-download.message=Fehler beim Herunterladen des Plugins, bitte einen anderen Update-Server versuchen\n{0}
@@ -1059,7 +1020,7 @@ plugin-error-download.message=Fehler beim Herunterladen des Plugins, bitte einen
 macro-input.title=Makro Eingabe
 macro-error.title=Makro Fehler
 macro-message.title=Makro Nachricht
-macro-confirm.title=Makro Bestätigung
+macro-confirm.title=Makro Best\u00E4tigung
 #}}}
 
 #{{{ BeanShell stuff
@@ -1079,12 +1040,12 @@ beanshell-eval.title=BeanShell Berechnung
 beanshell-eval.message={0}
 
 beanshell-eval-line.title=BeanShell-Ausdruck auswerten
-beanshell-eval-line.message=BeanShell-Ausdruck, der für jede selektierte Zeile \
+beanshell-eval-line.message=BeanShell-Ausdruck, der f\u00FCr jede selektierte Zeile \
   berechnet werden soll:\n\
   \n\
   Variablen:\n\
-  line     - Der Index der Zeile bezüglich Beginn der Datei (= Zeilennummer - 1)\n\
-  index    - Der Index der Zeile bezüglich Beginn der Auswahl\n\
+  line     - Der Index der Zeile bez\u00FCglich Beginn der Datei (= Zeilennummer - 1)\n\
+  index    - Der Index der Zeile bez\u00FCglich Beginn der Auswahl\n\
   text     - Der Text der Zeile\n\
   view     - Die aktive Ansicht (view instance)\n\
   editPane - Das aktive Editorpanel (edit pane instance)\n\
@@ -1098,16 +1059,16 @@ macro-not-recording.message=Zur Zeit wird kein Makro aufgezeichnet.
 #}}}
 
 #{{{ Large repeat count warning
-large-repeat-count.title=Große Anzahl von Wiederholungen
-large-repeat-count.message=Möchten Sie "{0}" wirklich {1} mal ausführen?
+large-repeat-count.title=Gro\u00DFe Anzahl von Wiederholungen
+large-repeat-count.message=M\u00F6chten Sie "{0}" wirklich {1} mal ausf\u00FChren?
 
-large-repeat-count.user-input.title=Große Anzahl von Wiederholungen
-large-repeat-count.user-input.message=Möchten Sie "{0}" wirklich \
-  {1} mal einfügen?
+large-repeat-count.user-input.title=Gro\u00DFe Anzahl von Wiederholungen
+large-repeat-count.user-input.message=M\u00F6chten Sie "{0}" wirklich \
+  {1} mal einf\u00FCgen?
 #}}}
 
 #{{{ Wrong fold mode dialog
-folding-not-explicit.title=Ungültiger Faltmodus
+folding-not-explicit.title=Ung\u00FCltiger Faltmodus
 folding-not-explicit.message=Dieser Befehl kann nur mit Faltmodus "explizit" verwendet werden.
 #}}}
 
@@ -1120,20 +1081,20 @@ memory-status.use={0} Kb verwendet, {1} Kb total.
 #{{{ Multiple I/O request errors
 buffer-multiple-io.title=I/O-Fehler
 buffer-multiple-io.message=Jede Datei kann nur eine Ein-/Ausgabe-Operation gleichzeitig\n\
-  ausführen. Bitte warten Sie, bis die aktive Operation\n\
+  ausf\u00FChren. Bitte warten Sie, bis die aktive Operation\n\
   beendet ist (oder brechen Sie diese ab mit dem I/O-Thread-Monitor),\n\
-  bevor die nächste gestartet wird.
+  bevor die n\u00E4chste gestartet wird.
 
 browser-multiple-io.title=I/O-Fehler
 browser-multiple-io.message=Jeder Dateisystem-Browser kann nur eine Ein-/Ausgabe-Operation\n\
-  gleichzeitig ausführen. Bitte warten Sie, bis die aktive Operation\n\
+  gleichzeitig ausf\u00FChren. Bitte warten Sie, bis die aktive Operation\n\
   beendet ist (oder brechen Sie diese ab mit dem I/O-Thread-Monitor),\n\
-  bevor die nächste gestartet wird.
+  bevor die n\u00E4chste gestartet wird.
 #}}}
 
 #{{{ maxLineLen=0 warning
-format-maxlinelen.title=Rand für den Wortumbruch
-format-maxlinelen.message=Der Rand für den Wortumbruch muss auf einen Wert größer Null gesetzt\n\
+format-maxlinelen.title=Rand f\u00FCr den Wortumbruch
+format-maxlinelen.message=Der Rand f\u00FCr den Wortumbruch muss auf einen Wert gr\u00F6\u00DFer Null gesetzt\n\
   werden, damit dieser Befehl funktioniert.
 #}}}
 
@@ -1144,7 +1105,7 @@ syntax-style-no-token.message=Dem Text unter dem Cursor ist \
 #}}}
 
 #{{{ View title dialog
-view.title.select=Bitte einen Namen für diese Ansicht eingeben: Please enter a title for this view:
+view.title.select=Bitte einen Namen f\u00FCr diese Ansicht eingeben: Please enter a title for this view:
 #}}}
 
 #}}}
@@ -1160,10 +1121,10 @@ hypersearch-results.result-caption1={0} ({1} Fundstelle in {2} Datei)
 hypersearch-results.result-caption2={0} ({1} Fundstellen in {2} Datei)
 
 
-hypersearch-results.open=Öffnen
-hypersearch-results.open-view=Öffnen in neuer Ansicht
-hypersearch-results.open-plain-view=Öffnen in neuer, einfacher Ansicht
-hypersearch-results.open-split=Öffnen in neuer Teilansicht
+hypersearch-results.open=\u00D6ffnen
+hypersearch-results.open-view=\u00D6ffnen in neuer Ansicht
+hypersearch-results.open-plain-view=\u00D6ffnen in neuer, einfacher Ansicht
+hypersearch-results.open-split=\u00D6ffnen in neuer Teilansicht
 hypersearch-results.remove-node=Knoten entfernen
 hypersearch-results.new-search=Neue Suche von hier
 hypersearch-results.expand-child-nodes=Untergeordnete Knoten ausklappen
@@ -1174,7 +1135,7 @@ hypersearch-results.tree-view=Baumansicht umschalten
 hypersearch-results.clear.label=Alle Knoten entfernen
 hypersearch-results.stop.label=Hypersuche stoppen und bisherige Ergebnisse anzeigen
 hypersearch-results.multi.label=Mehrfachergebnisse umschalten
-hypersearch-results.highlight.label=Hervorhebungsstil für Fundstellen
+hypersearch-results.highlight.label=Hervorhebungsstil f\u00FCr Fundstellen
 
 ## bis jEdit 4.2/4.3preX: hypersearch-results.file-caption={0} ({1} Fundstellen in {2} Zeilen)
 hypersearch-results.file-caption={0} ({1,choice,1#1 Fundstelle|1<{1,number,integer} Fundstellen in '{2,choice,1#1 Zeile|1<{2,number,integer} Zeilen}'})
@@ -1182,8 +1143,8 @@ hypersearch-results.file-caption1={0} (1 Fundstelle)
 hypersearch-results.file-caption2={0} ({1} Fundstellen in 1 Zeile)
 
 hypersearch-results.searching=Suchen nach "{0}"...
-hypersearch-results.no-results=Kein Ergebnis für Suche nach "{0}".
-hypersearch-results.done=Ergebnisse für Suche nach "{0}":
+hypersearch-results.no-results=Kein Ergebnis f\u00FCr Suche nach "{0}".
+hypersearch-results.done=Ergebnisse f\u00FCr Suche nach "{0}":
 
 hypersearch-status=Searching
 
@@ -1217,7 +1178,7 @@ view-registers.undefined=__UNDEFINED__
 
 #{{{ Buffer options dialog
 buffer-options.title=Datei-Optionen
-buffer-options.caption=Die Einstellungen dieses Dialoges gelten nur für die aktive Datei.\n\
+buffer-options.caption=Die Einstellungen dieses Dialoges gelten nur f\u00FCr die aktive Datei.\n\
   Editorweite Einstellungen werden im Dialog Extras->Globale Optionen getroffen.
 buffer-options.loading-saving=Laden und Speichern
 buffer-options.lineSeparator=Zeilenendezeichen:
@@ -1236,52 +1197,52 @@ options.jedit.label=jEdit
 options.general.label=Allgemein
 options.general.lineSeparator=Standard Zeilenendezeichen:
 options.general.encoding=Standard Zeichenkodierung:
-options.general.encodingAutodetect=Automatische Erkennung der Zeichenkodierung einer Datei, wenn möglich
+options.general.encodingAutodetect=Automatische Erkennung der Zeichenkodierung einer Datei, wenn m\u00F6glich
 
-options.general.checkModStatus=Reaktion auf geänderte Dateien:
+options.general.checkModStatus=Reaktion auf ge\u00E4nderte Dateien:
 options.general.checkModStatus.nothing=deaktivieren
 options.general.checkModStatus.prompt=nachfragen
 options.general.checkModStatus.reload=automatisch neu laden mit Benachrichtigung
 options.general.checkModStatus.silentReload=automatisch neu laden ohne Benachrichtigung
 
-options.general.checkModStatusUpon=Prüfung auf Änderung einer Datei bei:
+options.general.checkModStatusUpon=Pr\u00FCfung auf \u00C4nderung einer Datei bei:
 options.general.checkModStatusUpon.focus=Wechseln zu jEdit
 options.general.checkModStatusUpon.all=Wechseln zu jEdit, Ansehen der Datei oder Speichern einer Datei
 options.general.checkModStatusUpon.operations=Ansehen der Datei oder Speichern einer Datei
 options.general.checkModStatusUpon.focusBuffer=Ansehen oder Speichern der Datei
 options.general.checkModStatusUpon.none=Speichern der Datei
 
-options.general.recentFiles=Länge der Liste letzter Dateien:
-options.general.hypersearch.maxWarningResults=Maximale Anzahl Suchergebnisse für Hypersuche:
+options.general.recentFiles=L\u00E4nge der Liste letzter Dateien:
+options.general.hypersearch.maxWarningResults=Maximale Anzahl Suchergebnisse f\u00FCr Hypersuche:
 
 options.general.sortRecent=Liste der letzten Dateien sortieren
 options.general.saveCaret=Cursor-Position merken in zuletzt verwendeten Dateien
 options.general.persistentMarkers=Lesezeichen merken
-options.general.resetUndo=Liste der rückgängig zu machenden Aktionen beim Speichern löschen
-options.general.restore=Beim Starten offene Dateien der letzten Sitzung wieder öffnen
-options.general.restore.remote=... einschließlich entfernter Dateien über VFS
-options.general.restore.cli=... einschließlich der auf der Befehlszeile angegebenen Dateien
+options.general.resetUndo=Liste der r\u00FCckg\u00E4ngig zu machenden Aktionen beim Speichern l\u00F6schen
+options.general.restore=Beim Starten offene Dateien der letzten Sitzung wieder \u00F6ffnen
+options.general.restore.remote=... einschlie\u00DFlich entfernter Dateien \u00FCber VFS
+options.general.restore.cli=... einschlie\u00DFlich der auf der Befehlszeile angegebenen Dateien
 options.general.sortBuffers=Liste offener Dateien sortieren (wirksam nach Neustart von jEdit)
 options.general.sortByName=... Sortierung nach Dateinamen statt nach Verzeichnisnamen.
 options.general.newkeyhandling=Vereinfachte Tastaturbehandlung verwenden
-options.general.newkeyhandling.tooltip=(Experimentell) Einige internationale Linux-Benutzer verwenden diesen Modus, der aber bald nicht mehr verfügbar sein könnte, da die regulärere Tastaturbehandlung besser funktioniert
-options.general.encodingDetectors=Erkennungszeichen für Kodierungen:
-options.general.fallbackEncodings=Liste der Rückfall-Kodierungen:
-options.general.fallbackEncodings.tooltip=(Experimentell) Leerzeichen-getrennte Liste von Zeichenkodierungen, die bei Kodierungsfehlern während des Ladens versucht werden sollen
+options.general.newkeyhandling.tooltip=(Experimentell) Einige internationale Linux-Benutzer verwenden diesen Modus, der aber bald nicht mehr verf\u00FCgbar sein k\u00F6nnte, da die regul\u00E4rere Tastaturbehandlung besser funktioniert
+options.general.encodingDetectors=Erkennungszeichen f\u00FCr Kodierungen:
+options.general.fallbackEncodings=Liste der R\u00FCckfall-Kodierungen:
+options.general.fallbackEncodings.tooltip=(Experimentell) Leerzeichen-getrennte Liste von Zeichenkodierungen, die bei Kodierungsfehlern w\u00E4hrend des Ladens versucht werden sollen
 
 # jedit 4.2
-options.general.confirmSaveAll=Bestätigung für "Alle Dateien speichern"
+options.general.confirmSaveAll=Best\u00E4tigung f\u00FCr "Alle Dateien speichern"
 options.general.stripTrailingEOL=Letztes Zeilenendezeichen verstecken (falls vorhanden)
-options.general.twoStageSave=Zweistufiges Speichern (Sicherer, setzt aber Dateieigentümer unter Unix zurück)
+options.general.twoStageSave=Zweistufiges Speichern (Sicherer, setzt aber Dateieigent\u00FCmer unter Unix zur\u00FCck)
 #}}}
 
 #{{{ Abbreviations pane
-options.abbrevs.label=Abkürzungen
-options.abbrevs.set=Gültigkeit:
-options.abbrevs.expandOnInput=Leertaste erweitert Abkürzungen
-options.abbrevs.abbrev=Abkürzung
+options.abbrevs.label=Abk\u00FCrzungen
+options.abbrevs.set=G\u00FCltigkeit:
+options.abbrevs.expandOnInput=Leertaste erweitert Abk\u00FCrzungen
+options.abbrevs.abbrev=Abk\u00FCrzung
 options.abbrevs.expand=Erweiterung
-options.abbrevs.add=Hinzufügen...
+options.abbrevs.add=Hinzuf\u00FCgen...
 options.abbrevs.edit=Bearbeiten...
 options.abbrevs.remove=Entfernen
 #}}}
@@ -1289,13 +1250,13 @@ options.abbrevs.remove=Entfernen
 #{{{ Appearance pane
 options.appearance.label=Erscheinungsbild
 options.appearance.iconTheme=Icon Thema:
-options.appearance.lf.note=Look & Feel-Änderungen werden erst nach einem Neustart von jEdit wirksam.\n.
+options.appearance.lf.note=Look & Feel-\u00C4nderungen werden erst nach einem Neustart von jEdit wirksam.\n.
 options.appearance.lf=Swing Look & Feel:
-options.appearance.primaryFont=Schrift für Schaltflächen, Menüs und Titel:
-options.appearance.secondaryFont=Schrift für Listen und Textfelder:
+options.appearance.primaryFont=Schrift f\u00FCr Schaltfl\u00E4chen, Men\u00FCs und Titel:
+options.appearance.secondaryFont=Schrift f\u00FCr Listen und Textfelder:
 options.appearance.helpViewerFont=Schriftart Hilfe-Viewer/Browser:
-options.appearance.history=Max. Anzahl der Einträge von History-Textfeldern:
-options.appearance.menuSpillover=Anzahl der Einträge, ab der ein Menü geteilt wird:
+options.appearance.history=Max. Anzahl der Eintr\u00E4ge von History-Textfeldern:
+options.appearance.menuSpillover=Anzahl der Eintr\u00E4ge, ab der ein Men\u00FC geteilt wird:
 options.appearance.startup.label=Start-Optionen
 options.appearance.showSplash=Zeige Splash-Screen beim Starten
 options.appearance.showTips=Zeige Tips beim Starten
@@ -1305,27 +1266,27 @@ options.appearance.experimental.caption=Die folgenden drei Optionen arbeiten u.U
   Wenn Sie Probleme feststellen, schalten Sie diese aus\n.
 
 options.appearance.textColors=Farben von jEdits Textbereich in allen Textkomponenten verwenden
-options.appearance.decorateFrames=Fensterränder unter Verwendung von Swing look & feel zeichnen
-options.appearance.decorateDialogs=Ränder von Dialogboxen unter Verwendung von Swing look & feel zeichnen
+options.appearance.decorateFrames=Fensterr\u00E4nder unter Verwendung von Swing look & feel zeichnen
+options.appearance.decorateDialogs=R\u00E4nder von Dialogboxen unter Verwendung von Swing look & feel zeichnen
 options.appearance.continuousLayout.label="Continuous Layout" in geteilten Ansichten verwenden
 #}}}
 
 #{{{ Context Menu pane
-options.context.label=Kontextmenü
-options.context.caption=Einträge im Kontextmenü des Textbereiches:
-options.context.add=Hinzufügen...
+options.context.label=Kontextmen\u00FC
+options.context.caption=Eintr\u00E4ge im Kontextmen\u00FC des Textbereiches:
+options.context.add=Hinzuf\u00FCgen...
 options.context.remove=Entfernen
 options.context.moveUp=Nach Oben
 options.context.moveDown=Nach Unten
-options.context.add.title=Hinzufügen zum Kontextmenü
-options.context.add.caption=Hinzufügen zum Kontextmenü:
+options.context.add.title=Hinzuf\u00FCgen zum Kontextmen\u00FC
+options.context.add.caption=Hinzuf\u00FCgen zum Kontextmen\u00FC:
 options.context.add.separator=Trennlinie
 options.context.add.action=Befehl oder Makro:
-options.context.includeOptionsLink.label=Include "Dieses Menü anpassen..." link
+options.context.includeOptionsLink.label=Include "Dieses Men\u00FC anpassen..." link
 
 options.context.reset=Standard wiederherstellen
-options.context.reset.dialog.title=Standardmenü
-options.context.reset.dialog.message=Soll das Kontextmenü wirklich auf die Standardeinträge zurückgesetzt werden?
+options.context.reset.dialog.title=Standardmen\u00FC
+options.context.reset.dialog.message=Soll das Kontextmen\u00FC wirklich auf die Standardeintr\u00E4ge zur\u00FCckgesetzt werden?
 #}}}
 
 #{{{ Docking pane
@@ -1333,57 +1294,57 @@ options.docking.label=Andocken
 options.docking.title=Fenster
 options.docking.dockPosition=Dock-Position
 options.appearance.selectFramework.label=Dockfenster-System:
-options.docking.autoSaveModeLayout.label=Modus-abhängiges Dock-Layout automatisch speichern
-options.docking.autoLoadModeLayout.label=Modus-abhängiges Dock-Layout automatisch laden
+options.docking.autoSaveModeLayout.label=Modus-abh\u00E4ngiges Dock-Layout automatisch speichern
+options.docking.autoLoadModeLayout.label=Modus-abh\u00E4ngiges Dock-Layout automatisch laden
 options.docking.selectSet.label=Dock-Fenster Satz:
 #}}}
 
 #{{{ Editing pane
 options.editing.label=Bearbeiten
 options.editing.defaultMode=Standard Bearbeitungsmodus:
-options.editing.undoCount=Anzahl Rückgängig-Aktionen:
+options.editing.undoCount=Anzahl R\u00FCckg\u00E4ngig-Aktionen:
 options.editing.caption-0=\
-  Um Modus-abhängige Einstellungen zu treffen, wählen Sie einen Bearbeitungsmodus\n\
+  Um Modus-abh\u00E4ngige Einstellungen zu treffen, w\u00E4hlen Sie einen Bearbeitungsmodus\n\
   aus der folgenden Liste.\nIm Augenblick werden globale Standard-Einstellungen gezeigt\n.
 options.editing.caption-1=\
-  Um Modus-abhängige Einstellungen zu treffen,\nmuss "Standard-Einstellungen verwenden"\
+  Um Modus-abh\u00E4ngige Einstellungen zu treffen,\nmuss "Standard-Einstellungen verwenden"\
   deaktiviert werden.\nAnderenfalls werden die Einstellungen von <Globale Standards> wirksam.\n.
-options.editing.mode=Einstellungen für Bearbeitungsmodus:
+options.editing.mode=Einstellungen f\u00FCr Bearbeitungsmodus:
 options.editing.global=<Globale Standards>
 options.editing.useDefaults=Standard-Einstellungen verwenden
-options.editing.filenameGlob="glob"-Muster für Dateiname:
-options.editing.firstlineGlob="glob"-Muster für erste Zeile der Datei:
+options.editing.filenameGlob="glob"-Muster f\u00FCr Dateiname:
+options.editing.firstlineGlob="glob"-Muster f\u00FCr erste Zeile der Datei:
 options.editing.folding=Faltmodus:
-options.editing.collapseFolds=Falten anfäglich einklappen bis Ebene:
+options.editing.collapseFolds=Falten anf\u00E4glich einklappen bis Ebene:
 options.editing.wrap=Wortumbruch-Modus:
 options.editing.maxLineLen=Wortumbruch nach Spalte:
-options.editing.maxLineLen.tooltip="0" für Umbruch am Fensterrand (nur bei Modus "soft")
+options.editing.maxLineLen.tooltip="0" f\u00FCr Umbruch am Fensterrand (nur bei Modus "soft")
 options.editing.tabSize=Tabulator Breite:
-options.editing.indentSize=Einrückung Breite:
-options.editing.noWordSep=Zusätzliche Wortzeichen:
+options.editing.indentSize=Einr\u00FCckung Breite:
+options.editing.noWordSep=Zus\u00E4tzliche Wortzeichen:
 options.editing.camelCasedWords="CamelCased" Worte trennen
-options.editing.noTabs=Soft-Tabs (Leerzeichen statt Tabulatoren einfügen)
-options.editing.deepIndent=Tiefe Einrückung
+options.editing.noTabs=Soft-Tabs (Leerzeichen statt Tabulatoren einf\u00FCgen)
+options.editing.deepIndent=Tiefe Einr\u00FCckung
 #}}}
 
 #{{{ Encodings pane
 options.encodings.label=Zeichenkodierungen
 options.encodings.selectEncodings=Zeichenkodierungen, die in entsprechenden Dialogen zur Auswahl stehen sollen:
-options.encodings.available=Verfügbare Zeichenkodierungen
-options.encodings.selected=Gewählte Zeichenkodierung(en)
+options.encodings.available=Verf\u00FCgbare Zeichenkodierungen
+options.encodings.selected=Gew\u00E4hlte Zeichenkodierung(en)
 options.encodings.available.tooltip=<html>Zeichenkodierungen in dieser Spalte werden <b>nicht</b> in Zeichenkodierungs-Dialogen gelistet. \
   Zum Aktivieren in die rechte Spalte ziehen!</html>
 options.encodings.selected.tooltip=Zeichenkodierungen in dieser Spalte werden in Zeichenkodierungs-Dialogen gelistet. \
   Zum Deaktivieren in die linke Spalte ziehen!
-options.encodings.selectAll=Alle wählen
-options.encodings.selectNone=Keine wählen
+options.encodings.selectAll=Alle w\u00E4hlen
+options.encodings.selectNone=Keine w\u00E4hlen
 #}}}
 
 #{{{ Gutter pane
 options.gutter.label=Gutter
 options.gutter.enabled=Gutter anzeigen
 options.gutter.lineNumbers=Zeilennummern
-options.gutter.minLineNumberDigits=Für Zeilennummern zu reservierende Mindestanzahl Ziffern:
+options.gutter.minLineNumberDigits=F\u00FCr Zeilennummern zu reservierende Mindestanzahl Ziffern:
 options.gutter.selectionAreaEnabled=Zeilenauswahlbereich anzeigen, wenn Zeilennummern nicht angezeigt werden
 options.gutter.optionalComponents=Optionale Gutter-Komponenten
 options.gutter.selectionAreaBgColor=Auswahlbereich Hintergrundfarbe:
@@ -1410,20 +1371,20 @@ options.gutter.foldStyleNames.Circle=Kreis
 #{{{ Mouse pane
 options.mouse.label=Maus
 options.mouse.dragAndDrop=Drag & Drop im Textbereich
-options.mouse.joinNonWordChars=Ziehen nach Doppelklick erweitert Auswahl über Sonderzeichen
+options.mouse.joinNonWordChars=Ziehen nach Doppelklick erweitert Auswahl \u00FCber Sonderzeichen
 options.mouse.middleMousePaste=Schnelles Kopieren mit mittlerer Maustaste
-options.mouse.ctrlForRectangularSelection=Spaltenauswahl, solange STRG gedrückt ist
+options.mouse.ctrlForRectangularSelection=Spaltenauswahl, solange STRG gedr\u00FCckt ist
 options.mouse.gutter.foldClick=Klick ins Gutter:
 options.mouse.gutter.SfoldClick=Umschalt-Klick ins Gutter:
 options.mouse.gutter.toggle-fold=Falte ein-/ausklappen
-options.mouse.gutter.toggle-fold-fully=Falte vollstängig ein-/ausklappen
+options.mouse.gutter.toggle-fold-fully=Falte vollst\u00E4ngig ein-/ausklappen
 #}}}
 
 #{{{ Plugin Manager pane
 options.plugin-manager.label=Plugin Manager
 options.plugin-manager.updateMirrors=Liste der Update-Server
 options.plugin-manager.downloadSource=Plugin-Quellkode herunterladen
-options.plugin-manager.deleteDownloads=Archive im Download-Verzeichnis nach der Installation löschen
+options.plugin-manager.deleteDownloads=Archive im Download-Verzeichnis nach der Installation l\u00F6schen
 options.plugin-manager.mirror=Bevorzugter Update-Server:
 options.plugin-manager.location=Plugins installieren in:
 options.plugin-manager.settings-dir=jEdit Einstellungs-Verzeichnis
@@ -1435,15 +1396,15 @@ options.plugin-manager.none=Plugin Central Standard
 options.print.label=Drucken
 options.print.font=Schrift:
 options.print.fontstyle=Schriftart:
-options.print.fontsize=Schriftgröße:
+options.print.fontsize=Schriftgr\u00F6\u00DFe:
 options.print.header=Kopfzeile mit Dateiname
-options.print.footer=Fußzeile mit Datum, Zeit und Seitennummer
+options.print.footer=Fu\u00DFzeile mit Datum, Zeit und Seitennummer
 options.print.lineNumbers=Zeilennummern
 options.print.color=Farben drucken
 options.print.tabSize=Tabulator-Breite beim Drucken:
 options.print.workarounds=Bekannte Java-Fehler umgehen
-options.print.glyphVector=Workaround für Druck von Leerzeichen (erhöht Größe der Spooldatei)
-options.print.force13=Altes Druckverfahren anwenden (falls jEdit beim Drucken hängen bleibt)
+options.print.glyphVector=Workaround f\u00FCr Druck von Leerzeichen (erh\u00F6ht Gr\u00F6\u00DFe der Spooldatei)
+options.print.force13=Altes Druckverfahren anwenden (falls jEdit beim Drucken h\u00E4ngen bleibt)
 options.print.folds=Gefaltete Bereiche drucken
 #}}}
 
@@ -1464,71 +1425,71 @@ options.firewall.socks.port=SOCKS Proxy Port:
 options.save-back.label=Speichern & Backup
 options.save-back.autosave=Auto-Speichern Intervall (Sekunden):
 options.save-back.backupDirectory=Backup Verzeichnis:
-options.save-back.backupPrefix=Backup-Präfix für Dateiname:
-options.save-back.backupSuffix=Backup-Suffix für Dateiname:
+options.save-back.backupPrefix=Backup-Pr\u00E4fix f\u00FCr Dateiname:
+options.save-back.backupSuffix=Backup-Suffix f\u00FCr Dateiname:
 options.save-back.backups=Max. Anzahl von Backups:
-options.save-back.confirmSaveAll=Bestätigung für "Alle Dateien speichern"
+options.save-back.confirmSaveAll=Best\u00E4tigung f\u00FCr "Alle Dateien speichern"
 
 options.save-back.backupEverySave=Backup bei jedem Speichern
-options.save-back.twoStageSave=Zweistufiges Speichern (Sicherer, setzt aber bei einigen Dateisystemenen den Dateieigentümer zurück)
-options.save-back.twoStageSave.tooltip=Stufe 1: Anlegen einer temporären Datei und dahinein sichern. Stufe 2: Umbenennen der temporären Datei zum wirklichen Namen
+options.save-back.twoStageSave=Zweistufiges Speichern (Sicherer, setzt aber bei einigen Dateisystemenen den Dateieigent\u00FCmer zur\u00FCck)
+options.save-back.twoStageSave.tooltip=Stufe 1: Anlegen einer tempor\u00E4ren Datei und dahinein sichern. Stufe 2: Umbenennen der tempor\u00E4ren Datei zum wirklichen Namen
 options.save-back.autosaveUntitled=Unbenannte Dateien automatisch speichern
 options.save-back.suppressNotSavedConfirmUntitled=Unbenannte Dateien niemals als bearbeitet markieren
-options.save-back.useMD5forDirtyCalculation=Dateien mit unverändertem Inhalt niemals als bearbeitet markieren
-options.save-back.useMD5forDirtyCalculation.tooltip=Länge und MD5-Summe der Datei im Editor und der entsprechenden Datei auf der Festplatte werden dafür verglichen.
+options.save-back.useMD5forDirtyCalculation=Dateien mit unver\u00E4ndertem Inhalt niemals als bearbeitet markieren
+options.save-back.useMD5forDirtyCalculation.tooltip=L\u00E4nge und MD5-Summe der Datei im Editor und der entsprechenden Datei auf der Festplatte werden daf\u00FCr verglichen.
 
 # jedit 4.2
 options.auto-back.label=Auto-Speichern & Backup
 options.auto-back.autosave=Auto-Speichern Intervall (Sekunden):
 options.auto-back.backupDirectory=Backup Verzeichnis:
 options.auto-back.backupEverySave=Backup bei jedem Speichern
-options.auto-back.backupPrefix=Backup-Präfix für Dateiname:
-options.auto-back.backupSuffix=Backup-Suffix für Dateiname:
+options.auto-back.backupPrefix=Backup-Pr\u00E4fix f\u00FCr Dateiname:
+options.auto-back.backupSuffix=Backup-Suffix f\u00FCr Dateiname:
 options.auto-back.backups=Max. Anzahl von Backups:
 #}}}
 
 #{{{ Shortcuts pane
-options.shortcuts.label=Tastenkürzel
-options.shortcuts.select.label=Tastenkürzel bearbeiten:
-options.shortcuts.select.tooltip=Filter für: Eingebaute Befehle, Makros, Plugin-Befehle, Dock-Layouts
+options.shortcuts.label=Tastenk\u00FCrzel
+options.shortcuts.select.label=Tastenk\u00FCrzel bearbeiten:
+options.shortcuts.select.tooltip=Filter f\u00FCr: Eingebaute Befehle, Makros, Plugin-Befehle, Dock-Layouts
 options.shortcuts.name=Befehl
-options.shortcuts.shortcut1=Primäres Tastenkürzel
-options.shortcuts.shortcut2=Alternatives Tastenkürzel
+options.shortcuts.shortcut1=Prim\u00E4res Tastenk\u00FCrzel
+options.shortcuts.shortcut2=Alternatives Tastenk\u00FCrzel
 options.shortcuts.filter.label=Filter:
 options.shortcuts.filter.tooltip=Nur Befehle anzeigen, deren Namen diesen Text enthalten
-options.shortcuts.clear.label=Löschen
+options.shortcuts.clear.label=L\u00F6schen
 
-grab-key.title=Tastenkombination drücken
-grab-key.caption=Gewünschtes Tastenkürzel für "{0}"  drücken, dann OK wählen.
-grab-key.keyboard-test=Drücken Sie die Tasten, die Probleme bereiten.
+grab-key.title=Tastenkombination dr\u00FCcken
+grab-key.caption=Gew\u00FCnschtes Tastenk\u00FCrzel f\u00FCr "{0}"  dr\u00FCcken, dann OK w\u00E4hlen.
+grab-key.keyboard-test=Dr\u00FCcken Sie die Tasten, die Probleme bereiten.
 grab-key.assigned-to=Aktuell zugeordnet zu: {0}
 grab-key.assigned-to.none=<nichts>
-grab-key.assigned-to.prefix={0} Präfix
-grab-key.clear=Löschen
+grab-key.assigned-to.prefix={0} Pr\u00E4fix
+grab-key.clear=L\u00F6schen
 grab-key.remove=aktuelle Zuordnung entfernen
 
-grab-key.remove-ask.title=Tastenkürzel entfernen?
+grab-key.remove-ask.title=Tastenk\u00FCrzel entfernen?
 grab-key.remove-ask.message=\
-  Sie haben kein neues Tastenkürzel festgelegt.\n\
-  Möchten Sie das aktuelle Tastenkürzel entfernen?
+  Sie haben kein neues Tastenk\u00FCrzel festgelegt.\n\
+  M\u00F6chten Sie das aktuelle Tastenk\u00FCrzel entfernen?
 
-grab-key.duplicate-alt-shortcut.title=Doppeltes Tastenkürzel
+grab-key.duplicate-alt-shortcut.title=Doppeltes Tastenk\u00FCrzel
 grab-key.duplicate-alt-shortcut.message=\
-  Das gewählte Tastenkürzel ist bereits für diesen\n\
-  Befehl vergeben. Bitte wählen Sie ein anderes.
+  Das gew\u00E4hlte Tastenk\u00FCrzel ist bereits f\u00FCr diesen\n\
+  Befehl vergeben. Bitte w\u00E4hlen Sie ein anderes.
 
-grab-key.duplicate-shortcut.title=Doppeltes Tastenkürzel
+grab-key.duplicate-shortcut.title=Doppeltes Tastenk\u00FCrzel
 grab-key.duplicate-shortcut.message=\
-  Dieses Tastenkürzel ist bereits zugeordnet zu\n\
+  Dieses Tastenk\u00FCrzel ist bereits zugeordnet zu\n\
   "{0}".\n\
   \n\
-  Möchten Sie diese Zuordnung überschreiben?
+  M\u00F6chten Sie diese Zuordnung \u00FCberschreiben?
 
-grab-key.prefix-shortcut.title=Ungültiges Tastenkürzel
+grab-key.prefix-shortcut.title=Ung\u00FCltiges Tastenk\u00FCrzel
 grab-key.prefix-shortcut.message=\
-  Sie können dieses Tastenkürzel nicht verwenden, weil\n\
-  es ein Präfix für andere Tastenkürzel ist.\n\
-  Bitte wählen Sie ein anderes.
+  Sie k\u00F6nnen dieses Tastenk\u00FCrzel nicht verwenden, weil\n\
+  es ein Pr\u00E4fix f\u00FCr andere Tastenk\u00FCrzel ist.\n\
+  Bitte w\u00E4hlen Sie ein anderes.
 #}}}
 
 #{{{ Status bar pane
@@ -1545,12 +1506,12 @@ options.status.edit.title=Statuszeilen-Element bearbeiten
 options.status.edit.labelRadioButton=Etikett
 options.status.edit.widgetRadioButton=Widget
 options.status.edit.labelLabel=Text eingeben:
-options.status.edit.widgetLabel=Widget wählen:
-options.status.caret.linenumber=Zeige aktuelle Zeile der Einfügemarke
-options.status.caret.dot=Zeige aktuelle Spalte der Einfügemarke
-options.status.caret.virtual=Zeige aktuelle, virtuelle Spalte der Einfügemarke
-options.status.caret.offset=Zeige Offset der Einfügemarke vom Dateianfang
-options.status.caret.bufferlength=Zeige Dateilänge
+options.status.edit.widgetLabel=Widget w\u00E4hlen:
+options.status.caret.linenumber=Zeige aktuelle Zeile der Einf\u00FCgemarke
+options.status.caret.dot=Zeige aktuelle Spalte der Einf\u00FCgemarke
+options.status.caret.virtual=Zeige aktuelle, virtuelle Spalte der Einf\u00FCgemarke
+options.status.caret.offset=Zeige Offset der Einf\u00FCgemarke vom Dateianfang
+options.status.caret.bufferlength=Zeige Dateil\u00E4nge
 
 #{{{ obsolete as of jedit 4.3pre14
 options.status.show-caret-status=Zeige Cursor-Status
@@ -1560,7 +1521,7 @@ options.status.show-fold-mode=Zeige Faltmodus
 options.status.show-wrap=Zeige Wortumbruch-Modus
 options.status.show-multi-select=Zeige Mehrfachauswahl-Modus
 options.status.show-rect-select=Zeige Spaltenauswahl-Modus
-options.status.show-overwrite=Zeige Überschreib-Status
+options.status.show-overwrite=Zeige \u00DCberschreib-Status
 options.status.show-line-seperator=Zeige Zeilenendezeichen
 options.status.show-memory=Zeige Speicherindikator
 options.status.show-clock=Zeige Zeit
@@ -1582,7 +1543,7 @@ options.textarea.label=Textbereich
 options.textarea.font=Textstil:
 options.textarea.fontsubst=Automatisches Ersetzen der Schriftart
 options.textarea.fontsubst.tooltip=Eine passende Schriftart wird automatisch gesucht \
-  wenn die gewählte Schriftart nicht alle Zeichen darstellen kann
+  wenn die gew\u00E4hlte Schriftart nicht alle Zeichen darstellen kann
 options.textarea.fontsubstlist=Bevorzugte Schriftarten:
 options.textarea.foreground=Text normal:
 options.textarea.background=Hintergrund normal:
@@ -1592,27 +1553,27 @@ options.textarea.blockCaret=Rechteck
 options.textarea.thickCaret=dick
 options.textarea.selection=Einzelauswahl:
 options.textarea.multipleSelection=Mehrfachauswahl:
-options.textarea.selectionFg=Text ausgewählt:
+options.textarea.selectionFg=Text ausgew\u00E4hlt:
 options.textarea.lineHighlight=Hervorhebung der aktiven Zeile:
 options.textarea.structureHighlight=Hervorhebung passender Elemente:
 options.textarea.eolMarkers=Markierung des Zeilenendes:
 options.textarea.wrapGuide=Umbruch-Markierung:
-options.textarea.electricBorders=Elektrische (auto scroll) Ränder
-options.textarea.stdNextPrevWord=Befehle "Gehe zu ... Wort" übergehen Leerräume
-options.textarea.antiAlias=Text mit Kantenglättung (langsam auf einigen Systemen)
+options.textarea.electricBorders=Elektrische (auto scroll) R\u00E4nder
+options.textarea.stdNextPrevWord=Befehle "Gehe zu ... Wort" \u00FCbergehen Leerr\u00E4ume
+options.textarea.antiAlias=Text mit Kantengl\u00E4ttung (langsam auf einigen Systemen)
 options.textarea.antiAlias.tooltip=Verlangsamt die Anzeige auf einigen Systemen.
-options.textarea.fracFontMetrics=Teilschriftformen (für bessere Textdarstellung)
-options.textarea.fracFontMetrics.tooltip=Nicht empfohlen mit Subpixel-Kantenglättung
+options.textarea.fracFontMetrics=Teilschriftformen (f\u00FCr bessere Textdarstellung)
+options.textarea.fracFontMetrics.tooltip=Nicht empfohlen mit Subpixel-Kantengl\u00E4ttung
 options.textArea.stripTrailingEOL=Letztes Zeilenendezeichen nicht anzeigen (falls vorhanden)
-options.textArea.completeFromAllBuffers=Quelle für Wort-Vervollständigungsliste: alle offenen Dateien \
+options.textArea.completeFromAllBuffers=Quelle f\u00FCr Wort-Vervollst\u00E4ndigungsliste: alle offenen Dateien \
     (Standard: alle sichtbaren Dateien)
 #}}}
 
 #{{{ Tool Bar pane
 options.toolbar.label=Symbolleiste
 options.toolbar.showToolbar=Symbolleiste anzeigen
-options.toolbar.caption=Schaltflächen in der Symbolleiste:
-options.toolbar.add=Hinzufügen...
+options.toolbar.caption=Schaltfl\u00E4chen in der Symbolleiste:
+options.toolbar.add=Hinzuf\u00FCgen...
 options.toolbar.edit=Bearbeiten...
 options.toolbar.remove=Entfernen
 options.toolbar.moveUp=Nach Oben
@@ -1623,12 +1584,12 @@ options.toolbar.edit.separator=Trennlinie
 options.toolbar.edit.action=Befehl oder Makro:
 options.toolbar.edit.builtin=eingebautes Icon:
 options.toolbar.edit.file=Icon laden aus Datei:
-options.toolbar.edit.choose=Wählen
-options.toolbar.edit.no-icon=Kein Icon gewählt
+options.toolbar.edit.choose=W\u00E4hlen
+options.toolbar.edit.no-icon=Kein Icon gew\u00E4hlt
 
 options.toolbar.reset=Standard wiederherstellen
-options.toolbar.reset.dialog.title=Standardmenü
-options.toolbar.reset.dialog.message=Soll die Symbolleiste wirklich auf die Standardeinträge zurückgesetzt werden?
+options.toolbar.reset.dialog.title=Standardmen\u00FC
+options.toolbar.reset.dialog.message=Soll die Symbolleiste wirklich auf die Standardeintr\u00E4ge zur\u00FCckgesetzt werden?
 #}}}
 
 #{{{ View pane
@@ -1636,21 +1597,21 @@ options.view.label=Ansicht
 options.view.viewLayout=Ansichtslayout
 options.view.alternateDockingLayout=Alternatives Dock-Layout
 options.view.alternateToolBarLayout=Alternatives Symbolleisten-Layout
-options.view.showFullPath=Zeige vollständigen Dateipfad in der Titelleiste
+options.view.showFullPath=Zeige vollst\u00E4ndigen Dateipfad in der Titelleiste
 options.view.showSearchbar=Suchzeile immer anzeigen
 options.view.beepOnSearchAutoWrap=Pieps, wenn Suche automatisch am anderen Dateiende fortsetzt
 options.view.showBufferSwitcher=Zeige Datei-Umschalter (Auswahlliste)
 options.view.bufferSwitcherMaxRowsCount= ... Zeilenanzahl in dieser Liste:
-options.view.sortBuffers=Dateisätze sortieren
+options.view.sortBuffers=Dateis\u00E4tze sortieren
 options.view.sortByName=... nach Dateiname (statt nach Pfadname)
-options.view.fullScreenIncludesMenu=Zeige Menüleiste im Vollbildmodus
+options.view.fullScreenIncludesMenu=Zeige Men\u00FCleiste im Vollbildmodus
 options.view.fullScreenIncludesToolbar=Zeige Symbolleiste im Vollbildmodus
 options.view.fullScreenIncludesStatus=Zeige Statuszeile im Vollbildmodus
 
-options.editpane.bufferset.default=Dateisatz-Modus für neue Editorpanele:
+options.editpane.bufferset.default=Dateisatz-Modus f\u00FCr neue Editorpanele:
 options.bufferset.scope=Dateisatz-Modus:
 
-options.editpane.bufferset.contain=Neue Dateisätze enthalten:
+options.editpane.bufferset.contain=Neue Dateis\u00E4tze enthalten:
 options.editpane.bufferset.newbufferset.copy=Kopie des aktuellen Dateisatzes
 options.editpane.bufferset.newbufferset.empty=nur eine leere Datei
 options.editpane.bufferset.newbufferset.currentbuffer=nur die aktive Datei
@@ -1660,9 +1621,9 @@ options.editpane.bufferset.newbufferset.currentbuffer=nur die aktive Datei
 options.browser.label=Dateisystem-Browser
 
 options.browser.colors.label=Farben
-options.browser.colors.glob="glob"-Muster für Dateiname
+options.browser.colors.glob="glob"-Muster f\u00FCr Dateiname
 options.browser.colors.color=Farbe
-options.browser.colors.add=Hinzufügen
+options.browser.colors.add=Hinzuf\u00FCgen
 options.browser.colors.remove=Entfernen
 
 options.browser.general.label=Allgemein
@@ -1672,13 +1633,13 @@ options.browser.general.defaultPath.home=jEdit-Programmverzeichnis
 options.browser.general.defaultPath.last=Zuletzt verwendetes Verzeichnis
 options.browser.general.defaultPath.buffer=Verzeichnis der aktiven Datei
 options.browser.general.defaultPath.working=Arbeitsverzeichnis des jEdit-Prozesses
-options.browser.general.showMenubar=Menüleiste anzeigen
+options.browser.general.showMenubar=Men\u00FCleiste anzeigen
 options.browser.general.showToolbar=Symbolleiste anzeigen
 options.browser.general.showIcons=Icons anzeigen
 options.browser.general.showHiddenFiles=Versteckte Dateien anzeigen
-options.browser.general.sortIgnoreCase=Groß-/Kleinschreibung beim Sortieren ignorieren
+options.browser.general.sortIgnoreCase=Gro\u00DF-/Kleinschreibung beim Sortieren ignorieren
 options.browser.general.sortMixFilesAndDirs=Dateien und Verzeichnisse mischen
-options.browser.general.doubleClickClose=Doppelklick auf den Name einer offenen Datei schließt diese
+options.browser.general.doubleClickClose=Doppelklick auf den Name einer offenen Datei schlie\u00DFt diese
 options.browser.general.currentBufferFilter=Filter in Dateidialogen ist der Typ der aktiven Datei
 options.browser.general.useDefaultIcons=Standard-Icons verwenden
 #}}}
@@ -1686,19 +1647,19 @@ options.browser.general.useDefaultIcons=Standard-Icons verwenden
 #{{{ Font selector
 font-selector.title=Schriftauswahl
 font-selector.family=Schriftfamilie:
-font-selector.size=Schriftgröße:
+font-selector.size=Schriftgr\u00F6\u00DFe:
 font-selector.style=Schriftstil:
 font-selector.plain=Normal
 font-selector.bold=Fett
 font-selector.italic=Kursiv
 font-selector.bolditalic=Fett Kursiv
 font-selector.preview=Vorschau
-font-selector.long-text=Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich.
+font-selector.long-text=Zw\u00F6lf Boxk\u00E4mpfer jagen Viktor quer \u00FCber den gro\u00DFen Sylter Deich.
 #font-selector.long-text=The quick brown fox jumps over the lazy dog.
 #}}}
 
 #{{{ Color chooser, used by options.syntaxs
-colorChooser.title=Wählen Sie eine Farbe
+colorChooser.title=W\u00E4hlen Sie eine Farbe
 #}}}
 
 #{{{ Style editor, used by options.syntaxs
@@ -1721,14 +1682,14 @@ options.no-Plugins.label=Keine Plugin-Optionen
 #{{{ Help viewer
 helpviewer.title=jEdit Hilfe
 helpviewer.loading=Laden...
-helpviewer.back.label=Zurück
-helpviewer.forward.label=Vorwärts
+helpviewer.back.label=Zur\u00FCck
+helpviewer.forward.label=Vorw\u00E4rts
 
 helpviewer.toc.loading=Laden...
 helpviewer.toc.label=Inhalt
 helpviewer.toc.welcome=Willkommen zu jEdit
 helpviewer.toc.readme=Allgemeine Informationen
-helpviewer.toc.changes=Detailliertes Änderungsprotokoll
+helpviewer.toc.changes=Detailliertes \u00C4nderungsprotokoll
 helpviewer.toc.todo=ToDo-Liste und bekannte Fehler
 helpviewer.toc.copying=GNU General Public License
 helpviewer.toc.copying-doc=GNU Free Documentation License
@@ -1747,16 +1708,16 @@ helpviewer.no-results=Keine Ergebnisse
 tip.title=Tip des Tages
 tip.caption=Wussten Sie schon...
 tip.show-next-time=Tips beim Starten zeigen
-tip.next-tip=Nächster Tip
+tip.next-tip=N\u00E4chster Tip
 tip.not-found=Doc/Tips-Verzeichnis nicht gefunden
 #}}}
 
 #{{{ Activity log
 log-viewer.title=Activity Log
 log-viewer.label=Activity $Log
-log-viewer.caption=Vollständiger Log-Text ist gespeichert in {0}.
+log-viewer.caption=Vollst\u00E4ndiger Log-Text ist gespeichert in {0}.
 log-viewer.copy=Kopieren
-log-viewer.tail.label=Kürzen
+log-viewer.tail.label=K\u00FCrzen
 #}}}
 
 #{{{ Activity log viewer
@@ -1789,8 +1750,8 @@ abort.message=Are you sure you want to abort the currently executing\n\
 task-monitor.title=Task-Monitor
 taskmanager.remainingtasks.label={0} verbleibende Aufgabe(n)
 
-killring.load-memoryerror.message=Zuvor gelöschter Text kann nicht geladen werden. Bitte HEAP-Speicherplatz erhöhen. \
-  JA drücken, um jEdit weiter zu starten, oder NEIN um abzubrechen und die Einstellungen zu ändern.
+killring.load-memoryerror.message=Zuvor gel\u00F6schter Text kann nicht geladen werden. Bitte HEAP-Speicherplatz erh\u00F6hen. \
+  JA dr\u00FCcken, um jEdit weiter zu starten, oder NEIN um abzubrechen und die Einstellungen zu \u00E4ndern.
 killring.load-memoryerror.title=Speicher-Fehler
 #}}}
 
@@ -1810,26 +1771,26 @@ vfs.browser.type.directory=Verzeichnis
 vfs.browser.type.filesystem=Dateisystem
 vfs.browser.status=Status
 vfs.browser.status.no=Kein Zugriff
-vfs.browser.status.ro=schreibgeschützt
-vfs.browser.status.append=Nur Anhängen
+vfs.browser.status.ro=schreibgesch\u00FCtzt
+vfs.browser.status.append=Nur Anh\u00E4ngen
 vfs.browser.status.rw=Lesen/Schreiben
-vfs.browser.size=Größe
-vfs.browser.modified=Letzte Änderung
+vfs.browser.size=Gr\u00F6\u00DFe
+vfs.browser.modified=Letzte \u00C4nderung
 
 #{{{ Actions
 vfs.browser.label=Dateisystem-$Browser
 vfs.browser.browse-window.label=Browse im neuen Fenster
 vfs.browser.browse.label=Browse
-vfs.browser.close.label=Schließen
+vfs.browser.close.label=Schlie\u00DFen
 vfs.browser.copy-path.label=Pfadname kopieren
-vfs.browser.delete.label=Löschen...
+vfs.browser.delete.label=L\u00F6schen...
 vfs.browser.home.label=User-Home-Verzeichnis
 vfs.browser.properties.label=Eigenschaften
 vfs.browser.properties.title=Datei-/Verzeichnis-Eigenschaften
-vfs.browser.insert.label=Einfügen
+vfs.browser.insert.label=Einf\u00FCgen
 vfs.browser.new-directory.label=Neues Verzeichnis...
 vfs.browser.new-file.label=Neue Datei
-vfs.browser.open.label=Öffnen
+vfs.browser.open.label=\u00D6ffnen
 vfs.browser.other-encoding-2.label=Andere ({0})...
 vfs.browser.other-encoding.label=Andere...
 vfs.browser.reload.label=Verzeichnis neu laden
@@ -1838,10 +1799,10 @@ vfs.browser.roots.label=Laufwerke
 vfs.browser.search-directory.label=Suche in Verzeichnis...
 vfs.browser.show-hidden-files.label=Versteckte Dateien anzeigen
 vfs.browser.synchronize.label=Verzeichnis der aktiven Datei
-vfs.browser.up.label=Verzeichnisebene höher
-vfs.browser.paste.label=Einfügen
+vfs.browser.up.label=Verzeichnisebene h\u00F6her
+vfs.browser.paste.label=Einf\u00FCgen
 vfs.browser.previous.label=Voriges Verzeichnis
-vfs.browser.next.label=Nächstes Verzeichnis
+vfs.browser.next.label=N\u00E4chstes Verzeichnis
 #}}}
 
 #{{{ Commands menu
@@ -1849,7 +1810,7 @@ vfs.browser.commands.label=Befehle
 vfs.browser.commands.encoding.label=Zeichenkodierung
 vfs.browser.commands.encoding.auto-detect=Autom. Erkennung
 
-vfs.browser.open-in.label=Öffnen in
+vfs.browser.open-in.label=\u00D6ffnen in
 vfs.browser.open-view.label=Neue Ansicht
 vfs.browser.open-plain-view.label=Neue einfache Ansicht
 vfs.browser.open-split.label=Neue Teilansicht
@@ -1864,33 +1825,33 @@ vfs.browser.plugins.no-Plugins.label=Keine Plugins
 
 #{{{ Favorites menu
 vfs.browser.favorites.label=Favoriten
-vfs.browser.favorites.add-to-favorites.label=Zu Favoriten hinzufügen
+vfs.browser.favorites.add-to-favorites.label=Zu Favoriten hinzuf\u00FCgen
 vfs.browser.favorites.edit-favorites.label=Favoriten bearbeiten
 vfs.browser.favorites.no-favorites.label=Keine Favorites
 #}}}
 
-vfs.browser.dialog.open=Öffnen
+vfs.browser.dialog.open=\u00D6ffnen
 vfs.browser.dialog.save=Speichern
-vfs.browser.dialog.choose-dir=Wählen
+vfs.browser.dialog.choose-dir=W\u00E4hlen
 vfs.browser.dialog.filename=Dateiname:
 vfs.browser.dialog.filename.mnemonic=n
 
 #{{{ Dialogs
-vfs.browser.bad-filter.title=Ungültiger Filter
-vfs.browser.bad-filter.message=Der Filter {0} ist ungültig ({1})
+vfs.browser.bad-filter.title=Ung\u00FCltiger Filter
+vfs.browser.bad-filter.message=Der Filter {0} ist ung\u00FCltig ({1})
 
 vfs.browser.recurse-favorites.title=Rekursive Favoriten...
-vfs.browser.recurse-favorites.message=Die Favoritenliste kann nicht zu sich selbst hinzugefügt werden
+vfs.browser.recurse-favorites.message=Die Favoritenliste kann nicht zu sich selbst hinzugef\u00FCgt werden
 
-vfs.browser.delete-confirm.title=Datei löschen
-vfs.browser.delete-confirm.message=Möchten Sie die folgenden Dateien wirklich löschen?
+vfs.browser.delete-confirm.title=Datei l\u00F6schen
+vfs.browser.delete-confirm.message=M\u00F6chten Sie die folgenden Dateien wirklich l\u00F6schen?
 
-vfs.browser.delete-favorites.title=Löschen von Favoriten
-vfs.browser.delete-favorites.message=Möchten Sie die folgenden Dateien wirklich \
-  aus der favoritenliste löschen?
+vfs.browser.delete-favorites.title=L\u00F6schen von Favoriten
+vfs.browser.delete-favorites.message=M\u00F6chten Sie die folgenden Dateien wirklich \
+  aus der favoritenliste l\u00F6schen?
 
 vfs.browser.rename.title=Datei umbenennen
-vfs.browser.rename.message=Neuer Name für {0}:
+vfs.browser.rename.message=Neuer Name f\u00FCr {0}:
 
 vfs.browser.mkdir.title=Neues Verzeichnis anlegen
 vfs.browser.mkdir.message=Name (oder Pfad) des neuen Verzeichnisses:
@@ -1900,12 +1861,12 @@ vfs.browser.mkdir.message=Name (oder Pfad) des neuen Verzeichnisses:
 
 #{{{ I/O status messages
 vfs.status.load=Laden von {0}
-vfs.status.load-markers=Lesezeichen laden für {0}
+vfs.status.load-markers=Lesezeichen laden f\u00FCr {0}
 vfs.status.save=Speichern von {0}
-vfs.status.save-markers=Lesezeichen speichern für {0}
+vfs.status.save-markers=Lesezeichen speichern f\u00FCr {0}
 vfs.status.autosave=Autom. Speichern von {0}
 vfs.status.listing-directory=Listen von {0}
-vfs.status.deleting=Löschen von {0}
+vfs.status.deleting=L\u00F6schen von {0}
 vfs.status.renaming=Umbenennen von {0} nach {1}
 #}}}
 
@@ -1920,18 +1881,18 @@ plugin-manager.hide-libraries=Bibliotheken verstecken
 
 plugin-manager.mgr-options=Download-Optionen...
 plugin-manager.plugin-options=Plugin-Optionen...
-plugin-manager.done=Schließen
+plugin-manager.done=Schlie\u00DFen
 
 plugin-manager.remove-confirm.title=Plugins entfernen
-plugin-manager.remove-confirm.message=Möchten Sie wirklich die folgenden Plugins entfernen?
+plugin-manager.remove-confirm.message=M\u00F6chten Sie wirklich die folgenden Plugins entfernen?
 
-plugin-manager.dependency.title=Plugin-Abhängigkeiten
-plugin-manager.dependency.message={0} wird benötigt von weiteren Plugins.\n\
+plugin-manager.dependency.title=Plugin-Abh\u00E4ngigkeiten
+plugin-manager.dependency.message={0} wird ben\u00F6tigt von weiteren Plugins.\n\
   Deaktivieren von {0} wird auch die folgenden Plugins deaktivieren:
 
-plugin-manager.remove-dependencies.title=Plugin-Abhängigkeiten
-plugin-manager.remove-dependencies.message=Die zu löschenden Plugins werden von folgenden\n\
-  Plugins benötigt, die dann deaktiviert werden:
+plugin-manager.remove-dependencies.title=Plugin-Abh\u00E4ngigkeiten
+plugin-manager.remove-dependencies.message=Die zu l\u00F6schenden Plugins werden von folgenden\n\
+  Plugins ben\u00F6tigt, die dann deaktiviert werden:
 
 plugin-manager.cleanup.label=Bereinigen
 plugin-manager.cleanup.title=Plugin-Daten bereinigen
@@ -1943,14 +1904,14 @@ plugin-manager.noOrphan.message=There was no orphan jars in your jEdit installat
 
 plugin-manager.findOrphan.label=Suche Waisen
 plugin-manager.findOrphan.title=Verwaiste jar-Dateien suchen
-plugin-manager.findOrphan.message=Die folgenden jars gehören scheinbar zu keinem Plugin\n\
-  Entfernen?\n (VORSICHT: Sie könnten dennoch notwendig sein für ein \n\
+plugin-manager.findOrphan.message=Die folgenden jars geh\u00F6ren scheinbar zu keinem Plugin\n\
+  Entfernen?\n (VORSICHT: Sie k\u00F6nnten dennoch notwendig sein f\u00FCr ein \n\
   Plugin wie z.B. JDBC-Treiber):
 
 
-install-Plugins.depend.title=Plugin-Abhängigkeiten
+install-Plugins.depend.title=Plugin-Abh\u00E4ngigkeiten
 install-Plugins.depend.message=Mindestens eines der zu installierenden Plugins\n\
-  erfordert zusätzliche Plugins. Diese werden automatisch\n\
+  erfordert zus\u00E4tzliche Plugins. Diese werden automatisch\n\
   installiert, wenn Sie fortfahren.
 
 plugin-manager.status.loaded=Geladen
@@ -1996,13 +1957,13 @@ manage-plugins.help=Hilfe...
 install-Plugins.title=Installation
 
 install-Plugins.info.name=Name
-install-Plugins.info.size=Größe
+install-Plugins.info.size=Gr\u00F6\u00DFe
 install-plugins.info.releaseDate=Release-Datum
 install-Plugins.info.version=Version
 install-Plugins.info.category=Kategorie
 
-install-Plugins.totalSize=Gesamtgröße:\u0020
-install-Plugins.select-all=Alle wählen
+install-Plugins.totalSize=Gesamtgr\u00F6\u00DFe:\u0020
+install-Plugins.select-all=Alle w\u00E4hlen
 install-Plugins.install=Installieren
 install-Plugins.show-updates=Updates zeigen
 
@@ -2012,7 +1973,7 @@ install-Plugins.info=<b>Autor</b>: {0}\n\
 
 update-Plugins.title=Update
 
-plugin-manager.progress=Gewählte Plugins werden heruntergeladen von Plugins.jedit.org...
+plugin-manager.progress=Gew\u00E4hlte Plugins werden heruntergeladen von Plugins.jedit.org...
 plugin-manager.progress.stop=Stop
 #}}}
 
@@ -2027,40 +1988,44 @@ plugin-manager.remove-failed.message=Das Plugin {0}\n\
 #{{{ File Properties Dialog
 fileprop.name=Name
 fileprop.path=Pfad
-fileprop.lastmod=Letze Änderung
-fileprop.size=Größe
+fileprop.lastmod=Letze \u00C4nderung
+fileprop.size=Gr\u00F6\u00DFe
 fileprop.properties=Eigenschaften
 fileprop.readable=Lesen
 fileprop.writeable=Schreiben
 fileprop.attribute=Attribut
 fileprop.okBtn=OK
 fileprop.cancelBtn=Abbruch
-fileprop.selectedFiles=Gewählte Dateien
-fileprop.selectedDirectories=Gewählte Verzeichnisse
+fileprop.selectedFiles=Gew\u00E4hlte Dateien
+fileprop.selectedDirectories=Gew\u00E4hlte Verzeichnisse
 #}}}
 
 #{{{ gnu.regexp
 # (obsolete since replaced with java native regexp???)
 # Prefix for REException messages
-error.prefix=An Position {0} im Regulären Ausdruck:
+error.prefix=An Position {0} im Regul\u00E4ren Ausdruck:
 
 # REException (parse error) messages
 repeat.assertion=Wiederholungsangabe ohne vorangehenden Bezeichner
-repeat.chained=Mehrfache Wiederholungsangabe für einen Bezeichner
+repeat.chained=Mehrfache Wiederholungsangabe f\u00FCr einen Bezeichner
 repeat.no.token=Quantifizierer (?*+{}) ohne vorangehenden Bezeichner
 repeat.empty.token=Bezeichner mit Wiederholungsangabe ist vielleicht leer
-unmatched.brace=Unvollständiges Paar geschweifter Klammern
-unmatched.bracket=Unvollständiges Paar eckiger Klammern
-unmatched.paren=Unvollständiges Paar runder Klammern
+unmatched.brace=Unvollst\u00E4ndiges Paar geschweifter Klammern
+unmatched.bracket=Unvollst\u00E4ndiges Paar eckiger Klammern
+unmatched.paren=Unvollst\u00E4ndiges Paar runder Klammern
 interval.no.end=Ende des Intervalles erwartet
 class.no.end=Ende der Zeichenklasse erwartet
 subexpr.no.end=Ende des Subausdrucks erwartet
-interval.order=Intervall Minimum ist größer als Maximum
-interval.error=Intervall ist leer oder enthält ungültige Zeichen
+interval.order=Intervall Minimum ist gr\u00F6\u00DFer als Maximum
+interval.error=Intervall ist leer oder enth\u00E4lt ung\u00FCltige Zeichen
 ends.with.backslash=Backslash am Ende des Musters
 
 # RESyntax message
-syntax.final=Die Syntax wurde für endgültig erklärt und kann nicht geändert werden.
+syntax.final=Die Syntax wurde f\u00FCr endg\u00FCltig erkl\u00E4rt und kann nicht ge\u00E4ndert werden.
+#}}}
+
+#{{{ Keymap Labels
+keymaps.German_Keyboard.label=Deutsche Tastatur
 #}}}
 
 #}}}
@@ -2070,38 +2035,38 @@ syntax.final=Die Syntax wurde für endgültig erklärt und kann nicht geändert 
 #{{{ Properties used by macros
 
 #{{{ common
-macro.rs.general.ErrorNotEditableDialog.title=schreibgeschützt
+macro.rs.general.ErrorNotEditableDialog.title=schreibgesch\u00FCtzt
 macro.rs.general.ErrorNotEditableDialog.message=Datei kann nicht bearbeitet werden!
 #}}}
 
 #{{{ Line_Filter
 macro.rs.LineFilter.MainDialog.title=Zeilenfilter
-macro.rs.LineFilter.ignoreCaseCheckBox.label=Groß-/Kleinschreibung ignorieren
-macro.rs.LineFilter.regexpPanelBorder.title=Vergleichsmuster (Regulärer Ausdruck)
+macro.rs.LineFilter.ignoreCaseCheckBox.label=Gro\u00DF-/Kleinschreibung ignorieren
+macro.rs.LineFilter.regexpPanelBorder.title=Vergleichsmuster (Regul\u00E4rer Ausdruck)
 macro.rs.LineFilter.processModeRadioButtonMatching.label=passend
 macro.rs.LineFilter.processModeRadioButtonNotMatching.label=nicht passend
 macro.rs.LineFilter.processModeOptionPanelBorder.title=Zeilen
 macro.rs.LineFilter.actionModeRadioButtonWrite.label=Schreiben in neue Datei
-macro.rs.LineFilter.actionModeRadioButtonDelete.label=Löschen
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=L\u00F6schen
 macro.rs.LineFilter.actionModeOptionPanelBorder.title=Aktion
 
-macro.rs.LineFilter.DeleteActionDisabled.message=Löschen ist nicht verfügbar
-macro.rs.LineFilter.MultipleSelection.message=Mehrfachauswahl wird nicht unterstützt
-macro.rs.LineFilter.BlockSelection.message=Spaltenauswahl wird nicht unterstützt
+macro.rs.LineFilter.DeleteActionDisabled.message=L\u00F6schen ist nicht verf\u00FCgbar
+macro.rs.LineFilter.MultipleSelection.message=Mehrfachauswahl wird nicht unterst\u00FCtzt
+macro.rs.LineFilter.BlockSelection.message=Spaltenauswahl wird nicht unterst\u00FCtzt
 
-macro.rs.LineFilter.SummaryDeleted.label=Zeile(n) gelöscht!
+macro.rs.LineFilter.SummaryDeleted.label=Zeile(n) gel\u00F6scht!
 macro.rs.LineFilter.SummaryWritten.label=Zeile(n) in neue Datei geschrieben
 
-macro.rs.LineFilter.ErrorRegexpDialog.title=Ungültiger Regulärer Ausdruck
-macro.rs.LineFilter.ErrorRegexpDialog.message=Der Reguläre Ausdruck ist ungültig!
+macro.rs.LineFilter.ErrorRegexpDialog.title=Ung\u00FCltiger Regul\u00E4rer Ausdruck
+macro.rs.LineFilter.ErrorRegexpDialog.message=Der Regul\u00E4re Ausdruck ist ung\u00FCltig!
 
 # obsolete as of version 1.3
-macro.rs.LineFilter.ErrorNotEditableDialog.title=schreibgeschützt
+macro.rs.LineFilter.ErrorNotEditableDialog.title=schreibgesch\u00FCtzt
 macro.rs.LineFilter.ErrorNotEditableDialog.message=Datei kann nicht bearbeitet werden!
 macro.rs.LineFilter.processModeRadioButton1.label=passend
 macro.rs.LineFilter.processModeRadioButton2.label=nicht passend
 macro.rs.LineFilter.actionModeRadioButton1.label=Schreiben in neue Datei
-macro.rs.LineFilter.actionModeRadioButton2.label=Löschen
+macro.rs.LineFilter.actionModeRadioButton2.label=L\u00F6schen
 #}}}
 
 #}}}
@@ -2109,7 +2074,7 @@ macro.rs.LineFilter.actionModeRadioButton2.label=Löschen
 #{{{ Macro Names for Macros Menu (only original macros in original folders!)
 
 #{{{ C
-C/Include_Guard.label=Include Wächter
+C/Include_Guard.label=Include W\u00E4chter
 C/Toggle_Header_Source.label=Wechseln zwischen Quelle und Header
 #}}}
 
@@ -2119,26 +2084,26 @@ Clipboard/Copy_Lines_Containing.label=Kopiere Zeilen (Filter nach Inhalt)
 Clipboard/Copy_Visible_Lines.label=Kopiere sichtbare Zeilen
 Clipboard/Cut_Lines.label=Schneide Zeilen aus
 Clipboard/Cut_Lines_Containing.label=Schneide Zeilen aus (Filter nach Inhalt)
-Clipboard/Paste_Indent.label=Einfügen mit Einrückung
+Clipboard/Paste_Indent.label=Einf\u00FCgen mit Einr\u00FCckung
 #}}}
 
 #{{{ Editing
 Editing/Duplicate_Lines_Above.label=Dupliziere Zeilen nach oben
 Editing/Duplicate_Lines_Below.label=Dupliziere Zeilen nach unten
 Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
-Editing/Emacs_Next_Line.label=Emacs Nächste Zeile
+Editing/Emacs_Next_Line.label=Emacs N\u00E4chste Zeile
 Editing/Emacs_Previous_Line.label=Emacs Vorige Zeile
 Editing/Go_to_Column.label=Gehe zu Spalte
-Editing/Greedy_Backspace.label=Gefräßig Löschen nach links
-Editing/Greedy_Delete.label=Gefräßig Löschen
-Editing/Greedy_Left.label=Gefräßig nach Links
-Editing/Greedy_Right.label=Gefräßig nach Rechts
-Editing/Keywords_to_Upper_Case.label=Keywords zu Großbuchstaben
+Editing/Greedy_Backspace.label=Gefr\u00E4\u00DFig L\u00F6schen nach links
+Editing/Greedy_Delete.label=Gefr\u00E4\u00DFig L\u00F6schen
+Editing/Greedy_Left.label=Gefr\u00E4\u00DFig nach Links
+Editing/Greedy_Right.label=Gefr\u00E4\u00DFig nach Rechts
+Editing/Keywords_to_Upper_Case.label=Keywords zu Gro\u00DFbuchstaben
 Editing/Mode_Switcher.label=Bearbeitungsmodus umschalten
 Editing/Move_Lines_Down.label=Verschiebe Zeilen nach unten
 Editing/Move_Lines_Up.label=Verschiebe Zeilen nach oben
-Editing/Open_Line_Above.label=Leerzeile einfügen oben
-Editing/Open_Line_Below.label=Leerzeile einfügen unten
+Editing/Open_Line_Above.label=Leerzeile einf\u00FCgen oben
+Editing/Open_Line_Below.label=Leerzeile einf\u00FCgen unten
 Editing/Toggle_Fold.label=Falte ein-/ausklappen
 #}}}
 
@@ -2146,26 +2111,26 @@ Editing/Toggle_Fold.label=Falte ein-/ausklappen
 Files/Browse_Buffer_Directory.label=Dateisystem-Browser im Verzeichnis der aktiven Datei
 Files/Browse_Directory.label=Dateisystem-Browser mit Verzeichnisabfrage
 Files/Buffer_Switcher.label=Datei wechseln
-Files/Close_All_Except_Active.label=Schließe alle anderen
+Files/Close_All_Except_Active.label=Schlie\u00DFe alle anderen
 Files/Copy_Name_to_Clipboard.label=Kopiere Dateiname
 Files/Copy_Path_to_Clipboard.label=Kopiere Dateipfad
-Files/Delete_Current.label=Lösche aktive Datei
+Files/Delete_Current.label=L\u00F6sche aktive Datei
 Files/Duplicate_Buffer.label=Dupliziere aktive Datei
-Files/Glob_Close.label=Schließen per Glob-Maske
-Files/Insert_Selection.label=Füge Datei ein (Name in Auswahl)
-Files/Next_Dirty_Buffer.label=Nächste nicht gespeicherte Datei
-Files/Open_Path.label=Öffne Datei (Name eingeben)
-Files/Open_Selection.label=Öffne Datei (Name in Auswahl)
-Files/Send_Buffer_To_Next_Split.label=Datei in den nächsten Dateisatz
+Files/Glob_Close.label=Schlie\u00DFen per Glob-Maske
+Files/Insert_Selection.label=F\u00FCge Datei ein (Name in Auswahl)
+Files/Next_Dirty_Buffer.label=N\u00E4chste nicht gespeicherte Datei
+Files/Open_Path.label=\u00D6ffne Datei (Name eingeben)
+Files/Open_Selection.label=\u00D6ffne Datei (Name in Auswahl)
+Files/Send_Buffer_To_Next_Split.label=Datei in den n\u00E4chsten Dateisatz
 Files/Toggle_ReadOnly.label=Schreibschutz umschalten
 #}}}
 
 #{{{ Interface
-Interface/Decrease_Font_Size.label=Schriftgröße verkleinern
-Interface/Increase_Font_Size.label=Schriftgröße vergrößern
-Interface/Open_Context_Menu.label=Kontextmenü öffnen
-Interface/Reset_TextArea.label=Textbereich zurüksetzen
-Interface/Splitpane_Grow.label=Teilansicht vergrößern
+Interface/Decrease_Font_Size.label=Schriftgr\u00F6\u00DFe verkleinern
+Interface/Increase_Font_Size.label=Schriftgr\u00F6\u00DFe vergr\u00F6\u00DFern
+Interface/Open_Context_Menu.label=Kontextmen\u00FC \u00F6ffnen
+Interface/Reset_TextArea.label=Textbereich zur\u00FCksetzen
+Interface/Splitpane_Grow.label=Teilansicht vergr\u00F6\u00DFern
 Interface/Toggle_Bottom_Docking_Area.label=Toggle unteren Dockbereich
 Interface/Toggle_Left_Docking_Area.label=Toggle linken Dockbereich
 Interface/Toggle_Right_Docking_Area.label=Toggle rechten Dockbereich
@@ -2183,34 +2148,34 @@ Java/Preview_JavaDoc_Of_Current_Buffer.label=JavaDoc-Vorschau der aktiven Datei
 
 #{{{ Misc
 Misc/Debug_BufferSets.label=Debug BufferSets
-Misc/Display_Abbreviations.label=Liste der Abkürzungen
+Misc/Display_Abbreviations.label=Liste der Abk\u00FCrzungen
 Misc/Display_Actions.label=Liste der Aktionen
 Misc/Display_Character_Code.label=Zeige Zeichenkodes (Zeichen am Cursor)
-Misc/Display_Shortcuts.label=Liste der Tastenkürzel
-Misc/Evaluate_Buffer_in_BeanShell.label=Datei in BeanShell ausführen
+Misc/Display_Shortcuts.label=Liste der Tastenk\u00FCrzel
+Misc/Evaluate_Buffer_in_BeanShell.label=Datei in BeanShell ausf\u00FChren
 Misc/Hex_Convert.label=Hex-Konvertierungen
 Misc/HyperSearch_Results_to_Buffer.label=Hypersuche-Ergebnisse - Zeilen-Export in neue Datei
 Misc/Buffer_to_HyperSearch_Results.label=Hypersuche-Ergebnisse - Zeilen-Import aus aktiver Datei
-Misc/Make_Bug_Report.label=jEdit-Info für Bug-Report
+Misc/Make_Bug_Report.label=jEdit-Info f\u00FCr Bug-Report
 Misc/Run_Script.label=Starte als Skript
 Misc/Show_Threads.label=Liste der Threads
 #}}}
 
 #{{{ Properties
 Properties/Create_Plugin_Announcement.label=Plugin-Bekanntgabe erzeugen
-Properties/Insert_Buffer_Properties.label=jEdit-Dateieigenschaften einfügen
+Properties/Insert_Buffer_Properties.label=jEdit-Dateieigenschaften einf\u00FCgen
 Properties/Look_and_Feel_Properties.label=Liste der Look and Feel Eigenschaften
 Properties/System_Properties.label=Liste der System Eigenschaften
 Properties/jEdit_Properties.label=Liste der jEdit Eigenschaften
 #}}}
 
 #{{{ Text
-Text/Add_Prefix_and_Suffix.label=Präfix und Suffix einfügen
-Text/Color_Picker.label=Farbwert wählen
+Text/Add_Prefix_and_Suffix.label=Pr\u00E4fix und Suffix einf\u00FCgen
+Text/Color_Picker.label=Farbwert w\u00E4hlen
 Text/Compose_Tag.label=XML-Tag zusammenstellen (Auswahl)
 Text/Duplicate_Line.label=Zeile duplizieren
-Text/Insert_Date.label=Datum und Internet-Zeit einfügen
-Text/Insert_Tag.label=XML-Tag einfügen
+Text/Insert_Date.label=Datum und Internet-Zeit einf\u00FCgen
+Text/Insert_Tag.label=XML-Tag einf\u00FCgen
 Text/Line_Filter.label=Zeilenfilter
 Text/Next_Char.label=Auswahl bis Zeichen (eingeben)
 Text/Reverse_Lines.label=Zeilenreihenfolge umkehren
