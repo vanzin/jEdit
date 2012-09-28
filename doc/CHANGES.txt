@@ -11,6 +11,8 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix keymap duplication (Björn "Vampire" Kautler)
+
 - Fix broken keymap properties (Björn "Vampire" Kautler)
 
 - Fix AutoSave exception after multiline cut (#3017650 Thomas Meyer)

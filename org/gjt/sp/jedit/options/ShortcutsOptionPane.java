@@ -433,6 +433,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 									     jEdit.getProperty(
 										     "options.shortcuts.duplicatekeymap.dialog.title"),
 									     JOptionPane.OK_CANCEL_OPTION);
+				if (newName == null) {
+					return;
+				}
 				KeymapManager manager = jEdit.getKeymapManager();
 				Collection<String> keymapNames = manager.getKeymapNames();
 				while (newName != null)
@@ -441,11 +444,13 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 						break;
 					newName = JOptionPane.showInputDialog(ShortcutsOptionPane.this,
 										     jEdit.getProperty(
-											     "options.shortcuts.keymapalreadyexists.dialog.label"),
+											     "options.shortcuts.duplicatekeymap.keymapalreadyexists.label"),
 										     jEdit.getProperty(
 											     "options.shortcuts.duplicatekeymap.dialog.title"),
 										     JOptionPane.OK_CANCEL_OPTION);
-
+					if (newName == null) {
+						return;
+					}
 				}
 				if (manager.copyKeymap(selectedKeymap.toString(), newName))
 				{
