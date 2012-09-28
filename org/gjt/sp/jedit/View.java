@@ -319,7 +319,7 @@ public class View extends JFrame implements InputHandlerProvider
 	{
 		addToolBar(group, DEFAULT_LAYER, toolBar);
 	}
-	
+
 	/**
 	 * Adds a tool bar to this view.
 	 * @param group The tool bar group to add to
@@ -644,7 +644,7 @@ public class View extends JFrame implements InputHandlerProvider
 	//}}}
 
 	//}}}
-	
+
 	//{{{ Buffers, edit panes, split panes
 
 	//{{{ splitHorizontally() method
@@ -974,16 +974,16 @@ public class View extends JFrame implements InputHandlerProvider
 		{
 			BufferSet bs = ep.getBufferSet();
 			Collections.addAll(retval, bs.getAllBuffers());
-			// If scope is not editpane, then all buffersets 
-			// are the same and we got what we need. 
+			// If scope is not editpane, then all buffersets
+			// are the same and we got what we need.
 			if (mgr.getScope() != BufferSet.Scope.editpane)
-				break;	
+				break;
 		}
 		Buffer[] bufs = new Buffer[retval.size()];
 		retval.toArray(bufs);
 		return bufs;
 	}//}}}
-	
+
 	//{{{ setBuffer() method
 	/**
 	 * Sets the current edit pane's buffer.
@@ -1298,7 +1298,7 @@ public class View extends JFrame implements InputHandlerProvider
 	} //}}}
 
 	// {{{ closeAllMenus()
-	/** closes any popup menus that may have been opened 
+	/** closes any popup menus that may have been opened
 	    @since jEdit 4.4pre1
 	*/
 	public void closeAllMenus()
@@ -1306,7 +1306,7 @@ public class View extends JFrame implements InputHandlerProvider
 		MenuSelectionManager.defaultManager().clearSelectedPath();
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
 	} // }}}
-	
+
 	//{{{ Package-private members
 	View prev;
 	View next;
@@ -1319,7 +1319,7 @@ public class View extends JFrame implements InputHandlerProvider
 		plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
-		
+
 		// OS X users expect a preview of the window rather than an icon
 		if (!OperatingSystem.isMacOS())
 			setIconImage(GUIUtilities.getEditorIcon());
@@ -1564,7 +1564,7 @@ public class View extends JFrame implements InputHandlerProvider
 		mainPanel.add(mainContent, BorderLayout.CENTER);
 		if (c instanceof JSplitPane)
 		{
-			splitPane = (JSplitPane)c;	
+			splitPane = (JSplitPane)c;
 		}
 		else
 		{
@@ -1992,7 +1992,7 @@ loop:		while (true)
 		EditBus.send(new ViewUpdate(this,ViewUpdate.EDIT_PANE_CHANGED));
 	} //}}}
 
-	
+
 	//{{{ handleBufferUpdate() method
 	@EBHandler
 	public void handleBufferUpdate(BufferUpdate msg)
@@ -2032,22 +2032,22 @@ loop:		while (true)
 
 	//{{{ handleViewUpdate() method
 	@EBHandler
-	public void handleViewUpdate(ViewUpdate msg) 
+	public void handleViewUpdate(ViewUpdate msg)
 	{
 		// only have my view handle each update message
 		if (msg.getView() == null || msg.getView() != this) return;
 		final int check = jEdit.getIntegerProperty("checkFileStatus");
 		if ((check == 0) || !jEdit.isStartupDone()) return;
 		// "buffer visit" also includes checking the buffer when you change editpanes.
-		if ((msg.getWhat() == ViewUpdate.EDIT_PANE_CHANGED) && 
+		if ((msg.getWhat() == ViewUpdate.EDIT_PANE_CHANGED) &&
 			((check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0))
 			jEdit.checkBufferStatus(View.this, true);
-		else if ((msg.getWhat() == ViewUpdate.ACTIVATED) && 
+		else if ((msg.getWhat() == ViewUpdate.ACTIVATED) &&
 			(check & GeneralOptionPane.checkFileStatus_focus) > 0)
 				jEdit.checkBufferStatus(View.this,
 					(check != GeneralOptionPane.checkFileStatus_focus));
 	}//}}}
-	
+
 	//{{{ closeDuplicateBuffers() method
 	/** Used if exclusive buffersets are enabled */
 	private void closeDuplicateBuffers(EditPaneUpdate epu)
@@ -2182,9 +2182,9 @@ loop:		while (true)
 			boolean appFocus = false;
 			boolean viewChanged = false;
 			View oldView = jEdit.getActiveViewInternal();
-			// check if view is changed			
+			// check if view is changed
 			if (oldView != View.this) viewChanged = true;
-			/* ACTIVATED currently means whenever the View gets focus. 
+			/* ACTIVATED currently means whenever the View gets focus.
 			Ideally it should be only when the View changes or we are
 			focusing on a View after previously using in another application.
 			Currently, we also get ACTIVATED messages after a closed jEdit dialog.
@@ -2192,7 +2192,7 @@ loop:		while (true)
 			if (evt.getOppositeWindow() == null) appFocus = true;
 			jEdit.setActiveView(View.this);
 //			Log.log(Log.DEBUG, this, "appFocus:" + appFocus + " viewChanged:" + viewChanged);
-			if (appFocus || viewChanged) 
+			if (appFocus || viewChanged)
 				EditBus.send(new ViewUpdate(View.this, ViewUpdate.ACTIVATED));
 		}
 
@@ -2266,7 +2266,7 @@ loop:		while (true)
 				setLocationRelativeTo(parent);
 			else
 			{
-				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND) 
+				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 					new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
 				else
 				{
@@ -2306,5 +2306,5 @@ loop:		while (true)
 		}
 	}//}}}
 	 //}}}
-	
+
 }
