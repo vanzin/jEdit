@@ -7,7 +7,7 @@
 
     <section id="overview">
         <title>Interface Overview</title>
-        
+
         <para>A <firstterm>View</firstterm> is the jEdit term for an editor main
         window. It is possible to have multiple views open at once, and each
         View can be split into multiple panes. jEdit remembers the state of open
@@ -24,7 +24,7 @@
         the View is split.  </para>
 
         <para>The drop-down buffer switcher list at the top of each EditPane shows
-        a BufferSet, or a set of open buffers (see <xref linkend="buffersets" />). 
+        a BufferSet, or a set of open buffers (see <xref linkend="buffersets" />).
         Selecting a buffer on this list will make it visible in the TextArea. Different
         emblems are displayed next to buffer names in the list, depending the
         buffer's state; a red disk is shown for buffers with unsaved changes, a
@@ -481,8 +481,8 @@
         invokes the action that would be first in the completion popup's
         list.</para>
 
-        <para>For example, entering <userinput>l-o</userinput> will match
-        <userinput>global-options</userinput>, which has the same effect as
+        <para>For example, entering <userinput>d-o</userinput> will invoke
+        <userinput>combined-options</userinput>, which has the same effect as
         invoking <guimenu>Utilities</guimenu>&gt;
         <guimenuitem>Options</guimenuitem>.</para>
 
