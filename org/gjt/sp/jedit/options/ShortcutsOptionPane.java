@@ -436,6 +436,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				if (newName == null) {
 					return;
 				}
+				newName = newName.replace(' ', '_');
 				KeymapManager manager = jEdit.getKeymapManager();
 				Collection<String> keymapNames = manager.getKeymapNames();
 				while (newName != null)
@@ -451,6 +452,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					if (newName == null) {
 						return;
 					}
+					newName = newName.replace(' ', '_');
 				}
 				if (manager.copyKeymap(selectedKeymap.toString(), newName))
 				{
@@ -724,7 +726,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			super.getListCellRendererComponent(list, value, index, isSelected,
 								  cellHasFocus);
-			String label = jEdit.getProperty("keymaps." + value + ".label", String.valueOf(value));
+			String label = jEdit.getProperty("keymaps." + value + ".label", String.valueOf(value).replace('_', ' '));
 			setText(label);
 			return this;
 		}

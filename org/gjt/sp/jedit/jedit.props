@@ -128,7 +128,7 @@ autoReloadDialog=true
 # If this is true, auto reload; if false, use 'reload' button in dialog
 autoReload=true
 
-# When to check file status on disk: 1=view focus. See GeneralOptionPane class for meanings of values. 
+# When to check file status on disk: 1=view focus. See GeneralOptionPane class for meanings of values.
 checkFileStatus=1
 
 # Encoding detectors
@@ -513,8 +513,6 @@ debug.beepOnOutput=false
 keymap.current=jEdit
 # the default keymap name
 keymap.default=jEdit
-keymaps.jEdit.label=jEdit
-keymaps.IntelliJ.label=IntelliJ IDEA
 #}}}
 
 

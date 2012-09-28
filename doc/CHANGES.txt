@@ -144,6 +144,9 @@ for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Translate underscores to spaces when displaying keymap names in the UI to
+  eliminate files with spaces in the name. (Björn "Vampire" Kautler)
+
 - jeditresource:/ URL handler now also checks jEditHome for files so
   it can be used to link to core documentation. (#3565139 Alan Ezust)
   [merged into 5.0.x]
