@@ -4,11 +4,14 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre1
 
-Thanks to Jarek Czekalski, Thomas Meyer, Matthieu Casanova, Alan Ezust,
-Malathi, Vladimir Avdonin, Eric Le Lay, Darien Brown, Steve snarum-micron,
-EdorFaus, Brian Clapper, and Maik Nijhuis for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Jarek Czekalski, Thomas Meyer,
+Matthieu Casanova, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
+Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper and Maik Nijhuis
+for contributing to this release.
 
 {{{ Bug fixes
+
+- Fix broken keymap properties (Björn "Vampire" Kautler)
 
 - Fix AutoSave exception after multiline cut (#3017650 Thomas Meyer)
 
