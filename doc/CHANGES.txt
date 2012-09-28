@@ -11,6 +11,9 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Handle menu bar mnemonics with precedence over otherwise defined shortcuts as
+  they are shown visually to the user (#3528208 Björn "Vampire" Kautler)
+
 - Fix keymap duplication (Björn "Vampire" Kautler)
 
 - Fix broken keymap properties (Björn "Vampire" Kautler)
