@@ -11,6 +11,10 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Correctly determine whether Look and Feel did change to not touch it if it
+  stays the same as this might cause delays and Exceptions.
+  (Björn "Vampire" Kautler)
+
 - Handle menu bar mnemonics with precedence over otherwise defined shortcuts as
   they are shown visually to the user (#3528208 Björn "Vampire" Kautler)
 

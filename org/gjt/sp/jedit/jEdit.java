@@ -35,6 +35,9 @@ import java.awt.*;
 
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
@@ -3733,10 +3736,12 @@ public class jEdit
 		if (lfOld != null)
 			sLfOld = lfOld.getClass().getName();
 
-		if (isStartupDone() && sLfOld != null && sLfOld.equals(lf))
+		// do not change anything if Look and Feel did not change
+		if (isStartupDone() && getPLAFClassName(lf).equals(sLfOld))
 		{
 			return;
 		}
+
 		Font primaryFont = jEdit.getFontProperty(
 			"metal.primary.font");
 		if(primaryFont != null)
@@ -3779,18 +3784,7 @@ public class jEdit
 
 		try
 		{
-			if(lf != null && lf.length() != 0)
-				UIManager.setLookAndFeel(lf);
-			else if(OperatingSystem.isMacOS())
-			{
-				UIManager.setLookAndFeel(UIManager
-					.getSystemLookAndFeelClassName());
-			}
-			else
-			{
-				UIManager.setLookAndFeel(UIManager
-					.getCrossPlatformLookAndFeelClassName());
-			}
+			UIManager.setLookAndFeel(getPLAFClassName(lf));
 		}
 		catch(Exception e)
 		{
@@ -3882,6 +3876,23 @@ public class jEdit
 		}
 
 	} //}}}
+
+	@Nonnull
+	private static String getPLAFClassName(@Nullable String lf)
+	{
+		if (lf != null && lf.length() != 0)
+		{
+			return lf;
+		}
+		else if(OperatingSystem.isMacOS())
+		{
+			return UIManager.getSystemLookAndFeelClassName();
+		}
+		else
+		{
+			return UIManager.getCrossPlatformLookAndFeelClassName();
+		}
+	}
 
 	//{{{ getNextUntitledBufferId() method
 	public static int getNextUntitledBufferId()
