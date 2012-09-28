@@ -498,7 +498,7 @@ public class jEdit
 		KillRing.getInstance().load();
 		GUIUtilities.advanceSplashProgress("init various properties");
 
-		// other one-time migration services. 
+		// other one-time migration services.
 		OneTimeMigrationService.execute();
 
 		propertiesChanged();
@@ -1032,7 +1032,7 @@ public class jEdit
 		}
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
-	
+
 	//}}} Property methods fold end
 
 	//{{{ Plugin management methods
@@ -2239,7 +2239,7 @@ public class jEdit
 	//{{{ getBuffers() method
 	/**
 	 * Returns an array of all open buffers from any View.
-	 * @return  an array of all open buffers 
+	 * @return  an array of all open buffers
 	 * @see View#getBuffers()
 	 */
 	public static Buffer[] getBuffers()
@@ -2341,7 +2341,7 @@ public class jEdit
 	 */
 	public static void checkBufferStatus(View view, boolean currentBuffer)
 	{
-		Log.log(Log.DEBUG, jEdit.class, "checkBufferStatus for " + 
+		Log.log(Log.DEBUG, jEdit.class, "checkBufferStatus for " +
 			(currentBuffer ? "current buffer: " + view.getBuffer() : "all buffers"));
 
 		// still need to call the status check even if the option is
@@ -2721,8 +2721,8 @@ public class jEdit
 	 * started with the <code>-nosettings</code> command-line switch; do not
 	 * blindly use this method without checking for a <code>null</code>
 	 * return value first. <p>
-	 * 
-	 * <b>NOTE</b>: plugins should <b>not</b> use this directory as a base to 
+	 *
+	 * <b>NOTE</b>: plugins should <b>not</b> use this directory as a base to
 	 * store their files. Instead, they should use EditPlugin.getPluginHome().
 	 * @see EditPlugin#getPluginHome()
 	 */
@@ -3731,7 +3731,7 @@ public class jEdit
 		String sLfNew = null;
 		LookAndFeel lfOld = UIManager.getLookAndFeel();
 		if (lfOld != null)
-			sLfOld = lfOld.getClass().getName(); 
+			sLfOld = lfOld.getClass().getName();
 
 		if (isStartupDone() && sLfOld != null && sLfOld.equals(lf))
 		{
@@ -3805,11 +3805,11 @@ public class jEdit
 				(EventQueue.isDispatchThread() ? "edt"
 				                               : "non-edt") +
 				" old=" + sLfOld +
-				" requested=" + lf + 
+				" requested=" + lf +
 				" new=" + sLfNew );
 		if (lf == null || !lf.equals(sLfNew))
 			Log.log(Log.WARNING, jEdit.class,
-				"inifPLAF failed to set required l&f");
+				"initPLAF failed to set required l&f");
 
 		UIDefaults defaults = UIManager.getDefaults();
 
@@ -4119,7 +4119,7 @@ public class jEdit
 
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete: "
-					+ (System.currentTimeMillis() - 
+					+ (System.currentTimeMillis() -
 					   startupTime) + " ms");
 
 				//{{{ Report any plugin errors
