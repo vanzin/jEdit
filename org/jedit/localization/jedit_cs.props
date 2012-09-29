@@ -396,7 +396,7 @@ no-macros.label=Žádná makra
 #}}}
 
 #{{{ Plugins menu
-plugins.label=$Pluginy
+plugins.label=P$luginy
 plugin-manager.label=$Plugin manažer...
 plugin-options.label=Plugin $možnosti...
 no-plugins.label=Žádné pluginy nejsou nainstalovány

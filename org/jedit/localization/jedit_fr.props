@@ -128,7 +128,7 @@ reload-encoding.error={0} n'est pas un encodage valide
 
 #{{{ Edit menu
 
-edit.label=$Édition
+edit.label=É$dition
 undo.label=$Annuler
 redo.label=$Rétablir
 cut.label=$Couper
@@ -239,7 +239,7 @@ markers.blank-line=[Ligne vide]
 #}}}
 
 #{{{ Folding menu
-folds.label=$Replis
+folds.label=Rep$lis
 collapse-fold.label=$Fermer le repli
 expand-one-level.label=$Développer le repli d'un niveau
 expand-fold.label=Développer le repli $entièrement
@@ -256,7 +256,7 @@ next-fold.label=Atteindre le repli sui$vant
 #}}}
 
 #{{{ View menu
-view.label=$Fenêtres
+view.label=F$enêtres
 new-view.label=Nouvelle $fenêtre
 new-view.tooltip=Nouvelle fenêtre principale avec fenêtres ancrées
 new-plain-view.label=Nouve$lle fenêtre simple

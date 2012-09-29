@@ -83,7 +83,7 @@ tray.exit.label=Выход
 #{{{ Menu bar
 
 #{{{ File menu
-file.label=$Файл
+file.label=Файл($F)
 new-file.label=$Создать
 new-file-in-mode.label=Создать в режиме
 new-file-in-mode.dialog.title=Новый Файл
@@ -128,7 +128,7 @@ reload-encoding.error=Нет кодировки {0}
 
 #{{{ Edit menu
 
-edit.label=Менять
+edit.label=Менять($E)
 undo.label=Отменить
 redo.label=Переприменить
 cut.label=Вырезать
@@ -205,7 +205,7 @@ next-bracket.label=Перейти к следующей скобке
 #}}}
 
 #{{{ Search menu
-search.label=Поиск
+search.label=Поиск($S)
 find.label=Найти...
 find-next.label=Найти следующее
 find-prev.label=Найти предыдущее
@@ -225,7 +225,7 @@ hypersearch-results.label=Глобальные результаты
 #}}}
 
 #{{{ Markers menu
-markers.label=закладки
+markers.label=закладки($M)
 add-marker.label=Добавить/удалить закладку
 add-marker-shortcut.label=Добавить закладку с сокращением
 remove-all-markers.label=Удалить все закладки
@@ -239,7 +239,7 @@ markers.blank-line=[Пустая строка]
 #}}}
 
 #{{{ Folding menu
-folds.label=Свёртка
+folds.label=Свёртка($O)
 collapse-fold.label=Свернуть
 expand-one-level.label=Развернуть один уровень
 expand-fold.label=Полностью развернуть
@@ -256,7 +256,7 @@ next-fold.label=Переход к следующей свертке
 #}}}
 
 #{{{ View menu
-view.label=Вид
+view.label=Вид($V)
 new-view.label=Новый вид
 new-view.tooltip=Новое главное окно с доком
 new-plain-view.label=Новый простой вид
@@ -325,7 +325,7 @@ layout-save-current-mode.label=Сохранить раскладку дока д
 
 #{{{ Utilities menu
 
-utils.label=Услуги
+utils.label=Услуги($U)
 vfs.browser.label=Инспектор файлов
 action-bar.label=Панель действий
 last-action.label=Повторить последнее действие
@@ -383,7 +383,7 @@ edit-syntax-style.label=Редактировать стил синтаксиса
 #}}}
 
 #{{{ Macros menu
-macros.label=Макро-команда
+macros.label=Макро-команда($C)
 new-macro.label=Новая
 record-macro.label=Записать...
 stop-recording.label=Закончить запись
@@ -396,14 +396,14 @@ no-macros.label=Нет макро команд
 #}}}
 
 #{{{ Plugins menu
-plugins.label=Модули
+plugins.label=Модули($P)
 plugin-manager.label=Управление модулями...
 plugin-options.label=Настройки модулей...
 no-plugins.label=Модулей не установлено
 #}}}
 
 #{{{ Help menu
-help-menu.label=Помощь
+help-menu.label=Помощь($H)
 about.label=Информация о jEdit...
 help.label=Использование jEdit
 tip-of-the-day.label=Совет дня
