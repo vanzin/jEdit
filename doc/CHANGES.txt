@@ -69,6 +69,7 @@ for contributing to this release.
 
 - Fix selecting mode based on exact filename match. (#3562935 Dale Anson)
 
+- Fix broken macro Files/Glob_close.bsh (Eric Le Lay)
 }}}
 {{{ API Changes
 
