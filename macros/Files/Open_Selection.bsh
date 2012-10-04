@@ -35,7 +35,8 @@ String getBrowserPath() //{{{
 		return pathModel.getItem(0);
 } //}}}
 
-/** tryPath {{{
+// tryPath function {{{
+/** tryPath
  * Tries to open a file built as concatenation of <code>sParent</code>
  * and <code>sPath</code> paths. If file does not exist, no action is done.
  * @return <code>true</code> if file exists, <code>false</code> otherwise.
@@ -54,6 +55,7 @@ boolean tryPath(String sParent, String sPath)
 	}
 } //}}}
 
+// getNoWordSep function {{{
 /**
  * Inverts the list of word break chars to get the list of word
  * separators. Ascii only space is assumed.
@@ -70,8 +72,9 @@ String getNoWordSep(String sWordBreakChars)
         }
     }
     return sb.toString();
-}
+} /}}}
 
+// getSelectedWords function {{{
 /**
  * Returns an array of selected words, assuming that user selected
  * words (not whitespaces). If nothing is selected, returns
@@ -115,15 +118,16 @@ String[] getSelectedWords()
             words.add(String.valueOf(line.subSequence(nLeft, nRight)));
     }
     return words.toArray(new String[0]);
-}
+} //}}}
 
+// openSelection function {{{
 /**
  * Tries to find an existing file using current java directory and
  * last browser directory as parents of the filename contained
  * in selection. If this succeeds, the file is opened.
  * Otherwise direct <code>jEdit.openFile</code> call is done on selection.
  */
-void openSelection() //{{{
+void openSelection()
 {
 	for (String sPath: getSelectedWords())
 	{
@@ -137,8 +141,7 @@ void openSelection() //{{{
 
 openSelection();
 
-/*
-	Macro index data (in DocBook format)
+/* Macro index data (in DocBook format) {{{
 
             <listitem>
                 <para><filename>Open_Selection.bsh</filename></para>
@@ -148,7 +151,7 @@ openSelection();
                 a parent of the filename, but only as a local path.</para>
             </listitem>
 
-*/
+}}} */
 
 
 // end Open_Selection.bsh
