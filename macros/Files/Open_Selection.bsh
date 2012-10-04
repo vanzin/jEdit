@@ -72,7 +72,7 @@ String getNoWordSep(String sWordBreakChars)
         }
     }
     return sb.toString();
-} /}}}
+} //}}}
 
 // getSelectedWords function {{{
 /**
