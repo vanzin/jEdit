@@ -162,8 +162,9 @@ for contributing to this release.
   it can be used to link to core documentation. (#3565139 Alan Ezust)
   [merged into 5.0.x]
 
-- Open Selection macro improvement: an attempt is made to use current
-  VFS browser directory as a parent for highlighted filename.
+- Open Selection macro improvements. An attempt is made to use current
+  VFS browser directory as a parent for the highlighted filename.
+  In case of no selection the path under caret is used. (Jarek Czekalski)
 
 - Fixed unreasonable quadratic operations which could be observable on
   big search&replace-all. (Patch #3533838 by Thomas Meyer)

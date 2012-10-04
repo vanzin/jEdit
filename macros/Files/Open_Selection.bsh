@@ -55,6 +55,69 @@ boolean tryPath(String sParent, String sPath)
 } //}}}
 
 /**
+ * Inverts the list of word break chars to get the list of word
+ * separators. Ascii only space is assumed.
+ */
+String getNoWordSep(String sWordBreakChars)
+{
+    StringBuilder sb = new StringBuilder();
+    for (char c = 33; c <= 126; c++)
+    {
+        if (!Character.isLetterOrDigit(c)
+            && sWordBreakChars.indexOf(c) < 0)
+        {
+            sb.append(c);
+        }
+    }
+    return sb.toString();
+}
+
+/**
+ * Returns an array of selected words, assuming that user selected
+ * words (not whitespaces). If nothing is selected, returns
+ * the word under the caret, using custom word break chars.
+ */
+String[] getSelectedWords()
+{
+    String sWordBreakChars = "\"\'";
+    ArrayList words = new ArrayList();
+    Selection[] sels = textArea.getSelection();
+    for (Selection sel: sels)
+        words.add(textArea.getSelectedText(sel));
+    if (words.size() == 0)
+    {
+        // we need to get the word under caret, as nothing is selected
+        // we use the same rules as in TextArea.selectWord
+        int nLine = textArea.getCaretLine();
+        CharSequence line = buffer.getLineSegment(nLine);
+        int nStartPos = textArea.getCaretPosition()
+                        - buffer.getLineStartOffset(nLine);
+
+        // cannot read any char if at line end, so:
+        if (nStartPos == line.length())
+            nStartPos--;
+
+        // findWordStart/End utilities expect noWordSep, but we have
+        /// a list of word separators - so invert it
+        String sNoWordSep = getNoWordSep(sWordBreakChars);
+
+        int nLeft = TextUtilities.findWordStart(
+            line, nStartPos, sNoWordSep);
+        int nRight = TextUtilities.findWordEnd(
+            line, nStartPos+1, sNoWordSep);
+        if (nRight - nLeft < 1)
+        {
+            // javax.swing.JOptionPane.showMessageDialog(null,
+                // "start: " + nLeft + ", end: " + nRight);
+            view.getToolkit().beep();
+        }
+        else
+            words.add(String.valueOf(line.subSequence(nLeft, nRight)));
+    }
+    return words.toArray(new String[0]);
+}
+
+/**
  * Tries to find an existing file using current java directory and
  * last browser directory as parents of the filename contained
  * in selection. If this succeeds, the file is opened.
@@ -62,19 +125,12 @@ boolean tryPath(String sParent, String sPath)
  */
 void openSelection() //{{{
 {
-	Selection[] selection = textArea.getSelection();
-	if(selection == null || selection.length == 0)
-		view.getToolkit().beep();
-	else
+	for (String sPath: getSelectedWords())
 	{
-		for(i = 0; i < selection.length; i++)
+		if (!tryPath("", sPath) &&
+			!tryPath(getBrowserPath(), sPath))
 		{
-			sSel = textArea.getSelectedText(selection[i]);
-			if (!tryPath("", sSel) &&
-				!tryPath(getBrowserPath(), sSel))
-			{
-				jEdit.openFile(view,textArea.getSelectedText(selection[i]));
-			}
+			jEdit.openFile(view, sPath);
 		}
 	}
 } //}}}
@@ -84,12 +140,13 @@ openSelection();
 /*
 	Macro index data (in DocBook format)
 
-<listitem>
-    <para><filename>Open_Selection.bsh</filename></para>
-    <abstract><para>
-        Opens the file named by the current buffer's selected text.
-    </para></abstract>
-</listitem>
+            <listitem>
+                <para><filename>Open_Selection.bsh</filename></para>
+
+                <para>Opens the file named by the current buffer's selected
+                text. Current VFS browser directory is also tried as
+                a parent of the filename, but only as a local path.</para>
+            </listitem>
 
 */
 
