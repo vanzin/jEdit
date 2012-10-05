@@ -838,6 +838,18 @@
     <section id="markers">
         <title>Markers</title>
 
+       <tip> <title> MarkerSets </title>
+        <para> The MarkerSets plugin is a replacement for the
+        built-in Markers feature of jEdit. Markers saved with
+        MarkerSets properly update when lines are added or
+        removed from a buffer. Furthermore, you can see
+        markers from multiple files in the Marker Sets
+        dockable. We recommend you use that instead
+        of the built-in Markers.
+        </para>
+        </tip>
+
+
         <para>A <firstterm>marker</firstterm> is a pointer to a specific
         location within a buffer, which may or may not have a single-character
         <firstterm>shortcut</firstterm> associated with it. Markers are
@@ -906,6 +918,8 @@
         highlight. Moving the mouse over the highlight displays a tool tip
         showing the marker's shortcut, if it has one. See <xref
         linkend="overview" /> for information about the gutter.</para>
+
+
     </section>
 
     <section id="search-replace">
