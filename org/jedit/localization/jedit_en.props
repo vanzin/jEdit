@@ -1431,6 +1431,7 @@ options.plugin-manager.settings-dir=jEdit settings directory
 options.plugin-manager.app-dir=jEdit application directory
 options.plugin-manager.none=Plugin Central default
 options.plugin-manager.disable-obsolete=Disable obsolete plugins
+options.plugin-manager.list-cache.minutes=Cache plugin list for: (minutes)
 #}}}
 
 #{{{ Printing pane

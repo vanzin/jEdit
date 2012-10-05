@@ -70,7 +70,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			cacheForSpinner = new JSpinner(spinnerModel);
 			spinnerPanel = new JPanel();
 			spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
-			spinnerPanel.add(new JLabel("Cache plugin list for: (minutes)"));
+			spinnerPanel.add(new JLabel(jEdit.getProperty("options.plugin-manager.list-cache.minutes")));
 			spinnerPanel.add(cacheForSpinner);
 			spinnerPanel.add(Box.createGlue());
 			
