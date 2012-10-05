@@ -162,6 +162,8 @@ for contributing to this release.
   it can be used to link to core documentation. (#3565139 Alan Ezust)
   [merged into 5.0.x]
 
+- New macro in Files section: "Open Selection In Desktop" (Jarek Czekalski)
+
 - Open Selection macro improvements. An attempt is made to use current
   VFS browser directory as a parent for the highlighted filename.
   In case of no selection the path under caret is used. (Jarek Czekalski)

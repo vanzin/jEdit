@@ -345,6 +345,17 @@
             </listitem>
 
             <listitem>
+                <para><filename>Open_Selection_In_Desktop.bsh</filename></para>
+
+                <para>Opens the file named by the current buffer's selected
+                text using <code>Desktop</code>. That is opens the file
+                using operating system's default application.
+                If a link is selected, it is browsed instead, using default
+                web browser. If no selection is active, the path
+                under caret is used.</para>
+            </listitem>
+
+            <listitem>
                 <para><filename>Send_Buffer_To_Next_Split.bsh</filename></para>
 
                 <para>If bufferset scope is set to EditPane, the current buffer
