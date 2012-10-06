@@ -21,23 +21,24 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import javax.annotation.Nonnull;
 //}}}
 
 /**
  * Encodings which are provided by java.nio.charset.Charset.
  *
- * @since 4.3pre10
  * @author Kazutoshi Satoda
+ * @since 4.3pre10
  */
 public class CharsetEncoding implements Encoding
 {
@@ -48,7 +49,8 @@ public class CharsetEncoding implements Encoding
 	} //}}}
 
 	//{{{ implements Encoding
-	public Reader getTextReader(InputStream in) throws IOException
+	@Nonnull
+	public Reader getTextReader(@Nonnull InputStream in) throws IOException
 	{
 		// Pass the decoder explicitly to report a decode error
 		// as an exception instead of replacing with "\uFFFD".
@@ -57,14 +59,16 @@ public class CharsetEncoding implements Encoding
 		return new InputStreamReader(in, body.newDecoder());
 	}
 
-	public Writer getTextWriter(OutputStream out) throws IOException
+	@Nonnull
+	public Writer getTextWriter(@Nonnull OutputStream out) throws IOException
 	{
 		// Pass the encoder explicitly because of same reason
 		// in getTextReader();
 		return new OutputStreamWriter(out, body.newEncoder());
 	}
 
-	public Reader getPermissiveTextReader(InputStream in) throws IOException
+	@Nonnull
+	public Reader getPermissiveTextReader(@Nonnull InputStream in) throws IOException
 	{
 		// Use REPLACE action to indicate where the coding error
 		// happened by the replacement character "\uFFFD".

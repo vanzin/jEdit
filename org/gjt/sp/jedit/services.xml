@@ -50,6 +50,9 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="X-UTF-32BE-BOM">
 		new EncodingWithBOM("UTF-32BE");
 	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="Native2ASCII">
+		new Native2ASCIIEncoding();
+	</SERVICE>
 
 	<!-- Encoding detectors -->
 	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="BOM">

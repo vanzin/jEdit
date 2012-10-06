@@ -113,6 +113,11 @@ for contributing to this release.
 }}}
 {{{ Editing
 
+- There is now a new encoding Native2ASCII which collapses unicode
+  escapes in ISO-8859-1 files on read and expands characters that cannot be
+  encoded with ASCII as unicode escapes on write. This encoding is the one Java
+  properties files should be in. (Björn "Vampire" Kautler)
+
 - Highlight entity references in xml attributes (#3559971 Eric Le Lay)
 
 - Added highlight of chapter title in rfc edit mode (Matthieu Casanova)

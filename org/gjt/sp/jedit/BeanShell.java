@@ -23,12 +23,19 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import org.gjt.sp.jedit.bsh.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
-import java.io.*;
-import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.bsh.BshMethod;
+import org.gjt.sp.jedit.bsh.EvalError;
+import org.gjt.sp.jedit.bsh.Interpreter;
+import org.gjt.sp.jedit.bsh.NameSpace;
+import org.gjt.sp.jedit.bsh.UtilEvalError;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.TaskManager;
 //}}}
@@ -56,7 +63,7 @@ import org.gjt.sp.util.TaskManager;
 public class BeanShell
 {
 	private static final BeanShellFacade<View> bsh = new MyBeanShellFacade();
-	
+
 	static void init()
 	{
 		Log.log(Log.MESSAGE, BeanShell.class, "Beanshell Init");
@@ -492,10 +499,11 @@ public class BeanShell
 			global.importPackage("org.gjt.sp.jedit.pluginmgr");
 			global.importPackage("org.gjt.sp.jedit.print");
 			global.importPackage("org.gjt.sp.jedit.search");
+			global.importPackage("org.jedit.io");
 		}
-		
+
 		@Override
-		protected void setupDefaultVariables(NameSpace namespace, View view) throws UtilEvalError 
+		protected void setupDefaultVariables(NameSpace namespace, View view) throws UtilEvalError
 		{
 			if(view != null)
 			{
@@ -529,6 +537,6 @@ public class BeanShell
 			else
 				new BeanShellErrorDialog(view,t);
 		}
-		
+
 	}
 }

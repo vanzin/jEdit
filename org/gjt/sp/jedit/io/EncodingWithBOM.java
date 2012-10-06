@@ -21,18 +21,19 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import java.io.InputStream;
-import java.io.SequenceInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.SequenceInputStream;
 import java.io.Writer;
-import java.io.IOException;
-import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.MalformedInputException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Nonnull;
 //}}}
 
 /**
@@ -56,7 +57,8 @@ public class EncodingWithBOM implements Encoding
 	} //}}}
 
 	//{{{ implements Encoding
-	public Reader getTextReader(InputStream in) throws IOException
+	@Nonnull
+	public Reader getTextReader(@Nonnull InputStream in) throws IOException
 	{
 		byte[] actualMark = new byte[bom.length];
 		int count = in.read(actualMark);
@@ -67,13 +69,15 @@ public class EncodingWithBOM implements Encoding
 		return plain.getTextReader(in);
 	}
 
-	public Writer getTextWriter(OutputStream out) throws IOException
+	@Nonnull
+	public Writer getTextWriter(@Nonnull OutputStream out) throws IOException
 	{
 		out.write(bom);
 		return plain.getTextWriter(out);
 	}
 
-	public Reader getPermissiveTextReader(InputStream in) throws IOException
+	@Nonnull
+	public Reader getPermissiveTextReader(@Nonnull InputStream in) throws IOException
 	{
 		byte[] actualMark = new byte[bom.length];
 		int count = in.read(actualMark);
@@ -97,7 +101,7 @@ public class EncodingWithBOM implements Encoding
 		{
 			byte[] mark = new byte[4];
 			int count = sample.read(mark);
-	
+
 			byte low = (byte)(BOM16 & 0xff);
 			byte high = (byte)((BOM16 >> 8) & 0xff);
 			if (count >= 4)
@@ -128,7 +132,7 @@ public class EncodingWithBOM implements Encoding
 					return "UTF-16";
 				}
 			}
-	
+
 			if (count >= UTF8BOM.length)
 			{
 				int i = 0;
@@ -145,7 +149,7 @@ public class EncodingWithBOM implements Encoding
 					return "UTF-8Y";
 				}
 			}
-	
+
 			return null;
 		}
 	} //}}}
