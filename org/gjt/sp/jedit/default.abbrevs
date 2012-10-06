@@ -1,10 +1,13 @@
+; Default set of abbreviations for jEdit.
+; :mode=ini:encoding=UTF-8:
 [global]
+--|—
 alpha|α
 beta|β
 gamma|γ
 delta|δ
 epsilon|ε
-zeta|ζ 
+zeta|ζ
 eta|η
 theta|ϴ
 iota|ι
@@ -34,8 +37,6 @@ Upsilon|Υ
 Phi|Φ
 Psi|Ψ
 Omega|Ω
-
-
 pm|±
 mp|∓
 times|
@@ -132,7 +133,6 @@ Rightarrow|⇒
 leftrightarrow|↔
 <->|↔
 mapsto|↦
-|->|↦
 uparrow|↑
 hookleftarrow|↪
 c->|↪
@@ -151,7 +151,6 @@ nwarrow|↖
 downarrow|↓
 uparrow|↑
 updownarrow|↕
-
 Downarrow|⇓
 Uparrow|⇑
 Updownarrow|⇳
@@ -196,12 +195,10 @@ oo|ø
 OO|Ø
 ss|ß
 ??|¿
-
 lfloor|⎣
 rfloor|⎦
 lceil|⎡
 rceil|⎤
-backslash|\
 
 [java]
 Br|BufferedReader $1 = new BufferedReader(\|);
