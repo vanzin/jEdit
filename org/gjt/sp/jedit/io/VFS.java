@@ -589,6 +589,13 @@ public abstract class VFS
 		boolean sendVFSUpdate)
 	throws IOException
 	{
+		if (sourcePath.equals(targetPath))
+		{
+			Log.log(Log.WARNING, VFS.class,
+				jEdit.getProperty("ioerror.copy-self",
+					new Object[] { sourcePath }));
+			return false;
+		}
 		if (progress != null)
 			progress.setStatus("Initializing");
 

@@ -656,6 +656,9 @@ ioerror.delete-error=Cannot delete file.
 ioerror.rename-exists=Cannot overwrite existing file {0}.
 ioerror.rename-error=Cannot rename to {0}.
 ioerror.mkdir-error=Cannot create directory.
+ioerror.backup-failed=Backup failed. Check "Saving & Backup" options.
+ioerror.backup-same-name=Backup filename is the same as the original filename.
+ioerror.copy-self=A destructive operation, copying file to self, was rejected: {0}
 
 vfs.not-supported.list=Directories on the "{0}" filesystem cannot be browsed.
 vfs.not-supported.load=Files on the "{0}" filesystem cannot be opened.

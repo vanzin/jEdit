@@ -712,6 +712,13 @@ public class MiscUtilities
 		File backupFile = getNthBackupFile(name, 1, backups,
 				backupPrefix, backupSuffix,
 				backupDirectory);
+		if (backupFile.equals(file))
+		{
+			Log.log(Log.WARNING, MiscUtilities.class,
+				jEdit.getProperty("ioerror.backup-same-name")
+				+ " " + jEdit.getProperty("ioerror.backup-failed"));
+			return null;
+		}
 
 		long modTime = backupFile.lastModified();
 		/* if backup file was created less than
@@ -728,7 +735,11 @@ public class MiscUtilities
 		File lastBackup = getNthBackupFile(name, backups, backups,
 				backupPrefix, backupSuffix,
 				backupDirectory);
-		lastBackup.delete();
+		// Under unfortunate circumstances the calculated backup
+		// file name may be equal to the source file name. Be careful
+		// not to delete the original file.
+		if (!lastBackup.equals(file))
+			lastBackup.delete();
 
 		if(backups > 1)
 		{
