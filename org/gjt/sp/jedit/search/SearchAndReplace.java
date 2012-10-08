@@ -481,7 +481,7 @@ public class SearchAndReplace
 			record(view,"find(view)",false,true);
 
 			boolean repeat = false;
-loop:			for(;;)
+loop:		for(;;)
 			{
 				while(path != null)
 				{
@@ -892,7 +892,7 @@ loop:			for(;;)
 			initReplace();
 
 			String path = fileset.getFirstFile(view);
-loop:			while(path != null)
+loop:		while(path != null)
 			{
 				Buffer buffer = jEdit.openTemporary(
 					view,null,path,false);
@@ -1202,7 +1202,7 @@ loop:			while(path != null)
 			buffer.getLineOfOffset(end)) - 1 == end);
 
 		int offset = start;
-loop:		for(int counter = 0; ; counter++)
+loop:	for(int counter = 0; ; counter++)
 		{
 			boolean startOfLine = (buffer.getLineStartOffset(
 				buffer.getLineOfOffset(offset)) == offset);
