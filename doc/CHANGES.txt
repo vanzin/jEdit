@@ -11,6 +11,9 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Added missing localization string:
+  options.plugin-manager.list-cache.minutes (#3574373 Matthieu Casanova)
+
 - Correctly determine whether Look and Feel did change to not touch it if it
   stays the same as this might cause delays and Exceptions.
   (Björn "Vampire" Kautler)
