@@ -433,7 +433,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 									     jEdit.getProperty(
 										     "options.shortcuts.duplicatekeymap.dialog.title"),
 									     JOptionPane.OK_CANCEL_OPTION);
-				if (newName == null) {
+				if (newName == null)
+				{
 					return;
 				}
 				newName = newName.replace(' ', '_');
@@ -449,7 +450,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 										     jEdit.getProperty(
 											     "options.shortcuts.duplicatekeymap.dialog.title"),
 										     JOptionPane.OK_CANCEL_OPTION);
-					if (newName == null) {
+					if (newName == null)
+					{
 						return;
 					}
 					newName = newName.replace(' ', '_');
