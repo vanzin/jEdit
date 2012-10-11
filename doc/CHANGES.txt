@@ -11,6 +11,8 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed whole word search (#3551515 Matthieu Casanova)
+
 - Added missing localization string:
   options.plugin-manager.list-cache.minutes (#3574373 Matthieu Casanova)
 
