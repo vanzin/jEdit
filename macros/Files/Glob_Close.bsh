@@ -23,7 +23,7 @@ void globClose(View view)
 	Pattern re = null;
 	try
 	{
-		re = Pattern.compile(MiscUtilities.globToRE(glob));
+		re = Pattern.compile(StandardUtilities.globToRE(glob));
 	}
 	catch(Exception e)
 	{
