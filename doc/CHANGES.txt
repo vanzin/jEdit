@@ -9,6 +9,8 @@ Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix broken keymap properties (Björn "Vampire" Kautler)
+
 - Fix broken macro Files/Glob_close.bsh (Eric Le Lay)
 
 - File status checking before save (#3562315, Alan Ezust)

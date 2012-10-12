@@ -83,7 +83,6 @@ next-textarea.shortcut=A+PAGE_DOWN
 next-word.shortcut=M+RIGHT
 open-file.shortcut=C+o
 open-path.shortcut=C+e C+o
-options.shortcuts.shortcut2=Alternative shortcut
 overwrite.shortcut=INSERT
 page-setup.shortcut=CS+p
 parent-fold.shortcut=MC+u
