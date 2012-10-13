@@ -677,10 +677,10 @@ class ChunkCache
 				{
 					if(i == 0)
 					{
-						if(textArea.displayManager.firstLine.skew > 0)
+						if(textArea.displayManager.firstLine.getSkew() > 0)
 						{
-							Log.log(Log.ERROR,this,"BUG: skew=" + textArea.displayManager.firstLine.skew + ",out.size()=" + out.size());
-							textArea.displayManager.firstLine.skew = 0;
+							Log.log(Log.ERROR,this,"BUG: skew=" + textArea.displayManager.firstLine.getSkew() + ",out.size()=" + out.size());
+							textArea.displayManager.firstLine.setSkew(0);
 							needFullRepaint = true;
 							lastScreenLine = lineInfo.length - 1;
 						}
@@ -694,7 +694,7 @@ class ChunkCache
 				{
 					if(i == 0)
 					{
-						int skew = textArea.displayManager.firstLine.skew;
+						int skew = textArea.displayManager.firstLine.getSkew();
 						if(skew >= out.size())
 						{
 							// The skew cannot be greater than the chunk count of the line

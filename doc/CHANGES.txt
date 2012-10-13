@@ -4,12 +4,16 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre2
 
-Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power, Malathi, 
-Vladimir Avondin, and Alan Ezust for contributing to this release.
+Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power, Malathi,
+Thomas Meyer, Vladimir Avondin, and Alan Ezust for contributing to this release.
 
 {{{ Bug fixes
 
 - Fix broken keymap properties (Björn "Vampire" Kautler)
+
+- Fixed a number of scrollbar bugs related to undo, multiline cut,
+  soft-wrap, and folding.
+  (Patch#3567959, Bugs #2832769, #2998294, and #3193168 - Thomas Meyer)
 
 - Fix broken macro Files/Glob_close.bsh (Eric Le Lay)
 
@@ -55,7 +59,7 @@ Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, Alan Ezust, Dale
 Anson, Matthieu Casanova, Olivier Pisano, Jimmy Chaw, peibl, Robert Schwenn,
 Martin Raspe, Max Funk, SPennington, Ingo Tomahogh, Jarek Czekalski, Jojaba,
 Stephen Blackheath, Milan Černil, Makarius, Chris Sullins, Peter C. Chapin,
-Thomas Meyer, Tom Power and Donovaly for contributing to this release.
+Tom Power and Donovaly for contributing to this release.
 
 {{{ Bug fixes
 
@@ -364,7 +368,7 @@ Thomas Meyer, Tom Power and Donovaly for contributing to this release.
 - New FileOpenerService, Offered by FastOpen 2.5, SmartOpen 1.1.
   Used by ErrorList 2.0 (#3481157 Alan Ezust)
 
-- jeditresource:/ URL handler now also checks jEditHome for files so 
+- jeditresource:/ URL handler now also checks jEditHome for files so
   it can be used to link to core documentation. (#3565139 Alan Ezust)
 
 - Macros folder can now be localized with properties

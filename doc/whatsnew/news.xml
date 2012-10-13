@@ -21,6 +21,12 @@
     <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
     </para></listitem>
 
+    <listitem><para> Scrolling - Many bugs (#2832769, #2998294, #3193168,
+    possibly others), related to soft wrap, multiline delete/cut, undo, and
+    folding, that could cause the text area to be confused about its location,
+    are fixed. This greatly improves the stability of jEdit. Thank you,
+    Thomas Meyer!!  </para></listitem>
+
     <listitem><para> Localization - jEdit now supports switching
     between default locale, French, German, Russian, Czech, and Japanese.
     Some translations for those locales are provided, containing
