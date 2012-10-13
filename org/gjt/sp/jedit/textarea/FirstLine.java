@@ -33,14 +33,149 @@ import org.gjt.sp.util.Log;
  */
 class FirstLine extends Anchor
 {
-	/** The skew is the scroll count from the beginning of the line. Used with soft wrap. */
-	int skew;
+
+	// scrollLine + skew = vertical scroll bar position
+
+	/**
+	 * The skew is the scroll count from the beginning of the line.
+	 * Used with soft wrap.
+	 */
+	private int skew;
+	private int preContentRemovedNumLines;
 
 	//{{{ FirstLine constructor
 	FirstLine(DisplayManager displayManager,
 		TextArea textArea)
 	{
 		super(displayManager,textArea);
+	} //}}}
+
+	@Override
+	void preContentInserted(int startLine, int numLines)
+	{
+		int scrollLines = 0;
+		int physicalLine = startLine;
+		int currentPhysicalLine = getPhysicalLine();
+
+		int numLinesVisible = 0;
+		for(int i = 0;
+			physicalLine < currentPhysicalLine;
+			i++, physicalLine++)
+		{
+			if(getDisplayManager().isLineVisible(physicalLine))
+			{
+				scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+			}
+			if(i < numLines)
+				numLinesVisible++;
+		}
+		preContentInsertedScrollLines = scrollLines;
+	}
+
+	//{{{ contentInserted() method
+	/**
+	 * Some content is inserted.
+	 *
+	 * @param startLine the start of the insert
+	 * @param numLines the number of inserted lines
+	 */
+	void contentInserted(int startLine, int numLines)
+	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"contentInserted() before:" + this);
+
+		int currentPhysicalLine = getPhysicalLine();
+		// The Anchor is changed only if the content was inserted before
+		if(startLine == currentPhysicalLine)
+			setCallChanged(true);
+		else if(startLine < currentPhysicalLine)
+		{
+			int scrollLines = 0;
+			int physicalLine = startLine;
+			int endLine = currentPhysicalLine + numLines;
+			int numLinesVisible = 0;
+
+			for(int i = 0;physicalLine < endLine; physicalLine++, i++)
+			{
+				if(getDisplayManager().isLineVisible(physicalLine))
+				{
+					scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+				}
+				if(i < numLines)
+					numLinesVisible++;
+			}
+			movePhysicalLine(numLinesVisible);
+			moveScrollLine(scrollLines - preContentInsertedScrollLines);
+		}
+
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"contentInserted() after:" + this);
+
+		if(Debug.SCROLL_VERIFY)
+			scrollVerify();
+	} //}}}
+
+	@Override
+	void preContentRemoved(int startLine, int offset, int numLines)
+	{
+		int scrollLines = 0;
+		int physicalLine = startLine;
+		int currentPhysicalLine = getPhysicalLine();
+
+		int numLinesVisible = 0;
+		for(int i = 0;
+			physicalLine < currentPhysicalLine;
+			i++, physicalLine++)
+		{
+			if(getDisplayManager().isLineVisible(physicalLine))
+			{
+				scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+			}
+			if(i < numLines)
+				numLinesVisible++;
+		}
+
+		preContentRemovedScrollLines = scrollLines;
+		preContentRemovedNumLines = numLinesVisible;
+	}
+
+	//{{{ contentRemoved() method
+	/**
+	 * Method called before a content is removed from a buffer.
+	 *
+	 * @param startLine the first line of the removed content
+	 * @param offset the offset in the start line
+	 * @param numLines the number of removed lines
+	 */
+	void contentRemoved(int startLine, int startOffset, int numLines)
+	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"contentRemoved() before:" + this);
+
+		// The removed content starts before the Anchor, we need to pull the anchor up
+		int currentPhysicalLine = getPhysicalLine();
+		if(startLine == currentPhysicalLine)
+			setCallChanged(true);
+		else if(startLine < currentPhysicalLine)
+		{
+			int scrollLines = 0;
+			int physicalLine = startLine;
+			int endLine = currentPhysicalLine - numLines;
+
+			for(;physicalLine < endLine; physicalLine++)
+			{
+				if(getDisplayManager().isLineVisible(physicalLine))
+				{
+					scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+				}
+			}
+			movePhysicalLine(-preContentRemovedNumLines);
+			moveScrollLine(scrollLines - preContentRemovedScrollLines);
+		}
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"contentRemoved() after:" + this);
+		if(Debug.SCROLL_VERIFY)
+			scrollVerify();
 	} //}}}
 
 	//{{{ changed() method
@@ -51,50 +186,51 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"changed() before: "
-				+ physicalLine + ':' + scrollLine
-				+ ':' + skew);
+				+ getPhysicalLine() + ':' + getScrollLine()
+				+ ':' + getSkew());
 		} //}}}
 
-		ensurePhysicalLineIsVisible();
+		if(Debug.SCROLL_VERIFY)
+			scrollVerify();
 
-		int screenLines = displayManager
-			.getScreenLineCount(physicalLine);
-		if(skew >= screenLines)
-			skew = screenLines - 1;
+		ensurePhysicalLineIsVisible();
+		int currentPhysicalLine = getPhysicalLine();
+		int screenLines = getDisplayManager().getScreenLineCount(currentPhysicalLine);
+
+		if(getSkew() >= screenLines)
+			setSkew(screenLines - 1);
 
 		//{{{ Debug code
 		if(Debug.SCROLL_VERIFY)
-		{
-			System.err.println("SCROLL_VERIFY");
-			int verifyScrollLine = 0;
-
-			for(int i = 0; i < displayManager.getBuffer()
-				.getLineCount(); i++)
-			{
-				if(!displayManager.isLineVisible(i))
-					continue;
-
-				if(i >= physicalLine)
-					break;
-
-				verifyScrollLine += displayManager
-					.getScreenLineCount(i);
-			}
-
-			if(verifyScrollLine != scrollLine)
-			{
-				Exception ex = new Exception(scrollLine + ":" + verifyScrollLine);
-				Log.log(Log.ERROR,this,ex);
-			}
-		}
+			scrollVerify();
 
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"changed() after: "
-				+ physicalLine + ':' + scrollLine
-				+ ':' + skew);
+				+ getPhysicalLine() + ':' + getScrollLine()
+				+ ':' + getSkew());
 		} //}}}
 	} //}}}
+
+	private void scrollVerify()
+	{
+		System.err.println("SCROLL_VERIFY");
+		int verifyScrollLine = 0;
+		int currentPhysicalLine = getPhysicalLine();
+
+		for(int i = 0, n = getDisplayManager().getBuffer().getLineCount(); i < n && i < currentPhysicalLine; i++)
+		{
+			if(getDisplayManager().isLineVisible(i))
+				verifyScrollLine += getDisplayManager().getScreenLineCount(i);
+		}
+
+		int scrollLine = getScrollLine();
+		if(verifyScrollLine != scrollLine)
+		{
+			RuntimeException ex = new RuntimeException("ScrollLine is " + scrollLine + " but should be " + verifyScrollLine + " diff = " + (verifyScrollLine - scrollLine));
+			Log.log(Log.ERROR,this,ex);
+		}
+	}
 
 	//{{{ reset() method
 	@Override
@@ -103,84 +239,90 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 			Log.log(Log.DEBUG,this,"reset()");
 
-		int oldPhysicalLine = physicalLine;
-		physicalLine = 0;
-		scrollLine = 0;
+		int currentPhysicalLine = getPhysicalLine();
 
-		int i = displayManager.getFirstVisibleLine();
+		int physicalLine = getDisplayManager().getFirstVisibleLine();
+		int scrollLine = 0;
 
-		for(;;)
+		while(physicalLine != -1)
 		{
-			if(i >= oldPhysicalLine)
+			if(physicalLine >= currentPhysicalLine)
 				break;
 
-			scrollLine += displayManager.getScreenLineCount(i);
+			scrollLine += getDisplayManager().getScreenLineCount(physicalLine);
 
-			int nextLine = displayManager.getNextVisibleLine(i);
+			int nextLine = getDisplayManager().getNextVisibleLine(physicalLine);
 			if(nextLine == -1)
 				break;
 			else
-				i = nextLine;
+				physicalLine = nextLine;
 		}
 
-		physicalLine = i;
+		setPhysicalLine(physicalLine);
+		setScrollLine(scrollLine);
 
-		int screenLines = displayManager.getScreenLineCount(physicalLine);
-		if(skew >= screenLines)
-			skew = screenLines - 1;
+		int screenLines = getDisplayManager().getScreenLineCount(physicalLine);
+		if(getSkew() >= screenLines)
+			setSkew(screenLines - 1);
 
-		textArea.updateScrollBar();
+		getTextArea().updateScrollBar();
 	} //}}}
 
 	//{{{ physDown() method
 	// scroll down by physical line amount
 	void physDown(int amount, int screenAmount)
 	{
+		int currentPhysicalLine = getPhysicalLine();
+		int currentScrollLine = getScrollLine();
+
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physDown() start: "
-				+ physicalLine + ':' + scrollLine);
+				+ currentPhysicalLine + ':' + currentScrollLine);
 		}
 
-		skew = 0;
+		setSkew(0);
 
-		if(!displayManager.isLineVisible(physicalLine))
+		if(!getDisplayManager().isLineVisible(currentPhysicalLine))
 		{
-			int lastVisibleLine = displayManager.getLastVisibleLine();
-			if(physicalLine > lastVisibleLine)
-				physicalLine = lastVisibleLine;
+			int lastVisibleLine = getDisplayManager().getLastVisibleLine();
+			if(currentPhysicalLine > lastVisibleLine)
+				setPhysicalLine(lastVisibleLine);
 			else
 			{
-				int nextPhysicalLine = displayManager.getNextVisibleLine(physicalLine);
-				amount -= nextPhysicalLine - physicalLine;
-				scrollLine += displayManager.getScreenLineCount(physicalLine);
-				physicalLine = nextPhysicalLine;
+				int nextPhysicalLine = getDisplayManager().getNextVisibleLine(currentPhysicalLine);
+				assert nextPhysicalLine > 0;
+				amount -= nextPhysicalLine - currentPhysicalLine;
+				moveScrollLine(getDisplayManager().getScreenLineCount(currentPhysicalLine));
+				setPhysicalLine(nextPhysicalLine);
 			}
 		}
 
+		currentPhysicalLine = getPhysicalLine();
+		int scrollLines = 0;
 		for(;;)
 		{
-			int nextPhysicalLine = displayManager.getNextVisibleLine(
-				physicalLine);
+			int nextPhysicalLine = getDisplayManager().getNextVisibleLine(currentPhysicalLine);
+
 			if(nextPhysicalLine == -1)
 				break;
-			else if(nextPhysicalLine > physicalLine + amount)
+			else if(nextPhysicalLine > currentPhysicalLine + amount)
 				break;
 			else
 			{
-				scrollLine += displayManager.getScreenLineCount(physicalLine);
-				amount -= nextPhysicalLine - physicalLine;
-				physicalLine = nextPhysicalLine;
+				scrollLines += getDisplayManager().getScreenLineCount(currentPhysicalLine);
+				amount -= nextPhysicalLine - currentPhysicalLine;
+				currentPhysicalLine = nextPhysicalLine;
 			}
 		}
+		setPhysicalLine(currentPhysicalLine);
+		moveScrollLine(scrollLines);
 
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physDown() end: "
-				+ physicalLine + ':' + scrollLine);
+				+ getPhysicalLine() + ':' + getScrollLine());
 		}
-
-		callChanged = true;
 
 		// JEditTextArea.scrollTo() needs this to simplify
 		// its code
@@ -197,47 +339,48 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physUp() start: "
-				+ physicalLine + ':' + scrollLine);
+				+getPhysicalLine()+ ':' + getScrollLine());
 		}
 
-		skew = 0;
+		setSkew(0);
 
-		if(!displayManager.isLineVisible(physicalLine))
+		int currentPhysicalLine = getPhysicalLine();
+		if(!getDisplayManager().isLineVisible(currentPhysicalLine))
 		{
-			int firstVisibleLine = displayManager.getFirstVisibleLine();
-			if(physicalLine < firstVisibleLine)
-				physicalLine = firstVisibleLine;
+			int firstVisibleLine = getDisplayManager().getFirstVisibleLine();
+			if(currentPhysicalLine < firstVisibleLine)
+				setPhysicalLine(firstVisibleLine);
 			else
 			{
-				int prevPhysicalLine = displayManager.getPrevVisibleLine(physicalLine);
-				amount -= physicalLine - prevPhysicalLine;
+				int prevPhysicalLine = getDisplayManager().getPrevVisibleLine(currentPhysicalLine);
+				amount -= currentPhysicalLine - prevPhysicalLine;
 			}
 		}
 
+		currentPhysicalLine = getPhysicalLine();
+		int scrollLines = 0;
 		for(;;)
 		{
-			int prevPhysicalLine = displayManager.getPrevVisibleLine(
-				physicalLine);
+			int prevPhysicalLine = getDisplayManager().getPrevVisibleLine(currentPhysicalLine);
 			if(prevPhysicalLine == -1)
 				break;
-			else if(prevPhysicalLine < physicalLine - amount)
+			else if(prevPhysicalLine < currentPhysicalLine - amount)
 				break;
 			else
 			{
-				amount -= physicalLine - prevPhysicalLine;
-				physicalLine = prevPhysicalLine;
-				scrollLine -= displayManager.getScreenLineCount(
-					prevPhysicalLine);
+				scrollLines -= getDisplayManager().getScreenLineCount(prevPhysicalLine);
+				amount -= currentPhysicalLine - prevPhysicalLine;
+				currentPhysicalLine = prevPhysicalLine;
 			}
 		}
+		setPhysicalLine(currentPhysicalLine);
+		moveScrollLine(scrollLines);
 
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physUp() end: "
-				+ physicalLine + ':' + scrollLine);
+				+getPhysicalLine()+ ':' + getScrollLine());
 		}
-
-		callChanged = true;
 
 		// JEditTextArea.scrollTo() needs this to simplify
 		// its code
@@ -256,34 +399,36 @@ class FirstLine extends Anchor
 
 		ensurePhysicalLineIsVisible();
 
-		amount += skew;
+		amount += getSkew();
 
-		skew = 0;
+		setSkew(0);
 
+		int physicalLine = getPhysicalLine();
+		int screenLinesSum = 0;
 		while(amount > 0)
 		{
-			int screenLines = displayManager.getScreenLineCount(physicalLine);
+			int screenLines = getDisplayManager().getScreenLineCount(physicalLine);
 			if(amount < screenLines)
 			{
-				skew = amount;
+				setSkew(amount);
 				break;
 			}
 			else
 			{
-				int nextLine = displayManager.getNextVisibleLine(physicalLine);
+				int nextLine = getDisplayManager().getNextVisibleLine(physicalLine);
 				if(nextLine == -1)
 					break;
-				boolean visible = displayManager.isLineVisible(physicalLine);
+				boolean visible = getDisplayManager().isLineVisible(physicalLine);
 				physicalLine = nextLine;
 				if(visible)
 				{
 					amount -= screenLines;
-					scrollLine += screenLines;
+					screenLinesSum += screenLines;
 				}
 			}
 		}
-
-		callChanged = true;
+		setPhysicalLine(physicalLine);
+		moveScrollLine(screenLinesSum);
 	} //}}}
 
 	//{{{ scrollUp() method
@@ -295,62 +440,73 @@ class FirstLine extends Anchor
 
 		ensurePhysicalLineIsVisible();
 
-		if(amount <= skew)
+		if(amount <= getSkew())
 		{
 			// the amount is less than the skew, so we stay in the same like, just going
 			// upper
-			skew -= amount;
+			setSkew(getSkew() - amount);
 		}
 		else
 		{
 			// moving to the first screen line of the current physical line
-			amount -= skew;
-			skew = 0;
+			amount -= getSkew();
+			setSkew(0);
 
+			int physicalLine = getPhysicalLine();
+			int screenLinesSum = 0;
 			while(amount > 0)
 			{
-				int prevLine = displayManager.getPrevVisibleLine(physicalLine);
+				int prevLine = getDisplayManager().getPrevVisibleLine(physicalLine);
 				if(prevLine == -1)
 					break;
 				// moving to the previous visible physical line
 				physicalLine = prevLine;
 
-				int screenLines = displayManager.getScreenLineCount(physicalLine);
-				scrollLine -= screenLines;
+				int screenLines = getDisplayManager().getScreenLineCount(physicalLine);
+				screenLinesSum -= screenLines;
+
 				if(amount < screenLines)
 				{
-					skew = screenLines - amount;
+					setSkew(screenLines - amount);
 					break;
 				}
 				else
+				{
 					amount -= screenLines;
+				}
 			}
+			setPhysicalLine(physicalLine);
+			moveScrollLine(screenLinesSum);
 		}
 
 		if(Debug.SCROLL_DEBUG)
 			Log.log(Log.DEBUG,this,"scrollUp() after:" + this);
-		callChanged = true;
 	} //}}}
 
 	//{{{ ensurePhysicalLineIsVisible() method
 	void ensurePhysicalLineIsVisible()
 	{
-		if(!displayManager.isLineVisible(physicalLine))
+		int physicalLine = getPhysicalLine();
+		if(!getDisplayManager().isLineVisible(physicalLine))
 		{
-			if(physicalLine > displayManager.getLastVisibleLine())
+			if(physicalLine > getDisplayManager().getLastVisibleLine())
 			{
-				physicalLine = displayManager.getLastVisibleLine();
-				scrollLine = displayManager.getScrollLineCount() - 1;
+				setPhysicalLine(getDisplayManager().getLastVisibleLine());
+				setScrollLine(getDisplayManager().getScrollLineCount() - 1);
 			}
-			else if(physicalLine < displayManager.getFirstVisibleLine())
+			else if(physicalLine < getDisplayManager().getFirstVisibleLine())
 			{
-				physicalLine = displayManager.getFirstVisibleLine();
-				scrollLine = 0;
+				setPhysicalLine(getDisplayManager().getFirstVisibleLine());
+				setScrollLine(0);
 			}
 			else
 			{
-				physicalLine = displayManager.getNextVisibleLine(physicalLine);
-				scrollLine += displayManager.getScreenLineCount(physicalLine);
+				int nextLine = getDisplayManager().getNextVisibleLine(physicalLine);
+				assert nextLine > 0;
+				int screenLineCount = 0;
+				screenLineCount = getDisplayManager().getScreenLineCount(nextLine);
+				setPhysicalLine(nextLine);
+				moveScrollLine(screenLineCount);
 			}
 		}
 	} //}}}
@@ -359,6 +515,21 @@ class FirstLine extends Anchor
 	@Override
 	public String toString()
 	{
-		return "FirstLine["+physicalLine+','+scrollLine+','+skew+']';
+		return "FirstLine["+ getPhysicalLine() + ',' + getScrollLine() + ',' + getSkew() + ']';
 	} //}}}
+
+	int getSkew()
+	{
+		return skew;
+	}
+
+	void setSkew(int skew)
+	{
+		if(this.skew != skew)
+		{
+			this.skew = skew;
+			//FIXME: Necessary?
+			setCallChanged(true);
+		}
+	}
 }

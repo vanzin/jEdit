@@ -387,6 +387,7 @@ public abstract class TextArea extends JComponent
 		{
 			bufferChanging = true;
 
+			boolean inCompoundEdit = false;
 			if(this.buffer != null)
 			{
 				// dubious?
@@ -396,13 +397,17 @@ public abstract class TextArea extends JComponent
 					selectNone();
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
-			}
-			boolean inCompoundEdit = false;
-			if (this.buffer != null)
+
+				// is the current buffer performing a compoundEdit?
 				inCompoundEdit = this.buffer.insideCompoundEdit();
-			if (inCompoundEdit)
-				this.buffer.endCompoundEdit();
+				if (inCompoundEdit)
+					this.buffer.endCompoundEdit();
+			}
+
+			// set new buffer
 			this.buffer = buffer;
+			// old buffer did perform a compoundEdit,
+			// so open a compoundEdit for new buffer
 			if (inCompoundEdit)
 				this.buffer.beginCompoundEdit();
 
@@ -511,8 +516,7 @@ public abstract class TextArea extends JComponent
 	 */
 	public final int getFirstLine()
 	{
-		return displayManager.firstLine.scrollLine
-			+ displayManager.firstLine.skew;
+		return displayManager.firstLine.getScrollLine() + displayManager.firstLine.getSkew();
 	} //}}}
 
 	//{{{ setFirstLine() method
@@ -532,13 +536,13 @@ public abstract class TextArea extends JComponent
 			firstLine = 0;
 		//}}}
 
+		int oldFirstLine = getFirstLine();
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"setFirstLine() from "
-				+ getFirstLine() + " to " + firstLine);
+				+ oldFirstLine + " to " + firstLine);
 		}
 
-		int oldFirstLine = getFirstLine();
 		if(firstLine == oldFirstLine)
 			return;
 
@@ -556,7 +560,7 @@ public abstract class TextArea extends JComponent
 	 */
 	public final int getFirstPhysicalLine()
 	{
-		return displayManager.firstLine.physicalLine;
+		return displayManager.firstLine.getPhysicalLine();
 	} //}}}
 
 	//{{{ setFirstPhysicalLine() methods
@@ -584,7 +588,7 @@ public abstract class TextArea extends JComponent
 				+ physFirstLine + ',' + skew + ')');
 		}
 
-		int amount = physFirstLine - displayManager.firstLine.physicalLine;
+		int amount = physFirstLine - displayManager.firstLine.getPhysicalLine();
 
 		displayManager.setFirstPhysicalLine(amount,skew);
 
@@ -822,8 +826,7 @@ public abstract class TextArea extends JComponent
 					Log.log(Log.DEBUG,this,"neither");
 					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());
 				}
-				setFirstPhysicalLine(line,subregion
-					- (visibleLines >> 1));
+				setFirstPhysicalLine(line,subregion - (visibleLines >> 1));
 				if(Debug.SCROLL_TO_DEBUG)
 				{
 					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());

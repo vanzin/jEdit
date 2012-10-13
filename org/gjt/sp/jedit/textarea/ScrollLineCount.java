@@ -30,6 +30,7 @@ import org.gjt.sp.util.Log;
  */
 class ScrollLineCount extends Anchor
 {
+
 	//{{{ ScrollLineCount constructor
 	ScrollLineCount(DisplayManager displayManager,
 		TextArea textArea)
@@ -47,17 +48,92 @@ class ScrollLineCount extends Anchor
 		if(Debug.SCROLL_DEBUG)
 			Log.log(Log.DEBUG,this,"reset()");
 
-		physicalLine = displayManager.getFirstVisibleLine();
 		int scrollLine = 0;
+		int physicalLine = getDisplayManager().getFirstVisibleLine();
+
 		while(physicalLine != -1)
 		{
-			scrollLine += displayManager
-				.getScreenLineCount(physicalLine);
-			physicalLine = displayManager
-				.getNextVisibleLine(physicalLine);
+			scrollLine += getDisplayManager().getScreenLineCount(physicalLine);
+			physicalLine = getDisplayManager().getNextVisibleLine(physicalLine);
 		}
 
-		this.scrollLine = scrollLine;
-		physicalLine = displayManager.getBuffer().getLineCount();
+		setPhysicalLine(getDisplayManager().getBuffer().getLineCount());
+		setScrollLine(scrollLine);
 	} //}}}
+
+	@Override
+	void preContentInserted(int startLine, int numLines)
+	{
+		preContentInsertedScrollLines = 0;
+		int physicalLine = startLine;
+		
+		if(!getDisplayManager().isLineVisible(physicalLine))
+			physicalLine = getDisplayManager().getNextVisibleLine(physicalLine);
+
+		preContentInsertedScrollLines = getDisplayManager().getScreenLineCount(physicalLine);
+	}
+
+	@Override
+	void contentInserted(int startLine, int numLines)
+	{
+		int scrollLines = 0;
+		int physicalLine = startLine;
+
+		for(int i = 0, n = numLines; i < n; i++, physicalLine++)
+		{
+			if(getDisplayManager().isLineVisible(physicalLine))
+				scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+		}
+		// process next visible line
+		if(!getDisplayManager().isLineVisible(physicalLine))
+			physicalLine = getDisplayManager().getNextVisibleLine(physicalLine);
+		if(physicalLine >= 0)
+			scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+
+		scrollLines -= preContentInsertedScrollLines;
+
+		movePhysicalLine(numLines);
+		moveScrollLine(scrollLines);
+	}
+
+	@Override
+	void preContentRemoved(int startLine, int offset, int numLines)
+	{
+		int scrollLines = 0;
+		int physicalLine = startLine;
+		int numLinesVisible = 0;
+		
+		for(int i = 0, n = numLines; i < n; i++, physicalLine++)
+		{
+			if(getDisplayManager().isLineVisible(physicalLine))
+			{
+				scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+				numLinesVisible++;
+			}
+		}
+		// process next visible line
+		if(!getDisplayManager().isLineVisible(physicalLine))
+			physicalLine = getDisplayManager().getNextVisibleLine(physicalLine);
+		if(physicalLine >= 0)
+		{
+			scrollLines += getDisplayManager().getScreenLineCount(physicalLine);
+			numLinesVisible++;
+		}
+
+		preContentRemovedScrollLines = scrollLines;
+	}
+
+	@Override
+	void contentRemoved(int startLine, int startOffset, int numLines)
+	{
+		int scrollLines = 0; 
+		int physicalLine = startLine;
+		if(!getDisplayManager().isLineVisible(physicalLine))
+			physicalLine = getDisplayManager().getNextVisibleLine(physicalLine);
+		scrollLines = getDisplayManager().getScreenLineCount(physicalLine);
+
+		scrollLines -= preContentRemovedScrollLines;
+		movePhysicalLine(-numLines);
+		moveScrollLine(scrollLines);
+	}
 }

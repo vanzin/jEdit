@@ -108,11 +108,8 @@ class BufferHandler implements BufferListener
 
 		if(textArea.getDisplayManager() == displayManager)
 		{
-			if(numLines != 0)
-			{
-				firstLine.contentInserted(startLine,numLines);
-				scrollLineCount.contentInserted(startLine,numLines);
-			}
+			firstLine.contentInserted(startLine,numLines);
+			scrollLineCount.contentInserted(startLine,numLines);
 
 			if(delayedUpdateEnd >= startLine)
 				delayedUpdateEnd += numLines;
@@ -152,8 +149,8 @@ class BufferHandler implements BufferListener
 		}
 		else
 		{
-			firstLine.callReset = true;
-			scrollLineCount.callReset = true;
+			firstLine.setCallReset(true);
+			scrollLineCount.setCallReset(true);
 		}
 	} //}}}
 
@@ -169,9 +166,14 @@ class BufferHandler implements BufferListener
 	 */
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
+		if(buffer.isLoading())
+			return;
+
 		if(textArea.getDisplayManager() == displayManager)
 		{
 			getReadyToBreakFold(startLine);
+			displayManager.firstLine.preContentInserted(startLine, numLines);
+			displayManager.scrollLineCount.preContentInserted(startLine, numLines);
 		}
 	} //}}}
 
@@ -204,7 +206,7 @@ class BufferHandler implements BufferListener
 			else
 			{
 				int lastLine = startLine + numLines;
-				if(!displayManager.isLineVisible(startLine)
+				if( !displayManager.isLineVisible(startLine)
 				 || !displayManager.isLineVisible(lastLine)
 			 	 || offset != buffer.getLineStartOffset(startLine)
 				 || offset + length != buffer.getLineStartOffset(lastLine))
@@ -215,16 +217,13 @@ class BufferHandler implements BufferListener
 				else
 				{
 					// The removal will not touch
-					// inside of folds and wll not
+					// inside of folds and will not
 					// modify any remaining lines.
 				}
 			}
 
-			if(numLines != 0)
-			{
-				firstLine.preContentRemoved(startLine,offset, numLines);
-				scrollLineCount.preContentRemoved(startLine, offset, numLines);
-			}
+			firstLine.preContentRemoved(startLine,offset, numLines);
+			scrollLineCount.preContentRemoved(startLine, offset, numLines);
 
 			if(delayedUpdateEnd >= startLine)
 				delayedUpdateEnd -= numLines;
@@ -232,8 +231,8 @@ class BufferHandler implements BufferListener
 		}
 		else
 		{
-			firstLine.callReset = true;
-			scrollLineCount.callReset = true;
+			firstLine.setCallReset(true);
+			scrollLineCount.setCallReset(true);
 		}
 
 		displayManager.screenLineMgr.contentRemoved(startLine,numLines);
@@ -246,29 +245,16 @@ class BufferHandler implements BufferListener
 		if(displayManager.folds.preContentRemoved(startLine,numLines))
 		{
 			displayManager.folds.reset(buffer.getLineCount());
-			firstLine.callReset = true;
-			scrollLineCount.callReset = true;
+			firstLine.setCallReset(true);
+			scrollLineCount.setCallReset(true);
 		}
 
-		if(firstLine.physicalLine
-			> displayManager.getLastVisibleLine()
-			|| firstLine.physicalLine
-			< displayManager.getFirstVisibleLine())
+		if(firstLine.getPhysicalLine() > displayManager.getLastVisibleLine() ||
+		   firstLine.getPhysicalLine() < displayManager.getFirstVisibleLine() )
 		{
 			// will be handled later.
 			// see comments at the end of
 			// transactionComplete().
-		}
-		// very subtle... if we leave this for
-		// ensurePhysicalLineIsVisible(), an
-		// extra line will be added to the
-		// scroll line count.
-		else if(!displayManager.isLineVisible(
-			firstLine.physicalLine))
-		{
-			firstLine.physicalLine =
-				displayManager.getNextVisibleLine(
-				firstLine.physicalLine);
 		}
 	} //}}}
 
@@ -279,8 +265,14 @@ class BufferHandler implements BufferListener
 		if(buffer.isLoading())
 			return;
 
+		FirstLine firstLine = displayManager.firstLine;
+		ScrollLineCount scrollLineCount = displayManager.scrollLineCount;
+
 		if(textArea.getDisplayManager() == displayManager)
 		{
+			firstLine.contentRemoved(startLine,start,numLines);
+			scrollLineCount.contentRemoved(startLine,start,numLines);
+
 			//{{{ resize selections if necessary
 			int nSel = textArea.getSelectionCount();
 			Iterator<Selection> iter = textArea.getSelectionIterator();
@@ -369,19 +361,7 @@ class BufferHandler implements BufferListener
 	//{{{ doDelayedUpdate() method
 	private void doDelayedUpdate()
 	{
-		// must update screen line counts before we call
-		// notifyScreenLineChanges() since that calls
-		// updateScrollBar() which needs valid info
-		int line = delayedUpdateStart;
-		if(!displayManager.isLineVisible(line))
-			line = displayManager.getNextVisibleLine(line);
-		while(line != -1 && line <= delayedUpdateEnd)
-		{
-			displayManager.updateScreenLineCount(line);
-			line = displayManager.getNextVisibleLine(line);
-		}
-
-		// must be before the below call
+		// must be done before the below call
 		// so that the chunk cache is not
 		// updated with an invisible first
 		// line (see above)

@@ -22,9 +22,6 @@
 
 package org.gjt.sp.jedit.textarea;
 
-import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.util.Log;
-
 /**
  * A base point for physical line/screen line conversion.
  * @author Slava Pestov
@@ -32,25 +29,46 @@ import org.gjt.sp.util.Log;
  */
 abstract class Anchor
 {
-	protected final DisplayManager displayManager;
-	protected final TextArea textArea;
-	/** The physical line. */
-	int physicalLine;
+	private final DisplayManager displayManager;
+	private final TextArea textArea;
+
 	/**
-	 * The visible line index. (from the top of the buffer). It can be different from physical line
-	 * when using soft wrap.
+	 * Class ScrollLineCount:
+	 * The total number of physical lines in this buffer
+	 * (visible and invisible lines)
+	 *
+	 * Class FirstLine:
+	 * The physical line number of this Anchor in the Buffer.
+	 * The first visible physical line index
+	 * (only visible lines are processed).
 	 */
-	int scrollLine;
+	private int physicalLine;
+
+	/**
+	 * Class ScrollLineCount:
+	 * The number of visible lines (from the top of the buffer).
+	 * It can be different from physical line when using soft wrap.
+	 * or when using folding, if the foldings are collapsed
+	 *
+	 * Class FirstLine:
+	 * Physical line number of the scroll line
+	 * (only visible lines are processed)
+	 */
+	private int scrollLine;
+
 	/** 
 	 * If this is set to true, the changed() method will be called in
 	 * {@link DisplayManager#notifyScreenLineChanges()}
 	 */
-	boolean callChanged;
+	private boolean callChanged;
 	/** 
 	 * If this is set to true, the reset() method will be called in
 	 * {@link DisplayManager#notifyScreenLineChanges()}
 	 */
-	boolean callReset;
+	private boolean callReset;
+
+	int preContentInsertedScrollLines;
+	int preContentRemovedScrollLines;
 
 	//{{{ Anchor constructor
 	protected Anchor(DisplayManager displayManager,
@@ -68,27 +86,42 @@ abstract class Anchor
 	@Override
 	public String toString()
 	{
-		return getClass().getName() + '[' + physicalLine + ','
-		       + scrollLine + ']';
+		return getClass().getName() + '[' + getPhysicalLine() + ',' + getScrollLine() + ']';
 	} //}}}
+
+	void movePhysicalLine(int numLines)
+	{
+		if(numLines == 0)
+			return;
+		setPhysicalLine(getPhysicalLine() + numLines);
+	}
+
+	void moveScrollLine(int numLines)
+	{
+		if(numLines == 0)
+			return;
+		setScrollLine(getScrollLine() + numLines);
+	}
+
+	//{{{ preContentInserted() method
+	/**
+	 * Some content is inserted.
+	 *
+	 * @param startLine the start of the insert
+	 * @param numLines the number of inserted lines
+	 */
+	abstract void preContentInserted(int startLine, int numLines);
+	//}}}
 
 	//{{{ contentInserted() method
 	/**
 	 * Some content is inserted.
 	 *
 	 * @param startLine the start of the insert
-	 * @param numLines the number of insterted lines
+	 * @param numLines the number of inserted lines
 	 */
-	void contentInserted(int startLine, int numLines)
-	{
-		// The Anchor is changed only if the content was inserted before
-		if(physicalLine >= startLine)
-		{
-			if(physicalLine != startLine)
-				physicalLine += numLines;
-			callChanged = true;
-		}
-	} //}}}
+	abstract void contentInserted(int startLine, int numLines);
+	//}}}
 
 	//{{{ preContentRemoved() method
 	/**
@@ -98,58 +131,83 @@ abstract class Anchor
 	 * @param offset the offset in the start line
 	 * @param numLines the number of removed lines
 	 */
-	void preContentRemoved(int startLine, int offset, int numLines)
+
+	abstract void preContentRemoved(int startLine, int offset, int numLines);
+	//}}}
+
+	//{{{ preContentRemoved() method
+	/**
+	 * Method called before a content is removed from a buffer.
+	 *
+	 * @param startLine the first line of the removed content
+	 * @param offset the offset in the start line
+	 * @param numLines the number of removed lines
+	 */
+	abstract void contentRemoved(int startLine, int offset, int numLines);
+	//}}}
+
+	int getPhysicalLine()
 	{
-		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"preContentRemoved() before:" + this);
-		// The removed content starts before the Anchor, we need to pull the anchor up
-		if(physicalLine >= startLine)
+		return physicalLine;
+	}
+
+	void setPhysicalLine(int physicalLine)
+	{
+		assert physicalLine >= 0;
+		if(this.physicalLine != physicalLine)
 		{
-			if(physicalLine == startLine)
-				callChanged = true;
-			else
-			{
-				int end = Math.min(startLine + numLines, physicalLine);
-				//Check the lines from the beginning of the removed content to the end (or the physical
-				//line of the Anchor if it is before the end of the removed content
-
-				//int loopStart = startLine + 1;
-
-				//{{{ treatment if the beginning of the deleted content is inside a physical line that has several line counts
-				/*if (displayManager.isLineVisible(startLine))
-				{
-					int screenLineCount = displayManager.screenLineMgr.getScreenLineCount(startLine);
-					if (screenLineCount > 1)
-					{
-						int lineStartOffset = textArea.getLineStartOffset(startLine);
-
-						int startScreenLine = textArea.getScreenLineOfOffset(lineStartOffset);
-						int deleteStartScreenLine = textArea.getScreenLineOfOffset(offset);
-						if (startScreenLine != deleteStartScreenLine)
-						{
-							loopStart = startLine + 2;
-							scrollLine -= screenLineCount - deleteStartScreenLine + startScreenLine;
-						}
-					}
-				}*/
-				//}}}
-
-				for(int i = startLine + 1; i <= end; i++)
-				{
-					//XXX
-					if(displayManager.isLineVisible(i))
-					{
-						scrollLine -=
-							displayManager
-								.screenLineMgr
-								.getScreenLineCount(i);
-					}
-				}
-				physicalLine -= end - startLine;
-				callChanged = true;
-			}
+			setCallChanged(true);
+			this.physicalLine = physicalLine;
 		}
-		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"preContentRemoved() after:" + this);
-	} //}}}
+	}
+
+	int getScrollLine()
+	{
+		return scrollLine;
+	}
+
+	void setScrollLine(int scrollLine)
+	{
+		assert scrollLine >= 0;
+		if(this.scrollLine != scrollLine)
+		{
+			setCallChanged(true);
+			this.scrollLine = scrollLine;
+		}
+	}
+
+	boolean isCallChanged()
+	{
+		return callChanged;
+	}
+
+	void setCallChanged(boolean callChanged)
+	{
+		this.callChanged = callChanged;
+	}
+
+	boolean isCallReset() {
+		return callReset;
+	}
+
+	void setCallReset(boolean callReset)
+	{
+		this.callReset = callReset;
+	}
+
+	DisplayManager getDisplayManager()
+	{
+		return displayManager;
+	}
+
+	TextArea getTextArea()
+	{
+		return textArea;
+	}
+
+	void resetCallState()
+	{
+		callChanged = false;
+		callReset = false;
+	}
 }
