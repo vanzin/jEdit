@@ -11,6 +11,8 @@ for contributing to this release.
 
 {{{ Bug fixes
 
+- incomplete api documentation of VFSBrowser constants (#3562060 Alan Ezust)
+
 - Fixed whole word search (#3551515 Matthieu Casanova)
 
 - Added missing localization string:
