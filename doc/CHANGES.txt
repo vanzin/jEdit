@@ -12,8 +12,8 @@ for contributing to this release.
 {{{ Bug fixes
 
 - Fixed a number of scrollbar bugs related to undo, multiline cut,
-  soft-wrap, and folding. 
-  (Patch#3567959, Bugs 2832769, 2998294, and 3193168 - Thomas Meyer)
+  soft-wrap, and folding. (Patch#3567959, Bugs #2832769, #2998294,
+  and #3193168 - Thomas Meyer) [merged into 5.0.x]
 
 - Fixed whole word search (#3551515 Matthieu Casanova)
 
