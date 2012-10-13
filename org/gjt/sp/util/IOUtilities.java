@@ -108,7 +108,7 @@ public class IOUtilities
 				progress.setStatus(StandardUtilities.formatFileSize(copied));
 				progress.setValue(copied);
 			}
-			if(canStop && Thread.interrupted()) 
+			if(canStop && Thread.interrupted())
 				return false;
 		}
 		return true;
@@ -158,9 +158,12 @@ public class IOUtilities
 	//{{{ closeQuietly() methods
 	/**
 	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.
-	 *
+	 * @deprecated we want to remove this method without breaking compatibility
+	 * with your plugin. Closeable works for this type as of Java5.
+	 * @see #closeQuietly(Closeable)
 	 * @param in the InputStream to close.
 	 */
+	@Deprecated
 	public static void closeQuietly(InputStream in)
 	{
 		if(in != null)
@@ -178,9 +181,12 @@ public class IOUtilities
 
 	/**
 	 * Method that will close an {@link OutputStream} ignoring it if it is null and ignoring exceptions.
-	 *
+	 * @deprecated we want to remove this method without breaking compatibility
+	 * with your plugin. Closeable works for this type as of Java5.
+	 * @see #closeQuietly(Closeable)
 	 * @param out the OutputStream to close.
 	 */
+	@Deprecated
 	public static void closeQuietly(OutputStream out)
 	{
 		if(out != null)
@@ -206,10 +212,13 @@ public class IOUtilities
 
 	/**
 	 * Method that will close an {@link Reader} ignoring it if it is null and ignoring exceptions.
-	 *
+	 * @deprecated we want to remove this method without breaking compatibility
+	 * with your plugin. Closeable works for this type as of Java5.
+	 * @see #closeQuietly(Closeable)
 	 * @param r the Reader to close.
 	 * @since jEdit 4.3pre5
 	 */
+	@Deprecated
 	public static void closeQuietly(Reader r)
 	{
 		if(r != null)
@@ -227,9 +236,12 @@ public class IOUtilities
 
 	/**
 	 * Method that will close a {@link Writer} ignoring it if it is null and ignoring exceptions.
-	 *
+	 * @deprecated we want to remove this method without breaking compatibility
+	 * with your plugin. Closeable works for this type as of Java5.
+	 * @see #closeQuietly(Closeable)
 	 * @param out the Writer to close.
 	 */
+	@Deprecated
 	public static void closeQuietly(Writer out)
 	{
 		if(out != null)
@@ -254,7 +266,7 @@ public class IOUtilities
 	}
 
 	/**
-	 * Method that will close an {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
+	 * Method that will close a {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
 	 *
 	 * @param closeable the closeable to close.
 	 * @since jEdit 4.3pre8
@@ -285,6 +297,7 @@ public class IOUtilities
 		}
 	}
 
+
 	/**
 	 * Method that will close an {@link ObjectInput} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -302,13 +315,13 @@ public class IOUtilities
 			catch (IOException e)
 			{
 				// ignore
-			}
+		}
 		}
 	}
 
+
 	/**
 	 * Method that will close an {@link ObjectOutput} ignoring it if it is null and ignoring exceptions.
-	 *
 	 * @param out the closeable to close.
 	 * @since jEdit 5.1pre1
 	 */

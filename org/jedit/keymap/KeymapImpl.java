@@ -24,6 +24,7 @@ package org.jedit.keymap;
 //{{{ Imports
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -78,7 +79,7 @@ class KeymapImpl implements Keymap
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 		}
 	} //}}}
 
@@ -157,7 +158,7 @@ class KeymapImpl implements Keymap
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(out);
+				IOUtilities.closeQuietly((Closeable)out);
 			}
 		}
 

@@ -57,7 +57,7 @@ public class BufferLoadRequest extends BufferIORequest
 	{
 		super(view,buffer,session,vfs,path);
 	} //}}}
-	
+
 	//{{{ run() method
 	public void _run()
 	{
@@ -202,7 +202,7 @@ public class BufferLoadRequest extends BufferIORequest
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(in);
+				IOUtilities.closeQuietly((Closeable)in);
 			}
 		}
 	} //}}}
@@ -215,7 +215,7 @@ public class BufferLoadRequest extends BufferIORequest
 	 *   - The encoding
 	 * If fallback encodings are specified, they are used on
 	 * encoding errors.
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	private void readContents() throws IOException, InterruptedException
 	{
@@ -373,7 +373,7 @@ public class BufferLoadRequest extends BufferIORequest
 				// malformed marks file?
 				if(line.length() == 0)
 					continue;
-				
+
 				// compatibility kludge for jEdit 3.1 and earlier
 				if(line.charAt(0) != '!')
 					continue;

@@ -240,7 +240,7 @@ class Roster
 		private void unloadPluginJAR(PluginJAR jar)
 		{
 			String[] dependents = jar.getDependentPlugins();
-			for (String path: dependents) 
+			for (String path: dependents)
 			{
 				PluginJAR _jar = jEdit.getPluginJAR(path);
 				if(_jar != null)
@@ -337,7 +337,7 @@ class Roster
 								throw new ZipException("Entry "
 									+ entry.getName() + " from archive "
 									+ zipFile.getName()
-									+ " could not be processed."); 
+									+ " could not be processed.");
 							out = new FileOutputStream(file);
 							IOUtilities.copyStream(4096,
 								null,
@@ -346,8 +346,8 @@ class Roster
 						}
 						finally
 						{
-							IOUtilities.closeQuietly(in);
-							IOUtilities.closeQuietly(out);
+							IOUtilities.closeQuietly((Closeable)in);
+							IOUtilities.closeQuietly((Closeable)out);
 						}
 						if(file.getName().toLowerCase().endsWith(".jar"))
 							toLoad.add(file.getPath());
@@ -415,7 +415,7 @@ class Roster
 				String host = jEdit.getProperty("plugin-manager.mirror.id");
 				if (host == null || host.equals(MirrorList.Mirror.NONE))
 					host = "default";
-				
+
 				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
 				URLConnection conn = new URL(url).openConnection();
 				progress.setStatus(jEdit.getProperty("plugin-manager.progress",new String[] {fileName, host}));
@@ -430,10 +430,10 @@ class Roster
 				}
 				finally
 				{
-					IOUtilities.closeQuietly(in);
-					IOUtilities.closeQuietly(out);
+					IOUtilities.closeQuietly((Closeable)in);
+					IOUtilities.closeQuietly((Closeable)out);
 				}
-				
+
 				return path;
 			}
 			catch(InterruptedIOException iio)

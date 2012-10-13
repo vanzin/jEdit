@@ -98,7 +98,7 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 		}
 		return models;
 	} //}}}
@@ -166,7 +166,7 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 
 		historyModTime = file2.lastModified();

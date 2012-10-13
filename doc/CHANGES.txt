@@ -75,6 +75,9 @@ for contributing to this release.
 }}}
 {{{ API Changes
 
+- Deprecated extra overloads of IOUtilities.closeQuietly() in favor of
+  using Java5 closeQuietly(Closeable) instead. (Alan Ezust)
+
 - New class: OneTimeMigrationStep, for adding property migration services
   (used by fix for #1871440 Alan Ezust)
 

@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.io;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
+import java.io.Closeable;
 import java.util.*;
 
 import java.util.regex.Pattern;
@@ -442,7 +443,7 @@ public abstract class VFS
 	{
 		return new Object();
 	}
-	
+
 	/**
 	* Same as {@link #createVFSSession}, but may be called fromy any
 	* thread. It first checks the <code>NON_AWT_SESSION_CAP</code>
@@ -643,8 +644,8 @@ public abstract class VFS
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)in);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	}
 
@@ -946,7 +947,7 @@ public abstract class VFS
 	/**
 	 * Backs up the specified file. Default implementation in 5.0pre1
 	 * copies the file to the backup directory. Before 5.0pre1 it was
-	 * empty. 
+	 * empty.
 	 * @param session The VFS session
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
@@ -971,9 +972,9 @@ public abstract class VFS
 			sbForeignCharsEsc.append("\\");
 			sbForeignCharsEsc.append(sForeignChars.charAt(i));
 		}
-		
+
 		String pathNorm = path.replaceAll("[" + sbForeignCharsEsc + "]", "_");
-		
+
 		// maybe the file is not applicable to local filesystem
 		// but don't worry - for backup purposes it may be out
 		// of a real filesystem
@@ -983,18 +984,18 @@ public abstract class VFS
 		{
 			// Usually that means there is no specified backup
 			// directory.
-			Log.log(Log.WARNING, VFS.class, "Backup of file " + 
+			Log.log(Log.WARNING, VFS.class, "Backup of file " +
 				path + " failed. Directory " + backupDir +
 				" does not exist.");
 			return;
 		}
-		
+
 		File backupFile = MiscUtilities.prepareBackupFile(file, backupDir);
 		if (backupFile == null)
 		{
 			return;
 		}
-		
+
 		// do copy using VFS.copy
 		VFS vfsDst = VFSManager.getVFSForPath(backupFile.getPath());
 		Object sessionDst = vfsDst.createVFSSessionSafe(
@@ -1009,7 +1010,7 @@ public abstract class VFS
 				vfsDst, sessionDst, backupFile.getPath(),
 				comp, true))
 			{
-				Log.log(Log.WARNING, VFS.class, "Backup of file " + 
+				Log.log(Log.WARNING, VFS.class, "Backup of file " +
 					path + " failed. Copy to " + backupFile +
 					" failed.");
 			}
@@ -1018,7 +1019,7 @@ public abstract class VFS
 		{
 			vfsDst._endVFSSession(sessionDst, comp);
 		}
-		
+
 	} //}}}
 
 	//{{{ _createInputStream() method
@@ -1328,12 +1329,12 @@ public abstract class VFS
 		private Object session;
 		private String path;
 		private Component comp;
-		
+
 		public void run()
 		{
 			session = createVFSSession(path, comp);
 		}
-		
+
 		public Object get() { return session; }
 	} //}}}
 

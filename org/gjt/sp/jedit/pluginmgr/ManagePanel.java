@@ -294,7 +294,7 @@ public class ManagePanel extends JPanel
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
 		/** Partially loaded, and marked as "error" due to unsatisfied depends. */
-		static final String ERROR = "error";	
+		static final String ERROR = "error";
 		/** Not loaded, marked Unsupported in plugin manager. */
 		static final String DISABLED = "disabled";
 
@@ -326,8 +326,8 @@ public class ManagePanel extends JPanel
 			jars = new LinkedList<String>();
 			this.jar = jar;
 			jars.add(this.jar);
-			if (jEdit.getBooleanProperty("plugin." + MiscUtilities.getFileName(jar) + ".disabled")) 
-				status = DISABLED;		
+			if (jEdit.getBooleanProperty("plugin." + MiscUtilities.getFileName(jar) + ".disabled"))
+				status = DISABLED;
 			else status = NOT_LOADED;
 		}
 
@@ -846,7 +846,7 @@ public class ManagePanel extends JPanel
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(writer);
+				IOUtilities.closeQuietly((Closeable)writer);
 			}
 
 		}

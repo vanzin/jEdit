@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import java.awt.Color;
 import java.io.*;
+import java.io.Closeable;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
@@ -125,7 +127,7 @@ public class VFSFile implements Serializable
 				VFSManager.error(e,path,browser);
 			}
 		}
-		
+
 		return null;
 	} //}}}
 
@@ -144,7 +146,7 @@ public class VFSFile implements Serializable
 	/**
 	 * Returns the icon for the file.
 	 * Implementations of File system browsers can override this method
-	 *  
+	 *
 	 * @since jEdit 4.3pre9
 	 */
 	public Icon getIcon(boolean expanded, boolean openBuffer)
@@ -236,7 +238,7 @@ public class VFSFile implements Serializable
 	{
 		return VFSManager.getVFSForPath(path);
 	} //}}}
-	
+
 	//{{{ getName() method
 	public String getName()
 	{
@@ -272,7 +274,7 @@ public class VFSFile implements Serializable
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 		}
 	} //}}}
 
@@ -450,7 +452,7 @@ public class VFSFile implements Serializable
 	{
 		return name;
 	} //}}}
-	
+
 	//{{{ fetchedAttrs() method
 	/**
 	 * Returns true if the attributes are already fetched.
@@ -462,7 +464,7 @@ public class VFSFile implements Serializable
 	{
 		return fetchedAttrs;
 	} //}}}
-	
+
 	//{{{ fetchAttrs() method
 	/**
 	 * Fetch some attributes of the file.

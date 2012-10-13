@@ -25,6 +25,7 @@
 package org.gjt.sp.util;
 
 //{{{ Imports
+import java.io.Closeable;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -152,7 +153,7 @@ public class XMLUtilities
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 		}
 		return false;
 	} //}}}

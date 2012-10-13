@@ -97,7 +97,7 @@ public class MarkersSaveRequest extends Task
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	} //}}}
 

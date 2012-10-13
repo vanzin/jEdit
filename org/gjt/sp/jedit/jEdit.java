@@ -22,6 +22,8 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.io.Closeable;
+
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
 import org.gjt.sp.util.StringList;
@@ -1417,7 +1419,7 @@ public class jEdit
 				}
 				finally
 				{
-					IOUtilities.closeQuietly(out);
+					IOUtilities.closeQuietly((Closeable)out);
 				}
 			}
 
@@ -2811,7 +2813,7 @@ public class jEdit
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(out);
+				IOUtilities.closeQuietly((Closeable)out);
 			}
 			file2.delete();
 			if (! file1.renameTo(file2))
@@ -3694,7 +3696,7 @@ public class jEdit
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(langResource);
+			IOUtilities.closeQuietly((Closeable)langResource);
 		}
 	} //}}}
 

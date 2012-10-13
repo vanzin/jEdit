@@ -21,6 +21,7 @@
  */
 package org.gjt.sp.jedit;
 
+import java.io.Closeable;
 import java.io.File;
 import java.util.List;
 import java.util.LinkedList;
@@ -151,7 +152,7 @@ class JEditKillRing extends KillRing
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	} //}}}
 

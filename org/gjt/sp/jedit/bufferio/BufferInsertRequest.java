@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+import java.io.Closeable;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -104,7 +106,7 @@ public class BufferInsertRequest extends BufferIORequest
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 			try
 			{
 				vfs._endVFSSession(session,view);

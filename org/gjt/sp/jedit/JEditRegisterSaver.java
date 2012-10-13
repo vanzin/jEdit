@@ -20,6 +20,8 @@
  */
 package org.gjt.sp.jedit;
 
+import java.io.Closeable;
+
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
@@ -137,7 +139,7 @@ class JEditRegisterSaver implements RegisterSaver
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	} //}}}
 

@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+import java.io.Closeable;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.io.IOException;
@@ -120,7 +121,7 @@ public class PerspectiveManager
 
 		if(perspectiveXML == null)
 			return;
-		
+
 		// backgrounded
 		if(jEdit.getBufferCount() == 0)
 			return;
@@ -185,7 +186,7 @@ public class PerspectiveManager
 				out.write(config.plainView ? "TRUE" : "FALSE");
 				out.write("\">");
 				out.write(lineSep);
-				
+
 				if (config.title != null)
 				{
 					out.write(lineSep);
@@ -218,7 +219,7 @@ public class PerspectiveManager
 
 				if (config.docking != null)
 					config.docking.saveLayout(PERSPECTIVE_FILENAME, i);
-				
+
 				out.write("</VIEW>");
 				out.write(lineSep);
 			}
@@ -235,7 +236,7 @@ public class PerspectiveManager
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	} //}}}
 
@@ -263,7 +264,7 @@ public class PerspectiveManager
 		boolean restoreFiles;
 		boolean restoreSplits;
 		String autoReload, autoReloadDialog;
-		
+
 		PerspectiveHandler(boolean restoreFiles)
 		{
 			this.restoreFiles = restoreFiles;
@@ -372,7 +373,7 @@ public class PerspectiveManager
 		{
 			charData.append(ch,start,length);
 		}
-		
+
 	}
 	//}}}
 }

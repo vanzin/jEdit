@@ -22,6 +22,8 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import java.io.Closeable;
+
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -233,7 +235,7 @@ public class ModeProvider
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(grammar);
+			IOUtilities.closeQuietly((Closeable)grammar);
 		}
 	} //}}}
 

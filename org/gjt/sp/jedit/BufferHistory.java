@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -271,7 +272,7 @@ public class BufferHistory
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 	} //}}}
 

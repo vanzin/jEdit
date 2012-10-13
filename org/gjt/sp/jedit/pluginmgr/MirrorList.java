@@ -126,7 +126,7 @@ public class MirrorList
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(inputStream);
+			IOUtilities.closeQuietly((Closeable)inputStream);
 		}
 	} //}}}
 
@@ -151,7 +151,7 @@ public class MirrorList
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(inputStream);
+			IOUtilities.closeQuietly((Closeable)inputStream);
 		}
 	} //}}}
 

@@ -30,6 +30,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -157,7 +158,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(out);
+				IOUtilities.closeQuietly((Closeable)out);
 			}
 			return true;
 		}

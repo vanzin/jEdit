@@ -25,6 +25,8 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+import java.io.Closeable;
+
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.*;
 import java.awt.Component;
@@ -590,7 +592,7 @@ public class FileVFS extends VFS
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(reader);
+				IOUtilities.closeQuietly((Closeable)reader);
 			}
 		}
 

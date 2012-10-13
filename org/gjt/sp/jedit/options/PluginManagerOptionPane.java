@@ -73,7 +73,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			spinnerPanel.add(new JLabel(jEdit.getProperty("options.plugin-manager.list-cache.minutes")));
 			spinnerPanel.add(cacheForSpinner);
 			spinnerPanel.add(Box.createGlue());
-			
+
 		}
 		JRadioButton appDir = new JRadioButton(jEdit.getProperty(
 				"options.plugin-manager.app-dir"));
@@ -126,7 +126,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		disableObsolete.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(disableObsolete);
 
-		
+
 		buttonPanel.add(Box.createVerticalStrut(6));
 
 		/* Install location */
@@ -136,7 +136,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		locGrp.add(appDir);
 		JPanel locPanel = new JPanel();
 		locPanel.setLayout(new BoxLayout(locPanel,BoxLayout.Y_AXIS));
-		
+
 		if(jEdit.getSettingsDirectory() != null)
 		{
 			locPanel.add(settingsDir);
@@ -396,7 +396,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(out);
+				IOUtilities.closeQuietly((Closeable)out);
 			}
 		} //}}}
 	} //}}}

@@ -23,6 +23,7 @@ package org.jedit.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackReader;
@@ -74,8 +75,8 @@ public class Native2ASCIIEncodingTest
 	@After
 	public void tearDown()
 	{
-		closeQuietly(reader);
-		closeQuietly(writer);
+		closeQuietly((Closeable)reader);
+		closeQuietly((Closeable)writer);
 	}
 
 	private Reader getReader(String input) throws IOException

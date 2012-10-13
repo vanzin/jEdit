@@ -24,6 +24,7 @@ package org.jedit.keymap;
 //{{{ Imports
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,7 +56,7 @@ public class KeymapManagerImpl implements KeymapManager
 	 */
 	private static File userKeymapFolder;
 	private final File systemKeymapFolder;
-	
+
 
 	//{{{ KeymapManagerImpl() constructor
 	public KeymapManagerImpl(IPropertyManager propertyManager,
@@ -176,8 +177,8 @@ public class KeymapManagerImpl implements KeymapManager
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
-			IOUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly((Closeable)in);
+			IOUtilities.closeQuietly((Closeable)out);
 		}
 		return false;
 	} //}}}

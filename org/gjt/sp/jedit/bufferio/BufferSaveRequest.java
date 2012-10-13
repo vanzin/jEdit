@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+import java.io.Closeable;
 import java.util.zip.*;
 
 import org.gjt.sp.jedit.io.*;
@@ -146,7 +147,7 @@ public class BufferSaveRequest extends BufferIORequest
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(out);
+				IOUtilities.closeQuietly((Closeable)out);
 			}
 
 			if(twoStageSave)

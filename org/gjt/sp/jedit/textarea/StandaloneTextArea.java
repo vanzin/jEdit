@@ -27,6 +27,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Font;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -578,7 +579,7 @@ public class StandaloneTextArea extends TextArea
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly((Closeable)in);
 		}
 		return props;
 	} //}}}

@@ -26,6 +26,7 @@ package org.gjt.sp.jedit;
 import java.awt.EventQueue;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -1000,7 +1001,7 @@ public class PluginJAR
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(din);
+			IOUtilities.closeQuietly((Closeable)din);
 		}
 	} //}}}
 
@@ -1025,7 +1026,7 @@ public class PluginJAR
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,PluginJAR.class,io);
-			IOUtilities.closeQuietly(dout);
+			IOUtilities.closeQuietly((Closeable)dout);
 			new File(jarCachePath).delete();
 		}
 	} //}}}
@@ -1340,7 +1341,7 @@ public class PluginJAR
 				}
 				finally
 				{
-					IOUtilities.closeQuietly(in);
+					IOUtilities.closeQuietly((Closeable)in);
 				}
 			}
 			else if(name.endsWith(".class"))
@@ -1371,7 +1372,7 @@ public class PluginJAR
 					}
 					finally
 					{
-						IOUtilities.closeQuietly(in);
+						IOUtilities.closeQuietly((Closeable)in);
 					}
 				}
 				else
@@ -1506,7 +1507,7 @@ public class PluginJAR
 
 		return cache;
 	} //}}}
-	
+
 	private static boolean continueLoading(String clazz, Properties cachedProperties)
 	{
 		if(jEdit.getPlugin(clazz) != null)
@@ -1700,7 +1701,7 @@ public class PluginJAR
 
 			cachedProperties = readMap(din);
 			localizationProperties = readLanguagesMap(din);
-			
+
 			pluginClass = readString(din);
 
 			return true;
@@ -1829,8 +1830,8 @@ public class PluginJAR
 			int languagesCount = din.readInt();
 			if (languagesCount == 0)
 				return Collections.emptyMap();
-			
-			
+
+
 			Map<String, Properties> languages = new HashMap<String, Properties>(languagesCount);
 			for (int i = 0;i<languagesCount;i++)
 			{
