@@ -11,8 +11,6 @@ for contributing to this release.
 
 {{{ Bug fixes
 
-- incomplete api documentation of VFSBrowser constants (#3562060 Alan Ezust)
-
 - Fixed whole word search (#3551515 Matthieu Casanova)
 
 - Added missing localization string:
@@ -76,6 +74,9 @@ for contributing to this release.
 
 }}}
 {{{ API Changes
+
+- Incomplete api documentation of VFSBrowser constants.
+  Deprecated VFSBrowser.BROWSER_DIALOG. (#3562060 Alan Ezust)
 
 - Deprecated extra overloads of IOUtilities.closeQuietly() in favor of
   using Java5 closeQuietly(Closeable) instead. (Alan Ezust)
