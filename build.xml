@@ -470,6 +470,15 @@
 				<include name="org/jedit/localization/*.props"/>
 			</fileset>
 		</jar>
+		<loadfile srcfile="keymaps/jEdit_keys.props"
+			  property="jEdit.keymap"
+			  encoding="ISO-8859-1"/>
+		<fail message="jEdit keymap must not contain A+[a-z] shortcuts, those may conflict with main menu mnemonics in localizations">
+			<condition>
+				<matches string="${jEdit.keymap}"
+					 pattern="=A\+[a-z]"/>
+			</condition>
+		</fail>
 		<copy todir="${jar.location}">
 			<fileset dir="${basedir}">
 				<include name="keymaps/**"/>

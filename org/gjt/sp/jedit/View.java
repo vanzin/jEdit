@@ -1846,7 +1846,11 @@ loop:		while (true)
 			int mnemonic = menu.getMnemonic();
 			if (mnemonic != 0)
 			{
-				inputHandler.removeKeyBinding("A+" + Character.toLowerCase((char) mnemonic));
+				Object keyBinding = inputHandler.getKeyBinding("A+" + Character.toLowerCase((char) mnemonic));
+				if (keyBinding != null)
+				{
+					menu.setMnemonic(0);
+				}
 			}
 		}
 

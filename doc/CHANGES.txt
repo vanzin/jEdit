@@ -24,8 +24,10 @@ for contributing to this release.
   stays the same as this might cause delays and Exceptions.
   (Björn "Vampire" Kautler)
 
-- Handle menu bar mnemonics with precedence over otherwise defined shortcuts as
-  they are shown visually to the user (#3528208 Björn "Vampire" Kautler)
+- Disable menu bar mnemonics if they are mapped as otherwise defined shortcuts
+  so that they are not shown visually to the user when they actually do not
+  work and make sure that no conflict can arise with the default keymap and
+  any localization (#3528208 Björn "Vampire" Kautler)
 
 - Fix keymap duplication (Björn "Vampire" Kautler)
 
