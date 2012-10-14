@@ -24,7 +24,7 @@
 
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
-		  location="${basedir}/lib"/>
+		  value="lib"/>
 	<property name="config.build.dir"
 		  value="build"/>
 	<property name="config.dist.dir"
@@ -790,7 +790,7 @@
 					 docencoding="UTF-8"
 					 charset="UTF-8">
 					<group title="jEdit 5 API"
-					       packages="org.jedit.*"/>
+					       packages="org.jedit.*"/>					       
 					<group title="jEdit 4 API"
 					       packages="org.gjt.*"/>
 					<group title="BeanShell"
