@@ -14,6 +14,8 @@ contributing to this release.
   soft-wrap, and folding.
   (Patch#3567959, Bugs #2832769, #2998294, and #3193168 - Thomas Meyer)
 
+- Fix keymap duplication handling (Björn "Vampire" Kautler)
+
 - Fix broken macro Files/Glob_close.bsh (Eric Le Lay)
 
 - File status checking before save (#3562315, Alan Ezust)
