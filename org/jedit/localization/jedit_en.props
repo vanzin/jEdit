@@ -902,7 +902,7 @@ search.replaceAllBtn.mnemonic=a
 #{{{ Keep searching dialog
 keepsearching.title=No More Matches Found
 keepsearching.message=No more matches were found. Continue search from\n\
-	{0,choice,0#beginning|1#end}?
+	{0,choice,0\#beginning|1\#end}?
 #}}}
 
 #{{{ HyperSearch results dialog
