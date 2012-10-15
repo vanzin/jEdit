@@ -101,7 +101,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			}
 			else if(type == VFSFile.FILE
 				&& (browser.getMode() == VFSBrowser.BROWSER
-				|| browser.getMode() == VFSBrowser.BROWSER_DIALOG))
+				|| browser.getMode() == VFSBrowser.OPEN_MULTI_DIALOG))
 			{
 				add(createMenuItem("open", "22x22/actions/document-open.png"));
 				JMenuItem openDesktop = GUIUtilities
@@ -160,7 +160,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		add(createMenuItem("show-hidden-files"));
 
 		if(browser.getMode() == VFSBrowser.BROWSER
-			|| browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+			|| browser.getMode() == VFSBrowser.OPEN_MULTI_DIALOG)
 		{
 			addSeparator();
 			add(createEncodingMenu());

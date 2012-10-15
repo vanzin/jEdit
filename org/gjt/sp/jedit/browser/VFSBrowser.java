@@ -76,10 +76,16 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 */
 	public static final int SAVE_DIALOG = 1;
 	/**
-	 * Choose directory dialog mode.
+	 * Open File in dialog mode, supports multiple selection. 
 	 */
-	public static final int BROWSER_DIALOG = 4;
-	/**
+	 public static final int OPEN_MULTI_DIALOG = 4;
+
+	 /** @deprecated use OPEN_MULTI_DIALOG. This ID is confusing and was never documented
+	 				properly. */
+	 @Deprecated
+	 public static final int BROWSER_DIALOG = 4;
+	
+	 /**
 	 * Choose directory dialog mode.
 	 */
 	public static final int CHOOSE_DIRECTORY_DIALOG = 3;
@@ -1219,7 +1225,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					if (selectedFiles.length == 1)
 						setDirectory(file.getPath());
 			}
-			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
+			else if(this.mode == BROWSER || this.mode == OPEN_MULTI_DIALOG)
 			{
 				if(mode == M_INSERT)
 				{
@@ -1242,7 +1248,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						file.getPath(),false,props);
 				}
 				else if(doubleClickClose && canDoubleClickClose
-					&& this.mode != BROWSER_DIALOG
+					&& this.mode != OPEN_MULTI_DIALOG
 					&& selectedFiles.length == 1)
 				{
 					// close if this buffer is currently
