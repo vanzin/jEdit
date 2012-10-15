@@ -22,14 +22,14 @@ for contributing to this release.
 
 - Correctly determine whether Look and Feel did change to not touch it if it
   stays the same as this might cause delays and Exceptions.
-  (Björn "Vampire" Kautler)
+  (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - Disable menu bar mnemonics if they are mapped as otherwise defined shortcuts
   so that they are not shown visually to the user when they actually do not
   work and make sure that no conflict can arise with the default keymap and
-  any localization (#3528208 Björn "Vampire" Kautler)
+  any localization (#3528208 Björn "Vampire" Kautler) [Merged into 5.0.x]
 
-- Fix keymap duplication (Björn "Vampire" Kautler)
+- Fix keymap duplication handling (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - Fix AutoSave exception after multiline cut (#3017650 Thomas Meyer)
 
@@ -147,7 +147,7 @@ for contributing to this release.
 {{{ UI
 
 - Add a "German Keyboard" keymap that replaces shortcuts that are not reachable
-  on a german keyboard by reachable ones. (Björn "Vampire" Kautler)
+  on a german keyboard by reachable ones. (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - Emacs macros and keymap updates. (Brian Clapper)
 
@@ -175,7 +175,7 @@ for contributing to this release.
 {{{ Miscellaneous
 
 - Translate underscores to spaces when displaying keymap names in the UI to
-  eliminate files with spaces in the name. (Björn "Vampire" Kautler)
+  eliminate files with spaces in the name. (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - jeditresource:/ URL handler now also checks jEditHome for files so
   it can be used to link to core documentation. (#3565139 Alan Ezust)
