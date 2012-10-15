@@ -193,7 +193,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 							break;
 					}
 					isOK = true;
-					if(browser.getMode() == VFSBrowser.OPEN_MULTI_DIALOG)
+					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
 					{
 						Hashtable props = new Hashtable();
 						if(browser.currentEncoding != null)
@@ -279,7 +279,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			return jEdit.getProperty("vfs.browser.title");
 		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
 			return jEdit.getProperty("vfs.browser.title");
-		case VFSBrowser.OPEN_MULTI_DIALOG:
+		case VFSBrowser.BROWSER_DIALOG:
 			return jEdit.getProperty("vfs.browser.title.dialog");
 		default:
 			return jEdit.getProperty("vfs.browser.title");
@@ -349,7 +349,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		switch(mode)
 		{
 		case VFSBrowser.OPEN_DIALOG:
-		case VFSBrowser.OPEN_MULTI_DIALOG:
+		case VFSBrowser.BROWSER_DIALOG:
 			ok.setText(jEdit.getProperty("vfs.browser.dialog.open"));
 			break;
 		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
