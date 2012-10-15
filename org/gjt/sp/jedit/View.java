@@ -1841,7 +1841,24 @@ loop:		while (true)
 	 */
 	private void propertiesChanged()
 	{
-		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
+		JMenuBar mbar = GUIUtilities.loadMenuBar("view.mbar");
+
+		// menu bar mnemonics take precedence over other shortcut definitions
+		for (int i = 0; i < mbar.getMenuCount(); i++)
+		{
+			JMenu menu = mbar.getMenu(i);
+			int mnemonic = menu.getMnemonic();
+			if (mnemonic != 0)
+			{
+				Object keyBinding = inputHandler.getKeyBinding("A+" + Character.toLowerCase((char) mnemonic));
+				if (keyBinding != null)
+				{
+					menu.setMnemonic(0);
+				}
+			}
+		}
+
+		setJMenuBar(mbar);
 
 		loadToolBars();
 

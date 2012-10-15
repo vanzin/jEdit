@@ -44,6 +44,11 @@ contributing to this release.
 }}}
 {{{ UI
 
+- Disable menu bar mnemonics if they are mapped as otherwise defined shortcuts
+  so that they are not shown visually to the user when they actually do not
+  work and make sure that no conflict can arise with the default keymap and
+  any localization (#3528208 Björn "Vampire" Kautler)
+
 - Added a new German keymap. Replaced shortcuts that were unreachable
   on a german keyboard. Moved shortcuts from German localization into
   keymap. (#3572796 Björn "Vampire" Kautler)
