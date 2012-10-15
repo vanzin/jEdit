@@ -44,6 +44,10 @@ contributing to this release.
 }}}
 {{{ UI
 
+- Added a new German keymap. Replaced shortcuts that were unreachable
+  on a german keyboard. Moved shortcuts from German localization into
+  keymap. (#3572796 Björn "Vampire" Kautler)
+
 - Translate underscores to spaces when displaying keymap names in the UI to
   eliminate files with spaces in the name. (Björn "Vampire" Kautler)
 

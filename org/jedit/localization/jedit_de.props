@@ -65,45 +65,6 @@
 #}}}
 # -------------------------------------------------------------------------------------------------
 
-
-#{{{ Special German Shortcuts
-
-#{{{ Deactivating alternative shortcuts to get to main menu items via ALT + underlined_key
-
-# Action                  Primary Shortcut    Alternative Shortcut (deactivating)
-# -------------------------------------------------------------------------------
-# Go to Next Character    RIGHT               A+l
-# Go to Next Page         PAGE_DOWN           A+a
-# Delete Next Character   DELETE              A+d
-
-next-char.shortcut2=
-next-page.shortcut2=
-delete.shortcut2=
-#}}}
-
-#{{{ Changing shortcuts that are unreachable on german keyboards
-
-# Action                  Original Shortcut      Changed Shortcut
-# ---------------------------------------------------------------
-# Expand Abbreviation     C+SEMICOLON            CA+SPACE
-# Multiple Selection      C+BACK_SLASH           C+NUMBER_SIGN
-# Rectangular Selection   A+BACK_SLASH           A+NUMBER_SIGN
-# Select Code Block       C+OPEN_BRACKET         C+8
-# Go to Matching Bracket  C+CLOSE_BRACKET        C+9
-# Go to Previous Bracket  C+e C+OPEN_BRACKET     C+e C+8
-# Go to Next Bracket      C+e C+CLOSE_BRACKET    C+e C+9
-
-expand-abbrev.shortcut=CA+SPACE
-toggle-rect-select.shortcut=A+NUMBER_SIGN
-toggle-multi-select.shortcut=C+NUMBER_SIGN
-select-block.shortcut=C+8
-match-bracket.shortcut=C+9
-next-bracket.shortcut=C+e C+9
-prev-bracket.shortcut=C+e C+8
-#}}}
-
-#}}}
-
 #{{{ jEdit core (jedit_gui.props)
 
 #{{{ Common strings
@@ -2062,6 +2023,10 @@ ends.with.backslash=Backslash am Ende des Musters
 
 # RESyntax message
 syntax.final=Die Syntax wurde für endgültig erklärt und kann nicht geändert werden.
+#}}}
+
+#{{{ Keymap Labels
+keymaps.German_Keyboard.label=Deutsche Tastatur
 #}}}
 
 #}}}
