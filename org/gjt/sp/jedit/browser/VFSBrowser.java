@@ -68,23 +68,17 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 * Open file dialog mode. Equals JFileChooser.OPEN_DIALOG for
 	 * backwards compatibility.
 	 */
-	public static final int OPEN_DIALOG = JFileChooser.OPEN_DIALOG;
+	public static final int OPEN_DIALOG = 0;
 
 	/**
 	 * Save file dialog mode. Equals JFileChooser.SAVE_DIALOG for
 	 * backwards compatibility.
 	 */
-	public static final int SAVE_DIALOG = JFileChooser.SAVE_DIALOG;
+	public static final int SAVE_DIALOG = 1;
 	/**
-	 * Choose directory in browser mode.
+	 * Choose directory dialog mode.
 	 */
-	public static final int DIRECTORY_BROWSER = 4;
-	
-	/** Directory browser mode (obsolete and ambiguous symbol - do not use)
-	    @deprecated use DIRECTORY_BROWSER */
-	@Deprecated
 	public static final int BROWSER_DIALOG = 4;
-	
 	/**
 	 * Choose directory dialog mode.
 	 */
@@ -1052,7 +1046,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			return getSelectedFiles();
 		}
 	} //}}}
-
+	
 	//{{{ paste() method
 	/**
 	 * Paste the file contained in the clipboard.
@@ -1225,7 +1219,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					if (selectedFiles.length == 1)
 						setDirectory(file.getPath());
 			}
-			else if(this.mode == BROWSER || this.mode == DIRECTORY_BROWSER)
+			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
 				if(mode == M_INSERT)
 				{
@@ -1248,7 +1242,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						file.getPath(),false,props);
 				}
 				else if(doubleClickClose && canDoubleClickClose
-					&& this.mode != DIRECTORY_BROWSER
+					&& this.mode != BROWSER_DIALOG
 					&& selectedFiles.length == 1)
 				{
 					// close if this buffer is currently
@@ -1831,7 +1825,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				}
 			}
 		} //}}}
-
+		
 		//{{{ Action class
 		class Action extends AbstractAction
 		{
@@ -1919,7 +1913,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		} //}}}
 
 		void doPopup()
-		{
+		{	
 			if (popup==null) createPopupMenu();
 			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}

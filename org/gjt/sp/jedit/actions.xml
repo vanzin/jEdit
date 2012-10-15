@@ -770,7 +770,7 @@
 
 <ACTION NAME="open-file">
 	<CODE>
-		GUIUtilities.showVFSFileDialog(view,null,VFSBrowser.DIRECTORY_BROWSER,true);
+		GUIUtilities.showVFSFileDialog(view,null,VFSBrowser.BROWSER_DIALOG,true);
 	</CODE>
 </ACTION>
 
