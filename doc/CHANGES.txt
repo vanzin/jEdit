@@ -15,7 +15,7 @@ for contributing to this release.
   soft-wrap, and folding. (Patch#3567959, Bugs #2832769, #2998294,
   and #3193168 - Thomas Meyer) [merged into 5.0.x]
 
-- Fixed whole word search (#3551515 Matthieu Casanova)
+- Fixed whole word search (#3551515 Matthieu Casanova) [merged into 5.0.x]
 
 - Added missing localization string:
   options.plugin-manager.list-cache.minutes (#3574373 Matthieu Casanova)

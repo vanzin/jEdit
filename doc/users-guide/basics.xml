@@ -228,7 +228,7 @@
 
         <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the jEdit 4.2 <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
 
-        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting) BufferSet. </para>
+        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is visited in one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting) BufferSet. </para>
 
         <para> <guimenuitem>Close Others</guimenuitem> will clear the BufferSet of the
         current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
