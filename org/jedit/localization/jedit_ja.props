@@ -100,7 +100,7 @@ closeall-except-active.label=他を閉じる($T)
 closeall-bufferset.label=すべて閉じる($E)
 closeall-bufferset.tooltip=編集ペインのバッファセットをクリアします。
 bufferset-toggle-exclusive.label=排他バッファセットの切り替え($X)
-bufferset-toggle-exclusive.tooltip=バッファが開かれるとき、他の無関係なバッファセット中にあれば閉じます。
+bufferset-toggle-exclusive.tooltip=バッファを表示したとき、他の無関係なバッファセット中に含まれている方を閉じます。
 close-all.label=すべて閉じる(グローバル)
 close-all.tooltip=すべてのビューのすべてのバッファを閉じます。
 save.label=保存($S)
@@ -656,6 +656,9 @@ ioerror.delete-error=ファイルを削除できません。
 ioerror.rename-exists=既存ファイル {0} を上書きできません。
 ioerror.rename-error={0} に名前を変更できません。
 ioerror.mkdir-error=ディレクトリを作成できません。
+ioerror.backup-failed=バックアップに失敗。 "保存とバックアップ" の設定を確認してください。
+ioerror.backup-same-name=バックアップファイル名が元のファイル名と同じです。
+ioerror.copy-self=ファイルを自身にコピーするのは破壊的操作のため、拒否されました: {0}
 
 vfs.not-supported.list=ファイルシステム "{0}" 上のディレクトリはブラウズできません。
 vfs.not-supported.load=ファイルシステム "{0}" 上のファイルを開くことはできません。
@@ -899,7 +902,7 @@ search.replaceAllBtn.mnemonic=A
 #{{{ Keep searching dialog
 keepsearching.title=これ以上の一致は発見できません
 keepsearching.message=これ以上の一致は発見できません。\n\
-	{0,choice,0#先頭|1#末尾}から検索を続けますか?
+	{0,choice,0\#先頭|1\#末尾}から検索を続けますか?
 #}}}
 
 #{{{ HyperSearch results dialog
@@ -1235,10 +1238,9 @@ options.general.checkModStatus.prompt=問い合わせる
 options.general.checkModStatus.reload=自動的に更新し通知する
 options.general.checkModStatus.silentReload=通知せずに自動更新
 options.general.checkModStatusUpon=ファイル変更を確認するきっかけ:
-options.general.checkModStatusUpon.focus=アプリケーションフォーカス
-options.general.checkModStatusUpon.all=アプリケーションフォーカス 対象バッファ表示 他バッファの保存
-options.general.checkModStatusUpon.operations=対象バッファ表示 他バッファの保存
-options.general.checkModStatusUpon.focusBuffer=対象バッファ表示および保存
+options.general.checkModStatusUpon.focus=ビューへのフォーカス (すべてのバッファを確認)
+options.general.checkModStatusUpon.all=ビューへのフォーカス 対象バッファ表示
+options.general.checkModStatusUpon.visitBuffer=対象バッファ表示
 options.general.checkModStatusUpon.none=対象バッファの保存
 options.general.recentFiles=最近開いたファイルの記憶:
 options.general.hypersearch.maxWarningResults=ハイパーサーチの中止を問う閾値:
@@ -1431,6 +1433,8 @@ options.plugin-manager.location=プラグインのインストール先:
 options.plugin-manager.settings-dir=jEdit 個人設定ディレクトリ
 options.plugin-manager.app-dir=jEdit アプリケーションディレクトリ
 options.plugin-manager.none=デフォルトのプラグインセンター
+options.plugin-manager.disable-obsolete=廃止されたプラグインを無効化
+options.plugin-manager.list-cache.minutes=プラグインリストのキャッシュ時間: (分)
 #}}}
 
 #{{{ Printing pane
@@ -1844,7 +1848,7 @@ vfs.browser.next.label=次のディレクトリ
 #}}}
 
 #{{{ Commands menu
-vfs.browser.commands.label=コマンド
+vfs.browser.commands.label=コマンド($C)
 vfs.browser.commands.encoding.label=エンコーディング
 vfs.browser.commands.encoding.auto-detect=自動検出
 
@@ -2044,6 +2048,9 @@ log-viewer.message.message.label=Message
 log-viewer.message.notice.label=Notice
 log-viewer.message.warning.label=Warning
 log-viewer.message.error.label=Error
+# This one should be actually placed in Debugging options, but
+# we don't have such a pane yet
+debug.beepOnOutput.label=Beep on output
 #}}}
 
 logs-remove-all-errors.label=すべてのエラーを削除
