@@ -44,22 +44,23 @@
         above.</para>
 
 <tip><title> Validation and Errors </title>
+
 <para> Most XML file formats have a formal grammar specified in either DTD, XSD or RNG.
-In the example above, we can see that the grammar for jEdit mode files 
-is described in a file called <literal>xmode.dtd</literal>,
-which happens to be part of jEdit's source code. 
-If you install the XML plugin, and while editing your XML file, go to 
-<guimenuitem>Plugins - XML - Parse as XML</guimenuitem>, 
+In the example above, we can see that the <literal>DOCTYPE</literal>,
+or formal grammar for jEdit mode files is described in <literal>xmode.dtd</literal>,
+which happens to come from jEdit's source code.
+If you install the XML plugin, and while editing a mode file in jEdit, go to
+<guimenuitem>Plugins - XML - Parse as XML</guimenuitem>,
 you should see a structure tree in Sidekick,
-and you will also see errors (if there are any) in ErrorList if your document does not
+and you will also see errors (if there are any) in ErrorList, if the document does not
 conform to the proper XML syntax or the document's formal grammar.
-In addition, the XML plugin provides you completion tips for elements and attributes,
-which can help immensely when you are learning a new XML document format.</para>
-
+In addition, the XML plugin provides completion tips for elements and attributes.
+All of these things can help immensely especially when learning XML.
+</para>
 <para> It is highly recommended that you check your XML files for validation errors
-before submitting them publicly. This is how you do it from jEdit. </para></tip>
+before submitting them to the community. </para></tip>
 
-          <para>XML is case sensitive. <literal>Span</literal> or
+         <para>XML is case sensitive. <literal>Span</literal> or
         <literal>span</literal> is not the same as
         <literal>SPAN</literal>.</para>
         <para>To insert a special character such as &lt; or &gt; literally in
@@ -137,7 +138,7 @@ before submitting them publicly. This is how you do it from jEdit. </para></tip>
         </itemizedlist>
         <para>When performing auto indent, a number of mode properties determine
         the resulting indent level:</para>
-        <itemizedlist>        
+        <itemizedlist>
             <listitem>
                 <para>The line and the one before it are scanned for brackets
                 listed in the <literal>indentCloseBrackets</literal> and
@@ -181,7 +182,7 @@ before submitting them publicly. This is how you do it from jEdit. </para></tip>
                 and subsequent lines is increased.</para>
 
                 <para> There are corresponding <literal>unindentThisLine</literal> and <literal>unindentNextLines</literal> properties which are checked also, for doing the reverse-indent operation on lines that match certain regular expressions. </para>
-                
+
                 <para>In Java mode, for example, the
                 <literal>indentNextLine</literal> property is set to match
                 control structures such as <quote>if</quote>,
@@ -221,7 +222,7 @@ before submitting them publicly. This is how you do it from jEdit. </para></tip>
              <programlisting>def fun1:
     a = 1
     b = 2
-    
+
 def fun2:
              </programlisting>
              Pressing <keycap>C+i</keycap>
@@ -883,11 +884,11 @@ def fun2:
         examples are given below, but these are just guidelines, not hard and
         fast rules.</para>
         <para>Many languages include constructs from other languages. One common
-        example is html files can include javascript and css blocks. Several of 
+        example is html files can include javascript and css blocks. Several of
         the mode tags support a DELEGATE attribute, which will allow a section
         of text to be passed to a different mode for highlighting. The html mode
         delegates to the javascript mode for javascript blocks and to the css
-        mode for style blocks. Use of the DELEGATE attribute is highly encouraged 
+        mode for style blocks. Use of the DELEGATE attribute is highly encouraged
         when appropriate since it makes writing modes easier, reduces duplication,
         and promotes visual consistency across languages.</para>
         <para>Parser rules can highlight tokens using any of the following token
@@ -950,7 +951,7 @@ def fun2:
                 <para><literal>KEYWORD4</literal></para>
                 <para>
                     Keywords are used to identify well-defined words within a
-                    language. Some languages naturally divide keywords into 
+                    language. Some languages naturally divide keywords into
                     groups, for example, the pascal mode identifies "for" as a
                     KEYWORD1, "private" as a KEYWORD2, and "int" as a KEYWORD3.
                 </para>
@@ -958,7 +959,7 @@ def fun2:
             <listitem>
                 <para><literal>LABEL</literal></para>
                 <para>A label is generally a named position within a source, for
-                example, the ada mode defined a label as &lt;&lt;foo&gt;&gt;. 
+                example, the ada mode defined a label as &lt;&lt;foo&gt;&gt;.
                 </para>
             </listitem>
             <listitem>
@@ -984,16 +985,16 @@ def fun2:
                     The markup token is generally used in the various "markup"
                     languages, such as xml and html. Markup is used for those
                     elements that are not specified as words belonging to the
-                    language. For example, in html, &lt;body&gt; would be 
+                    language. For example, in html, &lt;body&gt; would be
                     considered a keyword, where &lt;foo&gt; would be considered
-                    markup. 
+                    markup.
                 </para>
             </listitem>
             <listitem>
                 <para><literal>OPERATOR</literal></para>
                 <para>
                     Common examples of operators are the math symbols, such as
-                    '+', '-', and so on. 
+                    '+', '-', and so on.
                 </para>
             </listitem>
         </itemizedlist>
