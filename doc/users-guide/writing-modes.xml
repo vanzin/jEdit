@@ -44,13 +44,17 @@
         above.</para>
 
 <tip><title> Validation and Errors </title>
-<para> Most XML file formats have a formal grammar specified in either DTD, XSD or RNG. 
-jEdit mode files are no exception. 
+<para> Most XML file formats have a formal grammar specified in either DTD, XSD or RNG.
+In the example above, we can see that the grammar for jEdit mode files 
+is described in a file called <literal>xmode.dtd</literal>,
+which happens to be part of jEdit's source code. 
 If you install the XML plugin, and while editing your XML file, go to 
 <guimenuitem>Plugins - XML - Parse as XML</guimenuitem>, 
 you should see a structure tree in Sidekick,
-and you will also see errors (if there are any) in ErrorList if your document does not have the correct structure. 
-In addition, the XML plugin provides you completion tips for elements and attributes, which can help immensely when you are learning a new XML document format.</para>
+and you will also see errors (if there are any) in ErrorList if your document does not
+conform to the proper XML syntax or the document's formal grammar.
+In addition, the XML plugin provides you completion tips for elements and attributes,
+which can help immensely when you are learning a new XML document format.</para>
 
 <para> It is highly recommended that you check your XML files for validation errors
 before submitting them publicly. This is how you do it from jEdit. </para></tip>
