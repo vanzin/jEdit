@@ -206,10 +206,6 @@ void toggleHeaderSource()
 	jEdit.openFile(view, path);
 }
 
-
-if (buffer.getMode().equals("c") || buffer.getMode().equals("c++"))
-    toggleHeaderSource();
-else
-    view.getToolkit().beep();
+toggleHeaderSource();
 
 
