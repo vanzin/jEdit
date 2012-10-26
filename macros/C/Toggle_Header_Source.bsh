@@ -1,5 +1,5 @@
 /**
-	ToggleHeaderSource.bsh V1.5
+	ToggleHeaderSource.bsh V1.6
 	by Alan Ezust
 	$Id$
 
@@ -24,6 +24,9 @@
 
 	New to 1.5: Supports multiple, default header extensions.
 
+	New to 1.6: Does nothing when not in the correct mode (c or c++)
+	Fixed a bug where it did not work without projectviewer installed. 
+	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
@@ -59,12 +62,7 @@ String[] headerExtensions = new String[]{"h", "hh", "hpp", "hxx"};
    @return the absolute path if found, NULL if not.
    */
 String findBufferInProject(String fileName) {
-    int sep1 = fileName.lastIndexOf('\\');
-    int sep2 = fileName.lastIndexOf('/');
-    if (sep1 > sep2)
-        fileName = fileName.substring(sep1 + 1);
-    else if (sep2 > sep1)
-        fileName = fileName.substring(sep2 + 1);
+    fileName = MiscUtilities.getFileName(fileName);
     VPTProject project = ProjectViewer.getActiveProject(view);
     Collection nodes = project.getOpenableNodes();
     for (VPTNode node: nodes) {
@@ -148,7 +146,7 @@ String getHeaderFile(String baseName)
     if (path != null) return path;
 
     // Then try current project
-    if (activeProjectExists())
+    if (activeProjectExists()) {
         for (int i=numExt-1; i>=0; --i)
         {
             String ext = headerExtensions[i];
@@ -157,7 +155,10 @@ String getHeaderFile(String baseName)
             if (path != null) return path;
         }
     // No extension at all in project:
-    return findBufferInProject(baseName);
+        path = findBufferInProject(baseName);
+        if (path != null) return path;
+    }
+    return baseName + "." + defaultHeaderExtension;
 }
 
 boolean isSourceFile(String extension)
@@ -171,6 +172,8 @@ boolean isSourceFile(String extension)
 
 void toggleHeaderSource()
 {
+    String mode = buffer.getMode().toString();
+    if (! (mode.equals("c") || mode.equals("c++"))) return;
     String currentFile = buffer.getPath();
     int pos = currentFile.lastIndexOf('.');
 	String path = null;
@@ -185,7 +188,7 @@ void toggleHeaderSource()
             path = getHeaderFile(baseName);
             if (path == null)
                 path = baseName + "." + defaultHeaderExtension;
-        }
+        } 
         else
         {
             path = getSourceFile(baseName);
@@ -206,6 +209,5 @@ void toggleHeaderSource()
 	jEdit.openFile(view, path);
 }
 
+
 toggleHeaderSource();
-
-
