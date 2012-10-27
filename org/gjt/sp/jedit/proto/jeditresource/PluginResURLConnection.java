@@ -33,9 +33,12 @@ import java.net.URLConnection;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.jEdit;
+//}}}
 
+//{{{ class PluginResURLConnection
 public class PluginResURLConnection extends URLConnection
 {
+	//{{{ constructor
 	public PluginResURLConnection(URL url)
 		throws IOException
 	{
@@ -63,8 +66,9 @@ public class PluginResURLConnection extends URLConnection
 
 		if(plugin != null && resource.startsWith("/"))
 			resource = resource.substring(1);
-	}
+	}//}}}
 
+	//{{{ connect()
 	public void connect() throws IOException
 	{
 		if(!connected)
@@ -98,15 +102,17 @@ public class PluginResURLConnection extends URLConnection
 			}
 			connected = true;
 		}
-	}
+	}//}}}
 
+	//{{{ getInputStream()
 	public InputStream getInputStream()
 		throws IOException
 	{
 		connect();
 		return in;
-	}
+	}//}}}
 
+	//{{{ getHeaderField()
 	public String getHeaderField(String name)
 	{
 		if(name.equals("content-type"))
@@ -128,10 +134,11 @@ public class PluginResURLConnection extends URLConnection
 		}
 		else
 			return null;
-	}
+	}//}}}
 
-	// private members
+	//{{{ private members
 	private InputStream in;
 	private String plugin;
 	private String resource;
-}
+	//}}}
+}//}}}
