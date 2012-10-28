@@ -2423,9 +2423,6 @@ macros.folder.Editing.label=Editing
 
 Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
 Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
-Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
-Editing/Emacs_Next_Line.label=Emacs Next Line
-Editing/Emacs_Previous_Line.label=Emacs Previous Line
 Editing/Go_to_Column.label=Go To Column
 Editing/Greedy_Backspace.label=Greedy Backspace
 Editing/Greedy_Delete.label=Greedy Delete
@@ -2439,6 +2436,32 @@ Editing/Open_Line_Above.label=Open Line Above
 Editing/Open_Line_Below.label=Open Line Below
 Editing/Toggle_Fold.label=Toggle Fold
 #}}}
+
+//{{{ Emacs
+macros.folder.Emacs.label=Emacs
+Emacs/Emacs_Align_Decls.label=Emacs Align Decls
+Emacs/Emacs_Backward_Sentence.label=Emacs Backward Sentence
+Emacs/Emacs_Capitalize_Word.label=Emacs Capitalize Word
+Emacs/Emacs_Center_Line.label=Emacs Center Line
+Emacs/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Emacs/Emacs_Downcase_Word.label=Emacs Downcase Word
+Emacs/Emacs_Exchange_Point_and_Mark.label=Emacs Exchange Point and Mark
+Emacs/Emacs_Fixup_Whitespace.label=Emacs Fixup Whitespace
+Emacs/Emacs_Forward_Sentence.label=Emacs Forward Sentence
+Emacs/Emacs_Insert_File.label=Emacs Insert File
+Emacs/Emacs_Kill_Line.label=Emacs Kill Line
+Emacs/Emacs_Kill_Region.label=Emacs Kill Region
+Emacs/Emacs_Kill_Ring_Save.label=Emacs Kill Ring Save
+Emacs/Emacs_Kill_Sentence.label=Emacs Kill Sentence
+Emacs/Emacs_Next_Line.label=Emacs Next Line
+Emacs/Emacs_Open_Line.label=Emacs Open Line
+Emacs/Emacs_Previous_Line.label=Emacs Previous Line
+Emacs/Emacs_Set_Mark.label=Emacs Set Mark
+Emacs/Emacs_Set_Wrap=Emacs Set Wrap
+Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
+Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
+Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
+//}}}
 
 #{{{ Files
 macros.folder.Files.label=Files
