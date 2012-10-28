@@ -18,15 +18,6 @@
     but here are some of the major features of this version. </para>
 
     <itemizedlist>
-    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
-    </para></listitem>
-
-    <listitem><para> Scrolling - Many bugs (#2832769, #2998294, #3193168,
-    possibly others), related to soft wrap, multiline delete/cut, undo, and
-    folding, that could cause the text area to be confused about its location,
-    are fixed. This greatly improves the stability of jEdit. Thank you,
-    Thomas Meyer!!  </para></listitem>
-
     <listitem><para> Localization - jEdit now supports switching
     between default locale, French, German, Russian, Czech, and Japanese.
     Some translations for those locales are provided, containing
@@ -36,16 +27,24 @@
     </para></listitem>
 
     <listitem><para> Keymaps - named collections of shortcuts. Example keymaps
-    for Emacs, MacOS, Intellij and classic jEdit are provided, and users can
-    create or customize them.
+    for Emacs, MacOS, German Keyboard, Intellij and classic jEdit are provided,
+    and users can create or customize them.
     </para></listitem>
 
     <listitem><para> New Editing options: Disable or simplified automatic
     indentation, and default response when opening a large file.
     </para></listitem>
 
-    <listitem><para> Added a dozen new edit modes, updated a dozen more.
+    
+    <listitem><para> Updated html/css edit modes with HTML5/CSS3 keywords.
+    Added a dozen new edit modes, updated a dozen more.
     </para></listitem>
+
+    <listitem><para> Scrolling - Many bugs (#2832769, #2998294, #3193168,
+    possibly others), related to soft wrap, multiline delete/cut, undo, and
+    folding, that could cause the text area to be confused about its location,
+    are fixed. This greatly improves the stability of jEdit. Thank you,
+    Thomas Meyer!!  </para></listitem>
 
     </itemizedlist>
 <!-- :maxLineLen=80:wrap=hard: -->
