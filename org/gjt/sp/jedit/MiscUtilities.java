@@ -625,21 +625,34 @@ public class MiscUtilities
 	/**
 	 * Prepares the directory to backup the specified file.
 	 * jedit property is used to determine the directory.
-	 * It is created if not exists.
-	 * @return Backup directory, never <code>null</code>.
+	 * If there is no dedicated backup directory specified by props,
+	 * then the current directory is used, but only for local files.
+	 * The directory is created if not exists.
+	 * @return Backup directory. <code>null</code> is returned for
+	 * non-local files if no backup directory is specified in properties.
 	 * @since 5.0pre1
 	 */
-	public static File prepareBackupDirectory(File file)
+	public static File prepareBackupDirectory(String path)
 	{
 		String backupDirectory = jEdit.getProperty("backup.directory");
 		File dir;
+		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
+		File file;
+		if (isLocal)
+			file = new File(path);
+		else
+			file = new File(replaceNonPathChars(path, "_"));
 
 		// Check for backup.directory, and create that
 		// directory if it doesn't exist
 		if(backupDirectory == null || backupDirectory.length() == 0)
 		{
-			backupDirectory = file.getParent();
-			dir = new File(backupDirectory);
+			if (!isLocal)
+				return null;
+			else {
+				backupDirectory = file.getParent();
+				dir = new File(backupDirectory);
+			}
 		}
 		else
 		{
@@ -676,7 +689,7 @@ public class MiscUtilities
 	           less than <code>backup.minTime</code> ms ago.
 	 * @since 5.0pre1
 	 */
-	public static File prepareBackupFile(File file, File backupDir)
+	public static File prepareBackupFile(String path, File backupDir)
 	{
 		// read properties
 		int backups = jEdit.getIntegerProperty("backups",1);
@@ -684,7 +697,7 @@ public class MiscUtilities
 		String backupSuffix = jEdit.getProperty("backup.suffix");
 		int backupTimeDistance = jEdit.getIntegerProperty("backup.minTime",0);
 
-		return prepareBackupFile(file, backups, backupPrefix,
+		return prepareBackupFile(path, backups, backupPrefix,
 				backupSuffix, backupDir.getPath(),
 				backupTimeDistance);
 	}
@@ -704,10 +717,17 @@ public class MiscUtilities
 	           less than <code>backupTimeDistance</code> ms ago.
 	 * @since 5.0pre1
 	 */
-	public static File prepareBackupFile(File file, int backups,
+	public static File prepareBackupFile(String path, int backups,
 		 String backupPrefix, String backupSuffix,
 		 String backupDirectory, int backupTimeDistance)
 	{
+		File file;
+		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
+		if (isLocal)
+			file = new File(path);
+		else
+			file = new File(replaceNonPathChars(path, "_"));
+
 		String name = file.getName();
 		File backupFile = getNthBackupFile(name, 1, backups,
 				backupPrefix, backupSuffix,
@@ -771,8 +791,8 @@ public class MiscUtilities
 	 */
 	public static void saveBackup(File file)
 	{
-		File backupDir = prepareBackupDirectory(file);
-		File backupFile = prepareBackupFile(file, backupDir);
+		File backupDir = prepareBackupDirectory(file.toString());
+		File backupFile = prepareBackupFile(file.toString(), backupDir);
 		if (backupFile != null)
 			saveBackup(file, backupFile);
 	}
@@ -814,7 +834,7 @@ public class MiscUtilities
 			       String backupPrefix, String backupSuffix,
 			       String backupDirectory, int backupTimeDistance)
 	{
-		File backupFile = prepareBackupFile(file, backups,
+		File backupFile = prepareBackupFile(file.toString(), backups,
 				backupPrefix, backupSuffix,
 				backupDirectory, backupTimeDistance);
 		if (backupFile == null)
@@ -1410,6 +1430,29 @@ loop:		for(;;)
 			}
 		}
 		return false;
+	} //}}}
+
+	//{{{ replaceNonPathChars
+	/**
+	 * Replaces the characters which are usually invalid as part of pathname.
+	 * Used by backup routines to convert remote filenames to local paths.
+	 * @param replaceWith The string to replace illegal chars with,
+	 * for example <code>_</code>.
+	 */
+	private static String replaceNonPathChars(String path, String replaceWith)
+	{
+		if (path == null)
+			return null;
+		String sForeignChars = ":*?\"<>|";
+		// Construct a regex from sForeignChars
+		StringBuilder sbForeignCharsEsc = new StringBuilder(20);
+		for (int i = 0; i < sForeignChars.length(); i++)
+		{
+			sbForeignCharsEsc.append("\\");
+			sbForeignCharsEsc.append(sForeignChars.charAt(i));
+		}
+
+		return path.replaceAll("[" + sbForeignCharsEsc + "]", replaceWith);
 	} //}}}
 
 	//}}}

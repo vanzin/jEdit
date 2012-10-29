@@ -962,24 +962,16 @@ public abstract class VFS
 			// file to backup does not exist
 			return;
 
-		// File systems do not like some characters, which
-		// may be part of a general path. Let's get rid of them.
-		String sForeignChars = ":*?\"<>|";
-		// Construct a regex from sForeignChars
-		StringBuilder sbForeignCharsEsc = new StringBuilder(20);
-		for (int i = 0; i < sForeignChars.length(); i++)
-		{
-			sbForeignCharsEsc.append("\\");
-			sbForeignCharsEsc.append(sForeignChars.charAt(i));
-		}
-
-		String pathNorm = path.replaceAll("[" + sbForeignCharsEsc + "]", "_");
-
 		// maybe the file is not applicable to local filesystem
 		// but don't worry - for backup purposes it may be out
 		// of a real filesystem
-		File file = new File(pathNorm);
-		File backupDir = MiscUtilities.prepareBackupDirectory(file);
+		File backupDir = MiscUtilities.prepareBackupDirectory(path);
+		if (backupDir == null)
+		{
+			Log.log(Log.WARNING, VFS.class, "Backup of remote file "
+				+ path + " failed, because there is no backup directory.");
+			return;
+		}
 		if (!backupDir.exists())
 		{
 			// Usually that means there is no specified backup
@@ -990,7 +982,7 @@ public abstract class VFS
 			return;
 		}
 
-		File backupFile = MiscUtilities.prepareBackupFile(file, backupDir);
+		File backupFile = MiscUtilities.prepareBackupFile(path, backupDir);
 		if (backupFile == null)
 		{
 			return;
