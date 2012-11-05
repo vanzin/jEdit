@@ -242,7 +242,7 @@
         The BufferSet Scope can also be changed from
         <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>  &gt;
         <guimenu>(Global|View|EditPane) Buffer Set</guimenu>.
-        Changes to the bufferset scope affects all editpanes immediately.
+        A change to the bufferset scope affects all editpanes immediately.
         </para>
 
     </section>

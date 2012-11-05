@@ -155,19 +155,17 @@
                 </question>
 
                 <answer>
-                    <para>Only Unicode can be detected when a file is loaded.
-                    For other encodings, you must specify the encoding when the
-                    file is loaded if you do not wish to use the default
-                    encoding for your operating system.</para>
-
-                    <para>There are a few features that can help you navigate
-                    through encoding issues. You can select the encoding you
+                    
+                    <para> You can select the encoding you
                     wish to use from <guisubmenu> Encoding</guisubmenu> in the
                     <guimenu>Commands</guimenu> menu of the File System Browser.
                     You can also designate a default encoding in the
-                    <guimenuitem>Loading &amp; Saving</guimenuitem> pane of the
-                    Global Options dialog; if you do not, jEdit adopts your
-                    operating system's default encoding as its own default. You
+                    <ulink url="jeditresource:/doc/users-guide/global-opts.html#encodings-pane">
+                    <guimenuitem>Encoding</guimenuitem></ulink> pane of the
+                    Global Options; if you do not, jEdit uses
+                    
+                    <emphasis role="bold">encoding autodetectors</emphasis> to decide which encoding
+                    to open a file in. You
                     can change the encoding used to save an individual file by
                     selecting
                     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
@@ -367,7 +365,7 @@
                     processors do. This would require a BeanShell macro to
                     modify quoted text.</para>
 
-                    <para>The Accents and CharacterMap plugins can also help you
+                    <para>The built-in Abbreviations feature (<guimenu>Global Options</guimenu> <guimenuitem>Abbreviations</guimenuitem>) as well as the Accents and CharacterMap plugins can also help you
                     type international characters.</para>
 
                     <para>You also have the option of using a TeX macro (or, in
@@ -376,32 +374,6 @@
                     into the appropriate opening or closing smart quotes without
                     the need to keep track of when quoted text opens or
                     closes.</para>
-                </answer>
-            </qandaentry>
-
-            <qandaentry>
-                <question id="text-softwrap">
-                    <para>Does jEdit have a <quote>soft</quote> wrap text
-                    mode?</para>
-                </question>
-
-                <answer>
-                    <para>jEdit's 4.3's soft wrap mode, and especially its wrap
-                    to margin=0, is one of its many features that just works
-                    better than it does in most other editing environments. Soft
-                    Wrap with margin=0 was unavailable in jEdit 4.2, but users
-                    of 4.1 will remember it well. When you set SOFT WRAP with a
-                    margin=0, you don't need to use the horizontal scroller
-                    anymore. It's just as simple as that.</para>
-
-                    <para>jEdit wrap capability can be activated for a specific
-                    buffer, specific editing modes, or for all documents by
-                    default. In prior versions, both the text wrap feature and
-                    the <guimenuitem>Edit&gt;Text&gt;Format
-                    Paragraph</guimenuitem> command insert <quote>hard</quote>
-                    end of line characters. This <quote>hard wrap</quote>
-                    feature remains available as an option for buffers and
-                    editing modes.</para>
                 </answer>
             </qandaentry>
 
@@ -432,21 +404,12 @@
                     available encoding scheme, and can open files with a
                     specified encoding other than the default encoding of your
                     operating system using the
-                    <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding
-                    </guisubmenu> from the File System Browser.</para>
+                    <guimenu>File</guimenu>&gt;<guisubmenu>Reload with Encoding
+                    </guisubmenu> action.</para>
 
                     <para>With respect to menu labels, message strings and other
-                    GUI elements, the jEdit project team currently does not have
-                    the resources to maintain multiple property sets in
-                    languages other than English, particularly since the
-                    development effort is continuing at a rapid pace. There has
-                    not been great demand for this in any event. This may be
-                    because jEdit is primarily a tool for programmers, and the
-                    use of English as a common first or second language is
-                    widespread in the global programming community. This
-                    decision may be reconsidered when the application has
-                    further matured and if more individuals express a
-                    willingness to be involved in translation work.</para>
+                    GUI elements, the jEdit project team now supports localization files for different languages.
+                    How well they are maintained is up to the individual members of the community who help to maintain them. </para>
                 </answer>
             </qandaentry>
         </qandadiv>
