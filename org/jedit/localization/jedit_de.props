@@ -993,15 +993,15 @@ plugin-error.load-error=Laden von "{0}" nicht möglich.\n\
 plugin-error.start-error=Fehler beim Starten: "{0}".\n\
   Versuchen Sie ein Update auf eine neuere Version des Plugins.
 plugin-error.already-loaded=Zwei Kopien installiert. Bitte entferne Sie eine der beiden Kopien.
-plugin-error.dep-jdk=Erfordert Java {0} oder höer, aber Sie haben nur Version {1}.
-plugin-error.dep-jedit=Erfordert jEdit {0} oder höer, aber Sie haben nur Version {1}.\n\
+plugin-error.dep-jdk=Erfordert Java {0} oder höher, aber Sie haben nur Version {1}.
+plugin-error.dep-jedit=Erfordert jEdit {0} oder höher, aber Sie haben nur Version {1}.\n\
   Laden Sie neue Versionen von jEdit herunter von <http://www.jedit.org>.
 plugin-error.dep-Plugin.no-version=Erfordert Version {0} \
-  oder höer von {1},\n\
+  oder höher von {1},\n\
   aber {1} ist nicht installiert.
 plugin-error.dep-Plugin.broken=Erfordert {0}, aber {0}\n\
-  kann´nicht geladen werden.
-plugin-error.dep-Plugin=Erfordert Version {0} oder höer von {1}, \
+  kann nicht geladen werden.
+plugin-error.dep-Plugin=Erfordert Version {0} oder höher von {1}, \
   aber Sie haben nur {1} in Version {2}.
 plugin-error.dep-class=Erfordert die Klasse {0}.\n\
   Versuchen Sie, das erforderliche Plugin bzw. die erforderliche Klassenbibliothek zu installieren.
