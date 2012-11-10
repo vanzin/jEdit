@@ -99,7 +99,7 @@ public abstract class BufferListSet implements SearchFileSet
 	//{{{ getCode() method
 	public String getCode()
 	{
-		// not supported for arbitriary filesets
+		// not supported for arbitrary filesets
 		return null;
 	} //}}}
 

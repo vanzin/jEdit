@@ -35,7 +35,6 @@ import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.*;
 //}}}
 

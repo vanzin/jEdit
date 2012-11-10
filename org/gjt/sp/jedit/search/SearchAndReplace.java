@@ -31,7 +31,6 @@ import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.TextAreaDialog;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;

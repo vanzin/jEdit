@@ -23,12 +23,10 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -115,34 +113,7 @@ public class DirectoryListSet extends BufferListSet
 		skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 		final VFS vfs = VFSManager.getVFSForPath(directory);
 		Object session;
-		if(SwingUtilities.isEventDispatchThread())
-		{
-			session = vfs.createVFSSession(directory,comp);
-		}
-		else
-		{
-			final Object[] returnValue = new Object[1];
-
-			try
-			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						returnValue[0] = vfs.createVFSSession(directory,comp);
-					}
-				});
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-
-			session = returnValue[0];
-		}
-
-		if(session == null)
-			return null;
+		session = vfs.createVFSSessionSafe(directory, comp);
 
 		try
 		{

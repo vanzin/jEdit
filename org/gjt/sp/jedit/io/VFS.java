@@ -37,7 +37,6 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferio.BufferLoadRequest;
 import org.gjt.sp.jedit.bufferio.BufferSaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferInsertRequest;
-import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
@@ -445,7 +444,7 @@ public abstract class VFS
 	}
 
 	/**
-	* Same as {@link #createVFSSession}, but may be called fromy any
+	* Same as {@link #createVFSSession}, but may be called from any
 	* thread. It first checks the <code>NON_AWT_SESSION_CAP</code>
 	* capability and enters EDT thread if necessary.
 	*/
@@ -550,7 +549,7 @@ public abstract class VFS
 	 * @param targetPath the target path.
 	 * If it is a path, it must exists, if it is a file, the parent must
 	 * exists
-	 * @param comp comp The component that will parent error dialog boxes
+	 * @param comp The component that will parent error dialog boxes
 	 * @param canStop could this copy be stopped ?
 	 * @return true if the copy was successful
 	 * @throws IOException  IOException If an I/O error occurs
@@ -577,7 +576,7 @@ public abstract class VFS
 	 * @param targetPath the target path.
 	 * If it is a path, it must exists, if it is a file, the parent must
 	 * exists
-	 * @param comp comp The component that will parent error dialog boxes
+	 * @param comp The component that will parent error dialog boxes
 	 * @param canStop could this copy be stopped ?
 	 * @param sendVFSUpdate true if you want to send a VFS update after the copy. False otherwise (if you do a lot
 	 *                      of copy)
@@ -656,7 +655,7 @@ public abstract class VFS
 	 *                  you should probably launch this command in a WorkThread
 	 * @param sourcePath the source path
 	 * @param targetPath the target path
-	 * @param comp comp The component that will parent error dialog boxes
+	 * @param comp The component that will parent error dialog boxes
 	 * @param canStop if true the copy can be stopped
 	 * @param sendVFSUpdate true if you want to send a VFS update after the copy. False otherwise (if you do a lot
 	 *                      of copy)
@@ -707,7 +706,7 @@ public abstract class VFS
 	 *                  you should probably launch this command in a WorkThread
 	 * @param sourcePath the source path
 	 * @param targetPath the target path
-	 * @param comp comp The component that will parent error dialog boxes
+	 * @param comp The component that will parent error dialog boxes
 	 * @param canStop if true the copy can be stopped
 	 * @return true if the copy was successful
 	 * @throws IOException IOException If an I/O error occurs
@@ -764,7 +763,7 @@ public abstract class VFS
 
 	//{{{ _listDirectory() method
 	/**
-	 * A convinience method that matches file names against globs, and can
+	 * A convenience method that matches file names against globs, and can
 	 * optionally list the directory recursively.
 	 * @param session The session
 	 * @param directory The directory. Note that this must be a full
