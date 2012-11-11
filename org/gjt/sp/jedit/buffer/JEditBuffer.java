@@ -85,7 +85,7 @@ public class JEditBuffer
 	public static final String ENCODING = "encoding";
 
 	//{{{ JEditBuffer constructors
-	public JEditBuffer(Map props)
+
 	{
 		bufferListeners = new Vector<Listener>();
 		lock = new ReentrantReadWriteLock();
@@ -96,7 +96,10 @@ public class JEditBuffer
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
+	}
 
+	public JEditBuffer(Map props)
+	{
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Set<Map.Entry> set = props.entrySet();
 		for (Map.Entry entry : set)
@@ -118,16 +121,6 @@ public class JEditBuffer
 	 */
 	public JEditBuffer()
 	{
-		bufferListeners = new Vector<Listener>();
-		lock = new ReentrantReadWriteLock();
-		contentMgr = new ContentManager();
-		lineMgr = new LineManager();
-		positionMgr = new PositionManager(this);
-		undoMgr = new UndoManager(this);
-		integerArray = new IntegerArray();
-		propertyLock = new Object();
-		properties = new HashMap<Object, PropValue>();
-
 		properties.put("wrap",new PropValue("none",false));
 		properties.put("folding",new PropValue("none",false));
 		tokenMarker = new TokenMarker();
