@@ -10,6 +10,8 @@ contributing to this release.
 
 {{{ Bug fixes
 
+- Does not create backups on exit (#3579788 Jarek Czekalski)
+
 - I/O Error on First Save Attempt (#3574500 Jarek Czekalski) 
 
 - Fixed whole word search (#3551515 Matthieu Casanova)
