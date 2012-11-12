@@ -2437,7 +2437,7 @@ Editing/Open_Line_Below.label=Open Line Below
 Editing/Toggle_Fold.label=Toggle Fold
 #}}}
 
-//{{{ Emacs
+#{{{ Emacs
 macros.folder.Emacs.label=Emacs
 Emacs/Emacs_Align_Decls.label=Emacs Align Decls
 Emacs/Emacs_Backward_Sentence.label=Emacs Backward Sentence
@@ -2461,7 +2461,7 @@ Emacs/Emacs_Set_Wrap=Emacs Set Wrap
 Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
 Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
 Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
-//}}}
+#}}}
 
 #{{{ Files
 macros.folder.Files.label=Files
