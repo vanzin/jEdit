@@ -5,7 +5,7 @@
 <!--
 This is Nullsoft Scriptable Installation System mode by Ryan Grove 2003.
 Copyright (C) 2003 Ryan Grove
-Copyright (C) 2007 Uwe Stöhr (donovaly@users.sourceforge.net)
+Copyright (C) 2007-2012 Uwe Stöhr (donovaly@users.sourceforge.net)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -50,17 +50,17 @@ $Id$
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">::</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
-		<SPAN TYPE="LITERAL1" DELEGATE="NSIS_LITERAL">
+		<SPAN TYPE="LITERAL1" ESCAPE="$\" DELEGATE="NSIS_LITERAL">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" DELEGATE="NSIS_LITERAL">
+		<SPAN TYPE="LITERAL1" ESCAPE="$\" DELEGATE="NSIS_LITERAL">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" DELEGATE="NSIS_LITERAL">
+		<SPAN TYPE="LITERAL1" ESCAPE="$\" DELEGATE="NSIS_LITERAL">
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>
@@ -425,12 +425,14 @@ $Id$
 			<KEYWORD2>setdatesave</KEYWORD2>
 			<KEYWORD2>setdetailsprint</KEYWORD2>
 			<KEYWORD2>setdetailsview</KEYWORD2>
+			<KEYWORD2>seterrorlevel</KEYWORD2>
 			<KEYWORD2>setfileattributes</KEYWORD2>
 			<KEYWORD2>setfont</KEYWORD2>
 			<KEYWORD2>setoutpath</KEYWORD2>
 			<KEYWORD2>setoverwrite</KEYWORD2>
 			<KEYWORD2>setpluginunload</KEYWORD2>
 			<KEYWORD2>setrebootflag</KEYWORD2>
+			<KEYWORD2>setregview</KEYWORD2>
 			<KEYWORD2>setshellvarcontext</KEYWORD2>
 			<KEYWORD2>setstaticbkcolor</KEYWORD2>
 			<KEYWORD2>setwindowlong</KEYWORD2>
