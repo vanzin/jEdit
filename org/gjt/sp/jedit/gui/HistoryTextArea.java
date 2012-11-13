@@ -165,6 +165,10 @@ public class HistoryTextArea extends JTextArea
 					evt.consume();
 				}
 				break;
+			case KeyEvent.VK_CONTEXT_MENU:
+				controller.showPopupMenu(evt.isShiftDown());
+				evt.consume();
+				break;
 			}
 		}
 
