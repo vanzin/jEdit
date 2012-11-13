@@ -663,15 +663,15 @@ public class SearchDialog extends EnhancedDialog
 		JPanel grid = new JPanel(new GridLayout(5,1,0,12));
 
 		findBtn = new JButton(jEdit.getProperty("search.findBtn"));
-		/* findBtn.setMnemonic(jEdit.getProperty("search.findBtn.mnemonic")
-			.charAt(0)); */
+		findBtn.setMnemonic(jEdit.getProperty("search.findBtn.mnemonic")
+			.charAt(0));
 		getRootPane().setDefaultButton(findBtn);
 		grid.add(findBtn);
 		findBtn.addActionListener(actionHandler);
 
 		replaceBtn = new JButton(jEdit.getProperty("search.replaceBtn", "Replace"));
-		/* replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic")
-			.charAt(0)); */
+		replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic")
+			.charAt(0));
 		grid.add(replaceBtn);
 		replaceBtn.addActionListener(actionHandler);
 

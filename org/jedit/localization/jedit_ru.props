@@ -883,6 +883,7 @@ search.synchronize.tooltip=Установить фильтр и дирекори
 search.findBtn=Искать
 search.findBtn.mnemonic=f
 search.replaceBtn=Заменить
+search.replaceBtn.mnemonic=
 search.replaceAndFindBtn=Заменить и найти
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Заменить все

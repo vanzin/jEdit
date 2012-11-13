@@ -825,9 +825,9 @@ search.synchronize=von aktiver Datei
 search.synchronize.mnemonic=o
 
 search.findBtn=Suchen
-#search.findBtn.mnemonic=
+search.findBtn.mnemonic=s
 search.replaceBtn=Ersetzen
-#search.replaceBtn.mnemonic=
+search.replaceBtn.mnemonic=e
 search.replaceAndFindBtn=Ersetzen & Suchen
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Alle ersetzen

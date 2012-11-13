@@ -888,6 +888,7 @@ search.synchronize.tooltip=Nastaví filtr a adresář na aktuálníkoncovku/umí
 search.findBtn=Najít
 search.findBtn.mnemonic=f
 search.replaceBtn=Nahradit
+search.replaceBtn.mnemonic=h
 search.replaceAndFindBtn=Nahradit & Najít
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Nahradit vše

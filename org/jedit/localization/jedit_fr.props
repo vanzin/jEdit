@@ -887,6 +887,7 @@ search.synchronize.tooltip=Défini filtre d'extension et dossier pour la localis
 search.findBtn=Rechercher
 search.findBtn.mnemonic=h
 search.replaceBtn=Remplacer
+search.replaceBtn.mnemonic=e
 search.replaceAndFindBtn=Remplacer & rechercher
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Tout remplacer
