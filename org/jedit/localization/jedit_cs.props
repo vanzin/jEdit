@@ -742,7 +742,7 @@ badurl.message=Následující URL není validní: {0}\n\
 
 #{{{ Go to line dialog
 goto-line.title=Jdi na řádku
-goto-line.message=Jdi na řádku:
+goto-line.message=Jdi na řádku ({0} - {1}):
 #}}}
 
 #{{{ Word count dialog

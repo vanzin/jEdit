@@ -743,7 +743,7 @@ badurl.message=The following URL is invalid: {0}\n\
 
 #{{{ Go to line dialog
 goto-line.title=Go To Line
-goto-line.message=Go to line:
+goto-line.message=Go to line ({0} - {1}):
 #}}}
 
 #{{{ Word count dialog

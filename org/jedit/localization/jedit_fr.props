@@ -740,7 +740,7 @@ badurl.message=Cette URL est invalide : {0}\n
 
 #{{{ Go to line dialog
 goto-line.title=Atteindre une ligne
-goto-line.message=Atteindre la ligne :
+goto-line.message=Atteindre la ligne ({0} - {1}) :
 #}}}
 
 #{{{ Word count dialog

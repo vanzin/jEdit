@@ -737,7 +737,7 @@ badurl.message=URL нокорректен: {0}\n\
 
 #{{{ Go to line dialog
 goto-line.title=Перейти к строке
-goto-line.message=Перейти к строке:
+goto-line.message=Перейти к строке ({0} - {1}):
 #}}}
 
 #{{{ Word count dialog

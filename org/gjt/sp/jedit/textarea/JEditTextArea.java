@@ -256,13 +256,16 @@ public class JEditTextArea extends TextArea
 	 */
 	public void showGoToLineDialog()
 	{
-		String line = GUIUtilities.input(view,"goto-line",null);
+		int maxLine = Integer.valueOf(buffer.getLineCount());
+		String line = GUIUtilities.input(view,"goto-line",new Integer[] {1, maxLine},null);
 		if(line == null)
 			return;
 
 		try
 		{
 			int lineNumber = Integer.parseInt(line) - 1;
+			if(lineNumber > --maxLine)
+				lineNumber = maxLine;
 			EditBus.send(new PositionChanging(this));
 			setCaretPosition(getLineStartOffset(lineNumber));
 		}

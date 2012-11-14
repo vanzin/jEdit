@@ -743,7 +743,7 @@ badurl.message=この URL は無効です: {0}\n\
 
 #{{{ Go to line dialog
 goto-line.title=行移動
-goto-line.message=移動先の行:
+goto-line.message=移動先の行 ({0} - {1}):
 #}}}
 
 #{{{ Word count dialog

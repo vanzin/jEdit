@@ -684,7 +684,7 @@ badurl.message=Die folgende URL ist ungültig: "{0}"\n\
 
 #{{{ Go to line dialog
 goto-line.title=Gehe zu Zeile
-goto-line.message=Gehe zu Zeile:
+goto-line.message=Gehe zu Zeile ({0} - {1}):
 #}}}
 
 #{{{ Word count dialog
