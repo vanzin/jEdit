@@ -268,7 +268,7 @@
 
                 <section id="electric-keys">
                 <title>Electric keys</title>
-                
+
                 <para>
                 Electric keys cause reapplying of the indentation rules to
                 the current line. Thanks to the electric keys the following
@@ -403,6 +403,14 @@
         <keycap>C+e C+k</keycap>) inserts the line comment string, for example
         <literal>//</literal> in Java mode, at the start of each selected
         line.</para>
+
+        <tip> <title> Toggling Comments </title>
+        <para> You might be looking for the actions
+        <guimenuitem>Toggle Line Comment</guimenuitem> or
+        <guimenuitem>Toggle Range Comment</guimenuitem>.
+        They are available from the TextTools plugin, not jEdit core. </para>
+        </tip>
+
     </section>
 
     <section id="bracket-matching">
