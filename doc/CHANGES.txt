@@ -2,10 +2,10 @@ jEdit 5.0 version history
        (changes since jEdit 4.5.2)
 :encoding=UTF-8:
 
-{{{ Version 5.0pre2
+{{{ Version 5.0.0
 
 Thanks to Jarek Czekalski, Eric Le Lay, Matthieu Casanova, Tom Power, Malathi,
-Thomas Meyer, Vladimir Avondin, Björn "Vampire" Kautler, and Alan Ezust for
+Thomas Meyer, Vladimir Avondin, Björn "Vampire" Kautler and Alan Ezust for
 contributing to this release. 
 
 {{{ Bug fixes
@@ -79,7 +79,6 @@ contributing to this release.
 }}}
 
 }}}
-
 
 {{{ Version 5.0pre1
 
@@ -188,18 +187,18 @@ Tom Power and Donovaly for contributing to this release.
 - New constructors for CopyFileWorker:
   CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target)
   CopyFileWorker(Component comp, VFSFile[] vfsFiles, String target,
-  			Behavior behavior)
+                 Behavior behavior)
   CopyFileWorker(Component comp, File[] files, String target)
   CopyFileWorker(Component comp, File[] files, String target, Behavior behavior)
   to allow copy of multiple files at the same time (Matthieu Casanova)
 
 - New VFS.copy() methods:
   copy(ProgressObserver progress, VFS sourceVFS, Object sourceSession,
-  	String sourcePath, VFS targetVFS, Object targetSession,
-  	String targetPath, Component comp, boolean canStop,
-  	boolean sendVFSUpdate)
+       String sourcePath, VFS targetVFS, Object targetSession,
+       String targetPath, Component comp, boolean canStop,
+       boolean sendVFSUpdate)
   copy(ProgressObserver progress, String sourcePath,String targetPath,
-  	Component comp, boolean canStop, boolean sendVFSUpdate)
+       Component comp, boolean canStop, boolean sendVFSUpdate)
   (Matthieu Casanova)
 
 - New methods MiscUtilities.getCompleteBaseName() to return
@@ -357,8 +356,8 @@ Tom Power and Donovaly for contributing to this release.
 - Added Icons to the VFS Browser context menu (Matthieu Casanova)
 
 - Combined Global and Plugin options into a single pane, making Optional plugin
-	obsolete, fixing auto resize dialog issue.
-	(#3449498, request #3455602 Alan Ezust)
+  obsolete, fixing auto resize dialog issue.
+  (#3449498, request #3455602 Alan Ezust)
 
 - jEdit is now always using continuous layout in JSplitPane (Matthieu Casanova)
 
