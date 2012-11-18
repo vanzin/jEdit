@@ -84,7 +84,7 @@ public class EditServer extends Thread
 			// Bind to any port on localhost; accept 2 simultaneous
 			// connection attempts before rejecting connections
 			socket = new ServerSocket(0, 2,
-				InetAddress.getByName("127.0.0.1"));
+				InetAddress.getByName(null));
 			authKey = new Random().nextInt(Integer.MAX_VALUE);
 			int port = socket.getLocalPort();
 

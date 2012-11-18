@@ -290,7 +290,7 @@ public class jEdit
 				int port = Integer.parseInt(in.readLine());
 				int key = Integer.parseInt(in.readLine());
 
-				Socket socket = new Socket(InetAddress.getByName("127.0.0.1"),port);
+				Socket socket = new Socket(InetAddress.getByName(null),port);
 				DataOutputStream out = new DataOutputStream(
 					socket.getOutputStream());
 				out.writeInt(key);
