@@ -11,21 +11,8 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
-- Fixed whole word search (#3551515 Matthieu Casanova) [merged into 5.0.x]
-
 - Added missing localization string:
   options.plugin-manager.list-cache.minutes (#3574373 Matthieu Casanova)
-
-- Correctly determine whether Look and Feel did change to not touch it if it
-  stays the same as this might cause delays and Exceptions.
-  (Björn "Vampire" Kautler) [Merged into 5.0.x]
-
-- Disable menu bar mnemonics if they are mapped as otherwise defined shortcuts
-  so that they are not shown visually to the user when they actually do not
-  work and make sure that no conflict can arise with the default keymap and
-  any localization (#3528208 Björn "Vampire" Kautler) [Merged into 5.0.x]
-
-- Fix keymap duplication handling (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - Fix AutoSave exception after multiline cut (#3017650 Thomas Meyer)
 
@@ -118,9 +105,6 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
-- Add a "German Keyboard" keymap that replaces shortcuts that are not reachable
-  on a german keyboard by reachable ones. (Björn "Vampire" Kautler) [Merged into 5.0.x]
-
 - Emacs macros and keymap updates. (Brian Clapper)
 
 - Use separate (shorter) label for "whole word search" in the search bar.
@@ -142,9 +126,6 @@ and Maik Nijhuis for contributing to this release.
 
 }}}
 {{{ Miscellaneous
-
-- Translate underscores to spaces when displaying keymap names in the UI to
-  eliminate files with spaces in the name. (Björn "Vampire" Kautler) [Merged into 5.0.x]
 
 - New macro in Files section: "Open Selection In Desktop" (Jarek Czekalski)
 
