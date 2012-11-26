@@ -40,6 +40,8 @@ and Maik Nijhuis for contributing to this release.
 
 - Fix selecting mode based on exact filename match. (#3562935 Dale Anson)
 
+- Fix old modes/catalog entries clutter properties. (#3533751 Eric Le Lay)
+
 }}}
 {{{ API Changes
 
