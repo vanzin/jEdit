@@ -146,6 +146,19 @@ public class jEdit
 		// are closed
 		background = OperatingSystem.isMacOS();
 
+		// Fix X11 windows class
+		if (OperatingSystem.isX11()) {
+			try {
+				Toolkit xToolkit = Toolkit.getDefaultToolkit();
+				java.lang.reflect.Field awtAppClassNameField =
+					xToolkit.getClass().getDeclaredField("awtAppClassName");
+				awtAppClassNameField.setAccessible(true);
+				awtAppClassNameField.set(xToolkit, System.getProperty("x11.wmclass", "jedit"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		//{{{ Parse command line
 		boolean endOpts = false;
 		int level = Log.WARNING;
