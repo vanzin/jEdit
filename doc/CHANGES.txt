@@ -11,6 +11,8 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Re-added missing OS/2 support code. (#3589903 Alan Ezust)
+
 - Added missing localization string:
   options.plugin-manager.list-cache.minutes (#3574373 Matthieu Casanova)
 

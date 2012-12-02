@@ -152,13 +152,13 @@ public class OperatingSystem
 
 	//{{{ isDOSDerived() method
 	/**
-	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7.
+	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7, or OS/2.
 	 * @deprecated use {@link #isWindows()}
 	 */
 	@Deprecated
 	public static boolean isDOSDerived()
 	{
-		return isWindows();
+		return isWindows() || isOS2();
 	} //}}}
 
 	//{{{ isWindows() method
@@ -186,6 +186,15 @@ public class OperatingSystem
 	public static boolean isWindowsNT()
 	{
 		return os == WINDOWS_NT;
+	} //}}}
+
+	//{{{ isOS2() method
+	/**
+	 * Returns if we're running OS/2.
+	 */
+	public static boolean isOS2()
+	{
+		return os == OS2;
 	} //}}}
 
 	//{{{ isUnix() method
@@ -291,6 +300,7 @@ public class OperatingSystem
 	private static final int UNIX = 0x31337;
 	private static final int WINDOWS_9x = 0x640;
 	private static final int WINDOWS_NT = 0x666;
+	private static final int OS2 = 0xDEAD;
 	private static final int MAC_OS_X = 0xABC;
 	private static final int VMS = 0xDEAD2;
 	private static final int UNKNOWN = 0xBAD;
@@ -324,13 +334,16 @@ public class OperatingSystem
 		{
 			os = UNIX;
 		}
+		else if(osName.contains("OS/2"))
+		{
+			os = OS2;
+		}
 		else
 		{
 			os = UNKNOWN;
 			Log.log(Log.WARNING,OperatingSystem.class,
-				"Unknown operating system: " + osName);
+			"Unknown operating system: " + osName);
 		}
-
 		// for debugging, make jEdit think its using a different
 		// version of Java than it really is.
 		String javaVersion = System.getProperty("jedit.force.java.version");
