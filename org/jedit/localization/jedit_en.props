@@ -2179,7 +2179,7 @@ macro.rs.DeleteCurrent.Deleted.message=Deleted:
 #}}}
 
 #{{{ Glob Close
-macro.rs.GlobClose.GlobPattern.label=Glob Pattern:
+macro.rs.GlobClose.GlobPattern.label=Glob Pattern (e.g. *.txt or /usr/include/*):
 macro.rs.GlobClose.ErrorGlobPattern.error=Error in glob pattern:
 #}}}
 

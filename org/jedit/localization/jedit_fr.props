@@ -2168,7 +2168,7 @@ macro.rs.DeleteCurrent.Deleted.message=Supprimé(s) :
 #}}}
 
 #{{{ Glob Close
-macro.rs.GlobClose.GlobPattern.label=Motif :
+macro.rs.GlobClose.GlobPattern.label=Motif (par exemple *.txt ou /usr/include/*):
 macro.rs.GlobClose.ErrorGlobPattern.error=Erreur dans le motif :
 #}}}
 
