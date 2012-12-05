@@ -8,6 +8,7 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix old modes/catalog entries clutter properties. (#3533751 Eric Le Lay)
 
 }}}
 {{{ Miscellaneous

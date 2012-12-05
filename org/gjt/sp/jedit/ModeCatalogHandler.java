@@ -66,11 +66,8 @@ class ModeCatalogHandler extends DefaultHandler
 			String firstlineGlob = attrs.getValue("FIRST_LINE_GLOB");
 
 
-			Mode mode = ModeProvider.instance.getMode(modeName);
-			if (mode == null)
-			{
-			    mode = instantiateMode(modeName);
-			}
+			Mode mode = instantiateMode(modeName);
+
 			ModeProvider.instance.addMode(mode);
 			
 			Object path;
