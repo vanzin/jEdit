@@ -16,16 +16,12 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="&lt;" DELEGATE="JAVASCRIPT">
-			<BEGIN>&lt;(?i)(script)</BEGIN>
-			<END>&lt;/$1&gt;</END>
-		</SPAN_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="SCRIPT_TAG"
+					HASH_CHAR="&lt;">&lt;(?=SCRIPT\b)</SEQ_REGEXP>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="MARKUP" DELEGATE="CSS">
-			<BEGIN>&lt;STYLE</BEGIN>
-			<END>&lt;/STYLE&gt;</END>
-		</SPAN>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="STYLE_TAG"
+					HASH_CHAR="&lt;">&lt;(?=STYLE\b)</SEQ_REGEXP>
 
 		<!-- DTD instructions -->
 		<SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
@@ -203,12 +199,40 @@
 		</KEYWORDS>
 	</RULES>
 
-	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP" IGNORE_CASE="TRUE">
+	<!-- SCRIPT tag: Highlight tag and delegate to JavaScript mode. -->
+	<RULES SET="SCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="JAVASCRIPT">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+
+	<RULES SET="JAVASCRIPT" 
+		IGNORE_CASE="FALSE"
+		HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">(?i)&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
 		<IMPORT DELEGATE="javascript::MAIN"/>
 	</RULES>
 
-	<RULES SET="CSS" DEFAULT="MARKUP">
-		<SEQ TYPE="MARKUP" DELEGATE="css::MAIN">&gt;</SEQ>
+	<!-- STYLE tag: Highlight tag and delegate to CSS mode. -->
+	<RULES SET="STYLE_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="CSS">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+
+	<RULES SET="CSS"
+	    HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="-?\d+(\.\d+)?(pt|pc|in|mm|cm|em|ex|px|ms|s|%|)"
+		NO_WORD_SEP="-_%">
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">&lt;(?=/STYLE\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="css::MAIN"/>
+	</RULES>
+
+	<!-- Closing tag: Highlight tag and return to MAIN ruleset. -->
+	<RULES SET="ENDTAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="MAIN">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
 	</RULES>
 	
  	<RULES SET="STRING" DEFAULT="LITERAL1">

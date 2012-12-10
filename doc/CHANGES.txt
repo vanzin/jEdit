@@ -106,6 +106,8 @@ and Maik Nijhuis for contributing to this release.
 
 - Updated Verilog mode (#3536967 Steve snarum-micron)
 
+- Updated HTML mode (#3594526 Marc Häfner)
+
 }}}
 {{{ UI
 
