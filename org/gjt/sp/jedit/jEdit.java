@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
@@ -147,15 +148,19 @@ public class jEdit
 		background = OperatingSystem.isMacOS();
 
 		// Fix X11 windows class
-		if (OperatingSystem.isX11()) {
-			try {
+		if (OperatingSystem.isX11())
+		{
+			try
+			{
 				Toolkit xToolkit = Toolkit.getDefaultToolkit();
-				java.lang.reflect.Field awtAppClassNameField =
+				Field awtAppClassNameField =
 					xToolkit.getClass().getDeclaredField("awtAppClassName");
 				awtAppClassNameField.setAccessible(true);
 				awtAppClassNameField.set(xToolkit, System.getProperty("x11.wmclass", "jedit"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+			catch (Exception e)
+			{
+				Log.log(Log.ERROR, jEdit.class, e);
 			}
 		}
 
