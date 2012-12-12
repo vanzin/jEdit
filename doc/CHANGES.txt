@@ -108,6 +108,8 @@ and Maik Nijhuis for contributing to this release.
 
 - Updated HTML mode (#3594526 Marc Häfner)
 
+- Updated CSS mode (#3595041 Marc Häfner)
+
 }}}
 {{{ UI
 

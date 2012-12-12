@@ -407,27 +407,34 @@
 		DIGIT_RE="-?\d+(\.\d+)?(pt|pc|in|mm|cm|em|ex|px|ms|s|%|)"
 		NO_WORD_SEP="-_%">
 
-		<SPAN TYPE="LITERAL1" ESCAPE="\">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
-		</SPAN>
-
-		<!-- "functions" -->
-		<SPAN_REGEXP TYPE="LITERAL1" HASH_CHARS="RU" MATCH_TYPE="KEYWORD1">
-			<BEGIN>(rgb|url)\s*\(</BEGIN>
-			<END>)</END>
+		<SPAN_REGEXP TYPE="LITERAL1" ESCAPE="\" HASH_CHARS="&quot;'">
+			<BEGIN>(["'])</BEGIN>
+			<END>$1</END>
 		</SPAN_REGEXP>
 
-		<!-- <SEQ DELEGATE="PROP_VALUE_COLOR">#</SEQ> -->
-		<MARK_FOLLOWING TYPE="DIGIT">#</MARK_FOLLOWING>
+		<!-- "functions" -->
 
-		<SEQ_REGEXP HASH_CHAR="!" TYPE="KEYWORD2">!\s*important</SEQ_REGEXP>
+		<!-- url without quotes -->
+		<SPAN_REGEXP TYPE="LITERAL1" MATCH_TYPE="KEYWORD1" HASH_CHAR="url(" ESCAPE="\">
+			<BEGIN>url\((?=\s*[^"'])</BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
 
 		<!-- proprietary IE function: -->
 		<SPAN_REGEXP TYPE="FUNCTION" DELEGATE="javascript::MAIN" HASH_CHAR="expression">
 			<BEGIN>expression\s*\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
+
+		<!-- all other functions -->
+		<SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="PROP_VALUE">
+			<BEGIN>[\w-]+\(</BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
+
+		<MARK_FOLLOWING TYPE="DIGIT">#</MARK_FOLLOWING>
+
+		<SEQ_REGEXP HASH_CHAR="!" TYPE="KEYWORD2">!\s*important</SEQ_REGEXP>
 
 		<!-- Delegate back: -->
 		<SEQ TYPE="OPERATOR" DELEGATE="PROPERTIES">;</SEQ>
