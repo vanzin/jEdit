@@ -6,8 +6,8 @@ jEdit 5.1 version history
 
 Thanks to Björn "Vampire" Kautler, Jarek Czekalski, Thomas Meyer,
 Matthieu Casanova, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
-Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper, Uwe Stöhr
-and Maik Nijhuis for contributing to this release.
+Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper, Uwe Stöhr,
+Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
