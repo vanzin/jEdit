@@ -106,8 +106,7 @@ void runScript()
 		execScript("Windows Script Host", "wscript " + path);
 	}
 	else {
-		Macros.error(view,
-			String FileNotScriptError);
+		Macros.error(view, FileNotScriptError);
 	}
 }
 
