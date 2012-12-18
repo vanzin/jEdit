@@ -684,7 +684,7 @@ public class MiscUtilities
 	 * <code>backup.minTime</code> (property) ms ago.
 	 * Uses jedit properties to determine backup parameters,
 	 * like prefix, suffix.
-	 * @param file The file to back up.
+	 * @param path The file to back up.
 	 * @param backupDir The directory, usually obtained from
 	 *                  <code>prepareBackupDirectory</code>.
 	 * @return File suitable for backup of <code>file</code>,
@@ -710,7 +710,7 @@ public class MiscUtilities
 	 * In case of multiple backups does necessary backup renumbering.
 	 * Checks whether the last backup was not earlier than
 	 * <code>backupTimeDistance</code> ms ago.
-	 * @param file The file to back up.
+	 * @param path The file to back up.
 	 * @param backups The number of backups. Must be >= 1. If > 1, backup
 	 * files will be numbered.
 	 * @param backupDirectory The directory determined externally or
