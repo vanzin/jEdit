@@ -117,6 +117,8 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 
 - Updated CSS mode (#3595041 Marc Häfner)
 
+- Updated Coffeescript mode (#3595105 Marc Häfner)
+
 }}}
 {{{ UI
 
