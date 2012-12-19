@@ -1119,23 +1119,30 @@ public class jEdit
 	 */
 	public static EditPlugin getPlugin(String name, boolean loadIfNecessary)
 	{
+		if (name == null)
+		{
+			return null;	
+		}
+		
 		EditPlugin[] plugins = getPlugins();
 		EditPlugin plugin = null;
-		for(int i = 0; i < plugins.length; i++)
+		for (EditPlugin ep : plugins)
 		{
-			if(plugins[i].getClassName().equals(name))
-				plugin = plugins[i];
-			if(loadIfNecessary)
+			if (ep.getClassName().equals(name))
 			{
-				if(plugin instanceof EditPlugin.Deferred)
-				{
-					plugin.getPluginJAR().activatePlugin();
-					plugin = plugin.getPluginJAR().getPlugin();
-					break;
-				}
+				plugin = ep;
+				break;
 			}
 		}
-		if (!loadIfNecessary) return plugin;
+		if (!loadIfNecessary) 
+		{
+			return plugin;	
+		}
+		if (plugin instanceof EditPlugin.Deferred)
+		{
+			plugin.getPluginJAR().activatePlugin();
+			plugin = plugin.getPluginJAR().getPlugin();
+		}
 		String jarPath = PluginJAR.findPlugin(name);
 		PluginJAR pjar = PluginJAR.load(jarPath, true);
 		return pjar.getPlugin();
@@ -3804,6 +3811,13 @@ public class jEdit
 
 		try
 		{
+			// A couple of issues here --
+			// First, setLookAndFeel must be called on the EDT. On initial start
+			// up this isn't a problem, but initPLAF is called on propertiesChanged,
+			// which can happen a lot.
+			// Second, this will fail to load the look and feel as set in the
+			// LookAndFeel plugin on initial start up because the plugins haven't
+			// been loaded yet.
 			UIManager.setLookAndFeel(getPLAFClassName(lf));
 		}
 		catch(Exception e)
