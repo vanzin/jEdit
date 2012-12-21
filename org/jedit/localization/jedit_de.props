@@ -1968,13 +1968,13 @@ plugin-manager.cleanup.label=Bereinigen
 plugin-manager.cleanup.title=Plugin-Daten bereinigen
 plugin-manager.cleanup.message=Daten der folgenden Plugins entfernen:
 
-plugin-manager.noOrphan.label=Find orphan
-plugin-manager.noOrphan.title=No orphan jars found
-plugin-manager.noOrphan.message=There was no orphan jars in your jEdit installation
+plugin-manager.noOrphan.label=Suche Waisen
+plugin-manager.noOrphan.title=Keine verwaisten jar-Dateien gefunden
+plugin-manager.noOrphan.message=In dieser jEdit-Installation wurden keine verwaisten jar-Dateien gefunden
 
 plugin-manager.findOrphan.label=Suche Waisen
 plugin-manager.findOrphan.title=Verwaiste jar-Dateien suchen
-plugin-manager.findOrphan.message=Die folgenden jars gehören scheinbar zu keinem Plugin\n\
+plugin-manager.findOrphan.message=Die folgenden jar-Dateien gehören scheinbar zu keinem Plugin\n\
   Entfernen?\n (VORSICHT: Sie könnten dennoch notwendig sein für ein \n\
   Plugin wie z.B. JDBC-Treiber):
 
