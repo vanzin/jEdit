@@ -12,7 +12,7 @@
 		<PROPERTY NAME="lineComment" VALUE="--" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
-	<RULES IGNORE_CASE="FALSE"
+	<RULES IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
