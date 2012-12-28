@@ -837,7 +837,7 @@ public class ManagePanel extends JPanel
 			try
 			{
 				OutputStream os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
-				writer = new BufferedWriter(new OutputStreamWriter(os));
+				writer = new BufferedWriter(new OutputStreamWriter(os, "utf-8"));
 				writer.write(sb.toString());
 			}
 			catch (Exception e)
