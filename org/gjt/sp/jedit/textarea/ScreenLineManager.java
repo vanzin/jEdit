@@ -48,7 +48,7 @@ class ScreenLineManager
 	//{{{ isScreenLineCountValid() method
 	boolean isScreenLineCountValid(int line)
 	{
-		return (screenLines[line] & SCREEN_LINES_VALID_MASK) != 0;
+		return screenLines[line] > 0;
 	} //}}}
 
 	//{{{ getScreenLineCount() method
@@ -62,14 +62,14 @@ class ScreenLineManager
 	int getScreenLineCount(int line)
 	{
 		assert isScreenLineCountValid(line);
-		return screenLines[line] >> SCREEN_LINES_SHIFT;
+		return screenLines[line];
 	} //}}}
 
 	//{{{ setScreenLineCount() method
 	/**
 	 * Sets the number of screen lines that the specified physical line
 	 * is split into.
-	 * @param line the line number
+	 * @param line the physical line number
 	 * @param count the line count (1 if no wrap)
 	 */
 	void setScreenLineCount(int line, int count)
@@ -80,31 +80,38 @@ class ScreenLineManager
 		{
 			// limitations...
 			count = Short.MAX_VALUE;
+			Log.log(Log.ERROR,this,new Exception("Max screen line count hit!"));
 		}
 
 		if(Debug.SCREEN_LINES_DEBUG)
 			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + ',' + count + ')'));
-		screenLines[line] = (short)(count << SCREEN_LINES_SHIFT | SCREEN_LINES_VALID_MASK);
+		screenLines[line] = (char)count;
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
 	void invalidateScreenLineCounts()
 	{
 		for(int i = 0, lineCount = buffer.getLineCount(); i < lineCount; i++)
-			screenLines[i] &= ~SCREEN_LINES_VALID_MASK;
+			invalidateScreenLineCount(i);
+	} //}}}
+
+	//{{{ invalidateScreenLineCounts() method
+	private void invalidateScreenLineCount(int physicalLineNo)
+	{
+		screenLines[physicalLineNo] = 0;
 	} //}}}
 
 	//{{{ reset() method
 	void reset()
 	{
-		screenLines = new short[buffer.getLineCount()];
+		screenLines = new char[buffer.getLineCount()];
 	} //}}}
 
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int numLines)
 	{
 		int endLine = startLine + numLines;
-		screenLines[startLine] &= ~SCREEN_LINES_VALID_MASK;
+		invalidateScreenLineCount(startLine);
 
 		int lineCount = buffer.getLineCount();
 
@@ -112,7 +119,7 @@ class ScreenLineManager
 		{
 			if(screenLines.length <= lineCount)
 			{
-				short[] screenLinesN = new short[((lineCount + 1) << 1)];
+				char[] screenLinesN = new char[((lineCount + 1) << 1)];
 				System.arraycopy(screenLines,0,screenLinesN,0,
 						 screenLines.length);
 				screenLines = screenLinesN;
@@ -130,7 +137,7 @@ class ScreenLineManager
 	public void contentRemoved(int startLine, int numLines)
 	{
 		int endLine = startLine + numLines;
-		screenLines[startLine] &= ~SCREEN_LINES_VALID_MASK;
+		invalidateScreenLineCount(startLine);
 
 		if(numLines > 0 && endLine != screenLines.length)
 		{
@@ -140,12 +147,12 @@ class ScreenLineManager
 	} //}}}
 
 	//{{{ Private members
-	private static final int SCREEN_LINES_SHIFT = 1;
-	private static final int SCREEN_LINES_VALID_MASK = 1;
-
 	private final JEditBuffer buffer;
 
-	/** This array contains the screen line count for each physical line. */
-	private short[] screenLines;
+	/** This array contains the screen line count for each physical line.
+	 * screenLines[physicalLineNo] == 0 -> invalid entry - No. of screen lines not calculated yet
+	 * screenLines[physicalLineNo] > 0 -> valid entry - No. of screen lines already calculated 
+	 */
+	private char[] screenLines;
 	//}}}
 }
