@@ -11,6 +11,9 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed negative values used in recent file history count (#3598661 Matthieu
+  Casanova)
+
 - Fixed Run script macro when the file is empty (#3596609 Matthieu
   Casanova)
 
