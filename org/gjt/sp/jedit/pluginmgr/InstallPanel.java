@@ -829,7 +829,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
-			String text = "";
+			String text = getText();
 			if (table.getSelectedRowCount() == 1)
 			{
 				Entry entry = (Entry) pluginModel.filteredEntries

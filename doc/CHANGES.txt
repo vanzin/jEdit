@@ -54,6 +54,9 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 - Fix old modes/catalog entries clutter properties. (#3533751 Eric Le Lay)
   [Merged into 5.0.x]
 
+- When checking a box to select a plugin to install, the description was 
+  appearing and immediately disappearing. (#3398605 Dale Anson) 
+  
 }}}
 {{{ API Changes
 
