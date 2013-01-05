@@ -223,6 +223,14 @@ public enum TaskManager
 			this.runnable = runnable;
 		}
 
+		public String getStatus() {
+			return runnable.toString();
+		}
+
+		public String toString() {
+			return runnable.toString();	
+		}
+		
 		@Override
 		public void _run()
 		{
