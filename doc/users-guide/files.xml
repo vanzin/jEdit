@@ -618,32 +618,20 @@
     </section>
 
     <section id="threaded-io">
-        <title>Multi-Threaded I/O</title>
+        <title>I/O tasks</title>
 
         <para>To improve responsiveness and perceived performance, jEdit
-        executes all buffer input/output operations asynchronously. While I/O is
-        in progress, the status bar displays the number of remaining I/O
-        operations.</para>
+        executes all buffer input/output tasks asynchronously.
+        When a task such as this is in progress, the status bar displays the number of running tasks. </para>
 
         <para>The
         <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;
         <guimenuitem>Task Monitor</guimenuitem> command displays a window with more
-        detailed status information and progress meters. By default, the
+        detailed status information and progress meters for each task. By default, the
         <guimenuitem>Task Monitor</guimenuitem> is shown in a floating
         window. This window can be docked using the commands in its top-left
-        corner popup menu; see <xref linkend="docking" />. I/O requests can also
-        be aborted in this window, however note that aborting a buffer save can
-        result in data loss.</para>
+        corner popup menu; see <xref linkend="docking" />. Tasks can be aborted in this window, however note that aborting a buffer save can result in data loss.</para>
 
-        <!-- <para>
-   By default, four I/O threads are created, which means that up
-   to four buffers can be loaded or saved simultaneously. The number of
-   threads can be changed in the
-   <guibutton>Loading and Saving</guibutton> pane of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />. Setting the number to zero
-   disables multi-threaded I/O completely; doing this is not recommended.
-  </para> -->
     </section>
 
     <section id="printing">
