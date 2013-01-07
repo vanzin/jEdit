@@ -48,7 +48,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -587,6 +586,7 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 			updateFilteredEntries();
+			table.setRowSelectionInterval(row, row);
 		} //}}}
 
 		//{{{ sort() method
