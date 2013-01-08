@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.annotation.Nonnull;
+
 import org.gjt.sp.jedit.buffer.*;
 //}}}
 
@@ -59,6 +61,7 @@ class SelectionManager
 	 * Returns the current selection.
 	 * @since jEdit 3.2pre1
 	 */
+	@Nonnull
 	public Selection[] getSelection()
 	{
 		return selection.toArray(
