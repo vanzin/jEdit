@@ -11,6 +11,9 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed macros cut lines and copy lines when the buffer is empty (#3596612
+  Matthieu Casanova)
+
 - Fixed negative values used in recent file history count (#3598661 Matthieu
   Casanova)
 

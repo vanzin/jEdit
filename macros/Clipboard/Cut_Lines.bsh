@@ -10,6 +10,8 @@
 */
 
 cutLines(){
+	if (buffer.getLength() == 0)
+		return;
 	selections = textArea.getSelectedLines();
 	
 	if(selections.length == 0){

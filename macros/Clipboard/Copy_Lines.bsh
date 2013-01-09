@@ -18,7 +18,16 @@ copyLines()
 	}
 	start = textArea.getLineStartOffset(selections[0]);
 	stop = textArea.getLineEndOffset(selections[selections.length-1]);
-	String text = textArea.getText(start,stop-start);
+	int bufferLength = buffer.getLength();
+	String text;
+	if (stop > bufferLength)
+	{
+		text = textArea.getText(start,bufferLength - start) + '\n';
+	}
+	else
+	{
+		text = textArea.getText(start,stop-start);
+	}
 	java.awt.datatransfer.Transferable value = new java.awt.datatransfer.StringSelection(text);
 	Registers.getRegister('$').setTransferable(value);
 }
