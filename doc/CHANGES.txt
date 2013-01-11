@@ -11,6 +11,9 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- fixed bug when pressing down if the is no selection (#3599630
+  Matthieu Casanova)
+
 - Fixed macros cut lines and copy lines when the buffer is empty (#3596612
   Matthieu Casanova)
 

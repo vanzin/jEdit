@@ -124,8 +124,8 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 		int selectedRow = colorsTable.getSelectedRow();
 		remove.setEnabled(selectedRow != -1);
 		moveUp.setEnabled(selectedRow > 0);
-		moveUp.setEnabled(selectedRow != -1 && selectedRow !=
-			colorsModel.getRowCount());
+		moveDown.setEnabled(selectedRow != -1 && selectedRow !=
+			colorsModel.getRowCount() - 1);
 	} //}}}
 
 	//{{{ setSelectedRow() method
