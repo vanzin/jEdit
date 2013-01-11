@@ -7,7 +7,8 @@ jEdit 5.1 version history
 Thanks to Björn "Vampire" Kautler, Jarek Czekalski, Thomas Meyer,
 Matthieu Casanova, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
 Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper, Uwe Stöhr,
-Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
+Marc Häfner, stone1343, Dale Anson, and Maik Nijhuis for contributing
+to this release.
 
 {{{ Bug fixes
 
@@ -110,10 +111,12 @@ Marc Häfner, Dale Anson, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Editing
 
+- Updated lua mode file (patch #2126692 stone1343)
+
 - Macros move lines up/down now keep the current selection (feature #3600082
   Matthieu Casanova)
 
-- Updated nsis2 mode (# 3586538 Uwe Stöhr)
+- Updated nsis2 mode (#3586538 Uwe Stöhr)
 
 - There is now a new encoding Native2ASCII which collapses unicode
   escapes in ISO-8859-1 files on read and expands characters that cannot be
