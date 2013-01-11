@@ -29,12 +29,12 @@ insertSelected(View view, String path){
 }
 
 if(buffer.isReadOnly()){
-	getToolkit().beep();
+	Toolkit.getDefaultToolkit().beep();
 }
 else{
 	String selected = view.getTextArea().getSelectedText();
 	if(selected == null || selected.indexOf('\n') != -1)
-		getToolkit().beep();
+		Toolkit.getDefaultToolkit().beep();
 	else
 		insertSelected(view,selected);
 }
