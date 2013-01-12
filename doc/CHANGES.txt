@@ -12,6 +12,10 @@ to this release.
 
 {{{ Bug fixes
 
+- Bug no. #3590540 produced a soft wrap for a single physical line that was
+  greater than 16383 screen lines. Increased this limit to 65535 in
+  the ScreenLineManager (Thomas Meyer)
+
 - Fixed Insert_Selection macro when the selection is empty (#3596616
   Matthieu Casanova)
 
