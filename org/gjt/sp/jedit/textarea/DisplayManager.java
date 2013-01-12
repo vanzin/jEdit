@@ -655,6 +655,8 @@ public class DisplayManager
 
 		if(!screenLineMgr.isScreenLineCountValid(line))
 		{
+			// reset chunk cache here
+			textArea.chunkCache.reset();
 			int newCount = textArea.chunkCache.getLineSubregionCount(line);
 
 			assert newCount > 0;

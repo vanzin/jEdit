@@ -12,9 +12,20 @@ to this release.
 
 {{{ Bug fixes
 
+- Bug no. #3590540 revealed a performance problem in the ChunkCache, because
+  every scroll action resulted in a tokenization of the really long line, which
+  takes a considerable time and makes jEdit unusable.
+  Fix is to always keep all Chunks of the tokenization process and use it as an
+  buffer in the ChunkCache class.
+  Tokenization of the physical line still happens for every insertion or
+  deletion of the Buffer. Tokenization also happens when the cursor enters the
+  physical line, as only the Chunks from the current physical line are keeped
+  in the ChunkCache.
+  (#3590540 Thomas Meyer)
+
 - Bug no. #3590540 produced a soft wrap for a single physical line that was
   greater than 16383 screen lines. Increased this limit to 65535 in
-  the ScreenLineManager (Thomas Meyer)
+  the ScreenLineManager (#3590540 Thomas Meyer)
 
 - Fixed Insert_Selection macro when the selection is empty (#3596616
   Matthieu Casanova)

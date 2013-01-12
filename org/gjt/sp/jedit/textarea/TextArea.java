@@ -4844,7 +4844,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			displayManager.invalidateScreenLineCounts();
 			displayManager.notifyScreenLineChanges();
 		}
-		chunkCache.invalidateAll();
+		chunkCache.reset();
 		gutter.repaint();
 		painter.repaint();
 	} //}}}

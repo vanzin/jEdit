@@ -50,7 +50,8 @@ class ChunkCache
 	ChunkCache(TextArea textArea)
 	{
 		this.textArea = textArea;
-		out = new ArrayList<Chunk>();
+		outFull = new ArrayList<Chunk>();
+		outFullPhysicalLine = -1;
 		tokenHandler = new DisplayTokenHandler();
 	} //}}}
 
@@ -91,13 +92,12 @@ class ChunkCache
 			return -1;
 		if(line > textArea.getLastPhysicalLine())
 			return -1;
-		
+
 		if(line == lastScreenLineP)
 		{
 			LineInfo last = getLineInfo(lastScreenLine);
 
-			if(offset >= last.offset
-				&& offset < last.offset + last.length)
+			if(offset >= last.offset && offset < last.offset + last.length)
 			{
 				return lastScreenLine;
 			}
@@ -106,7 +106,7 @@ class ChunkCache
 		int screenLine = -1;
 
 		// Find the screen line containing this offset
-		for(int i = 0; i < textArea.getVisibleLines(); i++)
+		for(int i = 0, n = textArea.getVisibleLines(); i < n; i++)
 		{
 			LineInfo info = getLineInfo(i);
 			if(info.physicalLine > line)
@@ -117,8 +117,7 @@ class ChunkCache
 			}
 			if(info.physicalLine == line)
 			{
-				if(offset >= info.offset
-					&& offset < info.offset + info.length)
+				if(offset >= info.offset && offset < info.offset + info.length)
 				{
 					screenLine = i;
 					break;
@@ -128,7 +127,6 @@ class ChunkCache
 
 		if(screenLine == -1)
 			return -1;
-
 
 		lastScreenLineP = line;
 		lastScreenLine = screenLine;
@@ -229,9 +227,19 @@ class ChunkCache
 		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
+	public void reset()
+	{
+		invalidateAll();
+		outFullPhysicalLine = -1;
+		outFull.clear();
+	}
+
 	//{{{ invalidateChunksFromPhys() method
 	void invalidateChunksFromPhys(int physicalLine)
 	{
+		if(physicalLine == outFullPhysicalLine)
+			outFullPhysicalLine = -1;
+
 		for(int i = 0; i < firstInvalidLine; i++)
 		{
 			LineInfo info = lineInfo[i];
@@ -268,10 +276,9 @@ class ChunkCache
 		if(!textArea.softWrap)
 			return 1;
 
-		out.clear();
-		lineToChunkList(physicalLine,out);
+		lineToChunkList(physicalLine);
 
-		int size = out.size();
+		int size = outFull.size();
 		if(size == 0)
 			return 1;
 		else
@@ -492,17 +499,21 @@ class ChunkCache
 	//{{{ getLineInfosForPhysicalLine() method
 	LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
 	{
-		out.clear();
-
 		if(!buffer.isLoading())
-			lineToChunkList(physicalLine,out);
+			lineToChunkList(physicalLine);
 
-		if(out.isEmpty())
-			out.add(null);
+		assert physicalLine == outFullPhysicalLine;
 
-		List<LineInfo> returnValue = new ArrayList<LineInfo>(out.size());
-		getLineInfosForPhysicalLine(physicalLine,returnValue);
-		return returnValue.toArray(new LineInfo[out.size()]);
+		List<Chunk> chunkList = null;
+		if(outFull.isEmpty()) {
+			chunkList = new ArrayList<Chunk>();
+			chunkList.add(null);
+		} else
+			chunkList = outFull;
+
+		List<LineInfo> returnValue = new ArrayList<LineInfo>(chunkList.size());
+		getLineInfosForPhysicalLine(physicalLine,returnValue, chunkList);
+		return returnValue.toArray(new LineInfo[chunkList.size()]);
 	} //}}}
 
 	//{{{ Private members
@@ -516,7 +527,20 @@ class ChunkCache
 	 * The content is valid from 0 to {@link #firstInvalidLine}
 	 */
 	private LineInfo[] lineInfo;
-	private final List<Chunk> out;
+
+	/**
+	 * All Chunks for the current physical line, see also {@link #outFullPhysicalLine}
+	 * The Chunks were created via a call to {@link #lineToChunkList(int)}.
+	 */
+	private final List<Chunk> outFull;
+
+	/**
+	 * Physical line number of the current tokenized/chunked line
+	 * This field contains -1 if the line was not tokenized yet, or
+	 * if the outFull cache was dropped via a {@link #reset()} call
+	 * See also {@link #outFull}
+	 */
+	private int outFullPhysicalLine;
 
 	/** The first invalid line. All lines before this one are valid. */
 	private int firstInvalidLine;
@@ -529,11 +553,13 @@ class ChunkCache
 	//}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
-	private void getLineInfosForPhysicalLine(int physicalLine, List<LineInfo> list)
+	private void getLineInfosForPhysicalLine(int physicalLine, List<LineInfo> list, List<Chunk> chunkList)
 	{
-		for(int i = 0; i < out.size(); i++)
+		assert outFullPhysicalLine == physicalLine;
+
+		for(int i = 0; i < chunkList.size(); i++)
 		{
-			Chunk chunks = out.get(i);
+			Chunk chunks = chunkList.get(i);
 			LineInfo info = new LineInfo();
 			info.physicalLine = physicalLine;
 			if(i == 0)
@@ -544,7 +570,7 @@ class ChunkCache
 			else
 				info.offset = chunks.offset;
 
-			if(i == out.size() - 1)
+			if(i == chunkList.size() - 1)
 			{
 				info.lastSubregion = true;
 				info.length = textArea.getLineLength(physicalLine)
@@ -552,7 +578,7 @@ class ChunkCache
 			}
 			else
 			{
-				info.length = out.get(i + 1).offset
+				info.length = outFull.get(i + 1).offset
 					- info.offset;
 			}
 
@@ -616,6 +642,8 @@ class ChunkCache
 
 		// if one line's chunks are invalid, remaining lines are also
 		// invalid
+		// i.e. if the lastScreenLine is smaller as the first invalid
+		// screen line we don't need to update the chunks, leave here
 		if(lastScreenLine < firstInvalidLine)
 			return;
 
@@ -628,12 +656,12 @@ class ChunkCache
 				+ " to " + lastScreenLine);
 		}
 
+		// Below comment is not true any more (at least partly):
 		// Note that we rely on the fact that when a physical line is
 		// invalidated, all screen lines/subregions of that line are
 		// invalidated as well. See below comment for code that tries
 		// to uphold this assumption.
-
-		out.clear();
+		List<Chunk> out = new ArrayList<Chunk>(0);
 
 		int offset;
 		int length;
@@ -668,7 +696,8 @@ class ChunkCache
 				}
 
 				// chunk the line.
-				lineToChunkList(physicalLine,out);
+				lineToChunkList(physicalLine);
+				out = outFull.subList(0, outFull.size());
 
 				info.firstSubregion = true;
 
@@ -692,7 +721,7 @@ class ChunkCache
 				// otherwise, the number of subregions
 				else
 				{
-					if(i == 0)
+					if(i == 0) //FIXME: (i == 0)!? - not (i == firstLine)?
 					{
 						int skew = textArea.displayManager.firstLine.getSkew();
 						if(skew >= out.size())
@@ -706,11 +735,11 @@ class ChunkCache
 						else if(skew > 0)
 						{
 							info.firstSubregion = false;
-							for(int j = 0; j < skew; j++)
-								out.remove(0);
+							out = outFull.subList(skew, outFull.size());
 						}
 					}
-					chunks = out.remove(0);
+					chunks = out.get(0);
+					out = out.subList(1, out.size());
 					offset = chunks.offset;
 					if (!out.isEmpty())
 						length = out.get(0).offset - offset;
@@ -722,7 +751,8 @@ class ChunkCache
 			{
 				info.firstSubregion = false;
 
-				chunks = out.remove(0);
+				chunks = out.get(0);
+				out = out.subList(1, out.size());
 				offset = chunks.offset;
 				if (!out.isEmpty())
 					length = out.get(0).offset - offset;
@@ -732,8 +762,7 @@ class ChunkCache
 
 			boolean lastSubregion = out.isEmpty();
 
-			if(i == lastScreenLine
-				&& lastScreenLine != lineInfo.length - 1)
+			if(i == lastScreenLine && lastScreenLine != lineInfo.length - 1)
 			{
 				/* if the user changes the syntax token at the
 				 * end of a line, need to do a full repaint. */
@@ -777,16 +806,24 @@ class ChunkCache
 	} //}}}
 
 	//{{{ lineToChunkList() method
-	private void lineToChunkList(int physicalLine, List<Chunk> out)
+	/** chunks the line and fill outFull array with the chunks for the given physical line */
+	private void lineToChunkList(int physicalLine)
 	{
-		TextAreaPainter painter = textArea.getPainter();
-		TabExpander expander= textArea.getTabExpander();
-		tokenHandler.init(painter.getStyles(),
-			painter.getFontRenderContext(),
-			expander,out,
-			textArea.softWrap
-			? textArea.wrapMargin : 0.0f, buffer.getLineStartOffset(physicalLine));
-		buffer.markTokens(physicalLine,tokenHandler);
+		assert physicalLine >= 0;
+
+		if(outFullPhysicalLine != physicalLine) {
+			TextAreaPainter painter = textArea.getPainter();
+			TabExpander expander= textArea.getTabExpander();
+			tokenHandler.init(painter.getStyles(),
+					painter.getFontRenderContext(),
+					expander,outFull,
+					textArea.softWrap
+					? textArea.wrapMargin : 0.0f, buffer.getLineStartOffset(physicalLine));
+
+			outFull.clear();
+			buffer.markTokens(physicalLine,tokenHandler);
+			outFullPhysicalLine = physicalLine;
+		}
 	} //}}}
 
 	//}}}

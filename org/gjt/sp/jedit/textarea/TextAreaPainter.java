@@ -266,7 +266,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		this.styles = styles;
 		styles[Token.NULL] = new SyntaxStyle(getForeground(),null,getFont());
-		textArea.chunkCache.invalidateAll();
+		textArea.chunkCache.reset();
 		repaint();
 	} //}}}
 
@@ -622,7 +622,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setFoldLineStyle(SyntaxStyle[] foldLineStyle)
 	{
 		this.foldLineStyle = foldLineStyle;
-		textArea.chunkCache.invalidateAll();
+		textArea.chunkCache.reset();
 		repaint();
 	} //}}}
 

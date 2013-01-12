@@ -528,7 +528,6 @@ class FirstLine extends Anchor
 		if(this.skew != skew)
 		{
 			this.skew = skew;
-			//FIXME: Necessary?
 			setCallChanged(true);
 		}
 	}
