@@ -238,8 +238,9 @@ public abstract class BeanShellFacade<T>
 		}
 		catch(Exception e)
 		{
-			unwrapException(e);
-			// never called
+			// Only show the exception if jEdit is started, it is meaningless otherwise.
+			if (jEdit.isStartupDone())
+				unwrapException(e);
 			return null;
 		}
 		finally

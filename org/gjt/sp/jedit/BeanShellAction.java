@@ -93,6 +93,8 @@ public class BeanShellAction extends EditAction
 		try
 		{
 			View view = GUIUtilities.getView(comp);
+			if (view == null)
+				view = jEdit.getActiveView();
 
 			// undocumented hack to allow browser actions to work.
 			// XXX - clean up in 4.3
