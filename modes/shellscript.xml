@@ -26,8 +26,8 @@
 		<EOL_SPAN TYPE="COMMENT2">#!</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
-		<!-- Variables -->
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
+		<!-- BUG #3594428 (Bash Syntax Highlighting) -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="LITERAL" NO_LINE_BREAK="TRUE">
 			<BEGIN>${</BEGIN>
 			<END>}</END>
 		</SPAN>
