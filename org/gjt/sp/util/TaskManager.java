@@ -35,6 +35,13 @@ public enum TaskManager
 {
 	INSTANCE;
 
+	/** for jEdit 5.0 API compatibility only. 
+		@deprecated
+	*/
+	@Deprecated
+	public static final TaskManager instance = INSTANCE;
+
+
 	private final List<TaskListener> listeners;
 
 	private final List<Task> tasks;
