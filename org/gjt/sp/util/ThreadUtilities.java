@@ -53,7 +53,8 @@ public class ThreadUtilities
 	 * The difference with VFSManager.runInAWTThread() method is that
 	 * this one will not wait for IO Request before being executed
 	 *
-	 * @param runnable the runnable to run
+	 * @param runnable the runnable to run - it should return something meaningful from 
+	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThread(Runnable runnable)
 	{
@@ -73,6 +74,8 @@ public class ThreadUtilities
 	 *  <ul><li>this method runs the runnable after them</li>
 	 *  <li><code>invokeAndWait</code> runs the runnable before them
 	 *  </li></ul>
+	 * @param runnable the runnable to run - it should return something meaningful from 
+	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
@@ -108,6 +111,8 @@ public class ThreadUtilities
 	 * From the article:
 	 * <a href="http://java.sun.com/products/jfc/tsc/articles/threads/threads1.html#event_dispatching">
 	 * Threads and Swing</a>
+	 * @param runnable the runnable to run - it should return something meaningful from 
+	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThreadNow(Runnable runnable)
 	{
@@ -155,7 +160,8 @@ public class ThreadUtilities
 	 * The runnable will be encapsulated in a {@link Task}
 	 * @see #runInBackground(Task)
 	 *
-	 * @param runnable the runnable to run
+	 * @param runnable the runnable to run - it should return something meaningful from 
+	     toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInBackground(Runnable runnable)
 	{

@@ -33,9 +33,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public enum TaskManager
 {
+	/** A singleton instance of TaskManager */
 	INSTANCE;
 
-	/** for jEdit 5.0 API compatibility only. 
+	/** for jEdit 5.0 API compatibility only.
 		@deprecated
 	*/
 	@Deprecated
