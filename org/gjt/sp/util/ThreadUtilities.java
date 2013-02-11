@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The threadpool of jEdit.
  * It uses a ExecutorService from the java.util.concurrent package.
  * You can run {@link Task} or {@link Runnable} in it, Runnables will be
- * encapsulated in Task.
+ * encapsulated in Task and displayed in the Task Monitor. 
  *
  * @author Matthieu Casanova
  * @author Marcelo Vanzin

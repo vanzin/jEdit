@@ -3,10 +3,10 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2005 Slava Pestov
- * Portions copyright (C) 2000 Richard S. Hall
- * Portions copyright (C) 2001 Dirk Moebius
- * Portions copyright (c) 2005-2012 by the jEdit All-Volunteer Development Team (tm)
+ * Copyright © 1999-2013 Slava Pestov, Richard S. Hall, Dirk Moebius,
+ *    jgellene, ezust, vanza, kpouer, Vampire0, Jarekczek, k_satoda, voituk,
+ *    Thomas Meyer, Martin Raspe
+ *   And possibly other members of the All Volunteer Developer Team (tm)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ import org.gjt.sp.util.StringList;
 //}}}
 
 /**
- * Path name manipulation, string manipulation, and more.<p>
+ * Path, URL name manipulation, string manipulation, and more.<p>
  *
  * The most frequently used members of this class are:<p>
  *
@@ -57,8 +57,6 @@ import org.gjt.sp.util.StringList;
  * <li>{@link #constructPath(String,String)}</li>
  * </ul>
  *
- * @author Slava Pestov
- * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class MiscUtilities
@@ -582,13 +580,13 @@ public class MiscUtilities
 		Uses native desktop commands for each platform, which ask the user to choose an
 		association for files that do not already have one, using the desktop's
 		dialog, in contrast to Desktop.open() which just throws an IOException
-		for unknown types. 
-		
-		@param path path or URL (supported on Linux, anyway) of thing to open  
+		for unknown types.
+
+		@param path path or URL (supported on Linux, anyway) of thing to open
 		@author Alan Ezust
 		@since jEdit 5.0
 	*/
-	public static void openInDesktop(String path) 
+	public static void openInDesktop(String path)
 	{
 		StringList sl = new StringList();
 		if (OperatingSystem.isWindows())
@@ -600,27 +598,27 @@ public class MiscUtilities
 			sl.add("open");
 		else if (OperatingSystem.isX11())
 		{
-			/* For kde or gnome, use gnome-open.
-			   xdg-open opens some filetypes via the web browser instead of running
-			   the gnome/kde preferred app directly */
+			/* For gnome, use gnome-open. Need a way of testing that gnome is actually
+			   running though. Otherwise it is not the correct program to use. 
 			File f = new File("/usr/bin/gnome-open");
 			if (f.exists()) sl.add("gnome-open");
-			else sl.add("xdg-open");
+			else */ 
+			sl.add("xdg-open");
 		}
-		try 
-		{		
+		try
+		{
 			if (sl.isEmpty()) // I don't know what platform it is
 				java.awt.Desktop.getDesktop().open(new File(path));
-			else 
+			else
 			{
 				sl.add(path);
 				Log.log(Log.DEBUG, MiscUtilities.class, "openInDesktop: " + sl.join(" "));
 				Runtime.getRuntime().exec(sl.toArray());
 			}
 		}
-		catch (IOException ioe) 
+		catch (IOException ioe)
 		{
-			Log.log(Log.ERROR, MiscUtilities.class, "openInDesktop failed: " + path, ioe);	
+			Log.log(Log.ERROR, MiscUtilities.class, "openInDesktop failed: " + path, ioe);
 		}
 	}// }}}
 
