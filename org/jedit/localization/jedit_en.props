@@ -1376,10 +1376,8 @@ options.encodings.label=Encodings
 options.encodings.selectEncodings=Select the encodings that should be shown in encoding dialogs:
 options.encodings.available=Available encoding(s)
 options.encodings.selected=Selected encoding(s)
-options.encodings.available.tooltip=<html>Encodings in this column will <b>not</b> be listed in encoding dialogs.\
-  Drag them to the right column to activate them</html>
-options.encodings.selected.tooltip=Encodings in this column be shown in encoding dialogs.\
-  Drag them to the left column to hide them
+options.encodings.available.tooltip=<html>Encodings in this column will <b>not</b> be shown as choices in encoding comboboxes. Drag them to the right column to show them. </html>
+options.encodings.selected.tooltip=<html>Encodings in this column will be shown as choices in encoding comboboxes of jEdit's GUI. Drag them to the left column to hide them.</html>
 #}}}
 
 #{{{ Gutter pane
