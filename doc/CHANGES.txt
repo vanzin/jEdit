@@ -166,6 +166,8 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
+- Made view option, "alternate toolbar placement" the default for jEdit. 
+
 - Emacs macros and keymap updates. (Brian Clapper)
 
 - Use separate (shorter) label for "whole word search" in the search bar.

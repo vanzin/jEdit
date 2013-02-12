@@ -399,7 +399,8 @@ view.fracFontMetrics=false
 
 # Docking and tool bar positioning
 view.docking.alternateLayout=false
-view.toolbar.alternateLayout=false
+# "alternate" is actually closer to standard location IMHO...
+view.toolbar.alternateLayout=true
 
 #{{{ Status bar
 view.status.foreground=black
