@@ -28,7 +28,6 @@ import org.gjt.sp.jedit.options.DockingOptionPane;
 public class DockingLayoutManager implements EBComponent
 {
 
-	private static final String NO_SETTINGS_MESSAGE = "no-settings.message";
 	private static final String SAVE_LAYOUT_FAILED = "save-layout-failed.message";
 	private static final String LOAD_LAYOUT_TITLE = "load-layout.title";
 	private static final String LOAD_LAYOUT_MESSAGE = "load-layout.message";

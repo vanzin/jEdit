@@ -15,8 +15,8 @@ and Maik Nijhuis for contributing to this release.
 - Fix #3596215 - NPE from docking layout save/loads when started with
   -nosettings. (Alan Ezust) 
 
-- Fix #3597101 - Bad error handling when an invalid path is entered into
-  the VFS Browser directory input. (Patch# 3602318 Benjamin Gmurczyk)
+- Fix #3597101, #3596600 - Bad error handling when an invalid path is entered
+  into the VFS Browser inputs. (Patch# 3602318 Benjamin Gmurczyk)
 
 - Bug no. #3590540 revealed a performance problem in the ChunkCache, because
   every scroll action resulted in a tokenization of the really long line, which
