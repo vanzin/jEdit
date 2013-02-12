@@ -98,7 +98,6 @@
 
 <!-- SPAN and SPAN_REGEXP children -->
 <!ELEMENT BEGIN ( #PCDATA ) >
-<!ATTLIST BEGIN %att-position-mix; >
 <!ELEMENT END ( #PCDATA ) >
 <!ATTLIST END
 	%att-position-mix;

@@ -483,9 +483,7 @@ def fun2:
         <para>Note that the <literal>AT_LINE_START</literal>,
         <literal>AT_WHITESPACE_END</literal> and
         <literal>AT_WORD_START</literal> attributes can also be used on the
-        <literal>BEGIN</literal> and <literal>END</literal> elements. Setting
-        these attributes to the same value on both elements has the same effect
-        as setting them on the <literal>SPAN</literal> element.</para>
+        <literal>END</literal> element.</para>
         <para>Here is a <literal>SPAN</literal> that highlights Java string
         literals, which cannot include line breaks:</para>
         <programlisting>&lt;SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE"&gt;
