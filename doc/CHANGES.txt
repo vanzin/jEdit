@@ -12,6 +12,9 @@ and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix #3596215 - NPE from docking layout save/loads when started with
+  -nosettings. (Alan Ezust) 
+
 - Fix #3597101 - Bad error handling when an invalid path is entered into
   the VFS Browser directory input. (Patch# 3602318 Benjamin Gmurczyk)
 

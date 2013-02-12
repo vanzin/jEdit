@@ -11,6 +11,7 @@ import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
@@ -36,14 +37,19 @@ public class DockingLayoutManager implements EBComponent
 	private static ActionSet actions;
 	private static DockingLayoutManager instance;
 	private Map<View, String> currentMode;
-	
+
 	private DockingLayoutManager()
 	{
 		currentMode = new HashMap<View, String>();
 	}
 	private static boolean save(View view, String layoutName)
 	{
-		DockingLayout docking = view.getViewConfig().docking; 
+		if (jEdit.getSettingsDirectory() == null)
+		{
+			GUIUtilities.error(view,"no-settings",null);
+			return false;
+		}
+		DockingLayout docking = view.getViewConfig().docking;
 		if (docking != null)
 		{
 			boolean ret = docking.saveLayout(layoutName, DockingLayout.NO_VIEW_INDEX);
@@ -53,12 +59,12 @@ public class DockingLayoutManager implements EBComponent
 		}
 		return true;
 	}
-	
+
 	public static void saveAs(View view)
 	{
 		if (jEdit.getSettingsDirectory() == null)
 		{
-			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
+			GUIUtilities.error(view,"no-settings",null);
 			return;
 		}
 		String layoutName = JOptionPane.showInputDialog(view,
@@ -70,19 +76,24 @@ public class DockingLayoutManager implements EBComponent
 		if (! save(view, layoutName))
 			JOptionPane.showMessageDialog(view, jEdit.getProperty(SAVE_LAYOUT_FAILED));
 	}
-	
+
 	private static void load(View view, String layoutName)
 	{
+		if (jEdit.getSettingsDirectory() == null)
+		{
+			GUIUtilities.error(view,"no-settings",null);
+			return;
+		}
 		DockingLayout docking = View.getDockingFrameworkProvider().createDockingLayout();
 		if (docking.loadLayout(layoutName, DockingLayout.NO_VIEW_INDEX))
 			view.getDockableWindowManager().setDockingLayout(docking);
 	}
-	
+
 	public static void load(View view)
 	{
 		if (jEdit.getSettingsDirectory() == null)
 		{
-			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
+			GUIUtilities.error(view,"no-settings",null);
 			return;
 		}
 		String layoutName = (String) JOptionPane.showInputDialog(view,
@@ -107,20 +118,20 @@ public class DockingLayoutManager implements EBComponent
 			return new String[0];
 		return layouts;
 	}
-	
+
 	private static void addAction(String layoutName)
 	{
 		if ((actions != null) && (! actions.contains(layoutName)))
 			actions.addAction(new LoadPerspectiveAction(layoutName));
 	}
-	
+
 	public static void init()
 	{
 		createActions();
 		instance = new DockingLayoutManager();
 		EditBus.addToBus(instance);
 	}
-	
+
 	private static void createActions()
 	{
 		actions = new ActionSet("Docking Layouts");
@@ -130,7 +141,7 @@ public class DockingLayoutManager implements EBComponent
 		jEdit.addActionSet(actions);
 		actions.initKeyBindings();
 	}
-	
+
 	public static void removeActions()
 	{
 		jEdit.removeActionSet(actions);
@@ -145,7 +156,7 @@ public class DockingLayoutManager implements EBComponent
 			super(LOAD_PREFIX + layoutName, new String[] { layoutName });
 			jEdit.setTemporaryProperty(LOAD_PREFIX + layoutName + ".label", LOAD_PREFIX + layoutName);
 		}
-		
+
 		@Override
 		public void invoke(View view)
 		{
@@ -230,7 +241,7 @@ public class DockingLayoutManager implements EBComponent
 	}
 
 	private static final String GLOBAL_MODE = "DEFAULT";
-	
+
 	private void saveModeLayout(View view, String mode)
 	{
 		String modeLayout = getModePerspective(mode);
@@ -238,7 +249,7 @@ public class DockingLayoutManager implements EBComponent
 			return;
 		save(view, modeLayout);
 	}
-	
+
 	private void loadModeLayout(View view, String mode)
 	{
 		String modeLayout = getModePerspective(mode);
@@ -254,7 +265,7 @@ public class DockingLayoutManager implements EBComponent
 		String mode = instance.getCurrentEditMode(view);
 		instance.loadModeLayout(view, mode);
 	}
-	
+
 	public static void saveCurrentModeLayout(View view)
 	{
 		if (view == null)
@@ -262,7 +273,7 @@ public class DockingLayoutManager implements EBComponent
 		String mode = instance.getCurrentEditMode(view);
 		instance.saveModeLayout(view, mode);
 	}
-	
+
 	private String getModePerspective(String mode)
 	{
 		if (mode == null)
