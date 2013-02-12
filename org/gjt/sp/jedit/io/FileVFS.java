@@ -360,11 +360,12 @@ public class FileVFS extends VFS
 
 		File directory = new File(path);
 		File[] list = null;
-		if(directory.exists())
+		if(directory.exists()) 
+		{
 			if (fsView == null)
 				fsView = FileSystemView.getFileSystemView();
 			list = fsView.getFiles(directory,false);
-
+		}
 		if(list == null)
 		{
 			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);
