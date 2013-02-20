@@ -1,4 +1,4 @@
-/*
+/* :encoding=UTF-8:
  * Insert_Buffer_Properties.bsh - a Beanshell macro
  * for the jEdit text editor that provides a gui for
  * inserting Buffer Local properties for the current buffer
