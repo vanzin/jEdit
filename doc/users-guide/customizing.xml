@@ -213,7 +213,7 @@
         as it is a buffer-local property and specifying the character encoding
         for the file. But it is not really a buffer-local property, and behaves
         differently.
-        It is detected by <literal>buffer-local-properties</literal> detector
+        It is detected by <literal>buffer-local-property/literal> detector
         only if the detector is selected in encoding options. Thus, it works
         only at loading, and it must appear near the top of the file.
         See <xref linkend="encodings"/>. </para>

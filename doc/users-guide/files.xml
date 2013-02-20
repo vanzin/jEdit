@@ -320,7 +320,7 @@
                 a file.</para>
                 <programlisting># -*- coding: utf-8 -*-                </programlisting>
             </listitem>
-            <listitem> <para> <emphasis role="bold">buffer-local-properties</emphasis>:
+            <listitem> <para> <emphasis role="bold">buffer-local-property</emphasis>:
                 Enable buffer-local properties' syntax
                 (see <xref linkend="buffer-local" />)
                 at the top of the file to specify encoding. </para>
