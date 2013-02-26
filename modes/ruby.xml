@@ -33,8 +33,8 @@
 
 		<!-- Ruby comment (Inline Documentation ) -->
 		<SPAN TYPE="COMMENT2">
-			<BEGIN>=begin</BEGIN>
-			<END>=end</END>
+			<BEGIN AT_LINE_START="TRUE">=begin</BEGIN>
+			<END AT_LINE_START="TRUE">=end</END>
 		</SPAN>
 
 		<!-- Class and instance vars -->

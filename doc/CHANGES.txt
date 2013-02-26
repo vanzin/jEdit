@@ -132,6 +132,9 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Editing
 
+- Fixed bug in ruby multiline comments (Patch#3605738 fixing bug #3605168
+  Richard The)
+
 - Fixed shellscript highlight (patch #3602461 fixing bug #3594428 Richard The)
 
 - Updated lua mode file (patch #2126692 stone1343)
