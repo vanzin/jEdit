@@ -1398,6 +1398,12 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 	} //}}}
 
+	//{{{ isFullScreenMode method
+	public boolean isFullScreenMode() 
+	{
+		return fullScreenMode;
+	}//}}}
+	
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
 	{

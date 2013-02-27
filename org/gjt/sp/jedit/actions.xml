@@ -1511,6 +1511,9 @@
 	<CODE>
 		view.toggleFullScreen();
 	</CODE>
+	<IS_SELECTED>
+	        view.isFullScreenMode();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="toggle-gutter">
