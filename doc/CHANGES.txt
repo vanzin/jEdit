@@ -166,6 +166,8 @@ and Maik Nijhuis for contributing to this release.
 
 - Updated Coffeescript mode (#3595105 Marc Häfner)
 
+- new PostgreSQL mode (feature #2833378 Thiemo Kellner, Eric Le Lay)
+
 }}}
 {{{ UI
 

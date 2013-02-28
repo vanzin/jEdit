@@ -408,6 +408,9 @@
 
 <MODE NAME="plaintex"		FILE="plaintex.xml" />
 
+<MODE NAME="PostgreSQL" FILE="pg-sql.xml"
+							FILE_NAME_GLOB="*.{pg_sql,pg-sql}" />
+
 <MODE NAME="pl-sql"		FILE="osql.xml"
                            FILE_NAME_GLOB="*.{pls,sql}" />
 
