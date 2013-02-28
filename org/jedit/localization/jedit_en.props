@@ -1648,10 +1648,6 @@ options.view.fullScreenIncludesMenu=Show the menu bar in full-screen mode
 options.view.fullScreenIncludesToolbar=Show the toolbars in full-screen mode
 options.view.fullScreenIncludesStatus=Show the status bar in full-screen mode
 options.bufferset.scope=BufferSet scope:
-options.editpane.bufferset.contain=New BufferSets contain:
-options.editpane.bufferset.newbufferset.copy=copy of current BufferSet
-options.editpane.bufferset.newbufferset.empty=an empty buffer
-options.editpane.bufferset.newbufferset.currentbuffer=current buffer only
 #}}}
 
 

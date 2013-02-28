@@ -1656,10 +1656,6 @@ options.view.fullScreenIncludesMenu=Zobrazit menu panel v režimu "Na celou obra
 options.view.fullScreenIncludesToolbar=Zobrazit panely nástrojů v režimu "Na celou obrazovku"
 options.view.fullScreenIncludesStatus=Zobrazit stavový řádek v režimu "Na celou obrazovku"
 options.bufferset.scope=Rozsah sady bufferů:
-options.editpane.bufferset.contain=Nová sada bufferu obsahuje:
-options.editpane.bufferset.newbufferset.copy=kopii aktuální sady bufferů
-options.editpane.bufferset.newbufferset.empty=prázdný buffer
-options.editpane.bufferset.newbufferset.currentbuffer=pouze aktuální buffer
 #}}}
 
 

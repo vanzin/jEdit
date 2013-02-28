@@ -1648,10 +1648,6 @@ options.view.fullScreenIncludesMenu=フルスクリーンモードでメニュ�
 options.view.fullScreenIncludesToolbar=フルスクリーンモードでツールバーを表示
 options.view.fullScreenIncludesStatus=フルスクリーンモードでステータスバーを表示
 options.bufferset.scope=バッファセットのスコープ:
-options.editpane.bufferset.contain=新規バッファセットの内容:
-options.editpane.bufferset.newbufferset.copy=現在のバッファセットのコピー
-options.editpane.bufferset.newbufferset.empty=空のバッファひとつ
-options.editpane.bufferset.newbufferset.currentbuffer=現在のバッファのみ
 #}}}
 
 

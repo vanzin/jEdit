@@ -1641,10 +1641,6 @@ options.view.fullScreenIncludesMenu=Показывать панель меню �
 options.view.fullScreenIncludesToolbar=Показывать панель инструментов в полно-экранном режиме
 options.view.fullScreenIncludesStatus=Показывать панел статуся в полно-экранном режиме
 options.bufferset.scope=Охват набора буферов:
-options.editpane.bufferset.contain=Новый набор содержит:
-options.editpane.bufferset.newbufferset.copy=копию текущего набора
-options.editpane.bufferset.newbufferset.empty=пустой буфер
-options.editpane.bufferset.newbufferset.currentbuffer=только текущий буфер
 #}}}
 
 

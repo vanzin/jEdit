@@ -1680,10 +1680,6 @@ options.view.fullScreenIncludesMenu=Zeige Menüleiste im Vollbildmodus
 options.view.fullScreenIncludesToolbar=Zeige Symbolleiste im Vollbildmodus
 options.view.fullScreenIncludesStatus=Zeige Statuszeile im Vollbildmodus
 options.bufferset.scope=Dateisatz-Modus:
-options.editpane.bufferset.contain=Neue Dateisätze enthalten:
-options.editpane.bufferset.newbufferset.copy=Kopie des aktuellen Dateisatzes
-options.editpane.bufferset.newbufferset.empty=nur eine leere Datei
-options.editpane.bufferset.newbufferset.currentbuffer=nur die aktive Datei
 #}}}
 
 
