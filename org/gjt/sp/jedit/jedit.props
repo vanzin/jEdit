@@ -267,6 +267,9 @@ view.electricBorders=3
 # Drag and drop of text
 view.dragAndDrop=true
 
+# Abbreviate paths using environment variables
+view.abbreviatePaths=true
+
 # Treat consecutive non-alphanumeric characters as one word
 view.joinNonWordChars=true
 

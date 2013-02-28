@@ -95,6 +95,13 @@ public class ViewOptionPane extends AbstractOptionPane
 			"view.toolbar.floatable"));
 		addComponent(floatableToolbars);
 
+		/* Abbreviate pathnames when possible */		
+		abbreviatePaths = new JCheckBox(jEdit.getProperty(
+			"options.view.abbreviatePaths"));
+		abbreviatePaths.setSelected(jEdit.getBooleanProperty(
+			"view.abbreviatePaths"));
+		addComponent(abbreviatePaths);
+		
 		/* Show full path */
 		showFullPath = new JCheckBox(jEdit.getProperty(
 			"options.view.showFullPath"));
@@ -200,8 +207,8 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.toolbar.alternateLayout",
 			layout.getIcon() == layoutIcon3
 			|| layout.getIcon() == layoutIcon4);
-		jEdit.setBooleanProperty("view.showFullPath",showFullPath
-			.isSelected());
+		jEdit.setBooleanProperty("view.abbreviatePaths",abbreviatePaths.isSelected());		
+		jEdit.setBooleanProperty("view.showFullPath",showFullPath.isSelected());
 		jEdit.setBooleanProperty("view.toolbar.floatable", floatableToolbars.isSelected());
 
 		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
@@ -225,6 +232,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JLabel layout;
 	private Icon layoutIcon1, layoutIcon2, layoutIcon3, layoutIcon4;
 	private JButton alternateDockingLayout, alternateToolBarLayout;
+	private JCheckBox abbreviatePaths;
 	private JCheckBox showFullPath;
 	private JCheckBox floatableToolbars;
 	private JCheckBox showSearchbar;

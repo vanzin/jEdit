@@ -179,6 +179,7 @@ public class MiscUtilities
 	 */
 	public static String abbreviate(String path)
 	{
+		if (!jEdit.getBooleanProperty("view.abbreviatePaths")) return path;
 		if (svc == null)
 			svc = new VarCompressor();
 		return svc.compress(path);

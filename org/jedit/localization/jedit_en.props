@@ -1636,6 +1636,7 @@ options.view.viewLayout=View layout
 options.view.floatableToolbars=Floatable Toolbars
 options.view.alternateDockingLayout=Alternate docked window placement
 options.view.alternateToolBarLayout=Alternate tool bar placement
+options.view.abbreviatePaths=Abbreviate paths with environment variables when possible
 options.view.showFullPath=Show full path of buffer in title bar
 options.view.showSearchbar=Always show search bar
 options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
