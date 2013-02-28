@@ -169,6 +169,9 @@ and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
+- New view option: "Abbreviate paths with environment variables when possible". 
+  (#3606329 Alan Ezust)
+
 - Made view option, "alternate toolbar placement" the default for jEdit. 
 
 - Emacs macros and keymap updates. (Brian Clapper)
