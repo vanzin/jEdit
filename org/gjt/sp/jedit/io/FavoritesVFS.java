@@ -195,7 +195,7 @@ public class FavoritesVFS extends VFS
 				String p = favorite.getPath();
 				String l = favorite.getLabel();
 				jEdit.setProperty("vfs.favorite." + i, p);
-				if (p.equals(l) || MiscUtilities.abbreviate(p).equals(l))
+				if (p.equals(l) || MiscUtilities.abbreviateView(p).equals(l))
 					jEdit.unsetProperty("vfs.favorite." + i + ".label");
 				else 
 					jEdit.setProperty("vfs.favorite." + i + ".label", l);
@@ -236,7 +236,7 @@ public class FavoritesVFS extends VFS
 		Favorite(String path, int type)
 		{
 			super(path,path,PROTOCOL + ':' + path,type, 0L,false);
-			this.label = MiscUtilities.abbreviate(path);
+			this.label = MiscUtilities.abbreviateView(path);
 		}
 
 		public String getLabel()

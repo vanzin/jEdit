@@ -30,7 +30,7 @@ package org.jedit.core;
  * The service and interface exists primarily so you don't need to add a compilation
  * dependency of the org.gjt.sp.jEdit class to your MigrationService class. <br />
  * <br />
- * Concrete instances need to gurantee that the migration itself is only done
+ * Concrete instances need to guarantee that the migration itself is only done
  * once.
  * @see org.jedit.migration.OneTimeMigrationService
  *

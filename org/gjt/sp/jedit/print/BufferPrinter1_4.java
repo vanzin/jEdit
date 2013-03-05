@@ -86,7 +86,7 @@ public class BufferPrinter1_4
 	//{{{ print() method
 	public static void print(final View view, final Buffer buffer, boolean selection)
 	{
-		job = getPrintJob(MiscUtilities.abbreviate(buffer.getPath()));
+		job = getPrintJob(MiscUtilities.abbreviateView(buffer.getPath()));
 
 		boolean header = jEdit.getBooleanProperty("print.header");
 		boolean footer = jEdit.getBooleanProperty("print.footer");

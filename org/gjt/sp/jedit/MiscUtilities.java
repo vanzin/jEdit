@@ -171,7 +171,7 @@ public class MiscUtilities
 		return arg;
 	} //}}}
 
-	//{{{ abbreviate() method
+	//{{{ abbreviate() methods
 	/** @return an abbreviated path, replacing values with variables, if a prefix exists.
 		uses platform convention (%varname% on windows, $varname on other platforms)
 	 *  @see #expandVariables
@@ -179,10 +179,19 @@ public class MiscUtilities
 	 */
 	public static String abbreviate(String path)
 	{
-		if (!jEdit.getBooleanProperty("view.abbreviatePaths")) return path;
 		if (svc == null)
 			svc = new VarCompressor();
 		return svc.compress(path);
+	}
+	
+	/** Same as abbreviate() but checks a view option which can 
+	 * disable the feature for things jEdit UI components.
+	 * 
+	 */
+	public static String abbreviateView(String path)
+	{
+		if (!jEdit.getBooleanProperty("view.abbreviatePaths")) return path;
+		return abbreviate(path);		
 	} //}}}
 
 	//{{{ resolveSymlinks() method

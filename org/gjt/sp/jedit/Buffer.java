@@ -803,7 +803,7 @@ public class Buffer extends JEditBuffer
 	  */
 	public String getPath(Boolean shortVersion)
 	{
-		return shortVersion ? MiscUtilities.abbreviate(path) : getPath();
+		return shortVersion ? MiscUtilities.abbreviateView(path) : getPath();
 	} //}}}
 
 
@@ -1588,7 +1588,7 @@ public class Buffer extends JEditBuffer
 	@Override
 	public String toString()
 	{
-		return name + " (" + MiscUtilities.abbreviate(directory) + ')';
+		return name + " (" + MiscUtilities.abbreviateView(directory) + ')';
 	} //}}}
 
 	//{{{ addBufferUndoListener() method
