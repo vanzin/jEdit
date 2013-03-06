@@ -99,32 +99,40 @@
                 <question id="plugin-cvs">
                     <para>Can I work with cvs/svn/git/hg/bzr/Perforce
                     under jEdit? Is there a plugin for my favorite SCCS system?
-                    How can I send a command from jEdit to cvs/svn without
-                    leaving my editor?</para>
+                    How can I send a command and edit a commit message from jEdit to svn/git without leaving my editor?</para>
                 </question>
                 <answer>
+
+
+                    <para>When using command line tools, the Console plugin
+                    documentation has some ideas on how to set your environment so that jEdit is the
+                    <literal>VISUAL</literal> and <literal>EDITOR</literal>
+                    used by <literal>svn</literal> or <literal>git</literal>
+                    when editing a commit message, for example. </para>
+
                     <para>The SVNPlugin supports Subversion browsing, diffing
                     (via JDiff) and other common operations.</para>
-                    <para>With *NIX (or cygwin), the Console plugin
-                    documentation has some ideas on how to set jEdit as the
-                    <literal>VISUAL</literal> and <literal>EDITOR</literal> tool  when called from the
-                    cvs/svn/hg command-line tools, all of which can be run from
-                    the Console dockable.</para>
+
                     <para>The ProjectViewer plugin has some support for reading
                     the "entries" in your working directory, and will use that
                     as a filter for importing. CVS support is built-in, and
-                    subversion, p4, bzr, git, and hg are supported via plugins.
+                    svn, p4, bzr, git, and hg are supported via plugins.
                     </para>
-                    <para>The P4Plugin and SvnPlugin both add extensions to the
-                    ProjectViewer tree, and have some other features for
+
+                    <para>The <literal>P4Plugin</literal>, <literal>GitPlugin</literal>,
+                    and <literal>SvnPlugin</literal> add extensions to the
+                    ProjectViewer tree, and offer additional operations for
                     working with repositories.</para>
-                    <para><literal>SourceControl</literal> plugin has some
-                    features to work with Microsoft Visual SourceSafe.
-                    </para>
-                    <para> <literal>ClearCasePlugin</literal> is used with Rational ClearCase. </para>
+
+                    <para><literal>SourceControl</literal> plugin offers
+                    support for Microsoft Visual SourceSafe. </para>
+
+                    <para> The <literal>ClearCasePlugin</literal> can be used with Rational ClearCase. </para>
+
                     <para>You can use jEdit as your default editor from WinCVS:
                     specify <userinput>jedit.exe</userinput> as your default
                     viewer and editor to automate the opening of file.</para>
+
                     <para>GruntSpud and jEditCvs plugins are no longer supported. </para>
                 </answer>
             </qandaentry>
@@ -167,9 +175,7 @@
                     <para>The FTP plugin allows remote editing of files over the
                     <literal>SFTP://</literal> and <literal>FTP://</literal>
                     protocols. <literal>HTTP://</literal> is supported natively
-                    in jEdit. The <literal>FTPS://</literal> and
-                    <literal>FISH://</literal> protocols are not supported
-                    yet.</para>
+                    in jEdit. </para>
                 </answer>
             </qandaentry>
         </qandadiv>
