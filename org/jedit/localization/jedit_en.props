@@ -1294,7 +1294,7 @@ options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 
 options.appearance.localization.section.label=Localization
-options.appearance.usedefaultlocale.label=Use defaut locale
+options.appearance.usedefaultlocale.label=Use default locale
 options.appearance.lang.label=Language (change is effective on restart)
 #}}}
 
