@@ -56,11 +56,6 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
-		<SPAN_REGEXP TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral" HASH_CHARS="&lt;&lt;" NO_LINE_BREAK="FALSE">
-			<BEGIN>&lt;&lt;-?PARAGRAPH</BEGIN>
-			<END REGEXP="TRUE">^\S*PARAGRAPH$</END>
-		</SPAN_REGEXP>
 
 		<!-- %Q(Hello world) %(Hello world)-->
 		<SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
@@ -197,7 +192,7 @@
 			 document will terminate highlighting; I couldn't make it smarter. -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
 			<BEGIN>&lt;&lt;-?"([\p{Graph}]+)"</BEGIN>
-			<END>$1</END>
+			<END REGEXP="TRUE">^\S*$1$</END>
 		</SPAN_REGEXP>
 
 		<!-- Here documents <<'FOO' <<-'FOO' -->
@@ -206,7 +201,7 @@
 			 document will terminate highlighting; I couldn't make it smarter. -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL1">
 			<BEGIN>&lt;&lt;-?'([\p{Graph}]+)'</BEGIN>
-			<END>$1</END>
+			<END REGEXP="TRUE">^\S*$1$</END>
 		</SPAN_REGEXP>
 
 		<!-- Here documents <<FOO <<-FOO -->
@@ -215,7 +210,7 @@
 			 document will terminate highlighting; I couldn't make it smarter. -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
 			<BEGIN>&lt;&lt;-?([A-Za-z_]+)</BEGIN>
-			<END>$1</END>
+			<END REGEXP="TRUE">^\S*$1$</END>
 		</SPAN_REGEXP>
 
 		<!-- Shell command strings -->
