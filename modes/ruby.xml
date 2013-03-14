@@ -33,7 +33,7 @@
 
 		<!-- Ruby comment (Inline Documentation ) -->
 		<SPAN TYPE="COMMENT2">
-			<BEGIN AT_LINE_START="TRUE">=begin</BEGIN>
+			<BEGIN>=begin</BEGIN>
 			<END AT_LINE_START="TRUE">=end</END>
 		</SPAN>
 
@@ -56,6 +56,11 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
+		
+		<SPAN_REGEXP TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral" HASH_CHARS="&lt;&lt;" NO_LINE_BREAK="FALSE">
+			<BEGIN>&lt;&lt;-?PARAGRAPH</BEGIN>
+			<END REGEXP="TRUE">^\S*PARAGRAPH$</END>
+		</SPAN_REGEXP>
 
 		<!-- %Q(Hello world) %(Hello world)-->
 		<SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
@@ -386,6 +391,8 @@
 			<KEYWORD1>in</KEYWORD1>
 			<KEYWORD1>module</KEYWORD1>
 			<KEYWORD1>next</KEYWORD1>
+			<KEYWORD1>print</KEYWORD1>
+			<KEYWORD1>puts</KEYWORD1>
 			<KEYWORD1>redo</KEYWORD1>
 			<KEYWORD1>rescue</KEYWORD1>
 			<KEYWORD1>retry</KEYWORD1>
