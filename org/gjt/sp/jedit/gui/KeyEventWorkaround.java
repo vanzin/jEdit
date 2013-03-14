@@ -297,8 +297,11 @@ public class KeyEventWorkaround
 
 			if(!Debug.ALTERNATIVE_DISPATCHER)
 			{
-				if(((modifiers & InputEvent.CTRL_MASK) != 0
-					^ (modifiers & InputEvent.ALT_MASK) != 0)
+				if((modifiers & InputEvent.CTRL_MASK) != 0
+					&& (modifiers & InputEvent.ALT_MASK) == 0
+					|| (modifiers & InputEvent.CTRL_MASK) == 0
+					&& (modifiers & InputEvent.ALT_MASK) != 0
+					&& !Debug.ALT_KEY_PRESSED_DISABLED
 					|| (modifiers & InputEvent.META_MASK) != 0)
 				{
 					return null;
