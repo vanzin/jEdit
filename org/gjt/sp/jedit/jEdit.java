@@ -2008,6 +2008,13 @@ public class jEdit
 			return;
 		}
 
+		// in case of a temporary buffer, just close it
+		if(buffer.isTemporary())
+		{
+			buffer.close();
+			return;
+		}
+
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		if(!buffer.isNewFile())
@@ -2023,15 +2030,19 @@ public class jEdit
 				buffer.getMode().getName());
 		}
 
+		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSING));
+
+		//FIXME: Duplicate code? Same is done in removeBufferFromList(buffer);
 		String path = buffer.getSymlinkPath();
 		if((VFSManager.getVFSForPath(path).getCapabilities()
 			& VFS.CASE_INSENSITIVE_CAP) != 0)
 		{
 			path = path.toLowerCase();
 		}
-		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSING));
 		bufferHash.remove(path);
+
 		removeBufferFromList(buffer);
+
 		buffer.close();
 		DisplayManager.bufferClosed(buffer);
 		bufferSetManager.removeBuffer(buffer);

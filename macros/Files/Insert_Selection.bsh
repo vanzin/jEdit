@@ -24,7 +24,7 @@ insertSelected(View view, String path){
 		view.getTextArea().setSelectedText(text);
 	}finally{
 		if(b != null)
-			b.close();
+			jEdit._closeBuffer(null, b);
 	}
 }
 
