@@ -37,6 +37,7 @@ void writeJEditProperties()
     pw = new PrintWriter(sw);
     props.store(pw,"jedit properties");
     newbuf = jEdit.newFile(view);
+    newbuf.setMode("properties");
     newbuf.insert(0, sw.toString());
 }
 
