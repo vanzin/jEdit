@@ -43,6 +43,7 @@ void lookAndFeelProperties()
 	}
 	p.store(sb,ListingLabel);
 	newbuf = jEdit.newFile(view);
+	newbuf.setMode("properties");
 	newbuf.insert(0, sb.toString());
 }
 

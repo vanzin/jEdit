@@ -36,7 +36,8 @@ systemProperties()
 	sw = new StringWriter();
 	pw = new PrintWriter(sw);
 	props.store(pw,SystemPropertiesLabel);
-	jEdit.newFile(view);
+	newBuf = jEdit.newFile(view);
+	newBuf.setMode("properties");
 	textArea.setSelectedText(sw.toString());
 }
 
