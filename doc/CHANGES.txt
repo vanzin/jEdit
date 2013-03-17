@@ -8,7 +8,7 @@ Thanks to Björn "Vampire" Kautler, Jarek Czekalski, Thomas Meyer,
 Matthieu Casanova, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
 Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper, Uwe Stöhr,
 Marc Häfner, stone1343, Richard The, Dale Anson, Benjamin Gmurczyk,
-and Maik Nijhuis for contributing to this release.
+Makarius, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
@@ -170,6 +170,8 @@ and Maik Nijhuis for contributing to this release.
 
 }}}
 {{{ UI
+
+- More accurate treatment of ALT_KEY_PRESSED_DISABLED (#3604532: Makarius)
 
 - New view option: "Abbreviate paths with environment variables when possible". 
   (#3606329 Alan Ezust)
