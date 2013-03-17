@@ -285,14 +285,24 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 	// {{{ init() method
 	protected void _init()
 	{
-
 		setLayout(new BorderLayout());
 		deferredOptionPanes = new HashMap<Object, OptionPane>();
 		optionTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) optionTreeModel.getRoot();
-		rootGroup.addOptionGroup(optionGroup);
+
+		// #3608324: ignore the root node of the option group as it does not provide
+		// a label and only add its children
+		for (Enumeration<Object> members = optionGroup.getMembers(); members.hasMoreElements();)
+		{
+				Object member = members.nextElement();
+				if (member instanceof OptionGroup)
+						rootGroup.addOptionGroup((OptionGroup)member);
+				else if (member instanceof String)
+						rootGroup.addOptionPane((String)member);
+				// TODO are there any other cases that must handled?
+		}
+
 		paneTree = new JTree(optionTreeModel);
-		paneTree.setVisibleRowCount(1);
 		paneTree.setRootVisible(false);
 		paneTree.setCellRenderer(new PaneNameRenderer());
 
