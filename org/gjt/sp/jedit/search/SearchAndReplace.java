@@ -509,7 +509,7 @@ loop:		for(;;)
 
 					// Wait for the buffer to load
 					if(!buffer.isLoaded())
-						TaskManager.INSTANCE.waitForIoTasks();
+						TaskManager.instance.waitForIoTasks();
 
 					int start;
 
@@ -911,7 +911,7 @@ loop:		while(path != null)
 
 				// Wait for buffer to finish loading
 				if(buffer.isPerformingIO())
-					TaskManager.INSTANCE.waitForIoTasks();
+					TaskManager.instance.waitForIoTasks();
 
 				if(!buffer.isEditable())
 					continue loop;

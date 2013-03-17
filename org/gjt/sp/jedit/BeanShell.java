@@ -325,7 +325,7 @@ public class BeanShell
 					null,path,false);
 
 				if(!buffer.isLoaded())
-					TaskManager.INSTANCE.waitForIoTasks();
+					TaskManager.instance.waitForIoTasks();
 
 				in = new StringReader(buffer.getText(0,
 					buffer.getLength()));

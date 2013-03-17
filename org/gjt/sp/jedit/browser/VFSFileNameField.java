@@ -205,7 +205,7 @@ public class VFSFileNameField extends HistoryTextField
 				return;
 
 			browser.setDirectory(dir);
-			TaskManager.INSTANCE.waitForIoTasks();
+			TaskManager.instance.waitForIoTasks();
 
 			if(index == -1)
 			{
@@ -224,7 +224,7 @@ public class VFSFileNameField extends HistoryTextField
 					return;
 
 				browser.setDirectory(dir);
-				TaskManager.INSTANCE.waitForIoTasks();
+				TaskManager.instance.waitForIoTasks();
 
 				currentText = currentText.substring(index + 1);
 			}
@@ -275,7 +275,7 @@ public class VFSFileNameField extends HistoryTextField
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
 		{
-			TaskManager.INSTANCE.waitForIoTasks();
+			TaskManager.instance.waitForIoTasks();
 			setText(name);
 			browser.getBrowserView().getTable().doTypeSelect(
 				name,browser.getMode() == VFSBrowser

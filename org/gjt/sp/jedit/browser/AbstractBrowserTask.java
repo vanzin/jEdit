@@ -52,7 +52,7 @@ abstract class AbstractBrowserTask extends Task
 		if (awtTask != null)
 		{
 			MyTaskListener listener = new MyTaskListener(awtTask);
-			TaskManager.INSTANCE.addTaskListener(listener);
+			TaskManager.instance.addTaskListener(listener);
 		}
 	} //}}}
 
@@ -87,7 +87,7 @@ abstract class AbstractBrowserTask extends Task
 		{
 			if (task == AbstractBrowserTask.this)
 			{
-				TaskManager.INSTANCE.removeTaskListener(this);
+				TaskManager.instance.removeTaskListener(this);
 				ThreadUtilities.runInDispatchThread(runnable);
 			}
 		}

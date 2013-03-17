@@ -119,7 +119,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
-		TaskManager.INSTANCE.removeTaskListener(ioTaskHandler);
+		TaskManager.instance.removeTaskListener(ioTaskHandler);
 		super.dispose();
 	} //}}}
 
@@ -373,7 +373,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		content.add(BorderLayout.SOUTH,panel);
 
-		TaskManager.INSTANCE.addTaskListener(
+		TaskManager.instance.addTaskListener(
 				ioTaskHandler = new IoTaskHandler());
 
 		pack();
@@ -532,7 +532,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			public void run()
 			{
-				int requestCount = TaskManager.INSTANCE.countIoTasks();
+				int requestCount = TaskManager.instance.countIoTasks();
 				if(requestCount == 0)
 				{
 					getContentPane().setCursor(

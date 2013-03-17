@@ -142,7 +142,7 @@ class HyperSearchRequest extends Task
 					{
 						// Wait for the buffer to load
 						if(!buffer.isLoaded())
-							TaskManager.INSTANCE.waitForIoTasks();
+							TaskManager.instance.waitForIoTasks();
 
 						resultCount += doHyperSearch(buffer, 0, buffer.getLength());
 					}

@@ -174,7 +174,7 @@ public class VFSManager
 		if(EventQueue.isDispatchThread() != true)
 			throw new IllegalStateException();
 
-		TaskManager.INSTANCE.waitForIoTasks();
+		TaskManager.instance.waitForIoTasks();
 	} //}}}
 
 	//{{{ errorOccurred() method
@@ -192,7 +192,7 @@ public class VFSManager
 	 */
 	public static int getRequestCount()
 	{
-		return TaskManager.INSTANCE.countIoTasks();
+		return TaskManager.instance.countIoTasks();
 	} //}}}
 
 	//{{{ runInAWTThread() method

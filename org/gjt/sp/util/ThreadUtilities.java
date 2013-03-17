@@ -174,7 +174,7 @@ public class ThreadUtilities
 		{
 			task = TaskManager.decorate(runnable);
 		}
-		TaskManager.INSTANCE.fireWaiting(task);
+		TaskManager.instance.fireWaiting(task);
 		threadPool.execute(task);
 	}
 
@@ -186,7 +186,7 @@ public class ThreadUtilities
 	 */
 	public static void runInBackground(Task task)
 	{
-		TaskManager.INSTANCE.fireWaiting(task);
+		TaskManager.instance.fireWaiting(task);
 		threadPool.execute(task);
 	} //}}}
 

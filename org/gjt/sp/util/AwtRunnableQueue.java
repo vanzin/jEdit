@@ -77,7 +77,7 @@ public enum AwtRunnableQueue
 		synchronized (this)
 		{
 			if(awtQueueStarted &&
-			   TaskManager.INSTANCE.countIoTasks() == 0 &&
+			   TaskManager.instance.countIoTasks() == 0 &&
 			   awtQueue.isEmpty())
 				runDirectly = true;
 		}
@@ -132,7 +132,7 @@ public enum AwtRunnableQueue
 				awtRunnerQueued = false;
 				nextRunnable = awtQueue.peek();
 			}
-			while(TaskManager.INSTANCE.countIoTasks() == 0 && nextRunnable != null)
+			while(TaskManager.instance.countIoTasks() == 0 && nextRunnable != null)
 			{
 				doAWTRequest(nextRunnable);
 				synchronized (AwtRunnableQueue.this)

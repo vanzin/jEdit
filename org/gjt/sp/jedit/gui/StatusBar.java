@@ -176,7 +176,7 @@ public class StatusBar extends JPanel
 	public void addNotify()
 	{
 		super.addNotify();
-		TaskManager.INSTANCE.addTaskListener(taskHandler);
+		TaskManager.instance.addTaskListener(taskHandler);
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -184,7 +184,7 @@ public class StatusBar extends JPanel
 	public void removeNotify()
 	{
 		super.removeNotify();
-		TaskManager.INSTANCE.removeTaskListener(taskHandler);
+		TaskManager.instance.removeTaskListener(taskHandler);
 	} //}}}
 
 	//{{{ TaskListener implementation
@@ -199,7 +199,7 @@ public class StatusBar extends JPanel
 					&& !currentMessageIsIO)
 					return;
 
-				int requestCount = TaskManager.INSTANCE.countIoTasks();
+				int requestCount = TaskManager.instance.countIoTasks();
 				if(requestCount == 0)
 				{
 					setMessageAndClear(jEdit.getProperty(

@@ -31,17 +31,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author Matthieu Casanova
  */
-public enum TaskManager
+public class TaskManager
 {
 	/** A singleton instance of TaskManager */
-	INSTANCE;
-
-	/** for jEdit 5.0 API compatibility only.
-		@deprecated
-	*/
-	@Deprecated
-	public static final TaskManager instance = INSTANCE;
-
+	public static final TaskManager instance = new TaskManager();
 
 	private final List<TaskListener> listeners;
 

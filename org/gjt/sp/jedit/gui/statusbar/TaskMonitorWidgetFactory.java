@@ -23,7 +23,6 @@ package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskListener;
 import org.gjt.sp.util.TaskManager;
@@ -72,7 +71,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         public void addNotify()
         {
             super.addNotify();
-            TaskManager.INSTANCE.addTaskListener(this);
+            TaskManager.instance.addTaskListener(this);
             update();
         }
 
@@ -80,7 +79,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         public void removeNotify()
         {
             super.removeNotify();
-            TaskManager.INSTANCE.removeTaskListener(this);
+            TaskManager.instance.removeTaskListener(this);
         }
 
         @Override
@@ -97,7 +96,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
         @Override
         public void update()
         {
-            int count = TaskManager.INSTANCE.countTasks();
+            int count = TaskManager.instance.countTasks();
             if (count == 0)
             {
                 setText(null);

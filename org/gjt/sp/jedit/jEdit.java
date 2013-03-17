@@ -23,6 +23,8 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.io.Closeable;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
@@ -298,19 +300,22 @@ public class jEdit
 		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
 		{
+			BufferedReader in = null;
+			DataOutputStream out = null;
 			try
 			{
-				BufferedReader in = new BufferedReader(new FileReader(portFile));
+				in = new BufferedReader(new FileReader(portFile));
 				String check = in.readLine();
 				if(!"b".equals(check))
-					throw new Exception("Wrong port file format");
+					throw new IllegalArgumentException("Wrong port file format");
 
 				int port = Integer.parseInt(in.readLine());
 				int key = Integer.parseInt(in.readLine());
 
+				// socket is closed via BeanShell script below
+				@SuppressWarnings("resource")
 				Socket socket = new Socket(InetAddress.getByName(null),port);
-				DataOutputStream out = new DataOutputStream(
-					socket.getOutputStream());
+				out = new DataOutputStream(socket.getOutputStream());
 				out.writeInt(key);
 
 				String script;
@@ -329,17 +334,9 @@ public class jEdit
 				out.writeUTF(script);
 
 				Log.log(Log.DEBUG,jEdit.class,"Waiting for server");
-				// block until its closed
-				try
-				{
-					socket.getInputStream().read();
-				}
-				catch(Exception e)
-				{
-				}
 
-				in.close();
-				out.close();
+				// block until its closed
+				socket.getInputStream().read();
 
 				System.exit(0);
 			}
@@ -356,6 +353,22 @@ public class jEdit
 				Log.log(Log.NOTICE,jEdit.class,"If you don't"
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
+			}
+			finally
+			{
+				if(in != null)
+					try
+					{
+						in.close();
+					}
+					catch (IOException e) {}
+
+				if(out != null)
+					try
+					{
+						out.close();
+					}
+					catch (IOException e) {}
 			}
 		}
 
@@ -1560,7 +1573,7 @@ public class jEdit
 	 */
 	public static Buffer openFile(View view, String path)
 	{
-		return openFile(view,null,path,false,new Hashtable());
+		return openFile(view,null,path,false,new Hashtable<String,Object>());
 	}
 
 	/**
@@ -1580,7 +1593,7 @@ public class jEdit
 	 * @since jEdit 3.2pre10
 	 */
 	public static Buffer openFile(View view, String parent,
-		String path, boolean newFile, Hashtable props)
+		String path, boolean newFile, Hashtable<String,Object> props)
 	{
 		return openFile(view == null ? null : view.getEditPane(), parent, path, newFile, props);
 	}
@@ -1597,7 +1610,7 @@ public class jEdit
 	 */
 	public static Buffer openFile(EditPane editPane, String path)
 	{
-		return openFile(editPane,null,path,false,new Hashtable());
+		return openFile(editPane,null,path,false,new Hashtable<String,Object>());
 	}
 
 	/**
@@ -1615,7 +1628,7 @@ public class jEdit
 	 * @since jEdit 4.3pre17
 	 */
 	public static Buffer openFile(EditPane editPane, String parent,
-		String path, boolean newFile, Hashtable props)
+		String path, boolean newFile, Hashtable<String,Object> props)
 	{
 		PerspectiveManager.setPerspectiveDirty(true);
 
@@ -1626,16 +1639,22 @@ public class jEdit
 		{
 			URL u = new URL(path);
 			if ("file".equals(u.getProtocol()))
-				path = URLDecoder.decode(u.getPath());
+			{
+				path = URLDecoder.decode(u.getPath(), "UTF-8");
+			}
 		}
-		catch (MalformedURLException mue)
+		catch(UnsupportedEncodingException e)
+		{
+			path = MiscUtilities.constructPath(parent,path);
+		}
+		catch (MalformedURLException e)
 		{
 			path = MiscUtilities.constructPath(parent,path);
 		}
 
 
 		if(props == null)
-			props = new Hashtable();
+			props = new Hashtable<String,Object>();
 		composeBufferPropsFromHistory(props, path);
 
 		Buffer newBuffer;
@@ -1714,7 +1733,7 @@ public class jEdit
 	 * @since jEdit 4.3pre10
 	 */
 	public static Buffer openTemporary(View view, String parent,
-		String path, boolean newFile, Hashtable props)
+		String path, boolean newFile, Hashtable<String, Object> props)
 	{
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
@@ -1728,7 +1747,7 @@ public class jEdit
 		path = MiscUtilities.constructPath(parent,path);
 
 		if(props == null)
-			props = new Hashtable();
+			props = new Hashtable<String, Object>();
 		composeBufferPropsFromHistory(props, path);
 
 		synchronized(bufferListLock)
@@ -1903,7 +1922,7 @@ public class jEdit
 		// Wait for pending I/O requests
 		if(buffer.isPerformingIO())
 		{
-			TaskManager.INSTANCE.waitForIoTasks();
+			TaskManager.instance.waitForIoTasks();
 			if(VFSManager.errorOccurred())
 				return false;
 		}
@@ -1919,7 +1938,7 @@ public class jEdit
 				if(!buffer.save(view,null,true))
 					return false;
 
-				TaskManager.INSTANCE.waitForIoTasks();
+				TaskManager.instance.waitForIoTasks();
 				if(buffer.getBooleanProperty(BufferIORequest
 					.ERROR_OCCURRED))
 				{
@@ -2098,7 +2117,7 @@ public class jEdit
 		}
 
 		// Wait for pending I/O requests
-		TaskManager.INSTANCE.waitForIoTasks();
+		TaskManager.instance.waitForIoTasks();
 		if(VFSManager.errorOccurred())
 			return false;
 
@@ -2877,7 +2896,7 @@ public class jEdit
 			view = activeView;
 
 		// Wait for pending I/O requests
-		TaskManager.INSTANCE.waitForIoTasks();
+		TaskManager.instance.waitForIoTasks();
 
 		// Create a new EditorExitRequested
 		EditorExitRequested eer = new EditorExitRequested(view);
@@ -4567,7 +4586,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	 * Compose buffer-local properties which can be got from history.
 	 * @since 4.3pre10
 	 */
-	private static void composeBufferPropsFromHistory(Map props, String path)
+	private static void composeBufferPropsFromHistory(Map<String, Object> props, String path)
 	{
 		BufferHistory.Entry entry = BufferHistory.getEntry(path);
 

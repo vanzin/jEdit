@@ -64,7 +64,7 @@ public abstract class Task implements Runnable, ProgressObserver
 	public final void run()
 	{
 		state = SwingWorker.StateValue.STARTED;
-		TaskManager.INSTANCE.fireRunning(this);
+		TaskManager.instance.fireRunning(this);
 		try
 		{
 			thread = Thread.currentThread();
@@ -76,7 +76,7 @@ public abstract class Task implements Runnable, ProgressObserver
 			Log.log(Log.ERROR, this, t);
 		}
 		state = SwingWorker.StateValue.DONE;
-		TaskManager.INSTANCE.fireDone(this);
+		TaskManager.instance.fireDone(this);
 	} //}}}
 
 	/**
@@ -89,21 +89,21 @@ public abstract class Task implements Runnable, ProgressObserver
 	public final void setValue(long value)
 	{
 		this.value = value;
-		TaskManager.INSTANCE.fireValueUpdated(this);
+		TaskManager.instance.fireValueUpdated(this);
 	}
 
 	@Override
 	public final void setMaximum(long maximum)
 	{
 		this.maximum = maximum;
-		TaskManager.INSTANCE.fireMaximumUpdated(this);
+		TaskManager.instance.fireMaximumUpdated(this);
 	}
 
 	@Override
 	public void setStatus(String status)
 	{
 		this.status = status;
-		TaskManager.INSTANCE.fireStatusUpdated(this);
+		TaskManager.instance.fireStatusUpdated(this);
 	}
 
 	public long getValue()

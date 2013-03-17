@@ -184,7 +184,7 @@ public class CloseDialog extends EnhancedDialog
 					Buffer buffer = jEdit.getBuffer(path);
 					if(!buffer.save(view,null,true,true))
 						return;
-					TaskManager.INSTANCE.waitForIoTasks();
+					TaskManager.instance.waitForIoTasks();
 					if(buffer.getBooleanProperty(BufferIORequest
 						.ERROR_OCCURRED))
 						return;
