@@ -330,7 +330,7 @@ public class ColumnBlock extends Rect implements Node
 	//{{{ throwException() method
 	private void throwException(int offset, int line)
 	{
-		throw new IllegalArgumentException("{ELSTIC TABSTOP}CORRUPT DATA@{"
+		throw new IllegalArgumentException("{ELASTIC TABSTOP}CORRUPT DATA@{"
 			+ System.currentTimeMillis() + "} & Thread : "
 			+ Thread.currentThread().getName()
 			+ " :Cannot find the size for tab at offset "
