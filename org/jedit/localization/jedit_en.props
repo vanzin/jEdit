@@ -1207,7 +1207,7 @@ view.title.select=Please enter a title for this view:
 buffer-options.title=Buffer Options
 buffer-options.caption=This dialog box changes settings for the current buffer\n\
 	only. To change the default settings for an edit mode, see\n\
-	the Utilities->Global Options->Editing dialog.
+	the Global Options->Editing pane.
 buffer-options.loading-saving=Loading and Saving
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
