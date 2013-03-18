@@ -305,7 +305,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		paneTree = new JTree(optionTreeModel);
 		paneTree.setRootVisible(false);
 		paneTree.setCellRenderer(new PaneNameRenderer());
-
+		
 		JPanel content = new JPanel(new BorderLayout(12, 12));
 		content.setBorder(new EmptyBorder(12, 12, 12, 12));
 		add(content, BorderLayout.CENTER);
@@ -318,7 +318,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 
 		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
-
+		
 		JScrollPane scroller = new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -332,30 +332,16 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		paneTree.getSelectionModel().addTreeSelectionListener(this);
 
 		OptionGroup rootNode = (OptionGroup) paneTree.getModel().getRoot();
-		for (int i = 0; i < rootNode.getMemberCount(); i++)
-		{
-			paneTree.expandPath(new TreePath(new Object[] { rootNode,
-				rootNode.getMember(i) }));
-		}
-
-		// returns false if no such pane exists; calling with null
-		// param selects first option pane found
 		String name = optionGroup.getName();
-		selectPane(rootNode, null);
-		/*
-		 * if ((defaultPaneName != null) && (!selectPane(rootNode,
-		 * defaultPaneName))) selectPane(rootNode, null);
-		 */
-
-		splitter.setDividerLocation(paneTree.getPreferredSize().width
-			+ scroller.getVerticalScrollBar().getPreferredSize().width);
-
 		String pane = jEdit.getProperty(name + ".last");
 		selectPane(rootNode, pane);
-
+		paneTree.setVisibleRowCount(1);
+		
 		int dividerLocation = jEdit.getIntegerProperty(name + ".splitter", -1);
 		if (dividerLocation != -1)
 			splitter.setDividerLocation(dividerLocation);
+		else splitter.setDividerLocation(paneTree.getPreferredSize().width
+					+ scroller.getVerticalScrollBar().getPreferredSize().width);
 
 	} //}}}
 
