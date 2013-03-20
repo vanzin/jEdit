@@ -199,19 +199,126 @@
 		</KEYWORDS>
 	</RULES>
 
-	<!-- SCRIPT tag: Highlight tag and delegate to JavaScript mode. -->
+	<!-- SCRIPT tag: Highlight tag and switch to language ruleset. -->
 	<RULES SET="SCRIPT_TAG" DEFAULT="MARKUP">
+		<!--If the content of the TYPE attribute is recognized, switch to
+			language specific ruleset. -->
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="COFFEESCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?text/coffeescript)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="VBSCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?text/vbscript)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="VBSCRIPT_TAG"
+					HASH_CHAR="language">language(?=\s*=\s*['"]?vbscript)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="PYTHON_SCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?\w+/python)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="RUBY_SCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?\w+/ruby)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="XML_SCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?application/xml)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="XQUERY_SCRIPT_TAG"
+					HASH_CHAR="type">type(?=\s*=\s*['"]?\w+/xquery)</SEQ_REGEXP>
+		<!-- Switch to JavaScript ruleset after the tag. -->
 		<SEQ TYPE="MARKUP" DELEGATE="JAVASCRIPT">&gt;</SEQ>
+		<!-- Import rules for highlighting. -->
 		<IMPORT DELEGATE="TAGS"/>
 	</RULES>
 
+	<!-- JavaScript (NOTE: RULES attributes must match the imported rules.)-->
 	<RULES SET="JAVASCRIPT" 
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
+		<!-- "Override" comments to avoid consuming the </SCRIPT> tag. -->
+		<SPAN_REGEXP TYPE="COMMENT1" HASH_CHAR="/*">
+			<BEGIN>/\*</BEGIN>
+			<END REGEXP="TRUE">(?i)(?=&lt;/SCRIPT\b)</END>
+		</SPAN_REGEXP>
+		<SEQ_REGEXP TYPE="COMMENT2" HASH_CHAR="//">(?i)//.*(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<!-- If closing </SCRIPT> tag is found, switch to ENDTAG ruleset. -->
 		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
 					HASH_CHAR="&lt;">(?i)&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<!-- Import rules for JavaScript mode. -->
 		<IMPORT DELEGATE="javascript::MAIN"/>
+	</RULES>
+
+	<!-- CoffeeScript -->
+	<RULES SET="COFFEESCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="COFFEESCRIPT">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="COFFEESCRIPT"
+		IGNORE_CASE="FALSE"
+		HIGHLIGHT_DIGITS="TRUE"
+		NO_WORD_SEP="$_"
+		DIGIT_RE="(0b[01]+)|(0o[0-7]+)|(0x\p{XDigit}+)|(\d*\.?\d+(e[+-]?\d+)?)">
+		<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="###">
+			<BEGIN>###(?!#)</BEGIN>
+			<END REGEXP="TRUE">(?i)(?=&lt;/SCRIPT\b)</END>
+		</SPAN_REGEXP>
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="#">(?i)#.*(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">(?i)&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="coffeescript::MAIN"/>
+	</RULES>
+
+	<!-- Python - provided by Gestalt -->
+	<RULES SET="PYTHON_SCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="PYTHON">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="PYTHON" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="#">(?i)#.*(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">(?i)&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="python::MAIN"/>
+	</RULES>
+
+	<!-- Ruby - provided by Gestalt -->
+	<RULES SET="RUBY_SCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="RUBY">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="RUBY" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="#">(?i)#.*(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">(?i)&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="ruby::MAIN"/>
+	</RULES>
+
+	<!-- VBScript - provided by Internet Explorer -->
+	<RULES SET="VBSCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="VBSCRIPT">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="VBSCRIPT" HIGHLIGHT_DIGITS="TRUE">
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="'">'.*(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="rem">rem(\b.*)?(?=&lt;/SCRIPT\b)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="vbscript::MAIN"/>
+	</RULES>
+
+	<!-- XML - for XAML, provided by Gestalt -->
+	<RULES SET="XML_SCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="XML">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="XML">
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="xml::MAIN"/>
+	</RULES>
+
+	<!-- XQUERY - provided by XQIB -->
+	<RULES SET="XQUERY_SCRIPT_TAG" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="XQUERY">&gt;</SEQ>
+		<IMPORT DELEGATE="TAGS"/>
+	</RULES>
+	<RULES SET="XQUERY">
+		<SEQ_REGEXP TYPE="MARKUP" DELEGATE="ENDTAG"
+					HASH_CHAR="&lt;">&lt;(?=/SCRIPT\b)</SEQ_REGEXP>
+		<IMPORT DELEGATE="xq::MAIN"/>
 	</RULES>
 
 	<!-- STYLE tag: Highlight tag and delegate to CSS mode. -->
