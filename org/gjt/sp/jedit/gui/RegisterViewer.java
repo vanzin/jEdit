@@ -32,8 +32,8 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
+
 /** Dockable view of register contents */
 public class RegisterViewer extends JPanel
 	implements DockableWindow, DefaultFocusComponent
@@ -69,8 +69,8 @@ public class RegisterViewer extends JPanel
 
 		add(BorderLayout.NORTH,toolBar);
 
-		DefaultListModel registerModel = new DefaultListModel();
-		registerList = new JList(registerModel);
+		DefaultListModel<Object> registerModel = new DefaultListModel<Object>();
+		registerList = new JList<Object>(registerModel);
 		registerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		registerList.setCellRenderer(new Renderer());
 		registerList.addListSelectionListener(new ListHandler());
@@ -153,7 +153,13 @@ public class RegisterViewer extends JPanel
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JList registerList;
+	/** contains either a
+	 *  - String object (no Register is registered yet,
+	 *                   "view-registers.none") or
+	 *  - Character objects ("name" of the register; char value must be between 0 and 255,
+	 *                       see Registers.java)
+	 */
+	private JList<Object> registerList;
 	private JTextArea contentTextArea;
 	private DocumentHandler documentHandler;
 	private View view;
@@ -165,7 +171,7 @@ public class RegisterViewer extends JPanel
 	//{{{ refreshList
 	private void refreshList()
 	{
-		DefaultListModel registerModel = (DefaultListModel)registerList.getModel();
+		DefaultListModel<Object> registerModel = (DefaultListModel<Object>)registerList.getModel();
 		Object o = registerList.getSelectedValue();
 		int selected = -1;
 		if (o != null && o instanceof Character)
@@ -240,7 +246,7 @@ public class RegisterViewer extends JPanel
 	{
 		@Override
 		public Component getListCellRendererComponent(
-			JList list, Object value, int index,
+			JList<?> list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list,value,
@@ -413,7 +419,7 @@ public class RegisterViewer extends JPanel
 		{
 			view.getTextArea().requestFocus();
 			view.toFront();
-	  	}
+		}
 	}//}}}
 
 	//{{{ TabHandler Class
@@ -422,7 +428,7 @@ public class RegisterViewer extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			registerList.requestFocusInWindow();
-	  	}
+		}
 	}//}}}
 
 	//{{{ InsertHandler Class
@@ -431,7 +437,7 @@ public class RegisterViewer extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			insertRegister();
-	  	}
+		}
 	}//}}}
 
 	//{{{ ClearHandler Class
@@ -441,6 +447,6 @@ public class RegisterViewer extends JPanel
 		{
 			clearSelectedIndex();
 
-	  	}
+		}
 	}//}}}
 }
