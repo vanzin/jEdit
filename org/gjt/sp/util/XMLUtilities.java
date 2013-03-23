@@ -170,7 +170,7 @@ public class XMLUtilities
 	 * by jEdit, but anyone is free to use the method if it sounds
 	 * usable.</p>
 	 */
-	public static InputSource findEntity(String systemId, String test, Class where)
+	public static InputSource findEntity(String systemId, String test, Class<?> where)
 	{
 		if (systemId != null && systemId.endsWith(test))
 		{

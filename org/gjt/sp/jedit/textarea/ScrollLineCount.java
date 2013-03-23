@@ -102,7 +102,7 @@ class ScrollLineCount extends Anchor
 		int scrollLines = 0;
 		int physicalLine = startLine;
 		int numLinesVisible = 0;
-		
+
 		for(int i = 0, n = numLines; i < n; i++, physicalLine++)
 		{
 			if(getDisplayManager().isLineVisible(physicalLine))

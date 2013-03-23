@@ -67,7 +67,7 @@ public class ColumnBlock extends Rect implements Node
 
 	@Override
 	//{{{ getChildren() method
-	public Vector getChildren()
+	public Vector<Node> getChildren()
 	{
 		return children;
 	}//}}}

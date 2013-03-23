@@ -253,7 +253,7 @@ public class Log
 	 * Returns the list model for viewing the log contents.
 	 * @since jEdit 4.2pre1
 	 */
-	public static ListModel getLogListModel()
+	public static ListModel<String> getLogListModel()
 	{
 		return listModel;
 	} //}}}
@@ -312,7 +312,7 @@ public class Log
 			}
 		}
 		else if(source instanceof Class)
-			_source = ((Class)source).getName();
+			_source = ((Class<?>)source).getName();
 		else
 			_source = source.getClass().getName();
 		int index = _source.lastIndexOf('.');
@@ -483,7 +483,7 @@ public class Log
 	//}}}
 
 	//{{{ LogListModel class
-	static class LogListModel implements ListModel
+	static class LogListModel implements ListModel<String>
 	{
 		final List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 
@@ -524,7 +524,7 @@ public class Log
 		} //}}}
 
 		//{{{ getElementAt() method
-		public Object getElementAt(int index)
+		public String getElementAt(int index)
 		{
 			if(wrap)
 			{

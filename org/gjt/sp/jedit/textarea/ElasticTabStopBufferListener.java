@@ -135,7 +135,6 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					if(!singleTabInserted)
 					{	
 						innerContainingBlock.updateColumnBlockLineOffset(startLine, length, false);
-						ColumnBlockLine containingLine = innerContainingBlock.getLines().elementAt(startLine-innerContainingBlock.startLine);
 						startingLine = innerContainingBlock.startLine;
 						innerContainingBlock.setTabSizeDirtyStatus(true,false);
 						endLine = innerContainingBlock.endLine;
@@ -231,7 +230,6 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		{
 			return;
 		}
-		String charDeleted;
 		boolean isASimpleChar = false;
 		ColumnBlock rootBlock = buffer.getColumnBlock();
 		if(rootBlock==null)
@@ -374,20 +372,20 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 			//deletion lies below all column blocks
 			else
 			{
-				 startLineToBuild = -1;
-				 endLineToBuild = -1;
-				 //firstBlockToBeUpdated = null;
-				 firstBlockToBeRemoved = null;
-				 lastBlockToBeRemoved = null;
+				startLineToBuild = -1;
+				endLineToBuild = -1;
+				//firstBlockToBeUpdated = null;
+				firstBlockToBeRemoved = null;
+				lastBlockToBeRemoved = null;
 			}
 			//once we reach here we have three things to do
 			//1)delete columnBlocks using firstBlockToBeDeleted and lastBlockToBeDeleted
-			Vector blocksToBeRemoved =null;
+			Vector<Node> blocksToBeRemoved =null;
 			if(firstBlockToBeRemoved!=null)
 			{
 				int startIndex = rootBlock.getChildren().indexOf(firstBlockToBeRemoved);
-				blocksToBeRemoved = new Vector();
-				if(lastBlockToBeRemoved==null)
+				blocksToBeRemoved = new Vector<Node>();
+				if(lastBlockToBeRemoved == null)
 				{
 					throw new IllegalArgumentException("Deletion not handled properly");
 				}
@@ -396,7 +394,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 				{
 					blocksToBeRemoved.add(rootBlock.getChildren().get(i));
 				}
-					
+
 			}	
 			//2)update startLine/endLine in column blocks using firstBlockToBeUpdated
 			if(numLines>0)
@@ -452,7 +450,6 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 				if(!singleTabDeleted)
 				{	
 					innerContainingBlock.updateColumnBlockLineOffset(startLine, -1*length, false);
-					ColumnBlockLine containingLine = innerContainingBlock.getLines().elementAt(startLine-innerContainingBlock.startLine);
 					startingLine = innerContainingBlock.startLine;
 					endLine = innerContainingBlock.endLine;
 					innerContainingBlock.setTabSizeDirtyStatus(true,false);

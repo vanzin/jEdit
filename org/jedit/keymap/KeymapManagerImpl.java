@@ -74,7 +74,7 @@ public class KeymapManagerImpl implements KeymapManager
 						      JOptionPane.ERROR_MESSAGE);
 			System.exit(10);
 		}
-		this.userKeymapFolder = userKeymapFolder;
+		KeymapManagerImpl.userKeymapFolder = userKeymapFolder;
 	} //}}}
 
 	//{{{ getKeymap() method

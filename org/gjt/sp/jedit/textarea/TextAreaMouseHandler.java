@@ -206,7 +206,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		{
 			Point p = textArea.offsetToXY(dragStart);
 			// defer scrolling until mouserelease if result is off-screen
-			textArea.moveCaretPosition(dragStart, (p.x < 0) ? textArea.NO_SCROLL : textArea.NORMAL_SCROLL);
+			textArea.moveCaretPosition(dragStart, (p.x < 0) ? TextArea.NO_SCROLL : TextArea.NORMAL_SCROLL);
 		}
 
 		if(!(textArea.isMultipleSelectionEnabled()
@@ -383,7 +383,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			if(dot != textArea.getCaretPosition())
 			{
 				// defer scroll to mouserelease if result is offscreen left without dragging that direction
-				textArea.moveCaretPosition(dot, (p.x < 0 && x > 1) ? textArea.NO_SCROLL : textArea.NORMAL_SCROLL);
+				textArea.moveCaretPosition(dot, (p.x < 0 && x > 1) ? TextArea.NO_SCROLL : TextArea.NORMAL_SCROLL);
 			}
 			else if(p.x < 0 && x < 1)
 			{

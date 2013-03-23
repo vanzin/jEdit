@@ -196,7 +196,7 @@ public abstract class PropertiesBean
 
 	private String encode(Object value)
 	{
-		Class _class = value.getClass();
+		Class<?> _class = value.getClass();
 		if (_class.isArray())
 		{
 			StringBuilder _val = new StringBuilder();
@@ -237,7 +237,7 @@ public abstract class PropertiesBean
 		if (_class.isArray())
 		{
 			StringTokenizer st = new StringTokenizer(value, String.valueOf(arraysep));
-			Class _type = _class.getComponentType();
+			Class<?> _type = _class.getComponentType();
 			_ret = Array.newInstance(_type, st.countTokens());
 			int _cnt = st.countTokens();
 			for (int i = 0; i < _cnt; i++)

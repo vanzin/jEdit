@@ -165,7 +165,6 @@ public class ParserRuleSet
 				rules = new ArrayList<ParserRule>();
 				ruleMap.put(key,rules);
 			}
-			int ruleAmount = rules.size();
 			rules.add(r);
 		}
 	} //}}}

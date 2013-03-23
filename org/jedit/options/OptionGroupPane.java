@@ -214,14 +214,14 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
         // {{{ selectPane() methods
 	private boolean selectPane(OptionGroup node, String name)
 	{
-		return selectPane(node, name, new ArrayList());
+		return selectPane(node, name, new ArrayList<Object>());
 	} 
 
-	private boolean selectPane(OptionGroup node, String name, ArrayList path)
+	private boolean selectPane(OptionGroup node, String name, ArrayList<Object> path)
 	{
 		path.add(node);
 
-		Enumeration e = node.getMembers();
+		Enumeration<Object> e = node.getMembers();
 		while (e.hasMoreElements())
 		{
 			Object obj = e.nextElement();
@@ -361,7 +361,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		if (obj instanceof OptionGroup)
 		{
 			OptionGroup grp = (OptionGroup) obj;
-			Enumeration members = grp.getMembers();
+			Enumeration<Object> members = grp.getMembers();
 			while (members.hasMoreElements())
 			{
 				save(members.nextElement());

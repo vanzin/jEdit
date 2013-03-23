@@ -29,6 +29,7 @@ import javax.print.attribute.standard.*;
 import java.awt.print.*;
 import java.awt.*;
 import java.io.*;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -51,15 +52,23 @@ public class BufferPrinter1_4
 
 			if (filePrintSpec.exists())
 			{
+				FileInputStream fileIn;
+				ObjectInputStream obIn = null;
 				try
 				{
-					FileInputStream fileIn = new FileInputStream(filePrintSpec);
-					ObjectInputStream obIn = new ObjectInputStream(fileIn);
+					fileIn = new FileInputStream(filePrintSpec);
+					obIn = new ObjectInputStream(fileIn);
 					format = (HashPrintRequestAttributeSet)obIn.readObject();
 				}
 				catch(Exception e)
 				{
 					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
+				} finally
+				{
+					try
+					{
+						obIn.close();
+					} catch (IOException e) {}
 				}
 				//for backwards compatibility, the color variable is stored also as a property
 				if(jEdit.getBooleanProperty("print.color"))
@@ -168,10 +177,12 @@ public class BufferPrinter1_4
 			settings, "printspec");
 		File filePrintSpec = new File(printSpecPath);
 
+		FileOutputStream fileOut;
+		ObjectOutputStream obOut = null;
 		try
 		{
-			FileOutputStream fileOut=new FileOutputStream(filePrintSpec);
-			ObjectOutputStream obOut=new ObjectOutputStream(fileOut);
+			fileOut = new FileOutputStream(filePrintSpec);
+			obOut = new ObjectOutputStream(fileOut);
 			obOut.writeObject(format);
 			//for backwards compatibility, the color variable is stored also as a property
 			Chromaticity cc=(Chromaticity)format.get(Chromaticity.class);
@@ -182,6 +193,12 @@ public class BufferPrinter1_4
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		} finally {
+			if(obOut != null)
+				try
+				{
+					obOut.close();
+				} catch (IOException e) {}
 		}
 	}
 	//}}}

@@ -23,7 +23,6 @@ package org.jedit.core;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.util.Log;
 
 /**  File Opener Service.
   *

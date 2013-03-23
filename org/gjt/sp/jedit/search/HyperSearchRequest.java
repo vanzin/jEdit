@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.search;
 import javax.swing.tree.*;
 import javax.swing.*;
 
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.Buffer;

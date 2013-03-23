@@ -62,7 +62,7 @@ public class ElasticTabstopsTabExpander implements TabExpander
 		float ret = -5;
 		if(columnBlock!=null)
 		{	
-			Vector lines = columnBlock.getLines();
+			Vector<ColumnBlockLine> lines = columnBlock.getLines();
 			if(columnBlock.areTabSizesDirty())
 			{
 				float colBlockWidth = -1;
