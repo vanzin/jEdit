@@ -69,8 +69,8 @@ public class RegisterViewer extends JPanel
 
 		add(BorderLayout.NORTH,toolBar);
 
-		DefaultListModel<Object> registerModel = new DefaultListModel<Object>();
-		registerList = new JList<Object>(registerModel);
+		DefaultListModel registerModel = new DefaultListModel();
+		registerList = new JList(registerModel);
 		registerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		registerList.setCellRenderer(new Renderer());
 		registerList.addListSelectionListener(new ListHandler());
@@ -159,7 +159,7 @@ public class RegisterViewer extends JPanel
 	 *  - Character objects ("name" of the register; char value must be between 0 and 255,
 	 *                       see Registers.java)
 	 */
-	private JList<Object> registerList;
+	private JList registerList;
 	private JTextArea contentTextArea;
 	private DocumentHandler documentHandler;
 	private View view;
@@ -171,7 +171,7 @@ public class RegisterViewer extends JPanel
 	//{{{ refreshList
 	private void refreshList()
 	{
-		DefaultListModel<Object> registerModel = (DefaultListModel<Object>)registerList.getModel();
+		DefaultListModel registerModel = (DefaultListModel)registerList.getModel();
 		Object o = registerList.getSelectedValue();
 		int selected = -1;
 		if (o != null && o instanceof Character)
@@ -246,7 +246,7 @@ public class RegisterViewer extends JPanel
 	{
 		@Override
 		public Component getListCellRendererComponent(
-			JList<?> list, Object value, int index,
+			JList list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list,value,
