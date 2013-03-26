@@ -104,14 +104,12 @@ public class BrowserCommandsMenu extends JPopupMenu
 				|| browser.getMode() == VFSBrowser.BROWSER_DIALOG))
 			{
 				add(createMenuItem("open", "22x22/actions/document-open.png"));
-				JMenuItem openDesktop = GUIUtilities
-					.loadMenuItem(VFSBrowser.getActionContext(),
-						      "vfs.browser.open-desktop", true);
-				openDesktop.setIcon(GUIUtilities.loadIcon("22x22/actions/document-open.png"));
-				add(openDesktop);
 				add(GUIUtilities.loadMenu(
 					VFSBrowser.getActionContext(),
 					"vfs.browser.open-in"));
+				if (browser.getSelectedFiles().length == 1)
+				add(createMenuItem("open-desktop", "22x22/actions/document-open.png"));
+				
 				add(createMenuItem("insert"));
 
 				if(fileOpen)
