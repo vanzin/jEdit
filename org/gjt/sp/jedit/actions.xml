@@ -2,7 +2,8 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <!-- jEdit action table                                                      -->
-<!-- Copyright (C) 2000, 2003 Slava Pestov                                   -->
+<!-- Copyright (C) 2000, 2013 Slava Pestov, Alan Ezust, Shlomy Reinstein,
+		              Matthieu Casanova, Kazutoshi Satoda            -->
 
 <!-- :tabSize=8:indentSize=8:noTabs=false:                                   -->
 <!-- :folding=indent:collapseFolds=1:mode=jedit-actions:		     -->
