@@ -286,6 +286,7 @@ public abstract class DockableWindowManager extends JPanel
 		return getDockable(name);
 	} //}}}
 
+	
 	// {{{ toggleDockAreas()
 	/**
 	 * Hides all visible dock areas, or shows them again,
@@ -317,6 +318,15 @@ public abstract class DockableWindowManager extends JPanel
 		closeToggle = !closeToggle;
 		view.getTextArea().requestFocus();
 	} // }}}
+
+	/** @return true if the next invocation of "toggle docked areas"
+	    will hide the dockables. false otherwise.
+	*/
+	    
+	public boolean willToggleHide()
+	{
+		return closeToggle;
+	}
 
 	// {{{ dockableTitleChanged
 	public void dockableTitleChanged(String dockable, String newTitle)

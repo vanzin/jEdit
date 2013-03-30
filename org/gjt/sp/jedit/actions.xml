@@ -1506,6 +1506,9 @@
 	<CODE>
 		wm.toggleDockAreas();
 	</CODE>
+	<IS_SELECTED>
+		wm.willToggleHide();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="toggle-full-screen">
