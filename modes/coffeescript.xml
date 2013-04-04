@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- CoffeeScript mode by Dennis Hotson, Balazs Toth
+<!-- CoffeeScript mode by Dennis Hotson, Balazs Toth, Marc Häfner
 
 Beta
 
@@ -17,7 +17,7 @@ TODO:
 
 		<!-- Auto indent -->
 		<PROPERTY NAME="indentNextLines"
-			VALUE="((\s*|.*\s+)([\-=]&gt;|[\+\-\*/%\\&lt;&gt;=\!&amp;\|\^~]|(.*:|&lt;&lt;|&gt;&gt;|&gt;&gt;&gt;|\+=|\-=|\*=|/=|%=|&lt;=|&gt;=|==|===|\!=|\!==|is|isnt|not|and|or|&amp;&amp;|\|\||of|in))|\s*(if|else|try|catch|finally|class|while|until|for)(\s*|\s+.*))\s*" />
+			VALUE="((\s*|.*\s+)([\-=]&gt;|[\+\-\*/%\\&lt;&gt;=\!&amp;\|\^~]|(.*:|&lt;&lt;|&gt;&gt;|&gt;&gt;&gt;|\+=|\-=|\*=|/=|%=|&lt;=|&gt;=|==|===|\!=|\!==|is|isnt|not|and|or|&amp;&amp;|\|\||of|in|loop))|\s*(if|else|try|catch|finally|class|while|until|for)(\s*|\s+.*))\s*" />
 
 		<PROPERTY NAME="unindentThisLine"  VALUE="^\s*(else|catch|finally)(\s*|\s+.*)$" />
 		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(else|catch|finally)(\s*|\s+.*)$" />
@@ -70,7 +70,7 @@ TODO:
 		</SPAN>
 
 		<!-- Heregexps -->
-		<SPAN TYPE="MARKUP" DELEGATE="hereRegexp">
+		<SPAN TYPE="MARKUP" DELEGATE="hereRegexp" ESCAPE="\">
 			<BEGIN>///</BEGIN>
 			<END>///</END>
 		</SPAN>
@@ -109,9 +109,9 @@ TODO:
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">?</SEQ>
 
-		<SEQ_REGEXP TYPE="KEYWORD3">@([\p{IsAlphabetic}\$_][\p{IsAlnum}\$_]*)</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="KEYWORD4">([\p{IsAlphabetic}\$_][\p{IsAlnum}\$_]*)(?=\s*(?:[:\.]|\?\.))</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="KEYWORD1" AT_WORD_START="TRUE" HASH_CHARS="for ">for\s+own(?![$_\p{IsAlnum}])</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD3">@([\p{L}\p{Nl}\$_][\p{L}\p{Nl}\p{Nd}\$_]*)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD4">([\p{L}\p{Nl}\$_][\p{L}\p{Nl}\p{Nd}\$_]*)(?=\s*(?:[:\.]|\?\.))</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD1" AT_WORD_START="TRUE" HASH_CHARS="for ">for\s+own(?![\p{L}\p{Nl}\p{Nd}\$_])</SEQ_REGEXP>
 
 		<KEYWORDS>
 			<KEYWORD3>this</KEYWORD3>
@@ -130,6 +130,7 @@ TODO:
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>in</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>loop</KEYWORD1>
 			<KEYWORD1>delete</KEYWORD1>
 			<KEYWORD1>instanceof</KEYWORD1>
 			<KEYWORD1>typeof</KEYWORD1>
@@ -143,7 +144,6 @@ TODO:
 			<KEYWORD1>until</KEYWORD1>
 			<KEYWORD1>of</KEYWORD1>
 			<KEYWORD1>by</KEYWORD1>
-			<KEYWORD1>where</KEYWORD1>
 			<KEYWORD1>when</KEYWORD1>
 
 			<KEYWORD1>and</KEYWORD1>
