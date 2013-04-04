@@ -1599,8 +1599,7 @@ options.textarea.electricBorders=自動スクロール
 options.textarea.stdNextPrevWord=次/前の単語へ移動するときホワイトスペースを含む
 options.textarea.antiAlias=アンチエイリアス スムーズフォント
 options.textarea.antiAlias.tooltip=いくつかのシステムで表示が遅くなります
-options.textarea.fracFontMetrics=Fractional フォントメトリクス (文字の表示が\
-	よりスムーズになります)
+options.textarea.fracFontMetrics=Fractional フォントメトリクス
 options.textarea.fracFontMetrics.tooltip=サブピクセルアンチエイリアスとの併用はお薦めしません
 options.textarea.stripTrailingEOL=最終行末を隠す (あれば)
 options.textarea.completeFromAllBuffers=開いているすべてのバッファから単語補完 (デフォルト\

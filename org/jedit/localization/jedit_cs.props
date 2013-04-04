@@ -1606,8 +1606,7 @@ options.textarea.electricBorders=Elektrické okraje (auto skrolování)
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Vyhlazený hladký text
 options.textarea.antiAlias.tooltip=Zpomaluje zobrazování na některých systémech
-options.textarea.fracFontMetrics=Částečné písmové metriky (pro lepší hladké \
-	zobrazení textu)
+options.textarea.fracFontMetrics=Částečné písmové metriky
 options.textarea.fracFontMetrics.tooltip=Není doporučeno se subpixelovým vyhlazováním
 options.textarea.stripTrailingEOL=Skrýt poslední konec řádku (pokud je)
 options.textarea.completeFromAllBuffers=Dokončit slova ve všech otevřených bufferech (výchozí je \

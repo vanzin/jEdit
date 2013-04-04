@@ -1592,8 +1592,7 @@ options.textarea.electricBorders=Электрические бордюры (ав
 options.textarea.stdNextPrevWord=Переход к следующему/предыдущему слову включает пробелы
 options.textarea.antiAlias=Сглаживание шрифта
 options.textarea.antiAlias.tooltip=Может замедлять дисплей на некоторых системах
-options.textarea.fracFontMetrics=Дробная размерность шрифта (для лучшего \
-	сглаживания текста)
+options.textarea.fracFontMetrics=Дробная размерность шрифта
 options.textarea.fracFontMetrics.tooltip=Не рекомендуется с суб-пиксельным сглаживанием
 options.textarea.stripTrailingEOL=Прятать последнюю пустую строку (когда она есть)
 options.textarea.completeFromAllBuffers=Оканчивать слова из всех буферов (изначально \

@@ -1598,8 +1598,7 @@ options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Anti Aliased smooth text
 options.textarea.antiAlias.tooltip=Slows down display on some systems
-options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
-	text display)
+options.textarea.fracFontMetrics=Fractional font metrics
 options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
 options.textarea.stripTrailingEOL=Hide final end of line (if any)
 options.textarea.completeFromAllBuffers=Complete words from all open buffers (default is \

@@ -1597,8 +1597,7 @@ options.textarea.electricBorders=Bordures électriques (défilement automatique)
 options.textarea.stdNextPrevWord=La commande « Atteindre le mot suivant/précédent » ignore les espaces
 options.textarea.antiAlias=Lissage du texte
 options.textarea.antiAlias.tooltip=Ralentit l'affichage sur certains systèmes
-options.textarea.fracFontMetrics=Police à espacement proportionnel (pour un affichage plus « doux » \
-	du texte)
+options.textarea.fracFontMetrics=Police à espacement proportionnel
 options.textarea.fracFontMetrics.tooltip=Non recommandé avec l'antialiasing de sous-pixel
 options.textarea.stripTrailingEOL=Masquer la fin de ligne (si existante)
 options.textarea.completeFromAllBuffers=Mots complets de tous les tampons ouverts (par défaut, \
