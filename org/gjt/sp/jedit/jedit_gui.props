@@ -895,6 +895,9 @@ options.view.code=new ViewOptionPane();
 fullScreenIncludesMenu=true
 fullScreenIncludesToolbars=true
 fullScreenIncludesStatus=true
+
+# Enable subpixel antialiasing by default in textarea.
+view.antiAlias=subpixel HRGB
 #}}}
 
 #{{{ File System Browser panes
