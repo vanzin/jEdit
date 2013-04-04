@@ -18,5 +18,9 @@ else
 	JAVA="${JAVA_HOME}/bin/java"
 fi
 
+# Antialias menus and dockable text:
+ANTIALIAS_ALL="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
+
+
 # Launch application.
-exec "${JAVA}" -jar "/usr/share/jEdit/@jar.filename@" -reuseview "$@"
+exec "${JAVA}" ${ANTIALIAS_ALL} -jar "/usr/share/jEdit/@jar.filename@" -reuseview "$@"

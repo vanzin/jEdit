@@ -198,7 +198,7 @@ public abstract class OperatingSystem
 				out.write("\n");
 				out.write("# Launch application.\n");
 				out.write("\n");
-				out.write("exec \"${JAVA}\" -jar \""
+				out.write("exec \"${JAVA}\" -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -jar \""
 					  + installDir + File.separator
 					  + "jedit.jar\" -reuseview \"$@\"\n");
 				out.close();
