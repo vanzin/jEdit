@@ -47,9 +47,7 @@
                 </question>
 
                 <answer>
-                    <para>Select
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem>, then select the
+                    <para>Select<guimenuitem>Global Options</guimenuitem>,
                     <guimenuitem>Abbreviations</guimenuitem> option pane. You
                     will see a checkbox option for <quote>Space bar expands
                     abbrevs</quote>. Here you can also add, modify and delete
@@ -126,10 +124,8 @@
                     the original file on the server.</para>
 
                     <para>To avoid this problem, you can disable the two-step
-                    file saving routine. Select
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem>, then under <guimenuitem>Loading &amp;
-                    Saving</guimenuitem>, clear the checkbox for
+                    file saving routine. Select <guimenuitem>Global Options</guimenuitem>, 
+                    then under <guimenuitem>Saving &amp; Backup</guimenuitem>, clear the checkbox for
                     <guimenuitem>Two-stage save</guimenuitem>.</para>
                 </answer>
             </qandaentry>
@@ -342,9 +338,8 @@
                 </question>
 
                 <answer>
-                    <para><guimenuitem>Select Utilities&gt;Global
-                    Options</guimenuitem>, and in the
-                    <guimenuitem>Gutter</guimenuitem> option pane select the
+                    <para>Select <guimenuitem>Global Options</guimenuitem>, 
+                    <guimenuitem>Gutter</guimenuitem> option pane, and check the
                     <guimenuitem>Line Numbering</guimenuitem> check box.</para>
                 </answer>
             </qandaentry>
@@ -386,10 +381,8 @@
                 <answer>
                     <para>This is controlled by the WhiteSpace plugin. To change
                     your settings to disable display of whitespace characters,
-                    select <guimenuitem>Utilities&gt;Global
-                    Options</guimenuitem>, then select <guimenuitem>Plugin
-                    options&gt;WhiteSpace</guimenuitem>. You can separately
-                    configure the display of spaces, tabs, and other whitespace
+                    <guimenuitem>Plugin options&gt;WhiteSpace</guimenuitem>. 
+                    You can separately configure the display of spaces, tabs, and other whitespace
                     characters.</para>
                 </answer>
             </qandaentry>
@@ -528,12 +521,10 @@
                 </question>
 
                 <answer>
-                    <para>Select
-                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-                    Options</guimenuitem>, then the
-                    <guimenuitem>Appearance</guimenuitem> option pane. When you
-                    select the <quote>Metal</quote> look and feel you can also
-                    select the fonts used for various displayed items.</para>
+		<para>Select the <guimenuitem>Global Options</guimenuitem>, 
+		<guimenuitem>Appearance</guimenuitem> option pane. When you
+		select the <quote>Metal</quote> look and feel you can also
+		select the fonts used for various displayed items.</para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -541,14 +532,21 @@
                     <para>How can I get antialiased text everywhere, even dockables and menus? </para>
                 </question>
                 <answer>
-                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. </para>
+                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>.
+                   Note that enabling the related option for "Fractional font metrics" potentially
+                   improves character shapes, but can make the text look blurry. </para>
+                   
                    <para>For the dockables, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else.
                    You can add these options to the batch file or shell script line that starts jEdit. </para>
+                   
                    <para> On Windows with the .exe launcher, you create a file called <literal>jedit.l4j.ini</literal> in the same directory as the .exe file, 
                    and place one line for each java argument you want to pass. For example:
                    <programlisting>-Dawt.useSystemAAFontSettings=on
 -Dswing.aatext=true</programlisting>
                    </para>
+                   
+                   <para> On Mac OS X, the jEdit.app bundle already provides certain antialiasing properties in
+                   <literal>Contents/Info.plist</literal> to enable that by default.</para>
 			    </answer>
             </qandaentry>
             <qandaentry>
