@@ -1445,6 +1445,14 @@ public class PluginJAR
 			}
 		}
 
+		boolean isBeingLoaded = jEdit.getPluginJAR(getPath()) != null;
+		if(!isBeingLoaded)
+		{
+			Log.log(Log.DEBUG, PluginJAR.class,
+					"not loading actions, dockables, services "
+					+"because the plugin is not really being loaded");
+			return cache;
+		}
 		if(cache.actionsURI != null)
 		{
 			actions = new ActionSet(this,null,null,

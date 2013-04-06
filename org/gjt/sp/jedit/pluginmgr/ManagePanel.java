@@ -267,19 +267,31 @@ public class ManagePanel extends JPanel
 		{
 			pluginCacheEntry = pluginJAR.generateCache();
 		}
-		Properties cachedProperties = pluginCacheEntry.cachedProperties;
-
-		String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
-
-		if (jars != null)
+		if(pluginCacheEntry == null)
 		{
-			String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
-			StringTokenizer st = new StringTokenizer(jars);
-			while (st.hasMoreTokens())
+			// this happens when, for some reason, two versions
+			// of a plugin are installed, e.g when XSLT.jar and
+			// xslt.jar are both in $JEDIT_HOME/jars on Linux.
+			Log.log(Log.WARNING, ManagePanel.class,
+					"couldn't load plugin "+pluginJAR.getPath()
+					+" (most likely other version exists)");
+		}
+		else
+		{
+			Properties cachedProperties = pluginCacheEntry.cachedProperties;
+
+			String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
+
+			if (jars != null)
 			{
-				String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
-				if (new File(_jarPath).exists())
-					jarList.add(_jarPath);
+				String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
+				StringTokenizer st = new StringTokenizer(jars);
+				while (st.hasMoreTokens())
+				{
+					String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
+					if (new File(_jarPath).exists())
+						jarList.add(_jarPath);
+				}
 			}
 		}
 		jarList.add(jarName);
@@ -1030,7 +1042,16 @@ public class ManagePanel extends JPanel
 					{
 						pluginCacheEntry = pluginJAR.generateCache();
 					}
-					if (pluginCacheEntry.pluginClass == null)
+					if(pluginCacheEntry == null)
+					{
+						// this happens when, for some reason, two versions
+						// of a plugin are installed, e.g when XSLT.jar and
+						// xslt.jar are both in $JEDIT_HOME/jars on Linux.
+						Log.log(Log.WARNING, ManagePanel.class,
+								"couldn't load plugin "+pluginJAR.getPath()
+								+" (most likely other version exists)");
+					}
+					if (pluginCacheEntry == null || pluginCacheEntry.pluginClass == null)
 					{
 						// Not a plugin
 						jarlibs.put(new File(notLoadedJars[i]).getName(), notLoadedJars[i]);

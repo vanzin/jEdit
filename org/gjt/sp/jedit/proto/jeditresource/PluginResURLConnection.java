@@ -33,6 +33,8 @@ import java.net.URLConnection;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.jEdit;
+
+import org.gjt.sp.util.Log;
 //}}}
 
 //{{{ class PluginResURLConnection
@@ -79,6 +81,7 @@ public class PluginResURLConnection extends URLConnection
 			}
 			else
 			{
+				boolean pluginFoundInPluginJARs = false;
 				PluginJAR[] plugins = jEdit.getPluginJARs();
 				for(int i = 0; i < plugins.length; i++)
 				{
@@ -86,9 +89,15 @@ public class PluginResURLConnection extends URLConnection
 					String jarName =MiscUtilities.getFileName(jar.getPath()).toLowerCase(); 
 					if(plugin.equalsIgnoreCase(jarName))
 					{
+						pluginFoundInPluginJARs = true;
 						in = jar.getClassLoader().getResourceAsStream(resource);
 						break;
 					}
+				}
+				if(!pluginFoundInPluginJARs){
+					Log.log(Log.DEBUG, PluginResURLConnection.class,
+							"reading resource from not loaded plugin "
+							+" => will always fail !");
 				}
 			}
 

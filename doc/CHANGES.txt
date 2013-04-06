@@ -88,6 +88,8 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 - When checking a box to select a plugin to install, the description was 
   appearing and immediately disappearing. (#3398605 Dale Anson) 
   
+- Fix Exception when clicking Find orphan when disabled plugins (#2940864 Eric
+  Le Lay)
 }}}
 {{{ API Changes
 

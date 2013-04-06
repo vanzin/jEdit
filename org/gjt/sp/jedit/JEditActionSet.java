@@ -380,7 +380,18 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			if ( XMLUtilities.parseXML(uri.openStream(), ah))
+			InputStream in = uri.openStream();
+			if(in == null)
+			{
+				// this happened when calling generateCache() in the context of 'find orphan jars'
+				// in org.gjt.sp.jedit.pluginmgr.ManagePanel.FindOrphan.actionPerformed(ActionEvent)
+				// because for not loaded plugins, the plugin will not be added to the list of pluginJars
+				// so the org.gjt.sp.jedit.proto.jeditresource.PluginResURLConnection will not find the plugin
+				// to read the resource from.
+				// Better log a small error message than a big stack trace
+				Log.log(Log.WARNING, this, "Unable to open: " + uri);
+			}
+			else if ( XMLUtilities.parseXML(in, ah))
 			{
 				Log.log(Log.ERROR, this, "Unable to parse: " + uri);
 			}
