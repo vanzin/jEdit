@@ -4175,6 +4175,7 @@ public class jEdit
 
 					if(buffer != null)
 						view.setBuffer(buffer);
+					view.toFront();
 				}
 				else
 				{
