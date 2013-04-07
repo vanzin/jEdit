@@ -173,6 +173,8 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ UI
 
+- Initial view hidden by other windows at startup (#3610089)
+
 - Remove empty root node in OptionGroupPane (#3608324, #3608327: Marco Hunsicker)
 
 - More accurate treatment of ALT_KEY_PRESSED_DISABLED (#3604532: Makarius)
