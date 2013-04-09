@@ -206,6 +206,9 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Made the plugin manager loading much faster (up to 3 time faster)
+  (Matthieu Casanova)
+
 - New macro in Files section: "Open Selection In Desktop" (Jarek Czekalski)
 
 - Open Selection macro improvements. An attempt is made to use current

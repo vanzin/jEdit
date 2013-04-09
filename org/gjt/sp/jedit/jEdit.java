@@ -4236,10 +4236,10 @@ public class jEdit
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method
-	private static void getNotLoadedPluginJARs(List<String> returnValue,
+	private static void getNotLoadedPluginJARs(Collection<String> returnValue,
 		String dir, String[] list)
 	{
-loop:		for(int i = 0; i < list.length; i++)
+loop:	for(int i = 0; i < list.length; i++)
 		{
 			String name = list[i];
 			if(!name.toLowerCase().endsWith(".jar"))
@@ -4251,12 +4251,10 @@ loop:		for(int i = 0; i < list.length; i++)
 			{
 				PluginJAR jar = jars.elementAt(j);
 				String jarPath = jar.getPath();
-				String jarName = MiscUtilities.getFileName(jarPath);
 
-				if(path.equals(jarPath))
-					continue loop;
-				else if(!new File(jarPath).exists()
-					&& name.equals(jarName))
+				if (path.equals(jarPath) ||
+					name.equals(MiscUtilities.getFileName(jarPath)) &&
+					!new File(jarPath).exists())
 					continue loop;
 			}
 
