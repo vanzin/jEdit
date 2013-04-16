@@ -628,7 +628,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ setAntiAliasEnabled() method
 	/**
-	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
+	 * As of jEdit 4.3, subpixel antialias mode is supported.
 	 *
 	 * @since jEdit 4.2pre4
 	 */

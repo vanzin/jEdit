@@ -283,7 +283,7 @@ public class OperatingSystem
 	 */
 	public static boolean hasJava17()
 	{
-		return java17;
+		return true;
 	} //}}}
 
 	

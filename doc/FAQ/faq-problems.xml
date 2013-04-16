@@ -355,9 +355,9 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
 </programlisting>
 				</question>
 				<answer>
-				 <para> Make sure the version of Java you are running is Sun Java 1.6 or higher.
+				 <para> Make sure the version of Java you are running is Sun Java 1.7 or higher.
 				 In debian/ubuntu,
-				 <literal> apt-get install sun-java6-jdk </literal>
+				 <literal> apt-get install openjdk-7-jdk </literal>
 				 </para>
 		        </answer>
 				</qandaentry>
