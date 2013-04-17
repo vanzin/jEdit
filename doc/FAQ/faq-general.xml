@@ -364,7 +364,7 @@
                     a full Java Development Kit (JDK) package. We recommend
                     obtaining a JDK package.</para>
                     <para>The current version of jEdit requires a
-                    Java runtime environment having a release version of 1.7 or greater. The <ulink
+                    Java runtime environment having a release version of 1.6 or greater. The <ulink
                     url="http://www.jedit.org/index.php?page=compatibility">jEdit
                     web site</ulink> contains a detailed discussion on the
                     compatibility of various publicly available JDK's for the

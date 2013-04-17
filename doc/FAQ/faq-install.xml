@@ -22,7 +22,7 @@
                 <answer>
                     <para>First, make sure you have a working installation of
                     the Java platform. To run jEdit, you will a platform package
-                    having a version number of at least 1.7. If you do not
+                    having a version number of at least 1.6. If you do not
                     have the Java platform, we recommend downloading the larger
                     <quote>Software Development Kit</quote> (SDK), instead of
                     the smaller <quote>Java Runtime Environment</quote> (JRE),
