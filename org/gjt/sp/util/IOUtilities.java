@@ -23,6 +23,7 @@
 package org.gjt.sp.util;
 
 import java.io.*;
+import javax.annotation.Nullable;
 
 /**
  * IO tools that depend on JDK only.
@@ -164,7 +165,7 @@ public class IOUtilities
 	 * @param in the InputStream to close.
 	 */
 	@Deprecated
-	public static void closeQuietly(InputStream in)
+	public static void closeQuietly(@Nullable InputStream in)
 	{
 		if(in != null)
 		{
@@ -187,7 +188,7 @@ public class IOUtilities
 	 * @param out the OutputStream to close.
 	 */
 	@Deprecated
-	public static void closeQuietly(OutputStream out)
+	public static void closeQuietly(@Nullable OutputStream out)
 	{
 		if(out != null)
 		{
@@ -219,7 +220,7 @@ public class IOUtilities
 	 * @since jEdit 4.3pre5
 	 */
 	@Deprecated
-	public static void closeQuietly(Reader r)
+	public static void closeQuietly(@Nullable Reader r)
 	{
 		if(r != null)
 		{
@@ -242,7 +243,7 @@ public class IOUtilities
 	 * @param out the Writer to close.
 	 */
 	@Deprecated
-	public static void closeQuietly(Writer out)
+	public static void closeQuietly(@Nullable Writer out)
 	{
 		if(out != null)
 		{
@@ -271,7 +272,7 @@ public class IOUtilities
 	 * @param closeable the closeable to close.
 	 * @since jEdit 4.3pre8
 	 */
-	public static void closeQuietly(Closeable closeable)
+	public static void closeQuietly(@Nullable Closeable closeable)
 	{
 		if(closeable != null)
 		{
@@ -304,7 +305,7 @@ public class IOUtilities
 	 * @param in the closeable to close.
 	 * @since jEdit 5.1pre1
 	 */
-	public void closeQuietly(ObjectInput in)
+	public void closeQuietly(@Nullable ObjectInput in)
 	{
 		if (in != null)
 		{
@@ -325,7 +326,7 @@ public class IOUtilities
 	 * @param out the closeable to close.
 	 * @since jEdit 5.1pre1
 	 */
-	public void closeQuietly(ObjectOutput out)
+	public void closeQuietly(@Nullable ObjectOutput out)
 	{
 		if (out != null)
 		{
