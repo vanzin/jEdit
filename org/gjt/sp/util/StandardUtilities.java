@@ -26,6 +26,7 @@ package org.gjt.sp.util;
 
 
 //{{{ Imports
+import javax.annotation.Nullable;
 import javax.swing.text.Segment;
 
 import java.security.MessageDigest;
@@ -476,6 +477,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		{
 		}
 
+		@Override
 		public int compare(E obj1, E obj2)
 		{
 			return compareStrings(obj1.toString(),
@@ -489,7 +491,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 * as opposed to calling <code>o1.equals(o2)</code>.
 	 * @since jEdit 4.3pre6
 	 */
-	public static boolean objectsEqual(Object o1, Object o2)
+	public static boolean objectsEqual(@Nullable Object o1, @Nullable Object o2)
 	{
 		if(o1 == null)
 		{
