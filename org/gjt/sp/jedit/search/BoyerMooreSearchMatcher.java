@@ -72,7 +72,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	@Override
 	public SearchMatcher.Match nextMatch(CharSequence text,
 		boolean start, boolean end, boolean firstTime,
-		boolean reverse)
+		boolean reverse) throws InterruptedException
 	{
 		int pos = match(text,reverse);
 
@@ -110,11 +110,15 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	 *  algorithm may be found on Moore's website at:
 	 *
 	 *   http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
+	 * @throws InterruptedException 
 	 *
 	 * @since jEdit 4.3pre5
 	 */
-	public int match(CharSequence text, boolean reverse)
+	public int match(CharSequence text, boolean reverse) throws InterruptedException
 	{
+		if(Thread.interrupted())
+			throw new InterruptedException();
+
 		//{{{
 		// lazily create skip and suffix arrays for either the
 		// search pattern, or the reversed search pattern
@@ -171,6 +175,9 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		SEARCH:
 		while (anchor + pattern_end < text.length())
 		{
+			if(Thread.interrupted())
+				throw new InterruptedException();
+
 			for (pos = pattern_end; pos >= 0; --pos)
 			{
 				ch = text.charAt(pos + anchor);

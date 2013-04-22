@@ -50,7 +50,7 @@ public abstract class SearchMatcher
 	 * @since jEdit 4.3pre5
 	 */
 	public abstract Match nextMatch(CharSequence text, boolean start,
-		boolean end, boolean firstTime, boolean reverse);
+		boolean end, boolean firstTime, boolean reverse) throws InterruptedException;
 
 	/**
 	 * @param noWordSep the chars that are considered as word chars for this search

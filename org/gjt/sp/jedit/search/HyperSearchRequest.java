@@ -228,7 +228,10 @@ class HyperSearchRequest extends Task
 	private int doHyperSearch(Buffer buffer, int start, int end)
 		throws Exception
 	{
-		setCancellable(false);
+		if(matcher instanceof BoyerMooreSearchMatcher)
+			setCancellable(true);
+		else
+			setCancellable(false);
 
 		HyperSearchFileNode hyperSearchFileNode = new HyperSearchFileNode(buffer.getPath());
 		DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
@@ -267,10 +270,15 @@ class HyperSearchRequest extends Task
 				boolean startOfLine = buffer.getLineStartOffset(
 					buffer.getLineOfOffset(offset)) == offset;
 
-				SearchMatcher.Match match = matcher.nextMatch(
-					buffer.getSegment(offset, end - offset),
-					startOfLine,endOfLine,counter == 0,
-					false);
+				SearchMatcher.Match match = null;
+				try {
+					match = matcher.nextMatch(
+						buffer.getSegment(offset, end - offset),
+						startOfLine,endOfLine,counter == 0,
+						false);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 				if(match == null)
 					break;
 
