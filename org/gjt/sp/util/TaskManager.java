@@ -179,6 +179,9 @@ public class TaskManager
 		}
 	}
 
+	/** Wait for all IO tasks to finish
+	 * @since jEdit 5.1pre1
+	 */
 	public void waitForIoTasks()
 	{
 		synchronized (ioWaitLock)
@@ -196,6 +199,29 @@ public class TaskManager
 		}
 
 		AwtRunnableQueue.INSTANCE.queueAWTRunner(true);
+	}
+
+	/** cancel a task by its class
+	 * @since jEdit 5.1pre1
+	 */
+	public void cancelTasksByClass(Class<? extends Task> clazz)
+	{
+		synchronized (tasks)
+		{
+			for(Task task: tasks)
+			{
+				if(task.getClass().equals(clazz))
+					task.cancel();
+			}
+		}
+		synchronized (ioTasks)
+		{
+			for(Task task: ioTasks)
+			{
+				if(task.getClass().equals(clazz))
+					task.cancel();
+			}
+		}
 	}
 
 	/**
@@ -224,14 +250,16 @@ public class TaskManager
 			this.runnable = runnable;
 		}
 
-		public String getStatus() {
+		public String getStatus()
+		{
 			return runnable.toString();
 		}
 
-		public String toString() {
+		public String toString()
+		{
 			return runnable.toString();	
 		}
-		
+
 		@Override
 		public void _run()
 		{

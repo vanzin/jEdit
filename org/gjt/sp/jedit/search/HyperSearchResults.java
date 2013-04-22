@@ -44,6 +44,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.HtmlUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
+import org.gjt.sp.util.TaskManager;
 //}}}
 
 /**
@@ -531,7 +532,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			}
 			else if(source == stop)
 			{
-				jEdit.setTemporaryProperty("hyperSearch-stopButton", "true");
+				TaskManager.instance.cancelTasksByClass(HyperSearchRequest.class);
 			}
 		}
 	} //}}}

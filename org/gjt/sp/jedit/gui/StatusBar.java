@@ -195,8 +195,7 @@ public class StatusBar extends JPanel
 			public void run()
 			{
 				// don't obscure existing message
-				if(message != null && !"".equals(message.getText().trim())
-					&& !currentMessageIsIO)
+				if(!currentMessageIsIO && message != null && !"".equals(message.getText().trim()))
 					return;
 
 				int requestCount = TaskManager.instance.countIoTasks();

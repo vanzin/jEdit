@@ -103,10 +103,8 @@ class HyperSearchRequest extends Task
 				int maxResults = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
 				for(int i = 0; i < files.length; i++)
 				{
-					if(jEdit.getBooleanProperty("hyperSearch-stopButton") ||
-						Thread.currentThread().isInterrupted())
+					if(Thread.currentThread().isInterrupted())
 					{
-						jEdit.setTemporaryProperty("hyperSearch-stopButton", "false");
 						Log.log(Log.MESSAGE, this, "Search stopped by user action (stop button)");
 						break;
 					}
