@@ -299,7 +299,9 @@
 				<include name="org/gjt/sp/jedit/buffer/LineManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/PositionManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/UndoManager.java"/>
-
+                
+				<include name="org/gjt/sp/jedit/bufferio/IoTask.java"/>
+                
 				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator.java"/>
 				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.java"/>
 				<include name="org/gjt/sp/jedit/gui/MutableListModel.java"/>
