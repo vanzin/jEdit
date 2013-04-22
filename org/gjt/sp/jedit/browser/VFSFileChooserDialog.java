@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.bufferio.IoTask;
 import org.gjt.sp.util.*;
 //}}}
 
@@ -583,7 +584,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ GetFileTypeRequest class
-	private class GetFileTypeRequest extends Task
+	private class GetFileTypeRequest extends IoTask
 	{
 		VFS    vfs;
 		Object session;
@@ -593,7 +594,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		GetFileTypeRequest(VFS vfs, Object session,
 			String path, int[] type)
 		{
-			super(true);
+			super();
 			this.vfs     = vfs;
 			this.session = session;
 			this.path    = path;

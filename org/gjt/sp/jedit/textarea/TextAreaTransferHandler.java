@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.bufferio.IoTask;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.FileVFS;
@@ -31,7 +32,6 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.AwtRunnableQueue;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 
 import javax.swing.*;
@@ -484,14 +484,14 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ DraggedURLLoader class
-	private static class DraggedURLLoader extends Task
+	private static class DraggedURLLoader extends IoTask
 	{
 		private final JEditTextArea textArea;
 		private final String url;
 		
 		DraggedURLLoader(JEditTextArea textArea, String url)
 		{
-			super(true);
+			super();
 			this.textArea = textArea;
 			this.url = url;
 		}

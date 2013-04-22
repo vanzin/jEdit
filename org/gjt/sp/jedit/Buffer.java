@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.SwingWorker.StateValue;
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -42,6 +43,7 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.IoTask;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
@@ -720,6 +722,19 @@ public class Buffer extends JEditBuffer
 		setFlag(AUTORELOAD, value);
 		autoreloadOverridden = isAutoreloadPropertyOverriden();
 	} //}}}
+//
+//	//{{{ getIoTask() method
+//	public IoTask getIoTask()
+//	{
+//		return ioTask;
+//	} //}}}
+//
+//	//{{{ setIoTask() method
+//	public void setIoTask(IoTask task)
+//	{
+//		assert(ioTask == null || ioTask != null && ioTask.getState() == StateValue.DONE);
+//		this.ioTask = task;
+//	} //}}}
 
 	//{{{ getAutoReloadDialog() method
 	/**
@@ -1841,6 +1856,9 @@ public class Buffer extends JEditBuffer
 
 	private Socket waitSocket;
 	private List<BufferUndoListener> undoListeners;
+//
+//	/** the current ioTask of this buffer */
+//	private volatile IoTask ioTask;
 	//}}}
 
 	//{{{ setPath() method

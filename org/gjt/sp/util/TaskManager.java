@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.gjt.sp.jedit.bufferio.IoTask;
+
 /**
  * The TaskManager manage Tasks in the Threadpool, it knows all of them, and
  * sends events to TaskListeners.
@@ -39,14 +41,12 @@ public class TaskManager
 	private final List<TaskListener> listeners;
 
 	private final List<Task> tasks;
-	private final List<Task> ioTasks;
 	private final Object ioWaitLock;
 
 	private TaskManager()
 	{
 		listeners = new CopyOnWriteArrayList<TaskListener>();
 		tasks = Collections.synchronizedList(new ArrayList<Task>());
-		ioTasks = Collections.synchronizedList(new ArrayList<Task>());
 		ioWaitLock = new Object();
 	}
 
@@ -69,7 +69,13 @@ public class TaskManager
 	 */
 	public int countIoTasks()
 	{
-		return ioTasks.size();
+		int size = 0;
+		synchronized (tasks) {
+			for(Task task : tasks)
+				if(task instanceof IoTask)
+					size++;
+		}
+		return size;
 	}
 
 	public void addTaskListener(TaskListener listener)
@@ -90,10 +96,7 @@ public class TaskManager
 
 	void fireWaiting(Task task)
 	{
-		if(task.getIoTask())
-			ioTasks.add(task);
-		else
-			tasks.add(task);
+		tasks.add(task);
 
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
@@ -113,10 +116,7 @@ public class TaskManager
 
 	void fireDone(Task task)
 	{
-		if(task.getIoTask())
-			ioTasks.remove(task);
-		else
-			tasks.remove(task);
+		tasks.remove(task);
 
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
@@ -124,7 +124,7 @@ public class TaskManager
 			listener.done(task);
 		}
 
-		if(task.getIoTask())
+		if(task instanceof IoTask)
 		{
 			AwtRunnableQueue.INSTANCE.queueAWTRunner(false);
 
@@ -209,14 +209,6 @@ public class TaskManager
 		synchronized (tasks)
 		{
 			for(Task task: tasks)
-			{
-				if(task.getClass().equals(clazz))
-					task.cancel();
-			}
-		}
-		synchronized (ioTasks)
-		{
-			for(Task task: ioTasks)
 			{
 				if(task.getClass().equals(clazz))
 					task.cancel();

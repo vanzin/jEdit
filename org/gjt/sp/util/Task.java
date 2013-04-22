@@ -41,22 +41,15 @@ public abstract class Task implements Runnable, ProgressObserver
 	 * It is set automatically when the task starts.
 	 */
 	private volatile Thread thread;
-	private final boolean ioTask;
 
-	private SwingWorker.StateValue state;
+	private volatile SwingWorker.StateValue state;
 
 	private volatile boolean cancellable = true;
 
 	//{{{ Task Constructor
 	protected Task()
 	{
-		this(false);
-	}
-
-	protected Task(boolean ioTask)
-	{
 		state = SwingWorker.StateValue.PENDING;
-		this.ioTask = ioTask;
 	} //}}}
 
 	//{{{ run() method
@@ -119,11 +112,6 @@ public abstract class Task implements Runnable, ProgressObserver
 	public long getMaximum()
 	{
 		return maximum;
-	}
-
-	public boolean getIoTask()
-	{
-		return ioTask;
 	}
 
 	public SwingWorker.StateValue getState()

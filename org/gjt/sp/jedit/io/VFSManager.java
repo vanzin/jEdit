@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import org.gjt.sp.jedit.bufferio.IoTask;
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
@@ -228,7 +229,7 @@ public class VFSManager
 	@Deprecated
 	public static void runInWorkThread(Task run)
 	{
-		if(!run.getIoTask())
+		if(!(run instanceof IoTask))
 			throw new IllegalArgumentException();
 
 		ThreadUtilities.runInBackground(run);

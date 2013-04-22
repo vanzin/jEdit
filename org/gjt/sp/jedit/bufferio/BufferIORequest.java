@@ -44,7 +44,6 @@ import org.gjt.sp.jedit.io.Encoding;
 import org.gjt.sp.jedit.io.EncodingServer;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.SegmentBuffer;
-import org.gjt.sp.util.Task;
 //}}}
 
 /**
@@ -52,7 +51,7 @@ import org.gjt.sp.util.Task;
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class BufferIORequest extends Task
+public abstract class BufferIORequest extends IoTask
 {
 	//{{{ Constants
 
@@ -97,7 +96,7 @@ public abstract class BufferIORequest extends Task
 	protected BufferIORequest(View view, Buffer buffer,
 		Object session, VFS vfs, String path)
 	{
-		super(true);
+		super();
 		this.view = view;
 		this.buffer = buffer;
 		this.session = session;
@@ -105,6 +104,7 @@ public abstract class BufferIORequest extends Task
 		this.path = path;
 
 		markersPath = Buffer.getMarkersPath(vfs, path);
+		//buffer.setIoTask(this);
 	} //}}}
 
 	//{{{ toString() method
