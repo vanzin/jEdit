@@ -93,6 +93,18 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ API Changes
 
+- TaskManager: Refactor io task - New class IoTask, a subclass of Task
+  Remove the code of the io special case in TaskManager (Thomas Meyer)
+
+- Make SearchMatcher interrupttible (Thomas Meyer)
+  1.) API change: let SearchMatcher.nextMatch() throw InterruptedException
+  2.) BoyerMooreSearchMatcher: Switch to the new API and react on thread
+      interruption
+
+- HyperSearch: Make search interruptible even when in VFS.listFiles():
+  New method TaskManager.cancelTasksByClass(): Interrupt all currently running
+  Tasks of the given type. (Thomas Meyer)
+
 - Deprecated extra overloads of IOUtilities.closeQuietly() in favor of
   using Java5 closeQuietly(Closeable) instead. (Alan Ezust)
 
