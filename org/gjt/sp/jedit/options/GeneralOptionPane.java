@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 2003 Slava Pestov
+ *               2013 Thomas Meyer
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,6 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.util.Log;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -43,13 +43,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 {
 	//{{{ checkFileStatus bit flags:
 	public static final int checkFileStatus_none = 0;
-	
+
 	/** Check the buffer status when the view gets focus (low bit) */
 	public static final int checkFileStatus_focus = 1;
-	
+
 	/** Check the file status when visiting the buffer (second bit) */
 	public static final int checkFileStatus_focusBuffer = 2;
-	
+
 	/** This is actually a bitwise OR: (view focus | buffer focus) */ 
 	public static final int checkFileStatus_all = 3;	
 	//}}}
@@ -58,8 +58,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 	private JComboBox checkModStatus;
 	private JComboBox checkModStatusUpon;
-	private JTextField recentFiles;
-	private JTextField hypersearchResultsWarning;
+	private JSpinner recentFiles;
+	private JSpinner hypersearchResultsWarning;
 	private JCheckBox saveCaret;
 	private JCheckBox sortRecent;
 	private JCheckBox persistentMarkers;
@@ -85,10 +85,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 		/* Check mod status */
 		String[] modCheckOptions = {
-			jEdit.getProperty("options.general.checkModStatus.nothing"),
-			jEdit.getProperty("options.general.checkModStatus.prompt"),
-			jEdit.getProperty("options.general.checkModStatus.reload"),
-			jEdit.getProperty("options.general.checkModStatus.silentReload")
+				jEdit.getProperty("options.general.checkModStatus.nothing"),
+				jEdit.getProperty("options.general.checkModStatus.prompt"),
+				jEdit.getProperty("options.general.checkModStatus.reload"),
+				jEdit.getProperty("options.general.checkModStatus.silentReload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
 		if(jEdit.getBooleanProperty("autoReload"))
@@ -108,50 +108,52 @@ public class GeneralOptionPane extends AbstractOptionPane
 				checkModStatus.setSelectedIndex(0);
 		}
 		addComponent(jEdit.getProperty("options.general.checkModStatus"),
-			checkModStatus);
+				checkModStatus);
 
 		/* Check mod status upon */
 		String[] modCheckUponOptions = {
-			jEdit.getProperty("options.general.checkModStatusUpon.none"),
-			jEdit.getProperty("options.general.checkModStatusUpon.focus"),
-			jEdit.getProperty("options.general.checkModStatusUpon.visitBuffer"),
-			jEdit.getProperty("options.general.checkModStatusUpon.all")
+				jEdit.getProperty("options.general.checkModStatusUpon.none"),
+				jEdit.getProperty("options.general.checkModStatusUpon.focus"),
+				jEdit.getProperty("options.general.checkModStatusUpon.visitBuffer"),
+				jEdit.getProperty("options.general.checkModStatusUpon.all")
 		};
 		checkModStatusUpon = new JComboBox(modCheckUponOptions);
 
 		checkModStatusUpon.setSelectedIndex(jEdit.getIntegerProperty("checkFileStatus"));
 		addComponent(jEdit.getProperty("options.general.checkModStatusUpon"),
-			checkModStatusUpon);
+				checkModStatusUpon);
 
 		/* Recent file list size */
-		recentFiles = new JTextField(jEdit.getProperty(
-			"options.general.recentFiles"));
-		recentFiles.setText(jEdit.getProperty("recentFiles"));
-		addComponent(jEdit.getProperty("options.general.recentFiles"),
-			recentFiles);
+		{
+			String recentFilesLabel = jEdit.getProperty("options.general.recentFiles");
+			int recentFilesValue = jEdit.getIntegerProperty("recentFiles");
+			SpinnerModel model = new SpinnerNumberModel(recentFilesValue, 0, Integer.MAX_VALUE, 1);
+			recentFiles = new JSpinner(model);
+			addComponent(recentFilesLabel, recentFiles);
+		}
 
 		/* Sort recent file list */
 		sortRecent = new JCheckBox(jEdit.getProperty(
-			"options.general.sortRecent"));
+				"options.general.sortRecent"));
 		sortRecent.setSelected(jEdit.getBooleanProperty("sortRecent"));
 		addComponent(sortRecent);
 
 		/* Save caret positions */
 		saveCaret = new JCheckBox(jEdit.getProperty(
-			"options.general.saveCaret"));
+				"options.general.saveCaret"));
 		saveCaret.setSelected(jEdit.getBooleanProperty("saveCaret"));
 		addComponent(saveCaret);
 
 		/* Persistent markers */
 		persistentMarkers = new JCheckBox(jEdit.getProperty(
-			"options.general.persistentMarkers"));
+				"options.general.persistentMarkers"));
 		persistentMarkers.setSelected(jEdit.getBooleanProperty(
-			"persistentMarkers"));
+				"persistentMarkers"));
 		addComponent(persistentMarkers);
 
 		/* Session management */
 		restore = new JCheckBox(jEdit.getProperty(
-			"options.general.restore"));
+				"options.general.restore"));
 
 		restore.setSelected(jEdit.getBooleanProperty("restore"));
 		restore.addActionListener(new ActionListener()
@@ -167,26 +169,30 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(restore);
 
 		restoreRemote = new JCheckBox(jEdit.getProperty(
-			"options.general.restore.remote"));
+				"options.general.restore.remote"));
 		restoreRemote.setSelected(jEdit.getBooleanProperty("restore.remote", false));
 		restoreRemote.setEnabled(restore.isSelected());
 		addComponent(restoreRemote);
 
 		restoreCLI = new JCheckBox(jEdit.getProperty(
-			"options.general.restore.cli"));
+				"options.general.restore.cli"));
 		restoreCLI.setSelected(jEdit.getBooleanProperty("restore.cli"));
 		restoreCLI.setEnabled(restore.isSelected());
 		addComponent(restoreCLI);
 
 		restoreSplits = new JCheckBox(jEdit.getProperty(
-			"options.general.restore.splits", "Restore split configuration"));
+				"options.general.restore.splits", "Restore split configuration"));
 		restoreSplits.setSelected(jEdit.getBooleanProperty("restore.splits", true));
 		addComponent(restoreSplits);
 
-		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
-		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
-			hypersearchResultsWarning);
-
+		/* Maximum hypersearch results to ask for abort */
+		{
+			String maxWarnLabel = jEdit.getProperty("options.general.hypersearch.maxWarningResults");
+			int maxWarnValue = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
+			SpinnerModel model = new SpinnerNumberModel(maxWarnValue, 0, Integer.MAX_VALUE, 1);
+			hypersearchResultsWarning = new JSpinner(model);
+			addComponent(maxWarnLabel, hypersearchResultsWarning);
+		}
 
 		String language = jEdit.getCurrentLanguage();
 
@@ -238,24 +244,19 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setIntegerProperty("checkFileStatus", checkModStatusUpon.getSelectedIndex());
-		jEdit.setProperty("recentFiles", recentFiles.getText());
+		jEdit.setIntegerProperty("recentFiles", (Integer) recentFiles.getModel().getValue());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
-			persistentMarkers.isSelected());
+				persistentMarkers.isSelected());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
 		jEdit.setBooleanProperty("restore.splits", restoreSplits.isSelected());
-		try
 		{
-			jEdit.setIntegerProperty("hypersearch.maxWarningResults", Integer.parseInt(hypersearchResultsWarning.getText()));
+			int maxWarnResults = (Integer) hypersearchResultsWarning.getModel().getValue();
+			jEdit.setIntegerProperty("hypersearch.maxWarningResults", maxWarnResults);
 		}
-		catch (NumberFormatException e)
-		{
-			Log.log(Log.WARNING, this, "hypersearchResultsWarning: " + hypersearchResultsWarning.getText() + " is not a valid value for this option");
-		}
-
 		jEdit.setBooleanProperty("lang.usedefaultlocale", useDefaultLocale.isSelected());
 		jEdit.setProperty("lang.current", String.valueOf(lang.getSelectedItem()));
 	} //}}}
@@ -265,10 +266,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 	{
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-							      boolean cellHasFocus)
+				boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list, value, index, isSelected,
-							   cellHasFocus);
+					cellHasFocus);
 			String label = jEdit.getProperty("options.appearance.lang."+value);
 			if (label != null)
 				setText(label);
