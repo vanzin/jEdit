@@ -12,6 +12,8 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix mode loading for temporary buffers (Thomas Meyer)
+
 - Fix #3598661 - Don't allow negative values in the general option pane.
   (Thomas Meyer)
 

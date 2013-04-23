@@ -101,7 +101,7 @@ public class ModeProvider
 		if (filename != null && filename.endsWith(".gz"))
 			filename = filename.substring(0, filename.length() - 3);
 
-		List<Mode> acceptable = new ArrayList<Mode>();
+		List<Mode> acceptable = new ArrayList<Mode>(1);
 		for(Mode mode : modes.values())
 		{
 			if(mode.accept(filepath, filename, firstLine))

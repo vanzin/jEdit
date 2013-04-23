@@ -65,11 +65,10 @@ class ModeCatalogHandler extends DefaultHandler
 			String filenameGlob = attrs.getValue("FILE_NAME_GLOB");
 			String firstlineGlob = attrs.getValue("FIRST_LINE_GLOB");
 
-
 			Mode mode = instantiateMode(modeName);
 
 			ModeProvider.instance.addMode(mode);
-			
+
 			Object path;
 			if(resource)
 				path = jEdit.class.getResource(directory + file);
@@ -79,12 +78,12 @@ class ModeCatalogHandler extends DefaultHandler
 
 			mode.unsetProperty("filenameGlob");
 			if(filenameGlob != null)
-			    mode.setProperty("filenameGlob",filenameGlob);
-			    
+				mode.setProperty("filenameGlob",filenameGlob);
+
 			mode.unsetProperty("firstlineGlob");
 			if(firstlineGlob != null)
-			    mode.setProperty("firstlineGlob",firstlineGlob);
-			    
+				mode.setProperty("firstlineGlob",firstlineGlob);
+
 			mode.init();
 		}
 	} //}}}

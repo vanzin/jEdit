@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.indent.DeepIndentRule;
@@ -75,7 +76,7 @@ public class Mode
 	{
 		try
 		{
-			filepathRE = null;
+			filepathMatcher = null;
 			String filenameGlob = (String)getProperty("filenameGlob");
 			if(filenameGlob != null && !filenameGlob.isEmpty())
 			{
@@ -93,15 +94,15 @@ public class Mode
 					// an optional path prefix to be able to match against full paths
 					filepathRE = String.format("(?:.*[/\\\\])?%s", filepathRE);
 				}
-				this.filepathRE = Pattern.compile(filepathRE, Pattern.CASE_INSENSITIVE);
+				this.filepathMatcher = Pattern.compile(filepathRE, Pattern.CASE_INSENSITIVE).matcher("");
 			}
 
-			firstlineRE = null;
+			firstlineMatcher = null;
 			String firstlineGlob = (String)getProperty("firstlineGlob");
 			if(firstlineGlob != null && !firstlineGlob.isEmpty())
 			{
-				firstlineRE = Pattern.compile(StandardUtilities.globToRE(firstlineGlob),
-							      Pattern.CASE_INSENSITIVE);
+				firstlineMatcher = Pattern.compile(StandardUtilities.globToRE(firstlineGlob),
+								Pattern.CASE_INSENSITIVE).matcher("");
 			}
 		}
 		catch(PatternSyntaxException re)
@@ -164,10 +165,7 @@ public class Mode
 	 */
 	public Object getProperty(String key)
 	{
-		Object value = props.get(key);
-		if(value != null)
-			return value;
-		return null;
+		return props.get(key);
 	} //}}}
 
 	//{{{ getBooleanProperty() method
@@ -213,24 +211,12 @@ public class Mode
 	public void setProperties(Map props)
 	{
 		if(props == null)
-			props = new Hashtable<String, Object>();
+			return;
 
 		ignoreWhitespace = !"false".equalsIgnoreCase(
 					(String)props.get("ignoreWhitespace"));
 
-		// need to carry over file name and first line globs because they are
-		// not given to us by the XMode handler, but instead are filled in by
-		// the catalog loader.
-		String filenameGlob = (String)this.props.get("filenameGlob");
-		String firstlineGlob = (String)this.props.get("firstlineGlob");
-		String filename = (String)this.props.get("file");
-		this.props = props;
-		if(filenameGlob != null)
-			props.put("filenameGlob",filenameGlob);
-		if(firstlineGlob != null)
-			props.put("firstlineGlob",firstlineGlob);
-		if(filename != null)
-			props.put("file",filename);
+		this.props.putAll(props);
 	} //}}}
 
 	//{{{ accept() method
@@ -261,9 +247,9 @@ public class Mode
 	 */
 	public boolean accept(String filePath, String fileName, String firstLine)
 	{
-		return acceptIdentical(filePath, fileName)
-		       || acceptFile(filePath, fileName)
-		       || acceptFirstLine(firstLine);
+		return acceptFile(filePath, fileName)
+				|| acceptIdentical(filePath, fileName)
+				|| acceptFirstLine(firstLine);
 	} //}}}
 
 	//{{{ acceptFilename() method
@@ -290,9 +276,11 @@ public class Mode
 	 */
 	public boolean acceptFile(String filePath, String fileName)
 	{
-		return filepathRE != null
-		       && (((filePath != null) && filepathRE.matcher(filePath).matches())
-			   || ((fileName != null) && filepathRE.matcher(fileName).matches()));
+		if (filepathMatcher == null)
+			return false;
+
+		return fileName != null && filepathMatcher.reset(fileName).matches() ||
+			filePath != null && filepathMatcher.reset(filePath).matches();
 	} //}}}
 
 	//{{{ acceptFilenameIdentical() method
@@ -322,14 +310,13 @@ public class Mode
 	public boolean acceptIdentical(String filePath, String fileName)
 	{
 		String filenameGlob = (String)getProperty("filenameGlob");
-		
-		boolean accept = false;
-		if (fileName != null) 
-		{
-			accept = fileName.equalsIgnoreCase(filenameGlob);	
-		}
-		
-		if (!accept && filePath != null) 
+		if(filenameGlob == null)
+			return false;
+
+		if(fileName != null && fileName.equalsIgnoreCase(filenameGlob))	
+			return true;
+
+		if (filePath != null) 
 		{
 			// get the filename from the path
 			// NOTE: can't use MiscUtilities.getFileName here as that breaks
@@ -338,12 +325,12 @@ public class Mode
 			int lastWindowsPos = filePath.lastIndexOf('\\');
 			int index = Math.max(lastUnixPos, lastWindowsPos);
 			String filename = filePath.substring(index + 1);
-			accept = filename != null && filename.equalsIgnoreCase(filenameGlob);
+			return filename != null && filename.equalsIgnoreCase(filenameGlob);
 		}
-		
-		return accept;
+
+		return false;
 	} //}}}
-	
+
 	//{{{ acceptFirstLine() method
 	/**
 	 * Returns true if the first line matches the first line glob.
@@ -353,7 +340,10 @@ public class Mode
 	 */
 	public boolean acceptFirstLine(String firstLine)
 	{
-		return firstlineRE != null && firstlineRE.matcher(firstLine).matches();
+		if (firstlineMatcher == null)
+			return false;
+
+		return firstLine != null && firstlineMatcher.reset(firstLine).matches();
 	} //}}}
 
 	//{{{ getName() method
@@ -534,10 +524,10 @@ public class Mode
 	//}}}
 
 	//{{{ Private members
-	protected String name;
-	protected Map<String, Object> props;
-	private Pattern firstlineRE;
-	private Pattern filepathRE;
+	protected final String name;
+	protected final Map<String, Object> props;
+	private Matcher firstlineMatcher;
+	private Matcher filepathMatcher;
 	protected TokenMarker marker;
 	private List<IndentRule> indentRules;
 	private String electricKeys;

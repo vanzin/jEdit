@@ -657,8 +657,11 @@ loop:		for(;;)
 			endOfLine = true;
 		}
 
-		String noWordSep = buffer.getStringProperty("noWordSep");
-		matcher.setNoWordSep(noWordSep);
+		if(matcher.wholeWord)
+		{
+			String noWordSep = buffer.getStringProperty("noWordSep");
+			matcher.setNoWordSep(noWordSep);
+		}
 		SearchMatcher.Match match = matcher.nextMatch(text,
 			startOfLine,endOfLine,firstTime,reverse);
 		if(match != null)
@@ -1193,8 +1196,11 @@ loop:		while(path != null)
 		boolean smartCaseReplace)
 		throws Exception
 	{
-		String noWordSep = buffer.getStringProperty("noWordSep");
-		matcher.setNoWordSep(noWordSep);
+		if(matcher.wholeWord)
+		{
+			String noWordSep = buffer.getStringProperty("noWordSep");
+			matcher.setNoWordSep(noWordSep);
+		}
 		int occurCount = 0;
 
 		boolean endOfLine = (buffer.getLineEndOffset(

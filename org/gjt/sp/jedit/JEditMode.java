@@ -80,10 +80,10 @@ class JEditMode extends Mode
 	@Override
 	public Object getProperty(String key)
 	{
-		String prefix = "mode." + name + '.';
 
 		//if(jEdit.getBooleanProperty(prefix + "customSettings"))
 		//{
+			String prefix = "mode." + name + '.';
 			String property = jEdit.getProperty(prefix + key);
 			if(property != null)
 			{
@@ -148,6 +148,5 @@ class JEditMode extends Mode
 		}
 	} //}}}
 
-
-	private boolean initialized = false;
+	private boolean initialized;
 }

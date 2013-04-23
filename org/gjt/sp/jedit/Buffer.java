@@ -261,11 +261,8 @@ public class Buffer extends JEditBuffer
 
 				// If the buffer is temporary, we don't need to
 				// call finishLoading() because it sets the FoldHandler
-				// and reload markers. But we always need to set the edit
-				// mode that is necessary for HyperSearch on directories
-				if (getFlag(TEMPORARY))
-					setMode();
-				else
+				// and reload markers.
+				if (!getFlag(TEMPORARY))
 					finishLoading();
 
 				setLoading(false);
@@ -1165,7 +1162,7 @@ public class Buffer extends JEditBuffer
 		if (mode != null)
 		{
 			int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
-			if (!getFlag(TEMPORARY) && getLength() > largeBufferSize && largeBufferSize != 0)
+			if (!getFlag(TEMPORARY) && getLength() > largeBufferSize && largeBufferSize > 0)
 			{
 				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
 				String largeFileMode = jEdit.getProperty("largefilemode", "ask");
