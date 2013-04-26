@@ -18,8 +18,11 @@ while (itr.hasNext()) {
     if (i%3==0) sbuffer.append("</tr><tr>\n");
 }
 sbuffer.append("</tr></tbody></table>\n");
-sbuffer.append("<p>Using jEdit " + jEdit.getVersion() + " on " + new Date() + ". </p>\n");
-sbuffer.append("<p>Generated from macro <tt>Misc/Generate Encodings List.bsh</tt> </p>");
+sbuffer.append("<p>Using jEdit " + jEdit.getVersion() + " on " + new Date() + " with ");
+sbuffer.append(System.getProperty("java.vendor") + " Java " + System.getProperty("java.version") + " on " + System.getProperty("os.name") + " " + System.getProperty("os.version") + "</p>\n");
+
+sbuffer.append("<p>Generated from macro <tt>" + scriptPath + "</tt> </p>");
+
 sbuffer.append("</body></html>\n");
 
 htmlBuffer.insert(0, sbuffer.toString());
