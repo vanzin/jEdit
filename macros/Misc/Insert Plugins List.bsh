@@ -1,18 +1,21 @@
-pluginJARs = jEdit.getPluginJARs();
+
+/** Inserts a list of the currently running plugins into the current buffer. */
+
 sbuffer = new StringBuffer();
 sbuffer.append("Using jEdit " + jEdit.getVersion() + " on " + new Date() + "\n");
 sbuffer.append("Currently running plugins: \n\n");
+
+pluginJARs = jEdit.getPluginJARs();
 int numJars = pluginJARs.length;
 for (int i=0; i<numJars; ++i) {
     jar = pluginJARs[i];
     plugin = jar.getPlugin();
-    if (plugin != null) {
-        className = plugin.getClass().getName();
-        String label = jEdit.getProperty("plugin." + className + ".name");
-        if (label == null) continue;
-        String version = jEdit.getProperty("plugin." + className + ".version");
-        sbuffer.append("  " + label + " " + version + " (" + className + ")" +  "\n");
-    }
+    if (plugin == null) continue;
+    className = plugin.getClass().getName();
+    String label = jEdit.getProperty("plugin." + className + ".name");
+    if (label == null) continue;
+    String version = jEdit.getProperty("plugin." + className + ".version");
+    sbuffer.append("  " + label + " " + version + " (" + className + ")" +  "\n");
 }
-
-buffer.insert(0, sbuffer.toString());
+sbuffer.append("\n\n Using macro " + scriptPath + "\n");
+buffer.insert(textArea.getCaretPosition(), sbuffer.toString());

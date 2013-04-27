@@ -1,9 +1,10 @@
 import org.gjt.sp.jedit.io.EncodingServer;
-import java.util.Date;
+
+/** Generates 'encodingsList.html' page for jedit.org containing the encodings list. */ 
 
 nameSet = EncodingServer.getAvailableNames();
-
 sbuffer = new StringBuffer();
+
 htmlBuffer = jEdit.openFile(editPane, "encodingsList.html");
 editPane.setBuffer(htmlBuffer);
 itr = nameSet.iterator();
