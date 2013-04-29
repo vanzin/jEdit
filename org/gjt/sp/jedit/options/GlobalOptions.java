@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanging;
 import org.gjt.sp.jedit.*;
 //}}}
 /**
-   @deprecated - use CombinedOptions
+   A dialog that can open initially to one of the Global Option Panes.
 */
 public class GlobalOptions extends OptionsDialog
 {
