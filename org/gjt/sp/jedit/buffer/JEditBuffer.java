@@ -39,6 +39,7 @@ import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
+import javax.annotation.Nonnull;
 import javax.swing.text.Position;
 import javax.swing.text.Segment;
 import java.awt.*;
@@ -113,6 +114,8 @@ public class JEditBuffer
 			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
 		if(getProperty(LINESEP) == null)
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
+
+		setFoldHandler(new DummyFoldHandler());
 	}
 
 	/**
@@ -2049,6 +2052,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Returns the current buffer's fold handler.
 	 * @since jEdit 4.2pre1
 	 */
+	@Nonnull
 	public FoldHandler getFoldHandler()
 	{
 		return foldHandler;
@@ -2059,7 +2063,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Sets the buffer's fold handler.
 	 * @since jEdit 4.2pre2
 	 */
-	public void setFoldHandler(FoldHandler foldHandler)
+	public void setFoldHandler(@Nonnull FoldHandler foldHandler)
 	{
 		FoldHandler oldFoldHandler = this.foldHandler;
 
@@ -2740,6 +2744,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private final ContentManager contentMgr;
 	private final LineManager lineMgr;
 	private final PositionManager positionMgr;
+	@Nonnull
 	private FoldHandler foldHandler;
 	private final IntegerArray integerArray;
 	private boolean undoInProgress;
