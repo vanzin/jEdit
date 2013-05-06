@@ -73,6 +73,7 @@ class InstallPanel extends JPanel implements EBComponent
 	private final PluginInfoBox infoBox;
 	private final ChoosePluginSet chooseButton;
 	private final boolean updates;
+	private final CardLayout layout;
 
 	private final Collection<String> pluginSet = new HashSet<String>();
 	//}}}
@@ -80,7 +81,8 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
 	{
-		super(new BorderLayout(12,12));
+		super(null);
+		setLayout(layout = new CardLayout());
 
 		this.window = window;
 		this.updates = updates;
@@ -205,8 +207,6 @@ class InstallPanel extends JPanel implements EBComponent
 		Box filterBox = Box.createHorizontalBox();
 		filterBox.add(new JLabel("Filter : "));
 		filterBox.add(searchField);
-		add(BorderLayout.NORTH,filterBox);
-		add(BorderLayout.CENTER,split);
 
 		/* Create buttons */
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -219,8 +219,31 @@ class InstallPanel extends JPanel implements EBComponent
 		buttons.add(Box.createGlue());
 		buttons.add(new SizeLabel());
 
+		JPanel _installPanel = new JPanel(new BorderLayout(12, 12));
+		_installPanel.add(BorderLayout.NORTH,filterBox);
+		_installPanel.add(BorderLayout.CENTER,split);
+		_installPanel.add(BorderLayout.SOUTH, buttons);
 
-		add(BorderLayout.SOUTH,buttons);
+		add(_installPanel, "INSTALL");
+
+		JPanel loadingLabelPanel = new JPanel(new GridBagLayout());
+		loadingLabelPanel.add(new JLabel("<html><b><strong>" + jEdit.getProperty("common.loading", "Loading...") +
+								  "</strong></b></html>"));
+		add(loadingLabelPanel, "LOADING");
+
+		JPanel noAvailablePluginsPanel = new JPanel(new GridBagLayout());
+		noAvailablePluginsPanel.add(new JLabel("<html><b><strong>" +
+			jEdit.getProperty("options.plugin-manager.no-plugin-available", "No available plugins...") +
+			"</strong></b></html>"));
+		add(noAvailablePluginsPanel, "NO_PLUGIN_AVAILABLE");
+
+		JPanel pluginsAreUpToDatePanel = new JPanel(new GridBagLayout());
+		pluginsAreUpToDatePanel.add(new JLabel("<html><b><strong>" +
+			jEdit.getProperty("options.plugin-manager.no-plugin-uptodate", "Plugins are up to date...") +
+			"</strong></b></html>"));
+		add(pluginsAreUpToDatePanel, "PLUGIN_ARE_UP_TO_DATE");
+
+		layout.show(this, "INSTALL");
 		String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 		if (!path.isEmpty())
 		{
@@ -272,6 +295,15 @@ class InstallPanel extends JPanel implements EBComponent
 				infoBox.setText(null);
 				pluginModel.update();
 				pluginModel.restoreSelection(savedChecked, savedSelection);
+				if (pluginModel.getRowCount() == 0)
+				{
+					if (updates)
+						layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
+					else
+						layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
+				}
+				else
+					layout.show(InstallPanel.this, "INSTALL");
 			}
 		});
 	} //}}}
@@ -290,6 +322,12 @@ class InstallPanel extends JPanel implements EBComponent
 				 chooseButton.updateUI();
 			 }
 		}
+	} //}}}
+
+	//{{{ loading() method
+	void loading()
+	{
+		layout.show(this, "LOADING");
 	} //}}}
 
 	//{{{ Private members

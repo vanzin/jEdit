@@ -37,6 +37,7 @@ common.moveDown=Descendre
 common.clearAll=Tout effacer
 common.selectAll=Tout sélectionner
 common.selectNone=Ne rien sélectionner
+common.loading=Chargement...
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
@@ -1433,6 +1434,8 @@ options.plugin-manager.location=Installer les plugins dans :
 options.plugin-manager.settings-dir=Le dossier de paramètres utilisateur
 options.plugin-manager.app-dir=Le dossier d'installation de jEdit
 options.plugin-manager.none=Centrale de plugins par défaut
+options.plugin-manager.no-plugin-available=Aucun plugin disponible
+options.plugin-manager.no-plugin-uptodate=Tous les plugins sont à jour
 #}}}
 
 #{{{ Printing pane

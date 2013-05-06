@@ -253,6 +253,8 @@ public class PluginManager extends JFrame
 			@Override
 			public void _run()
 			{
+				installer.loading();
+				updater.loading();
 				try
 				{
 					downloadingPluginList = true;

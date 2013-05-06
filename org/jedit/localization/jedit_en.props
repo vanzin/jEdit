@@ -37,6 +37,7 @@ common.moveDown=Move Down
 common.clearAll=Clear All
 common.selectAll=Select All
 common.selectNone=Select None
+common.loading=Loading...
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
@@ -1434,6 +1435,8 @@ options.plugin-manager.app-dir=jEdit application directory
 options.plugin-manager.none=Plugin Central default
 options.plugin-manager.disable-obsolete=Disable obsolete plugins
 options.plugin-manager.list-cache.minutes=Cache plugin list for: (minutes)
+options.plugin-manager.no-plugin-available=No plugin available
+options.plugin-manager.no-plugin-uptodate=All plugins are up to date
 #}}}
 
 #{{{ Printing pane
