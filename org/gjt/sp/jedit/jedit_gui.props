@@ -592,6 +592,7 @@ about.text.contributors=Slava Pestov\n\
 	Chris Sullins\n\
 	Christoph Daniel Schulze\n\
 	Claude Eisenhut\n\
+	cnvince\n\
 	Cullen Linn\n\
 	Dakshinamurthy Karra\n\
 	Dale Anson\n\
@@ -816,6 +817,8 @@ options.appearance.lang.de=Deutsch
 options.appearance.lang.ja=日本語
 options.appearance.lang.cs=Česky
 options.appearance.lang.ru=Русский
+#Chinese
+options.appearance.lang.zh=中文
 #}}}
 
 #{{{ Context Menu pane

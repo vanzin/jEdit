@@ -5,7 +5,7 @@ jEdit 5.1 version history
 {{{ Version 5.1pre1
 
 Thanks to Björn "Vampire" Kautler, Jarek Czekalski, Thomas Meyer,
-Matthieu Casanova, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
+Matthieu Casanova, cnvince, Alan Ezust, Malathi, Vladimir Avdonin, Eric Le Lay,
 Darien Brown, Steve snarum-micron, EdorFaus, Brian Clapper, Uwe Stöhr,
 Marc Häfner, stone1343, Richard The, Dale Anson, Benjamin Gmurczyk,
 Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
@@ -225,6 +225,8 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Added chinese translation (patch #3611777 - cnvince)
 
 - Made the plugin manager loading much faster (up to 3 time faster)
   (Matthieu Casanova)

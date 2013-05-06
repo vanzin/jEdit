@@ -520,7 +520,7 @@ keymap.default=jEdit
 #}}}
 
 
-available.lang=en de fr ja cs ru
+available.lang=en de fr ja cs ru zh
 # if lang.usedefaultlocale is true, the lang.current is not used
 lang.usedefaultlocale=true
 lang.current=en
