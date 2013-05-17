@@ -1101,7 +1101,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 					sources.add(copiedFile.getAbsolutePath());
 				}
 			}
-			CopyFileWorker worker = new CopyFileWorker(this, sources, targetPath);
+			CopyFileWorker worker = new CopyFileWorker(this, sources, targetPath, CopyFileWorker.Behavior.RENAME);
 			ThreadUtilities.runInBackground(worker);
 		}
 		finally

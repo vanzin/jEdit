@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import javax.annotation.Nullable;
+
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.Task;
@@ -47,7 +49,7 @@ public class CopyFileWorker extends Task
 	 * The behavior if the target already exists
 	 * @since jEdit 5.0
 	 */
-	enum Behavior 
+	public enum Behavior
 	{ 
 		/** Do not copy file. */
 		SKIP, 
@@ -96,7 +98,7 @@ public class CopyFileWorker extends Task
 	 * @param target the target path (it is the file path, not a parent directory)
 	 * @param latch a latch so the caller knows when the copy is done
 	 */
-	private CopyFileWorker(Component comp, String source, String target, CountDownLatch latch)
+	private CopyFileWorker(Component comp, String source, String target, @Nullable CountDownLatch latch)
 	{
 		if (source == null || target == null)
 			throw new NullPointerException("The source and target cannot be null");
@@ -249,6 +251,7 @@ public class CopyFileWorker extends Task
 	} //}}}
 
 	//{{{ getTargetName() method
+	@Nullable
 	private String getTargetName(Object session, VFS vfs, String path, String baseName) throws IOException
 	{
 		if (behavior == Behavior.OVERWRITE)
