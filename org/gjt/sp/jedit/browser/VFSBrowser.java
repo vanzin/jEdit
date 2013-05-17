@@ -1069,6 +1069,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			case VFSFile.DIRECTORY:
 				targetPath = file.getPath();
 				break;
+			default:
+				Log.log(Log.ERROR, this, "Unknown file type " + file.getType());
+				return;
 		}
 		VFS vfs = VFSManager.getVFSForPath(targetPath);
 		Object vfsSession = null;
@@ -1103,7 +1106,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		}
 		finally
 		{
-			vfs._endVFSSession(vfsSession, this);
+			if (vfsSession != null)
+				vfs._endVFSSession(vfsSession, this);
 		}
 	} //}}}
 
