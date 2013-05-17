@@ -93,7 +93,7 @@ public class IOUtilities
 	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
 	 * @throws IOException  IOException If an I/O error occurs
 	 */
-	public static boolean copyStream(int bufferSize, ProgressObserver progress,
+	public static boolean copyStream(int bufferSize, @Nullable ProgressObserver progress,
 					InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
@@ -125,7 +125,7 @@ public class IOUtilities
 	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
 	 * @throws IOException  IOException If an I/O error occurs
 	 */
-	public static boolean copyStream(ProgressObserver progress,
+	public static boolean copyStream(@Nullable ProgressObserver progress,
 					 InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
@@ -148,9 +148,12 @@ public class IOUtilities
 		else if (file.isDirectory())
 		{
 			File[] files = file.listFiles();
-			for (int i = 0; i < files.length; i++)
+			if (files != null)
 			{
-				length += fileLength(files[i]);
+				for (int i = 0; i < files.length; i++)
+				{
+					length += fileLength(files[i]);
+				}
 			}
 		}
 		return length;
