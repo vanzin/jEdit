@@ -60,12 +60,12 @@ public class Install
 		boolean isGUI = args.length == 0;
 		
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.6") < 0)
+		if(javaVersion.compareTo("1.7") < 0)
 		{
 			errorAndExit(isGUI,
 					  "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
-					+"This installer requires Java 1.6 or later.");
+					+"This installer requires Java 1.7 or later.");
 		}
 
 		if(isRunningFromExclam())

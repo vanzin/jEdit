@@ -14,11 +14,7 @@
 		  prefix="config"/>
 
 	<!-- Target Java Versions -->
-	<property name="target.java.version"
-		  value="1.6"/>
-	<property name="mac.target.java.version"
-		  value="1.6+"/>
-	<!-- based on http://packages.slackverse.org/?v=1&p=92 -->
+	<!-- Someone should update this, perhaps?  -->
 	<property name="slackware.target.java.version"
 		  value="1_6_0_20-i586-1"/>
 
@@ -224,8 +220,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -255,8 +249,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -412,8 +404,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -766,8 +756,6 @@
 				       debuglevel="${config.build.debuglevel}"
 				       nowarn="${config.build.nowarn}"
 				       deprecation="${config.build.deprecation}"
-				       source="${target.java.version}"
-				       target="${target.java.version}"
 				       compiler="modern"
 				       encoding="UTF-8"
 				       includeAntRuntime="true">
@@ -787,7 +775,6 @@
 					 windowtitle="jEdit API Documentation"
 					 doctitle="jEdit API"
 					 failonerror="true"
-					 source="${target.java.version}"
 					 encoding="UTF-8"
 					 docencoding="UTF-8"
 					 charset="UTF-8">
@@ -946,8 +933,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -1206,7 +1191,6 @@
 				   extraclasspath="/System/Library/Java"
 				   icon="icons/icon.icns"
 				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
-				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
 				   signature="JESP"
 				   stubfile="jedit"
@@ -1375,10 +1359,6 @@
 					value="${jedit.build.number}"/>
 				<filter token="jedit.version"
 					value="${jedit.version}"/>
-				<filter token="slackware.target.java.version"
-					value="${slackware.target.java.version}"/>
-				<filter token="target.java.version"
-					value="${target.java.version}"/>
 				<filter token="win.filename"
 					value="${win.filename}"/>
 			</filterset>
@@ -1505,8 +1485,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
@@ -1531,8 +1509,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
@@ -1557,8 +1533,6 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">

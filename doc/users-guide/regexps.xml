@@ -239,7 +239,7 @@
 
                 <para>There are some known issues with the
                 <literal>java.util.regex</literal> library, as it stands in
-                Sun's Java 1.6. In particular, it is possible to create
+                Java. In particular, it is possible to create
                 regular expressions that hang the JVM, or cause stack overflow
                 errors, which was not as easy to accomplish using the legacy
                 <literal>gnu.regexp</literal> library. If you find that

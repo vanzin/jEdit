@@ -115,7 +115,7 @@ Workflow
           if a plugin was released that depends on it. 
      - Switch "Head of Branch" to "[ifdevel]devel[/ifdevel][iffinal]main[/iffinal]"
      - Check the "Remove" checkbox for the jEdit dependency
-     - Switch the "Low Version" of the JDK dependency to "1.6 [jdk-1.6]"
+     - Switch the "Low Version" of the JDK dependency to "1.7 [jdk-1.7]"
      - Click "Update Dependencies"
      - Click "Create Release"
 

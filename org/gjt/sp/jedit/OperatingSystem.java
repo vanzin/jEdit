@@ -264,26 +264,17 @@ public class OperatingSystem
 		return hasScreenMenuBar == 1;
 	} //}}}
 
-	//{{{ hasJava16() method
-	/**
-	 * Returns true always 
-	 * @since jEdit 4.3pre17
-	 * @deprecated obsolete, since we depend on Java 1.6 now
-	 */
-	@Deprecated
-	public static boolean hasJava16()
-	{
-		return true;
-	} //}}}
-
 	//{{{ hasJava17() method
 	/**
+	 * @deprecated - there is no point in checking for this
+	 *				 since we require Java 1.7.
 	 * Returns if Java 2 version 1.7 is in use.
 	 * @since jEdit 5.0pre1
 	 */
+	@Deprecated
 	public static boolean hasJava17()
 	{
-		return java17;
+		return true;
 	} //}}}
 
 	
