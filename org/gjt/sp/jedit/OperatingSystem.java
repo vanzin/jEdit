@@ -297,7 +297,6 @@ public class OperatingSystem
 	private static final int UNKNOWN = 0xBAD;
 
 	private static int os;
-	private static boolean java17;
 	private static int hasScreenMenuBar = -1;
 
 	//{{{ Class initializer
@@ -337,12 +336,13 @@ public class OperatingSystem
 		}
 		// for debugging, make jEdit think its using a different
 		// version of Java than it really is.
+		/*
 		String javaVersion = System.getProperty("jedit.force.java.version");
 		if(javaVersion == null || javaVersion.isEmpty())
 			javaVersion = System.getProperty("java.version");
 		if(javaVersion == null || javaVersion.isEmpty())
-			javaVersion = System.getProperty("java.runtime.version");
-		java17 = javaVersion.compareTo("1.7") >= 0;
+			javaVersion = System.getProperty("java.runtime.version"); */
+		// java17 = javaVersion.compareTo("1.7") >= 0;
 	} //}}}
 
 	//}}}

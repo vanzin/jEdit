@@ -86,9 +86,9 @@
 
             <revision>
                 <revnumber>1.4</revnumber>
-                <date>2006,2012</date>
+                <date>2006,2013</date>
                 <author> <firstname>Alan </firstname> <surname>Ezust </surname></author>
-                <revremark>Updates for jEdit 4.3-5.1 releases</revremark>
+                <revremark>Updates for jEdit 4.3-5.2 releases</revremark>
             </revision>
         </revhistory>
 

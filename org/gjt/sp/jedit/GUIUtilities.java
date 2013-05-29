@@ -1864,19 +1864,6 @@ public class GUIUtilities
 		frame.addComponentListener(ss);
 	} //}}}
 
-	//{{{ initContinuousLayout() method
-	/**
-	 * This method do nothing.
-	 *
-	 * @param split the split. It must never be null
-	 * @since jEdit 4.3pre9
-	 * @deprecated since jEdit 5.0 using or not continuous layout is not anymore an option.
-	 */
-	@Deprecated
-	public static void initContinuousLayout(JSplitPane split)
-	{
-	} //}}}
-
 	//{{{ Package-private members
 
 	//{{{ initializeDeprecatedIcons() method

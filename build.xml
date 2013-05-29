@@ -14,9 +14,10 @@
 		  prefix="config"/>
 
 	<!-- Target Java Versions -->
+	
 	<!-- Someone should update this, perhaps?  -->
 	<property name="slackware.target.java.version"
-		  value="1_6_0_20-i586-1"/>
+		  value="1_7_0"/>
 
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
