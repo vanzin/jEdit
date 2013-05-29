@@ -16,7 +16,7 @@ encodings on many of known OS and locales. -->
 	<stayAlive>true</stayAlive>
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
-		<minVersion>@target.java.version@.0</minVersion>
+		<minVersion>1.7.0</minVersion>
 		<!-- Prefer JDK to make tools.jar available if possible. -->
 		<jdkPreference>preferJdk</jdkPreference>
 	</jre>
