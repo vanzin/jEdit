@@ -12,10 +12,12 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+  - jEdit 5.2 now depends on Java 1.7
 
 }}}
 {{{ API Changes
 
+  - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
 }}}
 {{{ Editing
