@@ -24,7 +24,7 @@ metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
 #}}}
 
-# Decorate frames and dialogs using Swing L&F? (JDK 1.4 only)
+# Decorate frames and dialogs using Swing L&F?
 decorate.frames=false
 decorate.dialogs=false
 
@@ -439,7 +439,7 @@ print.color=false
 # Print tab size
 print.tabSize=2
 
-# Force JDK 1.3 API even on 1.4
+# Use old (JDK 1.3) printing API
 print.force13=false
 
 # Force use of glyph vectors to work around spacing problems

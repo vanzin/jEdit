@@ -797,7 +797,7 @@
 			</contrib:else>
 		</contrib:if>
 	</target>
-
+ 
 	<target name="docs-javadoc"
 		depends="init,generate-javadoc"
 		description="generate JavaDoc API docs">
@@ -806,6 +806,7 @@
 				 includes="api/**"
 				 excludes="api/**/*.html"/>
 		</copy>
+
 		<copy todir="${jar.location}/doc">
 			<fileset dir="${classes.dir}/javadoc"
 				 includes="api/**/*.html"/>
@@ -823,6 +824,8 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
+        <copy todir="${jar.location}/doc/api" overwrite="true" flatten="true"
+            file="${basedir}/doc/stylesheet.css"/>
 	</target>
 
 	<target name="generate-pdf-users-guide"

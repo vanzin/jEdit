@@ -4,18 +4,20 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Alan Ezust for contributing to this
+release.
 
 {{{ Bug Fixes
 
+ - JavaDoc stylesheet customized so it is readable in helpviewer (#3614229 - Alan Ezust) 
 
 }}}
 {{{ Miscellaneous
 
-  - jEdit 5.2 now depends on Java 1.7
-
 }}}
 {{{ API Changes
+
+  - jEdit now depends on Java 1.7
 
   - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
