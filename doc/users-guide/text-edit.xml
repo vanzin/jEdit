@@ -525,16 +525,12 @@
                         linkend="buffer-opts" />.</para>
                     </listitem>
 
-                    <listitem>
-                        <para>From the keyboard, if a keyboard shortcut has been
-                        assigned to the <guimenuitem>Toggle Word
-                        Wrap</guimenuitem> command in the
-                        <guibutton>Shortcuts</guibutton> pane of the
-                        <guimenu>Utilities</guimenu>&gt;
-                        <guimenuitem>Options</guimenuitem>
-                        dialog box. By default, this
-                        command does not have a keyboard shortcut.</para>
-                    </listitem>
+                    <listitem> <para>From the keyboard, if a keyboard shortcut
+                    has been assigned to the <guimenuitem>Built-in
+                    Command</guimenuitem> for <guimenuitem>Toggle Word
+                    Wrap</guimenuitem> in the <guibutton>Shortcuts</guibutton>
+                    pane of <guimenu>Global Options</guimenu>. By default, this
+                    command does not have a keyboard shortcut, or appear in any menu. </para> </listitem>
                 </itemizedlist>
             </listitem>
 

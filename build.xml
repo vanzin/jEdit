@@ -13,12 +13,6 @@
 	<property file="build.properties"
 		  prefix="config"/>
 
-	<!-- Target Java Versions -->
-	
-	<!-- Someone should update this, perhaps?  -->
-	<property name="slackware.target.java.version"
-		  value="1_7_0"/>
-
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
 		  value="lib"/>
