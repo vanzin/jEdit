@@ -4,17 +4,21 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler and Alan Ezust for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
+ contributing to this release.
 
 {{{ Bug Fixes
 
- - JavaDoc stylesheet customized so it is readable in helpviewer (#3614229 - Alan Ezust) 
+ - JavaDoc stylesheet customized so it is readable in helpviewer
+   (#3614229 - Alan Ezust)
 
 }}}
 {{{ Miscellaneous
 
+ - Increased the scrolling speed in option pane (Matthieu Casanova)
+
 }}}
+
 {{{ API Changes
 
   - jEdit now depends on Java 1.7

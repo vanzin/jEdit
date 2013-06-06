@@ -323,7 +323,9 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller.setMinimumSize(new Dimension(120, 0));
-		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroller, new JScrollPane(stage));
+		JScrollPane scroll = new JScrollPane(stage);
+		scroll.getVerticalScrollBar().setUnitIncrement(10);
+		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroller, scroll);
 		content.add(splitter, BorderLayout.CENTER);
 
 		// register the Options dialog as a TreeSelectionListener.
