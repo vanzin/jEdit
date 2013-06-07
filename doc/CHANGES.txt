@@ -9,6 +9,9 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
 
 {{{ Bug Fixes
 
+ - The column title are missing in shortcuts option pane
+   (#3614404 Matthieu Casanova)
+
  - JavaDoc stylesheet customized so it is readable in helpviewer
    (#3614229 - Alan Ezust)
 
