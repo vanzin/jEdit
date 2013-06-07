@@ -334,6 +334,7 @@ public class GrabKeyDialog extends JDialog
 			this.isPrefix = isPrefix;
 		}
 
+		public String actionSet;
 		public String name;
 		public String label;
 		public String shortcut;

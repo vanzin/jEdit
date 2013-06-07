@@ -256,7 +256,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					Log.log(Log.ERROR,this,"Empty action set: "
 						+ actionSet.getPluginJAR());
 				}
-				ShortcutsModel model = createModel(modelLabel,
+				ShortcutsModel model = createModel(actionSet.getLabel(), modelLabel,
 						actionSet.getActionNames());
 				models.add(model);
 				List<KeyBinding[]> bindings = model.getBindings();
@@ -272,7 +272,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 		}
 		if (models.size() > 1)
-			models.add(new ShortcutsModel("All", allBindings));
+			models.add(new ShortcutsModel(ShortcutsModel.ALL, allBindings));
 		ShortcutsModel delegated = filteredModel.getDelegated();
 		Collections.sort(models,new StandardUtilities.StringCompare<ShortcutsModel>(true));
 		if (delegated == null)
@@ -296,7 +296,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ createModel() method
-	private ShortcutsModel createModel(String modelLabel, String[] actions)
+	private ShortcutsModel createModel(String actionSet, String modelLabel, String[] actions)
 	{
 		List<GrabKeyDialog.KeyBinding[]> bindings = new ArrayList<GrabKeyDialog.KeyBinding[]>(actions.length);
 
@@ -310,28 +310,27 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				continue;
 
 			label = GUIUtilities.prettifyMenuLabel(label);
-			addBindings(name,label,bindings);
+			addBindings(actionSet, name,label,bindings);
 		}
 
 		return new ShortcutsModel(modelLabel,bindings);
 	} //}}}
 
 	//{{{ addBindings() method
-	private void addBindings(String name, String label, Collection<KeyBinding[]> bindings)
+	private void addBindings(String actionSet, String name, String label, Collection<KeyBinding[]> bindings)
 	{
 		GrabKeyDialog.KeyBinding[] b = new GrabKeyDialog.KeyBinding[2];
 
-		b[0] = createBinding(name,label,
+		b[0] = createBinding(actionSet, name,label,
 			selectedKeymap.getShortcut(name + ".shortcut"));
-		b[1] = createBinding(name,label,
+		b[1] = createBinding(actionSet, name,label,
 			selectedKeymap.getShortcut(name + ".shortcut2"));
 
 		bindings.add(b);
 	} //}}}
 
 	//{{{ createBinding() method
-	private GrabKeyDialog.KeyBinding createBinding(String name,
-		String label, String shortcut)
+	private GrabKeyDialog.KeyBinding createBinding(String actionSet, String name, String label, String shortcut)
 	{
 		if(shortcut != null && shortcut.length() == 0)
 			shortcut = null;
@@ -339,6 +338,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		GrabKeyDialog.KeyBinding binding
 			= new GrabKeyDialog.KeyBinding(name,label,shortcut,false);
 
+		binding.actionSet = actionSet;
 		allBindings.add(binding);
 		return binding;
 	} //}}}
@@ -503,6 +503,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	//{{{ ShortcutsModel class
 	private class ShortcutsModel extends AbstractTableModel
 	{
+		public static final String ALL = "All";
 		private final List<GrabKeyDialog.KeyBinding[]> bindings;
 		private final String name;
 
@@ -526,6 +527,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		@Override
 		public int getColumnCount()
 		{
+			if (ALL.equals(name))
+				return 4;
 			return 3;
 		}
 
@@ -548,6 +551,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				return GUIUtilities.getPlatformShortcutLabel(getBindingAt(row,0).shortcut);
 			case 2:
 				return GUIUtilities.getPlatformShortcutLabel(getBindingAt(row,1).shortcut);
+			case 3:
+				return getBindingAt(row, 0).actionSet;
 			default:
 				return null;
 			}
@@ -577,6 +582,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				return selectedKeymap.getShortcut("options.shortcuts.shortcut1");
 			case 2:
 				return selectedKeymap.getShortcut("options.shortcuts.shortcut2");
+			case 3:
+				return jEdit.getProperty("options.shortcuts.actionset");
 			default:
 				return null;
 			}
