@@ -124,6 +124,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 			this.delegated.removeTableModelListener(this);
 		delegated.addTableModelListener(this);
 		this.delegated = delegated;
+		fireTableStructureChanged();
 	} //}}}
 
 	//{{{ resetFilter() method
@@ -137,7 +138,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	{
 		Set<Integer> selectedIndices = saveSelection();
 		this.filter = filter;
-		if (filter != null && filter.length() > 0)
+		if (filter != null && !filter.isEmpty())
 		{
 			int size = delegated.getRowCount();
 			filter = prepareFilter(filter);
@@ -213,6 +214,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	}  //}}}
 
 	//{{{ getRowCount() method
+	@Override
 	public int getRowCount()
 	{
 		if (filteredIndices == null)
@@ -221,24 +223,28 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	} //}}}
 
 	//{{{ getColumnCount() method
+	@Override
 	public int getColumnCount()
 	{
 		return delegated.getColumnCount();
 	} //}}}
 
 	//{{{ getColumnName() method
+	@Override
 	public String getColumnName(int columnIndex)
 	{
 		return delegated.getColumnName(columnIndex);
 	} //}}}
 
 	//{{{ getColumnClass() method
+	@Override
 	public Class<?> getColumnClass(int columnIndex)
 	{
 		return delegated.getColumnClass(columnIndex);
 	} //}}}
 
 	//{{{ isCellEditable() method
+	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex)
 	{
 		int trueRowIndex = getTrueRow(rowIndex);
@@ -246,6 +252,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	} //}}}
 
 	//{{{ getValueAt() method
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		int trueRowIndex = getTrueRow(rowIndex);
@@ -253,6 +260,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	} //}}}
 
 	//{{{ setValueAt() method
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 	{
 		int trueRowIndex = getTrueRow(rowIndex);
@@ -296,6 +304,7 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	 * This fine grain notification tells listeners the exact range
 	 * of cells, rows, or columns that changed.
 	 */
+	@Override
 	public void tableChanged(TableModelEvent e)
 	{
 		setFilter(filter);
