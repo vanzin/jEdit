@@ -549,7 +549,7 @@ public class ManagePanel extends JPanel
 				}
 				else
 				{
-					if(value.equals(Boolean.TRUE))
+					if(value.equals(Boolean.TRUE)) 
 						return;
 
 					unloadPluginJARWithDialog(jar);
@@ -631,14 +631,17 @@ public class ManagePanel extends JPanel
 			// unloaded = new HashSet<String>();
 			unloaded = new ConcurrentHashMap<String, Object>();
 			String[] dependents = jar.getDependentPlugins();
-			if(dependents.length == 0)
+			String[] optionalDependents = jar.getOptionallyDependentPlugins();
+			if(dependents.length == 0 && optionalDependents.length == 0)
+			{
 				unloadPluginJAR(jar);
+			}
 			else
 			{
 				List<String> closureSet = new LinkedList<String>();
 				PluginJAR.transitiveClosure(dependents, closureSet);
-				List<String> listModel = new ArrayList<String>();
-				listModel.addAll(closureSet);
+				PluginJAR.transitiveClosure(optionalDependents, closureSet);
+				List<String> listModel = new ArrayList<String>(new HashSet<String>(closureSet));	// remove dupes
 				Collections.sort(listModel, new StandardUtilities.StringCompare<String>(true));
 
 				int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
@@ -652,7 +655,11 @@ public class ManagePanel extends JPanel
 		private void unloadPluginJAR(PluginJAR jar)
 		{
 			String[] dependents = jar.getDependentPlugins();
-			for (String dependent : dependents)
+			String[] optionalDependents = jar.getOptionallyDependentPlugins();
+			String[] allDependents = new String[dependents.length + optionalDependents.length];
+			System.arraycopy( dependents, 0, allDependents, 0, dependents.length );
+			System.arraycopy( optionalDependents, 0, allDependents, dependents.length, optionalDependents.length);
+			for (String dependent : allDependents)
 			{
 				if (!unloaded.containsKey(dependent))
 				{

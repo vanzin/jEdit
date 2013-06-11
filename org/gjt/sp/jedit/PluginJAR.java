@@ -172,10 +172,16 @@ public class PluginJAR
 	private boolean activated;
 
 	// Lists of jarPaths
+	/** These plugins require this plugin */
 	private final Set<String> theseRequireMe = new LinkedHashSet<String>();
+	
 	/** The plugins that uses me as optional dependency. */
 	private final Set<String> theseUseMe = new LinkedHashSet<String>();
+	
+	/** This plugin requires these plugins. */
 	private final Set<String> weRequireThese = new LinkedHashSet<String>();
+	
+	/** These plugins are an optional dependency for me, I'll use them if they are available, no worries if they aren't. */
 	private final Set<String> weUseThese = new LinkedHashSet<String>();
 	//}}}
 
@@ -218,6 +224,7 @@ public class PluginJAR
 				load(jarPath, true);
 			}
 		}
+		
 		// Load extra jars that are part of this plugin
 		String jars = jEdit.getProperty("plugin." + className + ".jars");
 		if(jars != null)
@@ -239,7 +246,7 @@ public class PluginJAR
 		jEdit.propertiesChanged();
 		return jar;
 	} // }}}
-
+	
 	//{{{ getPath() method
 	/**
 	 * Returns the full path name of this plugin's JAR file.
@@ -699,10 +706,22 @@ public class PluginJAR
   	} //}}}
 
 	//{{{ getDependentPlugins() method
-	  public String[] getDependentPlugins()
-	  {
-		  return theseRequireMe.toArray(new String[theseRequireMe.size()]);
-	  } //}}}
+	/**
+	* @return an array of plugin names that have a hard dependency on this plugin
+	*/
+	public String[] getDependentPlugins()
+	{
+		return theseRequireMe.toArray(new String[theseRequireMe.size()]);
+	} //}}}
+
+	//{{{ getOptionallyDependentPlugins() method
+	/**
+	* @return an array of plugin names that have an optional dependency on this plugin
+	*/
+	public String[] getOptionallyDependentPlugins()
+	{
+		return theseUseMe.toArray(new String[theseUseMe.size()]);
+	} //}}}
 
 	//{{{ getPlugin() method
 	/**

@@ -14,6 +14,9 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
 
  - JavaDoc stylesheet customized so it is readable in helpviewer
    (#3614229 - Alan Ezust)
+   
+ - Remove optionally dependent plugins when a plugin is unloaded.
+   (#3614456 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
