@@ -1849,13 +1849,16 @@ loop:		while (true)
 		for (int i = 0; i < mbar.getMenuCount(); i++)
 		{
 			JMenu menu = mbar.getMenu(i);
-			int mnemonic = menu.getMnemonic();
-			if (mnemonic != 0)
+			if (menu != null)
 			{
-				Object keyBinding = inputHandler.getKeyBinding("A+" + Character.toLowerCase((char) mnemonic));
-				if (keyBinding != null)
+				int mnemonic = menu.getMnemonic();
+				if (mnemonic != 0)
 				{
-					menu.setMnemonic(0);
+					Object keyBinding = inputHandler.getKeyBinding("A+" + Character.toLowerCase((char) mnemonic));
+					if (keyBinding != null)
+					{
+						menu.setMnemonic(0);
+					}
 				}
 			}
 		}
