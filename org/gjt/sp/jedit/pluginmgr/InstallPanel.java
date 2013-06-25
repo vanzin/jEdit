@@ -52,6 +52,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -782,7 +783,7 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ Entry class
 	private static class Entry
 	{
-		String name, installedVersion, version, author, date, description, set;
+		String name, installedVersion, version, author, date, description, set, dependencies;
 
 		long timestamp;
 		int size;
@@ -803,6 +804,7 @@ class InstallPanel extends JPanel implements EBComponent
 			this.size = size;
 			this.date = branch.date;
 			this.description = plugin.description;
+			this.dependencies = branch.depsToString();
 			this.set = set;
 			this.install = false;
 			this.plugin = plugin;
@@ -851,7 +853,6 @@ class InstallPanel extends JPanel implements EBComponent
 	 */
 	private class PluginInfoBox extends JEditorPane implements ListSelectionListener
 	{
-		private final String[] params;
 		PluginInfoBox()
 		{
 			setBackground(jEdit.getColorProperty("view.bgColor"));
@@ -859,7 +860,6 @@ class InstallPanel extends JPanel implements EBComponent
 			putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 			setContentType("text/html");
 			setEditable(false);
-			params = new String[3];
 			table.getSelectionModel().addListSelectionListener(this);
 		}
 
@@ -872,11 +872,23 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				Entry entry = (Entry) pluginModel.filteredEntries
 					.get(table.getSelectedRow());
-				params[0] = entry.author;
-				params[1] = entry.date;
-				params[2] = entry.description;
-				text = jEdit.getProperty("install-plugins.info", params);
-				text = text.replace("\n", "<br>");
+				String pattern = "<b>{0}</b>: {1}<br><b>{2}</b>: {3}<br>{4}<br><br><b>{5}</b>:<br>{6}";
+				List<String> params = new ArrayList<String>();
+				params.add(jEdit.getProperty("install-plugins.info.author", "Author"));
+				params.add(entry.author);
+				params.add(jEdit.getProperty("install-plugins.info.released", "Released"));
+				params.add(entry.date);
+				params.add(entry.description);
+				if (entry.dependencies == null || entry.dependencies.isEmpty())
+				{
+					pattern = "<b>{0}</b>: {1}<br><b>{2}</b>: {3}<br>{4}";
+				} 
+				else
+				{
+					params.add(jEdit.getProperty("install-plugins.info.depends", "Depends on"));
+					params.add(entry.dependencies.replaceAll("\n", "<br>"));
+				}
+				text = MessageFormat.format(pattern, params.toArray(new String[0]));				
 			}
 			setText(text);
 			setCaretPosition(0);

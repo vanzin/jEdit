@@ -15,9 +15,12 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
  - JavaDoc stylesheet customized so it is readable in helpviewer
    (#3614229 - Alan Ezust)
    
- - Remove optionally dependent plugins when a plugin is unloaded.
+ - Reload optionally dependent plugins when a plugin is unloaded.
    (#3614456 - Dale Anson)
-
+   
+ - Plugin dependencies are shown in the plugin manager details pane for all three 
+   tabs. (#3614465 - Dale Anson)
+   
 }}}
 {{{ Miscellaneous
 

@@ -24,6 +24,12 @@ package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
 import java.awt.BorderLayout;
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -31,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.pluginmgr.ManagePanel.Entry;
 //}}}
 
@@ -80,22 +87,53 @@ class PluginDetailPanel extends JPanel
 				// <br> instead of <br/> because Sun's Java 5 HTML parser can't digest them.
 				// No problem on Sun's Java 6 JVM.
 				if (entry.version != null)
-					builder.append("<b>Version</b>: ").append(entry.version).append("<br>");
+					builder.append("<b>").append(jEdit.getProperty("install-plugins.info.version", "Version")).append("</b>: ").append(entry.version).append("<br>");
 				if (entry.author != null)
-					builder.append("<b>Author</b>: ").append(entry.author).append("<br>");
+					builder.append("<b>").append(jEdit.getProperty("install-plugins.info.author", "Author")).append("</b>: ").append(entry.author).append("<br>");
 				if (entry.description != null)
 				{
 					builder.append("<br>").append(entry.description);
 				}
+				builder.append(getDepends(entry));
 				pluginDetail.setText(builder.toString());
 			}
 			else
 			{
 				title.setText("<html><b>"+entry.jar+"</b></html>");
-				pluginDetail.setText(null);
+				
+				PluginJAR pluginJar = new PluginJAR(new File(entry.jar));
+				pluginJar.init();
+				entry.plugin = pluginJar.getPlugin();
+				String clazz = pluginJar.getPlugin().getClassName();
+				
+				StringBuilder sb = new StringBuilder(256);
+				sb.append("<b>").append(jEdit.getProperty("install-plugin.info.version", "Version")).append("</b>: ").append(jEdit.getProperty("plugin."+clazz+".version", ""));
+				sb.append("<br><b>").append(jEdit.getProperty("install-plugin.info.author", "Author")).append("</b>: ").append( jEdit.getProperty("plugin."+clazz+".author", ""));
+				sb.append("<br>").append(jEdit.getProperty("plugin."+clazz+".description", ""));
+				sb.append(getDepends(entry));
+				pluginDetail.setText(sb.toString());
+				
+				pluginJar.uninit(false);
 			}
 			this.entry = entry;
 		}
 	} //}}}
-
+	
+	//{{{ getDepends() method
+	private String getDepends(Entry entry) 
+	{
+		StringBuilder builder = new StringBuilder();
+		Set<String> dependencies = entry.getDependencies();
+		if (dependencies != null && !dependencies.isEmpty()) 
+		{
+			builder.append("<br><br><b>").append(jEdit.getProperty("install-plugins.info.depends", "Depends on")).append("</b>:");
+			List<String> depends = new ArrayList(dependencies);
+			Collections.sort(depends);
+			for (String dep : depends) 
+			{
+				builder.append("<br>").append(dep);		
+			}
+		}
+		return builder.toString();
+	} //}}}
 }

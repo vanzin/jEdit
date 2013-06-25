@@ -301,7 +301,7 @@ public class ManagePanel extends JPanel
 	//{{{ Inner classes
 
 	//{{{ Entry class
-	static class Entry
+	class Entry
 	{
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
@@ -317,6 +317,9 @@ public class ManagePanel extends JPanel
 		String clazz, name, version, author, docs;
 		/** The description property of the plugin. */
 		String description;
+		/** The dependencies of the plugin. */
+		Set<String> depends;
+		
 		EditPlugin plugin;
 		/**
 		 * The jars referenced in the props file of the plugin.
@@ -366,7 +369,6 @@ public class ManagePanel extends JPanel
 				docs = jEdit.getProperty("plugin."+clazz+".docs");
 				description = jEdit.getProperty("plugin."+clazz+".description");
 				String jarsProp = jEdit.getProperty("plugin."+clazz+".jars");
-
 				if(jarsProp != null)
 				{
 					String directory = MiscUtilities.getParentOfPath(this.jar);
@@ -397,6 +399,32 @@ public class ManagePanel extends JPanel
 			{
 				status = LOADED;
 			}
+		}
+		
+		/**
+		 * @param optional If false, returns only the dependencies, if true, 
+		 * returns only the optional dependencies.
+		 * @return A list of the names of the dependencies, e.g. ErrorList or ProjectViewer.
+		 */
+		public Set<String> getDependencies() 
+		{
+			if (plugin == null)
+				return null;
+			Set<String> depends = null;
+			PluginJAR jar = plugin.getPluginJAR();
+			String cn = plugin.getClassName();
+			Set<String> requiredJars = jar.getDependencies(cn);
+			if (requiredJars != null && !requiredJars.isEmpty())
+			{
+				depends = new HashSet<String>();
+				for (String dep : requiredJars)
+				{
+					Entry e = pluginModel.getEntry(dep);
+					if (e != null)
+						depends.add(e.name);
+				}
+			}
+			return depends;
 		}
 	} //}}}
 
@@ -457,6 +485,19 @@ public class ManagePanel extends JPanel
 		public Entry getEntry(int rowIndex)
 		{
 			return entries.get(rowIndex);
+		} //}}}
+
+		//{{{ getEntry() method
+		public Entry getEntry(String classname)
+		{
+			if (classname == null || classname.isEmpty())
+				return null;
+			for (Entry entry : entries)
+			{
+				if (classname.equals(entry.clazz))
+					return entry;
+			}
+			return null;
 		} //}}}
 
 		//{{{ getRowCount() method
@@ -630,36 +671,45 @@ public class ManagePanel extends JPanel
 		{
 			// unloaded = new HashSet<String>();
 			unloaded = new ConcurrentHashMap<String, Object>();
-			String[] dependents = jar.getDependentPlugins();
-			String[] optionalDependents = jar.getOptionallyDependentPlugins();
-			if(dependents.length == 0 && optionalDependents.length == 0)
+			String[] dependents = jar.getAllDependentPlugins();
+			if(dependents.length == 0)
 			{
 				unloadPluginJAR(jar);
 			}
 			else
 			{
 				List<String> closureSet = new LinkedList<String>();
+				dependents = jar.getDependentPlugins();
 				PluginJAR.transitiveClosure(dependents, closureSet);
-				PluginJAR.transitiveClosure(optionalDependents, closureSet);
 				List<String> listModel = new ArrayList<String>(new HashSet<String>(closureSet));	// remove dupes
-				Collections.sort(listModel, new StandardUtilities.StringCompare<String>(true));
-
-				int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
-					new String[] { jar.getFile().getName() }, listModel.toArray());
-				if(button == JOptionPane.YES_OPTION)
+				boolean confirm = true;
+				if (!listModel.isEmpty())
+				{
+					// show confirmation dialog listing dependencies to be unloaded
+					Collections.sort(listModel, new StandardUtilities.StringCompare<String>(true));
+					int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
+						new String[] { jar.getFile().getName() }, listModel.toArray());
+					confirm = button == JOptionPane.YES_OPTION;
+				}
+				if (confirm)
+				{
+					String[] optionals = jar.getOptionallyDependentPlugins();
 					unloadPluginJAR(jar);
+					// reload the optionally dependent plugins since they can run 
+					// without this plugin
+					for (String opt : optionals) 
+					{
+						PluginJAR.load(opt, true);	
+					}
+				}
 			}
 		} //}}}
 
 		//{{{ unloadPluginJAR() method
 		private void unloadPluginJAR(PluginJAR jar)
 		{
-			String[] dependents = jar.getDependentPlugins();
-			String[] optionalDependents = jar.getOptionallyDependentPlugins();
-			String[] allDependents = new String[dependents.length + optionalDependents.length];
-			System.arraycopy( dependents, 0, allDependents, 0, dependents.length );
-			System.arraycopy( optionalDependents, 0, allDependents, dependents.length, optionalDependents.length);
-			for (String dependent : allDependents)
+			String[] dependents = jar.getAllDependentPlugins();
+			for (String dependent : dependents)
 			{
 				if (!unloaded.containsKey(dependent))
 				{

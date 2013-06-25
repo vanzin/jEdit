@@ -38,10 +38,12 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -244,6 +246,33 @@ public class PluginJAR
 		jar.checkDependencies();
 		jar.activatePluginIfNecessary();
 		jEdit.propertiesChanged();
+		
+		// check all other installed plugins to see if any of them  
+		// use me. Reload those that do so the classloaders work together.
+		PluginJAR[] installedPlugins = jEdit.getPluginJARs();
+		for (PluginJAR installed : installedPlugins)
+		{
+			if (installed == null || installed.equals(jar) )
+			{
+				continue;	
+			}
+			EditPlugin ep = installed.getPlugin();
+			if (ep == null) 
+			{
+				continue;
+			}
+			String installedClassname = ep.getClassName();
+			PluginDepends[] deps = getPluginDepends(installedClassname);
+			for (PluginDepends dep : deps)
+			{
+				if ("plugin".equals(dep.what) && className.equals(dep.name))
+				{
+					String reloadPath = ep.getPluginJAR().getPath();
+					jEdit.removePluginJAR(ep.getPluginJAR(), false);
+					load(reloadPath, true);
+				}
+			}
+		}
 		return jar;
 	} // }}}
 	
@@ -336,21 +365,13 @@ public class PluginJAR
 	 */
 	public static Set<String> getDependencySet(String className)
 	{
-		String dep;
 		Set<String> retval = new LinkedHashSet<String>();
-		int i=0;
-		while((dep = jEdit.getProperty("plugin." + className + ".depend." + i++)) != null)
+		PluginDepends[] deps = getPluginDepends(className);
+		for (PluginDepends pluginDepends : deps)
 		{
-			PluginDepends pluginDepends;
-			try
+			if (pluginDepends.optional)
 			{
-				pluginDepends = getPluginDepends(dep);
-			}
-			catch (IllegalArgumentException e)
-			{
-				Log.log(Log.ERROR, PluginJAR.class,
-					className + " has an invalid dependency: " + dep);
-				continue;
+				continue;	
 			}
 
 			if("plugin".equals(pluginDepends.what))
@@ -360,7 +381,7 @@ public class PluginJAR
 				{
 					Log.log(Log.ERROR, PluginJAR.class, className
 						+ " has an invalid dependency: "
-						+ dep + " (version is missing)");
+						+ pluginDepends.dep + " (version is missing)");
 					continue;
 				}
 
@@ -448,27 +469,12 @@ public class PluginJAR
 	{
 		if(plugin == null)
 			return true;
-		int i = 0;
 		boolean ok = true;
 
 		String name = plugin.getClassName();
-
-		String dep;
-		while((dep = jEdit.getProperty("plugin." + name + ".depend." + i++)) != null)
+		PluginDepends[] deps = getPluginDepends(name);
+		for (PluginDepends pluginDepends : deps)
 		{
-			PluginDepends pluginDepends;
-			try
-			{
-				pluginDepends = getPluginDepends(dep);
-			}
-			catch (IllegalArgumentException e)
-			{
-				Log.log(Log.ERROR,this,name + " has an invalid"
-					+ " dependency: " + dep);
-				ok = false;
-				continue;
-			}
-
 			if("jdk".equals(pluginDepends.what))
 			{
 				if(!pluginDepends.optional && StandardUtilities.compareStrings(
@@ -508,7 +514,7 @@ public class PluginJAR
 				{
 					Log.log(Log.ERROR,this,name
 						+ " has an invalid dependency: "
-						+ dep + " (version is missing)");
+						+ pluginDepends.dep + " (version is missing)");
 					ok = false;
 					continue;
 				}
@@ -585,7 +591,7 @@ public class PluginJAR
 			else
 			{
 				Log.log(Log.ERROR,this,name + " has unknown"
-					+ " dependency: " + dep);
+					+ " dependency: " + pluginDepends.dep);
 				ok = false;
 			}
 		}
@@ -617,7 +623,7 @@ public class PluginJAR
 				}
 			}
 		}
-
+		
 		if(!ok)
 			breakPlugin();
 
@@ -637,38 +643,105 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ getPluginDepends() method
-	private static PluginDepends getPluginDepends(String dep) throws IllegalArgumentException
+	private static PluginDepends[] getPluginDepends(String classname) throws IllegalArgumentException
 	{
-		boolean optional;
-		if(dep.startsWith("optional "))
+		List<PluginDepends> ret = new ArrayList<PluginDepends>();
+		int i = 0;
+		String dep;
+		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
 		{
-			optional = true;
-			dep = dep.substring("optional ".length());
+			boolean optional;
+			if(dep.startsWith("optional "))
+			{
+				optional = true;
+				dep = dep.substring("optional ".length());
+			}
+			else
+			{
+				optional = false;
+			}
+	
+			int index = dep.indexOf(' ');
+			if(index == -1)
+				throw new IllegalArgumentException("wrong dependency");
+	
+			String what = dep.substring(0,index);
+			String arg = dep.substring(index + 1);
+			PluginDepends depends = new PluginDepends();
+			depends.what = what;
+			depends.arg = arg;
+			depends.optional = optional;
+			depends.dep = dep;
+			if ("plugin".equals(what))
+				depends.name = arg.indexOf(' ') > 0 ? arg.substring(0, arg.indexOf(' ')) : arg;
+			ret.add(depends);
 		}
-		else
+		return ret.toArray(new PluginDepends[0]);
+	} //}}}
+
+	//{{{ getDependencies() method
+	/**
+	 * Returns a list of dependencies by searching the plugin properties.
+	 * @param classname The classname of a plugin
+	 * @return A list of classnames of plugins the plugin depends on.
+	 */
+	public static Set<String> getDependencies(String classname) throws IllegalArgumentException
+	{
+		Set<String> ret = new HashSet<String>();
+		int i = 0;
+		String dep;
+		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
 		{
-			optional = false;
+			int index = dep.indexOf(' ');
+			String what = dep.substring(0,index);
+			String arg = dep.substring(index + 1);
+			if ("plugin".equals(what))
+			{
+				ret.add(arg.indexOf(' ') > 0 ? arg.substring(0, arg.indexOf(' ')) : arg);
+			}
 		}
+		return ret;
+	} //}}}
 
-		int index = dep.indexOf(' ');
-		if(index == -1)
-			throw new IllegalArgumentException("wrong dependency");
-
-		String what = dep.substring(0,index);
-		String arg = dep.substring(index + 1);
-		PluginDepends depends = new PluginDepends();
-		depends.what = what;
-		depends.arg = arg;
-		depends.optional = optional;
-		return depends;
+	//{{{ getOptionalDependencies() method
+	/**
+	 * Returns a list of optional dependencies by searching the plugin properties.
+	 * @param classname The classname of a plugin
+	 * @return A list of classnames of plugins the plugin optionally depends on.
+	 */
+	public static Set<String> getOptionalDependencies(String classname) throws IllegalArgumentException
+	{
+		Set<String> ret = new HashSet<String>();
+		int i = 0;
+		String dep;
+		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
+		{
+			int index = dep.indexOf(' ');
+			String what = dep.substring(0,index);
+			String arg = dep.substring(index + 1);
+			if ("optional".equals(what))
+			{
+				index = arg.indexOf(' ');
+				what = arg.substring(0, index);
+				arg = arg.substring(index + 1);
+				if ("plugin".equals(what))
+				{
+					ret.add(arg.indexOf(' ') > 0 ? arg.substring(0, arg.indexOf(' ')) : arg);
+				}
+			}
+		}
+		return ret;
 	} //}}}
 
 	//{{{ PluginDepends class
 	private static class PluginDepends
 	{
-		String what;
-		String arg;
+		String dep;		// full string, e.g. plugin errorlist.ErrorList 1.3
+		String what;	// depends type, e.g. jedit, jdk, plugin
+		String arg;		// classname + version, e.g errorlist.ErrorList 1.3
+		String name;	// just the class name, e.g. errorlist.ErrorList, only filled in if what is plugin
 		boolean optional;
+		
 	} //}}}
 
 	//{{{ transitiveClosure()
@@ -722,6 +795,20 @@ public class PluginJAR
 	{
 		return theseUseMe.toArray(new String[theseUseMe.size()]);
 	} //}}}
+	
+	//{{{ getAllDependentPlugins() method
+	/**
+	* @return an array of plugin names that have a dependency or an optional dependency on this plugin,
+	* this returns a combination of <code>getDependentPlugins</code> and getOptionallyDependentPlugins</code>.
+	*/
+	public String[] getAllDependentPlugins()
+	{
+		String[] dependents = new String[theseRequireMe.size() + theseUseMe.size()];
+		System.arraycopy( theseRequireMe.toArray(), 0, dependents, 0, theseRequireMe.size() );
+		System.arraycopy( theseUseMe.toArray(), 0, dependents, theseRequireMe.size(), theseUseMe.size());
+		return dependents;
+	} //}}}
+	
 
 	//{{{ getPlugin() method
 	/**
@@ -984,7 +1071,7 @@ public class PluginJAR
 	//{{{ Package-private members
 
 	//{{{ Static methods
-
+	
 	//{{{ getPluginCache() method
 	public static PluginCacheEntry getPluginCache(PluginJAR plugin)
 	{
@@ -1072,7 +1159,7 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ init() method
-	boolean init()
+	public boolean init()
 	{
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
@@ -1112,7 +1199,7 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ uninit() method
-	void uninit(boolean exit)
+	public void uninit(boolean exit)
 	{
 		deactivatePlugin(exit);
 
