@@ -465,7 +465,7 @@ public class CompleteWord extends CompletionPopup
 	protected void keyTyped(KeyEvent e)
 	{
 		char ch = e.getKeyChar();
-		if(Character.isDigit(ch))
+		if(jEdit.getBooleanProperty("insertCompletionWithDigit") && Character.isDigit(ch)) 
 		{
 			int index = ch - '0';
 			if(index == 0)

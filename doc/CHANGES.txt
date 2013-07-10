@@ -40,6 +40,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
 }}}
 {{{ Editing
 
+  - Patch to toggle word completion of words with digits.
+    (#3614607, Patrick Eibl)
 
 }}}
 

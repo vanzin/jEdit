@@ -69,6 +69,9 @@ stripTrailingEOL=true
 # Complete words from all open buffers
 completeFromAllBuffers=false
 
+# Insert a word completion when the corresponding digit is pressed
+insertCompletionWithDigit=true
+
 # Need this so that new files have a trailing EOL
 buffer.trailingEOL=true
 

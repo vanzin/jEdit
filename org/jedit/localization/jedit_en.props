@@ -1608,6 +1608,7 @@ options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialias
 options.textarea.stripTrailingEOL=Hide final end of line (if any)
 options.textarea.completeFromAllBuffers=Complete words from all open buffers (default is \
     to limit search to currently visible buffers)
+options.textarea.insertCompletionWithDigit=Complete word by typing corresponding digit (otherwise, digit is considered part of the word)
 options.textarea.lineSpacing.label=Extra vertical line spacing (in pixels):
 #}}}
 
