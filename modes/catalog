@@ -251,7 +251,7 @@
 				FILE_NAME_GLOB="*.iss" />
 
 <MODE NAME="ini"		FILE="ini.xml"
-				FILE_NAME_GLOB="*.{ini,reg}" />
+				FILE_NAME_GLOB="*.{ini,reg,milk}" />
 
 <MODE NAME="interlis"		FILE="interlis.xml"
 				FILE_NAME_GLOB="*.ili" />
