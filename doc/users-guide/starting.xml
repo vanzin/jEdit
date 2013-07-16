@@ -372,4 +372,27 @@
             </informaltable>
         </section>
     </section>
+    <section id="jvm-arguments"> 
+    <title> Java Virtual Machine Arguments </title>
+      <para> It is also possible to pass command line arguments to the Java Virtual Machine (JVM).
+      These arguments can change certain things about how Java runs, such as the maximum heap size, or whether
+      antialiasing is used in certain places. </para>
+      
+      <para> For operating systems such as Linux where jEdit is started via a shell script, you can easily
+      edit the <literal>jedit</literal> script and add JVM arguments in the correct place. But on a Windows install that uses <literal>jEdit.exe</literal>, the JVM arguments are located in a separate file, called <literal>jEdit.l4j.ini</literal>. Create or edit this file in the same directory as <literal>jEdit.exe</literal> and place one JVM argument per line. </para>
+      
+      <para> There is no full list of arguments to java, since it can vary from one platform to another. 
+      Some of can be found by typing the commands <literal>java -?</literal> or <literal>man java</literal>
+      JVM arguments that I sometimes use for jEdit are: </para>
+      
+      <itemizedlist>
+      <listitem><para>  <literal>-Dawt.useSystemAAFontSettings=on</literal> together with <literal>-Dswing.aatext=true</literal> help ensure that antialiasing is used whenever possible 
+      in the non-TextArea widgets of jEdit. On some systems, the system antialiasing settings are used properly, while on other systems they are not. 
+      </para> </listitem>
+      
+      <listitem><para> <literal>-mx768m</literal> set maximum heap size to 1768 megabytes. Adjust this value depending on your own personal needs.  </para></listitem>
+      </itemizedlist>
+      
+    </section>  
+    
 </chapter>
