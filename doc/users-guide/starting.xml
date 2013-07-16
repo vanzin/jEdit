@@ -390,7 +390,7 @@
       in the non-TextArea widgets of jEdit. On some systems, the system antialiasing settings are used properly, while on other systems they are not. 
       </para> </listitem>
       
-      <listitem><para> <literal>-mx768m</literal> set maximum heap size to 1768 megabytes. Adjust this value depending on your own personal needs.  </para></listitem>
+      <listitem><para> <literal>-mx768m</literal> set maximum heap size to 768 megabytes. Adjust this value depending on your own personal needs / plugins.  </para></listitem>
       </itemizedlist>
       
     </section>  
