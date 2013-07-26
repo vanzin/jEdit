@@ -38,6 +38,12 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
   - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
 }}}
+{{{ UI
+
+ - Made TextArea thick caret thicker, and also thick when in overwrite mode. 
+    (Alan Ezust)
+
+}}}
 {{{ Editing
 
   - Patch to toggle word completion of words with digits.
