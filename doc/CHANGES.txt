@@ -5,12 +5,9 @@ jEdit 5.2 version history
 {{{ Version 5.2pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
- contributing to this release.
+contributing to this release.
 
 {{{ Bug Fixes
-
- - The column title are missing in shortcuts option pane
-   (#3614404 Matthieu Casanova) [merged into 5.1.x]
 
  - JavaDoc stylesheet customized so it is readable in helpviewer
    (#3614229 - Alan Ezust)
@@ -19,19 +16,9 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
    (#3614456 - Dale Anson)
    
  - Plugin dependencies are shown in the plugin manager details pane for all three 
-   tabs. (#3614465 - Dale Anson)
-   
-}}}
-{{{ Miscellaneous
-
- - Added a new column "ActionSet" in Shortcuts option pane to know
-   to which actionSet an action belong (feature #3614386 Matthieu Casanova)
-   [merged into 5.1.x]
-    
- - Increased the scrolling speed in option pane (Matthieu Casanova)
+   tabs. (#3614465 - Dale Anson)  
 
 }}}
-
 {{{ API Changes
 
   - jEdit now depends on Java 1.7
@@ -39,10 +26,19 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
   - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
 }}}
-{{{ UI
+{{{ UI improvements
+
+ - The column titles are missing in shortcuts option pane
+   (#3614404 Matthieu Casanova) [merged into 5.1.x]
+
+ - Added a new column "ActionSet" in Shortcuts option pane to know
+   to which actionSet an action belong (feature #3614386 Matthieu Casanova)
+   [merged into 5.1.x]
+    
+ - Increased the scrolling speed in option pane (Matthieu Casanova)
 
  - Made TextArea thick caret thicker, and also thick when in overwrite mode. 
-    (#3614784 Alan Ezust) [merge request #3614811]
+    (#3614784 Alan Ezust) [merged into 5.1.x]
 
 }}}
 {{{ Editing
