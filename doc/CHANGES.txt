@@ -14,6 +14,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+ - Added a new column "ActionSet" in Shortcuts option pane to know
+   to which actionSet an action belong (feature #3614386 Matthieu Casanova)
 
 }}}
 {{{ API Changes
