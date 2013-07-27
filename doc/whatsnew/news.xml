@@ -9,7 +9,7 @@
         <author>
             <othername>The jEdit all-volunteer development team</othername>
         </author>
-        <date> 2012 </date>
+        <date> 2013 </date>
     </articleinfo>
 
 
@@ -18,7 +18,7 @@
     but here are some of the major features of this version. </para>
 
     <itemizedlist>
-    
+
       <listitem><para>VFS WorkThreads have been rewritten into Tasks, making it 
       possible to completely remove the old "I/O Progress Monitor" and the 
       wasteful space it took up in the Task Monitor. Old deprecated
@@ -30,7 +30,12 @@
       Enabled by default, this will ensure that old unsupported plugins do not
       interfere with the running operation of jEdit. </para> 
     </listitem>
+    <listitem><para> Added another language to our list of translated languages:
+    English, French, German, Japanese, Czech, Russian, and now Chinese!
+    We are always looking for volunteers to help translate jEdit into Hindi,
+    Korean, or Spanish, or any other language, really! It is fairly easy
+    to add a new translation to jEdit or the plugins. 
+    </para></listitem>
     </itemizedlist>
-    
 <!-- :maxLineLen=80:wrap=hard: -->
 </article>

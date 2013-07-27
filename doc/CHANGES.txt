@@ -8,6 +8,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+ - The column titles were missing in shortcuts option pane
+   (#3614404 Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
@@ -38,7 +40,7 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 - The contextInsensitive flag of the edit mode was not used at the first use
   of the edit mode (Matthieu Casanova)
 
-- Fix mode loading for temporary buffers (Thomas Meyer)
+- Fix mode loading for temporary buffers (patch #3609469 Thomas Meyer)
 
 - Fix #3598661 - Don't allow negative values in the general option pane.
   (Thomas Meyer)
