@@ -4,15 +4,13 @@ jEdit 5.1 version history
 
 {{{ Version 5.1pre2
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Alan Ezust, Matthieu Casanova, and Björn "Vampire" Kautler
+for contributing to this release.
 
-{{{ Bug Fixes
+{{{ UI
 
  - The column titles were missing in shortcuts option pane
    (#3614404 Matthieu Casanova)
-
-}}}
-{{{ UI
 
  - Made TextArea thick caret thicker, and also thick when in overwrite mode. 
     (#3614784 Alan Ezust)
