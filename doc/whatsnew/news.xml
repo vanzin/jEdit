@@ -36,6 +36,10 @@
     Korean, or Spanish, or any other language, really! It is fairly easy
     to add a new translation to jEdit or the plugins. 
     </para></listitem>
-    </itemizedlist>
-<!-- :maxLineLen=80:wrap=hard: -->
-</article>
+    
+    <listitem><para> There is now a new encoding Native2ASCII which collapses
+    unicode escapes in ISO-8859-1 files on read and expands characters that
+    cannot be encoded with ASCII as unicode escapes on write. This encoding is
+    the one Java properties files should be in. </para></listitem>
+    
+    </itemizedlist> <!-- :maxLineLen=80:wrap=hard: --> </article>
