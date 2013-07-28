@@ -166,11 +166,11 @@ Thanks to  for contributing to this release.
             svn commit -m "Update the version number to [nextVersion]"
        in the root source directory
 
-16. It the release is from the latest release branch, clean up doc/CHANGES.txt on trunk.
+16. If the release is from the latest release branch, clean up doc/CHANGES.txt on trunk.
      - Update the version number which is the base of CHANGES.txt.
-       "changes since jEdit [version]".
-     - Remove all entries which has been released in [version].
-       The entries to be removed are those which are listed in CHANGES in the release you just finished.
+            "changes since jEdit [version]"
+     - Remove all entries which have been released in [version].
+       The entries to be removed are tagged with "[merged into [branch]]".
      - Submit your changes by doing
             svn commit -m "Update the base version of CHANGES.txt to [version]" doc/CHANGES.txt
        in trunk.
