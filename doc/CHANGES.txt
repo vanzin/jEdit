@@ -13,10 +13,7 @@ contributing to this release.
    (#3614229 - Alan Ezust)
    
  - Reload optionally dependent plugins when a plugin is unloaded.
-   (#3614456 - Dale Anson)
-   
- - Plugin dependencies are shown in the plugin manager details pane for all three 
-   tabs. (#3614465 - Dale Anson)  
+   (#3614456 - Dale Anson)  
 
 }}}
 {{{ API Changes
@@ -27,6 +24,9 @@ contributing to this release.
 
 }}}
 {{{ UI improvements
+
+ - Plugin dependencies are shown in the plugin manager details pane for all three 
+   tabs. (#3614465 - Dale Anson)  
 
  - The column titles are missing in shortcuts option pane
    (#3614404 Matthieu Casanova) [merged into 5.1.x]

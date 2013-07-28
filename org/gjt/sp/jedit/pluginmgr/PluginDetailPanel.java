@@ -129,9 +129,12 @@ class PluginDetailPanel extends JPanel
 			builder.append("<br><br><b>").append(jEdit.getProperty("install-plugins.info.depends", "Depends on")).append("</b>:");
 			List<String> depends = new ArrayList(dependencies);
 			Collections.sort(depends);
+			int i = 0;
 			for (String dep : depends) 
 			{
-				builder.append("<br>").append(dep);		
+				if (i > 0) builder.append(",");
+				builder.append(" ").append(dep);
+				++i;				
 			}
 		}
 		return builder.toString();
