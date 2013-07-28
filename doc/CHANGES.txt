@@ -7,7 +7,7 @@ jEdit 5.1 version history
 Thanks to Alan Ezust, Matthieu Casanova, and Björn "Vampire" Kautler
 for contributing to this release.
 
-{{{ UI
+{{{ UI improvements
 
  - The column titles were missing in shortcuts option pane
    (#3614404 Matthieu Casanova)
@@ -212,7 +212,7 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 - new PostgreSQL mode (feature #2833378 Thiemo Kellner, Eric Le Lay)
 
 }}}
-{{{ UI
+{{{ UI improvements
 
 - Better information in the plugin manager when loading plugin list
   (Matthieu Casanova)
@@ -251,7 +251,7 @@ Makarius, Marco Hunsicker, and Maik Nijhuis for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- Added chinese translation (patch #3611777 - cnvince)
+- Added Chinese translation (patch #3611777 cnvince)
 
 - Made the plugin manager loading much faster (up to 3 time faster)
   (Matthieu Casanova)
