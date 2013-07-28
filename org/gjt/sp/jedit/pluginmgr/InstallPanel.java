@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.StringList;
 import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
@@ -881,12 +882,14 @@ class InstallPanel extends JPanel implements EBComponent
 				params.add(entry.description);
 				if (entry.dependencies == null || entry.dependencies.isEmpty())
 				{
-					pattern = "<b>{0}</b>: {1}<br><b>{2}</b>: {3}<br>{4}";
+					pattern = "<b>{0}</b>: {1}<br><b>{2}</b>: {3} {4}";
 				} 
 				else
 				{
 					params.add(jEdit.getProperty("install-plugins.info.depends", "Depends on"));
-					params.add(entry.dependencies.replaceAll("\n", "<br>"));
+					StringList sl = StringList.split(entry.dependencies, "\n");
+					params.add(sl.join(", "));
+					// params.add(entry.dependencies.replaceAll("\n", ", "));
 				}
 				text = MessageFormat.format(pattern, params.toArray(new String[0]));				
 			}
