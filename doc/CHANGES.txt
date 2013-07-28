@@ -9,14 +9,14 @@ for contributing to this release.
 
 {{{ UI improvements
 
- - The column titles were missing in shortcuts option pane
-   (#3614404 Matthieu Casanova)
+- The column titles were missing in shortcuts option pane
+  (#3614404 Matthieu Casanova)
 
- - Made TextArea thick caret thicker, and also thick when in overwrite mode. 
-    (#3614784 Alan Ezust)
+- Made TextArea thick caret thicker, and also thick when in overwrite mode.
+  (#3614784 Alan Ezust)
 
- - Added a new column "ActionSet" in Shortcuts option pane to know
-   to which actionSet an action belong (feature #3614386 Matthieu Casanova)
+- Added a new column "ActionSet" in Shortcuts option pane to know
+  to which actionSet an action belongs (feature #3614386 Matthieu Casanova)
 
 }}}
 
