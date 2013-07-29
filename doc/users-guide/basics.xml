@@ -99,6 +99,10 @@
         Vertically</guimenuitem> (shortcut: <keycap>C+3</keycap>) splits the
         View into two TextAreas, placed next to each other.</para>
 
+        <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
+        <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
+        TextArea. </para>
+        
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit
         Current</guimenuitem> (shortcut: <keycap>C+0</keycap>) removes the split
         containing the current TextArea only.</para>
@@ -118,9 +122,6 @@
         Area</guimenuitem> (shortcut: <keycap>A+PAGE_DOWN</keycap>) shifts
         keyboard focus to the next TextArea.</para>
 
-        <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
-        <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
-        TextArea. </para>
 
     </section>
 

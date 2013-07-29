@@ -3,7 +3,8 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002 Kris Kopicki
+ * Copyright (C) 2002-2013 Kris Kopicki, Slava Pestov, Dale Anson,
+ *      Matthieu Casanova, Alan Ezust, Björn "Vampire" Kautler
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

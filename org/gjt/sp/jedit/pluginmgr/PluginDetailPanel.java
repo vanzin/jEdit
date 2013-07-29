@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008-2013 Matthieu Casanova, Dale Anson, Alan Ezust 
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

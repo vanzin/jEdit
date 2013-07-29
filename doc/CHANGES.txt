@@ -4,8 +4,8 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Alan Ezust for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
+and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 

@@ -282,6 +282,35 @@
             </note>
         </section>
     </section>
+    
+    <section id="keyboard-focus">
+      <title> Keyboard Focus </title>
+      
+      <para> When the cursor disappears, that means the text area no longer has focus, and when you type, your keystrokes are probably going somewhere else, such as a dockable. To ensure that the keyboard is focused
+      in the textarea, you can always use the mouse and click in it,
+      but a more keyboard-friendly way is preferred when you are just about to start typing anyway. For this reason, a number of jEdit's actions
+      have a side-effect of focusing on the text area as well. <guimenuitem> View - Toggle Full Screen</guimenuitem> is one example. Some others are listed below: 
+      </para>
+      
+      <para> From the <guimenuitem>View - Scrolling</guimenuitem> submenu: 
+        <itemizedlist>
+        <listitem><para> <guimenuitem>Scroll and Center Caret</guimenuitem> </para></listitem>
+        <listitem><para> <guimenuitem>Scroll to Line</guimenuitem></para>
+        </listitem>
+        </itemizedlist>
+      </para>
+      
+      <para> From the <guimenuitem>View - Docking</guimenuitem> submenu:
+        <itemizedlist>
+          <listitem><para> <guimenuitem>Toggle Docked Areas</guimenuitem> </para></listitem>
+          <listitem><para> <guimenuitem>Close current docking area</guimenuitem> </para></listitem>
+        </itemizedlist>
+      </para>
+      
+      
+      <para> In general, jEdit is a keyboard-friendly editor that is also
+      mouse-friendly, so you should never be forced to use a mouse to do anything. </para>
+    </section>
 
     <section id="entering-text">
         <title>Inserting and Deleting Text</title>
