@@ -126,7 +126,7 @@
                     the allocation of memory to the heap for Java objects
                     created by the Java Virtual Machine in which jEdit is
                     running. Add a command line option
-                    <userinput>-Xmx640m</userinput> to the options passed to the
+                    <userinput>-mx640m</userinput> to the options passed to the
                     version of the Java application loader you are using (such
                     as <filename>java</filename>, <filename>java.exe</filename>
                     or <filename>javaw.exe</filename>). In place of the
@@ -134,19 +134,15 @@
                     of megabytes you think is appropriate for the maximum heap
                     size. If you already are using the option, try doubling it. 
                     </para>
-                    <para>If you are using the <userinput>-jar</userinput>
-                    command line option with Java to run jEdit, remember that
-                    the <userinput>-jar</userinput> parameter must be the last
-                    Java option, followed immediately by the path to
-                    <filename>jedit.jar</filename> and then any jEdit command
-                    line options.</para>
+                    
+                    <para> For more information about JVM options, see the <ulink url="jeditresource:/doc/users-guide/jvm-options.html">page on JVM options</ulink> in the users guide. </para>
                     
                     <para> On Windows, if you are using the <literal>jedit.exe</literal> launcher, you can add
                     or change the JVM arguments by editing a file called <literal>jEdit.l4j.ini</literal> in the same directory
                     as the <literal>jedit.exe</literal>. Place one 
-                    JVM argument (e.g. <literal>-Xmx512m</literal>) on each
+                    JVM argument (e.g. <literal>-mx640m</literal>) on each
                     line by itself. </para> 
-                    
+                                       
                     <para>If out of memory errors occur while running a build or
                     compilation operation from within jEdit, you can also have
                     the operation run in an external process rather than inside
@@ -161,23 +157,26 @@
             </qandaentry>
             <qandaentry>
                 <question id="textarea-corruption">
-                    <para>My textarea gets confused about the end of the buffer or in some other way corrupted (the characters are in the wrong place on the screen) every now and then. What
-                    should I do?</para>
+                    <para>My textarea gets confused about the end of the buffer or in some other way corrupted (the characters are in the wrong place on the screen, or I get an exception when I scroll to the bottom). What should I do?</para>
                 </question>
                 <answer>
-                    <para>It happens to me sometimes too. I have this macro to work around it for now:
+                    <para>Before jEdit 5.0, it happened to me quite a bit too.
+                    I use this macro to help avoid the need to restart jEdit. 
 <programlisting>
 /** Reset_TextArea.bsh */
 view.splitVertically();
 view.unsplitCurrent();
 </programlisting>
 					Run this, and jEdit creates
-                    a new TextArea for you, and that one won't be confused. This
-                    can help avoid the need to restart jEdit. If you can
-                    reproduce the steps you took to cause this, please submit a
-                    bug report that details what plugins/versions you were
-                    using, and how to reproduce it. It may be specific to a file you are editing, or a particular combination of settings you are using, or sequence of actions you performed. </para>
-                </answer>
+                    a new TextArea for you, one that is in a valid state. </para>
+                    
+                    <para>If you can reproduce the steps you took to cause this,
+                    please submit a bug report that details what
+                    plugins/versions you were using, and how to reproduce it. It
+                    may be specific to a file you are editing, or a particular
+                    combination of settings you are using, or sequence of
+                    actions you performed. </para>
+                    </answer>
             </qandaentry>
             <qandaentry>
                 <question id="general-borders">
