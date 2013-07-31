@@ -426,7 +426,7 @@
                   <entry>Antialias the text in Swing components. </entry>
               </row>
               <row>
-                  <entry><userinput>"-Djedit.home=/path/to/jedit" </userinput>
+                  <entry><userinput>-Djedit.home=/path/to/jedit</userinput>
                   </entry> 
                   <entry> Sets/overrides the java System property
                   <literal>jedit.home</literal> to be the path to the jEdit

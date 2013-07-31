@@ -129,7 +129,11 @@
             <para>Like jEdit itself, plugins are written primarily in Java.
             While this guide assumes some working knowledge of the language, you
             are not required to be a Java wizard. If you can write a useful
-            application of any size in Java, you can write a plugin.</para>
+            application of any size in Java, you can write a plugin. </para>
+            
+            <para>Where applicable, this section will also explain how jEdit's
+            source code is similar. Therefore, this is also a good introduction to 
+            to jEdit development. </para>   
 
         </partintro>
 

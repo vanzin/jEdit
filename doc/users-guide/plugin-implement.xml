@@ -4,8 +4,8 @@
     <!-- :xml.root=users-guide.xml: -->
     <!-- :maxLineLen=80:wrap=soft: -->
     <title>Implementing a Simple Plugin</title>
-    <!-- jEdit 4 Plugin Guide, (C) 2001, 2002 John Gellene      -->
-    <!-- jEdit 4.5 Plugin Guide, (C) 2005, 2011 Alan Ezust      -->
+    <!-- jEdit Plugin Guide, (C) 2001-2013 John Gellene, Alan Ezust      -->
+
 
     <para>There are many applications for the leading operating systems that
     provide a <quote>scratch-pad</quote> or <quote>sticky note</quote> facility
@@ -315,7 +315,7 @@ options.quicknotepad.filepath=
     </section>
 
     <section id="plugin-implement-properties">
-        <title>The Property File</title>
+        <title>The Property Files</title>
 
         <para>jEdit maintains a list of <quote>properties</quote>, which are
         name/value pairs used to store human-readable strings, user settings,
@@ -453,8 +453,17 @@ options.quicknotepad.filepath=</programlisting>
             of property files.</para>
         </tip>
 
-    </section>
 
+      <section id="localizationfiles"> 
+      <title> Localization Files </title>
+      
+      <para> In addition to property files ending in <literal>.props</literal>,
+      you will find property files with the names like       <literal>lang_de.properties</literal>. Each of these files provides
+      localized strings for a particular locale. In the example above, it is for the German locale. These files are loaded by jEdit automatically when that locale is in use. They need to have a different filename extension from the other property files so they can be treated differently from 
+      the regular properties. </para>
+      </section>
+      
+    </section>
     <section id="plugin-implement-editbus">
         <title>The EditBus</title>
 
@@ -542,9 +551,9 @@ else if(msg instanceof ViewUpdate) {
     </section>
 
     <section id="plugin-implement-actions">
-        <title>The Actions Catalog</title>
+        <title>The Actions.xml Catalog</title>
 
-        <para>Actions define procedures that can be bound to a menu item, a
+        <para>In jEdit as well as in Plugins, actions define procedures that can be bound to a menu item, a
         toolbar button or a keyboard shortcut. Most plugin Actions <footnote>
                 <para>Some plugins, such as Sidekick, Console, and
                 ProjectViewer, create pure Java EditAction-derived Actions,
@@ -591,6 +600,11 @@ else if(msg instanceof ViewUpdate) {
 &lt;/ACTIONS&gt;</programlisting>
         </informalexample>
 
+        <tip> <title> Actions in jEdit core </title>
+        <para> You can see how each action in jEdit core is implemented by
+        inspecting the <literal>actions.xml</literal> file that is there. </para>
+        </tip>        
+        
         <para>This file defines three actions. They each use a built-in variable
         <literal>wm</literal>, which refers to the current view's <ulink
         url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
@@ -636,7 +650,7 @@ else if(msg instanceof ViewUpdate) {
         and on small buttons) and a title (for display in the floating window's
         title bar).</para>
 
-        <para>The jEdit plugin API uses BeanShell to create the top-level
+        <para>The jEdit API uses BeanShell to create the top-level
         visible container of a plugin's interface. The BeanShell code is
         contained in a file named <filename>dockables.xml</filename>. It usually
         is quite short, providing only a single BeanShell expression used to
@@ -684,6 +698,12 @@ else if(msg instanceof ViewUpdate) {
         also contains the public interface you should use for getting, showing,
         hiding, and other interactions with the plugin's top-level
         windows.</para>
+        
+        
+        <tip> <title> jEdit's dockables </title> <para> jEdit has its own
+        <literal>dockables.xml</literal> file that you can inspect to see how
+        jEdit creates its own dockables. </para> </tip>
+        
     </section>
 
     <section id="plugin-implement-services">
@@ -696,11 +716,11 @@ else if(msg instanceof ViewUpdate) {
         defined in the XML plugin. In a way, the dependency is
         bidirectional.</para>
 
-        <para>Similarly, the AntFarm plugin defines but does not instantiate a
-        <literal>Shell</literal> object. It is the Console plugin which creates
-        a specific shell for each available service. SideKick and Console use
-        the ServiceManager to search for services offered by other
-        plugins.</para>
+        <para>Similarly, the SshConsole plugin defines but does not instantiate
+        a <literal>Shell</literal> object. It is the Console plugin which
+        creates a specific shell for each available service. SideKick and
+        Console use the <literal>ServiceManager</literal> to search for services
+        offered by other plugins.</para>
 
         <para>Here is an example of a service from the XML plugin, which extends
         Sidekick:</para>
@@ -733,7 +753,10 @@ else if(msg instanceof ViewUpdate) {
         <para>For more information about services, refer to the <ulink
         url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink>
         class API documentation. There, you can find out what the tags and
-        attributes mean, as well as how to register and use services.</para>
+        attributes mean, as well as how to register and use services.
+        You can also inspect the <literal>services.xml</literal> file of jEdit
+        core to see what services are offered by jEdit itself. </para>
+        
     </section>
 
     <section id="plugin-implement-quicknotepad">
