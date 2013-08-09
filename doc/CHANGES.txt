@@ -15,6 +15,8 @@ and Alan Ezust for contributing to this release.
 - Reload optionally dependent plugins when a plugin is unloaded.
   (#3614456 - Dale Anson)
 
+- Fix #3614883: Alt+'f' multiply bound in "Search and Replace" dialog  
+  
 }}}
 {{{ API Changes
 

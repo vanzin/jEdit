@@ -198,6 +198,7 @@ select-prev-line.shortcut=S+UP
 next-line.shortcut=DOWN
 select-next-line.shortcut=S+DOWN
 insert-newline-indent.shortcut=ENTER
+insert-newline.shortcut=S+ENTER
 insert-tab-indent.shortcut=TAB
 #}}}
 

@@ -2,74 +2,8 @@
  * Emulate GNU Emacs's (kill-line) function (typically bound to Ctrl-K)
  */
 
-source (MiscUtilities.constructPath(dirname(scriptPath), "EmacsUtil.bsh"));
+import org.jedit.keymap.EmacsUtil;
 
-void emacsKillLine()
-{
-    boolean lastActionWasThis = repeatingSameMacro ("Emacs/Emacs_Kill_Line");
-
-    caret = textArea.getCaretPosition();
-    caretLine = textArea.getCaretLine();
-    lineStart = textArea.getLineStartOffset (caretLine);
-    lineEnd = textArea.getLineEndOffset (caretLine);
-
-    // If we're at the end of line (ignoring any trailing white space),
-    // then kill the newline, too.
-    
-    caret2 = caret + 1;
-    while (caret2 < lineEnd)
-    {
-        ch = charAt (caret2);
-        
-        if (! Character.isWhitespace (ch))
-            break;
-
-        caret2++;
-    }
-
-    String deletedText = null;
-    Selection selection = null;
-
-    if (caret2 == lineEnd)
-    {
-        // We're at the end of the line. Join this line and the next line--but
-        // do it with a true delete, not with textArea.joinLines(), to
-        // emulate emacs better.
-
-        if (caretLine != textArea.getLastPhysicalLine())
-            selection = new Selection.Range (caret, caret2);
-    }
-
-    else
-    {
-        // Simple delete to end of line.
-
-        selection = new Selection.Range (caret, lineEnd - 1);
-        //textArea.deleteToEndOfLine();
-    }
-
-    if (selection != null)
-    {
-        textArea.setSelection (selection);
-        deletedText = textArea.getSelectedText();
-        textArea.replaceSelection ("");
-        textArea.removeFromSelection (selection);
-
-        if (lastActionWasThis)
-        {
-            clipboard = getClipboard();
-            if (clipboard == null)
-                clipboard = "";
-
-            setClipboard (clipboard + deletedText);
-        }
-
-        else
-        {
-            setClipboard (deletedText);
-        }
-    }
-}
-
-emacsKillLine();
+emacsUtil = new EmacsUtil();
+emacsUtil.emacsKillLine();
 
