@@ -17,5 +17,5 @@ Type=Application
 Categories=Development;TextEditor;
 StartupNotify=true
 MimeType=text/plain;
-StartupWMClass=org-gjt-sp-jedit-jEdit
+StartupWMClass=jedit
 Keywords=Code;Editor;Programming;PHP;FTP;
