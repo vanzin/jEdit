@@ -2156,8 +2156,7 @@ macro.rs.CutLinesContaining.LinesCut.message=Zeile(n) ausgeschnitten
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Spalte (zwischen 1 und
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=Spalte (zwischen 1 und {0}):
 #}}}
 
 #{{{ Key Words to Uppercase

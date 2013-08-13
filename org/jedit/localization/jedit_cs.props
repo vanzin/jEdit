@@ -2127,8 +2127,7 @@ macro.rs.CutLinesContaining.LinesCut.message=řadka/y vyjmuta
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Sloupec (mezi 1 a
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=Sloupec (mezi 1 a {0}):
 #}}}
 
 #{{{ Key Words to Uppercase

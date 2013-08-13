@@ -7,10 +7,6 @@
  *
  * $Id$
  */
- 
-//Localization
-final static String ColumnBeforeLabel   = jEdit.getProperty("macro.rs.GoToColumn.ColumnBefore.label",  "Column (between 1 and");
-final static String ColumnAfterLabel   = jEdit.getProperty("macro.rs.GoToColumn.ColumnAfter.label",  "):");
 
 //Process
 goToColumn()
@@ -19,7 +15,7 @@ goToColumn()
 	len = textArea.getLineLength(line) + 1;
 	while(true)
 	{
-		col = Macros.input(view, ColumnBeforeLabel + " " + len + " " + ColumnAfterLabel);
+		col = Macros.input(view, jEdit.getProperty("macro.rs.GoToColumn.label", new Integer[]{len}));
 		if(col == null)
 			return;
 		else

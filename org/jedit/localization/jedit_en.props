@@ -2132,8 +2132,7 @@ macro.rs.CutLinesContaining.LinesCut.message=line(s) cut
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Column (between 1 and
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=Column (between 1 and {0}):
 #}}}
 
 # Go To Offset

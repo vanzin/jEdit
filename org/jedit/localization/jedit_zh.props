@@ -2112,8 +2112,7 @@ macro.rs.CutLinesContaining.LinesCut.message=行以剪切
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=列 (在 1 和
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=列 (在 1 和 {0}):
 #}}}
 
 #{{{ Key Words to Uppercase

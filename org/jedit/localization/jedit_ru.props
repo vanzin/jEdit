@@ -2112,8 +2112,7 @@ macro.rs.CutLinesContaining.LinesCut.message=строк вырезано
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Столбец (межды 1 и
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=Столбец (межды 1 и {0}):
 #}}}
 
 #{{{ Key Words to Uppercase

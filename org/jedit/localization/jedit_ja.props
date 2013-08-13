@@ -2126,8 +2126,7 @@ macro.rs.CutLinesContaining.LinesCut.message=行切り取り
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=列 ( 1 から
-macro.rs.GoToColumn.ColumnAfter.label=の間で指定):
+macro.rs.GoToColumn.label=列 ( 1 から {0} の間で指定):
 #}}}
 
 #{{{ Key Words to Uppercase

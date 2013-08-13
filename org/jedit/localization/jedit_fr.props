@@ -2123,8 +2123,7 @@ macro.rs.CutLinesContaining.LinesCut.message=ligne(s) coupées
 #{{{ Editing
 
 #{{{ Go to column
-macro.rs.GoToColumn.ColumnBefore.label=Colonne (entre 1 et
-macro.rs.GoToColumn.ColumnAfter.label=):
+macro.rs.GoToColumn.label=Colonne (entre 1 et {0}):
 #}}}
 
 #{{{ Key Words to Uppercase
