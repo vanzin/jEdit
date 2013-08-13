@@ -2136,6 +2136,9 @@ macro.rs.GoToColumn.ColumnBefore.label=Column (between 1 and
 macro.rs.GoToColumn.ColumnAfter.label=):
 #}}}
 
+# Go To Offset
+macro.rs.GoToOffset.label=Offset (between 0 and {0}): 
+
 #{{{ Key Words to Uppercase
 macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=Converted Keywords to Upper Case
 #}}}
