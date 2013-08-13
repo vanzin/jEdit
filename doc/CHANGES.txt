@@ -42,6 +42,11 @@ and Alan Ezust for contributing to this release.
   (#3614607, Patrick Eibl)
 
 }}}
+{{{ Miscellaneous
+
+- New macros: Go To Offset, Reverse Selection (#3614563, #3614564 Thomas Meyer)
+
+}}}
 
 }}}
 
