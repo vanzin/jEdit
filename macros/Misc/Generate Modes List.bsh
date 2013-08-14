@@ -5,7 +5,6 @@ import org.gjt.sp.jedit.io.EncodingServer;
 modeList = jEdit.getModes();
 sbuffer = new StringBuffer();
 htmlBuffer = jEdit.openFile(editPane, "editModeList.html");
-editPane.setBuffer(htmlBuffer);
 
 sbuffer.append("<html><head><title> Supported jEdit Edit Modes </title></head>\n");
 sbuffer.append("<!--    :elasticTabstops=true: -->\n");
@@ -22,6 +21,7 @@ sbuffer.append(" Generated from macro <tt>" + scriptPath + "</tt> </p>");
 sbuffer.append("\n</body></html>\n");
 
 htmlBuffer.insert(0, sbuffer.toString());
-// set elastic tabstops for this one. 
 
+// set elastic tabstops (causes bug# 3614248)
 htmlBuffer.setBooleanProperty("elasticTabstops", true);
+

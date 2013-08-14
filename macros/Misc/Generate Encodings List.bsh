@@ -6,7 +6,7 @@ nameSet = EncodingServer.getAvailableNames();
 sbuffer = new StringBuffer();
 
 htmlBuffer = jEdit.openFile(editPane, "encodingsList.html");
-editPane.setBuffer(htmlBuffer);
+
 itr = nameSet.iterator();
 int i=0;
 sbuffer.append("<html><head><title> Supported jEdit Encodings </title></head>\n");
@@ -27,6 +27,6 @@ sbuffer.append(" Generated from macro <tt>" + scriptPath + "</tt> </p>");
 sbuffer.append("</body></html>\n");
 
 htmlBuffer.insert(0, sbuffer.toString());
-// set elastic tabstops for this one. 
-
+// set elastic tabstops for this one. (causes bug# 3614248) 
 htmlBuffer.setBooleanProperty("elasticTabstops", true);
+
