@@ -22,24 +22,14 @@
 
 package org.gjt.sp.jedit;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.buffer.FoldHandlerProvider;
+import java.util.*;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.jedit.buffer.FoldHandlerProvider;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 
 /**
  * A generic way for plugins (and core) to provide various API extensions.<p>
@@ -119,7 +109,7 @@ public class ServiceManager
 		ServiceListHandler dh = new ServiceListHandler(plugin,uri);
 		try
 		{
-			java.io.InputStream in = uri.openStream();
+			InputStream in = uri.openStream();
 			if(in == null)
 			{
 				// this happened when calling generateCache() in the context of 'find orphan jars'
@@ -171,9 +161,8 @@ public class ServiceManager
 	 *
 	 * @since jEdit 4.2pre1
 	 */
-	public static void registerService(@Nonnull String clazz,
-					   @Nonnull String name,
-					   String code, PluginJAR plugin)
+	public static void registerService(String clazz, String name,
+		String code, PluginJAR plugin)
 	{
 		Descriptor d = new Descriptor(clazz,name,code,plugin);
 		serviceMap.put(d,d);
@@ -188,8 +177,7 @@ public class ServiceManager
 	 *
 	 * @since jEdit 4.2pre1
 	 */
-	public static void unregisterService(@Nonnull String clazz,
-					     @Nonnull String name)
+	public static void unregisterService(String clazz, String name)
 	{
 		Descriptor d = new Descriptor(clazz,name);
 		serviceMap.remove(d);
@@ -255,9 +243,7 @@ public class ServiceManager
 	 * @param name The service name
 	 * @since jEdit 4.2pre1
 	 */
-	@Nullable
-	public static Object getService(@Nonnull String clazz,
-					@Nonnull String name)
+	public static Object getService(String clazz, String name)
 	{
 
 		Descriptor key = new Descriptor(clazz,name);
@@ -327,15 +313,15 @@ public class ServiceManager
 		boolean instanceIsNull;
 
 		// this constructor keys the hash table
-		Descriptor(@Nonnull String clazz, @Nonnull String name)
+		Descriptor(String clazz, String name)
 		{
 			this.clazz = clazz;
 			this.name  = name;
 		}
 
 		// this constructor is the value of the hash table
-		Descriptor(@Nonnull String clazz, @Nonnull String name,
-			   String code, PluginJAR plugin)
+		Descriptor(String clazz, String name, String code,
+			PluginJAR plugin)
 		{
 			this.clazz  = clazz;
 			this.name   = name;
