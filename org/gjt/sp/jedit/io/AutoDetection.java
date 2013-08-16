@@ -22,16 +22,18 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -77,6 +79,7 @@ public class AutoDetection
 	 * Returns the user configured ordered list of encoding detectors.
 	 * This method reads property "encodingDetectors".
 	 */
+	@Nonnull
 	public static List<EncodingDetector> getEncodingDetectors()
 	{
 		List<EncodingDetector> detectors
@@ -210,7 +213,8 @@ public class AutoDetection
 	/**
 	 * Returns a service of EncodingDetector for name.
 	 */
-	private static EncodingDetector getEncodingDetectorService(String name)
+	@Nullable
+	private static EncodingDetector getEncodingDetectorService(@Nonnull String name)
 	{
 		String serviceClass = "org.gjt.sp.jedit.io.EncodingDetector";
 		Object service = ServiceManager.getService(serviceClass, name);

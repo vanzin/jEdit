@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project name="jedit"
 	 default="build"
 	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"
@@ -98,7 +99,7 @@
 
 	<target name="init-ivy"
 		depends="init,download-ivy"
-		unless="${ivy.done}">
+		unless="ivy.done">
 		<property name="ivy.retrieve.pattern"
 			  value="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"/>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml"
@@ -111,7 +112,7 @@
 	<target name="retrieve"
 		description="retrieve the dependencies"
 		depends="init,init-ivy"
-		unless="${ivy.done}">
+		unless="ivy.done">
 		<ivy:retrieve sync="true"/>
 		<ivy:retrieve pattern="${lib.dir}/ivy/[artifact]-[revision].[ext]"
 			      organisation="org.apache.ivy"
@@ -286,9 +287,9 @@
 				<include name="org/gjt/sp/jedit/buffer/LineManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/PositionManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/UndoManager.java"/>
-                
+
 				<include name="org/gjt/sp/jedit/bufferio/IoTask.java"/>
-                
+
 				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator.java"/>
 				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.java"/>
 				<include name="org/gjt/sp/jedit/gui/MutableListModel.java"/>
@@ -402,11 +403,8 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
+			<classpath refid="classpath.compile"/>
 			<compilerarg line="${config.build.compilerarg}"/>
-            <classpath id="classpath.compile">
-				<fileset dir="${lib.dir}/compile"
-					 includes="*.jar"/>
-			</classpath>
 		</javac>
 	</target>
 
@@ -435,7 +433,7 @@
 	</target>
 
 	<target name="build"
-		depends="init,retrieve,setup,compile"
+		depends="init,retrieve,setup,compile,test"
 		description="build the jEdit JAR-file with full debug-information">
 		<mkdir dir="${jar.location}"/>
 		<jar destfile="${jar.location}/${jar.filename}"
@@ -756,8 +754,7 @@
 				       includeAntRuntime="true">
 					<compilerarg line="${config.build.compilerarg}"/>
 				</javac>
-				<javadoc
-					 locale="en"
+				<javadoc locale="en"
 					 sourcepath="${basedir}"
 					 destdir="${classes.dir}/javadoc/api"
 					 packagenames="org.*"
@@ -774,19 +771,17 @@
 					 docencoding="UTF-8"
 					 charset="UTF-8">
 					<group title="jEdit 5 API"
-					       packages="org.jedit.*"/>					       
+					       packages="org.jedit.*"/>
 					<group title="jEdit 4 API"
-					       packages="org.gjt.*"/>
+					       packages="org.gjt.sp.*"/>
 					<group title="BeanShell"
 					       packages="org.gjt.sp.jedit.bsh*"/>
 					<tag name="todo" scope="all" description="To do:"/>
 					<tag name="example" scope="all" description="Example:"/>
-						<classpath>
-							<fileset dir="${classes.dir}/core/"
-								includes="*.class"/>
-							<fileset dir="${lib.dir}/compile"
-								includes="*.jar"/>
-						</classpath>
+					<classpath id="classpath.javadoc">
+						<path refid="classpath.compile"/>
+						<pathelement location="${classes.dir}/core"/>
+					</classpath>
 				</javadoc>
 			</contrib:else>
 		</contrib:if>
