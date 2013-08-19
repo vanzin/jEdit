@@ -64,7 +64,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	@Override
 	protected void _init()
 	{
-		allBindings = new Vector<KeyBinding>();
+		allBindings = new Vector<>();
 
 		setLayout(new BorderLayout(12, 12));
 
@@ -83,8 +83,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		ActionListener actionHandler = new ActionHandler();
 
-		ComboBoxModel model = new KeymapsModel();
-		keymaps = new JComboBox(model);
+		ComboBoxModel<String> model = new KeymapsModel();
+		keymaps = new JComboBox<>(model);
 		keymaps.setRenderer(new KeymapCellRenderer());
 		keymaps.setSelectedItem(keymapName);
 		duplicateKeymap.addActionListener(actionHandler);
@@ -105,7 +105,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		keymapBox.add(Box.createHorizontalGlue());
 
 		// combobox to choose action set
-		selectModel = new JComboBox(models);
+		selectModel = new JComboBox<>(models);
 		selectModel.addActionListener(actionHandler);
 		selectModel.setToolTipText(jEdit.getProperty("options.shortcuts.select.tooltip"));
 		Box north = Box.createHorizontalBox();
@@ -201,11 +201,11 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private JButton duplicateKeymap;
 	private JButton resetKeymap;
 	private JButton deleteKeymap;
-	private JComboBox keymaps;
+	private JComboBox<String> keymaps;
 	private JTable keyTable;
 	private Vector<ShortcutsModel> models;
 	private FilteredTableModel<ShortcutsModel> filteredModel;
-	private JComboBox selectModel;
+	private JComboBox<ShortcutsModel> selectModel;
 	private List<KeyBinding> allBindings;
 	private JTextField filterTF;
 
@@ -233,7 +233,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				return name.contains(filter);
 			}
 		};
-		models = new Vector<ShortcutsModel>();
+		models = new Vector<>();
 		reloadModels();
 	} //}}}
 
@@ -242,8 +242,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	{
 		models.clear();
 		allBindings.clear();
-		List<KeyBinding[]> allBindings = new ArrayList<KeyBinding[]>();
-		Collection<String> knownBindings = new HashSet<String>();
+		List<KeyBinding[]> allBindings = new ArrayList<>();
+		Collection<String> knownBindings = new HashSet<>();
 		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
 		{
@@ -298,7 +298,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	//{{{ createModel() method
 	private ShortcutsModel createModel(String actionSet, String modelLabel, String[] actions)
 	{
-		List<GrabKeyDialog.KeyBinding[]> bindings = new ArrayList<GrabKeyDialog.KeyBinding[]>(actions.length);
+		List<KeyBinding[]> bindings = new ArrayList<>(actions.length);
 
 		for(int i = 0; i < actions.length; i++)
 		{
@@ -319,7 +319,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	//{{{ addBindings() method
 	private void addBindings(String actionSet, String name, String label, Collection<KeyBinding[]> bindings)
 	{
-		GrabKeyDialog.KeyBinding[] b = new GrabKeyDialog.KeyBinding[2];
+		KeyBinding[] b = new KeyBinding[2];
 
 		b[0] = createBinding(actionSet, name,label,
 			selectedKeymap.getShortcut(name + ".shortcut"));
@@ -330,13 +330,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ createBinding() method
-	private GrabKeyDialog.KeyBinding createBinding(String actionSet, String name, String label, String shortcut)
+	private KeyBinding createBinding(String actionSet, String name, String label, String shortcut)
 	{
-		if(shortcut != null && shortcut.length() == 0)
+		if(shortcut != null && shortcut.isEmpty())
 			shortcut = null;
 
-		GrabKeyDialog.KeyBinding binding
-			= new GrabKeyDialog.KeyBinding(name,label,shortcut,false);
+		KeyBinding binding = new KeyBinding(name,label,shortcut,false);
 
 		binding.actionSet = actionSet;
 		allBindings.add(binding);
@@ -432,7 +431,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 										     "options.shortcuts.duplicatekeymap.dialog.label"),
 									     jEdit.getProperty(
 										     "options.shortcuts.duplicatekeymap.dialog.title"),
-									     JOptionPane.OK_CANCEL_OPTION);
+									     JOptionPane.QUESTION_MESSAGE);
 				if (newName == null)
 				{
 					return;
@@ -440,16 +439,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				newName = newName.replace(' ', '_');
 				KeymapManager manager = jEdit.getKeymapManager();
 				Collection<String> keymapNames = manager.getKeymapNames();
-				while (newName != null)
+				while (keymapNames.contains(newName))
 				{
-					if (!keymapNames.contains(newName))
-						break;
 					newName = JOptionPane.showInputDialog(ShortcutsOptionPane.this,
 										     jEdit.getProperty(
 											     "options.shortcuts.duplicatekeymap.keymapalreadyexists.label"),
 										     jEdit.getProperty(
 											     "options.shortcuts.duplicatekeymap.dialog.title"),
-										     JOptionPane.OK_CANCEL_OPTION);
+										     JOptionPane.QUESTION_MESSAGE);
 					if (newName == null)
 					{
 						return;
@@ -504,17 +501,17 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private class ShortcutsModel extends AbstractTableModel
 	{
 		public static final String ALL = "All";
-		private final List<GrabKeyDialog.KeyBinding[]> bindings;
+		private final List<KeyBinding[]> bindings;
 		private final String name;
 
-		ShortcutsModel(String name, List<GrabKeyDialog.KeyBinding[]> bindings)
+		ShortcutsModel(String name, List<KeyBinding[]> bindings)
 		{
 			this.name = name;
 			this.bindings = bindings;
 			sort(0);
 		}
 
-		public List<GrabKeyDialog.KeyBinding[]> getBindings()
+		public List<KeyBinding[]> getBindings()
 		{
 			return bindings;
 		}
@@ -593,7 +590,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public void save()
 		{
-			for (GrabKeyDialog.KeyBinding[] binding : bindings)
+			for (KeyBinding[] binding : bindings)
 			{
 				selectedKeymap.setShortcut(
 					binding[0].name + ".shortcut",
@@ -604,9 +601,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 		}
 
-		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
+		public KeyBinding getBindingAt(int row, int nr)
 		{
-			GrabKeyDialog.KeyBinding[] binding = bindings.get(row);
+			KeyBinding[] binding = bindings.get(row);
 			return binding[nr];
 		}
 
@@ -616,7 +613,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			return name;
 		}
 
-		private class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
+		private class KeyCompare implements Comparator<KeyBinding[]>
 		{
 			private final int col;
 
@@ -626,7 +623,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 
 			@Override
-			public int compare(GrabKeyDialog.KeyBinding[] k1, GrabKeyDialog.KeyBinding[] k2)
+			public int compare(KeyBinding[] k1, KeyBinding[] k2)
 			{
 				String label1 = k1[0].label.toLowerCase();
 				String label2 = k2[0].label.toLowerCase();
@@ -662,7 +659,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ KeymapsModel class
-	private static class KeymapsModel extends AbstractListModel implements ComboBoxModel
+	private static class KeymapsModel extends AbstractListModel<String> implements ComboBoxModel<String>
 	{
 		private String[] keymaps;
 
@@ -694,7 +691,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		//{{{ getElementAt() method
 		@Override
-		public Object getElementAt(int index)
+		public String getElementAt(int index)
 		{
 			return keymaps[index];
 		} //}}}
@@ -732,7 +729,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private static class KeymapCellRenderer extends DefaultListCellRenderer
 	{
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index,
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index,
 							      boolean isSelected, boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list, value, index, isSelected,
