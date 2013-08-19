@@ -93,16 +93,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		keymaps.addActionListener(actionHandler);
 		keymaps.setSelectedItem(selectedKeymap);
 
-		Box keymapBox = Box.createHorizontalBox();
+		JPanel keymapBox = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		keymapBox.add(new JLabel(jEdit.getProperty(
 			"options.shortcuts.keymap.label")));
-		keymapBox.add(Box.createHorizontalStrut(6));
 		keymapBox.add(keymaps);
 		keymapBox.add(Box.createHorizontalStrut(6));
 		keymapBox.add(duplicateKeymap);
 		keymapBox.add(resetKeymap);
 		keymapBox.add(deleteKeymap);
-		keymapBox.add(Box.createHorizontalGlue());
 
 		// combobox to choose action set
 		selectModel = new JComboBox<>(models);
