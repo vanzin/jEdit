@@ -22,8 +22,6 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import java.io.Closeable;
-
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -53,7 +51,7 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
+	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(220);
 
 	//{{{ removeAll() method
 	public void removeAll()
@@ -235,7 +233,7 @@ public class ModeProvider
 		}
 		finally
 		{
-			IOUtilities.closeQuietly((Closeable)grammar);
+			IOUtilities.closeQuietly(grammar);
 		}
 	} //}}}
 
