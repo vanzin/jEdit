@@ -1,0 +1,29 @@
+<html>
+<title> Text Area Package </title>
+<body>
+<p> Classes related to jEdit's TextArea. </p>
+
+<p> Since jEdit 4.2, many TextArea classes have been split into a base and derived class. This
+is an attempt to make an API partition for the standalone text area. So for example: </p>
+<ul>
+<li> @ref JEditBuffer and @ref Buffer were split into two classes. </li>
+<li> @ref MouseHandler and @ref TextAreaMouseHandler were split. </li>
+<li> @ref TextArea and @ref JEditTextArea were split. </li>
+<li> @ref StandaloneTextArea is a new class for other open source Java applications to reuse. 
+<li> @ref JEditEmbeddedTextArea is a new class for jEdit plugins to reuse. </li>
+</li>
+</ul>
+
+<h2> Keeping things separate </h2>
+<p>
+The embeddable TextArea includes the packages "textarea", "buffer", "syntax", and should
+include nothing else. This means that for the standalone and abstract base classes,
+we should only use classes from that set.
+</p>
+
+<p> To build the standalone textarea, "ant build-textArea", and you'll quickly see if you
+broke something by using a class that was not supposed to be used. </p>
+
+</p>
+</body>
+</html>

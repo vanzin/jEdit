@@ -1,0 +1,35 @@
+cLines = 2000;
+sLine = "insert into example a,b,c,d,e,f,g,h,i,h,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,a,b,c,d,e,f,g,h,i,h,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,a,b,c,d,e,f,g,h,i,h,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z values (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0);";
+newBuffer = true;
+
+SearchAndReplace.setSearchString(",");
+SearchAndReplace.setReplaceString(", ");
+SearchAndReplace.setBeanShellReplace(false);
+SearchAndReplace.setWholeWord(false);
+SearchAndReplace.setIgnoreCase(false);
+SearchAndReplace.setRegexp(false);
+
+if (newBuffer) {
+  jEdit.newFile(view);
+  buffer = textArea.getBuffer();
+  sb = new StringBuilder();
+  for (i=0; i<cLines; i++) {
+    sb.append(sLine);
+    sb.append('\n');
+  }
+  buffer.insert(0, sb.toString());
+}
+
+SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+sig = new java.util.concurrent.CountDownLatch(1);
+nStop = nStart = 0;
+
+nStart = System.currentTimeMillis();
+SearchAndReplace.replaceAll(view);
+nStop = System.currentTimeMillis();
+
+buffer.writeLock();
+buffer.insert(0, "time elapsed: " + ((nStop-nStart)/1000.0) + " s , per line: " + ((nStop-nStart)/1.0/cLines) + " ms\n");
+buffer.writeUnlock();
+buffer.setDirty(false);
+textArea.setCaretPosition(0);

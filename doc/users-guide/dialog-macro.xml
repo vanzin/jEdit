@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="dialog-macro">
+    <title>A Dialog-Based Macro</title>
+    <!-- jEdit 4.x Macro Guide, (C) 2001, 2002 John Gellene         -->
+    <!-- jEdit buffer-local properties:                             -->
+    <!-- :indentSize=1:noTabs=yes:maxLineLen=80:tabSize=2:          -->
+    <!-- :xml.root=users-guide.xml:                                 -->
+    <!-- This file contains an extended discussion of a             -->
+    <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"     -->
+    <!-- $Id$   -->
+
+    <para>Now we will look at a more complicated macro which will demonstrate
+    some useful techniques and BeanShell features.</para>
+
+    <section id="dialog-macro-intro">
+        <title>Use of the Macro</title>
+
+        <para>Our new example adds prefix and suffix text to a series of
+        selected lines. This macro can be used to reduce typing for a series of
+        text items that must be preceded and following by identical text. In
+        Java, for example, if we are interested in making a series of calls to
+        <function>StringBuffer.append()</function> to construct a lengthy,
+        formatted string, we could type the parameter for each call on
+        successive lines as follows:</para>
+
+        <screen>profileString_1
+secretThing.toString()
+name
+address
+addressSupp
+city
+<quote>state/province</quote>
+country</screen>
+
+        <para>Our macro would ask for input for the common <quote>prefix</quote>
+        and <quote>suffix</quote> to be applied to each line; in this case, the
+        prefix is <userinput>ourStringBuffer.append(</userinput> and the suffix
+        is <userinput>);</userinput>. After selecting these lines and running
+        the macro, the resulting text would look like this:</para>
+
+        <screen>ourStringBuffer.append(profileString_1);
+ourStringBuffer.append(secretThing.toString());
+ourStringBuffer.append(name);
+ourStringBuffer.append(address);
+ourStringBuffer.append(addressSupp);
+ourStringBuffer.append(city);
+ourStringBuffer.append(<quote>state/province</quote>);
+ourStringBuffer.append(country);</screen>
+    </section>
+
+    <section id="add-prefix-and-suffix">
+        <title>Listing of the Macro</title>
+
+        <para>The macro script follows. You can find it in the jEdit
+        distribution in the <filename>Text</filename> subdirectory of the
+        <filename>macros</filename> directory. You can also try it out by
+        invoking
+        <guimenu>Macros</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Add
+        Prefix and Suffix</guimenuitem>.</para>
+
+        <informalexample>
+            <!-- <title>Add_Prefix_and_Suffix.bsh</title> -->
+
+            <programlisting>// beginning of Add_Prefix_and_Suffix.bsh
+
+<anchor id="imports" />// import statement (see <xref linkend="explain-imports" />)
+import javax.swing.border.*;
+
+<anchor id="main-routine" />// main routine
+void prefixSuffixDialog()
+{
+<anchor id="create-dialog" />    // create dialog object (see <xref
+                    linkend="explain-create-dialog" />)
+    title = <quote>Add prefix and suffix to selected lines</quote>;
+    dialog = new JDialog(view, title, false);
+    content = new JPanel(new BorderLayout());
+    content.setBorder(new EmptyBorder(12, 12, 12, 12));
+    content.setPreferredSize(new Dimension(320, 160));
+    dialog.setContentPane(content);
+
+<anchor id="fields-panel" />    // add the text fields (see <xref
+                    linkend="explain-fields-panel" />)
+    fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
+    prefixField = new HistoryTextField(<quote>macro.add-prefix</quote>);
+    prefixLabel = new JLabel(<quote>Prefix to add:</quote>);
+    suffixField = new HistoryTextField(<quote>macro.add-suffix</quote>);
+    suffixLabel = new JLabel(<quote>Suffix to add:</quote>);
+    fieldPanel.add(prefixLabel);
+    fieldPanel.add(prefixField);
+    fieldPanel.add(suffixLabel);
+    fieldPanel.add(suffixField);
+    content.add(fieldPanel, <quote>Center</quote>);
+
+<anchor id="button-panel" />    // add a panel containing the buttons (see <xref
+                    linkend="explain-button-panel" />)
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new BoxLayout(buttonPanel,
+        BoxLayout.X_AXIS));
+    buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
+    buttonPanel.add(Box.createGlue());
+    ok = new JButton(<quote>OK</quote>);
+    cancel = new JButton(<quote>Cancel</quote>);
+    ok.setPreferredSize(cancel.getPreferredSize());
+    dialog.getRootPane().setDefaultButton(ok);
+    buttonPanel.add(ok);
+    buttonPanel.add(Box.createHorizontalStrut(6));
+    buttonPanel.add(cancel);
+    buttonPanel.add(Box.createGlue());
+    content.add(buttonPanel, <quote>South</quote>);
+
+<anchor id="add-listeners" />    // register this method as an ActionListener for
+    // the buttons and text fields (see <xref linkend="explain-add-listeners" />)
+    ok.addActionListener(this);
+    cancel.addActionListener(this);
+    prefixField.addActionListener(this);
+    suffixField.addActionListener(this);
+
+<anchor id="set-visible" />    // locate the dialog in the center of the
+    // editing pane and make it visible (see <xref linkend="explain-set-visible" />)
+    dialog.pack();
+    dialog.setLocationRelativeTo(view);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    dialog.setVisible(true);
+
+<anchor id="action-listener" />    // this method will be called when a button is clicked
+    // or when ENTER is pressed (see <xref linkend="explain-action-listener" />)
+    void actionPerformed(e)
+    {
+        if(e.getSource() != cancel)
+        {
+            processText();
+        }
+        dialog.dispose();
+    }
+
+<anchor id="process-text" />    // this is where the work gets done to insert
+    // the prefix and suffix (see <xref linkend="explain-process-text" />)
+    void processText()
+    {
+        prefix = prefixField.getText();
+        suffix = suffixField.getText();
+        if(prefix.length() == 0 &amp;&amp; suffix.length() == 0)
+            return;
+        prefixField.addCurrentToHistory();
+        suffixField.addCurrentToHistory();
+
+<anchor id="jEdit-calls" />        // text manipulation begins here using calls
+        // to jEdit methods  (see <xref linkend="explain-jedit-calls" />)
+        buffer.beginCompoundEdit();
+        selectedLines = textArea.getSelectedLines();
+        for(i = 0; i &lt; selectedLines.length; ++i)
+        {
+            offsetBOL = textArea.getLineStartOffset(
+                selectedLines[i]);
+            textArea.setCaretPosition(offsetBOL);
+            textArea.goToStartOfWhiteSpace(false);
+            textArea.goToEndOfWhiteSpace(true);
+            text = textArea.getSelectedText();
+            if(text == null) text = "";
+            textArea.setSelectedText(prefix + text + suffix);
+        }
+        buffer.endCompoundEdit();
+    }
+}
+
+<anchor id="main" />// this single line of code is the script's main routine
+// (see <xref linkend="explain-main" />)
+prefixSuffixDialog();
+
+// end of Add_Prefix_and_Suffix.bsh</programlisting>
+        </informalexample>
+    </section>
+
+    <section id="macro-analysis">
+        <title>Analysis of the Macro</title>
+
+        <section id="explain-imports">
+            <title>Import Statements</title>
+
+            <informalexample>
+                <programlisting>// import statement
+import javax.swing.border.*;</programlisting>
+            </informalexample>
+
+            <para>This macro makes use of classes in the
+            <literal>javax.swing.border</literal> package, which is not
+            automatically imported. As we mentioned previously (see <xref
+            linkend="first-example" />), jEdit's implementation of BeanShell
+            causes a number of classes to be automatically imported. Classes
+            that are not automatically imported must be identified by a full
+            qualified name or be the subject of an <function>import</function>
+            statement.</para>
+        </section>
+
+        <section id="explain-create-dialog">
+            <title>Create the Dialog</title>
+
+            <informalexample>
+                <programlisting>// create dialog object
+title = <quote>Add prefix and suffix to selected lines</quote>;
+dialog = new JDialog(view, title, false);
+content = new JPanel(new BorderLayout());
+content.setBorder(new EmptyBorder(12, 12, 12, 12));
+dialog.setContentPane(content);</programlisting>
+            </informalexample>
+
+            <para>To get input for the macro, we need a dialog that provides for
+            input of the prefix and suffix strings, an <guibutton>OK</guibutton>
+            button to perform text insertion, and a
+            <guibutton>Cancel</guibutton> button in case we change our mind. We
+            have decided to make the dialog window non-modal. This will allow us
+            to move around in the text buffer to find things we may need
+            (including text to cut and paste) while the macro is running and the
+            dialog is visible.</para>
+
+            <para>The Java object we need is a <classname>JDialog</classname>
+            object from the Swing package. To construct one, we use the
+            <function>new</function> keyword and call a
+            <glossterm>constructor</glossterm> function. The constructor we use
+            takes three parameters: the owner of the new dialog, the title to be
+            displayed in the dialog frame, and a <classname>boolean</classname>
+            parameter (<constant>true</constant> or <constant>false</constant>)
+            that specifies whether the dialog will be modal or non-modal. We
+            define the variable <varname>title</varname> using a string literal,
+            then use it immediately in the <classname>JDialog</classname>
+            constructor.</para>
+
+            <para>A <classname>JDialog</classname> object is a window containing
+            a single object called a <glossterm>content pane</glossterm>. The
+            content pane in turn contains the various visible components of the
+            dialog. A <classname>JDialog</classname> creates an empty content
+            pane for itself as during its construction. However, to control the
+            dialog's appearance as much as possible, we will separately create
+            our own content pane and attach it to the
+            <classname>JDialog</classname>. We do this by creating a
+            <classname>JPanel</classname> object. A
+            <classname>JPanel</classname> is a lightweight container for other
+            components that can be set to a given size and color. It also
+            contains a <glossterm>layout</glossterm> scheme for arranging the
+            size and position of its components. Here we are constructing a
+            <classname>JPanel</classname> as a content pane with a
+            <classname>BorderLayout</classname>. We put a
+            <classname>EmptyBorder</classname> inside it to serve as a margin
+            between the edge of the window and the components inside. We then
+            attach the <classname>JPanel</classname> as the dialog's content
+            pane, replacing the dialog's home-grown version.</para>
+
+            <para>A <classname>BorderLayout</classname> is one of the simpler
+            layout schemes available for container objects like
+            <classname>JPanel</classname>. A <classname>BorderLayout</classname>
+            divides the container into five sections: <quote>North</quote>,
+            <quote>South</quote>, <quote>East</quote>, <quote>West</quote> and
+            <quote>Center</quote>. Components are added to the layout using the
+            container's <function>add</function> method, specifying the
+            component to be added and the section to which it is assigned.
+            Building a component like our dialog window involves building a set
+            of nested containers and specifying the location of each of their
+            member components. We have taken the first step by creating a
+            <classname>JPanel</classname> as the dialog's content pane.</para>
+        </section>
+
+        <section id="explain-fields-panel">
+            <title>Create the Text Fields</title>
+
+            <informalexample>
+                <programlisting>// add the text fields
+fieldPanel = new JPanel(new GridLayout(4, 1, 0, 6));
+prefixField = new HistoryTextField("macro.add-prefix");
+prefixLabel = new JLabel(<quote>Prefix to add</quote>:);
+suffixField = new HistoryTextField(<quote>macro.add-suffix</quote>);
+suffixLabel = new JLabel(<quote>Suffix to add:</quote>);
+fieldPanel.add(prefixLabel);
+fieldPanel.add(prefixField);
+fieldPanel.add(suffixLabel);
+fieldPanel.add(suffixField);
+content.add(fieldPanel, <quote>Center</quote>);</programlisting>
+            </informalexample>
+
+            <para>Next we shall create a smaller panel containing two fields for
+            entering the prefix and suffix text and two labels identifying the
+            input fields.</para>
+
+            <para>For the text fields, we will use jEdit's <ulink
+            url="../api/org/gjt/sp/jedit/gui/HistoryTextField.html">HistoryTextField</ulink>
+            class. It is derived from the Java Swing class
+            <classname>JTextField</classname>. This class offers the enhancement
+            of a stored list of prior values used as text input. When the
+            component has input focus, the up and down keys scroll through the
+            prior values for the variable. <!-- The prior values are stored in a file named
+    <filename>history</filename> located in the directory in which jEdit stores
+    various user data. --></para>
+
+            <para>To create the <ulink
+            url="../api/org/gjt/sp/jedit/gui/HistoryTextField.html">HistoryTextField</ulink>
+            objects we use a constructor method that takes a single parameter:
+            the name of the tag under which history values will be stored. Here
+            we choose names that are not likely to conflict with existing jEdit
+            history items.</para>
+
+            <para>The labels that accompany the text fields are
+            <classname>JLabel</classname> objects from the Java Swing package.
+            The constructor we use for both labels takes the label text as a
+            single <classname>String</classname> parameter.</para>
+
+            <para>We wish to arrange these four components from top to bottom,
+            one after the other. To achieve that, we use a
+            <classname>JPanel</classname> container object named
+            <varname>fieldPanel</varname> that will be nested inside the
+            dialog's content pane that we have already created. In the
+            constructor for <varname>fieldPanel</varname>, we assign a new
+            <classname>GridLayout</classname> with the indicated parameters:
+            four rows, one column, zero spacing between columns (a meaningless
+            element of a grid with only one column, but nevertheless a required
+            parameter) and spacing of six pixels between rows. The spacing
+            between rows spreads out the four <quote>grid</quote> elements.
+            After the components, the panel and the layout are specified, the
+            components are added to <varname>fieldPanel</varname> top to bottom,
+            one <quote>grid cell</quote> at a time. Finally, the complete
+            <varname>fieldPanel</varname> is added to the dialog's content pane
+            to occupy the <quote>Center</quote> section of the content
+            pane.</para>
+        </section>
+
+        <section id="explain-button-panel">
+            <title>Create the Buttons</title>
+
+            <informalexample>
+                <programlisting>// add the buttons
+buttonPanel = new JPanel();
+buttonPanel.setLayout(new BoxLayout(buttonPanel,
+    BoxLayout.X_AXIS));
+buttonPanel.setBorder(new EmptyBorder(12, 50, 0, 50));
+buttonPanel.add(Box.createGlue());
+ok = new JButton(<quote>OK</quote>);
+cancel = new JButton(<quote>Cancel</quote>);
+ok.setPreferredSize(cancel.getPreferredSize());
+dialog.getRootPane().setDefaultButton(ok);
+buttonPanel.add(ok);
+buttonPanel.add(Box.createHorizontalStrut(6));
+buttonPanel.add(cancel);
+buttonPanel.add(Box.createGlue());
+content.add(buttonPanel, <quote>South</quote>);</programlisting>
+            </informalexample>
+
+            <para>To create the dialog's buttons, we follow repeat the
+            <quote>nested container</quote> pattern we used in creating the text
+            fields. First, we create a new, nested panel. This time we use a
+            <classname>BoxLayout</classname> that places components either in a
+            single row or column, depending on the parameter passed to its
+            constructor. This layout object is more flexible than a
+            <classname>GridLayout</classname> in that variable spacing between
+            elements can be specified easily. We put an
+            <classname>EmptyBorder</classname> in the new panel to set margins
+            for placing the buttons. Then we create the buttons, using a
+            <classname>JButton</classname> constructor that specifies the button
+            text. After setting the size of the <guilabel>OK</guilabel> button
+            to equal the size of the <guilabel>Cancel</guilabel> button, we
+            designate the <guilabel>OK</guilabel> button as the default button
+            in the dialog. This causes the <guilabel>OK</guilabel> button to be
+            outlined when the dialog if first displayed. Finally, we place the
+            buttons side by side with a 6 pixel gap between them (for aesthetic
+            reasons), and place the completed <varname>buttonPanel</varname> in
+            the <quote>South</quote> section of the dialog's content
+            pane.</para>
+        </section>
+
+        <section id="explain-add-listeners">
+            <title>Register the Action Listeners</title>
+
+            <informalexample>
+                <programlisting>// register this method as an ActionListener for
+// the buttons and text fields
+ok.addActionListener(this);
+cancel.addActionListener(this);
+prefixField.addActionListener(this);
+suffixField.addActionListener(this);</programlisting>
+            </informalexample>
+
+            <para>In order to specify the action to be taken upon clicking a
+            button or pressing the <keycap>Enter</keycap> key, we must register
+            an <classname>ActionListener</classname> for each of the four active
+            components of the dialog - the two <ulink
+            url="../api/org/gjt/sp/jedit/HistoryTextField.html">HistoryTextField</ulink>
+            components and the two buttons. In Java, an
+            <classname>ActionListener</classname> is an
+            <glossterm>interface</glossterm> - an abstract specification for a
+            derived class to implement. The
+            <classname>ActionListener</classname> interface contains a single
+            method to be implemented:</para>
+
+            <funcsynopsis>
+                <funcprototype>
+                    <funcdef>public void
+                    <function>actionPerformed</function></funcdef>
+
+                    <paramdef>ActionEvent <parameter>e</parameter></paramdef>
+                </funcprototype>
+            </funcsynopsis>
+
+            <para>BeanShell does not permit a script to create derived classes.
+            However, BeanShell offers a useful substitute: a method can be used
+            as a scripted object that can include nested methods implementing a
+            number of Java interfaces. The method
+            <function>prefixSuffixDialog()</function> that we are writing can
+            thus be treated as an <classname>ActionListener</classname> object.
+            To accomplish this, we call <function>addActionListener()</function>
+            on each of the four components specifying <varname>this</varname> as
+            the <classname>ActionListener</classname>. We still need to
+            implement the interface. We will do that shortly.</para>
+        </section>
+
+        <section id="explain-set-visible">
+            <title>Make the Dialog Visible</title>
+
+            <informalexample>
+                <programlisting>// locate the dialog in the center of the
+// editing pane and make it visible
+dialog.pack();
+dialog.setLocationRelativeTo(view);
+dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+dialog.setVisible(true);</programlisting>
+            </informalexample>
+
+            <para>Here we do three things. First, we activate all the layout
+            routines we have established by calling the
+            <function>pack()</function> method for the dialog as the top-level
+            window. Next we center the dialog's position in the active jEdit
+            <varname>view</varname> by calling
+            <function>setLocationRelativeTo()</function> on the dialog. We also
+            call the <function>setDefaultCloseOperation()</function> function to
+            specify that the dialog box should be immediately disposed if the
+            user clicks the close box. Finally, we activate the dialog by
+            calling <function>setVisible()</function>with the state parameter
+            set to <constant>true</constant>.</para>
+
+            <para>At this point we have a decent looking dialog window that
+            doesn't do anything. Without more code, it will not respond to user
+            input and will not accomplish any text manipulation. The remainder
+            of the script deals with these two requirements.</para>
+        </section>
+
+        <section id="explain-action-listener">
+            <title>The Action Listener</title>
+
+            <informalexample>
+                <programlisting>// this method will be called when a button is clicked
+// or when ENTER is pressed
+void actionPerformed(e)
+{
+    if(e.getSource() != cancel)
+    {
+        processText();
+    }
+    dialog.dispose();
+}</programlisting>
+            </informalexample>
+
+            <para>The method <function>actionPerformed()</function> nested
+            inside <function>prefixSuffixDialog()</function> implements the
+            implicit <classname>ActionListener</classname> interface. It looks
+            at the source of the <classname>ActionEvent</classname>, determined
+            by a call to <function>getSource()</function>. What we do with this
+            return value is straightforward: if the source is not the
+            <guibutton>Cancel</guibutton> button, we call the
+            <function>processText()</function> method to insert the prefix and
+            suffix text. Then the dialog is closed by calling its
+            <function>dispose()</function> method.</para>
+
+            <para>The ability to implement interfaces like
+            <classname>ActionListener</classname> inside a BeanShell script is
+            one of the more powerful features of the BeanShell package. this
+            technique is discussed in the next chapter; see <xref
+            linkend="macro-tips-BeanShell-class" />.</para>
+        </section>
+
+        <section id="explain-process-text">
+            <title>Get the User's Input</title>
+
+            <informalexample>
+                <programlisting>// this is where the work gets done to insert
+// the prefix and suffix
+void processText()
+{
+    prefix = prefixField.getText();
+    suffix = suffixField.getText();
+    if(prefix.length() == 0 &amp;&amp; suffix.length() == 0)
+        return;
+    prefixField.addCurrentToHistory();
+    suffixField.addCurrentToHistory();</programlisting>
+            </informalexample>
+
+            <para>The method <function>processText()</function> does the work of
+            our macro. First we obtain the input from the two text fields with a
+            call to their <function>getText()</function> methods. If they are
+            both empty, there is nothing to do, so the method returns. If there
+            is input, any text in the field is added to that field's stored
+            history list by calling <function>addCurrentToHistory()</function>.
+            We do not need to test the <varname>prefixField</varname> or
+            <varname>suffixField</varname> controls for
+            <constant>null</constant> or empty values because
+            <function>addCurrentToHistory()</function> does that
+            internally.</para>
+        </section>
+
+        <section id="explain-jedit-calls">
+            <title>Call jEdit Methods to Manipulate Text</title>
+
+            <informalexample>
+                <programlisting>    // text manipulation begins here using calls
+    // to jEdit methods
+    buffer.beginCompoundEdit();
+    selectedLines = textArea.getSelectedLines();
+    for(i = 0; i &lt; selectedLines.length; ++i)
+    {
+        offsetBOL = textArea.getLineStartOffset(
+            selectedLines[i]);
+        textArea.setCaretPosition(offsetBOL);
+        textArea.goToStartOfWhiteSpace(false);
+        textArea.goToEndOfWhiteSpace(true);
+        text = textArea.getSelectedText();
+        if(text == null) text = "";
+        textArea.setSelectedText(prefix + text + suffix);
+    }
+    buffer.endCompoundEdit();
+}</programlisting>
+            </informalexample>
+
+            <para>The text manipulation routine loops through each selected line
+            in the text buffer. We get the loop parameters by calling
+            <function>textArea.getSelectedLines()</function>, which returns an
+            array consisting of the line numbers of every selected line. The
+            array includes the number of the current line, whether or not it is
+            selected, and the line numbers are sorted in increasing order. We
+            iterate through each member of the <varname>selectedLines</varname>
+            array, which represents the number of a selected line, and apply the
+            following routine:</para>
+
+            <itemizedlist>
+                <listitem>
+                    <para>Get the buffer position of the start of the line
+                    (expressed as a zero-based index from the start of the
+                    buffer) by calling
+                    <function>textArea.getLineStartOffset(selectedLines[i])</function>;</para>
+                </listitem>
+
+                <listitem>
+                    <para>Move the caret to that position by calling
+                    <function>textArea.setCaretPosition()</function>;</para>
+                </listitem>
+
+                <listitem>
+                    <para>Find the first and last non-whitespace characters on
+                    the line by calling
+                    <function>textArea.goToStartOfWhiteSpace()</function> and
+                    <function>textArea.goToEndOfWhiteSpace()</function>;</para>
+
+                    <para>The <function>goTo...</function> methods in <ulink
+                    url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
+                    take a single parameter which tells jEdit whether the text
+                    between the current caret position and the desired position
+                    should be selected. Here, we call
+                    <function>textArea.goToStartOfWhiteSpace(false)</function>
+                    so that no text is selected, then call
+                    <function>textArea.goToEndOfWhiteSpace(true)</function> so
+                    that all of the text between the beginning and ending
+                    whitespace is selected.</para>
+                </listitem>
+
+                <listitem>
+                    <para>Retrieve the selected text by storing the return value
+                    of <function>textArea.getSelectedText()</function> in a new
+                    variable <function>text</function>.</para>
+
+                    <para>If the line is empty,
+                    <function>getSelectedText()</function> will return
+                    <constant>null</constant>. In that case, we assign an empty
+                    string to <varname>text</varname> to avoid calling methods
+                    on a null object.</para>
+                </listitem>
+
+                <listitem>
+                    <para>Change the selected text to <varname>prefix + text +
+                    suffix</varname> by calling
+                    <function>textArea.setSelectedText()</function>. If there is
+                    no selected text (for example, if the line is empty), the
+                    prefix and suffix will be inserted without any intervening
+                    characters.</para>
+                </listitem>
+            </itemizedlist>
+
+            <sidebar>
+                <title>Compound edits</title>
+
+                <para>Note the <function>beginCompoundEdit()</function> and
+                <function>endCompoundEdit()</function> calls. These ensure that
+                all edits performed between the two calls can be undone in one
+                step. Normally, jEdit automatically wraps a macro call in these
+                methods; however if the macro shows a non-modal dialog box, as
+                far as jEdit is concerned the macro has finished executing by
+                the time the dialog is shown, since control returns to the event
+                dispatch thread.</para>
+
+                <para>If you do not understand this, don't worry; just keep it
+                in mind if your macro needs to show a non-modal dialog box for
+                some reason; Most macros won't.</para>
+            </sidebar>
+
+            <!-- <para>
+    The loop routine is bracketed by calls to
+    <function>buffer.beginCompoundEdit()</function> and
+    <function>buffer.endCompoundEdit()</function>.  These methods
+    modify the way in which jEdit's undo facility performs.  Text
+    operations done between calls to these functions will be
+    treated as a single operation for undo purposes.  A single undo
+    command issued immediately after the macro completes will thus remove
+    the prefix and suffix text from all of the previously selected lines.
+  </para> -->
+        </section>
+
+        <section id="explain-main">
+            <title>The Main Routine</title>
+
+            <informalexample>
+                <programlisting>// this single line of code is the script's main routine
+prefixSuffixDialog();</programlisting>
+            </informalexample>
+
+            <para>The call to <function>prefixSuffixDialog()</function>is the
+            only line in the macro that is not inside an enclosing block.
+            BeanShell treats such code as a top-level <function>main</function>
+            method and begins execution with it.</para>
+
+            <para>Our analysis of <filename>Add_Prefix_and_Suffix.bsh</filename>
+            is now complete. In the next section, we look at other ways in which
+            a macro can obtain user input, as well as other macro writing
+            techniques.</para>
+        </section>
+    </section>
+</chapter>

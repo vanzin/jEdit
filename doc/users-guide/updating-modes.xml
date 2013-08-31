@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="updating-modes">
+    <title>Updating Edit Modes</title>
+    <!-- jEdit buffer-local properties: -->
+    <!-- :indentSize=1:noTabs=true: -->
+    <!-- :xml.root=users-guide.xml: -->
+
+    <section id="currentmodeformat">
+        <title>From jEdit 4.2 to 4.4</title>
+
+        <orderedlist>
+            <listitem>
+                <para>All regular expressions in mode files were rewritten to
+                use <ulink
+                url="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html#sum">
+                java.util.regex</ulink> instead of <ulink
+                url="http://nlp.stanford.edu/nlp/javadoc/gnu-regexp-docs/syntax.html">
+                gnu.regexp</ulink>.</para>
+            </listitem>
+
+            <listitem>
+                <para><literal>HASH_CHAR</literal> handling of
+                <literal>xxx_REGEXP</literal> elements has been updated, as
+                explained in <xref linkend="mode-rule-span-regexp" />.</para>
+            </listitem>
+
+            <listitem>
+                <para>The <literal>EXCLUDE_MATCH</literal> attribute got
+                superseded by <literal>MATCH_TYPE</literal>. The attribute
+                values translate from <literal>TRUE</literal> to
+                <literal>CONTEXT</literal> and from <literal>FALSE</literal> to
+                <literal>RULE</literal>, respectively. For more information see
+                <xref linkend="mode-match-type" />.</para>
+            </listitem>
+
+            <listitem>
+               <para> <literal>NO_ESCAPE</literal> is now deprecated and ignored by the parsing engine.
+               <literal>ESCAPE</literal> is now a valid attribute for <literal>SPAN</literal> and <literal>SPAN_REGEXP</literal> rules.
+                </para>
+            </listitem>
+        </orderedlist>
+    </section>
+</chapter>

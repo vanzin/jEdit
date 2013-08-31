@@ -1,0 +1,16 @@
+These are the test cases for indentation related issues.
+
+Electric keys testing:
+01.cpp - std::
+02.py - if if else
+03.java - if broken in 2 lines and "? :" expression
+04.java - : inside a string literal or bracketing a single statement
+05.sh - a function beginning with a keyword in basic-like languages
+
+Typical cases where automatic indentation should work on current line:
+java, c:
+  {} brackets, a label ending with ":", 
+python:
+  "else:" should be indented left
+bash:
+  "fi" should go left

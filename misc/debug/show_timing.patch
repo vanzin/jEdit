@@ -1,0 +1,46 @@
+Index: org/gjt/sp/jedit/search/SearchAndReplace.java
+===================================================================
+--- org/gjt/sp/jedit/search/SearchAndReplace.java	(Revision 21683)
++++ org/gjt/sp/jedit/search/SearchAndReplace.java	(Arbeitskopie)
+@@ -853,7 +853,24 @@
+ 	{
+ 		return replaceAll(view,false);
+ 	} //}}}
+-	
++
++	private static long mCount;
++	private static long mTime;
++	private static long mStart;
++	private static long mEnd;
++	private static final int mMod = 1;
++	private static void startMeasurement() {
++		mCount++;
++		mStart = System.nanoTime();
++	}
++	private static void stopMeasurement() {
++		mEnd = System.nanoTime();
++		mTime += mEnd-mStart;
++		if(mCount % mMod == 0) {
++			Log.log(Log.DEBUG,null,"Call= " + mCount + " Avg=" + mTime / mCount);
++		}
++	}
++
+ 	//{{{ replaceAll() method
+ 	/**
+ 	 * Replaces all occurrences of the search string with the replacement
+@@ -921,6 +938,7 @@
+ 				// an error occurs
+ 				int retVal = 0;
+ 
++				startMeasurement();
+ 				try
+ 				{
+ 					buffer.beginCompoundEdit();
+@@ -932,6 +950,7 @@
+ 				{
+ 					buffer.endCompoundEdit();
+ 				}
++				stopMeasurement();
+ 
+ 				if(retVal != 0)
+ 				{

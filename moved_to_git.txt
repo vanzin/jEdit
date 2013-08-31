@@ -1,5 +1,0 @@
-The jEdit core code was moved to Git.
-To clone read-only do:
-
-git clone git://jedit.git.sourceforge.net/gitroot/jedit/jEdit
-

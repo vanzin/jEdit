@@ -1,0 +1,2535 @@
+###
+### jEdit user interface definitions,
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+### :encoding=UTF-8:
+###
+### Copyright (C) 1998, 2005 Slava Pestov
+###
+
+#{{{ jEdit core (jedit_gui.props)
+
+#{{{ Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+#}}}
+
+#{{{ Common strings
+common.ok=确定
+common.cancel=取消
+common.close=关闭
+common.error=错误
+common.apply=应用
+common.more=更多
+common.insert=插入
+common.add=添加
+common.remove=移除
+common.removeCurrent=移除当前项目
+common.moveUp=向上移动
+common.moveDown=向下移动
+common.clearAll=全部清除
+common.selectAll=全选
+common.selectNone=反选
+
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
+#}}}
+
+#{{{ Miscellaneous
+history.caption=历史输入字符:
+
+action-set.jEdit=内建命令
+action-set.browser=文件系统浏览器
+action-set.macros=宏
+action-set.plugin=插件: {0}
+
+macro-handler.beanshell.label=BeanShell 脚本
+macro-handler.beanshell.glob=*.bsh
+
+save-layout-failed.message=无法保存对接布局.
+load-layout.title=加载对接布局
+load-layout.message=选择对接布局:
+save-layout.title=保存对接布局
+save-layout.message=选择保存的对接布局:
+#}}}
+
+#{{{ Tool bar
+view.search.find=搜索:
+view.search.close-tooltip=隐藏搜索条 (ESCAPE)
+
+view.action.prompt=操作:
+view.action.no-completions=没有匹配的操作
+view.action.close-tooltip=隐藏操作工具条 (ESCAPE)
+#}}}
+
+#{{{ Context menu
+view.context.customize=个性化菜单...
+#}}}
+
+#{{{ System tray menu
+tray.newView.label=新视图
+tray.newPlainView.label=新的空白视图
+tray.exit.label=退出
+#}}}
+
+#{{{ Menu bar
+
+#{{{ File menu
+file.label=$文件
+new-file.label=$新建
+new-file-in-mode.label=新建模式 ($Mode)
+new-file-in-mode.dialog.title=新文件
+new-file-in-mode.dialog.message=编辑模式:
+open-file.label=打开($Open)...
+reload.label=重新加载($Reload)
+reload-all.label=重新加载所有(Reloa$d All)
+close-buffer.label=关闭($Close)
+close-buffer.tooltip=关闭编辑面板
+global-close-buffer.label=关闭 (整个程序)
+global-close-buffer.tooltip=关闭所有视图
+closeall-except-active.tooltip=关闭其他编辑面板
+closeall-except-active.label=关闭其他(Close O$thers)
+closeall-bufferset.label=关闭所有(Clos$e All)
+closeall-bufferset.tooltip=清除编辑面板
+bufferset-toggle-exclusive.label=切换内容(Toggle E$xclusive BufferSets)
+bufferset-toggle-exclusive.tooltip=一个缓存内容被访问时，在其他非交叉区关闭它
+close-all.label=关闭所有
+close-all.tooltip=关闭所有视图中的所有内容
+save.label=保存($Save)
+save-as.label=另存为(S$ave As)...
+save-a-copy-as.label=保存一个副本(Save a Cop$y As)...
+save-a-copy-as.tooltip=不改变当前内容路径
+save-all.label=保存全部(Save A$ll)...
+print.label=打印($Print)...
+page-setup.label=页面配置(Pa$ge Setup)...
+# Print selection not yet implemented
+#print-selection.label=Prin$t Selection...
+exit.label=退出(E$xit)
+
+#{{{ Recent Files menu
+recent-files.label=最近文件(Recent $Files)
+recent-files.textfield.tooltip=在此输入前缀过滤或者全局模式
+no-recent-files.label=没有最近文件
+clear-recent-files.label=清除最近文件
+#}}}
+
+reload-encoding.label=重新加载编码(Reload with $Encoding)
+reload-encoding.error={0} 不是一个有效的编码
+
+#}}}
+
+#{{{ Edit menu
+
+edit.label=编辑($Edit)
+undo.label=撤销($Undo)
+redo.label=重做($Redo)
+cut.label=剪切($Cut)
+copy.label=复制(C$opy)
+paste.label=粘贴($Paste)
+select-all.label=全选(Select $All)
+word-count.label=字数统计($Word Count)...
+complete-word.label=字符自动填写(Co$mplete Word)
+expand-abbrev.label=扩展简写(E$xpand Abbreviation)
+goto-line.label=跳至行($Go to Line)...
+
+#{{{ More Clipboard menu
+clipboard.label=更多的粘贴板(More Clip$board)
+cut-append.label=剪切追加($Cut Append)
+copy-append.label=复制追加(C$opy Append)
+vertical-paste.label=垂直粘贴($Vertical Paste)
+paste-previous.label=粘贴之前内容(Paste Previo$us)...
+paste-deleted.label=粘贴删除内容(Paste $Deleted)...
+paste-special.label=粘贴特殊...
+cut-string-register.label=剪切到寄存器(Cu$t to Register)
+copy-string-register.label=复制到寄存器(Co$py to Register)
+paste-string-register.label=粘贴寄存器(Paste $Register)
+clear-string-register.label=清除寄存器
+cut-append-string-register.label=剪切追加到寄存器(Cut Appe$nd to Register)
+copy-append-string-register.label=复制追加到寄存器(Copy $Append to Register)
+vertical-paste-string-register.label=垂直复制寄存器(V$ertical Paste Register)
+view-registers.label=查看寄存器(Vie$w Registers)
+#}}}
+
+#{{{ More Selection menu
+selection.label=更多选择(More $Selection)
+select-none.label=不选(Select $None)
+select-word.label=选择单词(Select $Word)
+select-line.label=选择行(Select $Line)
+select-paragraph.label=选择段落(Select $Paragraph)
+invert-selection.label=置换选择($Invert Selection)
+toggle-multi-select.label=多项选择($Multiple Selection)
+toggle-rect-select.label=矩形选择($Rectangular Selection)
+select-line-range.label=选择行范围(Sele$ct Line Range)...
+#}}}
+
+#{{{ Text menu
+text.label=文本($Text)
+delete-line.label=删除行($Delete Lines)
+delete-start-line.label=删除行首(Delete to $Start of Line)
+delete-end-line.label=删除行尾(Delete to $End of Line)
+join-lines.label=连接行($Join Lines)
+delete-paragraph.label=删除段落(Delete $Paragraph)
+format-paragraph.label=格式化段落($Format Paragraph)
+to-lower.label=转换为小写(To $Lower Case)
+to-upper.label=转化为大写(To $Upper Case)
+#}}}
+
+#{{{ Indent menu
+indent.label=缩进($Indent)
+indent-lines.label=行缩进($Indent Lines)
+shift-left.label=左缩进(Shift Indent $Left)
+shift-right.label=右缩进(Shift Indent $Right)
+remove-trailing-ws.label=删除尾随空白(Remove Trailing $Whitespace)
+spaces-to-tabs.label=空白转制表符($Spaces to Tabs)
+tabs-to-spaces.label=制表符转空白符($Tabs to Spaces)
+#}}}
+
+#{{{ Source menu
+source.label=源(Sourc$e)
+range-comment.label=范围内注释($Range Comment)
+line-comment.label=行注释($Line Comment)
+select-block.label=选择代码块($Select Code Block)
+match-bracket.label=跳至匹配的括号(Go to $Matching Bracket)
+prev-bracket.label=跳至先前的括号(Go to $Previous Bracket)
+next-bracket.label=跳至下一个括号(Go to $Next Bracket)
+#}}}
+
+#}}}
+
+#{{{ Search menu
+search.label=搜索($Search)
+find.label=查找($Find...)
+find-next.label=查找下一个(Fi$nd Next)
+find-prev.label=查找先前的(Find Pre$vious)
+search-in-open-buffers.label=在当前内容中查找(Search in Open $Buffers)...
+search-in-directory.label=在路径下搜索(Search in $Directory)...
+replace-in-selection.label=替换选择($Replace in Selection)
+replace-and-find-next.label=替换并且查找下一个(Re$place and Find Next)
+replace-all.label=替换全部(Replace $All)
+quick-search.label=增量搜索栏($Incremental Search Bar)
+hypersearch.label=超级搜索栏($HyperSearch Bar)
+quick-search-word.label=增量搜索单词(I$ncremental Search for Word)
+hypersearch-word.label=超级单纯搜索(H$yperSearch for Word)
+whole-word.label=整体单词($Whole Word)
+ignore-case.label=忽略大小写(Ignore $Case)
+regexp.label=正则表达式(Regular E$xpressions)
+hypersearch-results.label=超级搜索结果(HyperSearch Results)
+#}}}
+
+#{{{ Markers menu
+markers.label=标记($Markers)
+add-marker.label=添加/删除 标记($Add/Remove Marker)
+add-marker-shortcut.label=添加标记快捷键(Add Marker $With Shortcut)
+remove-all-markers.label=移除所有标记(Re$move All Markers)
+goto-marker.label=跳至标记($Go to Marker)
+select-marker.label=选择到标签($Select to Marker)
+swap-marker.label=换插入符号和标记(Swa$p Caret and Marker)
+prev-marker.label=跳转至先前标记(Go to $Previous Marker)
+next-marker.label=跳转至下一个标记(Go to $Next Marker)
+no-markers.label=无标记
+markers.blank-line=[空行]([Blank line])
+#}}}
+
+#{{{ Folding menu
+folds.label=折叠(F$olding)
+collapse-fold.label=收起折腾($Collapse Fold)
+expand-one-level.label=展开第一层折叠($Expand Fold One Level)
+expand-fold.label=完全展开折叠(Expand $Fold Fully)
+collapse-all-folds.label=收起所有折叠(Collapse $All Folds)
+expand-folds.label=展开层级折叠(Expand Fo$lds With Level)
+expand-all-folds.label=扩展所有折叠(E$xpand All Folds)
+select-fold.label=选择折叠($Select Fold)
+add-explicit-fold.label=添加明显折叠(A$dd Explicit Fold)
+narrow-to-fold.label=收缩到折叠(Na$rrow to Fold)
+narrow-to-selection.label=收缩到选择(Narro$w to Selection)
+parent-fold.label=跳至父节点($Go to Parent Fold)
+prev-fold.label=跳转至先前节点(Go to $Previous Fold)
+next-fold.label=跳转至下一个节点(Go to $Next Fold)
+#}}}
+
+#{{{ View menu
+view.label=视图($View)
+new-view.label=新建视图(New $View)
+new-view.tooltip=新建带可停靠窗口的主窗口
+new-plain-view.label=新建空白视图(Ne$w Plain View)
+new-plain-view.tooltip=新建带少量工具条和无可停靠窗口的主窗口
+close-view.label=关闭视图($Close View)
+close-view.tooltip=关闭主窗口，如果这是唯一视图，退出jEdit
+prev-buffer.label=跳至先前内容(Go to $Previous Buffer)
+next-buffer.label=跳至下一个内容(Go to $Next Buffer)
+recent-buffer.label=跳转至最近内容(Go to $Recent Buffer)
+toggle-buffer-switcher.label=切换内容(Toggle $Buffer Switcher)
+focus-buffer-switcher.label=聚焦缓冲切换(Focus on Buffer S$witcher)
+toggle-line-numbers.label=切换行号(Toggle $Line Numbers)
+toggle-statusbar.label=切换状态栏(Toggle S$tatus Bar)
+toggle-gutter.label=切换装订线(Toggle $Gutter)
+show-context-menu.label=显示上下文菜单
+set-view-title.label=设置视图标题...
+set-view-title.tooltip=设置主窗口标题以方便识别
+toggle-full-screen.label=切换全屏模式(Toggle $full-screen mode)
+
+#{{{ Scrolling menu
+scrolling.label=滚动(Scrollin$g)
+scroll-to-current-line.label=滚动到当前行(Scroll $to Current Line)
+scroll-and-center.label=滚动到插入符中心($Scroll and Center Caret)
+center-caret.label=调整插入符到屏幕中心($Center Caret on Screen)
+scroll-up-line.label=向上滚动行(Line Scroll $Up)
+scroll-down-line.label=向下滚动行(Line Scroll $Down)
+scroll-up-page.label=向上滚动页(Page Scroll U$p)
+scroll-down-page.label=向下滚动页(Page Scroll D$own)
+#}}}
+
+#{{{ Splitting menu
+splitting.label=拆分($Splitting)
+split-horizontal.label=水平拆分(Split $Horizontally)
+split-vertical.label=垂直拆分(Split $Vertically)
+unsplit-current.label=取消当前拆分($Unsplit Current)
+unsplit.label=取消所有拆分(Unsplit $All)
+resplit.label=恢复拆分($Restore Split)
+prev-textarea.label=跳转至先前文本区域(Go to $Previous Text Area)
+next-textarea.label=跳转至下一个文本区域(Go to $Next Text Area)
+buffersets.label=缓冲集($Buffer Sets)
+global-bufferset.label=全局缓冲集($Global Scope BufferSets)
+global-bufferset.tooltip=所有编辑面板共享缓冲集.
+view-bufferset.label=查看范围内缓冲集($View Scope BufferSets)
+view-bufferset.tooltip=同一个视图下的编辑面板共享缓冲集.
+editpane-bufferset.label=编辑面板范围内缓冲集($EditPane Scope BufferSets)
+editpane-bufferset.tooltip=编辑面板拥有独立缓冲集.
+#}}}
+
+#{{{ Docking menu
+docking.label=停靠($Docking)
+docking.menu.label=可停靠菜单
+toggle-dock-areas.label=切换停靠的区域(Toggle Docked $Areas)
+left-docking-area.label=跳转到左边停靠区域(Go to $Left Docking Area)
+top-docking-area.label=跳转到顶部停靠区域(Go to $Top Docking Area)
+right-docking-area.label=跳转到右边停靠区域(Go to $Right Docking Area)
+bottom-docking-area.label=跳转到底部停靠区域(Go to $Bottom Docking Area)
+focus-textarea.label=跳转至文本区域
+close-docking-area.label=关闭当前停靠区域($Close Current Docking Area)
+layout-load.label=载入可停靠布局($Load docking layout) ...
+layout-save.label=保存可停靠布局($Save docking layout) ...
+layout-load-current-mode.label=载入当前模式下可停靠布局
+layout-save-current-mode.label=保存当前模式下可停靠布局
+#}}}
+
+#}}}
+
+#{{{ Utilities menu
+
+utils.label=工具集($Utilities)
+vfs.browser.label=文件浏览器($File System Browser)
+action-bar.label=动作栏($Action Bar)
+last-action.label=重复上一次动作(Re$peat Last Action)
+buffer-options.label=缓冲区选项($Buffer Options)...
+global-options.label=全局选项($Global Options)...
+combined-options.label=选项集($Options)...
+
+#{{{ Recent Directories menu
+recent-directories.label=最近目录($Recent Directories)
+no-recent-dirs.label=无最近目录
+#}}}
+
+#{{{ Favorites menu
+favorites.label=喜好(Fa$vorites)
+add-buffer-to-favorites.label=添加内容去喜好
+add-dir-to-favorites.label=添加目录到喜好
+edit-favorites.label=编辑喜好
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=当前目录($Current Directory)
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=jEdit 根目录($jEdit Home Directory)
+#}}}
+
+#{{{ Settings Directory menu
+settings-directory.label=设置目录($Settings Directory)
+#}}}
+
+#{{{ BeanShell menu
+beanshell.label=B$eanShell
+eval.label=计算BeanShell表达式($Evaluate BeanShell Expression)...
+eval-for-selected-lines.label=计算选择行(Evaluate $For Selected Lines)...
+eval-selection.label=计算所选择区域(Evaluate $Selection)
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting.label=故障排除($Troubleshooting)
+log-viewer.label=活动日志($Activity Log)
+update-log.label=更新磁盘上活动日志($Update Activity Log on Disk)
+io-progress-monitor.label=I/O 进程($I/O Progress)
+task-monitor.label=任务监视器($Task Monitor)
+keyboard-tester.label=键盘测试($Keyboard Tester)...
+memory-status.label=内存状态($Memory Status)...
+reload-modes.label=重新加载编辑模式($Reload Edit Modes)
+#}}}
+
+#{{{ Quick options menu
+quick-options.label=快速设置($Quick settings)
+edit-syntax-style.label=在插入符下编辑语法风格
+#}}}
+
+#}}}
+
+#{{{ Macros menu
+macros.label=宏(Ma$cros)
+new-macro.label=新建宏(New Macro)
+record-macro.label=记录宏($Record Macro)...
+stop-recording.label=停止记录($Stop Recording)
+last-macro.label=重复上次宏
+record-temp-macro.label=记录即时宏(Record $Temporary Macro)
+run-temp-macro.label=运行即时宏(Run Tem$porary Macro)
+run-other-macro.label=运行其它宏(Run $Other Macro)...
+rescan-macros.label=重新扫描宏(Resca$n Macros)
+no-macros.label=无宏
+#}}}
+
+#{{{ Plugins menu
+plugins.label=插件($Plugins)
+plugin-manager.label=插件管理器(Plugin $Manager)...
+plugin-options.label=插件选项(Plugin $Options)...
+no-plugins.label=没有安装选项
+#}}}
+
+#{{{ Help menu
+help-menu.label=帮助($Help)
+about.label=关于jEdit($About jEdit)...
+help.label=jEdit帮助(jEdit $Help)
+tip-of-the-day.label=每日小提示($Tip of the Day)
+userFeedback.label=提出建议...
+#}}}
+
+#}}}
+
+#{{{ Macro strings
+
+macro.temp.header=// This is a temporary macro. First, check over the\n\
+		  // commands to make sure this is what you intended.\n\
+		  // Then, to run this macro, switch to the buffer\n\
+		  // where you would like to execute it and press C+m C+p.
+
+macro.header=// This is a recorded macro. First, check over the\n\
+	     // commands to make sure this is what you intended. Then,\n\
+	     // save this buffer, and the macro should appear in the\n\
+	     // Macros menu.
+
+#}}}
+
+#{{{ Commands that don't appear in menus
+backspace-word.label=删除先前单词
+backspace-word-std.label=删除先前单词(删除空白符)
+backspace-word-std-after.label=删除先前单词(删除单词后空白符)
+backspace.label=删除先前字符
+delete-word.label=删除下一个单词
+delete-word-std.label=删除下一个单词(删除空白符)
+delete.label=删除下一个字符
+document-end.label=删除内容尾
+document-home.label=跳至内容开头
+end.label=结尾
+home.label=开头
+smart-end.label=智能结尾
+smart-home.label=智能开头
+insert-literal.label=逐字插入下一个字符
+insert-newline.label=插入换行符
+insert-newline-indent.label=插入换行符和缩进
+insert-tab.label=插入标签
+insert-tab-indent.label=插入标签和缩进
+line-end.label=跳至行尾
+line-home.label=跳至行首
+next-char.label=跳至下一个字符
+next-line.label=跳至下一行
+next-page.label=跳至下一页
+next-paragraph.label=跳至下一个段落
+next-word.label=跳至下一个单词
+next-word-std.label=跳至下一个单词(删除空白符)
+overwrite.label=覆盖模式
+prev-char.label=跳至前一个字符
+prev-line.label=跳至前一行
+prev-page.label=跳至先前一页
+prev-paragraph.label=跳至前一段落
+prev-word.label=跳至前一个单词
+prev-word-std.label=跳至前一个单词(删除空白符)
+prev-word-std-after.label=跳至前一个单词(删除单词后空白符)
+select-document-end.label=选择内容结尾
+select-document-home.label=选择内容开头
+select-end.label=选择智能结尾位置
+select-home.label=选择智能开头位置
+select-line-end.label=选择行尾
+select-line-home.label=选择行首
+select-next-char.label=选择下一个字符
+select-next-line.label=选择下一行
+select-next-page.label=选择下一页
+select-next-paragraph.label=选择下一段落
+select-next-word.label=选择下一个单词
+select-next-word-std.label=选择下一个单词(删除空白字符)
+select-prev-char.label=选择前一个字符
+select-prev-line.label=选择前一行
+select-prev-page.label=选择前一页
+select-prev-paragraph.label=选择前一个段落
+select-prev-word.label=选择前一个单词
+select-prev-word-std.label=选择前一个单词(删除空白符)
+select-prev-word-std-after.label=选择前一个单词(删除单词后空白符)
+select-visible-end.label=选择最后一个可视行
+select-visible-home.label=选择第一个可视行
+select-whitespace-end.label=选择空白符尾
+select-whitespace-home.label=选择空白符首
+toggle-line-separator.label=切换行分隔符
+toggle-word-wrap.label=切换自动换行
+visible-end.label=跳至最后一个可视行
+visible-home.label=跳至第一个可视行
+whitespace-end.label=跳至空白符尾
+whitespace-home.label=跳至空白符首
+#}}}
+
+#{{{ View stuff
+
+# Title
+view.title=jEdit -\u0020
+view.title.dirty=\ (modified)
+
+view.docking.close-tooltip=停靠当前可停靠窗口
+view.docking.menu-tooltip=可停靠窗口选项
+view.docking.menu-floating=悬浮
+view.docking.menu-top=停靠在顶部
+view.docking.menu-left=停靠在左边
+view.docking.menu-bottom=停靠在底部
+view.docking.menu-right=停靠在右边
+view.docking.menu-clone=新的浮动窗体
+view.docking.menu-close=关闭
+view.docking.menu-undock=取消停靠
+
+view.docking.toggle.label={0} (切换)
+view.docking.float.label={0} (新的浮动窗体)
+
+directory.not-local=远程文件系统上无法列出目录
+directory.no-files=没有文件
+
+#{{{ Gutter highlight
+view.gutter.marker.no-name=标记
+view.gutter.marker=标记: {0}
+#}}}
+
+#{{{ Status messages
+view.status.add-marker=为新标记创建快捷键? [{0}]
+view.status.auto-wrap=搜索的字符没有找到;在附近搜索!
+view.status.bracket=匹配行 {0}: {1}
+view.status.caret-tooltip=Offset, line and column number (offset,line,column[-virtual] relative%)
+view.status.copy-append-string-register=追加复制寄存器名? [{0}]
+view.status.copy-string-register=要复制的寄存器? [{0}]
+view.status.cut-append-string-register=追加剪切寄存器? [{0}]
+view.status.cut-string-register=要剪切的寄存器? [{0}]
+view.status.expand-folds=折叠层次? [1-9]
+view.status.goto-marker=输入标记快捷键以跳转? [{0}]
+view.status.incomplete-abbrev=指定参数:{0}, 但是需要 {1}!
+view.status.insert-literal=逐字插入键?
+view.status.io-1=I/O: 一个操作在运行中
+view.status.io.done=输入/输出完成
+view.status.io=I/O: {0} 操作在进行中
+view.status.linesep-changed=行分隔符设置为 {0}
+view.status.linesep-tooltip=行分隔符 (点击以改变)
+view.status.memory-tooltip=Java 堆内存: {0}Kb/{1}Kb
+view.status.mode-tooltip=当前编辑模式，折叠模式，以及编码
+view.status.multi-changed=多项选择模式 {0,choice,0#off|1#on}
+view.status.multi-tooltip=多项选择模式 (点击以改变)
+view.status.narrow=调用"展开所有折叠"已使所有文本可见
+view.status.no-markers=没有标记组
+view.status.no-registers=没有定义寄存器
+view.status.overwrite-changed=重载模式是 {0,choice,0#off|1#on}
+view.status.overwrite-tooltip=覆盖/插入模式指示器（点击更改）
+view.status.paste-string-register=从寄存器粘贴? [{0}]
+view.status.print=打印页面 {0}
+view.status.quick-copy=快速复制模式-标记的文本将替换选择内容
+view.status.recording=正在记录宏
+view.status.rect-select-changed=矩形选择内容是 {0,choice,0#off|1#on}
+view.status.rect-tooltip=矩形选择模式 (点击更换)
+view.status.replace-all=在{1}文件中替换了{0}次出现
+view.status.search-not-found=所搜索字符串没有找到!
+view.status.select-marker=所选标记的快捷键? [{0}]
+view.status.swap-marker=切换光标到标记的快捷键? \
+	[{0}]
+view.status.vertical-paste-string-register=垂直粘贴的寄存器 \
+	from? [{0}]
+view.status.wrap-changed=自动换行模式现在是 "{0}"
+view.status.wrap-tooltip=<html>自动换行模式 {0} (点击以改变)</html>
+view.status.indent-tooltip=自动缩进指示（点击更换）
+view.status.autoindent-changed=自动缩进状态是"{0}"
+view.status.bufferset-tooltip=内容范围是 {0}
+wrap.none=禁用
+wrap.hard=硬
+wrap.soft=软
+#}}}
+
+#{{{ Status bar component visibility
+
+#}}}
+
+#}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: 页 {1}
+
+print-error.title=打印错误
+print-error.message=一个错误发生在打印:\n\
+	{0}
+#}}}
+
+#{{{ Various dialog boxes
+
+#{{{ About dialog
+about.title=关于 jEdit
+about.version=jEdit {0} {1} 模式, 使用 {2} Java {3}
+about.mode.standalone=独立	
+about.mode.server=服务器
+about.mode.server-background=服务器背景
+about.navigate=按箭头键来浏览有关文本
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text.prefix=jEdit 开发人员是
+about.text.suffix=我也非常感谢用户的评价，回馈以及BUG 报告.
+#}}}
+
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=插件管理器
+#}}}
+
+#{{{
+largeBufferDialog.title=大数据内容 {0}
+largeBufferDialog.message=由于内容太大，jEdit可能未响应\n\
+	由于语法高亮. 你应该考虑以下选项\n\
+	-保留所有高亮:jEdit的语法高亮将要正常工作, jEdit \n\
+	可能变得非常慢，这个选项不推荐.\n\
+	-上下文不敏感的语法高亮. 在这种情况下, jEdit 将要\n\
+	做快速高亮, 但是结果可能不完美. \n\
+	内容讲在不检查上下文的情况下被高亮\n\
+	语法可能不准确\n\
+	如果你在多行上有标记 (多行注释, xml 标签 ...)\n\
+	-使用jEdit的'文本'模式 (无语法高亮)
+largeBufferDialog.fullSyntax=保留所有高亮
+largeBufferDialog.contextInsensitive=上下文不敏感的语法高亮
+largeBufferDialog.defaultMode=文本编辑模式
+#}}}
+
+#{{{ I/O error dialog box
+ioerror.title=I/O 错误
+ioerror.caption=以下 {0} I/O 操作不能完成:
+ioerror.caption-1=以下 I/O 操作不能完成:
+
+ioerror={0}
+ioerror.directory-error=无法列出目录: {0}
+ioerror.directory-error-nomsg=无法列出目录.
+ioerror.encoding-error=文件在编码 "{0}"下无法\n\正确加载(一下数据可能丢失了) \n\
+	({1})\n\
+	尝试选择不同的编码.\n\
+	你可以从目录->重新加载编码 下选择.\n\
+	如果你想要系统自动完成， 将候选编码加入\n\
+	"后备编码列表" (在全局选项的编码面板下).
+ioerror.write-encoding-error=无法对\n\
+	{3} 在列 {2} 行 {1} 的字符使用编码 "{0}"进行编码.
+ioerror.read-error=无法加载: {0}
+ioerror.write-error=无法保存: {0}
+ioerror.unsupported-encoding-error={0} 字符集不支持你的JVM
+ioerror.open-directory=无法以内容形式打开目录.
+ioerror.save-directory=无法将内容保存为目录.
+ioerror.no-read=没有足够的权限加载文件.
+ioerror.no-write=没有足够的权限保存文件.
+ioerror.write-error-readonly=无法保存，该文件只读.
+ioerror.save-readonly-twostagefail=无法保存，文件只读并且无法进行两阶段保存.
+ioerror.badurl=异常 URL: {0}
+ioerror.delete-error=无法删除文件.
+ioerror.rename-exists=无法覆盖已存文件 {0}.
+ioerror.rename-error=无法重命名为 {0}.
+ioerror.mkdir-error=无法创建目录.
+ioerror.backup-failed=备份失败,选择"保存与备份"选项.
+ioerror.backup-same-name=备份名与原文件一致.
+ioerror.copy-self=破坏性操作，自我复制文件，遭到拒绝: {0}
+
+vfs.not-supported.list="{0}"文件系统下目录无法浏览.
+vfs.not-supported.load="{0}"文件系统下文件无法打开.
+vfs.not-supported.save="{0}"文件系统下文件无法保存.
+
+vfs.overwrite-readonly.title=该文件只读
+vfs.overwrite-readonly.message=文件 {0} 只读.\n\
+	你是否仍然要保存，重设只读标签\n\
+	将使用二阶段保存(在UNIX下重设文件拥有者)
+
+vfs.twostageimpossible.title=二阶段保存不能使用
+vfs.twostageimpossible.message=二阶段保存不能使用,你仍然要保存?\n\
+
+out-of-memory-error=没有足够的Java堆内存来完成\n\
+	该请求. 尝试增加堆内存.\n\
+	\n\
+	改变堆内存的文档在D\n\
+	 user guide的"jEdit Basics"章的"Buffers" 节里.\n\
+	
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=一个 I/O 错误发生d ({0})
+
+read-error.title=读错误
+# {0} - the path name {1} - the error message
+read-error.message=文件 {0}\n\
+	由于一个 I/O 错误无法加载.\n\
+	({1})
+
+write-error.title=写错误
+# {0} - the path name {1} - the error message
+write-error.message=文件 {0}\n\
+	由于一个 I/O 错误无法保存.\n\
+	({1})
+
+directory-error.title=目录错误
+# {0} - the path name {1} - the error message
+directory-error.message=目录 {0}\n\
+	由于一个 I/O 错误无法列出.\n\
+	({1})
+
+directory-error-nomsg.title=目录错误
+# {0} - the path name
+directory-error-nomsg.message=目录 {0}\n\
+	c由于一个 I/O 错误无法列出.
+
+encoding-error.title=不兼容的编码
+encoding-error.message=文件 {0}\n\
+	无线在 "{1}" 编码下加载.\n\
+	({2})\n\
+	\n\
+	要使用不同的编码, 尝试在\n\
+	文件->打开编码菜单 下的指令.\n\
+	\n\
+	如果你真的不知道要使用什么编码\n\
+	, 尝试使用 "ASCII" 或者 "8859_1".
+
+open-directory.title=无法使用目录
+open-directory.message={0} 是一个目录.\n\
+	目录无法打开编辑.
+
+save-directory.title=无法删除目录
+save-directory.message={0} 是一个目录.\n\
+	编辑内容无法保存为其它目录上.
+
+no-read.title=无法打开文件
+no-read.message=无法从 {0}读取.\n\
+	这可能是由于你没有足够的权限.
+
+no-write.title=无法保存文件
+no-write.message=无法保存到 {0}.\n\
+	这可能是由于你没有足够的权限.
+
+badurl.title=无效的URL
+# {0} - the URL
+# {1} - the error
+badurl.message=以下 URL 是无效的: {0}\n\
+	({1})
+#}}}
+
+#{{{ Go to line dialog
+goto-line.title=跳至行
+goto-line.message=跳至行({0} - {1}):
+#}}}
+
+#{{{ Word count dialog
+wordcount.title=字数统计
+# {0} - characters
+# {1} - words
+# {2} - lines
+wordcount.message=字符: {0}\n单词: {1}\n行: {2}
+#}}}
+
+#{{{ Set marker dialog
+setmarker.title=设置标记
+setmarker.message=标记名称:
+#}}}
+
+#{{{ File not saved dialog
+notsaved.title=文件未保存
+# {0} - file name
+notsaved.message=保存改变到 {0}?
+#}}}
+
+#{{{ File changed, still reload dialog
+changedreload.title=文件以更新
+changedreload.message=文件 {0}\n\
+	在上次保存时已改变; 如果你重新加载,\n\
+	改变将丢失. 继续?
+#}}}
+
+#{{{ Autosave file exists dialog
+autosave-found.title=找到自动保存文件
+# {0} - autosave file name
+autosave-found.message=发现自动保存文件 {0}\n\! 这可能是由于jEdit在未保存前崩溃了.\n\
+	你想要打开自动保存文件吗?
+
+autosave-loaded.title=已加载自动保存文件
+autosave-loaded.message=自动保存文件 {0}\n\
+	已加载. 你现在应该检查它是否包含你未保存的数据\n\
+	. 如果你想要保存自动保存文件的改名，请保存文件\n\
+	否则, 选择 文件->重新加载.
+#}}}
+
+#{{{ Save all confirm dialog
+saveall.title=保存所有内容
+saveall.message=你确定要保存已改变的文件吗?
+#}}}
+
+#{{{ Reload all confirm dialog
+reload-all.title=加载所有内容	
+reload-all.message=你确定要从硬盘重新加载所有内容吗?\n\
+	所有打开文件的改变将要丢失!
+#}}}
+
+#{{{ Encoding prompt
+encoding-prompt.title=使用其它编码打开
+encoding-prompt.message=字符编码使用:
+#}}}
+
+#{{{ Macro recording already in progress dialog
+already-recording.title=已经在记录中
+already-recording.message=一个宏记录已经在进行中.
+#}}}
+
+#{{{ No temporary macro dialog
+no-temp-macro.title=没有即时宏
+no-temp-macro.message=没有记录的即时宏.
+#}}}
+
+#{{{ Record macro dialog
+record.title=记录宏
+record.message=宏名称:
+#}}}
+
+#{{{ Some features don't work with -nosettings dialog
+no-settings.title=特征未启用
+no-settings.message=jEdit初始化时使用了-无设置 开关.\n\
+	要使用这些特征，你必须在关闭这个开关的情况下启动jEdit.
+#}}}
+
+#{{{ Some features don't work with the web start version
+no-webstart.title=特征未启用
+no-webstart.message=该特征无法在WebStart版本中使用\n\
+#}}}
+
+#{{{ Search and replace dialog
+search.title=搜索和替换
+
+search.find=搜索:
+search.find.tooltip=PgUp/PgDown 或者右键单击恢复以前查询
+search.find.mnemonic=s
+search.replace=替换内容:
+search.replace.mnemonic=w
+search.string-replace-btn=文本
+search.beanshell-replace-btn=返回一个BeanShell片段值
+
+search.settings=设置:
+search.keep=保留对话框
+search.keep.mnemonic=k
+search.word=全部单词 (q)
+search.word.bar=全部单词
+search.word.mnemonic=q
+search.case=忽略大小写
+search.case.mnemonic=i
+search.regexp=正则表达式
+search.regexp.mnemonic=x
+search.hypersearch=超级搜索
+search.hypersearch.mnemonic=h
+search.wrap=自动换行
+search.wrap.mnemonic=t
+
+search.direction=方向:
+search.back=后退
+search.back.mnemonic=b
+search.forward=前进
+search.forward.mnemonic=o
+
+search.fileset=搜索范围:
+search.selection=选择
+search.selection.mnemonic=n
+search.current=当前内容
+search.current.mnemonic=c
+search.all=所有内容
+search.all.mnemonic=l
+search.directory=目录:
+search.directory.mnemonic=d
+search.skipHidden=跳过隐藏文件/备份文件
+search.skipBinary=跳过二进制文件
+search.skipHidden.mnemonic=h
+search.skipBinary.mnemonic=b
+
+search.directoryField=目录:
+search.directoryField.mnemonic=y
+search.filterField=过滤器:
+search.filterField.mnemonic=f
+glob.tooltip={*.c,*.h} 是多个扩展
+search.subdirs=搜索子目录
+search.subdirs.mnemonic=u
+search.choose=选择...
+search.choose.mnemonic=e
+search.synchronize=同步
+search.synchronize.mnemonic=z
+search.synchronize.tooltip=为当前缓冲区的扩展/位置设置过滤器和目录.
+search.findBtn=查找
+search.findBtn.mnemonic=f
+search.replaceBtn=替换
+search.replaceBtn.mnemonic=p
+search.replaceAndFindBtn=替换查找
+search.replaceAndFindBtn.mnemonic=r
+search.replaceAllBtn=替换所有
+search.replaceAllBtn.mnemonic=a
+
+# Beep when searching automatically wraps?
+
+#}}}
+
+#{{{ Keep searching dialog
+keepsearching.title=没有更多的匹配
+keepsearching.message=没有更多的匹配.\n\
+	从{0,choice,0#beginning|1#end}继续搜索?
+#}}}
+
+#{{{ HyperSearch results dialog
+hypersearch-results.title=超级搜索结果
+hypersearch-results.result-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} 出现在 '{2,choice,1#1 file|1<{2,number,integer} 文件中}'})
+hypersearch-results.open=打开
+hypersearch-results.open-view=在新视图中打开
+hypersearch-results.open-plain-view=在新的空白视图中打开
+hypersearch-results.open-split=在新的差分中打开
+hypersearch-results.remove-node=移除节点
+hypersearch-results.new-search=从这里开始新的搜索
+hypersearch-results.expand-child-nodes=展开子节点
+hypersearch-results.collapse-child-nodes=折叠子节点
+hypersearch-results.copy-to-clipboard=复制到粘贴板
+hypersearch-results.redo=重做超级搜索
+hypersearch-results.tree-view=切换树视图
+hypersearch-results.clear.label=移除所有节点
+hypersearch-results.stop.label=停止超级搜索并返回当前结果
+hypersearch-results.multi.label=切换多个结果
+hypersearch-results.highlight.label=设置匹配高亮样式
+hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} 出现在'{2,choice,1#1 line|1<{2,number,integer} 行}'})
+hypersearch-results.searching=搜索 "{0}"...
+hypersearch-results.no-results=没有结果匹配 "{0}".
+hypersearch-results.done= "{0}"的搜索结果:
+
+hypersearch-status=Searching
+#}}}
+
+#{{{ HyperSearch too many results
+hypersearch.tooManyResults.label=过多结果
+hypersearch.tooManyResults.title=过多结果
+hypersearch.tooManyResults.message=你的搜索返回 {0} \
+	个结果，并且没有结束. 你是否想要停止搜索 ?
+#}}}
+
+
+#{{{ Search and replace error dialog
+searcherror.title=搜索替换错误
+# {0} - error message
+searcherror.message=进行该操作时出现一个错误.
+#}}}
+
+#{{{ Search and replace error dialog
+searcherror-bsh.title=搜索替换错误
+# {0} - error message
+searcherror-bsh.message=进行该操作时出现一个错误.\n\
+	\n\
+	如果你不是要使用BeanShell表达式来替换字符串，确保将替换模式设置成“文本”
+#}}}
+
+#{{{ Empty fileset error dialog
+empty-fileset.title=空文件集
+empty-fileset.message=指定的文件集没有任何文件.\n\
+	请确保文件名过滤器和搜索目录(如果有的话)已正确设置.
+#}}}
+
+#{{{ Can only search local directories dialog
+remote-dir-search.title=未选择本地目录
+remote-dir-search.message=你选择了非本地目录进行搜索.\n\
+	由于网络延迟，这可能会非常慢.\n\
+	你确定要继续吗?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=没有选择任何内容
+search-no-selection.message=选择一些文字或停用
+"在选择范围内搜索"选项.
+#}}}
+
+#{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<whitespace>
+paste-previous.title=粘贴之前内容
+paste-previous.caption=最近复制和粘贴的文本:
+paste-deleted.title=粘贴已删除内容
+paste-deleted.caption=最近删除的文本:
+#}}}
+
+#{{{ File changed on disk dialog
+filechanged-save.title=磁盘上文件已改变
+filechanged-save.message=文件{0}\n\
+	在磁盘上已经被其他程序改变. \n\
+	你确定要继续保存它?
+#}}}
+
+#{{{ File exists dialog
+fileexists.title=文件已存在
+fileexists.message=文件 {0} 已经存在. 你确定要\n\
+	覆盖它?
+#}}}
+
+#{{{ Select line range dialog
+selectlinerange.title=选择行范围
+selectlinerange.caption=选择行范围:
+selectlinerange.start=开始行:
+selectlinerange.end=结束行:
+#}}}
+
+#{{{ View registers dialog
+view-registers.title=寄存器
+view-registers.caption=寄存器:
+view-registers.clipboard=$ (clipboard)
+view-registers.selection=% (selection)
+view-registers.none=未定义寄存器
+view-registers.register=寄存器:
+view-registers.contents=内容:
+view-registers.undefined=__UNDEFINED__
+#}}}
+
+#{{{ Close all buffers dialog
+close.title=未保存的改变
+close.caption=以下内容存在未保存的改变:
+close.selectAll=全选
+close.selectAll.mnemonic=a
+close.save=保存选择的内容
+close.save.mnemonic=s
+close.discard=抛弃选择的内容
+close.discard.mnemonic=d
+#}}}
+
+#{{{ Files changed on disk dialog
+files-changed.title=磁盘上文件已改变
+files-changed.caption=以下文件在磁盘上被其他程序改变:
+files-changed.deleted=在磁盘上已删除，保存已重建:
+files-changed.changed-auto=自动重新加载:
+files-changed.changed=磁盘上文件已改变:
+files-changed.changed-dirty-auto=内容紊乱，未重新加载:
+files-changed.changed-dirty=内容紊乱，磁盘上文件已改变:
+files-changed.select-all=全选
+files-changed.select-all.mnemonic=a
+files-changed.reload=重新加载
+files-changed.reload.mnemonic=r
+files-changed.ignore=忽略
+files-changed.ignore.mnemonic=i
+#}}}
+
+#{{{ Abbrev dialogs
+add-abbrev.title=添加缩写
+add-abbrev.mode=添加特定模式
+add-abbrev.global=添加全局化缩写
+
+edit-abbrev.title=编辑缩写
+
+edit-abbrev.duplicate.title=重复缩写
+edit-abbrev.duplicate.message=\
+	该缩写已存在\n\
+	\n\
+	你想要覆盖当前缩写?
+
+abbrev-editor.abbrev=缩写:
+abbrev-editor.before=插入符前要插入的文本:
+abbrev-editor.after=插入符后要插入的文本:
+#}}}
+
+#{{{ XMode errors
+xmode-error.title=XML 解析错误
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message=在解析 {0}的时候发生错误, 行 {1}:\n\
+	{3}
+xmode-error.dtd=DTD 无法加载\n({0})
+xmode-error.termchar-invalid= AT_CHAR 属性值无效 ({0})
+xmode-error.doctype-invalid=预期的模式的文档类型, 发现 {0}
+xmode-error.empty-tag={0} 标签不能为空
+xmode-error.token-invalid=token 类型 {0} 无效
+xmode-error.empty-keyword=关键词文本不能为空
+xmode-error.regexp=无效的正则表达式\n({0})
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR 和 HASH_CHARS 可能都未指定
+xmode-error.delegate-invalid=无效的代理: {0}
+#}}}
+
+#{{{ JARClassLoader errors
+plugin-error.title=插件错误
+plugin-error.caption=以下插件无法加载:
+plugin-error.caption-1=以下插件无法加载:
+
+plugin-error.load-error=无法加载: {0}\n\
+	最可能的原因是 JAR 文件已损坏; \n\
+	请尝试重新安装. 请参阅 工具集->故障排除 - >活动日志\n\
+	以查看一个完整的堆栈跟踪.
+plugin-error.start-error=无法打开: {0}\n\
+	请尝试安装更新的版本.
+plugin-error.already-loaded=安装了两个相同插\n\
+	请尝试移除其中一个
+plugin-error.dep-jdk=需要 Java {0} 或者更新版本, 但你只有版本 {1}.
+plugin-error.dep-jedit=需要 jEdit {0} 或者更新版本, 但你只有版本 {1}.\n\
+	从<http://www.jedit.org>下载jEdit最新版本.
+plugin-error.dep-plugin.no-version=需要版本 {0} \
+	或者 {1}的最新版本,\n\
+	但是 {1} 没有安装.
+plugin-error.dep-plugin.broken=需要 {0}, 但是 {0}\n\
+	无法.
+plugin-error.dep-plugin=需要版本 {0} 或者 {1}的最新版本, \
+	但你只有 {1} 的版本 {2}.
+plugin-error.dep-class=需要类 {0}.\n\
+	请尝试安装合适的插件或者类库.
+plugin-error.missing-jar=需要 JAR 文件 {0}.\n\
+	该JAR文件是该插件的一部分，但是无法找到.\n\
+	请尝试重新安装该插件.
+plugin-error.not-42=该插件不支持动态加载.\n\
+	在删除或者安装该插件后，你必须重启jEdit.
+
+plugin-error-download.title=插件错误
+plugin-error-download.message=下载插件时出现错误,请尝试其它镜像\n{0}
+#}}}
+
+#{{{ Macro dialogs
+macro-input.title=宏输入
+macro-error.title=宏错误
+macro-message.title=宏消息
+macro-confirm.title=宏确认
+#}}}
+
+#{{{ BeanShell stuff
+beanshell-error.title=BeanShell 错误
+beanshell-error.message=发生了一个 BeanShell 错误.
+
+beanshell-eval-input.title=测试BeanShell的表达式
+beanshell-eval-input.message=BeanShell 表达式:\n\
+	\n\
+	变量:\n\
+	view - 当前视图实例\n\
+	editPane - 目前编辑窗格实例\n\
+	textArea - 目前的文本区域实例\n\
+	buffer - 当前内容
+
+beanshell-eval.title=BeanShell 评估
+beanshell-eval.message={0}
+
+beanshell-eval-line.title=测试 BeanShell 表达式
+beanshell-eval-line.message=使用BeanShell 表达式对每个所选行 \
+	进行评估:\n\
+	\n\
+	变量:\n\
+	line - 行的索引，从该内容起始开始\n\
+	index - 行的索引，从选择内容起始开始\n\
+	text - 行文本\n\
+	view - 当前视图实例\n\
+	editPane - 目前编辑窗格实例\n\
+	textArea - 目前的文本区域实例\n\
+	buffer - 当前内容
+#}}}
+
+#{{{ Macro not recording dialog
+macro-not-recording.title=没有记录
+macro-not-recording.message=宏当前没有被记录.
+#}}}
+
+#{{{ Large repeat count warning
+large-repeat-count.title=过多重复调用
+large-repeat-count.message=你确定要调用 "{0}" {1} 次?
+
+large-repeat-count.user-input.title=过多重复调用
+large-repeat-count.user-input.message=你确定要插入 "{0}" \
+	{1} 次?
+#}}}
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=错误折叠模式
+folding-not-explicit.message=该指令只能在显式折叠模式下使用.
+#}}}
+
+#{{{ Memory status dialog box
+memory-status.title=Java 堆内存
+memory-status.gc=垃圾内存释放 {0} Kb.
+memory-status.use=消耗{0} Kb , 总共{1} Kb 
+#}}}
+
+#{{{ Multiple I/O request errors
+buffer-multiple-io.title=I/O 错误
+buffer-multiple-io.message=每个内容在同一时间只能执行一个 input/output操作\n\
+	. 在启动一个新的操作前,请等待当前操作结束\n\
+	(或者在I/O 进程监视器退出).\n\
+
+browser-multiple-io.title=I/O 错误
+browser-multiple-io.message=每个文件浏览器在同一时间只能执行一个 input/output操作\n\
+	. 在启动一个新的操作前,请等待当前操作结束\n\
+	(或者在I/O 进程监视器退出).\n\
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=自动行边距
+format-maxlinelen.message=要使此命令工作，请将自动行边距设置0
+#}}}
+
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=语法格式设置
+syntax-style-no-token.message=T没有关联的下的文本插入符\
+语法风格配置。
+#}}}
+
+#{{{ View title dialog
+view.title.select=请为该视图输入标题:
+#}}}
+#}}}
+
+#{{{ Buffer options dialog
+buffer-options.title=内容操作
+buffer-options.caption=此对话框只为当前内容更改设置\n \
+。要改变编辑模式的默认设置，请参阅\n \
+全球“选项” - >“编辑窗格。
+buffer-options.loading-saving=正在加载和保存
+buffer-options.lineSeparator=行分隔符:
+buffer-options.encoding=字符编码:
+buffer-options.gzipped=GZIP(压缩)磁盘上的文件
+buffer-options.editing=编辑中
+buffer-options.mode=编辑模式:
+#}}}
+
+#{{{ Global options dialog
+options.title=选项
+options.title-template={0}: {1}
+options.jedit.label=jEdit
+
+# Option pane to show by default
+options.last=编辑中
+
+#{{{ Options groups
+
+#}}}
+
+#{{{ General pane
+options.general.label=普通选项
+options.general.lineSeparator=默认行分隔符:
+options.general.encoding=默认字符编码:
+options.general.encodingAutodetect=可能时自动检测文件编码
+options.general.checkModStatus=打开的文件在磁盘上是否更改:
+options.general.checkModStatus.nothing=什么都不做
+options.general.checkModStatus.prompt=提示
+options.general.checkModStatus.reload=自动重新加载，并通知用户
+options.general.checkModStatus.silentReload=自动重载，不通知用户
+options.general.checkModStatusUpon=检查文件变化:
+options.general.checkModStatusUpon.focus=查看焦点 (检查所有内容)
+options.general.checkModStatusUpon.all=查看焦点或者访问内容
+options.general.checkModStatusUpon.visitBuffer=访问内容
+options.general.checkModStatusUpon.none=没有
+options.general.recentFiles=最近记忆的文件:
+options.general.hypersearch.maxWarningResults=最大超级搜索结果:
+options.general.sortRecent=对最近文件列表排序
+options.general.saveCaret=在最近文件列表保存插入符号的位置
+options.general.persistentMarkers=保存标记位置
+options.general.resetUndo=保存时重新设置撤销的历史
+options.general.restore=启动时恢复以前打开的文件
+options.general.restore.splits=恢复分栏设置
+options.general.restore.remote=... 添加远程VFS文件
+options.general.restore.cli=... 添加命令行指定的文件名
+options.general.encodingDetectors=编码自动探测器列表:
+options.general.fallbackEncodings=后备编码列表:
+options.general.fallbackEncodings.tooltip=处理加载时编码错误的编码列表(空白符隔开)
+options.general.systrayicon=显示系统托盘图标
+#}}}
+
+#{{{ Abbreviations pane
+options.abbrevs.label=缩略语
+options.abbrevs.set=缩写集:
+options.abbrevs.expandOnInput=空格键扩展缩略
+options.abbrevs.abbrev=缩略语
+options.abbrevs.expand=扩展
+options.abbrevs.add=添加...
+options.abbrevs.edit=编辑...
+options.abbrevs.remove=删除
+#}}}
+
+#{{{ Appearance pane
+options.appearance.label=外观
+options.appearance.iconTheme=图标主题:
+options.appearance.fonts.antialias=消除锯齿非文本区域的字体
+options.appearance.lf=Swing 外观和感觉:
+options.appearance.primaryFont=按钮，菜单和标签字体:
+options.appearance.secondaryFont=列表和文本字段字体:
+options.appearance.helpViewerFont=查看帮助/浏览器文本字体:
+options.appearance.history=记住历史文本字段项:
+options.appearance.menuSpillover=菜单移除前的项目数:
+options.appearance.startup.label=启动选项
+options.appearance.showSplash=启动时显示启动画面
+options.appearance.showTips=启动时启动小提示
+options.appearance.experimental.label=实验性选项
+options.appearance.experimental.caption=以下三个选项可能在 \
+	某些Java版本下无法正常工作.\n\
+	如果你遇到了问题，请关闭它们.
+
+options.appearance.textColors=在所有文本组件中使用jEdit文本区域颜色
+options.appearance.decorateFrames=使用Swing的外观和感觉绘制窗口边框
+options.appearance.decorateDialogs=使用Swing外观和感觉绘制对话框边框
+
+options.appearance.localization.section.label=本地化
+options.appearance.usedefaultlocale.label=使用默认本地化
+options.appearance.lang.label=语言 (重启后有效)
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=右键菜单
+options.context.caption=文本区域中的右键菜单项目:
+options.context.add=添加...
+options.context.remove=删除
+options.context.moveUp=上移
+options.context.moveDown=下移
+options.context.reset=设置到默认
+options.context.add.title=添加到右键菜单
+options.context.add.caption=添加到右键菜单:
+options.context.add.separator=分隔符号
+options.context.add.action=指令或者宏:
+options.context.includeOptionsLink.label=包含 "个性化菜单..." 链接
+
+options.context.reset.dialog.title=设置到默认
+options.context.reset.dialog.message=确定要将右键菜单设置到默认?
+#}}}
+
+#{{{ Docking pane
+options.docking.label=可停靠菜单
+options.docking.title=窗口
+options.docking.dockPosition=停靠位置
+options.docking.selectFramework.label=停靠框架:
+options.docking.autoSaveModeLayout.label=自动保存特定模式的停靠布局
+options.docking.autoLoadModeLayout.label=自动加载特定模式的停靠布局
+options.docking.selectSet.label=可停靠设置t:
+options.docking.system-change.note=（实验）重新启动jEdit更改生效
+#}}}
+
+#{{{ Editing pane
+options.editing.label=编辑中
+options.editing.defaultMode=默认编辑模式:
+options.editing.undoCount=撤消次数:
+options.editing.caption-0=\
+	要自定义模式特定的设置，从下面的菜单选择编辑模式。\n \
+	最初显示全局默认值。
+options.editing.caption-1=\
+	取消选中“使用默认设置”以自定义特定模式设置.\n \
+	否则将使用"全局默认值"设置\n \
+options.editing.mode=更改设置模式:
+options.editing.global=<global defaults>
+options.editing.useDefaults=使用默认设置
+options.editing.filenameGlob=全局文件名:
+options.editing.firstlineGlob=全局首行:
+options.editing.folding=折叠模式:
+options.editing.collapseFolds=最初折叠层次:
+options.editing.wrap=自动换行:
+options.editing.maxLineLen=自动边距:
+options.editing.maxLineLen.tooltip=设置 0 为文本区域宽度 (只有在软换行下)
+options.editing.tabSize=表格宽度:
+options.editing.indentSize=缩进宽度:
+options.editing.noWordSep=额外单词字符:
+options.editing.camelCasedWords=分离“驼峰”格式单词
+options.editing.noTabs=软（用空格模拟）标签
+options.editing.elasticTabstops=使用弹性制表位缩进
+options.editing.elasticTabstops.tooltip=单元格上下行中的列对齐制表符，制表符可以根据单元格宽带增大或者缩小.
+options.editing.deepIndent=深缩进
+options.editing.autoIndent=自动缩进
+options.editing.largefilemode.title=大文件模式
+options.editing.largefilemode=关于非常大的文件，我应该怎么办:
+options.editing.largefilemode.option.ask=<html><b>Ask</b> 关于非常大的文件，我应该怎么办</html>
+options.editing.largefilemode.option.full=<html><b>保持完整的语法</b> : jEdit的语法高亮将照常工作, jEdit \
+                                               	可能变得<br/><b>非常慢, 因此不推荐</b></html>
+options.editing.largefilemode.option.limited=<html><b>上下文不敏感的语法高亮</b>: 在此情况下 jEdit 将 \
+		做快速高亮, 但是<br/>结果可能不完美.  \
+		内容可能在没有考虑上下文的情况下进行高亮<br/> \
+		语法有可能不正确 \
+		如果你有<br/>token在多行(多行注释, xml 标签 ...) \
+		软换行也被停用<br/><b>(最好的选择)</b></html>
+options.editing.largefilemode.option.nohighlight=没有语法高亮，没有软换行
+#}}}
+
+#{{{ Encodings pane
+options.encodings.label=编码
+options.encodings.selectEncodings=选择应显示编码对话框的编码:
+options.encodings.available=可用的编码
+options.encodings.selected=选定的编码
+options.encodings.available.tooltip=<html>在此列的编码会 <b>not</b> 显示为编码组合框的选项. 拖到右列来显示它们. </html>
+options.encodings.selected.tooltip=<html>在此列的编码会显示为 jEdit的 GUI的编码组合框的选项. 拖到左列来隐藏它们.</html>
+#}}}
+
+#{{{ Gutter pane
+options.gutter.label=装订线
+options.gutter.enabled=显示装订线
+options.gutter.optionalComponents=可选的装订线组件
+options.gutter.lineNumbers=行号
+options.gutter.minLineNumberDigits=储备行号最小的位数:
+options.gutter.selectionAreaEnabled=当行号未显示时行选择区域
+options.gutter.selectionAreaBgColor=选择区域背景色:
+options.gutter.selectionAreaWidth=选择区域的宽度（以像素为单位）:
+options.gutter.font=装订线字体:
+options.gutter.foreground=行号颜色:
+options.gutter.background=背景色:
+options.gutter.borderWidth=装订线边框宽度:
+options.gutter.numberAlignment=行号对齐:
+options.gutter.interval-1=每\u0020 高亮
+options.gutter.interval-2=行:
+options.gutter.currentLineHighlight=高亮当前行:
+options.gutter.structureHighlight=现实结构范围:
+options.gutter.markerHighlight=现实标记位置:
+options.gutter.foldColor=折叠标记:
+options.gutter.focusBorderColor=聚焦装订线边界:
+options.gutter.noFocusBorderColor=未聚焦的装订线边界:
+options.gutter.foldStyle.label=折叠样式:
+options.gutter.foldStyleNames.Triangle=三角
+options.gutter.foldStyleNames.Square=矩形
+options.gutter.foldStyleNames.Circle=原型
+#}}}
+
+#{{{ Mouse pane
+options.mouse.label=鼠标
+options.mouse.dragAndDrop=在文本区域拖放
+options.mouse.joinNonWordChars=双击拖动加入非字母数字字符
+options.mouse.middleMousePaste=使用鼠标中键快速复制
+options.mouse.ctrlForRectangularSelection=按下Ctrl键切换到矩形选择
+options.mouse.gutter.foldClick=点击装订线:
+options.mouse.gutter.SfoldClick=按住Shift键单击装订线:
+options.mouse.gutter.toggle-fold=折叠/展开
+options.mouse.gutter.toggle-fold-fully=完全折叠/展开
+#}}}
+
+#{{{ Plugin Manager pane
+options.plugin-manager.label=插件管理器
+options.plugin-manager.updateMirrors=更新镜像列表
+options.plugin-manager.workthread=更新镜像列表 ...
+options.plugin-manager.downloadSource=下载插件源码
+options.plugin-manager.deleteDownloads=安装后从下载目录删除安装文件
+options.plugin-manager.mirror=首选下载镜像:
+options.plugin-manager.location=插件安装在:
+options.plugin-manager.settings-dir=jEdit 配置目录
+options.plugin-manager.app-dir=jEdit 程序目录
+options.plugin-manager.none=默认插件中心
+options.plugin-manager.disable-obsolete=禁用过时插件
+options.plugin-manager.list-cache.minutes=为插件列表缓存: (minutes)
+#}}}
+
+#{{{ Printing pane
+options.print.label=打印
+options.print.font=打印字体:
+options.print.fontstyle=打印字体样式:
+options.print.fontsize=打印字体大小:
+options.print.header=打印带文件名的页眉
+options.print.footer=打印带日期，时间和页码的页脚
+options.print.lineNumbers=打印行号
+options.print.color=彩色打印
+options.print.tabSize=打印时标签宽度:
+options.print.workarounds=Java错误的解决方法
+options.print.glyphVector=打印间距的解决方法（增加后台打印文件大小）
+options.print.force13=使用旧的打印API（如果jEdit打印时挂起\
+启用此）
+options.print.folds=打印折叠区域
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=代理服务器
+options.firewall.http.enabled=使用HTTP代理服务器
+options.firewall.http.host=HTTP代理主机:
+options.firewall.http.port=HTTP代理服务器端口:
+options.firewall.http.user=用户名:
+options.firewall.http.password=密码:
+options.firewall.http.nonProxy=直接连接到:
+options.firewall.socks.enabled=使用SOCKS代理服务器
+options.firewall.socks.host=SOCKS代理主机:
+options.firewall.socks.port=SOCKS代理服务器的端口:
+#}}}
+
+#{{{ Save & Backup pane
+options.save-back.label=保存和备份
+
+options.save-back.autosave=自动保存频率（秒）:
+options.save-back.backups=最大备份数量:
+options.save-back.backupDirectory=备份目录:
+options.save-back.backupPrefix=备份文件名前缀:
+options.save-back.backupSuffix=备份文件名后缀:
+options.save-back.backupEverySave=每次保存进行备份
+options.save-back.twoStageSave=两个阶段的保存（更安全，但复位文件需要某些文件系统上的所有者权限）
+options.save-back.twoStageSave.tooltip=第1阶段：创建一个临时文件，并保存它。第2阶段：重命名临时文件的真实文件名。
+options.save-back.confirmSaveAll=“保存全部内容“要求进行确认
+options.save-back.autosaveUntitled=自动保存未命名的内容
+options.save-back.suppressNotSavedConfirmUntitled=不给未命名内容标记未混乱文件.
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=检查这意味着每当创建一个新的内容，未命名的内容就被删除（它是一个功能！）
+options.save-back.useMD5forDirtyCalculation=如果内容未改变，不标注内容紊乱.
+options.save-back.useMD5forDirtyCalculation.tooltip=在加载时比较内容长度以及MD5哈希值, 以判断已编辑的内容是否仍然混乱.
+options.save-back.saveAsUsesFSB=“另存为”默认到文件系统浏览器目录
+#}}}
+
+#{{{ Shortcuts pane
+options.shortcuts.deletekeymap.label=删除
+options.shortcuts.deletekeymap.dialog.label=删除键盘映射
+options.shortcuts.deletekeymap.dialog.title=删除
+options.shortcuts.duplicatekeymap.label=重复
+options.shortcuts.duplicatekeymap.dialog.label=选择新的键盘映射名称
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=这个名字已经存在，请另外选择
+options.shortcuts.duplicatekeymap.dialog.title=键盘映射名称
+options.shortcuts.resetkeymap.label=复位
+options.shortcuts.resetkeymap.dialog.label=重置键盘映射
+options.shortcuts.resetkeymap.dialog.title=重置键盘映射
+options.shortcuts.keymap.label=选择键盘映射:
+options.shortcuts.label=快捷键
+options.shortcuts.select.label=编辑快捷键:
+options.shortcuts.select.tooltip=您可以选择全局，宏或插件快捷方式
+options.shortcuts.name=指令
+options.shortcuts.shortcut1=主快捷键
+options.shortcuts.shortcut2=备选快捷键
+options.shortcuts.filter.label=滤波器:
+options.shortcuts.filter.tooltip=只显示包含该段文字的动作
+options.shortcuts.clear.label=清除
+
+grab-key.title=指定快捷键
+grab-key.caption=按所需的 "{0}"的快捷方式, 然后按确定.
+grab-key.keyboard-test=输入导致问题的按键.
+grab-key.assigned-to=目前分配给: {0}
+grab-key.assigned-to.none=<none>
+grab-key.assigned-to.prefix={0} 前缀
+grab-key.clear=清楚
+grab-key.remove=删除当前
+
+grab-key.remove-ask.title=删除快捷键?
+grab-key.remove-ask.message=\
+	你未指定一个新的快捷键.\n\
+	你是否想要移除当前快捷键?
+
+grab-key.duplicate-alt-shortcut.title=快捷键重复
+grab-key.duplicate-alt-shortcut.message=\
+	选择的快捷键与其他快捷键重复.\n\
+	请选择另一个。
+
+grab-key.duplicate-shortcut.title=快捷键重复
+grab-key.duplicate-shortcut.message=\
+	该快捷键已经分配给\n\
+	"{0}".\n\
+	\n\
+	你想要覆盖它吗?
+
+grab-key.prefix-shortcut.title=无效的快捷键
+grab-key.prefix-shortcut.message=\
+	你无法使用该快捷键, \n\
+	因为它是其他快捷键的前缀.\n\
+	请选择另外一个.
+#}}}
+
+#{{{ Status bar pane
+options.status.label=状态栏
+options.status.visible=显示状态栏
+options.status.plainview.visible=在插件视图显示状态栏
+options.status.foreground=状态栏文本:
+options.status.background=状态栏背景:
+options.status.memory.foreground=内存指示器前景色:
+options.status.memory.background=内存指示器背景:
+options.status.edit.title=编辑状态栏条目
+options.status.edit.labelRadioButton=标签
+options.status.edit.widgetRadioButton=小部件
+options.status.edit.labelLabel=键入一个标签:
+options.status.edit.widgetLabel=选择一个部件:
+options.status.caret.linenumber=显示插入线号
+options.status.caret.dot=显示从行首开始的插入符偏离
+options.status.caret.virtual=显示从行首开始的插入符虚拟偏离
+options.status.caret.offset=显示从文件首开始的插入符偏离
+options.status.caret.bufferlength=显示文件长度
+options.status.caret.title=光标位置显示选项:
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=语法高亮
+options.syntax.object=语汇基元类型
+options.syntax.style=文本样式
+options.syntax.foldLine.1=折叠的折叠线，1级
+options.syntax.foldLine.2=折叠的折叠线，2级
+options.syntax.foldLine.3=折叠的折叠线，3级
+options.syntax.foldLine.0=折叠的折叠线，>3级
+#}}}
+
+#{{{ Text Area pane
+options.textarea.label=文本区域
+options.textarea.font=文本字体:
+options.textarea.fontSubst=可替换的其他字体
+options.textarea.fontSubst.tooltip=搜索可能从已选字体丢失的字形的其它字体（而不是显示矩形）
+options.textarea.fontSubstList=字体替换: 首选字体:
+options.textarea.fontSubstSystemFonts=字体替换：搜索所有的系统字体
+options.textarea.fontSubstWarning.label=字体替换
+options.textarea.fontSubstWarning=没有系统字体，您将需要首选字体.
+options.textarea.foreground=文本颜色:
+options.textarea.background=背景颜色:
+options.textarea.caret=插入符:
+options.textarea.blinkCaret=闪烁
+options.textarea.blockCaret=块
+options.textarea.thickCaret=粗
+options.textarea.selection=单项选择:
+options.textarea.multipleSelection=多重选择:
+options.textarea.selectionFg=选择前景色:
+options.textarea.lineHighlight=高亮当前行
+options.textarea.structureHighlight=高亮匹配元素:
+options.textarea.eolMarkers=行标记结束:
+options.textarea.wrapGuide=换行指南:
+options.textarea.electricBorders=电动（自动滚动）边界
+options.textarea.stdNextPrevWord=跳至下一个/前一个单词命令，删除空白符
+options.textarea.antiAlias=消除锯齿平滑文本
+options.textarea.antiAlias.tooltip=在某些系统上减慢显示
+options.textarea.fracFontMetrics=小数字体度量
+options.textarea.fracFontMetrics.tooltip=不推荐使用亚像素抗锯齿
+options.textarea.stripTrailingEOL=隐藏最终的行（如果有的话）
+options.textarea.completeFromAllBuffers=所有打开内容的完整单词(默认是 \
+    在当前可见内容中限制搜索)
+options.textarea.lineSpacing.label=	额外的垂直行间距（以像素为单位）:
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=工具栏
+options.toolbar.showToolbar=显示工具栏
+options.toolbar.caption=工具栏显示的按钮:
+options.toolbar.add=添加...
+options.toolbar.edit=编辑...
+options.toolbar.remove=删除
+options.toolbar.moveUp=向上移动
+options.toolbar.moveDown=向下移动
+options.toolbar.reset=重置到默认
+options.toolbar.edit.title=编辑工具栏条目
+options.toolbar.edit.caption=类型:
+options.toolbar.edit.separator=分隔符
+options.toolbar.edit.action=命令或宏:
+options.toolbar.edit.builtin=使用内置的图标:
+options.toolbar.edit.file=从文件加载图标:
+options.toolbar.edit.choose=选择
+options.toolbar.edit.no-icon=没有选择图标
+
+options.toolbar.reset.dialog.title=重置为默认值
+options.toolbar.reset.dialog.message=你确定要重置工具栏到安装默认?
+#}}}
+
+#{{{ View pane
+options.view.label=视图
+options.view.viewLayout=查看布局
+options.view.floatableToolbars=流通工具栏
+options.view.alternateDockingLayout=备用停靠窗口位置
+options.view.alternateToolBarLayout=备用工具栏的位置
+options.view.abbreviatePaths=可能时，使用环境变量缩写路径
+options.view.showFullPath=在标题栏中显示完整路径缓冲区
+options.view.showSearchbar=总是显示搜索栏
+options.view.beepOnSearchAutoWrap=搜索自动换行时蜂鸣
+options.view.showBufferSwitcher=显示内容切换
+options.view.bufferSwitcherMaxRowsCount=可见行内容切换:
+options.view.sortBuffers=排序内容集
+options.view.sortByName=按文件名排序内容集, 而不是路径名
+options.view.fullScreenIncludesMenu=在全屏模式下显示菜单栏
+options.view.fullScreenIncludesToolbar=在全屏模式下显示工具栏
+options.view.fullScreenIncludesStatus=在全屏模式下显示状态栏
+options.bufferset.scope=内容范围:
+#}}}
+
+
+
+#{{{ File System Browser panes
+options.browser.label=文件系统浏览器
+
+options.browser.colors.label=颜色
+options.browser.colors.glob=全局文件名
+options.browser.colors.color=颜色
+options.browser.colors.add=添加
+options.browser.colors.remove=删除
+
+options.browser.general.label=普通
+options.browser.general.defaultPath=默认路径:
+options.browser.general.defaultPath.favorites=喜欢
+options.browser.general.defaultPath.home=主目录
+options.browser.general.defaultPath.last=最近访问目录
+options.browser.general.defaultPath.buffer=当前内容父目录
+options.browser.general.defaultPath.working=jEdit进程的工作目录
+options.browser.general.showMenubar=显示菜单栏
+options.browser.general.showToolbar=显示工具栏
+options.browser.general.showIcons=显示图标
+options.browser.general.showHiddenFiles=显示隐藏文件
+options.browser.general.sortIgnoreCase=排序时忽略大小写
+options.browser.general.sortMixFilesAndDirs=混合文件和目录
+options.browser.general.doubleClickClose=Double-点击打开的文件关闭
+options.browser.general.currentBufferFilter=文件对话框中筛选\
+当前缓冲区扩展
+options.browser.general.useDefaultIcons=使用默认图标
+#}}}
+
+#{{{ Browser Context Menu
+options.browser.custom.context.label=右键菜单
+options.browser.custom.context.caption=自定义浏览器中的右键菜单项目:
+#}}}
+
+#{{{ Font selector
+font-selector.title=字体选择
+font-selector.family=字体集合:
+font-selector.size=字体大小:
+font-selector.style=字体样式:
+font-selector.plain=平白
+font-selector.bold=加粗
+font-selector.italic=斜体
+font-selector.bolditalic=加粗倾斜
+font-selector.preview=预览
+font-selector.long-text=The quick brown fox jumps over the lazy dog.
+#}}}
+
+#{{{ Color chooser, used by options.syntaxs
+colorChooser.title=选择颜色
+#}}}
+
+#{{{ Style editor, used by options.syntaxs
+style-editor.title=样式编辑器
+style-editor.tokenType=语汇基元类型:
+style-editor.italics=斜体
+style-editor.bold=加粗
+style-editor.fgColor=文本颜色:
+style-editor.bgColor=背景颜色:
+#}}}
+
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=选项
+options.plugins.label=插件
+options.no-plugins.label=没有插件选项
+#}}}
+
+#{{{ Help viewer
+helpviewer.title=jEdit帮助
+helpviewer.loading=加载...
+helpviewer.back.label=返回
+helpviewer.forward.label=向前
+
+helpviewer.toc.loading=加载...
+helpviewer.toc.label=目录
+helpviewer.toc.welcome=欢迎来到 jEdit
+helpviewer.toc.readme=常规信息
+helpviewer.toc.changes=详细更改日志
+helpviewer.toc.todo=待办事项清单和已知错误
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.copying-apache=Apache License
+helpviewer.toc.copying-plugins=Plugin Licensing Amendment
+helpviewer.toc.plugins=插件
+helpviewer.toc.online-apidocs=jEdit的API参考（在线）
+helpviewer.search.label=搜索
+helpviewer.search.caption=搜索:
+helpviewer.searching=搜索中...
+helpviewer.no-results=没有结果
+#}}}
+
+#{{{ Tip of the day window
+tip.title=每日提示
+tip.caption=你知道吗...
+tip.show-next-time=启动时显示提示
+tip.next-tip=下一个提示
+
+tip.not-found=文件/提示 目录没有找到
+#}}}
+
+#{{{ Activity log
+log-viewer.title=活动日志
+log-viewer.caption=全文日志存储在 {0}.
+log-viewer.copy=复制
+log-viewer.tail.label=文档结尾
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=查看标记(Vie$w Markers)
+view-markers.title=标记
+#}}}
+
+#{{{ I/O progress monitor
+io-progress-monitor.title=I/O 进程监视器
+io-progress-monitor.caption={0} 挂起的请求.
+io-progress-monitor.idle=线程空闲
+io-progress-monitor.abort=退出
+
+#{{{ I/O abort dialog box
+abort.title=退出 I/O
+abort.message=你确定要中止当前正在执行的\n\
+输入/输出请求？如果中止保存文件，这可能\n\
+导致数据丢失。
+#}}}
+
+#}}}
+
+#{{{ Task  monitor
+task-monitor.title=任务监视器
+#}}}
+
+#{{{ VFS browser
+vfs.browser.title=文件浏览器
+vfs.browser.longtitle=文件系统浏览器
+vfs.browser.title.open=文件浏览器 - 打开
+vfs.browser.title.save=文件浏览器 - 保存
+vfs.browser.title.dialog=文件浏览器 - 打开
+vfs.browser.path=路径:
+vfs.browser.path.mnemonic=p
+vfs.browser.filter=过滤器:
+vfs.browser.tree.loading=加载...
+
+vfs.browser.name=名称
+vfs.browser.type=类型
+vfs.browser.type.file=文件
+vfs.browser.type.directory=目录
+vfs.browser.type.filesystem=文件系统
+vfs.browser.status=状态
+vfs.browser.status.no=没有权限
+vfs.browser.status.ro=只读
+vfs.browser.status.append=仅追加
+vfs.browser.status.rw=读/写
+vfs.browser.size=大小
+vfs.browser.modified=最后编辑
+
+vfs.browser.file_filter.glob=全局文件过滤
+vfs.browser.file_filter.dir_only=仅目录
+
+#{{{ Actions
+vfs.browser.browse-window.label=在新窗口中浏览
+vfs.browser.browse.label=浏览
+vfs.browser.close.label=关闭
+vfs.browser.copy-path.label=复制
+vfs.browser.delete.label=删除...
+vfs.browser.home.label=主目录
+vfs.browser.properties.label=属性
+vfs.browser.properties.title=文件/目录 属性
+vfs.browser.insert.label=插入
+vfs.browser.new-directory.label=新建目录...
+vfs.browser.new-file.label=新建文件
+vfs.browser.open.label=打开
+vfs.browser.open-desktop.label=在桌面打开(Open in $Desktop)
+vfs.browser.other-encoding-2.label=其它 ({0})...
+vfs.browser.other-encoding.label=其它...
+vfs.browser.reload.label=重新加载目录
+vfs.browser.rename.label=重命名...
+vfs.browser.roots.label=根目录
+vfs.browser.search-directory.label=在目录中搜索...
+vfs.browser.show-hidden-files.label=显示隐藏文件
+vfs.browser.synchronize.label=当前内容目录
+vfs.browser.up.label=父目录
+vfs.browser.paste.label=粘贴
+vfs.browser.previous.label=前一个目录
+vfs.browser.next.label=下一个目录
+#}}}
+
+#{{{ Tool bar
+
+#}}}
+
+#{{{ Commands menu
+vfs.browser.commands.label=指令($Commands)
+vfs.browser.commands.encoding.label=编码
+vfs.browser.commands.encoding.auto-detect=自动检测
+
+vfs.browser.open-in.label=打开在
+vfs.browser.open-view.label=新建视图
+vfs.browser.open-plain-view.label=新建空白视图
+vfs.browser.open-split.label=新建拆分
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=插件($Plugins)
+vfs.browser.plugins.plugin-manager.label=插件管理器...
+vfs.browser.plugins.plugin-options.label=插件选项...
+vfs.browser.plugins.no-plugins.label=没有插件
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=喜好(Fa$vorites)
+vfs.browser.favorites.add-to-favorites.label=添加到喜好
+vfs.browser.favorites.edit-favorites.label=编辑喜好
+vfs.browser.favorites.no-favorites.label=没有喜好
+#}}}
+
+vfs.browser.dialog.open=打开
+vfs.browser.dialog.save=保存
+vfs.browser.dialog.choose-dir=选择
+vfs.browser.dialog.filename=文件名:
+vfs.browser.dialog.filename.mnemonic=f
+
+#{{{ Dialogs
+vfs.browser.bad-filter.title=无效过滤器
+vfs.browser.bad-filter.message=过滤器 {0} 无效 ({1})
+
+vfs.browser.recurse-favorites.title=不能添加喜好给自己
+vfs.browser.recurse-favorites.message=喜好列表无法添加给自己.
+
+vfs.browser.delete-confirm.title=删除文件确认
+vfs.browser.delete-confirm.message=你确定要删除以下 {1}?
+
+vfs.browser.delete-favorites.title=从喜好删除
+vfs.browser.delete-favorites.message=你确定要从喜好\
+	删除以下文件?
+
+vfs.browser.rename.title=重命名文件
+vfs.browser.rename.message=为 {0}键入一个新名称:
+
+vfs.browser.mkdir.title=新目录
+vfs.browser.mkdir.message=新目录名称（或路径）:
+#}}}
+
+#}}}
+
+#{{{ I/O status messages
+vfs.status.load=正在加载 {0}
+vfs.status.load-markers=正在加载 {0}的标记
+vfs.status.save=正在保存 {0}
+vfs.status.save-markers=正在保存 {0}的标记
+vfs.status.autosave=正在自动保存 {0}
+vfs.status.listing-directory=正在列出 {0}
+vfs.status.deleting=正在删除 {0}
+vfs.status.renaming=正在重命名 {0} 到 {1}
+#}}}
+
+#{{{ Plugin manager
+
+plugin-manager.title=插件管理器
+
+plugin-manager.hide-libraries=隐藏库
+
+plugin-manager.mgr-options=下载选项...
+plugin-manager.plugin-options=插件选项...
+plugin-manager.done=关闭
+
+plugin-manager.remove-confirm.title=移除插件
+plugin-manager.remove-confirm.message=你确定要删除以下\
+	插件吗?
+
+plugin-manager.dependency.title=插件依赖项
+plugin-manager.dependency.message=以下插件需要{0}.\n\
+	取消 {0} 将要使下列插件取消:
+
+plugin-manager.remove-dependencies.title=插件依赖项
+plugin-manager.remove-dependencies.message=删除插件的需要以下插件.\n\
+	删除它们也将取消下面的插件:
+
+plugin-manager.cleanup.label=清除
+plugin-manager.cleanup.title=清除插件数据
+plugin-manager.cleanup.message=清除以下插件的数据:
+
+plugin-manager.noOrphan.label=查找孤立的
+plugin-manager.noOrphan.title=无孤立的jar文件发现
+plugin-manager.noOrphan.message=jEdit的安装有没有孤立的jar文件
+
+plugin-manager.findOrphan.label=查找孤立的
+plugin-manager.findOrphan.title=发现孤立的 jars文件
+plugin-manager.findOrphan.message=下列jar文件不属于任何插件\n \
+删除它们吗？\n（警告，他们可能在一下插件中动态声明\n\
+  如JDBC驱动插件）：
+
+install-plugins.depend.title=需要依赖项
+install-plugins.depend.message=一个或更多的插件安装\n\
+需要额外的插件。如果你继续他们将被自动\n \
+安装。
+
+plugin-manager.status.loaded=已加载
+plugin-manager.status.disabled=不支持
+plugin-manager.status.not-loaded=没有加载
+plugin-manager.status.error=错误
+
+plugin-manager.list-download-connect=连接到 plugins.jedit.org
+plugin-manager.list-download=从m plugins.jedit.org下载插件列表
+plugin-manager.list-download.mirror-autoselect-error.title=镜像选择错误
+plugin-manager.list-download.mirror-autoselect-error.message=镜像自动选择错误:\n\
+	{0}\n\
+	指定一个镜像可能有效.
+plugin-manager.list-download.need-password.title=HTTP 代理需要密码
+plugin-manager.list-download.need-password.message=HTTP 代理需要密码.\n\
+	请在“下载选项”配置有效的用户名/密码.
+plugin-manager.list-download.disconnected.title=下载插件列表错误
+plugin-manager.list-download.disconnected.message=插件列表无法下载:\n\
+服务器 {0} 无效. 请检查你的互联网连接...
+plugin-manager.list-download.generic-error.title=下载插件列表错误
+plugin-manager.list-download.generic-error.message=下载插件列表错误:\n\
+错误是 {0} - {1}
+plugin-manager.filterField=只显示其名称中包含这段文字的插件
+
+#{{{ Plugin management
+manage-plugins.title=管理
+
+manage-plugins.info.name=名称
+manage-plugins.info.version=版本
+manage-plugins.info.status=状态
+manage-plugins.info.data=数据
+
+manage-plugins.data-size.unknown=<unknown>
+
+manage-plugins.remove=移除...
+manage-plugins.help=帮助...
+plugin-load-error.message=无法加载插件
+plugin-load-error.title=插件加载错误
+#}}}
+
+#{{{ Plugin installation
+install-plugins.title=安装
+
+install-plugins.info.name=名称
+install-plugins.info.size=大小
+install-plugins.info.releaseDate=发布日期
+install-plugins.info.version=版本
+install-plugins.info.category类别
+
+install-plugins.totalSize={0} 个插件), 总大小: {1}
+install-plugins.select-all=全选
+install-plugins.install=安装
+install-plugins.show-updates=显示更新
+
+install-plugins.info=<b>作者</b>: {0}\n\
+	<b>发布了</b>: {1}\n\
+	{2}
+
+update-plugins.title=更新
+
+plugin-manager.progress=正在从 {1}下载 {0} 
+plugin-manager.progress.title=正在安装插件
+plugin-manager.progress.stop=停止
+#}}}
+
+#{{{ Plugin remove error
+plugin-manager.remove-failed.title=移除失败项
+plugin-manager.remove-failed.message=插件 {0}\n\
+	无法被移除.
+#}}}
+
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=名称
+fileprop.path=路径
+fileprop.lastmod=最后编辑
+fileprop.size=大小
+fileprop.properties=特性
+fileprop.readable=可读
+fileprop.writeable=可写
+fileprop.attribute=属性
+fileprop.okBtn=确定
+fileprop.cancelBtn=取消
+fileprop.selectedFiles=已选文件
+fileprop.selectedDirectories=已选目录
+#}}}
+
+#{{{ Activity log viewer
+log-viewer.dialog.title=活动日志设置
+log-viewer.settings.label=设置
+log-viewer.message.label=消息显示:
+log-viewer.message.debug.label=调试
+log-viewer.message.message.label=消息
+log-viewer.message.notice.label=注意
+log-viewer.message.warning.label=警告
+log-viewer.message.error.label=错误
+# This one should be actually placed in Debugging options, but
+# we don't have such a pane yet
+debug.beepOnOutput.label=输出时蜂鸣
+#}}}
+
+logs-remove-all-errors.label=删除所有错误
+
+taskmanager.remainingtasks.label={0} 个剩余任务
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=内容编辑模式 (ex:java)
+statusbar.mode.sample=java
+statusbar.fold.label=内容折叠处理程序 (ex:explicit)
+statusbar.fold.sample=显式
+statusbar.encoding.label=内容编码 (ex:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=内容换行模式 (ex:N)
+statusbar.wrap.sample=N
+statusbar.indent.label=自动缩进 (ex:F)
+statusbar.indent.sample=F
+statusbar.multiSelect.label=内容多重选择模式 (ex:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=内容矩形选择模式 (ex:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=Buffer overwrite (ex:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=内容行分割器 (ex:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=内存状态 (ex:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=时钟 (ex:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=内容集范围 (ex:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=选择范围长度 (ex:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=磁盘上的最后修改日期 (ex:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+statusbar.task-monitor.label=任务监视器 (ex: 7 task(s))
+statusbar.task-monitor.tooltip=点击查看正在运行的可停靠任务
+statusbar.task-monitor.sample=7 个任务
+statusbar.task-monitor.template={0} 个任务
+#}}}
+
+killring.load-memoryerror.message=<html>无法加载之前删除的文本. 请增加内存堆空间.<br>\
+  点击 <b>开始</b> 以启动jEdit,或者 <br><b>结束</b> 已结束并且改变你的设置. <br>你并且可以 <b>删除这些历史文件</b> 再启动 jEdit</html>
+killring.load-memoryerror.title=内存错误
+killring.start=开始
+killring.stop=停止
+killring.delete=删除killring，并开始
+
+#}}}
+
+#{{{ Macros
+
+#{{{ Properties used by macros
+
+#{{{ common
+macro.rs.general.ErrorNotEditableDialog.title=写权限
+macro.rs.general.ErrorNotEditableDialog.message=内容无法编辑!
+#}}}
+
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=复制包含以下内容的行:
+macro.rs.CopyLinesContaining.LinesCopied.message=行已复制
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=剪切包含以下内容的行:
+macro.rs.CutLinesContaining.LinesCut.message=行以剪切
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.label=列 (在 1 和 {0}):
+#}}}
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=转换关键词为大写
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=内容模式开关
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=键入内容模式:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=正在改变内容模式
+macro.rs.BufferModeSwitcher.To.label=到
+macro.rs.BufferModeSwitcher.Mode.label=模式
+macro.rs.BufferModeSwitcher.NotFound.label=未发现
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=行移动无法在多重选择下执行.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=要流量的目录:
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=打开内容
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] 转换到; [SPACE] 转换到, 保留对话框; [DEL] 关闭内容
+macro.rs.BufferSwitcher.Help1.label=内容切换宏帮助:
+macro.rs.BufferSwitcher.Help2.label=DELETE 关闭选择内容.
+macro.rs.BufferSwitcher.Help3.label=ENTER 切换到选定的内容，关闭对话框.
+macro.rs.BufferSwitcher.Help4.label=ESCAPE 关闭对话框.
+macro.rs.BufferSwitcher.Help5.label=SPACE 切换到选定的内容，不会关闭对话.
+macro.rs.BufferSwitcher.Help6.label=注意: 这个对话框只显示一次
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=内容不存在于磁盘上.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=不支持删除.
+macro.rs.DeleteCurrent.Deleted.message=已删除:
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=全局模式 (e.g. *.txt or /usr/include/*):
+macro.rs.GlobClose.ErrorGlobPattern.error=全局模式错误:
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=没有其它内容混乱
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=无混乱内容
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=路径名:
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=这个宏仅适用于本地文件.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=这个宏仅适用于 Windows, Unix, 以及 MacOS X.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=当前字体大小:
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=奇数类型名称和变量.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=这个宏在Java编译时不工作
+macro.rs.GetPackageName.NotWorking2.error=使用'-jar' 命令行选项加载jEdit.
+macro.rs.GetPackageName.NotFind.error=找不到包名.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=无限循环:
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=生成代码
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=创建Get方法
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=创建Set方法
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=创建Get以及Set方法
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error='超级搜索结果“窗口未打开.
+macro.rs.HyperSearchResults.NotMatch.error=没有匹配的超级搜索.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=内容集调试中
+macro.rs.DebugBuffersets.BufferCount.label=内容数:
+macro.rs.DebugBuffersets.BufferList.label=内容列表
+macro.rs.DebugBuffersets.EndBufferList.label=内容列表结束
+macro.rs.DebugBuffersets.EditpaneList.label=编辑面板列表
+macro.rs.DebugBuffersets.EndEditpaneList.label=编辑面板列表结束
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=缩写
+macro.rs.DisplayAbbreviations.Expansion.label=扩展
+macro.rs.DisplayAbbreviations.Close.label=关闭
+macro.rs.DisplayAbbreviations.WriteSet.label=写设置
+macro.rs.DisplayAbbreviations.WriteAll.label=全写
+macro.rs.DisplayAbbreviations.AbbreviationList.label=缩写词列表
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=调用将表单写入新内容
+macro.rs.DisplayAbbreviations.SizeVector.label=向量大小:
+macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit 缩写表
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=缩写集:
+macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=缩写扩展
+macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< 没有缩略语 >>
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=jEdit的动作栏可以通过“工具”菜单中打开而且通常
+macro.rs.DisplayActions.jEditActionBar2.label=分配给 C+ENTER 的键盘快捷键.
+macro.rs.DisplayActions.NoLabel.label=<没有标签>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=插入符号字符:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit的键盘快捷键表
+macro.rs.DisplayShortcuts.Name.label=名称
+macro.rs.DisplayShortcuts.Shortcut1.label=快捷键 - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=快捷键 - 2
+macro.rs.DisplayShortcuts.Close.label=关闭
+macro.rs.DisplayShortcuts.WriteToBuffer.label=写入到内容
+macro.rs.DisplayShortcuts.ShortcutList.label=键盘快捷键列表
+macro.rs.DisplayShortcuts.Center.label=中心
+macro.rs.DisplayShortcuts.South.label=南部
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=之前:
+macro.rs.HexConvert.After.label=之后:
+macro.rs.HexConvert.NotValidHex.label=不是有效的十六进制字符串.
+macro.rs.HexConvert.ByteToString.label=字节转化为字符串:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=打开活动日志错误.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=活动日志条目在bug报告里可能是有用的:\n\n.
+macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
+macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
+macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
+macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: 完成启动
+macro.rs.MakeBugReport.Error.label=[error]
+macro.rs.MakeBugReport.ReadingActivityLog.error=阅读活动日志错误
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=指定运行脚本下的参数
+macro.rs.RunScript.ScriptExecutionCancelled.message=脚本执行被取消.
+macro.rs.RunScript.FileNotScript.error=当前文件可能不是是一个脚本.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=daemon
+macro.rs.ShowThreads.Priority.label=prio
+macro.rs.ShowThreads.NotStarted.label=未启动
+macro.rs.ShowThreads.Interrupted.label=中断
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] 关闭      [U] 更新
+macro.rs.ShowThreads.CurrentThreads.label=当前进程
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=插入缓冲区本地属性
+macro.rs.InsertBufferProperties.Properties.label=特性:
+macro.rs.InsertBufferProperties.Insert.label=插入
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=注：缓冲区局部属性必须在缓冲区的第一个或最后10行以被jEdit认可.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--列出的外观和感觉的属性名称--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=系统属性
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=添加前缀和后缀到选择行
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=要添加的前缀:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=要添加的后缀:
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=颜色选择器
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=互联网时间
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=输入标签名称:
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=行过滤器
+macro.rs.LineFilter.ignoreCaseCheckBox.label=忽略大小写
+macro.rs.LineFilter.regexpPanelBorder.title=模式比较（正则表达式）
+macro.rs.LineFilter.processModeRadioButtonMatching.label=正在匹配
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=没有匹配
+macro.rs.LineFilter.processModeOptionPanelBorder.title=行
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=写到新内容
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=删除
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=动作
+
+macro.rs.LineFilter.DeleteActionDisabled.message=删除不可用
+macro.rs.LineFilter.MultipleSelection.message=不支持多重选择
+macro.rs.LineFilter.BlockSelection.message=不支持矩形选择
+
+macro.rs.LineFilter.SummaryDeleted.label=行已删除!
+macro.rs.LineFilter.SummaryWritten.label=行写入新内容.
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=无效的正则表达式
+macro.rs.LineFilter.ErrorRegexpDialog.message=正则表达式无效!
+#}}}
+
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=输入一个字符
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=对不起，这个宏在矩形选择下不起作用.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=似乎没有双倍行距:
+macro.rs.SingleSpaceBuffer.Line.message=行
+macro.rs.SingleSpaceBuffer.NotBlank.message=不是空白.
+#}}}
+
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C
+macros.folder.C.label=C
+
+C/Include_Guard.label=Include Guard
+C/Toggle_Header_Source.label=切换 Header Source
+#}}}
+
+#{{{ Clipboard
+macros.folder.Clipboard.label=粘贴板
+
+Clipboard/Copy_Lines.label=复制行
+Clipboard/Copy_Lines_Containing.label=复制行包含
+Clipboard/Copy_Visible_Lines.label=复制可见行
+Clipboard/Cut_Lines.label=剪切行
+Clipboard/Cut_Lines_Containing.label=剪切行包含
+Clipboard/Paste_Indent.label=复制缩进
+#}}}
+
+#{{{ Editing
+macros.folder.Editing.label=正在编辑
+
+Editing/Duplicate_Lines_Above.label=复制以上行
+Editing/Duplicate_Lines_Below.label=复制以下行
+Editing/Go_to_Column.label=跳至列
+Editing/Greedy_Backspace.label=贪婪退格键
+Editing/Greedy_Delete.label=贪婪删除
+Editing/Greedy_Left.label=贪婪左键
+Editing/Greedy_Right.label=贪婪右键
+Editing/Keywords_to_Upper_Case.label=关键字转化为大写
+Editing/Mode_Switcher.label=模式开关
+Editing/Move_Lines_Down.label=行下移
+Editing/Move_Lines_Up.label=行上移
+Editing/Open_Line_Above.label=打开上行
+Editing/Open_Line_Below.label=打开下行
+Editing/Toggle_Fold.label=切换折叠
+#}}}
+
+#{{{ Emacs
+macros.folder.Emacs.label=Emacs
+Emacs/Emacs_Align_Decls.label=Emacs 声明对齐
+Emacs/Emacs_Backward_Sentence.label=Emacs 向后句
+Emacs/Emacs_Capitalize_Word.label=Emacs 大写单词
+Emacs/Emacs_Center_Line.label=Emacs 中心线
+Emacs/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Emacs/Emacs_Downcase_Word.label=Emacs 小写单词
+Emacs/Emacs_Exchange_Point_and_Mark.label=Emacs 交换点和标记
+Emacs/Emacs_Fixup_Whitespace.label=Emacs 修正空白
+Emacs/Emacs_Forward_Sentence.label=Emacs 正向句
+Emacs/Emacs_Insert_File.label=Emacs 插入文件
+Emacs/Emacs_Kill_Line.label=Emacs 删除行
+Emacs/Emacs_Kill_Region.label=Emacs 删除区域
+Emacs/Emacs_Kill_Ring_Save.label=Emacs 删除 Ring 保存
+Emacs/Emacs_Kill_Sentence.label=Emacs 删除句
+Emacs/Emacs_Next_Line.label=Emacs 下一行
+Emacs/Emacs_Open_Line.label=Emacs 打开行
+Emacs/Emacs_Previous_Line.label=Emacs 前一行
+Emacs/Emacs_Set_Mark.label=Emacs 设置标记
+Emacs/Emacs_Set_Wrap=Emacs 设置自动换行
+Emacs/Emacs_Transpose_Chars.label=Emacs 转置字符
+Emacs/Emacs_Transpose_Lines.label=Emacs 转置行
+Emacs/Emacs_Upcase_Word.label=Emacs 单词大写
+#}}}
+
+#{{{ Files
+macros.folder.Files.label=文件
+
+Files/Browse_Buffer_Directory.label=浏览内容目录
+Files/Browse_Directory.label=浏览目录
+Files/Buffer_Switcher.label=内容开关
+Files/Close_All_Except_Active.label=关闭除活动区外所有内容
+Files/Copy_Name_to_Clipboard.label=复制内容到粘贴板
+Files/Copy_Path_to_Clipboard.label=复制路径到粘贴板
+Files/Delete_Current.label=删除当前
+Files/Duplicate_Buffer.label=复制内容
+Files/Glob_Close.label=全局关闭
+Files/Insert_Selection.label=插入选择
+Files/Next_Dirty_Buffer.label=下一个混乱内容
+Files/Open_Path.label=打开路径
+Files/Open_Selection.label=打开选择内容
+Files/Send_Buffer_To_Next_Split.label=内容移入下一个拆分
+Files/Toggle_ReadOnly.label=切换只读
+#}}}
+
+#{{{ Interface
+macros.folder.Interface.label=接口
+
+Interface/Decrease_Font_Size.label=减小字体
+Interface/Increase_Font_Size.label=增大字体
+Interface/Open_Context_Menu.label=打开右键菜单
+Interface/Reset_TextArea.label=复制文本区域
+Interface/Splitpane_Grow.label=拆分窗格增长
+Interface/Toggle_Bottom_Docking_Area.label=切换底部停靠区域
+Interface/Toggle_Left_Docking_Area.label=切换左停靠区
+Interface/Toggle_Right_Docking_Area.label=切换右停靠区
+Interface/Toggle_Top_Docking_Area.label=切换顶部停靠区
+#}}}
+
+#{{{ Java
+macros.folder.Java.label=Java
+
+Java/Create_Constructor.label=Create Constructor
+Java/Get_Class_Name.label=Get Class Name
+Java/Get_Package_Name.label=Get Package Name
+Java/Java_File_Save.label=Java File Save
+Java/Make_Get_and_Set_Methods.label=Make Get and Set Methods
+Java/Preview_JavaDoc_Of_Current_Buffer.label=Preview JavaDoc Of Current Buffer
+#}}}
+
+#{{{ Misc
+macros.folder.Misc.label=Misc
+
+Misc/Buffer_to_HyperSearch_Results.label=内容转化为超级搜索结果
+Misc/Debug_BufferSets.label=调试内容集
+Misc/Display_Abbreviations.label=显示缩写
+Misc/Display_Actions.label=显示动作
+Misc/Display_Character_Code.label=显示字符代码
+Misc/Display_Shortcuts.label=显示快捷键
+Misc/Evaluate_Buffer_in_BeanShell.label=在 BeanShell测试内容
+Misc/Hex_Convert.label=十六进制转换
+Misc/HyperSearch_Results_to_Buffer.label=超级搜索结果转换为内容
+Misc/Make_Bug_Report.label=错误报告
+Misc/Run_Script.label=运行脚本
+Misc/Show_Threads.label=显示线程
+#}}}
+
+#{{{ Properties
+macros.folder.Properties.label=特性
+
+Properties/Create_Plugin_Announcement.label=创建插件声明
+Properties/Insert_Buffer_Properties.label=插入内容属性
+Properties/jEdit_Properties.label=jEdit 特性
+Properties/Look_and_Feel_Properties.label=外观和感觉属性
+Properties/System_Properties.label=系统属性
+#}}}
+
+#{{{ Text
+macros.folder.Text.label=文本
+
+Text/Add_Prefix_and_Suffix.label=添加前缀和后缀
+Text/Color_Picker.label=颜色选择器
+Text/Compose_Tag.label=构图标签
+Text/Duplicate_Line.label=重复行
+Text/Insert_Date.label=插入时间
+Text/Insert_Tag.label=插入标签
+Text/Line_Filter.label=行过滤器
+Text/Next_Char.label=下一个字符
+Text/Reverse_Lines.label=行倒置
+Text/Single_Space_Buffer.label=单空间缓冲区
+#}}}
+
+#}}}
+
+#}}}

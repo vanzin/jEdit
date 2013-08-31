@@ -1,0 +1,27 @@
+/*
+ * Copy_Path_to_Clipboad.bsh - Copies the current buffer's 
+ * path to the clipboard.
+ *
+ * Copyright (C) 2002-2004 Ollie Rutherfurd <oliver@rutherfurd.net>
+ *
+ * $Id$
+ */
+
+void copyBufferPathToClipboard(Buffer buffer)
+{
+	Registers.setRegister('$',buffer.getPath());
+	HistoryModel.getModel("clipboard").addItem(buffer.getPath());
+}
+
+copyBufferPathToClipboard(buffer);
+
+/*
+
+<listitem>
+	<para><filename>Copy_Path_to_Clipboad.bsh</filename></para>
+	<abstract><para>Copies the current buffer's path
+		to the clipboard.
+	</para></abstract>
+</listitem>
+
+*/

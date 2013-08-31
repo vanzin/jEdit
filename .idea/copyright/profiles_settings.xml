@@ -1,0 +1,17 @@
+<component name="CopyrightManager">
+  <settings default="GPL v2">
+    <module2copyright />
+    <LanguageOptions name="HTML">
+      <option name="fileLocation" value="2" />
+    </LanguageOptions>
+    <LanguageOptions name="JSP">
+      <option name="fileLocation" value="2" />
+    </LanguageOptions>
+    <LanguageOptions name="JSPX">
+      <option name="fileLocation" value="2" />
+    </LanguageOptions>
+    <LanguageOptions name="XML">
+      <option name="fileLocation" value="2" />
+    </LanguageOptions>
+  </settings>
+</component>

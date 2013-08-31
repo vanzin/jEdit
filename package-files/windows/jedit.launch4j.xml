@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- US-ASCII is the best encoding to avoid problem of Launch4j which
+uses system default encoding no matter what encoding the config file
+declare in it. Here, "best" means a common subset of system default
+encodings on many of known OS and locales. -->
+<launch4jConfig>
+	<headerType>gui</headerType>
+	<outfile>jedit.exe</outfile>
+	<jar>@jar.filename@</jar>
+	<dontWrapJar>true</dontWrapJar>
+	<errTitle>jEdit</errTitle>
+	<downloadUrl>http://www.java.com/download</downloadUrl>
+	<supportUrl>http://www.jEdit.org</supportUrl>
+	<cmdLine>-reuseview</cmdLine>
+	<customProcName>false</customProcName>
+	<stayAlive>true</stayAlive>
+	<icon>@base.dir@/icons/jedit.ico</icon>
+	<jre>
+		<minVersion>1.7.0</minVersion>
+		<!-- Prefer JDK to make tools.jar available if possible. -->
+		<jdkPreference>preferJdk</jdkPreference>
+	</jre>
+	<versionInfo>
+		<fileVersion>@jedit.build.number@</fileVersion>
+		<txtFileVersion>@jedit.version@</txtFileVersion>
+		<fileDescription>jEdit - Programmer&apos;s Text Editor</fileDescription>
+		<copyright>Copyright (C) 1998-@current.year@ Contributors</copyright>
+		<productVersion>@jedit.build.number@</productVersion>
+		<txtProductVersion>@jedit.version@</txtProductVersion>
+		<productName>jEdit</productName>
+		<companyName>Contributors</companyName>
+		<internalName>jEdit</internalName>
+		<originalFilename>jedit.exe</originalFilename>
+	</versionInfo>
+</launch4jConfig>

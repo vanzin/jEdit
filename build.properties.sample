@@ -1,0 +1,70 @@
+###
+### Build property file for jEdit
+###
+
+### The directory where to download dependencies to
+### Use a directory exclusive used for that,
+### because the target "clean-all" will delete
+### it with all its content. (So don't use your
+### home-directory or your project-directory
+### if you don't want to loose all your files!)
+### This has to be a relative directory.
+#lib.dir=lib
+
+### The directory where to put the build-files
+### Use a directory exclusive used for that,
+### because the target "clean-all" will delete
+### it with all its content. (So don't use your
+### home-directory or your project-directory
+### if you don't want to loose all your files!)
+### This has to be a relative directory.
+#build.dir=build
+
+### The directory where to put the distribution-files
+### Use a directory exclusive used for that,
+### because the target "clean-all" will delete
+### it with all its content. (So don't use your
+### home-directory or your project-directory
+### if you don't want to loose all your files!)
+### This has to be a relative directory.
+#dist.dir=dist
+
+### The Ivy version to be used
+#ivy.version=2.2.0
+
+### The name of the wine executable for building the Windows installer on *nix.
+#wine.executable=wine
+
+### The name of the winepath executable for translating paths for wine.
+#winepath.executable=winepath
+
+### The name of the Inno Setup command line compiler
+### executable for building the Windows installer.
+
+# Example Windows location
+#innosetup.compiler.executable=C:\\Program Files\\Inno Setup 5\\ISCC.exe
+
+# Example wine location
+#innosetup.compiler.executable=/home/vampire/.wine/drive_c/Program Files/Inno Setup 5/ISCC.exe
+#innosetup.via.wine=true
+
+### For uploading the docs to the public webserver
+### adjust the following to your local path
+#rsync.executable=C:\\Programme\\cwRsync\\bin\\rsync.exe
+# If it's in your path, this is sufficient:
+#rsync.executable=rsync
+
+### GPG settings for signing the Debian repository metadata
+### The password can also be supplied interactively
+#gpg.ignore.missing.secring=true
+#gpg.secring=/home/vampire/.gnupg/secring.gpg
+#gpg.secring.password=<password>
+
+# debug settings
+#build.debug=true
+#build.debuglevel=lines,vars,source
+
+# warning settings
+#build.nowarn=false
+#build.deprecation=true
+#build.compilerarg=-Xlint:unchecked

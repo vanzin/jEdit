@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- jEdit buffer-local properties: -->
+<!-- maxLineLen=0:wrap=soft:indentSize=1:noTabs=true: -->
+<!-- jEdit user's guide -->
+<book id="users-guide"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
+    <bookinfo>
+        <title>jEdit 5.2 User's Guide</title>
+
+        <legalnotice>
+            <title>Legal Notice</title>
+
+            <para>Permission is granted to copy, distribute and/or modify this
+            document under the terms of the GNU Free Documentation License,
+            Version 1.1 or any later version published by the Free Software
+            Foundation; with no <quote>Invariant Sections</quote>,
+            <quote>Front-Cover Texts</quote> or <quote>Back-Cover Texts</quote>,
+            each as defined in the license. A copy of the license can be found
+            in the file <filename>COPYING.DOC.txt</filename> included with
+            jEdit.</para>
+        </legalnotice>
+        <author>
+           <othername> The jEdit all-volunteer developer team </othername>
+        </author>
+        
+        <revhistory>
+           <revision>
+                <revnumber>1.0 - 4.3</revnumber>
+                <date>1999-2004</date>
+                <author> <firstname>Slava</firstname> <surname>Pestov</surname> </author>
+                <revremark>Initial HTML document</revremark>
+            </revision>
+            
+            <revision>
+               <revnumber>3.2 - 4.1</revnumber>
+               <date>2001-2002</date>
+               <author> <firstname>John</firstname><surname>Gellene</surname> </author>
+               <revremark> Initial DocBook version. Initial versions of Plugin Guide and Macro Guide. </revremark>
+               </revision>
+            
+            <revision>
+              <revnumber>4.3 - 5.2</revnumber>
+              <date>2005-2013</date>
+              <author><firstname>Alan</firstname><surname>Ezust</surname></author>
+              <revremark> Maintainer. </revremark>
+            </revision>
+        </revhistory>
+    </bookinfo>
+
+    <part id="using-jedit-part">
+        <title>Using jEdit</title>
+
+        <partintro>
+            <para>This part of the user's guide covers jEdit's text editing
+            commands, along with basic usage of macros and plugins.</para>
+
+            <para>This part of the user's guide was originally written by Slava
+            Pestov and is maintained by the jEdit core development team.</para>
+        </partintro>
+
+        <xi:include href="conventions.xml" />
+        <xi:include href="starting.xml" />
+        <xi:include href="basics.xml" />
+        <xi:include href="files.xml" />
+        <xi:include href="text-edit.xml" />
+        <xi:include href="source-edit.xml" />
+        <xi:include href="customizing.xml" />
+        <xi:include href="using-macros.xml" />
+        <xi:include href="using-plugins.xml" />
+        <xi:include href="shortcuts.xml" />
+        <xi:include href="activity-log.xml" />
+        <xi:include href="history.xml" />
+        <xi:include href="globs.xml" />
+        <xi:include href="regexps.xml" />
+        <xi:include href="macro-index.xml" />
+
+    </part>
+
+    <part id="writing-modes-part">
+        <title>Writing Edit Modes</title>
+
+        <partintro>
+            <para>This part of the user's guide covers writing edit modes for
+            jEdit.</para>
+
+            <para>Edit modes specify syntax highlighting rules, auto indent
+            behavior, and various other customizations for editing different
+            file types. For general information about edit modes, see <xref
+            linkend="modes" />.</para>
+
+            <para>This part of the user's guide was written by Slava Pestov and
+            is maintained by the jEdit core development team.</para>
+        </partintro>
+
+        <xi:include href="writing-modes.xml" />
+        <xi:include href="installing-modes.xml" />
+        <xi:include href="updating-modes.xml" />
+    </part>
+
+    <part id="writing-macros-part">
+        <title>Writing Macros</title>
+
+        <partintro>
+            <para>This part of the user's guide covers writing macros for
+            jEdit.</para>
+
+            <para>First, we will tell you a little about BeanShell, jEdit's
+            macro scripting language. Next, we will walk through a few simple
+            macros. We then present and analyze a dialog-based macro to
+            illustrate additional macro writing techniques. Finally, we discuss
+            several tips and techniques for writing and debugging macros.</para>
+
+        </partintro>
+
+        <xi:include href="macro-basics.xml" />
+
+        <xi:include href="dialog-macro.xml" />
+        <xi:include href="macro-tips.xml" />
+        <xi:include href="bsh-commands.xml" />
+    </part>
+
+    <part id="writing-plugins-part">
+        <title>Writing Plugins</title>
+
+        <partintro>
+            <para>This part of the user's guide covers writing plugins for
+            jEdit.</para>
+
+            <para>Like jEdit itself, plugins are written primarily in Java.
+            While this guide assumes some working knowledge of the language, you
+            are not required to be a Java wizard. If you can write a useful
+            application of any size in Java, you can write a plugin. </para>
+            
+            <para>Where applicable, this section will also explain how jEdit's
+            source code is similar. Therefore, this is also a good introduction to 
+            to jEdit development. </para>   
+
+        </partintro>
+
+        <xi:include href="plugin-intro.xml" />
+        <xi:include href="plugin-implement.xml" />
+        <xi:include href="plugin-tips.xml" />
+
+    </part>
+</book>
