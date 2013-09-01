@@ -6,7 +6,6 @@ import java.lang.StringBuffer;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.Registers;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.jEdit;
@@ -34,15 +33,14 @@ public class EmacsUtil {
 	{
 		boolean lastActionWasThis = repeatingSameMacro ("Emacs/Emacs_Kill_Line");
 	
-		int caret = textArea.getCaretPosition();
+		int caret = textArea.getCaretPosition();		
 		int caretLine = textArea.getCaretLine();
 		int lineStart = textArea.getLineStartOffset (caretLine);
-		int lineEnd = textArea.getLineEndOffset (caretLine);
-	
+		int lineEnd = textArea.getLineEndOffset (caretLine);					
+		
 		// If we're at the end of line (ignoring any trailing white space),
 		// then kill the newline, too.
-		
-		int caret2 = caret + 1;
+		int caret2 = caret + 1;		
 		while (caret2 < lineEnd)
 		{
 			char ch = charAt (caret2);
@@ -131,7 +129,7 @@ public class EmacsUtil {
 	
 	public char charAt (int i)
 	{
-		
+		if (i >= buffer.getLength()) return 0;
 		return buffer.getText (i, 1).charAt (0);
 	}
 	
@@ -392,3 +390,4 @@ public class EmacsUtil {
 	}
 }
 
+   
