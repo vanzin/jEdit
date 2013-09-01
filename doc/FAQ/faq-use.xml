@@ -502,9 +502,7 @@
                 </question>
 
                 <answer>
-                    <para>Start with the "Emacs" Keymap and customize it by setting 
-                    your own shortcuts to make it more like your flavor of Emacs.
-                    Emacs macros are contributed by Brian Clapper. 
+                    <para>As of jEdit 5.1, it is much easier than before:  <guimenuitem> Global Options - Shortcuts - Choose Keymap: Emacs</guimenuitem>. Customize it by setting your own shortcuts to make it more like your flavor of Emacs. Emacs macros are contributed by Brian Clapper. 
                     </para>
                 </answer>
             </qandaentry>
