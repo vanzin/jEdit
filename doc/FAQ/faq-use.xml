@@ -156,7 +156,7 @@
                     wish to use from <guisubmenu> Encoding</guisubmenu> in the
                     <guimenu>Commands</guimenu> menu of the File System Browser.
                     You can also designate a default encoding in the
-                    <ulink url="jeditresource:/doc/users-guide/global-opts.html#encodings-pane">
+                    <ulink url="../users-guide/global-opts.html#encodings-pane">
                     <guimenuitem>Encoding</guimenuitem></ulink> pane of the
                     Global Options; if you do not, jEdit uses
                     
@@ -531,7 +531,7 @@
                 </question>
                 <answer>
                    <para>
-                   See the <ulink url="jeditresource:/doc/users-guide/jvm-options.html">page on JVM options</ulink> in the users guide.  
+                   See the <ulink url="../users-guide/jvm-options.html">page on JVM options</ulink> in the users guide.  
                    </para>
                    
                    <para> On Mac OS X, the jEdit.app bundle already provides certain antialiasing properties in

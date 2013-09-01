@@ -135,7 +135,7 @@
                     size. If you already are using the option, try doubling it. 
                     </para>
                     
-                    <para> For more information about JVM options, see the <ulink url="jeditresource:/doc/users-guide/jvm-options.html">page on JVM options</ulink> in the users guide. </para>
+                    <para> For more information about JVM options, see the <ulink url="../users-guide/jvm-options.html">page on JVM options</ulink> in the users guide. </para>
                     
                     <para> On Windows, if you are using the <literal>jedit.exe</literal> launcher, you can add
                     or change the JVM arguments by editing a file called <literal>jEdit.l4j.ini</literal> in the same directory
