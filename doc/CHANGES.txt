@@ -5,6 +5,7 @@ jEdit 5.2 version history
 {{{ Version 5.2pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
+Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
 and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
@@ -18,8 +19,8 @@ and Alan Ezust for contributing to this release.
 - Reload optionally dependent plugins when a plugin is unloaded.
   (#3614456 - Dale Anson)
 
-- Fix #3614883: Alt+'f' multiply bound in "Search and Replace" dialog  
-  
+- Fix #3614883: Alt+'f' multiply bound in "Search and Replace" dialog
+
 }}}
 {{{ API Changes
 
@@ -30,9 +31,9 @@ and Alan Ezust for contributing to this release.
 }}}
 {{{ UI improvements
 
-- EnhancedDialog instances (Search/Replace, Options,Open) now can be closed
-  consistently with the current close-buffer.shortcut key combination. 
-  (#3613007, 3588892 - László Schmidt, Zsombor Franczia, Bence Pintér)
+- EnhancedDialog instances (Search/Replace, Options, Open) now can be closed
+  using a single-key close-buffer.shortcut. (#3613007, #3588892 - László Schmidt,
+  Zsombor Franczia, Bence Pintér)
 
 - Plugin dependencies are shown in the plugin manager details pane for all three
   tabs. (#3614465 - Dale Anson)
