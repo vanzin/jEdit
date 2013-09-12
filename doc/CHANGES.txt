@@ -30,6 +30,10 @@ and Alan Ezust for contributing to this release.
 }}}
 {{{ UI improvements
 
+- EnhancedDialog instances (Search/Replace, Options,Open) now can be closed
+  consistently with the current close-buffer.shortcut key combination. 
+  (#3613007, 3588892 - László Schmidt, Zsombor Franczia, Bence Pintér)
+
 - Plugin dependencies are shown in the plugin manager details pane for all three
   tabs. (#3614465 - Dale Anson)
 

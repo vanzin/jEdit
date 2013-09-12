@@ -20,6 +20,10 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.gui.KeyEventTranslator;
+
 import java.awt.event.*;
 import java.awt.*;
 
@@ -157,7 +161,10 @@ public abstract class EnhancedDialog extends JDialog
 				evt.consume();
 				ok();
 			}
-			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE
+					||
+					isCloseBufferShortcut(evt)
+					)
 			{
 				evt.consume();
 				if(comp instanceof JComboBox)
@@ -171,6 +178,34 @@ public abstract class EnhancedDialog extends JDialog
 				}
 				else cancel();
 			}
+		}
+
+		private boolean isCloseBufferShortcut(KeyEvent evt) {
+
+			String[] s = GUIUtilities.getShortcutLabel("close-buffer").split(" or ");
+
+			if(s.length == 1){ // w/o alternative shortcut
+
+				if(s[0].contains(" "))  //primary shortcut is a multiple-key shortcut
+					return false;
+				else{
+					return KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[0]));
+				}
+			}
+			else{ // w/ alternative shortcut
+				boolean primarymatch,altmatch;
+				primarymatch=altmatch=false;
+
+				if(!s[0].contains(" "))
+					primarymatch=KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[0]));
+
+				if(!primarymatch && !s[1].contains(" "))
+					altmatch=KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[1]));
+
+				if(primarymatch || altmatch)
+					return true;
+			}
+			return false;
 		}
 	}
 
