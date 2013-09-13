@@ -28,6 +28,8 @@ and Alan Ezust for contributing to this release.
 
 - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
+- New status "REMOVED" added to PluginUpdate message.
+
 }}}
 {{{ UI improvements
 

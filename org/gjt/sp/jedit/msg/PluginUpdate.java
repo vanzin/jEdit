@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.msg;
 
+import java.io.File;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -60,8 +61,14 @@ public class PluginUpdate extends EBMessage
 	 * @since jEdit 4.2pre1
 	 */
 	public static final Object UNLOADED = "UNLOADED";
-	//}}}
 
+	/**
+	 * Plugin removed, as in deleted from disk.
+	 * @since jEdit 5.2
+	 */
+	public static final Object REMOVED = "REMOVED";
+	//}}}
+	
 	//{{{ PluginUpdate constructor
 	/**
 	 * Creates a new plugin update message.
@@ -74,6 +81,11 @@ public class PluginUpdate extends EBMessage
 	{
 		super(jar);
 
+		if (jar == null) {
+			throw new IllegalArgumentException("PluginJAR may not be null.");	
+		}
+		this.jar = jar;
+		
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
 
@@ -83,6 +95,27 @@ public class PluginUpdate extends EBMessage
 			String clazz = plugin.getClassName();
 			version = jEdit.getProperty("plugin."+clazz+".version");
 		}
+		this.what = what;
+		this.exit = exit;
+	} //}}}
+
+	//{{{ PluginUpdate constructor
+	/**
+	 * Creates a new plugin update message. This constructor should be used
+	 * when the plugin is being removed and the PluginJAR is no longer available.
+	 * @param file The file representing the plugin
+	 * @param what What happened
+	 * @param exit Is the editor exiting?
+	 * @since jEdit 4.2pre3
+	 */
+	public PluginUpdate(File file, Object what, boolean exit)
+	{
+		super(file);
+		this.file = file;
+		
+		if(what == null)
+			throw new NullPointerException("What must be non-null");
+
 		this.what = what;
 		this.exit = exit;
 	} //}}}
@@ -114,7 +147,16 @@ public class PluginUpdate extends EBMessage
 	 */
 	public PluginJAR getPluginJAR()
 	{
-		return (PluginJAR)getSource();
+		return jar;
+	} //}}}
+
+	//{{{ getFile() method
+	/**
+	 * Returns the file representing the plugin involved.
+	 */
+	public File getFile()
+	{
+		return file;
 	} //}}}
 
 	//{{{ getPluginVersion() method
@@ -137,6 +179,8 @@ public class PluginUpdate extends EBMessage
 	} //}}}
 
 	//{{{ Private members
+	private PluginJAR jar = null;
+	private File file = null;
 	private Object what;
 	private boolean exit;
 	private String version;

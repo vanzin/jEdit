@@ -30,6 +30,7 @@ import java.net.*;
 import java.util.zip.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 
@@ -219,6 +220,10 @@ class Roster
 			Log.log(Log.NOTICE,this,"Deleting " + jarFile);
 
 			boolean ok = jarFile.delete();
+			if (ok) 
+			{
+				EditBus.send(new PluginUpdate(jarFile, PluginUpdate.REMOVED, false));	
+			}
 
 			if(srcFile.exists())
 			{
