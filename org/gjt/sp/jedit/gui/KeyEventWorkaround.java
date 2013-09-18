@@ -295,17 +295,14 @@ public class KeyEventWorkaround
 					+ AbstractInputHandler.toString(evt)+": last="+last+".");
 			}
 
-			if(!Debug.ALTERNATIVE_DISPATCHER)
+			if((modifiers & InputEvent.CTRL_MASK) != 0
+				&& (modifiers & InputEvent.ALT_MASK) == 0
+				|| (modifiers & InputEvent.CTRL_MASK) == 0
+				&& (modifiers & InputEvent.ALT_MASK) != 0
+				&& !Debug.ALT_KEY_PRESSED_DISABLED
+				|| (modifiers & InputEvent.META_MASK) != 0)
 			{
-				if((modifiers & InputEvent.CTRL_MASK) != 0
-					&& (modifiers & InputEvent.ALT_MASK) == 0
-					|| (modifiers & InputEvent.CTRL_MASK) == 0
-					&& (modifiers & InputEvent.ALT_MASK) != 0
-					&& !Debug.ALT_KEY_PRESSED_DISABLED
-					|| (modifiers & InputEvent.META_MASK) != 0)
-				{
-					return null;
-				}
+				return null;
 			}
 
 			// if the last key was a numeric keypad key

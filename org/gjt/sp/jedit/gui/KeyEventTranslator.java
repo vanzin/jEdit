@@ -79,15 +79,7 @@ public class KeyEventTranslator
 				|| (keyCode >= KeyEvent.VK_A
 				&& keyCode <= KeyEvent.VK_Z))
 			{
-				if(Debug.ALTERNATIVE_DISPATCHER)
-					return null;
-				else
-				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						'\0',Character.toLowerCase(
-						(char)keyCode));
-				}
+				returnValue = new Key(modifiersToString(modifiers), '\0', Character.toLowerCase((char)keyCode));			
 			}
 			else
 			{
@@ -108,14 +100,8 @@ public class KeyEventTranslator
 					// do a "<space> to insert ".
 					if((modifiers & ~InputEvent.SHIFT_MASK) == 0)
 						returnValue = null;
-                    else if (Debug.ALTERNATIVE_DISPATCHER && (modifiers & ~InputEvent.META_MASK) == 0)
-                        returnValue = null;
-					else
-					{
-						returnValue = new Key(
-							modifiersToString(modifiers),
-							0,' ');
-					}
+                    else 
+						returnValue = new Key(modifiersToString(modifiers), 0, ' ');
 				}
 				else
 				{
@@ -138,11 +124,7 @@ public class KeyEventTranslator
 			case '\b':
 				return null;
 			case ' ':
-                if (Debug.ALTERNATIVE_DISPATCHER && (modifiers & ~InputEvent.META_MASK) == 0)
-                    returnValue = new Key(
-                        modifiersToString(modifiers),
-                        0,' ');
-				else if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
+                if ((modifiers & ~InputEvent.SHIFT_MASK) != 0)
 					return null;
 			}
 
@@ -163,15 +145,8 @@ public class KeyEventTranslator
 
 			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
 				&& (modifiers & ~ignoreMods) != 0)
-			{
-				if(Debug.ALTERNATIVE_DISPATCHER)
-				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						0,ch);
-				}
-				else
-					return null;
+			{				
+				return null;
 			}
 			else
 			{

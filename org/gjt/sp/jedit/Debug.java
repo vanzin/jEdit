@@ -104,13 +104,10 @@ public class Debug
 	 */
 	public static boolean BEANSHELL_DEBUG = false;
 
-	/**
-	 * If true, an alternative dispatcher using key typed events will be
-	 * used to handle a modifier key press in conjunction with an alphabet
-	 * key. <b>On by default on MacOS.</b>
-	 */
-	public static boolean ALTERNATIVE_DISPATCHER = OperatingSystem.isMacOS();
-
+	/** @deprecated no longer used. */
+	@Deprecated
+	public static boolean ALTERNATIVE_DISPATCHER = false;
+	
 	/**
 	 * If true, A+ shortcuts are disabled. If you use this, you should also
 	 * remap the the modifiers so that A+ is actually something else.
