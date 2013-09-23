@@ -527,7 +527,7 @@ public class GUIUtilities
 		}
 
 		String toolTip = prettifyMenuLabel(label);
-		String shortcutLabel = getShortcutLabel(name);
+		String shortcutLabel = getShortcutLabel(name, true);
 		if(shortcutLabel != null)
 		{
 			toolTip = toolTip + " (" + shortcutLabel + ')';
@@ -582,8 +582,9 @@ public class GUIUtilities
 	/**
 	 * Returns a label string to show users what shortcut are
 	 * assigned to the action.
+	 * @param platform if true, show fancy platform-specific label for the modifiers. 
 	 */
-	public static String getShortcutLabel(String action)
+	public static String getShortcutLabel(String action, Boolean platform)
 	{
 		if(action == null)
 			return null;
@@ -593,8 +594,8 @@ public class GUIUtilities
 			String shortcut1 = keymap.getShortcut(action + ".shortcut");
 			String shortcut2 = keymap.getShortcut(action + ".shortcut2");
 
-			shortcut1 = getPlatformShortcutLabel(shortcut1);
-			shortcut2 = getPlatformShortcutLabel(shortcut2);
+			shortcut1 = platform ? getPlatformShortcutLabel(shortcut1) : shortcut1;
+			shortcut2 = platform ? getPlatformShortcutLabel(shortcut2) : shortcut2;
 
 			if(shortcut1 == null || shortcut1.length() == 0)
 			{

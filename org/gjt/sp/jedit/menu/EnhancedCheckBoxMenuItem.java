@@ -51,7 +51,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		this.context = context;
 		this.action = action;
-		this.shortcut = GUIUtilities.getShortcutLabel(action);
+		this.shortcut = GUIUtilities.getShortcutLabel(action, true);
 		String toolTip = jEdit.getProperty(action+ ".tooltip");
 		if (toolTip != null) {
 			setToolTipText(toolTip);

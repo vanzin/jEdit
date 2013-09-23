@@ -49,7 +49,7 @@ public class EnhancedMenuItem extends JMenuItem
 	public EnhancedMenuItem(String label, String action, ActionContext context)
 	{
 		this.action = action;
-		this.shortcut = GUIUtilities.getShortcutLabel(action);
+		this.shortcut = GUIUtilities.getShortcutLabel(action, true);
 		String toolTip = jEdit.getProperty(action+ ".tooltip");
 		if (toolTip != null) {
 			setToolTipText(toolTip);

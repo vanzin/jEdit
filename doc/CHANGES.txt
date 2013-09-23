@@ -6,7 +6,7 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
 Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
-and Alan Ezust for contributing to this release.
+Makarius, and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -23,6 +23,9 @@ and Alan Ezust for contributing to this release.
 
 }}}
 {{{ API Changes
+
+- GUIUtilities.getShortcutLabel() has a second boolean argument to specify
+  whether platform modifier symbols are desired or not. (#3615046 Makarius) 
 
 - jEdit now depends on Java 1.7
 
