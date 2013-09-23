@@ -188,17 +188,6 @@ public class KeyEventWorkaround
 		}
 	} //}}}
 
-	//{{{ isMacControl() method
-	/**
-	 * Apple sucks.
-	 */
-	public static boolean isMacControl(KeyEvent evt)
-	{
-		return (OperatingSystem.isMacOS() &&
-			(evt.getModifiers() & InputEvent.CTRL_MASK) != 0
-			&& evt.getKeyChar() <= 0x2B);
-	} //}}}
-
 	//{{{ isNumericKeypad() method
 	public static boolean isNumericKeypad(int keyCode)
 	{
@@ -282,8 +271,7 @@ public class KeyEventWorkaround
 		case KeyEvent.KEY_TYPED:
 			// need to let \b through so that backspace will work
 			// in HistoryTextFields
-			if(!isMacControl(evt)
-				&& (ch < 0x20 || ch == 0x7f || ch == 0xff)
+			if((ch < 0x20 || ch == 0x7f || ch == 0xff)
 				&& ch != '\b' && ch != '\t' && ch != '\n')
 			{
 				return null;

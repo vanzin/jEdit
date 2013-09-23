@@ -114,9 +114,6 @@ public class KeyEventTranslator
 		case KeyEvent.KEY_TYPED:
 			char ch = evt.getKeyChar();
 
-			if(KeyEventWorkaround.isMacControl(evt))
-				ch |= 0x60;
-
 			switch(ch)
 			{
 			case '\n':

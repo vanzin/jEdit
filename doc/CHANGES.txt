@@ -53,6 +53,8 @@ and Alan Ezust for contributing to this release.
 
 - New macros: Go To Offset, Reverse Selection (#3614563, #3614564 Thomas Meyer)
 
+- Removed some old MacOSX workaround code (#3615043 Makarius)
+
 }}}
 
 }}}
