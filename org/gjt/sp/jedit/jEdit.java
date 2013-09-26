@@ -50,6 +50,7 @@ import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
+import java.lang.reflect.InvocationTargetException;
 
 import org.xml.sax.SAXParseException;
 
@@ -378,6 +379,14 @@ public class jEdit
 			// just exit
 			System.exit(0);
 		} //}}}
+
+		// This must be done before anything graphical is displayed, so we can't even
+		// wait for the settings to be loaded, because the splash screen will already
+		// be visible
+		if (OperatingSystem.isMacOS() && !new File(settingsDirectory, "noquartz").exists())
+		{
+			System.setProperty("apple.awt.graphics.UseQuartz", "true");
+		}
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
@@ -3779,6 +3788,7 @@ public class jEdit
 	private static void initPLAF()
 	{
 		String lf = getProperty("lookAndFeel");
+		final String sLf = getPLAFClassName(lf);
 		String sLfOld = null;
 		String sLfNew = null;
 		LookAndFeel lfOld = UIManager.getLookAndFeel();
@@ -3786,7 +3796,7 @@ public class jEdit
 			sLfOld = lfOld.getClass().getName();
 
 		// do not change anything if Look and Feel did not change
-		if (isStartupDone() && getPLAFClassName(lf).equals(sLfOld))
+		if (isStartupDone() && sLf.equals(sLfOld))
 		{
 			return;
 		}
@@ -3831,20 +3841,51 @@ public class jEdit
 		KeyboardFocusManager.setCurrentKeyboardFocusManager(
 			new MyFocusManager());
 
-		try
+		// A couple of issues here -- (these are fixed)
+		// First, setLookAndFeel must be called on the EDT. On initial start
+		// up this isn't a problem, but initPLAF is called on propertiesChanged,
+		// which can happen a lot.
+		// Second, this will fail to load the look and feel as set in the
+		// LookAndFeel plugin on initial start up because the plugins haven't
+		// been loaded yet.
+		if (EventQueue.isDispatchThread())
 		{
-			// A couple of issues here --
-			// First, setLookAndFeel must be called on the EDT. On initial start
-			// up this isn't a problem, but initPLAF is called on propertiesChanged,
-			// which can happen a lot.
-			// Second, this will fail to load the look and feel as set in the
-			// LookAndFeel plugin on initial start up because the plugins haven't
-			// been loaded yet.
-			UIManager.setLookAndFeel(getPLAFClassName(lf));
+			try 
+			{
+				UIManager.setLookAndFeel(sLf);
+			}
+			catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) 
+			{
+				// ignored, there really isn't anything to do and this may be
+				// bogus, the lnf may be from the Look And Feel plugin
+			}
 		}
-		catch(Exception e)
+		else 
 		{
-			Log.log(Log.ERROR,jEdit.class,e);
+			try
+			{
+				EventQueue.invokeAndWait(
+					new Runnable()
+					{
+						public void run() 
+						{
+							try
+							{
+								UIManager.setLookAndFeel(sLf);
+							}
+							catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) 
+							{
+								// same as above, there really isn't anything to do and this may be
+								// bogus, the lnf may be from the Look And Feel plugin
+							}
+						}
+					}
+				);
+			}
+			catch (InterruptedException | InvocationTargetException e) 
+			{
+				// don't worry about this one either	
+			}
 		}
 
 		LookAndFeel lfNew = UIManager.getLookAndFeel();
@@ -3857,9 +3898,9 @@ public class jEdit
 				" old=" + sLfOld +
 				" requested=" + lf +
 				" new=" + sLfNew );
-		if (lf == null || !lf.equals(sLfNew))
+		if (!sLf.equals(sLfNew))
 			Log.log(Log.WARNING, jEdit.class,
-				"initPLAF failed to set required l&f");
+				"initPLAF failed to set requested l&f " + lf);
 
 		UIDefaults defaults = UIManager.getDefaults();
 

@@ -21,6 +21,9 @@ Makarius, and Alan Ezust for contributing to this release.
 
 - Fix #3614883: Alt+'f' multiply bound in "Search and Replace" dialog
 
+- Applied patch #3615045 (Makarius), plus some additional cleanup of setting the 
+  look and feel (Dale Anson)
+
 }}}
 {{{ API Changes
 
