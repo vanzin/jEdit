@@ -16,6 +16,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="Test Dependencies" level="project" />
+    <orderEntry type="library" name="Test Dependencies" level="project" />
   </component>
 </module>
 

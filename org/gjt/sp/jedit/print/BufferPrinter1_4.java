@@ -67,7 +67,8 @@ public class BufferPrinter1_4
 				{
 					try
 					{
-						obIn.close();
+						if (obIn != null)
+							obIn.close();
 					} catch (IOException e) {}
 				}
 				//for backwards compatibility, the color variable is stored also as a property

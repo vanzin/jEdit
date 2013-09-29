@@ -232,18 +232,21 @@ public class Chunk extends Token
 
 		String family;
 		int i = 0;
-		while ((family = props.getProperty("view.fontSubstList." + i)) != null)
+		if (props != null)
 		{
-			/*
-			 * The default font is Font.DIALOG if the family
-			 * doesn't match any installed fonts. The following
-			 * check skips fonts that don't exist.
-			 */
-			Font f = new Font(family, Font.PLAIN, 12);
-			if (!"dialog".equalsIgnoreCase(f.getFamily()) ||
-				"dialog".equalsIgnoreCase(family))
-				userFonts.add(f);
-			i++;
+			while ((family = props.getProperty("view.fontSubstList." + i)) != null)
+			{
+				/*
+				 * The default font is Font.DIALOG if the family
+				 * doesn't match any installed fonts. The following
+				 * check skips fonts that don't exist.
+				 */
+				Font f = new Font(family, Font.PLAIN, 12);
+				if (!"dialog".equalsIgnoreCase(f.getFamily()) ||
+					"dialog".equalsIgnoreCase(family))
+					userFonts.add(f);
+				i++;
+			}
 		}
 
 		preferredFonts = userFonts.toArray(new Font[userFonts.size()]);
