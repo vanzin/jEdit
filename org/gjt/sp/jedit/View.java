@@ -1211,10 +1211,10 @@ public class View extends JFrame implements InputHandlerProvider
 	{
 		List<Buffer> buffers = new ArrayList<Buffer>();
 		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
+		for (EditPane ep : editPanes)
 		{
-			Buffer buffer = editPanes[i].getBuffer();
-			if(!buffers.contains(buffer))
+			Buffer buffer = ep.getBuffer();
+			if (!buffers.contains(buffer))
 				buffers.add(buffer);
 		}
 
@@ -1289,9 +1289,8 @@ public class View extends JFrame implements InputHandlerProvider
 	public void visit(JEditVisitor visitor)
 	{
 		EditPane[] panes = getEditPanes();
-		for (int i = 0; i < panes.length; i++)
+		for (EditPane editPane : panes)
 		{
-			EditPane editPane = panes[i];
 			visitor.visit(editPane);
 			visitor.visit(editPane.getTextArea());
 		}
@@ -1486,8 +1485,8 @@ public class View extends JFrame implements InputHandlerProvider
 		dispose();
 
 		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-			editPanes[i].close();
+		for (EditPane ep : editPanes)
+			ep.close();
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
@@ -1606,10 +1605,9 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 
 		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
+		for (EditPane ep : editPanes)
 		{
-			EditPane ep = editPanes[i];
-			if(ep.getBuffer() == buffer
+			if (ep.getBuffer() == buffer
 				/* ignore zero-height splits, etc */
 				&& ep.getTextArea().getVisibleLines() > 1)
 			{
@@ -2028,9 +2026,9 @@ loop:		while (true)
 			|| msg.getWhat() == BufferUpdate.LOADED)
 		{
 			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
+			for (EditPane ep : editPanes)
 			{
-				if(editPanes[i].getBuffer() == buffer)
+				if (ep.getBuffer() == buffer)
 				{
 					updateTitle();
 					break;
@@ -2115,8 +2113,8 @@ loop:		while (true)
 	private void updateGutterBorders()
 	{
 		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-			editPanes[i].getTextArea().getGutter().updateBorder();
+		for (EditPane editPane : editPanes)
+			editPane.getTextArea().getGutter().updateBorder();
 	} //}}}
 
 	//{{{ getOpenBuffers() method

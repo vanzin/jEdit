@@ -49,8 +49,8 @@ public class StringUtil {
 
 	public static String [] bubbleSort( String [] in ) {
 		Vector v = new Vector();
-		for(int i=0; i<in.length; i++)
-			v.addElement(in[i]);
+		for (String element : in)
+			v.addElement(element);
 
 		int n = v.size();
 		boolean swap = true;

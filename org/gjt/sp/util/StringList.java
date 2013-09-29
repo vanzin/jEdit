@@ -49,10 +49,8 @@ public class StringList extends ArrayList<String>
 	// {{{ addAll()
 	public void addAll(Object[] array)
 	{
-		for (int i = 0; i < array.length; ++i)
-		{
-			add(array[i].toString());
-		}
+		for (Object element : array)
+			add(element.toString());
 	}   // }}}
 
 	// {{{ split()

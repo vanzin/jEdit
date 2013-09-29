@@ -298,17 +298,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	{
 		List<KeyBinding[]> bindings = new ArrayList<>(actions.length);
 
-		for(int i = 0; i < actions.length; i++)
+		for (String name : actions)
 		{
-			String name = actions[i];
 			EditAction ea = jEdit.getAction(name);
 			String label = ea.getLabel();
 			// Skip certain actions this way
-			if(label == null)
+			if (label == null)
 				continue;
 
 			label = GUIUtilities.prettifyMenuLabel(label);
-			addBindings(actionSet, name,label,bindings);
+			addBindings(actionSet, name, label, bindings);
 		}
 
 		return new ShortcutsModel(modelLabel,bindings);

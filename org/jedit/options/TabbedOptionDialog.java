@@ -182,10 +182,8 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 	{
 		GUIUtilities.saveGeometry(this, getName());
 
-		Iterator<OptionPane> itr = panes.iterator();
-		while (itr.hasNext())
+		for (OptionPane op : panes)
 		{
-			OptionPane op = itr.next();
 			if (shownPanes.contains(op))
 				op.save();
 		}

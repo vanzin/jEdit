@@ -87,13 +87,12 @@ class Roster
 	//{{{ performOperationsInWorkThread() method
 	void performOperationsInWorkThread(PluginManagerProgress progress)
 	{
-		for(int i = 0; i < operations.size(); i++)
+		for (Operation op : operations)
 		{
-			Operation op = operations.get(i);
 			op.runInWorkThread(progress);
 			progress.done();
 
-			if(Thread.interrupted())
+			if (Thread.interrupted())
 				return;
 		}
 	} //}}}
@@ -101,40 +100,31 @@ class Roster
 	//{{{ performOperationsInAWTThread() method
 	void performOperationsInAWTThread(Component comp)
 	{
-		for(int i = 0; i < operations.size(); i++)
-		{
-			Operation op = operations.get(i);
+		for (Operation op : operations)
 			op.runInAWTThread(comp);
-		}
 
 		// add the JARs before checking deps since dep check might
 		// require all JARs to be present
-		for(int i = 0; i < toLoad.size(); i++)
+		for (String pluginName : toLoad)
 		{
-			String pluginName = toLoad.get(i);
-			if(jEdit.getPluginJAR(pluginName) != null)
-			{
-				Log.log(Log.WARNING,this,"Already loaded: "
-					+ pluginName);
-			}
+			if (jEdit.getPluginJAR(pluginName) != null)
+				Log.log(Log.WARNING, this, "Already loaded: " + pluginName);
 			else
 				jEdit.addPluginJAR(pluginName);
 		}
 
-		for(int i = 0; i < toLoad.size(); i++)
+		for (String pluginName : toLoad)
 		{
-			String pluginName = toLoad.get(i);
 			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
-			if(plugin != null)
+			if (plugin != null)
 				plugin.checkDependencies();
 		}
 
 		// now activate the plugins
-		for(int i = 0; i < toLoad.size(); i++)
+		for (String pluginName : toLoad)
 		{
-			String pluginName = toLoad.get(i);
 			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
-			if(plugin != null)
+			if (plugin != null)
 				plugin.activatePluginIfNecessary();
 		}
 	} //}}}
@@ -148,9 +138,9 @@ class Roster
 	//{{{ addOperation() method
 	private void addOperation(Operation op)
 	{
-		for(int i = 0; i < operations.size(); i++)
+		for (Operation operation : operations)
 		{
-			if(operations.get(i).equals(op))
+			if (operation.equals(op))
 				return;
 		}
 

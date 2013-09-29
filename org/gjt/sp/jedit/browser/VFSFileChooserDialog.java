@@ -409,10 +409,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	{
 		List<String> l = new ArrayList<String>();
 		VFSFile[] selectedFiles = browser.getSelectedFiles();
-		for(int i = 0; i < selectedFiles.length; i++)
+		for (VFSFile file : selectedFiles)
 		{
-			VFSFile file = selectedFiles[i];
-			if(file.getType() == type1 || file.getType() == type2)
+			if (file.getType() == type1 || file.getType() == type2)
 				l.add(file.getPath());
 		}
 		return l.toArray(new String[l.size()]);

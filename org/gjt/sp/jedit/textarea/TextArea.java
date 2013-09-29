@@ -2082,8 +2082,8 @@ forward_scan:	do
 				buffer.beginCompoundEdit();
 
 				Selection[] selection = getSelection();
-				for(int i = 0; i < selection.length; i++)
-					newCaret = selection[i].setText(buffer,selectedText);
+				for (Selection aSelection : selection)
+					newCaret = aSelection.setText(buffer, selectedText);
 			}
 			finally
 			{
@@ -4075,10 +4075,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				Selection[] selections = getSelection();
 				Selection selection = null;
 				int caretBack = 0;
-				for (int i = 0; i < selections.length; i++)
+				for (Selection selection1 : selections)
 				{
-					selection = selections[i];
-					caretBack = addExplicitFold(selection.start, selection.end, selection.startLine,selection.endLine);
+					selection = selection1;
+					caretBack = addExplicitFold(selection.start,
+						selection.end, selection.startLine,
+						selection.endLine);
 				}
 				// Selection cannot be null because there is at least 1 selection
 				assert selection != null;
@@ -4121,12 +4123,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		try
 		{
-			for(int i = 0; i < lines.length; i++)
+			for (int line : lines)
 			{
-				String text = getLineText(lines[i]);
-				buffer.insert(getLineStartOffset(lines[i])
-					+ StandardUtilities.getLeadingWhiteSpace(text),
-					comment);
+				String text = getLineText(line);
+				buffer.insert(getLineStartOffset(line) +
+					StandardUtilities.getLeadingWhiteSpace(text), comment);
 			}
 		}
 		finally
@@ -4171,26 +4172,23 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				setCaretPosition(oldCaret + commentStart.length());
 			}
 
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
-				if(s instanceof Selection.Range)
+				if (s instanceof Selection.Range)
 				{
-					buffer.insert(s.start,commentStart);
-					buffer.insert(s.end,commentEnd);
+					buffer.insert(s.start, commentStart);
+					buffer.insert(s.end, commentEnd);
 				}
-				else if(s instanceof Selection.Rect)
+				else if (s instanceof Selection.Rect)
 				{
-					Selection.Rect rect = (Selection.Rect)s;
+					Selection.Rect rect = (Selection.Rect) s;
 					int start = rect.getStartColumn(buffer);
 					int end = rect.getEndColumn(buffer);
 
-					for(int j = s.startLine; j <= s.endLine; j++)
+					for (int j = s.startLine; j <= s.endLine; j++)
 					{
-						buffer.insertAtColumn(j,end,
-							commentEnd);
-						buffer.insertAtColumn(j,start,
-							commentStart);
+						buffer.insertAtColumn(j, end, commentEnd);
+						buffer.insertAtColumn(j, start, commentStart);
 					}
 				}
 			}
@@ -4226,12 +4224,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			buffer.beginCompoundEdit();
 
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
-				setSelectedText(s,TextUtilities.format(
-					getSelectedText(s),maxLineLen,
-					buffer.getTabSize()));
+				setSelectedText(s, TextUtilities.format(getSelectedText(s), maxLineLen,
+									buffer.getTabSize()));
 			}
 
 			buffer.endCompoundEdit();
@@ -4312,11 +4308,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
-				setSelectedText(s,TextUtilities.spacesToTabs(
-					getSelectedText(s),buffer.getTabSize()));
+				setSelectedText(s, TextUtilities.spacesToTabs(
+					getSelectedText(s), buffer.getTabSize()));
 			}
 		}
 
@@ -4347,11 +4342,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
 				setSelectedText(s, TextUtilities.tabsToSpaces(
-					getSelectedText(s),buffer.getTabSize()));
+					getSelectedText(s), buffer.getTabSize()));
 			}
 		}
 
@@ -4389,11 +4383,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		buffer.beginCompoundEdit();
 
-		for(int i = 0; i < selection.length; i++)
-		{
-			Selection s = selection[i];
-			setSelectedText(s,getSelectedText(s).toUpperCase());
-		}
+		for (Selection s : selection)
+			setSelectedText(s, getSelectedText(s).toUpperCase());
 
 		buffer.endCompoundEdit();
 		if (caret != -1)
@@ -4431,11 +4422,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		buffer.beginCompoundEdit();
 
-		for (int i = 0; i < selection.length; i++)
-		{
-			Selection s = selection[i];
-			setSelectedText(s,getSelectedText(s).toLowerCase());
-		}
+		for (Selection s : selection)
+			setSelectedText(s, getSelectedText(s).toLowerCase());
 
 		buffer.endCompoundEdit();
 		if (caret != -1)
@@ -6103,16 +6091,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			buffer.beginCompoundEdit();
 			int[] lines = getSelectedLines();
-			for(int i = 0; i < lines.length; i++)
+			for (int line : lines)
 			{
-				String text = getLineText(lines[i]);
+				String text = getLineText(line);
 				if (text.trim().length() == 0)
 					continue;
-				buffer.insert(getLineEndOffset(lines[i]) - 1,
-					commentEnd);
-				buffer.insert(getLineStartOffset(lines[i])
-					+ StandardUtilities.getLeadingWhiteSpace(text),
-					commentStart);
+				buffer.insert(getLineEndOffset(line) - 1, commentEnd);
+				buffer.insert(getLineStartOffset(line) +
+					StandardUtilities.getLeadingWhiteSpace(text),
+					      commentStart);
 			}
 		}
 		finally

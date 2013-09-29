@@ -114,17 +114,17 @@ public class EmacsUtil {
 	
 	public String lineAt (int i)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		
 		while (! atEndOfBuffer (i))
 		{
 			char c = charAt (i);
-			buf.append (c);
+			sb.append(c);
 			if (c == '\n')
 				break;
 		}
 		
-		return buf.toString();
+		return sb.toString();
 	}
 	
 	public char charAt (int i)
@@ -222,7 +222,7 @@ public class EmacsUtil {
 	
 	public String makeBufferPropertyName (Buffer theBuffer, String prefix)
 	{
-		StringBuffer propName = new StringBuffer (prefix);
+		StringBuilder propName = new StringBuilder(prefix);
 	
 		// Convert any Windows-style file separators to Unix ones, since
 		// backslashes are special characters in properties files.

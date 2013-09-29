@@ -32,11 +32,8 @@ public class StringModel
 	void fireTextChanged()
 	{
 		TextEvent te = new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED);
-		Iterator<TextListener> itr = listeners.iterator();
-		while (itr.hasNext())
-		{
-			itr.next().textValueChanged(te);
-		}
+		for (TextListener listener : listeners)
+			listener.textValueChanged(te);
 	}
 
 	public String toString()

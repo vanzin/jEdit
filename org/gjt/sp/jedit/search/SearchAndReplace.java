@@ -743,12 +743,11 @@ loop:		for(;;)
 
 			int retVal = 0;
 
-			for(int i = 0; i < selection.length; i++)
+			for (Selection aSelection : selection)
 			{
-				s = selection[i];
-
-				retVal += replaceInSelection(view,textArea,
-					buffer,matcher,smartCaseReplace,s);
+				s = aSelection;
+				retVal += replaceInSelection(view, textArea, buffer,
+					matcher, smartCaseReplace, s);
 			}
 			
 			if(reverse)

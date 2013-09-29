@@ -473,16 +473,13 @@ class ToolBarEditDialog extends EnhancedDialog
 		String selectedActionSet = jEdit.getProperty("options.toolbar.selectedActionSet");
 		ActionSet selectedItem = null;
 		Vector<ActionSet> vec = new Vector<ActionSet>(actionsList.length);
-		for(int i = 0; i < actionsList.length; i++)
+		for (ActionSet actionSet : actionsList)
 		{
-			ActionSet actionSet = actionsList[i];
-			if(actionSet.getActionCount() != 0)
+			if (actionSet.getActionCount() != 0)
 			{
 				vec.add(actionSet);
 				if (actionSet.getLabel().equals(selectedActionSet))
-				{
 					selectedItem = actionSet;
-				}
 			}
 		}
 		Collections.sort(vec, new ActionSetCompare());
@@ -705,15 +702,14 @@ class ToolBarEditDialog extends EnhancedDialog
 		EditAction[] actions = actionSet.getActions();
 		Vector<ToolBarOptionPane.Button> listModel = new Vector<ToolBarOptionPane.Button>(actions.length);
 
-		for(int i = 0; i < actions.length; i++)
+		for (EditAction action : actions)
 		{
-			EditAction action = actions[i];
 			String label = action.getLabel();
-			if(label == null)
+			if (label == null)
 				continue;
 
-			listModel.add(new ToolBarOptionPane.Button(
-				action.getName(),null,null,label));
+			listModel.add(new ToolBarOptionPane.Button(action.getName(),
+				null, null, label));
 		}
 
 		Collections.sort(listModel,new ToolBarOptionPane.ButtonCompare());

@@ -222,13 +222,11 @@ public abstract class DockableWindowManager extends JPanel
 	public void applyDockingLayout(DockingLayout docking)
 	{
 		// By default, use the docking positions specified by the jEdit properties
-		Iterator<Entry<String, String>> iterator = positions.entrySet().iterator();
-		while (iterator.hasNext())
+		for (Entry<String, String> entry : positions.entrySet())
 		{
-			Entry<String, String> entry = iterator.next();
 			String dockable = entry.getKey();
 			String position = entry.getValue();
-			if (! position.equals(FLOATING))
+			if (!position.equals(FLOATING))
 				showDockableWindow(dockable);
 		}
 	} //}}}

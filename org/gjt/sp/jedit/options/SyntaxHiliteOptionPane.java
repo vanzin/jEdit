@@ -217,12 +217,10 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 		//{{{ save() method
 		public void save()
 		{
-			for(int i = 0; i < styleChoices.size(); i++)
+			for (StyleChoice ch : styleChoices)
 			{
-				StyleChoice ch = styleChoices
-					.get(i);
 				jEdit.setProperty(ch.property,
-				                  GUIUtilities.getStyleString(ch.style));
+					GUIUtilities.getStyleString(ch.style));
 			}
 		} //}}}
 

@@ -92,18 +92,18 @@ public abstract class PropertiesBean
 		try
 		{
 			PropertyDescriptor[] _props = getPropertyDescriptors();
-			for (int i = 0; i < _props.length; i++)
+			for (PropertyDescriptor prop : _props)
 			{
-				if ("class".equals(_props[i].getName()))
+				if ("class".equals(prop.getName()))
 					continue;
 
-				Method _set = _props[i].getWriteMethod();
+				Method _set = prop.getWriteMethod();
 				if (_set != null)
 				{
-					String _pname = root + "." + _props[i].getName();
+					String _pname = root + "." + prop.getName();
 					Object _val = p.getProperty(_pname);
 					if (_val != null)
-						_val = parse((String)_val, _props[i].getPropertyType());
+						_val = parse((String) _val, prop.getPropertyType());
 					try
 					{
 						_set.invoke(this, _val);
@@ -132,20 +132,17 @@ public abstract class PropertiesBean
 		try
 		{
 			PropertyDescriptor[] _props = getPropertyDescriptors();
-			for (int i = 0; i < _props.length; i++)
+			for (PropertyDescriptor prop : _props)
 			{
-				if ("class".equals(_props[i].getName()))
-					continue;
+				if ("class".equals(prop.getName())) continue;
 
-				Method _get = _props[i].getReadMethod();
+				Method _get = prop.getReadMethod();
 				if (_get != null)
 				{
 					Object _val = _get.invoke(this);
-					String _pname = root + "." + _props[i].getName();
-					if (_val != null)
-						p.setProperty(_pname, encode(_val));
-					else
-						p.remove(_pname);
+					String _pname = root + "." + prop.getName();
+					if (_val != null) p.setProperty(_pname, encode(_val));
+					else p.remove(_pname);
 				}
 			}
 		}
@@ -167,12 +164,11 @@ public abstract class PropertiesBean
 		try
 		{
 			PropertyDescriptor[] _props = getPropertyDescriptors();
-			for (int i = 0; i < _props.length; i++)
+			for (PropertyDescriptor prop : _props)
 			{
-				if ("class".equals(_props[i].getName()))
-					continue;
+				if ("class".equals(prop.getName())) continue;
 
-				String _pname = root + "." + _props[i].getName();
+				String _pname = root + "." + prop.getName();
 				p.remove(_pname);
 			}
 		}

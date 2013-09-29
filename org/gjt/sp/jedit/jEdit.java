@@ -1505,21 +1505,20 @@ public class jEdit
 		Buffer retVal = null;
 		Buffer lastBuffer = null;
 
-		for(int i = 0; i < args.length; i++)
+		for (String arg : args)
 		{
-			String arg = args[i];
-			if(arg == null)
+			if (arg == null)
 				continue;
-			else if(arg.startsWith("+line:") || arg.startsWith("+marker:"))
+			else if (arg.startsWith("+line:") || arg.startsWith("+marker:"))
 			{
-				if(lastBuffer != null)
-					gotoMarker(view,lastBuffer,arg);
+				if (lastBuffer != null)
+					gotoMarker(view, lastBuffer, arg);
 				continue;
 			}
 
-			lastBuffer = openFile((View)null,parent,arg,false,null);
+			lastBuffer = openFile((View) null, parent, arg, false, null);
 
-			if(retVal == null && lastBuffer != null)
+			if (retVal == null && lastBuffer != null)
 				retVal = lastBuffer;
 		}
 
@@ -3680,10 +3679,8 @@ public class jEdit
 		}
 
 		PluginJAR[] jars = getPluginJARs();
-		for(int i = 0; i < jars.length; i++)
-		{
-			jars[i].checkDependencies();
-		}
+		for (PluginJAR jar : jars)
+			jar.checkDependencies();
 	} //}}}
 
 	//{{{ initUserProperties() method
@@ -4596,10 +4593,8 @@ loop:	for(int i = 0; i < list.length; i++)
 		inputHandler.removeAllKeyBindings();
 
 		ActionSet[] actionSets = getActionSets();
-		for (int i = 0; i < actionSets.length; i++)
-		{
-			actionSets[i].initKeyBindings();
-		}
+		for (ActionSet actionSet : actionSets)
+			actionSet.initKeyBindings();
 	} //}}}
 
 	//{{{ composeBufferPropsFromHistory() method

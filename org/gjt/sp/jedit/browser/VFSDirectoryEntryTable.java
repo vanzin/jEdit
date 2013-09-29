@@ -126,10 +126,8 @@ public class VFSDirectoryEntryTable extends JTable
 
 		java.util.List<VFSFile> returnValue = new LinkedList<VFSFile>();
 		int[] selectedRows = getSelectedRows();
-		for(int i = 0; i < selectedRows.length; i++)
-		{
-			returnValue.add(model.files[selectedRows[i]].dirEntry);
-		}
+		for (int selectedRow : selectedRows)
+			returnValue.add(model.files[selectedRow].dirEntry);
 		return returnValue.toArray(new VFSFile[returnValue.size()]);
 	} //}}}
 

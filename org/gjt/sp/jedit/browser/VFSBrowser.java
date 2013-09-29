@@ -1165,8 +1165,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		if (!vec.isEmpty())
 		{
 			Collections.sort(vec,new MenuItemTextComparator());
-			for(int i = 0; i < vec.size(); i++)
-				pluginMenu.add(vec.get(i));
+			for (JMenuItem item : vec)
+				pluginMenu.add(item);
 		}
 		else
 		{
@@ -1210,59 +1210,54 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		Buffer buffer = null;
 
-check_selected: for(int i = 0; i < selectedFiles.length; i++)
+check_selected:
+		for (VFSFile file : selectedFiles)
 		{
-			VFSFile file = selectedFiles[i];
-
-			if(file.getType() == VFSFile.DIRECTORY
-				|| file.getType() == VFSFile.FILESYSTEM)
+			if (file.getType() == VFSFile.DIRECTORY ||
+			    file.getType() == VFSFile.FILESYSTEM)
 			{
-				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
-					browseDirectoryInNewWindow(view,file.getPath());
-				else
-					if (selectedFiles.length == 1)
-						setDirectory(file.getPath());
+				if (mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
+					browseDirectoryInNewWindow(view, file.getPath());
+				else if (selectedFiles.length == 1)
+					setDirectory(file.getPath());
 			}
-			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
+			else if (this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
-				if(mode == M_INSERT)
+				if (mode == M_INSERT)
 				{
-					view.getBuffer().insertFile(view,
-						file.getPath());
+					view.getBuffer().insertFile(view, file.getPath());
 					continue check_selected;
 				}
 
 				Buffer _buffer = jEdit.getBuffer(file.getPath());
-				if(_buffer == null)
+				if (_buffer == null)
 				{
 					Hashtable<String, Object> props = new Hashtable<String, Object>();
-					if(currentEncoding != null)
+					if (currentEncoding != null)
 					{
-						props.put(JEditBuffer.ENCODING,currentEncoding);
+						props.put(JEditBuffer.ENCODING, currentEncoding);
 					}
-					props.put(Buffer.ENCODING_AUTODETECT,
-						autoDetectEncoding);
-					_buffer = jEdit.openFile(view, null,
-						file.getPath(),false,props);
+					props.put(Buffer.ENCODING_AUTODETECT, autoDetectEncoding);
+					_buffer = jEdit.openFile(view, null, file.getPath(), false, props);
 				}
-				else if(doubleClickClose && canDoubleClickClose
-					&& this.mode != BROWSER_DIALOG
-					&& selectedFiles.length == 1)
+				else if (doubleClickClose && canDoubleClickClose &&
+					 this.mode != BROWSER_DIALOG &&
+					 selectedFiles.length == 1)
 				{
 					// close if this buffer is currently
 					// visible in the view.
 					EditPane[] editPanes = view.getEditPanes();
-					for(int j = 0; j < editPanes.length; j++)
+					for (EditPane editPane : editPanes)
 					{
-						if(editPanes[j].getBuffer() == _buffer)
+						if (editPane.getBuffer() == _buffer)
 						{
-							jEdit.closeBuffer(view,_buffer);
+							jEdit.closeBuffer(view, _buffer);
 							return;
 						}
 					}
 				}
 
-				if(_buffer != null)
+				if (_buffer != null)
 					buffer = _buffer;
 			}
 			else
@@ -1393,23 +1388,23 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			VFSFileFilter filter = getVFSFileFilter();
 
-			for(int i = 0; i < list.length; i++)
+			for (VFSFile file : list)
 			{
-				VFSFile file = list[i];
-				if(file.isHidden() && !showHiddenFiles)
+				if (file.isHidden() && !showHiddenFiles)
 				{
 					invisible++;
 					continue;
 				}
 
-				if (filter != null && (filterEnabled || filter instanceof DirectoriesOnlyFilter)
+				if (filter != null &&
+				    (filterEnabled || filter instanceof DirectoriesOnlyFilter)
 				    && !filter.accept(file))
 				{
 					invisible++;
 					continue;
 				}
 
-				if(file.getType() == VFSFile.FILE)
+				if (file.getType() == VFSFile.FILE)
 					files++;
 				else
 					directories++;
@@ -1447,11 +1442,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		if(mode == BROWSER)
 		{
-			for(int i = 0; i < selectedFiles.length; i++)
+			for (VFSFile file : selectedFiles)
 			{
-				VFSFile file = selectedFiles[i];
 				Buffer buffer = jEdit.getBuffer(file.getPath());
-				if(buffer != null && view != null)
+				if (buffer != null && view != null)
 					view.setBuffer(buffer);
 			}
 		}
@@ -1999,10 +1993,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					}
 					else
 					{
-						for(int i = 0; i < selected.length; i++)
+						for (VFSFile file : selected)
 						{
-							VFSFile file = selected[i];
-							FavoritesVFS.addToFavorites(file.getPath(),
+							FavoritesVFS.addToFavorites(
+								file.getPath(),
 								file.getType());
 						}
 					}

@@ -1114,10 +1114,9 @@ public abstract class VFS
 			if(colors == null)
 				loadColors();
 
-			for(int i = 0; i < colors.size(); i++)
+			for (ColorEntry entry : colors)
 			{
-				ColorEntry entry = colors.get(i);
-				if(entry.re.matcher(name).matches())
+				if (entry.re.matcher(name).matches())
 					return entry.color;
 			}
 

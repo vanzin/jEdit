@@ -106,7 +106,7 @@ public class AntiAlias
 
 	public String toString()
 	{
-		return comboChoices[m_val].toString();
+		return comboChoices[m_val];
 	}
 
 	public int val()

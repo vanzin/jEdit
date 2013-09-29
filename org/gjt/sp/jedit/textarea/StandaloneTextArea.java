@@ -515,13 +515,13 @@ public class StandaloneTextArea extends TextArea
 			"folding",
 			"collapseFolds"
 		};
-		for (int i = 0; i < bufferProperties.length; i++)
+		for (String bufferProperty : bufferProperties)
 		{
-			String value = getProperty("buffer." + bufferProperties[i]);
+			String value = getProperty("buffer." + bufferProperty);
 			if (value == null)
-				buffer.unsetProperty(bufferProperties[i]);
+				buffer.unsetProperty(bufferProperty);
 			else
-				buffer.setProperty(bufferProperties[i], value);
+				buffer.setProperty(bufferProperty, value);
 		}
 		buffer.propertiesChanged();
 	} // }}}

@@ -125,7 +125,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 
 		Object[] nodes = path.getPath();
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		OptionPane optionPane = null;
 
@@ -178,17 +178,17 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 				continue;
 			}
 			if (label != null)
-				buf.append(label);
+				sb.append(label);
 
 			if (i > 0 && i < lastIdx)
-				buf.append(": ");
+				sb.append(": ");
 		}
 
 		if (optionPane == null)
 			return;
 		
 		String ttext = jEdit.getProperty("optional.title-template", new Object[] {
-			optionGroup.getName(), buf.toString() });
+			optionGroup.getName(), sb.toString() });
 		setTitle(ttext);
 
 		try

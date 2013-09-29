@@ -90,10 +90,9 @@ class SelectionManager
 	{
 		if(selection != null)
 		{
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
-				if(s != null)
+				if (s != null)
 					addToSelection(s);
 			}
 		}

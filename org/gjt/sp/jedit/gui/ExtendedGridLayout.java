@@ -1153,13 +1153,11 @@ public class ExtendedGridLayout implements LayoutManager2
 		int gridRowsSize = gridRows.size();
 		if (gridRowsSize > 0)
 		{
-			ListIterator<ExtendedGridLayoutConstraints> gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
-			while (gridRowIterator.hasNext())
+			for (ExtendedGridLayoutConstraints cell :
+				gridRows.get(gridRows.size() - 1))
 			{
-				ExtendedGridLayoutConstraints cell = gridRowIterator.next();
-				if ((null != cell) &&
-				    ((REMAINDER != cell.getRowspan()) &&
-				     (null != cell.getRowspanPlaceholder(false))))
+				if ((null != cell) && ((REMAINDER != cell.getRowspan())
+					&& (null != cell.getRowspanPlaceholder(false))))
 				{
 					haveNext = true;
 					break;
@@ -1168,7 +1166,8 @@ public class ExtendedGridLayout implements LayoutManager2
 			while (haveNext)
 			{
 				haveNext = false;
-				gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
+				ListIterator<ExtendedGridLayoutConstraints> gridRowIterator =
+					gridRows.get(gridRows.size()-1).listIterator();
 				List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<ExtendedGridLayoutConstraints>();
 				gridRows.add(gridRow);
 				ListIterator<ExtendedGridLayoutConstraints> newGridRowIterator = gridRow.listIterator();

@@ -269,16 +269,13 @@ public class BrowserCommandsMenu extends JPopupMenu
 		Collections.sort(encodingMenuItemList,
 			new MenuItemTextComparator());
 
-		Iterator iter = encodingMenuItemList.iterator();
-		while(iter.hasNext())
+		for (JMenuItem item : encodingMenuItemList)
 		{
-			JRadioButtonMenuItem mi = (JRadioButtonMenuItem)
-				iter.next();
+			JRadioButtonMenuItem mi = (JRadioButtonMenuItem) item;
 
-			if(menu.getMenuComponentCount() > 20)
+			if (menu.getMenuComponentCount() > 20)
 			{
-				JMenu newMenu = new JMenu(
-					jEdit.getProperty("common.more"));
+				JMenu newMenu = new JMenu(jEdit.getProperty("common.more"));
 				menu.add(newMenu);
 				menu = newMenu;
 			}
