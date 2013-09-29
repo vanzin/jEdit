@@ -79,23 +79,16 @@ public class FavoritesProvider implements DynamicMenuProvider
 				new VFS.DirectoryEntryCompare(
 				jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs"),
 				jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase")));
-			for(int i = 0; i < favorites.length; i++)
+			for (VFSFile fav : favorites)
 			{
-				FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) favorites[i];
-				JMenuItem mi = new JMenuItem(
-					favorite.getLabel());
+				FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) fav;
+				JMenuItem mi = new JMenuItem(favorite.getLabel());
 				mi.setActionCommand(favorite.getPath());
-				mi.setIcon(FileCellRenderer
-					.getIconForFile(
-					favorite,false));
-				if(favorite.getType() == VFSFile.FILE)
-				{
+				mi.setIcon(FileCellRenderer.getIconForFile(favorite, false));
+				if (favorite.getType() == VFSFile.FILE)
 					mi.addActionListener(fileListener);
-				}
 				else
-				{
 					mi.addActionListener(dirListener);
-				}
 				menu.add(mi);
 			}
 		}

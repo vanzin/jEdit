@@ -244,14 +244,13 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 		List<JMenuItem> encodingMenuItemList = new ArrayList<JMenuItem>();
 		String[] encodings = MiscUtilities.getEncodings(true);
-		for(int i = 0; i < encodings.length; i++)
+		for (String encoding : encodings)
 		{
-			String encoding = encodings[i];
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(encoding);
 			mi.setActionCommand("encoding@" + encoding);
 			mi.addActionListener(actionHandler);
 			grp.add(mi);
-			encodingMenuItems.put(encoding,mi);
+			encodingMenuItems.put(encoding, mi);
 			encodingMenuItemList.add(mi);
 		}
 

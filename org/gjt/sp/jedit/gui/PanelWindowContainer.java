@@ -389,10 +389,8 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		buttonPanel.add(closeBox);
 		buttonPanel.add(menuBtn);
 		Collections.sort(buttons,new DockableWindowCompare());
-		for(int i = 0; i < buttons.size(); i++)
-		{
-			buttonPanel.add(buttons.get(i));
-		}
+		for (AbstractButton button : buttons)
+			buttonPanel.add(button);
 	} //}}}
 
 	//{{{ getWrappedDimension() method
@@ -820,10 +818,8 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			Component[] comp = parent.getComponents();
 			if(comp.length <= 2)
 			{
-				for(int i = 0; i < comp.length; i++)
-				{
-					comp[i].setVisible(false);
-				}
+				for (Component aComp : comp)
+					aComp.setVisible(false);
 				return;
 			}
 

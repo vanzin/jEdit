@@ -558,11 +558,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			String[] dockables = ((PanelWindowContainer)
 				container).getDockables();
 			Map<String,String> dockableMap = new TreeMap<String, String>();
-			for (int i = 0; i < dockables.length; i++)
-			{
-				String action = dockables[i];
+			for (String action : dockables)
 				dockableMap.put(getDockableTitle(action), action);
-			}
 			for (Map.Entry<String, String> entry : dockableMap.entrySet())
 			{
 				JMenuItem item = new JMenuItem(entry.getKey());
@@ -581,25 +578,23 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			if(!clone)
 			{
 				String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
-				for(int i = 0; i < positions.length; i++)
+				for (final String pos : positions)
 				{
-					final String pos = positions[i];
-					if(pos.equals(currentPos))
+					if (pos.equals(currentPos))
 						continue;
 
-					JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
-						+ pos));
+					JMenuItem moveMenuItem =
+						new JMenuItem(jEdit.getProperty("view.docking.menu-" + pos));
 
 					moveMenuItem.addActionListener(new ActionListener()
 					{
 						public void actionPerformed(ActionEvent evt)
 						{
-							jEdit.setProperty(dockable + ".dock-position",pos);
-							EditBus.send(new DockableWindowUpdate(
-								DockableWindowManagerImpl.this,
-								DockableWindowUpdate.PROPERTIES_CHANGED,
-								dockable
-							));
+							jEdit.setProperty(dockable + ".dock-position", pos);
+							EditBus.send(
+								new DockableWindowUpdate(DockableWindowManagerImpl.this,
+											 DockableWindowUpdate.PROPERTIES_CHANGED,
+											 dockable));
 							showDockableWindow(dockable);
 						}
 					});
@@ -841,9 +836,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 
 		String[] windowList = factory.getRegisteredDockableWindows();
 
-		for(int i = 0; i < windowList.length; i++)
+		for (String dockable : windowList)
 		{
-			String dockable = windowList[i];
 			Entry entry = windows.get(dockable);
 			if (entry == null)
 			{
@@ -851,46 +845,33 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 				// is not yet created if the plugin has some jars.
 				continue;
 			}
-			String newPosition = jEdit.getProperty(dockable
-				+ ".dock-position",FLOATING);
-			if(newPosition.equals(entry.position))
-			{
+			String newPosition = jEdit.getProperty(dockable + ".dock-position", FLOATING);
+			if (newPosition.equals(entry.position))
 				continue;
-			}
 
 			entry.position = newPosition;
-			if(entry.container != null)
+			if (entry.container != null)
 			{
 				entry.container.unregister(entry);
 				entry.container = null;
-				if (entry.factory.movable && (! newPosition.equals(FLOATING)))
+				if (entry.factory.movable && (!newPosition.equals(FLOATING)))
 				{
 					if (entry.win instanceof DockableWindow)
-						((DockableWindow)entry.win).move(newPosition);
-				}
-				else
-					entry.win = null;
+						((DockableWindow) entry.win).move(newPosition);
+				} else entry.win = null;
 			}
 
-			if(newPosition.equals(FLOATING))
+			if (newPosition.equals(FLOATING))
 			{
-			}
-
-			else
+			} else
 			{
-				if(newPosition.equals(TOP))
-					entry.container = top;
-				else if(newPosition.equals(LEFT))
-					entry.container = left;
-				else if(newPosition.equals(BOTTOM))
-					entry.container = bottom;
-				else if(newPosition.equals(RIGHT))
-					entry.container = right;
+				if (newPosition.equals(TOP)) entry.container = top;
+				else if (newPosition.equals(LEFT)) entry.container = left;
+				else if (newPosition.equals(BOTTOM)) entry.container = bottom;
+				else if (newPosition.equals(RIGHT)) entry.container = right;
 				else
 				{
-					Log.log(Log.WARNING,this,
-						"Unknown position: "
-						+ newPosition);
+					Log.log(Log.WARNING, this, "Unknown position: " + newPosition);
 					continue;
 				}
 

@@ -315,19 +315,17 @@ print_loop:	for(;;)
 					(float)pageX,(float)(pageY + y + lm.getHeight()));
 			}
 
-			for(int i = 0; i < lineList.size(); i++)
+			for (Chunk chunk : lineList)
 			{
 				y += lm.getHeight();
-				Chunk chunks = lineList.get(i);
-				if(chunks != null && actuallyPaint)
+				Chunk chunks = chunk;
+				if (chunks != null && actuallyPaint)
 				{
 					FontMetrics metrics = gfx.getFontMetrics();
-					Chunk.paintChunkBackgrounds(chunks,gfx,
-						(float)(pageX + lineNumberWidth),
-						(float)(pageY + y), metrics.getHeight());
-					Chunk.paintChunkList(chunks,gfx,
-						(float)(pageX + lineNumberWidth),
-						(float)(pageY + y),glyphVector);
+					Chunk.paintChunkBackgrounds(chunks, gfx, (float) (pageX + lineNumberWidth),
+								    (float) (pageY + y), metrics.getHeight());
+					Chunk.paintChunkList(chunks, gfx, (float) (pageX + lineNumberWidth),
+							     (float) (pageY + y), glyphVector);
 				}
 			}
 

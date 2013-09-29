@@ -207,9 +207,9 @@ public class EditingOptionPane extends AbstractOptionPane
 
 		global.save();
 
-		for(int i = 0; i < modeProps.length; i++)
+		for (ModeProperties modeProp : modeProps)
 		{
-			modeProps[i].save();
+			modeProp.save();
 		}
 
 		if (fullSyntaxLargeFileMode.isSelected())

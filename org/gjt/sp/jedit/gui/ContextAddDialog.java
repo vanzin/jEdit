@@ -205,14 +205,13 @@ public class ContextAddDialog extends EnhancedDialog
 		EditAction[] actions = actionSet.getActions();
 		Vector<MenuItem> listModel = new Vector<MenuItem>(actions.length);
 
-		for(int i = 0; i < actions.length; i++)
+		for (EditAction action : actions)
 		{
-			EditAction action = actions[i];
 			String label = action.getLabel();
-			if(label == null)
+			if (label == null)
 				continue;
 
-			listModel.addElement(new MenuItem(action.getName(),label));
+			listModel.addElement(new MenuItem(action.getName(), label));
 		}
 
 		Collections.sort(listModel,new AbstractContextOptionPane.MenuItemCompare());

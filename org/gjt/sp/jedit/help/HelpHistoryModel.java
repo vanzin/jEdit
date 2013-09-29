@@ -133,12 +133,10 @@ public class HelpHistoryModel
 	//{{{ updateTitle() method
 	public void updateTitle(String url, String title)
 	{
-		for (int i=0;i<history.length;i++)
+		for (HistoryEntry aHistory : history)
 		{
-			if ((history[i] != null) && history[i].url.equals(url))
-			{
-				history[i].title = title;
-			}
+			if ((aHistory != null) && aHistory.url.equals(url))
+				aHistory.title = title;
 		}
 		fireUpdate();
 	}//}}}
@@ -186,10 +184,8 @@ public class HelpHistoryModel
 	//{{{ fireUpdate() method
 	public void fireUpdate()
 	{
-		for (int i=0 ; i<listeners.size() ; i++)
-		{
-			listeners.get(i).historyUpdated();
-		}
+		for (HelpHistoryModelListener listener : listeners)
+			listener.historyUpdated();
 	} //}}}
 
 	//{{{ Private members

@@ -509,10 +509,9 @@ public class EditPane extends JPanel implements BufferSetListener
 
 		int caret = textArea.getCaretPosition();
 
-		for(int i = 0; i < markers.size(); i++)
+		for (Marker _marker : markers)
 		{
-			Marker _marker = markers.get(i);
-			if(_marker.getPosition() > caret)
+			if (_marker.getPosition() > caret)
 			{
 				marker = _marker;
 				break;
@@ -603,17 +602,15 @@ public class EditPane extends JPanel implements BufferSetListener
 
 		// always add markers on selected lines
 		Selection[] selection = textArea.getSelection();
-		for(int i = 0; i < selection.length; i++)
+		for (Selection s : selection)
 		{
-			Selection s = selection[i];
 			int startLine = s.getStartLine();
-			if(startLine != s.getEndLine() && startLine != caretLine)
+			if (startLine != s.getEndLine() && startLine != caretLine)
 			{
-				buffer.addMarker('\0',s.getStart());
+				buffer.addMarker('\0', s.getStart());
 			}
 
-			if(s.getEndLine() != caretLine)
-				buffer.addMarker('\0',s.getEnd());
+			if (s.getEndLine() != caretLine) buffer.addMarker('\0', s.getEnd());
 		}
 
 		// toggle marker on caret line

@@ -2229,13 +2229,11 @@ public class jEdit
 		// save caret info. Buffer.load() will load it.
 		visit(new SaveCaretInfoVisitor());
 
-
-		for(int i = 0; i < buffers.length; i++)
+		for (Buffer buffer : buffers)
 		{
-			Buffer buffer = buffers[i];
 			if (buffer.isUntitled())
 				continue;
-			buffer.load(view,true);
+			buffer.load(view, true);
 		}
 	} //}}}
 
@@ -3909,16 +3907,15 @@ public class jEdit
 				jEdit.getColorProperty("view.selectionColor"));
 
 			String[] prefixes = { "PasswordField", "TextField", "TextArea", "List", "Table" };
-			for(int i = 0; i < prefixes.length; i++)
+			for (String prefix : prefixes)
 			{
-				String prefix = prefixes[i];
-				defaults.put(prefix + ".foreground",foreground);
-				defaults.put(prefix + ".background",background);
-				defaults.put(prefix + ".disabledForeground",foreground);
-				defaults.put(prefix + ".disabledBackground",background);
-				defaults.put(prefix + ".caretForeground",caretColor);
-				defaults.put(prefix + ".selectionForeground",foreground);
-				defaults.put(prefix + ".selectionBackground",selectionColor);
+				defaults.put(prefix + ".foreground", foreground);
+				defaults.put(prefix + ".background", background);
+				defaults.put(prefix + ".disabledForeground", foreground);
+				defaults.put(prefix + ".disabledBackground", background);
+				defaults.put(prefix + ".caretForeground", caretColor);
+				defaults.put(prefix + ".selectionForeground", foreground);
+				defaults.put(prefix + ".selectionBackground", selectionColor);
 			}
 
 			defaults.put("ComboBox.foreground",foreground);

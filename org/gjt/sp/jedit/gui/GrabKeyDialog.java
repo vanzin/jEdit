@@ -243,15 +243,11 @@ public class GrabKeyDialog extends JDialog
 		try
 		{
 			Field[] fields = KeyEvent.class.getFields();
-			for(int i = 0; i < fields.length; i++)
+			for (Field field : fields)
 			{
-				Field field = fields[i];
 				String name = field.getName();
-				if(name.startsWith("VK_")
-					&& field.getInt(null) == keyCode)
-				{
+				if (name.startsWith("VK_") && field.getInt(null) == keyCode)
 					return name.substring(3);
-				}
 			}
 		}
 		catch(Exception e)

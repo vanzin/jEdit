@@ -257,9 +257,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				Object[] selected = list.getSelectedValues();
 				if(selected != null && selected.length != 0)
 				{
-					for(int i = 0; i < selected.length; i++)
+					for (Object sel : selected)
 					{
-						buf.append(selected[i]);
+						buf.append(sel);
 						buf.append('\n');
 					}
 				}

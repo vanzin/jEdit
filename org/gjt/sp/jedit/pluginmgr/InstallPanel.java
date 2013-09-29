@@ -556,8 +556,8 @@ class InstallPanel extends JPanel implements EBComponent
 				return;
 			}
 
-			for(int i = 0; i < parents.length; i++)
-				 parents[i].install = false;
+			for (Entry parent : parents)
+				parent.install = false;
 
 			fireTableRowsUpdated(0,getRowCount() - 1);
 		} //}}}
@@ -725,9 +725,9 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 			int[] rows = table.getSelectedRows();
-			for (int i=0 ; i<rows.length ; i++)
+			for (int row : rows)
 			{
-				savedSelection.add(filteredEntries.get(rows[i]).toString());
+				savedSelection.add(filteredEntries.get(row).toString());
 			}
 		} //}}}
 

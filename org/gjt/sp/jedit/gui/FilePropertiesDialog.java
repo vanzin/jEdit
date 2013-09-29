@@ -110,16 +110,12 @@ public class FilePropertiesDialog extends EnhancedDialog
 
 		int filesCounter = 0;
 		int directoriesCounter = 0;
-		for(int i=0;i<selectedFiles.length;i++)
+		for (VFSFile selectedFile : selectedFiles)
 		{
-			if(selectedFiles[i].getType() == VFSFile.DIRECTORY)
-			{
+			if (selectedFile.getType() == VFSFile.DIRECTORY)
 				directoriesCounter++;
-			}
-			else if(selectedFiles[i].getType() == VFSFile.FILE)
-			{
+			else if (selectedFile.getType() == VFSFile.FILE)
 				filesCounter++;
-			}
 		}
 		JPanel nameField = new JPanel();
 		nameField.add(new JLabel(jEdit.getProperty("fileprop.selectedFiles")+": "+filesCounter+", "+
@@ -137,17 +133,15 @@ public class FilePropertiesDialog extends EnhancedDialog
 		long filesSize = 0L;
 		JPanel centerPanel = new JPanel(new BorderLayout());
 
-		for (int i=0;i<selectedFiles.length;i++)
+		for (VFSFile selectedFile : selectedFiles)
 		{
-			if(selectedFiles[i].getType() == VFSFile.DIRECTORY)
+			if (selectedFile.getType() == VFSFile.DIRECTORY)
 			{
-				File ioFile = new File(selectedFiles[i].getPath());
+				File ioFile = new File(selectedFile.getPath());
 				filesSize += IOUtilities.fileLength(ioFile);
 			}
-			else if(selectedFiles[i].getType() == VFSFile.FILE)
-			{
-				filesSize += selectedFiles[i].getLength();
-			}
+			else if (selectedFile.getType() == VFSFile.FILE)
+				filesSize += selectedFile.getLength();
 		}
 
 		JPanel propField = new JPanel();

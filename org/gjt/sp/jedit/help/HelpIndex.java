@@ -101,17 +101,16 @@ class HelpIndex
 		}
 
 		PluginJAR[] jars = jEdit.getPluginJARs();
-		for(int i = 0; i < jars.length; i++)
+		for (PluginJAR jar : jars)
 		{
 			try
 			{
-				indexJAR(jars[i].getZipFile());
+				indexJAR(jar.getZipFile());
 			}
-			catch(Throwable e)
+			catch (Throwable e)
 			{
-				Log.log(Log.ERROR,this,"Error indexing JAR: "
-					+ jars[i].getPath());
-				Log.log(Log.ERROR,this,e);
+				Log.log(Log.ERROR, this, "Error indexing JAR: " + jar.getPath());
+				Log.log(Log.ERROR, this, e);
 			}
 		}
 
@@ -128,10 +127,8 @@ class HelpIndex
 		String[] files = VFSManager.getFileVFS()
 			._listDirectory(null,dir,"*.{html,txt}",true,null);
 
-		for(int i = 0; i < files.length; i++)
-		{
-			indexURL(files[i]);
-		}
+		for (String file : files)
+			indexURL(file);
 	} //}}}
 
 	//{{{ indexJAR() method

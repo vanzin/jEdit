@@ -105,10 +105,8 @@ public abstract class EnhancedDialog extends JDialog
 				Container cont = (Container)comp;
 				cont.addContainerListener(this);
 				Component[] comps = cont.getComponents();
-				for(int i = 0; i < comps.length; i++)
-				{
-					componentAdded(comps[i]);
-				}
+				for (Component comp1 : comps)
+					componentAdded(comp1);
 			}
 		}
 
@@ -120,10 +118,8 @@ public abstract class EnhancedDialog extends JDialog
 				Container cont = (Container)comp;
 				cont.removeContainerListener(this);
 				Component[] comps = cont.getComponents();
-				for(int i = 0; i < comps.length; i++)
-				{
-					componentRemoved(comps[i]);
-				}
+				for (Component comp1 : comps)
+					componentRemoved(comp1);
 			}
 		}
 	}

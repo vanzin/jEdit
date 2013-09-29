@@ -143,12 +143,10 @@ public class HistoryButton extends JPanel implements ActionListener
 				}
 				else
 				{
-					for (int i=0 ; i<urls.length ; i++)
+					for (HelpHistoryModel.HistoryEntry url : urls)
 					{
-						if (urls[i] != null)
-						{
-							historyList.add(new HistoryListActionHandler(urls[i]));
-						}
+						if (url != null)
+							historyList.add(new HistoryListActionHandler(url));
 					}
 				}
 

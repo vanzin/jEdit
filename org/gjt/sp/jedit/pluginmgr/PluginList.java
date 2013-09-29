@@ -268,9 +268,9 @@ class PluginList
 	//{{{ dump() method
 	void dump()
 	{
-		for(int i = 0; i < plugins.size(); i++)
+		for (Plugin plugin : plugins)
 		{
-			System.err.println(plugins.get(i));
+			System.err.println(plugin);
 			System.err.println();
 		}
 	} //}}}

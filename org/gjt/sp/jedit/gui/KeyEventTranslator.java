@@ -373,10 +373,10 @@ public class KeyEventTranslator
 	{
 		StringBuilder buf = null;
 
-		for(int i = 0; i < MODS.length; i++)
+		for (int modifier : MODS)
 		{
-			if((mods & MODS[i]) != 0)
-				buf = lazyAppend(buf,getSymbolicModifierName(MODS[i]));
+			if ((mods & modifier) != 0)
+				buf = lazyAppend(buf, getSymbolicModifierName(modifier));
 		}
 
 		if(buf == null)

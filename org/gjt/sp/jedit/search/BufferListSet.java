@@ -127,10 +127,10 @@ public abstract class BufferListSet implements SearchFileSet
 			boolean ignoreCase = ((vfs.getCapabilities()
 				& VFS.CASE_INSENSITIVE_CAP) != 0);
 
-			for(int i = 0; i < files.length; i++)
+			for (String file : files)
 			{
-				if(StandardUtilities.compareStrings(
-					files[i],path,ignoreCase) == 0)
+				if (StandardUtilities.compareStrings(
+					file, path, ignoreCase) == 0)
 				{
 					return path;
 				}

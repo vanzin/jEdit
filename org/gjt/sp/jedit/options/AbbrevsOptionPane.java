@@ -385,14 +385,10 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		public Hashtable<String,String> toHashtable()
 		{
 			Hashtable<String,String> hash = new Hashtable<String,String>();
-			for(int i = 0; i < abbrevs.size(); i++)
+			for (Abbrev abbrev : abbrevs)
 			{
-				Abbrev abbrev = abbrevs.get(i);
-				if(abbrev.abbrev.length() > 0
-				   && abbrev.expand.length() > 0)
-				{
-					hash.put(abbrev.abbrev,abbrev.expand);
-				}
+				if (abbrev.abbrev.length() > 0 && abbrev.expand.length() > 0)
+					hash.put(abbrev.abbrev, abbrev.expand);
 			}
 			return hash;
 		} //}}}

@@ -394,9 +394,9 @@ public class Mode
 			};
 
 			StringBuilder buf = new StringBuilder();
-			for(int i = 0; i < props.length; i++)
+			for (String prop1 : props)
 			{
-				String prop = (String) getProperty(props[i]);
+				String prop = (String) getProperty(prop1);
 				if (prop != null)
 					buf.append(prop);
 			}

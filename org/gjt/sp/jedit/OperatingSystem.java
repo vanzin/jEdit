@@ -90,10 +90,9 @@ public class OperatingSystem
 		// Get available screens
 		// O(n^3), this is nasty, but since we aren't dealling with
 		// many items it should be fine
-		for (int i=0; i < gd.length; i++)
+		for (GraphicsDevice aGd : gd)
 		{
-			GraphicsConfiguration gc = gd[i]
-				.getDefaultConfiguration();
+			GraphicsConfiguration gc = aGd.getDefaultConfiguration();
 			// Don't add duplicates
 			if (window.intersects(gc.getBounds()))
 			{

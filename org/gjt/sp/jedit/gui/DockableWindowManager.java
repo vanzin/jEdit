@@ -558,9 +558,8 @@ public abstract class DockableWindowManager extends JPanel
 		}
 
 		String[] dockables = factory.getRegisteredDockableWindows();
-		for(int i = 0; i < dockables.length; i++)
+		for (String dockable : dockables)
 		{
-			String dockable = dockables[i];
 			String oldPosition = positions.get(dockable);
 			String newPosition = getDockablePosition(dockable);
 			if (oldPosition == null || !newPosition.equals(oldPosition))

@@ -215,10 +215,10 @@ public class ActionBar extends JToolBar
 		str = str.toLowerCase();
 		String[] actions = jEdit.getActionNames();
 		ArrayList<String> returnValue = new ArrayList<String>(actions.length);
-		for(int i = 0; i < actions.length; i++)
+		for (String act : actions)
 		{
-			if(actions[i].toLowerCase().contains(str))
-				returnValue.add(actions[i]);
+			if (act.toLowerCase().contains(str))
+				returnValue.add(act);
 		}
 
 		return returnValue.toArray(new String[returnValue.size()]);

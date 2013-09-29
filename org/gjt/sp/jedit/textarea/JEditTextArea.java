@@ -342,22 +342,24 @@ public class JEditTextArea extends TextArea
 		int lines = 1;
 
 		boolean word = true;
-		for(int i = 0; i < chars.length; i++)
+		for (char aChar : chars)
 		{
-			switch(chars[i])
+			switch (aChar)
 			{
-			case '\r': case '\n':
-				lines++;
-			case ' ': case '\t':
-				word = true;
-				break;
-			default:
-				if(word)
-				{
-					words++;
-					word = false;
-				}
-				break;
+				case '\r':
+				case '\n':
+					lines++;
+				case ' ':
+				case '\t':
+					word = true;
+					break;
+				default:
+					if (word)
+					{
+						words++;
+						word = false;
+					}
+					break;
 			}
 		}
 

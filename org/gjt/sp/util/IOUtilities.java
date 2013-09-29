@@ -150,10 +150,8 @@ public class IOUtilities
 			File[] files = file.listFiles();
 			if (files != null)
 			{
-				for (int i = 0; i < files.length; i++)
-				{
-					length += fileLength(files[i]);
-				}
+				for (File f : files)
+					length += fileLength(f);
 			}
 		}
 		return length;

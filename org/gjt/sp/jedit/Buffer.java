@@ -1290,12 +1290,11 @@ public class Buffer extends JEditBuffer
 	public String getMarkerNameString()
 	{
 		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < markers.size(); i++)
+		for (Marker marker : markers)
 		{
-			Marker marker = markers.get(i);
-			if(marker.getShortcut() != '\0')
+			if (marker.getShortcut() != '\0')
 			{
-				if(buf.length() != 0)
+				if (buf.length() != 0)
 					buf.append(' ');
 				buf.append(marker.getShortcut());
 			}
@@ -1387,11 +1386,10 @@ public class Buffer extends JEditBuffer
 	 */
 	public Marker getMarkerInRange(int start, int end)
 	{
-		for(int i = 0; i < markers.size(); i++)
+		for (Marker marker : markers)
 		{
-			Marker marker = markers.get(i);
 			int pos = marker.getPosition();
-			if(pos >= start && pos < end)
+			if (pos >= start && pos < end)
 				return marker;
 		}
 
@@ -1407,10 +1405,9 @@ public class Buffer extends JEditBuffer
 	 */
 	public Marker getMarkerAtLine(int line)
 	{
-		for(int i = 0; i < markers.size(); i++)
+		for (Marker marker : markers)
 		{
-			Marker marker = markers.get(i);
-			if(getLineOfOffset(marker.getPosition()) == line)
+			if (getLineOfOffset(marker.getPosition()) == line)
 				return marker;
 		}
 
@@ -1450,8 +1447,8 @@ public class Buffer extends JEditBuffer
 	{
 		setFlag(MARKERS_CHANGED,true);
 
-		for(int i = 0; i < markers.size(); i++)
-			markers.get(i).removePosition();
+		for (Marker marker : markers)
+			marker.removePosition();
 
 		markers.removeAllElements();
 
@@ -2078,14 +2075,13 @@ public class Buffer extends JEditBuffer
 		}
 
 		// Create marker positions
-		for(int i = 0; i < markers.size(); i++)
+		for (Marker marker : markers)
 		{
-			Marker marker = markers.get(i);
 			marker.removePosition();
 			int pos = marker.getPosition();
-			if(pos > getLength())
+			if (pos > getLength())
 				marker.setPosition(getLength());
-			else if(pos < 0)
+			else if (pos < 0)
 				marker.setPosition(0);
 			marker.createPosition();
 		}

@@ -175,21 +175,16 @@ public class HelpTOCPanel extends JPanel
 		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);
 
-		for(int i = 0; i < plugins.length; i++)
+		for (EditPlugin plugin : plugins)
 		{
-			EditPlugin plugin = plugins[i];
-
 			String name = plugin.getClassName();
 
 			String docs = jEdit.getProperty("plugin." + name + ".docs");
 			String label = jEdit.getProperty("plugin." + name + ".name");
-			if(label != null && docs != null)
+			if (label != null && docs != null)
 			{
-				String path = plugin.getPluginJAR()
-					.getClassLoader()
-					.getResourceAsPath(docs);
-				pluginTree.add(createNode(
-					path,label));
+				String path = plugin.getPluginJAR().getClassLoader().getResourceAsPath(docs);
+				pluginTree.add(createNode(path, label));
 			}
 		}
 

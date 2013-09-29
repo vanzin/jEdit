@@ -269,9 +269,9 @@ class CheckBoxListModel extends AbstractTableModel
 	CheckBoxListModel(Object[] _items)
 	{
 		items = new Vector<JCheckBoxList.Entry>(_items.length);
-		for(int i = 0; i < _items.length; i++)
+		for (Object _item : _items)
 		{
-			items.add(createEntry(_items[i]));
+			items.add(createEntry(_item));
 		}
 	}
 

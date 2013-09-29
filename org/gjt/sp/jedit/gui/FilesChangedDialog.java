@@ -224,10 +224,10 @@ public class FilesChangedDialog extends EnhancedDialog
 		boolean enabled = false;
 		if(paths != null)
 		{
-			for(int i = 0; i < paths.length; i++)
+			for (TreePath tp : paths)
 			{
-				Object[] path = paths[i].getPath();
-				if(path.length == 3)
+				Object[] path = tp.getPath();
+				if (path.length == 3)
 					enabled = true;
 			}
 		}
@@ -279,24 +279,18 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		int row = bufferTree.getRowForPath(paths[0]);
 
-		for(int i = 0; i < paths.length; i++)
+		for (TreePath path : paths)
 		{
-			TreePath path = paths[i];
-
 			// is it a header?
-			if(path.getPathCount() == 2)
+			if (path.getPathCount() == 2)
 				continue;
 
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-				path.getLastPathComponent();
-			if(!(node.getUserObject() instanceof String))
-			{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+			if (!(node.getUserObject() instanceof String))
 				return;
-			}
 
-			Buffer buffer = jEdit.getBuffer(
-				(String)node.getUserObject());
-			if(buffer == null)
+			Buffer buffer = jEdit.getBuffer((String) node.getUserObject());
+			if (buffer == null)
 				return;
 
 			if ("RELOAD".equals(action))
@@ -307,9 +301,7 @@ public class FilesChangedDialog extends EnhancedDialog
 				buffer.setAutoReloadDialog(false);
 			}
 
-			DefaultMutableTreeNode parent =
-				(DefaultMutableTreeNode)
-				node.getParent();
+			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 			parent.remove(node);
 		}
 

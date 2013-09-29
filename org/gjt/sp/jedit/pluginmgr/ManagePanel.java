@@ -736,10 +736,8 @@ public class ManagePanel extends JPanel
 			if (table != null)
 			{
 				int[] rows = table.getSelectedRows();
-				for (int i=0 ; i<rows.length ; i++)
-				{
-					savedSelection.add(entries.get(rows[i]).jar);
-				}
+				for (int row : rows)
+					savedSelection.add(entries.get(row).jar);
 			}
 		} //}}}
 
@@ -1162,11 +1160,8 @@ public class ManagePanel extends JPanel
 				return;
 
 			Roster roster = new Roster();
-			for (int i = 0; i < mustRemove.size(); i++)
-			{
-				String entry = mustRemove.get(i);
+			for (String entry : mustRemove)
 				roster.addRemove(jarlibs.get(entry));
-			}
 
 			roster.performOperationsInAWTThread(window);
 			pluginModel.update();
@@ -1386,10 +1381,11 @@ public class ManagePanel extends JPanel
 				break;
 			case EDIT_PLUGIN:
 				int[] rows = table.getSelectedRows();
-				for (int i = 0; i < rows.length; i++)
+				for (int row : rows)
 				{
-					Object st = pluginModel.getValueAt(rows[i], 0);
-					pluginModel.setValueAt(st.equals(Boolean.FALSE), rows[i], 0);
+					Object st = pluginModel.getValueAt(row, 0);
+					pluginModel.setValueAt(
+						st.equals(Boolean.FALSE), row, 0);
 				}
 				break;
 			case CLOSE_PLUGIN_MANAGER:

@@ -817,13 +817,14 @@ public class JEditBuffer
 		{
 			beginCompoundEdit();
 
-			for(int i = 0; i < lines.length; i++)
+			for (int line : lines)
 			{
 				Segment seg = new Segment();
-				getLineText(lines[i],seg);
+				getLineText(line, seg);
 
 				// blank line
-				if (seg.count == 0) continue;
+				if (seg.count == 0)
+					continue;
 
 				int lineStart = seg.offset;
 				int lineEnd = seg.offset + seg.count - 1;
@@ -838,9 +839,10 @@ public class JEditBuffer
 				int tail = lineEnd - pos;
 
 				// no whitespace
-				if (tail == 0) continue;
+				if (tail == 0)
+					continue;
 
-				remove(getLineEndOffset(lines[i]) - 1 - tail,tail);
+				remove(getLineEndOffset(line) - 1 - tail, tail);
 			}
 		}
 		finally
@@ -865,22 +867,19 @@ public class JEditBuffer
 		{
 			beginCompoundEdit();
 
-			for(int i = 0; i < lines.length; i++)
+			for (int l : lines)
 			{
-				int lineStart = getLineStartOffset(lines[i]);
-				CharSequence line = getLineSegment(lines[i]);
-				int whiteSpace = StandardUtilities
-					.getLeadingWhiteSpace(line);
-				if(whiteSpace == 0)
-					continue;
-				int whiteSpaceWidth = Math.max(0,StandardUtilities
-					.getLeadingWhiteSpaceWidth(line,tabSize)
-					- indentSize);
+				int lineStart = getLineStartOffset(l);
+				CharSequence line = getLineSegment(l);
+				int whiteSpace = StandardUtilities.getLeadingWhiteSpace(line);
+				if (whiteSpace == 0) continue;
+				int whiteSpaceWidth = Math.max(0, StandardUtilities
+									  .getLeadingWhiteSpaceWidth(line, tabSize)
+								  - indentSize);
 
-				insert(lineStart + whiteSpace,StandardUtilities
-					.createWhiteSpace(whiteSpaceWidth,
-					noTabs ? 0 : tabSize));
-				remove(lineStart,whiteSpace);
+				insert(lineStart + whiteSpace,
+				       StandardUtilities.createWhiteSpace(whiteSpaceWidth, noTabs ? 0 : tabSize));
+				remove(lineStart, whiteSpace);
 			}
 
 		}
@@ -905,24 +904,21 @@ public class JEditBuffer
 			int tabSize = getTabSize();
 			int indentSize = getIndentSize();
 			boolean noTabs = getBooleanProperty("noTabs");
-			for(int i = 0; i < lines.length; i++)
+			for (int l : lines)
 			{
-				int lineStart = getLineStartOffset(lines[i]);
-				CharSequence line = getLineSegment(lines[i]);
-				int whiteSpace = StandardUtilities
-					.getLeadingWhiteSpace(line);
+				int lineStart = getLineStartOffset(l);
+				CharSequence line = getLineSegment(l);
+				int whiteSpace = StandardUtilities.getLeadingWhiteSpace(line);
 
 				// silly usability hack
 				//if(lines.length != 1 && whiteSpace == 0)
 				//	continue;
 
-				int whiteSpaceWidth = StandardUtilities
-					.getLeadingWhiteSpaceWidth(
-					line,tabSize) + indentSize;
-				insert(lineStart + whiteSpace,StandardUtilities
-					.createWhiteSpace(whiteSpaceWidth,
-					noTabs ? 0 : tabSize));
-				remove(lineStart,whiteSpace);
+				int whiteSpaceWidth =
+					StandardUtilities.getLeadingWhiteSpaceWidth(line, tabSize) + indentSize;
+				insert(lineStart + whiteSpace,
+				       StandardUtilities.createWhiteSpace(whiteSpaceWidth, noTabs ? 0 : tabSize));
+				remove(lineStart, whiteSpace);
 			}
 		}
 		finally
@@ -962,8 +958,8 @@ public class JEditBuffer
 		try
 		{
 			beginCompoundEdit();
-			for(int i = 0; i < lines.length; i++)
-				indentLine(lines[i],true);
+			for (int line : lines)
+				indentLine(line, true);
 		}
 		finally
 		{

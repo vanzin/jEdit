@@ -105,10 +105,9 @@ public class AllBufferSet extends BufferListSet
 			return null;
 		}
 
-		for(int i = 0; i < buffers.length; i++)
+		for (Buffer buffer : buffers)
 		{
-			Buffer buffer = buffers[i];
-			if(filter.matcher(buffer.getName()).matches())
+			if (filter.matcher(buffer.getName()).matches())
 				returnValue.add(buffer.getPath());
 		}
 

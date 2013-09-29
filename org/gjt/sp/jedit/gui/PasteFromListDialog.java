@@ -115,10 +115,10 @@ public class PasteFromListDialog extends EnhancedDialog
 		 * to the model. This has the effect of moving it to the
 		 * top of the list.
 		 */
-		for(int i = 0; i < selected.length; i++)
+		for (Object sel : selected)
 		{
-			listModel.removeElement(selected[i]);
-			listModel.insertElementAt(selected[i],0);
+			listModel.removeElement(sel);
+			listModel.insertElementAt(sel, 0);
 		}
 
 		view.getTextArea().setSelectedText(text);

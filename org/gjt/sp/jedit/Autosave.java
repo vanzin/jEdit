@@ -91,9 +91,8 @@ class Autosave implements ActionListener
 		}
 		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 		Buffer[] bufferArray = jEdit.getBuffers();
-		for(int i = 0; i < bufferArray.length; i++)
+		for (Buffer buffer : bufferArray)
 		{
-			Buffer buffer = bufferArray[i];
 			if (autosaveUntitled || !buffer.isUntitled())
 				buffer.autosave();
 		}

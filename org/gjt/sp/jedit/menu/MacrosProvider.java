@@ -93,9 +93,7 @@ public class MacrosProvider implements DynamicMenuProvider
 		if (subMenu != null)
 			menuItems.add(subMenu);
 
-		for(int i = 0; i < menuItems.size(); i++)
-		{
-			menu.add(menuItems.get(i));
-		}
+		for (JMenuItem menuItem : menuItems)
+			menu.add(menuItem);
 	} //}}}
 }

@@ -178,17 +178,14 @@ public class CloseDialog extends EnhancedDialog
 			{
 				Object[] paths = bufferList.getSelectedValues();
 
-				for(int i = 0; i < paths.length; i++)
+				for (Object path1 : paths)
 				{
-					String path = (String)paths[i];
+					String path = (String) path1;
 					Buffer buffer = jEdit.getBuffer(path);
-					if(!buffer.save(view,null,true,true))
-						return;
+					if (!buffer.save(view, null, true, true)) return;
 					TaskManager.instance.waitForIoTasks();
-					if(buffer.getBooleanProperty(BufferIORequest
-						.ERROR_OCCURRED))
-						return;
-					jEdit._closeBuffer(view,buffer);
+					if (buffer.getBooleanProperty(BufferIORequest.ERROR_OCCURRED)) return;
+					jEdit._closeBuffer(view, buffer);
 					bufferModel.removeElement(path);
 				}
 
@@ -207,11 +204,11 @@ public class CloseDialog extends EnhancedDialog
 			{
 				Object[] paths = bufferList.getSelectedValues();
 
-				for(int i = 0; i < paths.length; i++)
+				for (Object path1 : paths)
 				{
-					String path = (String)paths[i];
+					String path = (String) path1;
 					Buffer buffer = jEdit.getBuffer(path);
-					jEdit._closeBuffer(view,buffer);
+					jEdit._closeBuffer(view, buffer);
 					bufferModel.removeElement(path);
 				}
 

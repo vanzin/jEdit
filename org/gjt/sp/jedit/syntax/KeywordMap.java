@@ -113,14 +113,14 @@ public class KeywordMap
 
 		// complete-word command needs a list of all non-alphanumeric
 		// characters used in a keyword map.
-loop:		for(int i = 0; i < keyword.length; i++)
+loop:
+		for (char ch : keyword)
 		{
-			char ch = keyword[i];
-			if(!Character.isLetterOrDigit(ch))
+			if (!Character.isLetterOrDigit(ch))
 			{
-				for(int j = 0; j < noWordSep.length(); j++)
+				for (int j = 0; j < noWordSep.length(); j++)
 				{
-					if(noWordSep.charAt(j) == ch)
+					if (noWordSep.charAt(j) == ch)
 						continue loop;
 				}
 
@@ -150,10 +150,10 @@ loop:		for(int i = 0; i < keyword.length; i++)
 	public String[] getKeywords()
 	{
 		List<String> vector = new ArrayList<String>(100);
-		for(int i = 0; i < map.length; i++)
+		for (Keyword kw : map)
 		{
-			Keyword keyword = map[i];
-			while(keyword != null)
+			Keyword keyword = kw;
+			while (keyword != null)
 			{
 				vector.add(new String(keyword.keyword));
 				keyword = keyword.next;

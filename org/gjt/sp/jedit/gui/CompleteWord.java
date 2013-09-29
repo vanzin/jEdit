@@ -255,17 +255,14 @@ public class CompleteWord extends CompletionPopup
 		if(keywordMap != null)
 		{
 			String[] keywords = keywordMap.getKeywords();
-			for(int i = 0; i < keywords.length; i++)
+			for (String _keyword : keywords)
 			{
-				String _keyword = keywords[i];
-				if(_keyword.regionMatches(keywordMap.getIgnoreCase(),
-					0,word,0,wordLen))
+				if (_keyword.regionMatches(keywordMap.getIgnoreCase(),
+							   0, word, 0, wordLen))
 				{
-					Completion keyword = new Completion(_keyword,true);
-					if(!completions.contains(keyword))
-					{
+					Completion keyword = new Completion(_keyword, true);
+					if (!completions.contains(keyword))
 						completions.add(keyword);
-					}
 				}
 			}
 		} //}}}

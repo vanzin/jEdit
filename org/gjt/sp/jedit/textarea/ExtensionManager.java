@@ -129,11 +129,11 @@ class ExtensionManager
 	//{{{ getToolTipText() method
 	String getToolTipText(int x, int y)
 	{
-		for(int i = 0; i < extensions.size(); i++)
+		for (Entry extension : extensions)
 		{
-			TextAreaExtension ext = extensions.get(i).ext;
-			String toolTip = ext.getToolTipText(x,y);
-			if(toolTip != null)
+			TextAreaExtension ext = extension.ext;
+			String toolTip = ext.getToolTipText(x, y);
+			if (toolTip != null)
 				return toolTip;
 		}
 

@@ -79,8 +79,8 @@ public class Macros
 			{
 				buffer.beginCompoundEdit();
 
-				for(int i = 0; i < paths.length; i++)
-					runScript(view,paths[i],false);
+				for (String path : paths)
+					runScript(view, path, false);
 			}
 			finally
 			{
@@ -446,9 +446,8 @@ public class Macros
 	 */
 	public static Handler getHandlerForPathName(String pathName)
 	{
-		for (int i = 0; i < macroHandlers.size(); i++)
+		for (Handler handler : macroHandlers)
 		{
-			Handler handler = macroHandlers.get(i);
 			if (handler.accept(pathName))
 				return handler;
 		}
@@ -464,9 +463,8 @@ public class Macros
 	 */
 	public static Handler getHandler(String name)
 	{
-		for (int i = 0; i < macroHandlers.size(); i++)
+		for (Handler handler : macroHandlers)
 		{
-			Handler handler = macroHandlers.get(i);
 			if (handler.getName().equals(name))
 				return handler;
 		}
@@ -776,44 +774,41 @@ public class Macros
 		if(macroFiles == null || macroFiles.length == 0)
 			return;
 
-		for(int i = 0; i < macroFiles.length; i++)
+		for (File file : macroFiles)
 		{
-			File file = macroFiles[i];
 			String fileName = file.getName();
-			if(file.isHidden())
+			if (file.isHidden())
 			{
 				/* do nothing! */
 			}
-			else if(file.isDirectory())
+			else if (file.isDirectory())
 			{
-				String submenuName = fileName.replace('_',' ');
+				String submenuName = fileName.replace('_', ' ');
 				List submenu = null;
 				//{{{ try to merge with an existing menu first
-				for(int j = 0; j < vector.size(); j++)
+				for (Object obj : vector)
 				{
-					Object obj = vector.get(j);
-					if(obj instanceof List)
+					if (obj instanceof List)
 					{
-						List vec = (List)obj;
-						if(submenuName.equals(vec.get(0)))
+						List vec = (List) obj;
+						if (submenuName.equals(vec.get(0)))
 						{
 							submenu = vec;
 							break;
 						}
 					}
 				} //}}}
-				if(submenu == null)
+				if (submenu == null)
 				{
 					submenu = new Vector();
 					submenu.add(submenuName);
 					vector.add(submenu);
 				}
 
-				loadMacros(submenu,path + fileName + '/',file);
-			}
-			else
+				loadMacros(submenu, path + fileName + '/', file);
+			} else
 			{
-				addMacro(file,path,vector);
+				addMacro(file, path, vector);
 			}
 		}
 	} //}}}

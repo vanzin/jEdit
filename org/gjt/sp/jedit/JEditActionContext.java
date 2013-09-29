@@ -64,16 +64,16 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 		actionSets.addElement(actionSet);
 		actionSet.context = this;
 		String[] actions = actionSet.getActionNames();
-		for(int i = 0; i < actions.length; i++)
+		for (String action : actions)
 		{
 			/* Is it already there? */
-			if (actionHash.containsKey(actions[i])) 
+			if (actionHash.containsKey(action))
 			{
 				/* Save it for plugin unloading time */
-				E oldAction = actionHash.get(actions[i]);
-				overriddenActions.put(actions[i], oldAction);
+				E oldAction = actionHash.get(action);
+				overriddenActions.put(action, oldAction);
 			}
-			actionHash.put(actions[i],actionSet);
+			actionHash.put(action, actionSet);
 		}
 	} //}}}
 
@@ -88,13 +88,13 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 		actionSets.removeElement(actionSet);
 		actionSet.context = null;
 		String[] actions = actionSet.getActionNames();
-		for(int i = 0; i < actions.length; i++)
+		for (String action : actions)
 		{
-			actionHash.remove(actions[i]);
-			if (overriddenActions.containsKey(actions[i])) 
+			actionHash.remove(action);
+			if (overriddenActions.containsKey(action))
 			{
-				E oldAction = overriddenActions.remove(actions[i]);
-				actionHash.put(actions[i], oldAction);
+				E oldAction = overriddenActions.remove(action);
+				actionHash.put(action, oldAction);
 			}
 		}
 	} //}}}

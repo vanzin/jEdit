@@ -122,9 +122,9 @@ public class FavoritesVFS extends VFS
 	public boolean _rename(Object session, String from, String to, Component comp)
 	{
 		VFSFile[] favorites = getFavorites();
-		for (int i = 0; i < favorites.length; i++)
+		for (VFSFile fav : favorites)
 		{
-			Favorite favorite = (Favorite) favorites[i];
+			Favorite favorite = (Favorite) fav;
 			if (favorite.getPath().equals(from))
 			{
 				favorite.label = to;

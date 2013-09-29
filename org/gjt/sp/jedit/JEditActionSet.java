@@ -169,10 +169,8 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		this.uri = uri;
 		if(cachedActionNames != null)
 		{
-			for(int i = 0; i < cachedActionNames.length; i++)
-			{
-				actions.put(cachedActionNames[i],placeholder);
-			}
+			for (String cachedActionName : cachedActionNames)
+				actions.put(cachedActionName, placeholder);
 		}
 		loaded = false;
 	} //}}}
@@ -220,10 +218,8 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		{
 			context.actionNames = null;
 			String[] actions = getActionNames();
-			for(int i = 0; i < actions.length; i++)
-			{
-				context.actionHash.remove(actions[i]);
-			}
+			for (String action : actions)
+				context.actionHash.remove(action);
 		}
 		actions.clear();
 	} //}}}

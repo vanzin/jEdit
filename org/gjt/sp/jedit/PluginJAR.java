@@ -1848,10 +1848,10 @@ public class PluginJAR
 			else
 			{
 				dout.writeInt(cachedServices.length);
-				for(int i = 0; i < cachedServices.length; i++)
+				for (ServiceManager.Descriptor cachedService : cachedServices)
 				{
-					writeString(dout,cachedServices[i].clazz);
-					writeString(dout,cachedServices[i].name);
+					writeString(dout, cachedService.clazz);
+					writeString(dout, cachedService.name);
 				}
 			}
 
@@ -1984,10 +1984,8 @@ public class PluginJAR
 			else
 			{
 				dout.writeInt(str.length);
-				for(int i = 0; i < str.length; i++)
-				{
-					writeString(dout,str[i]);
-				}
+				for (String s : str)
+					writeString(dout, s);
 			}
 		} //}}}
 
@@ -2002,10 +2000,8 @@ public class PluginJAR
 			else
 			{
 				dout.writeInt(bools.length);
-				for(int i = 0; i < bools.length; i++)
-				{
-					dout.writeBoolean(bools[i]);
-				}
+				for (boolean bool : bools)
+					dout.writeBoolean(bool);
 			}
 		} //}}}
 
