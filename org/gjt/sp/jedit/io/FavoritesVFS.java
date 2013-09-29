@@ -195,7 +195,7 @@ public class FavoritesVFS extends VFS
 				String p = favorite.getPath();
 				String l = favorite.getLabel();
 				jEdit.setProperty("vfs.favorite." + i, p);
-				if (p.equals(l) || MiscUtilities.abbreviateView(p).equals(l))
+				if (p.equals(l) || MiscUtilities.abbreviate(p).equals(l))
 					jEdit.unsetProperty("vfs.favorite." + i + ".label");
 				else 
 					jEdit.setProperty("vfs.favorite." + i + ".label", l);
