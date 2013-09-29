@@ -153,22 +153,6 @@ public class EditServer extends Thread
 					Log.log(Log.ERROR,this,e);
 				abort = true;
 			}
-			finally
-			{
-				/* if(client != null)
-				{
-					try
-					{
-						client.close();
-					}
-					catch(Exception e)
-					{
-						Log.log(Log.ERROR,this,e);
-					}
-
-					client = null;
-				} */
-			}
 		}
 	} //}}}
 

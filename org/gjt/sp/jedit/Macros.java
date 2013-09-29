@@ -79,7 +79,7 @@ public class Macros
 			{
 				buffer.beginCompoundEdit();
 
-file_loop:			for(int i = 0; i < paths.length; i++)
+				for(int i = 0; i < paths.length; i++)
 					runScript(view,paths[i],false);
 			}
 			finally

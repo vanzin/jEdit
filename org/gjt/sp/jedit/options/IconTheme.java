@@ -3,7 +3,7 @@ package org.gjt.sp.jedit.options;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 
-public class IconTheme extends Object
+public class IconTheme
 {
 	static final String[] builtIn  = new String[] { "tango", "classic" };
 	

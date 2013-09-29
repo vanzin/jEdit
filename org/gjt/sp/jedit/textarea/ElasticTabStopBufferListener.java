@@ -493,7 +493,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		{
 			return;
 		}
-		if((buffer.getBooleanProperty("elasticTabstops"))&&((handledInsertion==false)||(handledDeletion==false)))
+		if((buffer.getBooleanProperty("elasticTabstops"))&&((!handledInsertion)||(!handledDeletion)))
 		{	
 			//if we reach here use brute force as a last resolve
 			fullyUpdateColumnBlocks(buffer);

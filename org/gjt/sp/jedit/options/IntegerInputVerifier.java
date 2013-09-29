@@ -22,5 +22,5 @@ class IntegerInputVerifier extends InputVerifier
         }
         return (i >= 0);
     }
-};
+}
 

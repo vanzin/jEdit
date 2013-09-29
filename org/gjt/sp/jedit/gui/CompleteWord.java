@@ -108,10 +108,7 @@ public class CompleteWord extends CompletionPopup
 		else
 		{
 			String longestPrefix = MiscUtilities.getLongestPrefix(
-				completions,
-				keywordMap != null
-				? keywordMap.getIgnoreCase()
-				: false);
+				completions, keywordMap != null && keywordMap.getIgnoreCase());
 
 			if (word.length() < longestPrefix.length())
 			{

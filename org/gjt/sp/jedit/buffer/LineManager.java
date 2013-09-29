@@ -330,13 +330,13 @@ public class LineManager
 	//}}}
 
 	//{{{ setLineEndOffset() method
-	private final void setLineEndOffset(int line, int end)
+	private void setLineEndOffset(int line, int end)
 	{
 		endOffsets[line] = end;
 	} //}}}
 
 	//{{{ moveGap() method
-	private final void moveGap(int newGapLine, int newGapWidth, String method)
+	private void moveGap(int newGapLine, int newGapWidth, String method)
 	{
 		if(gapLine == -1)
 			gapWidth = newGapWidth;

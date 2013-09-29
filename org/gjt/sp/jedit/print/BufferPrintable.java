@@ -114,10 +114,6 @@ class BufferPrintable implements Printable
 				}
 			});
 		}
-		finally
-		{
-			//buffer.readUnlock();
-		}
 	} //}}}
 
 	//{{{ print() method

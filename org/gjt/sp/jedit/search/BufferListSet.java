@@ -110,7 +110,8 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getPrevOrNextFile method()
-	private enum Direction {PREV, NEXT};
+	private enum Direction {PREV, NEXT}
+
 	private String getPrevOrNextFile(View view, String path, Direction direction)
 	{
 		if(files == null)

@@ -172,7 +172,7 @@ public class VFSManager
 	 */
 	public static void waitForRequests()
 	{
-		if(EventQueue.isDispatchThread() != true)
+		if(!EventQueue.isDispatchThread())
 			throw new IllegalStateException();
 
 		TaskManager.instance.waitForIoTasks();
