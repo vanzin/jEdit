@@ -243,19 +243,17 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		List<KeyBinding[]> allBindings = new ArrayList<>();
 		Collection<String> knownBindings = new HashSet<>();
 		ActionSet[] actionSets = jEdit.getActionSets();
-		for(int i = 0; i < actionSets.length; i++)
+		for (ActionSet actionSet : actionSets)
 		{
-			ActionSet actionSet = actionSets[i];
-			if(actionSet.getActionCount() != 0)
+			if (actionSet.getActionCount() != 0)
 			{
 				String modelLabel = actionSet.getLabel();
-				if(modelLabel == null)
+				if (modelLabel == null)
 				{
-					Log.log(Log.ERROR,this,"Empty action set: "
-						+ actionSet.getPluginJAR());
+					Log.log(Log.ERROR, this, "Empty action set: " + actionSet.getPluginJAR());
 				}
-				ShortcutsModel model = createModel(actionSet.getLabel(), modelLabel,
-						actionSet.getActionNames());
+				ShortcutsModel model =
+					createModel(actionSet.getLabel(), modelLabel, actionSet.getActionNames());
 				models.add(model);
 				List<KeyBinding[]> bindings = model.getBindings();
 				for (KeyBinding[] binding : bindings)

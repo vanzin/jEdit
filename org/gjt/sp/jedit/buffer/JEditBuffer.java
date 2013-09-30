@@ -1138,13 +1138,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		List<IndentRule> indentRules = getIndentRules(lineIndex);
 		List<IndentAction> actions = new LinkedList<IndentAction>();
-		for (int i = 0;i<indentRules.size();i++)
-		{
-			IndentRule rule = indentRules.get(i);
-			rule.apply(this,lineIndex,prevLineIndex,
-				prevPrevLineIndex,actions);
-		}
-
+		for (IndentRule rule : indentRules)
+			rule.apply(this, lineIndex, prevLineIndex, prevPrevLineIndex, actions);
 
 		for (IndentAction action : actions)
 		{

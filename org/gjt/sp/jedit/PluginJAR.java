@@ -676,7 +676,7 @@ public class PluginJAR
 				depends.name = arg.indexOf(' ') > 0 ? arg.substring(0, arg.indexOf(' ')) : arg;
 			ret.add(depends);
 		}
-		return ret.toArray(new PluginDepends[0]);
+		return ret.toArray(new PluginDepends[ret.size()]);
 	} //}}}
 
 	//{{{ getDependencies() method
@@ -756,26 +756,23 @@ public class PluginJAR
 	 */
 	public static void transitiveClosure(String[] dependents, List<String> listModel)
 	{
-  		for(int i = 0; i < dependents.length; i++)
-  		{
-  			String jarPath = dependents[i];
-  			if(!listModel.contains(jarPath))
-  			{
-  				listModel.add(jarPath);
-  				PluginJAR jar = jEdit.getPluginJAR(
-  					jarPath);
+		for (String jarPath : dependents)
+		{
+			if (!listModel.contains(jarPath))
+			{
+				listModel.add(jarPath);
+				PluginJAR jar = jEdit.getPluginJAR(jarPath);
 				if (jar == null)
 				{
 					Log.log(Log.WARNING, PluginJAR.class, "The jar file " + jarPath +
-						" doesn't exist, the plugin may have been partially removed");
+									      " doesn't exist, the plugin may have been partially removed");
 				}
 				else
 				{
-					transitiveClosure(jar.getDependentPlugins(),
-									  listModel);
+					transitiveClosure(jar.getDependentPlugins(), listModel);
 				}
-  			}
-  		}
+			}
+		}
   	} //}}}
 
 	//{{{ getDependentPlugins() method

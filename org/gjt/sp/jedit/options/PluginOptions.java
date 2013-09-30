@@ -71,33 +71,24 @@ public class PluginOptions extends OptionsDialog
 
 		// Query plugins for option panes
 		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
+		for (EditPlugin ep : plugins)
 		{
-			EditPlugin ep = plugins[i];
-			if(ep instanceof EditPlugin.Broken)
+			if (ep instanceof EditPlugin.Broken)
 				continue;
 
 			String className = ep.getClassName();
 			if (jEdit.getProperty("plugin." + className + ".activate") != null)
 			{
-				String optionPane = jEdit.getProperty(
-					"plugin." + className + ".option-pane");
-				if(optionPane != null)
+				String optionPane = jEdit.getProperty("plugin." + className + ".option-pane");
+				if (optionPane != null)
 					pluginsGroup.addOptionPane(optionPane);
 				else
 				{
-					String options = jEdit.getProperty(
-						"plugin." + className
-						+ ".option-group");
-					if(options != null)
+					String options = jEdit.getProperty("plugin." + className + ".option-group");
+					if (options != null)
 					{
-						pluginsGroup.addOptionGroup(
-							new OptionGroup(
-							"plugin." + className,
-							jEdit.getProperty("plugin."
-							+ className + ".name"),
-							options)
-						);
+						pluginsGroup.addOptionGroup(new OptionGroup("plugin." + className,
+							jEdit.getProperty("plugin." + className + ".name"), options));
 					}
 				}
 			}

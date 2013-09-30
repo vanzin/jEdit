@@ -431,10 +431,8 @@ public class Mode
 			"unalignedCloseBracket",
 		};
 
-		for(int i = 0; i < bracketProps.length; i++)
-		{
-			createBracketIndentRules(bracketProps[i], rules);
-		}
+		for (String bracketProp : bracketProps)
+			createBracketIndentRules(bracketProp, rules);
 
 		String[] finalProps = {
 			"unindentThisLine",

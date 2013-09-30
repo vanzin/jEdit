@@ -688,9 +688,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		}
 
 		String typeStr = "files";
-		for(int i = 0; i < files.length; i++)
+		for (VFSFile file : files)
 		{
-			if (files[i].getType() == VFSFile.DIRECTORY)
+			if (file.getType() == VFSFile.DIRECTORY)
 			{
 				typeStr = "directories and their contents";
 				break;
@@ -1155,10 +1155,10 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		//{{{ new API
 		EditPlugin[] plugins = jEdit.getPlugins();
-		for (int i = 0; i < plugins.length; i++)
+		for (EditPlugin plugin : plugins)
 		{
-			JMenuItem menuItem = plugins[i].createBrowserMenuItems();
-			if(menuItem != null)
+			JMenuItem menuItem = plugin.createBrowserMenuItems();
+			if (menuItem != null)
 				vec.add(menuItem);
 		} //}}}
 

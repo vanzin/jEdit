@@ -1262,14 +1262,13 @@ public class jEdit
 		if(plugins == null)
 			return;
 
-		for(int i = 0; i < plugins.length; i++)
+		for (String plugin : plugins)
 		{
-			String plugin = plugins[i];
-			if(!plugin.toLowerCase().endsWith(".jar"))
+			if (!plugin.toLowerCase().endsWith(".jar"))
 				continue;
 
-			String path = MiscUtilities.constructPath(directory,plugin);
-			if (jEdit.getBooleanProperty("plugin-blacklist."+plugin))
+			String path = MiscUtilities.constructPath(directory, plugin);
+			if (jEdit.getBooleanProperty("plugin-blacklist." + plugin))
 				continue;
 
 			addPluginJAR(path);
@@ -2962,11 +2961,8 @@ public class jEdit
 
 			// Stop all plugins
 			PluginJAR[] plugins = getPluginJARs();
-			for(int i = 0; i < plugins.length; i++)
-			{
-				removePluginJAR(plugins[i],true);
-			}
-
+			for (PluginJAR plugin : plugins)
+				removePluginJAR(plugin, true);
 
 			// Save settings
 			saveSettings();
@@ -3610,30 +3606,26 @@ public class jEdit
 		Arrays.sort(snippets,
 			new StandardUtilities.StringCompare<String>(true));
 
-		for (int i = 0; i < snippets.length; ++i)
+		for (String snippet : snippets)
 		{
-			String snippet = snippets[i];
-			if(!snippet.toLowerCase().endsWith(".props"))
+			if (!snippet.toLowerCase().endsWith(".props"))
 				continue;
 
 			try
 			{
-				String path = MiscUtilities.constructPath(
-					siteSettingsDirectory,snippet);
-				Log.log(Log.DEBUG,jEdit.class,
-					"Loading site snippet: " + path);
+				String path = MiscUtilities.constructPath(siteSettingsDirectory, snippet);
+				Log.log(Log.DEBUG, jEdit.class, "Loading site snippet: " + path);
 
 				propMgr.loadSiteProps(new FileInputStream(new File(path)));
 			}
-			catch(FileNotFoundException fnf)
+			catch (FileNotFoundException fnf)
 			{
-				Log.log(Log.DEBUG,jEdit.class,fnf);
+				Log.log(Log.DEBUG, jEdit.class, fnf);
 			}
-			catch(IOException e)
+			catch (IOException e)
 			{
-				Log.log(Log.ERROR,jEdit.class,"Cannot load site snippet "
-					+ snippet);
-				Log.log(Log.ERROR,jEdit.class,e);
+				Log.log(Log.ERROR, jEdit.class, "Cannot load site snippet " + snippet);
+				Log.log(Log.ERROR, jEdit.class, e);
 			}
 		}
 	} //}}}
@@ -4028,25 +4020,20 @@ public class jEdit
 		String defaultEncoding = getProperty("buffer.encoding");
 		setProperty("buffer.encoding", "UTF-8");
 
-		for(int i = 0; i < snippets.length; ++i)
+		for (File snippet : snippets)
 		{
-			File snippet = snippets[i];
-
-			Macros.Handler handler = Macros.getHandlerForPathName(
-				snippet.getPath());
-			if(handler == null)
+			Macros.Handler handler = Macros.getHandlerForPathName(snippet.getPath());
+			if (handler == null)
 				continue;
 
 			try
 			{
-				Macros.Macro newMacro = handler.createMacro(
-					snippet.getName(),
-					snippet.getPath());
-				handler.runMacro(null,newMacro,false);
+				Macros.Macro newMacro = handler.createMacro(snippet.getName(), snippet.getPath());
+				handler.runMacro(null, newMacro, false);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				Log.log(Log.ERROR,jEdit.class,e);
+				Log.log(Log.ERROR, jEdit.class, e);
 			}
 		}
 
@@ -4258,22 +4245,21 @@ public class jEdit
 	private static void getNotLoadedPluginJARs(Collection<String> returnValue,
 		String dir, String[] list)
 	{
-loop:	for(int i = 0; i < list.length; i++)
+loop:
+		for (String name : list)
 		{
-			String name = list[i];
-			if(!name.toLowerCase().endsWith(".jar"))
+			if (!name.toLowerCase().endsWith(".jar"))
 				continue loop;
 
-			String path = MiscUtilities.constructPath(dir,name);
+			String path = MiscUtilities.constructPath(dir, name);
 
-			for(int j = 0; j < jars.size(); j++)
+			for (int j = 0; j < jars.size(); j++)
 			{
 				PluginJAR jar = jars.elementAt(j);
 				String jarPath = jar.getPath();
 
-				if (path.equals(jarPath) ||
-					name.equals(MiscUtilities.getFileName(jarPath)) &&
-					!new File(jarPath).exists())
+				if (path.equals(jarPath)
+				    || name.equals(MiscUtilities.getFileName(jarPath)) && !new File(jarPath).exists())
 					continue loop;
 			}
 

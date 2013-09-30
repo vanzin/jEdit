@@ -193,23 +193,19 @@ class HyperSearchRequest extends Task
 		{
 			buffer.readLock();
 
-			for(int i = 0; i < selection.length; i++)
+			for (Selection s : selection)
 			{
-				Selection s = selection[i];
-				if(s instanceof Selection.Rect)
+				if (s instanceof Selection.Rect)
 				{
-					for(int j = s.getStartLine();
-						j <= s.getEndLine(); j++)
+					for (int j = s.getStartLine(); j <= s.getEndLine(); j++)
 					{
-						resultCount += doHyperSearch(buffer,
-							s.getStart(buffer,j),
-							s.getEnd(buffer,j));
+						resultCount += doHyperSearch(buffer, s.getStart(buffer, j),
+									     s.getEnd(buffer, j));
 					}
 				}
 				else
 				{
-					resultCount += doHyperSearch(buffer,
-						s.getStart(),s.getEnd());
+					resultCount += doHyperSearch(buffer, s.getStart(), s.getEnd());
 				}
 			}
 		}

@@ -581,22 +581,21 @@ class InstallPanel extends JPanel implements EBComponent
 
 			List<PluginList.Dependency> deps = entry.plugin.getCompatibleBranch().deps;
 
-			for (int i = 0; i < deps.size(); i++)
+			for (PluginList.Dependency dep : deps)
 			{
-				PluginList.Dependency dep = deps.get(i);
 				if ("plugin".equals(dep.what))
 				{
 					boolean found = false;
 					for (int j = 0; j < filteredEntries.size(); j++)
 					{
-						Entry temp = (Entry)filteredEntries.get(j);
+						Entry temp = (Entry) filteredEntries.get(j);
 						if (temp.plugin == dep.plugin)
 						{
 							found = true;
 							if (entry.install)
 							{
 								temp.parents.add(entry);
-								setValueAt(Boolean.TRUE,j,0);
+								setValueAt(Boolean.TRUE, j, 0);
 							}
 							else
 								temp.parents.remove(entry);
@@ -608,7 +607,7 @@ class InstallPanel extends JPanel implements EBComponent
 					{
 						// the dependency was not found in the filtered list so we search in
 						// global list.
-						for (int a = 0;a<entries.size();a++)
+						for (int a = 0; a < entries.size(); a++)
 						{
 							Entry temp = (Entry) entries.get(a);
 							if (temp.plugin == dep.plugin)
@@ -617,9 +616,7 @@ class InstallPanel extends JPanel implements EBComponent
 								{
 									temp.parents.add(entry);
 									temp.install = true;
-								}
-								else
-									temp.parents.remove(entry);
+								} else temp.parents.remove(entry);
 								break;
 							}
 						}
@@ -892,7 +889,7 @@ class InstallPanel extends JPanel implements EBComponent
 					params.add(sl.join(", "));
 					// params.add(entry.dependencies.replaceAll("\n", ", "));
 				}
-				text = MessageFormat.format(pattern, params.toArray(new String[0]));				
+				text = MessageFormat.format(pattern, params.toArray(new String[params.size()]));
 			}
 			setText(text);
 			setCaretPosition(0);

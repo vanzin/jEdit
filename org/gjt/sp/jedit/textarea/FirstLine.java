@@ -144,7 +144,7 @@ class FirstLine extends Anchor
 	 * Method called before a content is removed from a buffer.
 	 *
 	 * @param startLine the first line of the removed content
-	 * @param offset the offset in the start line
+	 * @param startOffset the offset in the start line
 	 * @param numLines the number of removed lines
 	 */
 	void contentRemoved(int startLine, int startOffset, int numLines)

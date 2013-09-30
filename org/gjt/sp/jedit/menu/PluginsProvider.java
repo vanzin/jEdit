@@ -49,17 +49,16 @@ public class PluginsProvider implements DynamicMenuProvider
 		}
 
 		PluginJAR[] pluginArray = jEdit.getPluginJARs();
-		for(int i = 0; i < pluginArray.length; i++)
+		for (PluginJAR jar : pluginArray)
 		{
-			PluginJAR jar = pluginArray[i];
 			EditPlugin plugin = jar.getPlugin();
-			if(plugin == null)
+			if (plugin == null)
 				continue;
 
 			JMenuItem menuItem = plugin.createMenuItems();
-			if(menuItem != null)
+			if (menuItem != null)
 			{
-				addToLetterMap(letters,menuItem);
+				addToLetterMap(letters, menuItem);
 				count++;
 			}
 		}

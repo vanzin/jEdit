@@ -83,11 +83,10 @@ public class PluginResURLConnection extends URLConnection
 			{
 				boolean pluginFoundInPluginJARs = false;
 				PluginJAR[] plugins = jEdit.getPluginJARs();
-				for(int i = 0; i < plugins.length; i++)
+				for (PluginJAR jar : plugins)
 				{
-					PluginJAR jar = plugins[i];
-					String jarName =MiscUtilities.getFileName(jar.getPath()).toLowerCase(); 
-					if(plugin.equalsIgnoreCase(jarName))
+					String jarName = MiscUtilities.getFileName(jar.getPath()).toLowerCase();
+					if (plugin.equalsIgnoreCase(jarName))
 					{
 						pluginFoundInPluginJARs = true;
 						in = jar.getClassLoader().getResourceAsStream(resource);

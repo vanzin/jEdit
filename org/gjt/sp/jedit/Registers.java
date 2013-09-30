@@ -790,12 +790,10 @@ public class Registers
 	{
 		DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
 
-		for (int i = 0;i<dataFlavors.length;i++)
+		for (DataFlavor dataFlavor : dataFlavors)
 		{
-			DataFlavor dataFlavor = dataFlavors[i];
-			Log.log(Log.DEBUG,Registers.class,
-				"debugListDataFlavors(): dataFlavor="+
-				dataFlavor+'.');
+			Log.log(Log.DEBUG, Registers.class, "debugListDataFlavors(): dataFlavor=" +
+				dataFlavor + '.');
 		}
 
 		if (dataFlavors.length == 0)

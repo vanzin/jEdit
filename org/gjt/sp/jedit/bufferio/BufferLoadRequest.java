@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.bufferio;
 //{{{ Imports
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -245,12 +246,7 @@ public class BufferLoadRequest extends BufferIORequest
 
 				String fallbackEncodings = jEdit.getProperty("fallbackEncodings");
 				if(fallbackEncodings != null && fallbackEncodings.length() > 0)
-				{
-					for(String encoding: fallbackEncodings.split("\\s+"))
-					{
-						encodingProviders.add(encoding);
-					}
-				}
+					Collections.addAll(encodingProviders, fallbackEncodings.split("\\s+"));
 			}
 			else
 			{

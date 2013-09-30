@@ -402,8 +402,6 @@ public class ManagePanel extends JPanel
 		}
 		
 		/**
-		 * @param optional If false, returns only the dependencies, if true, 
-		 * returns only the optional dependencies.
 		 * @return A list of the names of the dependencies, e.g. ErrorList or ProjectViewer.
 		 */
 		public Set<String> getDependencies() 

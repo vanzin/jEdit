@@ -174,16 +174,12 @@ public class FileVFS extends VFS
 		if (path.exists())
 		{
 			File[] files = path.listFiles();
-			for (int i = 0; i < files.length; i++)
+			for (File file : files)
 			{
-				if (files[i].isDirectory())
-				{
-					recursiveDelete(files[i]);
-				}
+				if (file.isDirectory())
+					recursiveDelete(file);
 				else
-				{
-					files[i].delete();
-				}
+					file.delete();
 			}
 		}
 		return path.delete();
