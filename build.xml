@@ -1208,6 +1208,7 @@
 				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
 				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
+				   vmoptions="-Xmx512m"
 				   signature="JESP"
 				   stubfile="jedit"
 				   version="${jedit.version}">
