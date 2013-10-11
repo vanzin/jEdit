@@ -1,4 +1,5 @@
-// Slava Pestov's startup script. Doesn't have much in it yet.
+// jEdit default startup.bsh script.
+//  Used mostly for experimental keyboard workarounds.
 // :folding=explicit:expandFolds=1:
 
 //Most of the file is commented out. Note that the hacks here are
@@ -18,7 +19,6 @@ ac()
 	setAccessibility(true);
 }
 
-   
 
 /* For the mathematicians among us. */
 e = Math.E;
@@ -80,8 +80,8 @@ s(search,replace,flags)
 //	InputEvent.ALT_MASK,   /* == M+ */
 //	InputEvent.SHIFT_MASK  /* == S+ */);
 
-/* ... if you want MacOS keyboard to behave 
-    like a Linux or Windows keyboard (From Alan): */
+/* ... if you want MacOS keyboard to behave like a Linux or Windows keyboard
+   (This is also a MacOSX plugin option): */
 
 // KeyEventTranslator.setModifierMapping(InputEvent.CTRL_MASK,
 //	InputEvent.META_MASK, InputEvent.ALT_MASK,
@@ -96,18 +96,22 @@ s(search,replace,flags)
     on all platforms.
 */
 
-linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_LEFT, (char)0);
-crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_LEFT, (char)0); 
-KeyEventTranslator.addTranslation(linp, crossp);
-linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_RIGHT, (char)0);
-crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_RIGHT, (char)0); 
-KeyEventTranslator.addTranslation(linp, crossp);
-linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_UP, (char)0);
-crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_UP, (char)0); 
-KeyEventTranslator.addTranslation(linp, crossp);
-linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_DOWN, (char)0);
-crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_DOWN, (char)0); 
-KeyEventTranslator.addTranslation(linp, crossp);
+String[] modifierList = new String[] {"A", "C", "S", "CA", "AS", "CS", null};
+
+for (String mod: modifierList) {
+    linp = new KeyEventTranslator.Key(mod, KeyEvent.VK_KP_LEFT, (char)0);
+    crossp = new KeyEventTranslator.Key(mod, KeyEvent.VK_LEFT, (char)0); 
+    KeyEventTranslator.addTranslation(linp, crossp);
+    linp = new KeyEventTranslator.Key(mod, KeyEvent.VK_KP_RIGHT, (char)0);
+    crossp = new KeyEventTranslator.Key(mod, KeyEvent.VK_RIGHT, (char)0); 
+    KeyEventTranslator.addTranslation(linp, crossp);
+    linp = new KeyEventTranslator.Key(mod, KeyEvent.VK_KP_UP, (char)0);
+    crossp = new KeyEventTranslator.Key(mod, KeyEvent.VK_UP, (char)0); 
+    KeyEventTranslator.addTranslation(linp, crossp);
+    linp = new KeyEventTranslator.Key(mod, KeyEvent.VK_KP_DOWN, (char)0);
+    crossp = new KeyEventTranslator.Key(mod, KeyEvent.VK_DOWN, (char)0); 
+    KeyEventTranslator.addTranslation(linp, crossp);
+}
 
 /* }}}*/
 
