@@ -90,10 +90,11 @@ s(search,replace,flags)
 
 /*}}}*/
 
-/*{{{ keypad arrows vs regular arrowkeys 
-   Linux distinguishes between keypad arrowkeys and regular arrows, unlike windows.  
-   Uncommenting these translations below makes windows and linux shortcuts work the same way 
-   on both platforms.
+/*{{{ Keypad arrowkeys vs regular arrowkeys 
+    Linux distinguishes between keypad arrowkeys and regular arrows, unlike Windows.
+    The translations below force keypad arrowkeys to behave the same way as regular arrowkeys
+    on all platforms.
+*/
 
 linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_LEFT, (char)0);
 crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_LEFT, (char)0); 
@@ -108,7 +109,7 @@ linp = new KeyEventTranslator.Key(null, KeyEvent.VK_KP_DOWN, (char)0);
 crossp = new KeyEventTranslator.Key(null, KeyEvent.VK_DOWN, (char)0); 
 KeyEventTranslator.addTranslation(linp, crossp);
 
-}}}*/
+/* }}}*/
 
 
 
