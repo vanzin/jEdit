@@ -4534,13 +4534,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void turnOnElasticTabstops()
 	{
-		if(!buffer.isEditable())
-			getToolkit().beep();
-		else
-		{	
-			buffer.indentUsingElasticTabstops();
-			buffer.elasticTabstopsOn = true;
-		}
+		if(buffer.isLoading())
+			return;
+		buffer.indentUsingElasticTabstops();
+		buffer.elasticTabstopsOn = true;
 	} //}}}
 
 	//{{{ shiftIndentLeft() method
