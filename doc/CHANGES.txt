@@ -8,6 +8,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix the integration with Unity and other Linux Desktop Environments,
+  broken by Patch #3582760. (Björn "Vampire" Kautler)
+
 
 }}}
 {{{ Miscellaneous
