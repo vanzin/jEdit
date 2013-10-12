@@ -13,9 +13,6 @@ Makarius, and Alan Ezust for contributing to this release.
 - Fix the integration with Unity and other Linux Desktop Environments,
   broken by Patch #3582760. (Björn "Vampire" Kautler)
 
-- JavaDoc stylesheet customized so it is readable in helpviewer
-  (#3614229 - Alan Ezust)
-
 - Reload optionally dependent plugins when a plugin is unloaded.
   (#3614456 - Dale Anson)
 
@@ -57,9 +54,13 @@ Makarius, and Alan Ezust for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- MiscUtilities.expandVariables() converts from Windows to Linux-style paths
+  when necessary
+
 - New macros: Go To Offset, Reverse Selection (#3614563, #3614564 Thomas Meyer)
 
-- Removed some old MacOSX workaround code (#3615043, #3615044 Makarius)
+- Removed some no longer needed pre-Java7 MacOSX key handling workaround code 
+    (#3615043, #3615044 Makarius, Alan Ezust) 
 
 }}}
 

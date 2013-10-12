@@ -502,7 +502,7 @@ public class KeyEventTranslator
 
 		private final int hashCode;
 		/**
-			Wether this Key event applies to all jEdit windows (and not only a specific jEdit GUI component).
+			Whether this Key event applies to all jEdit windows (and not only a specific jEdit GUI component).
 		*/
 		protected boolean isFromGlobalContext;
 

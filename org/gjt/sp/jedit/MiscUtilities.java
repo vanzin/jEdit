@@ -126,6 +126,20 @@ public class MiscUtilities
 	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
 	static final Pattern winPattern = Pattern.compile(winPatternString);
 
+	
+	// A helper function for expandVariables for handling windows paths on non-windows systems. 
+	private static String win2unix(String winPath) {
+		String unixPath = winPath.replace('\\', '/');		
+		Matcher m = winPattern.matcher(unixPath);
+		if (m.find()) {
+			String varName = m.group(2);
+			String expansion = System.getenv(varName);
+			if (expansion != null) 
+				return m.replaceFirst(expansion);
+		}
+		return unixPath;
+	}
+	
 	/** Accepts a string from the user which may contain variables of various syntaxes.
 	 *  The function supports the following expansion syntaxes:
 	 *     ~/ or ~\   expand to user.home
@@ -143,10 +157,15 @@ public class MiscUtilities
 	{
 		if (arg.startsWith("~/") || arg.startsWith("~\\"))
 			return System.getProperty("user.home") + arg.substring(1);
-		Pattern p = varPattern;
-		Matcher m = p.matcher(arg);
+		
+		Matcher m = winPattern.matcher(arg);
+		if (m.find() && !OperatingSystem.isWindows()) {
+				return win2unix(arg);
+		}				
+		Pattern p = varPattern;			
+		m = p.matcher(arg);
 		if (!m.find())
-		{
+		{			
 			if (OperatingSystem.isWindows())
 				p = winPattern;
 			else p = varPattern2;
