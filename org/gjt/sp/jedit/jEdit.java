@@ -1053,7 +1053,14 @@ public class jEdit
 
 		if (getBooleanProperty("systrayicon"))
 		{
-			JTrayIconManager.addTrayIcon();
+			EventQueue.invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					JTrayIconManager.addTrayIcon();
+				}
+			});
 		}
 		else
 		{
