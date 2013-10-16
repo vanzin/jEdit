@@ -89,7 +89,8 @@ public class JTrayIconManager
 				trayIcon = null;
 				return;
 			}
-			if (trayIcon instanceof EBComponent) {
+			if (trayIcon instanceof EBComponent)
+			{
 				EditBus.addToBus(trayIcon);
 			}
 		}
@@ -101,7 +102,8 @@ public class JTrayIconManager
 		if (trayIcon != null)
 		{
 			SystemTray.getSystemTray().remove(trayIcon);
-			if (trayIcon instanceof EBComponent) {
+			if (trayIcon instanceof EBComponent)
+			{
 				EditBus.removeFromBus(trayIcon);
 			}
 			trayIcon = null;
