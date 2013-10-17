@@ -418,15 +418,15 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		public boolean passFilter(int row, String filter)
 		{
 			String text = delegated.getElementAt(row).toString().toLowerCase();
-			if (text.contains("[debug]") && !showDebug)
+			if (!showDebug && text.contains("[debug]"))
 				return false;
-			if (text.contains("[message]") && !showMessage)
+			if (!showMessage && text.contains("[message]"))
 				return false;
-			if (text.contains("[notice]") && !showNotice)
+			if (!showNotice && text.contains("[notice]"))
 				return false;
-			if (text.contains("[warning]") && !showWarning)
+			if (!showWarning && text.contains("[warning]"))
 				return false;
-			if (text.contains("[error]") && !showError)
+			if (!showError && text.contains("[error]"))
 				return false;
 			return filter.length() == 0 || text.contains(filter);
 		}
