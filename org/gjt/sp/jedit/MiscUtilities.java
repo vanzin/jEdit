@@ -126,28 +126,30 @@ public class MiscUtilities
 	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
 	static final Pattern winPattern = Pattern.compile(winPatternString);
 
-	
-	// A helper function for expandVariables for handling windows paths on non-windows systems. 
-	private static String win2unix(String winPath) {
-		String unixPath = winPath.replace('\\', '/');		
+
+	/** A helper function for expandVariables when handling Windows paths on non-windows systems. 
+	*/
+	private static String win2unix(String winPath)
+	{
+		String unixPath = winPath.replace('\\', '/');
 		Matcher m = winPattern.matcher(unixPath);
-		if (m.find()) {
+		if (m.find())
+		{
 			String varName = m.group(2);
 			String expansion = System.getenv(varName);
-			if (expansion != null) 
+			if (expansion != null)
 				return m.replaceFirst(expansion);
 		}
 		return unixPath;
 	}
-	
-	/** Accepts a string from the user which may contain variables of various syntaxes.
-	 *  The function supports the following expansion syntaxes:
+
+	/** Accepts a string from the user (or a settings file) which may contain a variable-prefix path of various syntaxes. Performs the reverse of abbreviate() from any platform.
+	 *  The function supports the following prefix syntaxes:
 	 *     ~/ or ~\   expand to user.home
-	 *     $varname
-	 *     ${varname} (on non-windows)
-	 *     %varname% (on Windows)
-	 *     And expand each of these by looking at the system environment variables for possible
-	 *     expansions.
+	 *     $varname (all platforms)
+	 *     %varname% (all platforms)
+	 *     ${varname} (non-Windows platforms)
+	 *     And expand each of these by looking at the system environment variables for possible expansions.
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
 	 *     @since jEdit 4.3
 	 *     @see #abbreviate
@@ -157,15 +159,14 @@ public class MiscUtilities
 	{
 		if (arg.startsWith("~/") || arg.startsWith("~\\"))
 			return System.getProperty("user.home") + arg.substring(1);
-		
+
 		Matcher m = winPattern.matcher(arg);
-		if (m.find() && !OperatingSystem.isWindows()) {
-				return win2unix(arg);
-		}				
-		Pattern p = varPattern;			
+		if (!OperatingSystem.isWindows() && m.find() )
+			return win2unix(arg);
+		Pattern p = varPattern;
 		m = p.matcher(arg);
 		if (!m.find())
-		{			
+		{
 			if (OperatingSystem.isWindows())
 				p = winPattern;
 			else p = varPattern2;
@@ -191,8 +192,11 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ abbreviate() methods
-	/** @return an abbreviated path, replacing values with variables, if a prefix exists.
-		uses platform convention (%varname% on windows, $varname on other platforms)
+	/** The reverse of expandVariables(), returns a shortened path if possible.
+	 *
+	 *  Uses platform convention (%varname% on windows, $varname on other platforms)
+	 *
+	 *	@return an abbreviated path, replacing values with variables, if a prefix exists.	
 	 *  @see #expandVariables
 	 *  @since jEdit 4.3pre16
 	 */
@@ -202,15 +206,15 @@ public class MiscUtilities
 			svc = new VarCompressor();
 		return svc.compress(path);
 	}
-	
-	/** Same as abbreviate() but checks a view option which can 
-	 * disable the feature for things jEdit UI components.
-	 * 
+
+	/** Same as abbreviate() but checks a view option which can
+	 *  disable the feature for jEdit UI components.
+	 *
 	 */
 	public static String abbreviateView(String path)
 	{
 		if (!jEdit.getBooleanProperty("view.abbreviatePaths")) return path;
-		return abbreviate(path);		
+		return abbreviate(path);
 	} //}}}
 
 	//{{{ resolveSymlinks() method
@@ -628,10 +632,10 @@ public class MiscUtilities
 		else if (OperatingSystem.isX11())
 		{
 			/* For gnome, use gnome-open. Need a way of testing that gnome is actually
-			   running though. Otherwise it is not the correct program to use. 
+			   running though. Otherwise it is not the correct program to use.
 			File f = new File("/usr/bin/gnome-open");
 			if (f.exists()) sl.add("gnome-open");
-			else */ 
+			else */
 			sl.add("xdg-open");
 		}
 		try
