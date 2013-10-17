@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -415,7 +416,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		}
 
 		@Override
-		public boolean passFilter(int row, String filter)
+		public boolean passFilter(int row, @Nullable String filter)
 		{
 			String text = delegated.getElementAt(row).toString().toLowerCase();
 			if (!showDebug && text.contains("[debug]"))
@@ -428,7 +429,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				return false;
 			if (!showError && text.contains("[error]"))
 				return false;
-			return filter.length() == 0 || text.contains(filter);
+			return filter != null && (filter.isEmpty() || text.contains(filter));
 		}
 	} //}}}
 
