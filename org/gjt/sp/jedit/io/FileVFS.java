@@ -55,8 +55,8 @@ public class FileVFS extends VFS
 			| NON_AWT_SESSION_CAP
 			| (OperatingSystem.isCaseInsensitiveFS()
 			? CASE_INSENSITIVE_CAP : 0),
-			new String[] { EA_TYPE, EA_SIZE, EA_STATUS,
-			EA_MODIFIED });
+			new String[] { EA_SIZE, EA_MODIFIED, EA_STATUS,
+			EA_TYPE });
 	} //}}}
 
 	//{{{ getParentOfPath() method
