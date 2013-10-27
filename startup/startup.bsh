@@ -122,32 +122,32 @@ for (String mod: modifierList) {
 /* If international keys do not work in the text area, sometimes it is possible
  * to workaround the problem by adding translation mappings: */
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key("CS",KeyEvent.VK_COMMA,'\0'),
 //	new KeyEventTranslator.Key("C",KeyEvent.VK_SEMICOLON,'\0')
 // );
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key(null,KeyEvent.VK_CLOSE_BRACKET,'\0'),
 //	new KeyEventTranslator.Key(null,0,'"')
 // );
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key("S",KeyEvent.VK_CLOSE_BRACKET,'\0'),
 //	new KeyEventTranslator.Key(null,0,(char)0x5e)
 // );
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key("C",KeyEvent.VK_CLOSE_BRACKET,'\0'),
 //	new KeyEventTranslator.Key(null,0,'~')
 // );
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key(null,KeyEvent.VK_EQUALS,'\0'),
 //	new KeyEventTranslator.Key(null,0,'\'')
 // );
 
-// KeyEventTranslator.translateKey(
+// KeyEventTranslator.addTranslation(
 //	new KeyEventTranslator.Key("S",KeyEvent.VK_EQUALS,'\0'),
 //	new KeyEventTranslator.Key(null,0,'`')
 // );
