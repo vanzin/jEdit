@@ -29,10 +29,12 @@ import java.io.Closeable;
 
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.*;
+
 import java.awt.Component;
 import java.io.*;
 import java.text.*;
 import java.util.Date;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -208,8 +210,7 @@ public class FileVFS extends VFS
 		private File file;
 
 		// use system default short format
-		public static DateFormat DATE_FORMAT
-			= DateFormat.getInstance();
+		public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
 		private long modified;
 
