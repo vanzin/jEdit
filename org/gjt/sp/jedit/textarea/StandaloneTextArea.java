@@ -589,7 +589,7 @@ public class StandaloneTextArea extends TextArea
 	 * The actionSet for standalone textArea.
 	 * @author Matthieu Casanova
 	 */
-	protected static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
+	public static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
 	{
 		private final IPropertyManager iPropertyManager;
 		private final TextArea textArea;

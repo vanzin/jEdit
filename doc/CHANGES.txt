@@ -10,6 +10,10 @@ Makarius, and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
+- Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
+
+- Fixed the systray not added on EDT thread (Matthieu Casanova)
+
 - Fix the integration with Unity and other Linux Desktop Environments,
   broken by Patch #3582760. (Björn "Vampire" Kautler)
 
