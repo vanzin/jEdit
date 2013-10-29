@@ -311,6 +311,19 @@
         <qandadiv id="text-format">
             <title>Formatting text</title>
 
+			<qandaentry>
+                <question id="toggle-auto-indent">
+                    <para>How do I toggle jEdit's auto-indent behavior? </para>
+                </question>
+                <answer>
+                   <para> By default, the <literal>Return</literal> key is bound to
+                   the <guimenuitem>Insert Newline and Indent</guimenuitem> action.
+                   If you bind it to <guimenuitem>Insert Newline</guimenuitem> from
+                   <guimenuitem>Global Options - Shortcuts</guimenuitem>, that will
+                   disable the auto-indent behavior. There is no way to "toggle"
+                   this feature. </para>
+                </answer>
+            </qandaentry>
             <qandaentry>
                 <question id="text-indent">
                     <para>How do I indent or unindent selections of text?</para>
