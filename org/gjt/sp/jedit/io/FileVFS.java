@@ -210,7 +210,7 @@ public class FileVFS extends VFS
 		private File file;
 
 		// use system default short format
-		public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		public static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
 		private long modified;
 
