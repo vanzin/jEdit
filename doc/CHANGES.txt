@@ -40,6 +40,9 @@ Makarius, and Alan Ezust for contributing to this release.
 }}}
 {{{ UI improvements
 
+- The TextArea will not scroll anymore when dragging files on jEdit
+  (Matthieu Casanova)
+
 - EnhancedDialog instances (Search/Replace, Options, Open) now can be closed
   using a single-key close-buffer.shortcut. (#3613007, #3588892 - László Schmidt,
   Zsombor Franczia, Bence Pintér)
