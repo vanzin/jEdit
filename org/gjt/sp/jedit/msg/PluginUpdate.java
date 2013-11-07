@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.msg;
 
 import java.io.File;
+import javax.annotation.Nullable;
+
 import org.gjt.sp.jedit.*;
 
 /**
@@ -144,7 +146,9 @@ public class PluginUpdate extends EBMessage
 	//{{{ getPluginJAR() method
 	/**
 	 * Returns the plugin involved.
+	 * It might be null when the plugin is removed
 	 */
+	@Nullable
 	public PluginJAR getPluginJAR()
 	{
 		return jar;
