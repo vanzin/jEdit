@@ -40,6 +40,9 @@ Makarius, and Alan Ezust for contributing to this release.
 }}}
 {{{ UI improvements
 
+- Added "loading" icon for task status bar widget (request #3615068 -
+  Matthieu Casanova)
+
 - The TextArea will not scroll anymore when dragging files on jEdit
   (Matthieu Casanova)
 
