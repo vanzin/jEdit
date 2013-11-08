@@ -6,7 +6,7 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
 Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
-Makarius, and Alan Ezust for contributing to this release.
+Makarius, Alan Ezust and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -25,6 +25,8 @@ Makarius, and Alan Ezust for contributing to this release.
 - Applied patch #3615045 (Makarius), plus some additional cleanup of setting the 
   look and feel (Dale Anson)
 
+- Fixed a bug in pluginmanager: transitive deps not installed when filtering
+  (#3614985 - Eric Le Lay)
 }}}
 {{{ API Changes
 
@@ -55,6 +57,8 @@ Makarius, and Alan Ezust for contributing to this release.
 
 - Increased the scrolling speed in option pane (Matthieu Casanova)
 
+- In plugin manager's install panel plugin dependencies are unchecked
+  if they are not required (Eric Le Lay)
 }}}
 {{{ Editing
 
