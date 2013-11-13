@@ -6,7 +6,8 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
 Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
-Makarius, Alan Ezust and Eric Le Lay for contributing to this release.
+Makarius, Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -41,6 +42,8 @@ Makarius, Alan Ezust and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ UI improvements
+
+- The bufferSwitcher now supports Drag&Drop (patch #3615177 - Yihua Zhang)
 
 - Added "loading" icon for task status bar widget (request #3615068 -
   Matthieu Casanova)
