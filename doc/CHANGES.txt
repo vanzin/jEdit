@@ -6,10 +6,12 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
 Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
-Makarius, Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this
-release.
+Makarius, Benjamin Zengin, Yihua Zhang, Alan Ezust and Eric Le Lay for
+contributing to this release.
 
 {{{ Bug Fixes
+
+- Fixed Whole word search (#3614975, patch #3615185 - Benjamin Zengin)
 
 - Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
 

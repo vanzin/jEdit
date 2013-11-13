@@ -87,10 +87,10 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 			int _end = returnValue.end;
 			if (wholeWord)
 			{
-				CharSequence subText = text;
+				CharSequence subText;
 				while (!isWholeWord(text, returnValue.start, returnValue.end))
 				{
-					subText = subText.subSequence(returnValue.end, text.length());
+					subText = text.subSequence(returnValue.end, text.length());
 					Match match = nextMatch(subText, start, end, firstTime, reverse);
 					// match == returnValue or null
 					if (match == null)
