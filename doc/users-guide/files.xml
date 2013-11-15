@@ -617,12 +617,13 @@
         asking for confirmation first.</para>
     </section>
 
-    <section id="threaded-io">
-        <title>I/O tasks</title>
+    <section id="task-monitor">
+        <title>Task Monitor, and background I/O tasks</title>
 
         <para>To improve responsiveness and perceived performance, jEdit
-        executes all buffer input/output tasks asynchronously.
-        When a task such as this is in progress, the status bar displays the number of running tasks. </para>
+        executes all buffer input/output tasks asynchronously. Plugins should
+        do the same. 
+        When a task such as this is in progress, the status bar should display the number of running tasks and an icon that spins. If you do not see this, you can add the widget from the <xref linkend="status-bar-pane"/>.  </para>
 
         <para>The
         <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;

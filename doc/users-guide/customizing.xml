@@ -551,7 +551,7 @@
             <para>The <guibutton>Status Bar</guibutton>, its API, and its corresponding option
             pane contains settings to customize
             which widgets are in the status bar, their order, and what separators exist
-            between them. Or, you can disable it completely, for regular and/or plain views.
+            between them. Also, you can disable it completely, for regular and/or plain views.
             See <xref linkend="status-bar" />.</para>
 
             <para> From the <literal>Options</literal> tab, you can

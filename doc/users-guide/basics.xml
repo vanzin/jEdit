@@ -2,7 +2,7 @@
 <chapter id="basics">
     <title>jEdit Basics</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :indentSize=1:noTabs=true: -->
+    <!-- :indentSize=2:noTabs=true:wrap=hard:maxLineLen=90: -->
     <!-- :xml.root=users-guide.xml: -->
 
     <section id="overview">
@@ -18,10 +18,10 @@
         completely separates the two concepts. A buffer might be visible in
         several views, or none at all.</para>
 
-        <para>A <firstterm>TextArea</firstterm> is an editor for a buffer.
-        An <firstterm>EditPane</firstterm> contains a TextArea plus optional buffer switcher.
+        <para>A <firstterm>TextArea</firstterm> is an editor for a buffer. An
+        <firstterm>EditPane</firstterm> contains a TextArea plus optional buffer switcher.
         A View contains one EditPane by default, and additional panes are created whenever
-        the View is split.  </para>
+        the View is split. </para>
 
         <para>The drop-down buffer switcher list at the top of each EditPane shows
         a BufferSet, or a set of open buffers (see <xref linkend="buffersets" />).
@@ -64,11 +64,10 @@
         dialog box.</para>
 
         <para> The gutter is divided into two sections. Right-clicking on the left side
-        gives you a context menu, while right-clicking on the right side (where line numbers might be)
-        toggles a marker at that position.
-        Text can be selected by left-clicking and dragging on right side of the gutter,
-        over the range of lines you wish to select.
-        </para>
+        gives you a context menu, while right-clicking on the right side (where line
+        numbers might be) toggles a marker at that position. Text can be selected by
+        left-clicking and dragging on right side of the gutter, over the range of lines
+        you wish to select. </para>
 
     </section>
 
@@ -128,9 +127,9 @@
     <section id="buffers">
         <title>Switching Buffers</title>
 
-        <para>Each EditPane has an optional drop-down BufferSwitcher at the top.
-        The BufferSwitcher shows the current buffer and can also be used to
-        switch the current buffer, using menu item commands and their keyboard shortcuts.</para>
+        <para>Each EditPane has an optional drop-down BufferSwitcher at the top. The
+        BufferSwitcher shows the current buffer and can also be used to switch the current
+        buffer, using menu item commands and their keyboard shortcuts.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous
         Buffer</guimenuitem> (keyboard shortcut: <keycap>C+PAGE_UP</keycap>)
@@ -195,29 +194,31 @@
         <para> The buffer sets feature helps keep the buffer lists local and manageable when using
         jEdit in a multiple-View and multiple-EditPane environment. </para>
 
-        <para> As mentioned in the previous section, each EditPane can show a Buffer Switcher, which
-        displays the contents of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
-        showed the same BufferSet: a global list of all buffers that were opened from any EditPane in any View.
-        When using many Views and EditPanes, this resulted in large lists of buffers, and made
-        the next/previous buffer actions useless with many Views, EditPanes and Buffers.
-        </para>
+        <para> As mentioned in the previous section, each EditPane can show a Buffer
+        Switcher, which displays the contents of a BufferSet. In jEdit 4.2, all EditPane
+        buffer switchers showed the same BufferSet: a global list of all buffers that were
+        opened from any EditPane in any View. When using many Views and EditPanes, this
+        resulted in large lists of buffers, and made the next/previous buffer actions
+        useless with many Views, EditPanes and Buffers. </para>
 
-        <para> In jEdit 4.3, it is possible to have more narrow scopes for the BufferSets
+        <para> Since jEdit 4.3, it is possible to have more narrow scopes for the BufferSets
         of an EditPane. This makes the 'next-buffer' and 'previous-buffer' actions switch
         between buffers that are local to the view or pane. </para>
 
         <para>
         The three BufferSet scopes are: </para>
 
-        <orderedlist>
-            <listitem><para> <emphasis role="bold">Global</emphasis>: Includes all buffers open from any EditPane. </para></listitem>
-            <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same
-            View share the same BufferSet. Opening a buffer in one View will not affect the
-            other views. </para></listitem>
-            <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its
-            own independent BufferSet.
-            </para></listitem>
-        </orderedlist>
+        <orderedlist> 
+        
+        <listitem><para> <emphasis role="bold">Global</emphasis>: Includes all buffers
+        open from any EditPane. </para></listitem>
+        
+        <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same View
+        share the same BufferSet. Opening a buffer in one View will not affect the other
+        views. </para></listitem>
+
+        <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have
+        its own independent BufferSet. </para></listitem> </orderedlist>
 
         <para> Bufferset scope can be set from <guimenu>Utilities</guimenu>
         &gt;<guimenuitem>Options</guimenuitem> &gt;
@@ -225,14 +226,22 @@
         <guilabel>BufferSet scope:</guilabel>.
         </para>
 
-        <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close</guimenuitem> removes the current buffer from the EditPane's BufferSet only. If it was the last BufferSet to contain that buffer, the buffer is also closed. </para>
+        <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close</guimenuitem> removes the
+        current buffer from the EditPane's BufferSet only. If it was the last BufferSet to
+        contain that buffer, the buffer is also closed. </para>
 
-        <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the jEdit 4.2 <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
+        <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close
+        (global)</guimenuitem> action closes the buffer in all EditPanes, as the jEdit 4.2
+        <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before.
+        </para>
 
-        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is visited in one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting) BufferSet. </para>
+        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time
+        a buffer is visited in one EditPane, it should be automatically closed in other
+        EditPanes which use a disjoint (non-intersecting) BufferSet. </para>
 
         <para> <guimenuitem>Close Others</guimenuitem> will clear the BufferSet of the
-        current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
+        current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items
+        except those buffers which are displayed in another active EditPane. </para>
 
         <bridgehead> Switching Bufferset Scopes </bridgehead>
 
@@ -251,7 +260,9 @@
     <section id="docking">
         <title>Window Docking Layouts</title>
 
-        <para> A docking layout is similar to an Eclipse "Perspective" in that it describes a set of dockable windows that are visible to the user at any given time, hiding the rest. </para>
+        <para> A docking layout is similar to an Eclipse "Perspective" in that it
+        describes a set of dockable windows that are visible to the user at any given
+        time, hiding the rest. </para>
 
         <para>Various jEdit and plugin windows can be docked into the View for
         convenience. Dockable windows have a popup button in their top-left
@@ -266,29 +277,37 @@
         floating instance of the current window.</para>
 
         <para>The commands in the
-        <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu> menu move keyboard focus between docking areas.</para>
+        <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu> menu move keyboard
+        focus between docking areas.</para>
 
 
-        <para>
-        After you have customized the layout of your dockables and wish to save it for export/import, use the actions <guimenu>View</guimenu> - <guimenu>Docking</guimenu> - <guimenuitem>Save/Load Docking Layout</guimenuitem>. </para>
-        <para> It is possible to configure a Dockable layout for just one or a handful of edit modes. This makes it possible to save or load your dockable layout with the same keyboard shortcut (or automatically) based on the edit mode of your current buffer.
-        </para>
+        <para> After you have customized the layout of your dockables and wish to save it
+        for export/import, use the actions <guimenu>View</guimenu> -
+        <guimenu>Docking</guimenu> - <guimenuitem>Save/Load Docking Layout</guimenuitem>.
+        </para> 
+        
+        <para> It is possible to configure a Dockable layout for just one or a handful of
+        edit modes. This makes it possible to save or load your dockable layout with the
+        same keyboard shortcut (or automatically) based on the edit mode of your current
+        buffer. </para>
 
-        <para>
-        It is also possible to save/load a layout for a particular edit mode. The loading and saving can be done automatically, as configured in the global options docking pane when the mode of the buffer changes, or manually in response to invoking <guimenu>View</guimenu> - <guimenu>Docking</guimenu> - <guimenuitem>Save/Load Docking Layout for current mode.</guimenuitem>
-        </para>
+        <para> It is also possible to save/load a layout for a particular edit mode. The
+        loading and saving can be done automatically, as configured in the global options
+        docking pane when the mode of the buffer changes, or manually in response to
+        invoking <guimenu>View</guimenu> - <guimenu>Docking</guimenu> -
+        <guimenuitem>Save/Load Docking Layout for current mode.</guimenuitem> </para>
 
         <para>Dockable windows can be further configured in the
         <guilabel>Docking</guilabel> pane of the
-        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box. See <xref linkend="docking-pane"/> for details.
-        </para>
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog
+        box. See <xref linkend="docking-pane"/> for details. </para>
 
 
         <sidebar>
             <title>For keyboard/power users</title>
 
-            <para>Each dockable has three commands associated with it; one is part of the menu bar and opens the dockable. The other two commands are:</para>
+            <para>Each dockable has three commands associated with it; one is part of the
+            menu bar and opens the dockable. The other two commands are:</para>
 
             <itemizedlist>
                 <listitem>
@@ -324,6 +343,7 @@
 
         <itemizedlist>
             <listitem>
+            
                 <para>Caret position information:</para>
                 <itemizedlist>
                     <listitem>
@@ -353,10 +373,6 @@
                     </listitem>
 
                 </itemizedlist>
-                <para>
-                    All of the above information is configurable in the Global Options
-                    for the status bar.
-                </para>
                 <para>Double-clicking on the caret location indicator displays
                 the <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to
                 Line</guimenuitem> dialog box; see <xref
@@ -434,7 +450,10 @@
 
                 </itemizedlist>
             </listitem>
-
+            <listitem><para>
+              A <guimenuitem>Task Monitor</guimenuitem> widget, which spins with 
+              activity when a background task is running, and also lists how many
+              tasks are running. Clicking on this will open the Task Monitor dockable (<xref linkend="task-monitor"/>). </para></listitem>
             <listitem>
                 <para>A Java heap memory usage indicator, that shows used and
                 total heap memory, in megabytes. Double-clicking this indicator
@@ -444,7 +463,7 @@
             </listitem>
         </itemizedlist>
 
-        <para>The visibility of each of the above items can be controlled in the
+        <para>The order and visibility of each of the above items can be controlled in the
         <guibutton>Status Bar</guibutton> pane of the
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
         dialog box; see <xref
