@@ -2,7 +2,7 @@
 <chapter id="using-macros">
     <title>Using Macros</title>
     <!-- jEdit buffer-local properties:                               -->
-    <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
+    <!-- :tabSize=2:indentSize=2:noTabs=true:wrap=soft:maxLineLen=90: -->
     <!-- :xml.root=users-guide.xml: -->
 
     <para>Macros in jEdit are short scripts written in a scripting language

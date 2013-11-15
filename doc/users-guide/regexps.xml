@@ -2,7 +2,7 @@
 <appendix id="regexps">
     <title>Regular Expressions</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :indentSize=1:noTabs=yes: -->
+    <!-- :indentSize=2:noTabs=yes: -->
     <!-- :xml.root=users-guide.xml: -->
 
     <para>jEdit uses regular expressions from <ulink

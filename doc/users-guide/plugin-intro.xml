@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="plugin-intro">
     <title>Introducing the Plugin API</title>
-    <!-- :indentSize=1:tabSize=2:noTabs=true:wrap=soft:maxLineLen=0:     -->
+    <!-- :indentSize=2:tabSize=2:noTabs=true:wrap=soft:maxLineLen=90:     -->
     <!-- :xml.root=users-guide.xml: -->
     <!-- jEdit buffer-local properties:                         -->
 

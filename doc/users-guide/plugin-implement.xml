@@ -2,7 +2,7 @@
 <chapter id="plugin-implement">
     <!-- jEdit buffer-local properties: -->
     <!-- :xml.root=users-guide.xml: -->
-    <!-- :maxLineLen=80:wrap=soft: -->
+    <!-- :maxLineLen=90:wrap=soft: -->
     <title>Implementing a Simple Plugin</title>
     <!-- jEdit Plugin Guide, (C) 2001-2013 John Gellene, Alan Ezust      -->
 

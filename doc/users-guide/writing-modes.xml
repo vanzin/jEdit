@@ -2,7 +2,7 @@
 <chapter id="writing-modes">
     <title>Mode Definition Syntax</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :indentSize=1:noTabs=true: -->
+    <!-- :indentSize=2:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
     <para>Edit modes are defined using XML, the <firstterm>eXtensible Markup
     Language</firstterm>; mode files have the extension

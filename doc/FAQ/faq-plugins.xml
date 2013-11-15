@@ -2,7 +2,7 @@
 <section id="plugins">
     <title>Plugin Questions</title>
     <!-- jEdit buffer-local properties:                      -->
-    <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
+    <!-- :indentSize=4:noTabs=false:maxLineLen=90:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
     <para>This section deals with questions concerning the use of jEdit's

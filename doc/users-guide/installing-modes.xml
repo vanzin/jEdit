@@ -2,7 +2,7 @@
 <chapter id="installing-modes">
     <title>Installing Edit Modes</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :indentSize=1:noTabs=true: -->
+    <!-- :indentSize=2:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
     <para>jEdit looks for edit modes in two locations; the
     <filename>modes</filename> subdirectory of the jEdit settings directory, and

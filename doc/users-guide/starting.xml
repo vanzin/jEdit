@@ -2,7 +2,7 @@
 <chapter id="starting">
     <title>Starting jEdit</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :tabSize=1:indentSize=1:maxLineLen=80:wrap=hard:noTabs=true: -->
+    <!-- :tabSize=2:indentSize=2:maxLineLen=90:wrap=hard:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
 
     <para>Exactly how jEdit is started depends on the operating system. For

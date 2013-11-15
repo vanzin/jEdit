@@ -2,7 +2,7 @@
 <chapter id="using-plugins">
     <title>Installing and Using Plugins</title>
     <!-- jEdit buffer-local properties: -->
-    <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=hard:maxLineLen=80: -->
+    <!-- :tabSize=2:indentSize=2:noTabs=true:wrap=hard:maxLineLen=90: -->
     <!-- :xml.root=users-guide.xml: -->
     <para>A <firstterm>plugin</firstterm> is an application which is loaded and
     runs as part of another, host application. Plugins respond to user commands

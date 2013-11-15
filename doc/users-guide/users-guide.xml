@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- jEdit buffer-local properties: -->
-<!-- maxLineLen=0:wrap=soft:indentSize=1:noTabs=true: -->
+<!-- maxLineLen=90:wrap=soft:indentSize=2:noTabs=true: -->
 <!-- jEdit user's guide -->
 <book id="users-guide"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>

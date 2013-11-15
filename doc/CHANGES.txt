@@ -74,7 +74,7 @@ contributing to this release.
 {{{ Miscellaneous
 
 - MiscUtilities.expandVariables() converts from Windows to Linux-style paths
-  when necessary
+  when necessary (the reverse was already true). (Alan Ezust)
 
 - New macros: Go To Offset, Reverse Selection (#3614563, #3614564 Thomas Meyer)
 
