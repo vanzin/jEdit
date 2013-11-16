@@ -33,6 +33,9 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- New method: VFSFile.getModified() which allows sorting by date in the FSB
+  for other VFSs (Patch #3615214 Yihua Zhang)
+
 - GUIUtilities.getShortcutLabel() has a second boolean argument to specify
   whether platform modifier symbols are desired or not. (#3615046 Makarius) 
 

@@ -446,9 +446,9 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			// if the modified attribute is present, then we have a LocalFile
 			if(sortAttribute == VFS.EA_MODIFIED)
 				result = (
-					(Long)((FileVFS.LocalFile)file1).getModified())
+					(Long)file1.getModified())
 					.compareTo(
-					(Long)((FileVFS.LocalFile)file2).getModified());
+					(Long)file2.getModified());
 			// sort by size
 			else if(sortAttribute == VFS.EA_SIZE)
 				result = (

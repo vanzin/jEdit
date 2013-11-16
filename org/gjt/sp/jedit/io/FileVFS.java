@@ -319,6 +319,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ getModified() method
+		@Override
 		public long getModified()
 		{
 			fetchAttrs();
