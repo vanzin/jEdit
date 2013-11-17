@@ -81,6 +81,7 @@ common.moveDown=Nach unten
 common.clearAll=Alle löschen
 common.selectAll=Alle wählen
 common.selectNone=Nichts wählen
+common.loading=Lade...
 
 #lineSep.unix=Unix (\\n).
 #lineSep.windows=DOS/Windows (\\r\\n).
@@ -568,7 +569,7 @@ view.gutter.marker=Lesezeichen: {0}
 view.status.add-marker=Kürzel für neues Lesezeichen? [{0}]
 view.status.auto-wrap=Suchtext nicht gefunden; Es geht am anderen Ende weiter!
 view.status.bracket=Passende Klammer in Zeile {0}: {1}
-view.status.caret-tooltip=Position der Einfügemarke (Absolut,Zeile,Spalte relativ%)
+view.status.caret-tooltip=Zeile, Spalte[-virtuell] (Offset/Länge)
 view.status.copy-append-string-register=Kopieren/Anhängen an Register? [{0}]
 view.status.copy-string-register=Kopieren in Register? [{0}]
 view.status.cut-append-string-register=Ausschneiden/Anhängen an Register? [{0}]
@@ -1245,7 +1246,7 @@ view.title.select=Bitte einen Namen für diese Ansicht eingeben:
 #{{{ Buffer options dialog
 buffer-options.title=Datei-Optionen
 buffer-options.caption=Die Einstellungen dieses Dialoges gelten nur für die aktive Datei.\n\
-  Editorweite Einstellungen werden im Dialog Extras->Globale Optionen getroffen.
+  Editorweite Einstellungen werden unter Globale Optionen->Bearbeiten getroffen.
 buffer-options.loading-saving=Laden und Speichern
 buffer-options.lineSeparator=Zeilenendezeichen:
 buffer-options.encoding=Zeichenkodierung:
@@ -1390,7 +1391,7 @@ options.editing.noWordSep=Zusätzliche Wortzeichen:
 options.editing.camelCasedWords="CamelCased" Worte trennen
 options.editing.noTabs=Soft-Tabs (Leerzeichen statt Tabulatoren einfügen)
 options.editing.elasticTabstops=Einrückung unter Verwendung elastischer Tabulatoren
-options.editing.elasticTabstops.tooltip=(Experimentell) - Könnte jEdit instabil werden lassen.
+options.editing.elasticTabstops.tooltip=Spalten in Zeilen über und unter einer "Zelle" bleiben ausgerichtet auf Tab-Stops, die in Abhängigkeit der "Zellen"-Breite angepasst werden.
 options.editing.deepIndent=Tiefe Einrückung
 options.editing.autoIndent=Automatische Einrückung
 options.editing.largefilemode.title=Modus für große Dateien
@@ -1410,10 +1411,8 @@ options.encodings.label=Zeichenkodierungen
 options.encodings.selectEncodings=Zeichenkodierungen, die in entsprechenden Dialogen zur Auswahl stehen sollen:
 options.encodings.available=Verfügbare Zeichenkodierungen
 options.encodings.selected=Gewählte Zeichenkodierung(en)
-options.encodings.available.tooltip=<html>Zeichenkodierungen in dieser Spalte werden <b>nicht</b> in Zeichenkodierungs-Dialogen gelistet. \
-  Zum Aktivieren in die rechte Spalte ziehen!</html>
-options.encodings.selected.tooltip=Zeichenkodierungen in dieser Spalte werden in Zeichenkodierungs-Dialogen gelistet. \
-  Zum Deaktivieren in die linke Spalte ziehen!
+options.encodings.available.tooltip=<html>Zeichenkodierungen in dieser Spalte werden <b>nicht</b> in Zeichenkodierungs-Auswahlboxen gelistet. Zum Anzeigen in die rechte Spalte ziehen!</html>
+options.encodings.selected.tooltip=Zeichenkodierungen in dieser Spalte werden in Zeichenkodierungs-Auswahlboxen gelistet. Zum Verstecken in die linke Spalte ziehen!
 #}}}
 
 #{{{ Gutter pane
@@ -1450,6 +1449,7 @@ options.mouse.dragAndDrop=Drag & Drop im Textbereich
 options.mouse.joinNonWordChars=Ziehen nach Doppelklick erweitert Auswahl über Sonderzeichen
 options.mouse.middleMousePaste=Schnelles Kopieren mit mittlerer Maustaste
 options.mouse.ctrlForRectangularSelection=Spaltenauswahl, solange STRG gedrückt ist
+options.mouse.singleClickToOpen=Dateien und Ordner mit einfachem Klick öffnen
 options.mouse.gutter.foldClick=Klick ins Gutter:
 options.mouse.gutter.SfoldClick=Umschalt-Klick ins Gutter:
 options.mouse.gutter.toggle-fold=Falte ein-/ausklappen
@@ -1469,6 +1469,8 @@ options.plugin-manager.app-dir=jEdit Programm-Verzeichnis
 options.plugin-manager.none=Plugin Central Standard
 options.plugin-manager.disable-obsolete=Veraltete Plugins deaktivieren
 options.plugin-manager.list-cache.minutes=Plugin-Liste zwischenspeichern für (Minuten):
+options.plugin-manager.no-plugin-available=Kein Plugin verfügbar
+options.plugin-manager.no-plugin-uptodate=Alle Plugins sind auf aktuellem Stand.
 #}}}
 
 #{{{ Printing pane
@@ -1536,6 +1538,7 @@ options.shortcuts.label=Tastenkürzel
 options.shortcuts.select.label=Tastenkürzel bearbeiten:
 options.shortcuts.select.tooltip=Filter für: Eingebaute Befehle, Makros, Plugin-Befehle, Dock-Layouts
 options.shortcuts.name=Befehl
+options.shortcuts.actionset=Befehlssatz
 options.shortcuts.shortcut1=Primäres Tastenkürzel
 options.shortcuts.shortcut2=Alternatives Tastenkürzel
 options.shortcuts.filter.label=Filter:
@@ -1637,6 +1640,7 @@ options.textarea.fracFontMetrics.tooltip=Nicht empfohlen mit Subpixel-Kantenglä
 options.textarea.stripTrailingEOL=Letztes Zeilenende verstecken (falls vorhanden)
 options.textarea.completeFromAllBuffers=Wort-Vervollständigung von allen offenen Dateien (Standard ist \
     die Suche auf alle gerade sichtbaren Dateien zu begrenzen)
+options.textarea.insertCompletionWithDigit=Wort vervollständigen durch Tippen der korrespondierenden Ziffer (ansonsten wird die Ziffer als Teil des Wortes angesehen). 
 options.textarea.lineSpacing.label=Zusätzlicher vertikaler Zeilenabstand (in Pixel):
 #}}}
 
@@ -1669,6 +1673,7 @@ options.view.viewLayout=Ansichtslayout
 options.view.floatableToolbars=Frei positionierbare Symbolleisten
 options.view.alternateDockingLayout=Alternatives Dock-Layout
 options.view.alternateToolBarLayout=Alternatives Symbolleisten-Layout
+options.view.abbreviatePaths=Pfade mit Namen von Umgebungsvariablen abkürzen, wenn möglich
 options.view.showFullPath=Zeige vollständigen Dateipfad in der Titelleiste
 options.view.showSearchbar=Suchzeile immer anzeigen
 options.view.beepOnSearchAutoWrap=Pieps, wenn Suche automatisch am anderen Dateiende fortsetzt
@@ -2024,15 +2029,15 @@ install-plugins.info.size=Größe
 install-plugins.info.releaseDate=Release-Datum
 install-plugins.info.version=Version
 install-plugins.info.category=Kategorie
+install-plugins.info.author=Autor
+install-plugins.info.released=Freigegeben
+install-plugins.info.depends=Abhängig von
+install-plugins.info.optionalDepends=Optional abhängig von
 
 install-plugins.totalSize={0} Plugin(s), Gesamtgröße: {1}
 install-plugins.select-all=Alle wählen
 install-plugins.install=Installieren
 install-plugins.show-updates=Updates anzeigen
-
-install-plugins.info=<b>Autor</b>: {0}\n\
-	<b>Release</b>: {1}\n\
-	{2}
 
 update-plugins.title=Aktualisieren
 
@@ -2158,6 +2163,10 @@ macro.rs.CutLinesContaining.LinesCut.message=Zeile(n) ausgeschnitten
 #{{{ Go to column
 macro.rs.GoToColumn.label=Spalte (zwischen 1 und {0}):
 #}}}
+
+# Go To Offset
+macro.rs.GoToOffset.label=Offset (zwischen 1 und {0}):
+
 
 #{{{ Key Words to Uppercase
 macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=zu Großbuchstaben konvertierte Schlüsselworte
