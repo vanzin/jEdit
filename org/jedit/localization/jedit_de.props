@@ -14,6 +14,7 @@
 ###                                        jedit_en.props (Revision 22535).
 ###                                      - About 330 labels newly translated, many are new
 ###                                        in jEdit 5, but some may have been missed before.
+###    21.11.2013  R. Schwenn  5.0.1.2   - Update for jEdit 5.1
 ###}}}
 ###
 ###{{{ Notes
@@ -2512,6 +2513,7 @@ Files/Insert_Selection.label=Füge Datei ein (Name in Auswahl)
 Files/Next_Dirty_Buffer.label=Nächste nicht gespeicherte Datei
 Files/Open_Path.label=Öffne Datei (Name eingeben)
 Files/Open_Selection.label=Öffne Datei (Name in Auswahl)
+Files/Open_Selection_In_Desktop.label=Starte Datei (Name in Auswahl)
 Files/Send_Buffer_To_Next_Split.label=Datei in den nächsten Dateisatz
 Files/Toggle_ReadOnly.label=Schreibschutz umschalten
 #}}}
