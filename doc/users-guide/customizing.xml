@@ -492,12 +492,13 @@
             connections, for example when downloading plugins.</para>
         </section>
 
-        <section id="autosave-backups-pane">
+        <section id="saving-backup-pane">
             <title>The Saving and Backup Pane</title>
 
             <para>The <guibutton>Saving and Backup</guibutton> option pane contains
             settings for the autosave and backup features. See <xref
             linkend="autosave" /> and <xref linkend="backups" />.</para>
+
         </section>
 
         <section id="shortcuts-pane">
@@ -611,23 +612,22 @@
             <title>The View Pane</title>
 
             <para>The <guibutton>View</guibutton> option pane lets you change
-            various settings related to the editor window's appearance,
-            including the arrangement of dockable windows, and if the search bar
-            and buffer switcher should be visible. See <xref
+            various settings related to the editor main window appearance,
+            including the arrangement of dockable windows, whether the search bar
+            and buffer switcher are visible, and whether menu, toolbar, and
+            statusbar are visible in full-screen mode. See <xref
             linkend="views" />.</para>
             
-            <para> If the <guimenuitem>Abbreviate paths with
-            environment variables when possible</guimenuitem>
-            is checked, you will notice that jEdit displays
-            abbreviated versions of file paths when it can,
-            using <literal>$VARIABLE/name.ext</literal> or
-            <literal>%VARIABLE%\name.ext</literal> syntax,
-            depending on your platform. Abbreviating is used in the
-            File System Browser, as well as in the window title,
-            and in plugins, to save horizontal space. In addition,
-            you can copy and paste abbreviated paths between the 
-            File System Browser, Console, native system shell,
-            or native file browser, where they are expanded the same way.
+            <para> You can choose the default bufferset scope here, as well as whether/how you want buffersets to be sorted in buffer switchers. See <xref linkend="buffersets"/> for more details. </para>
+            
+            <para> If <guimenuitem>Abbreviate paths with environment variables when
+            possible</guimenuitem> is checked, you will notice that jEdit displays
+            abbreviated versions of file paths when it can, using
+            <literal>$VARIABLE/name.ext</literal> or
+            <literal>%VARIABLE%\name.ext</literal> syntax, depending on your platform.
+            Abbreviating is used in the File System Browser, as well as in the window
+            title, and in plugins, to save horizontal space. Reverse-expansions also work
+            as you would expect them to, with both syntaxes recognized on both platforms.
             </para>
 
         </section>

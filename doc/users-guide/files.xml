@@ -134,7 +134,7 @@
             <guibutton>Autosave and Backup</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
             dialog box; see <xref
-            linkend="autosave-backups-pane" />.</para>
+            linkend="saving-backup-pane" />.</para>
         </section>
 
         <section id="backups">
@@ -149,7 +149,7 @@
             <guibutton>Autosave and Backup</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
             dialog box; see <xref
-            linkend="autosave-backups-pane" />.`</para>
+            linkend="saving-backup-pane" />.`</para>
 
             <para>The default behavior is to back up the original contents to
             the buffer's file name suffixed with a tilde (<quote>~</quote>). For
