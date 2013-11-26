@@ -4446,6 +4446,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ insertEnterAndIndent() method
+	/**
+	 * Inserts a line break and indents the new line. Moves the caret to
+	 * the first non-whitespace character of the new line. If the newline
+	 * character is an electric key the current line will also be
+	 * re-indented.
+	 */
 	public void insertEnterAndIndent()
 	{
 		if(!isEditable())
@@ -4464,7 +4470,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				setSelectedText("\n");
 				
 				if ("full".equals(autoIndent))
-					buffer.indentLine(caretLine, true);
+				{
+					if (!buffer.indentLine(caretLine, true)) {
+						// If the line was already correctly indented, the
+						// caret needs to be moved explicitly.
+						if (lineContainsSpaceAndTabs(caretLine)) {
+							goToEndOfLine(false);
+						} else {
+							goToStartOfWhiteSpace(false);
+						}
+					}
+				}
 				else if ("simple".equals(autoIndent))
 					buffer.simpleIndentLine(caretLine);
 			}
