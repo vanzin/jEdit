@@ -615,6 +615,21 @@
             including the arrangement of dockable windows, and if the search bar
             and buffer switcher should be visible. See <xref
             linkend="views" />.</para>
+            
+            <para> If the <guimenuitem>Abbreviate paths with
+            environment variables when possible</guimenuitem>
+            is checked, you will notice that jEdit displays
+            abbreviated versions of file paths when it can,
+            using <literal>$VARIABLE/name.ext</literal> or
+            <literal>%VARIABLE%\name.ext</literal> syntax,
+            depending on your platform. Abbreviating is used in the
+            File System Browser, as well as in the window title,
+            and in plugins, to save horizontal space. In addition,
+            you can copy and paste abbreviated paths between the 
+            File System Browser, Console, native system shell,
+            or native file browser, where they are expanded the same way.
+            </para>
+
         </section>
 
         <section id="vfs-browser-pane">
