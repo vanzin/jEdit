@@ -4,16 +4,13 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson,
-Thomas Meyer, Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér
-Makarius, Benjamin Zengin, Yihua Zhang, Alan Ezust and Eric Le Lay for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer, 
+Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin, 
+Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fixed Whole word search (#3614975, patch #3615185 - Benjamin Zengin)
-
-- Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
 
 - Fixed the systray not added on EDT thread (Matthieu Casanova)
 
@@ -23,10 +20,8 @@ contributing to this release.
 - Reload optionally dependent plugins when a plugin is unloaded.
   (#3614456 - Dale Anson)
 
-- Fix #3614883: Alt+'f' multiply bound in "Search and Replace" dialog
-
-- Applied patch #3615045 (Makarius), plus some additional cleanup of setting the 
-  look and feel (Dale Anson)
+- Applied patch #3615045 (Makarius), plus some additional cleanup of setting 
+  the look and feel (Dale Anson)
 
 - Fixed a bug in pluginmanager: transitive deps not installed when filtering
   (#3614985 - Eric Le Lay)
@@ -47,6 +42,8 @@ contributing to this release.
 
 }}}
 {{{ UI improvements
+
+- Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
 
 - The bufferSwitcher now supports Drag&Drop (patch #3615177 - Yihua Zhang)
 
@@ -89,5 +86,5 @@ contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:maxLineLen=80:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
+:maxLineLen=90:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
 :folding=explicit:collapseFolds=2:
