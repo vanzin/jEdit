@@ -424,7 +424,7 @@
 
 	<target name="test"
 		depends="init,retrieve,compile,compile-test"
-		description="run unit tests">
+		description="run unit tests" unless="skip.tests">
 		<delete dir="${build.dir}/test/raw-reports"/>
 		<mkdir dir="${build.dir}/test/raw-reports"/>
 		<junit printsummary="true"
