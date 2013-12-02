@@ -4471,12 +4471,16 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				
 				if ("full".equals(autoIndent))
 				{
-					if (!buffer.indentLine(caretLine, true)) {
+					if (!buffer.indentLine(caretLine, true))
+					{
 						// If the line was already correctly indented, the
 						// caret needs to be moved explicitly.
-						if (lineContainsSpaceAndTabs(caretLine)) {
+						if (lineContainsSpaceAndTabs(caretLine))
+						{
 							goToEndOfLine(false);
-						} else {
+						}
+						else
+						{
 							goToStartOfWhiteSpace(false);
 						}
 					}
