@@ -430,8 +430,11 @@
                   </entry> 
                   <entry> Sets/overrides the java System property
                   <literal>jedit.home</literal> to be the path to the jEdit
-                  install. This tells jEdit where to find its extra
-                  files, such as docuentation, for non-standard installs. </entry>
+                  install. This tells jEdit where to find its site properties, 
+                  default keymaps, macros, edit modes, and documentation. You can override
+                  this setting to create a custom install that is shared by multiple
+                  users. See <xref linkend="sitepropertiesfiles"/> for more information.
+                  </entry>
                   </row>
               <row>
                   <entry><userinput>-mx768m</userinput></entry>

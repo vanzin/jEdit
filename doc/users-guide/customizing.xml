@@ -647,7 +647,7 @@
     <section id="settings-directory">
         <title>The jEdit Settings Directory</title>
 
-        <para>jEdit stores settings, macros, and plugins as files inside the
+        <para>jEdit stores settings, keymaps, macros, and plugins as files inside the
         <firstterm>settings directory</firstterm>. In most cases, editing these
         files by hand is not necessary, since graphical tools and editor
         commands can do the job. However, being familiar with the structure of
@@ -704,7 +704,7 @@
                 which contains the full activity log. See <xref
                 linkend="activity-log" />.</para>
             </listitem>
-
+            
             <listitem>
                 <para><filename>history</filename> - a plain text file which
                 stores history lists, used by history text fields and the
@@ -725,7 +725,13 @@
                 are automatically updated when plugins are installed or
                 updated.</para>
             </listitem>
-
+            <listitem>
+              <para><filename>keymaps</filename> - this directory
+              contains collections of named keyboard shortcuts
+              which can be defined from the Shortcuts Option Pane (see <xref linkend="shortcuts-pane"/>).  </para>
+            </listitem>
+              
+            
             <listitem>
                 <para><filename>killring.xml</filename> - stores recently
                 deleted text. See <xref linkend="text-transfer" />.</para>
@@ -814,18 +820,20 @@
 
         <section id="sitepropertiesfiles">
             <title>Site Properties</title>
+            
+            
             <para>
-                You may also put properties files in the "properties" directory in
-                the jEdit home directory (NOT the .jedit settings directory). You
+                You may also put properties files in the <filename>properties</filename> directory under 
+                the jEdit home directory (NOT the jedit settings directory). You
                 can locate the jEdit home directory by going to the Utilities menu
-                directory, then the "jEdit Home Directory" menu item, and the first
+                directory, then the <guimenuitem>jEdit Home Directory</guimenuitem> menu item, and the first
                 item in the pullout menu will be the location of the jEdit home
-                directory. This is intended for site-wide settings and it is
-                useful for things like a set of custom key bindings that you might
-                want to share between different computers. This lets you keep your
-                custom properties separate from the jEdit properties, so they are
-                easier to find, edit, and move between machines. Note that your
+                directory. This is intended for site-wide settings. This lets you keep 
+                custom user properties separate from the jEdit site-wide properties, so they are easier to find, edit, and move between machines. Note that your
                 custom properties files must have ".props" as the file name extension.
+            </para>
+            <para> 
+              Prior to jEdit 5.0, this was also where site-wide keyboard shortcuts were placed, but now you can define custom sets of shortcuts as keymap files. These files can be cloned and edited from the Shortcuts Option Pane, or edited by hand. To place them in a system-wide location, copy them into the <filename>keymaps</filename> folder under the jedit home directory. 
             </para>
             <para>
                 Site properties files are read in alphabetically by file name. This means
@@ -836,6 +844,7 @@
             <para>
                 You can edit these files inside jEdit - changes made to these files will not be re-read until the next time jEdit is started.
             </para>
+            
         </section>
     </section>
 </chapter>
