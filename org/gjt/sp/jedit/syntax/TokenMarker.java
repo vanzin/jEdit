@@ -31,7 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.SegmentCharSequence;
-import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -969,9 +968,9 @@ unwind:		while(context.parent != null)
 			{
 				LineContext lc = (LineContext)obj;
 				return lc.inRule == inRule && lc.rules == rules
-					&& StandardUtilities.objectsEqual(parent,lc.parent)
+					&& Objects.equals(parent,lc.parent)
 					&& charArraysEqual(spanEndSubst,lc.spanEndSubst)
-					&& StandardUtilities.objectsEqual(spanEndSubstRegex, lc.spanEndSubstRegex);
+					&& Objects.equals(spanEndSubstRegex, lc.spanEndSubstRegex);
 			}
 			else
 				return false;

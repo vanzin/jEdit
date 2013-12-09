@@ -490,7 +490,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 * Returns if two strings are equal. This correctly handles null pointers,
 	 * as opposed to calling <code>o1.equals(o2)</code>.
 	 * @since jEdit 4.3pre6
+	 * @deprecated use {java.util.Objects#equals(Object, Object}
 	 */
+	@Deprecated
 	public static boolean objectsEqual(@Nullable Object o1, @Nullable Object o2)
 	{
 		if(o1 == null)

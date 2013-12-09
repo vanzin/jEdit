@@ -30,8 +30,8 @@ import javax.swing.text.Segment;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Objects;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
@@ -132,7 +132,7 @@ public class StatusBar extends JPanel
 			panel.remove(caretStatus);
 
 		String statusBar = jEdit.getProperty("view.status");
-		if (!StandardUtilities.objectsEqual(currentBar, statusBar))
+		if (!Objects.equals(currentBar, statusBar))
 		{
 			box.removeAll();
 			StringTokenizer tokenizer = new StringTokenizer(statusBar);

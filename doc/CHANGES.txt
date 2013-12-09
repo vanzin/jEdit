@@ -28,6 +28,9 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 }}}
 {{{ API Changes
 
+- StandardUtilities.objectsEqual() is deprecated as Objects.equals() does the
+  same job in Java 7 (Matthieu Casanova)
+
 - jEdit now depends on Java 1.7
 
 - New method: VFSFile.getModified() which allows sorting by date in the FSB

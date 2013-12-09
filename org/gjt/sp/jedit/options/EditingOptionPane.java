@@ -27,6 +27,7 @@ import javax.swing.*;
 
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
@@ -489,10 +490,8 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "autoIndent");
 					jEdit.resetProperty(prefix + "deepIndent");
 
-					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
-						mode.getProperty("filenameGlob"))
-						&& StandardUtilities.objectsEqual(oldFirstlineGlob,
-						mode.getProperty("firstlineGlob"))))
+					if(!(Objects.equals(oldFilenameGlob, mode.getProperty("filenameGlob"))
+						&& Objects.equals(oldFirstlineGlob, mode.getProperty("firstlineGlob"))))
 					{
 						mode.init();
 					}
@@ -504,10 +503,8 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.setProperty(prefix + "filenameGlob",filenameGlob);
 					jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
 
-					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
-						filenameGlob)
-						&& StandardUtilities.objectsEqual(oldFirstlineGlob,
-						firstlineGlob)))
+					if(!(Objects.equals(oldFilenameGlob, filenameGlob) &&
+						 Objects.equals(oldFirstlineGlob, firstlineGlob)))
 					{
 						mode.init();
 					}

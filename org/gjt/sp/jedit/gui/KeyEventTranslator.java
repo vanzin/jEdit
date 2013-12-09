@@ -27,10 +27,11 @@ import java.awt.event.*;
 import javax.swing.KeyStroke;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /** In conjunction with the <code>KeyEventWorkaround</code>, hides some
@@ -526,8 +527,7 @@ public class KeyEventTranslator
 			if(o instanceof Key)
 			{
 				Key k = (Key)o;
-				if(StandardUtilities.objectsEqual(modifiers,
-					k.modifiers) && key == k.key
+				if(Objects.equals(modifiers, k.modifiers) && key == k.key
 					&& input == k.input)
 				{
 					return true;
