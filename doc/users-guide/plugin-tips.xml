@@ -5,6 +5,26 @@
     <!-- :tabSize=2:indentSize=2:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
 
+    <section id="platform-specific-code">
+    <title> Paths, Urls, and Platform Specific Code </title>
+    
+    <para> If you need to check what the current running platform is, 
+      see <classname>org.gjt.sp.jedit.OperatingSystem</classname>. </para>
+    
+    <para> If you need to compare file names and don't want to
+    worry about whether you are on a case-sensitive file system or not, 
+    use <function>MiscUtilities.pathsEqual()</function>. See that
+    class for other useful path manipulation routines. </para>
+
+    <para> There are other helpful classes in <package>org.gjt.sp.util</package>,
+      such as <classname>HtmlUtilities</classname>, <classname>StandardUtilities</classname>,
+      <classname>IOUtilities</classname>, and <classname>Log</classname>. 
+      In particular, the <classname>Log</classname> class is recommended 
+      for reporting errors and also logging debug information. 
+    </para>
+
+    </section>
+
     <section id="plugin-tips-libraries">
         <title>Bundling Additional Class Libraries</title>
 
