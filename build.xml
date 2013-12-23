@@ -637,6 +637,8 @@
 				<fileset dir="${lib.dir}/docbook"
 					 includes="*.jar"/>
 			</classpath>
+			<!-- ant 1.9 compatibility: explicitly set the processor to Saxon (see bug #3818) -->
+			<factory name="com.icl.saxon.TransformerFactoryImpl"/>
 			<xmlcatalog>
 				<entity publicid="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
 					location="${build.dir}/docbook-xsl/docbook/html/chunk.xsl"/>
