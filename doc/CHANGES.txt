@@ -25,6 +25,9 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 
 - Fixed a bug in pluginmanager: transitive deps not installed when filtering
   (#3614985 - Eric Le Lay)
+
+- Fix java installer bug: Installing from jedit5.1.0install.jar failure
+   (#3837 - Eric Le Lay)
 }}}
 {{{ API Changes
 
