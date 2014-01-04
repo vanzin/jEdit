@@ -5,8 +5,8 @@
     <!-- :tabSize=2:indentSize=2:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
 
-    <section id="platform-specific-code">
-    <title> Paths, Urls, and Platform Specific Code </title>
+    <section id="utility-classes">
+    <title> Utility Classes </title>
     
     <para> If you need to check what the current running platform is, 
       see <classname>org.gjt.sp.jedit.OperatingSystem</classname>. </para>
@@ -23,6 +23,10 @@
       for reporting errors and also logging debug information. 
     </para>
 
+    <para> If your plugin needs to "find a word" (using word boundaries) somewhere 
+    in the  buffer, you might want to reuse the <classname>org.gjt.sp.jedit.TextUtilities</classname>
+    class. </para>
+    
     </section>
 
     <section id="plugin-tips-libraries">

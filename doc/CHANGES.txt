@@ -10,6 +10,8 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix for #3843: Russian localization breaks Search dialog 
+
 - Fixed Whole word search (#3614975, patch #3615185 - Benjamin Zengin)
 
 - Fixed the systray not added on EDT thread (Matthieu Casanova)

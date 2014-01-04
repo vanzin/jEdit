@@ -122,7 +122,9 @@
         on a transitional basis. While the majority of plugins are unaffected by
         most changes and will continue working, it is a good idea to monitor the
         jEdit change log, and join the <literal>jedit-devel</literal> mailing list, to keep updated on changes and bug reports, so that you will know when your
-        plugin needs to be updated.
+        plugin needs to be updated. If you allow the source code to be managed
+        by the jEdit project, then other plugin developers can help fix things
+        when they break more easily.
         </para>
     </sidebar>
 </chapter>
