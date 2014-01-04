@@ -721,19 +721,19 @@ public class SearchDialog extends EnhancedDialog
 		findBtn.addActionListener(actionHandler);
 
 		replaceBtn = new JButton(jEdit.getProperty("search.replaceBtn", "Replace"));
-		replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic")
+		replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic", "p")
 			.charAt(0));
 		grid.add(replaceBtn);
 		replaceBtn.addActionListener(actionHandler);
 
 		replaceAndFindBtn = new JButton(jEdit.getProperty("search.replaceAndFindBtn"));
-		replaceAndFindBtn.setMnemonic(jEdit.getProperty("search.replaceAndFindBtn.mnemonic")
+		replaceAndFindBtn.setMnemonic(jEdit.getProperty("search.replaceAndFindBtn.mnemonic", "R")
 			.charAt(0));
 		grid.add(replaceAndFindBtn);
 		replaceAndFindBtn.addActionListener(actionHandler);
 
 		replaceAllBtn = new JButton(jEdit.getProperty("search.replaceAllBtn"));
-		replaceAllBtn.setMnemonic(jEdit.getProperty("search.replaceAllBtn.mnemonic")
+		replaceAllBtn.setMnemonic(jEdit.getProperty("search.replaceAllBtn.mnemonic", "a")
 			.charAt(0));
 		grid.add(replaceAllBtn);
 		replaceAllBtn.addActionListener(actionHandler);
