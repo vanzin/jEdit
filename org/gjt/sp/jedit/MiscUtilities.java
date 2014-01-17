@@ -209,7 +209,7 @@ public class MiscUtilities
 
 	/** Same as abbreviate() but checks a view option which can
 	 *  disable the feature for jEdit UI components.
-	 *
+	 *  @since jEdit 5.1
 	 */
 	public static String abbreviateView(String path)
 	{
