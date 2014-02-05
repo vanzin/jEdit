@@ -30,9 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.gui.CompletionPopup;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
@@ -44,6 +42,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 public class MultiSelectWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
+	@Override
 	public Widget getWidget(View view)
 	{
 		Widget multiSelect = new MultiSelectWidget(view);
@@ -73,11 +72,13 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 			});
 		}
 
+		@Override
 		public JComponent getComponent()
 		{
 			return multiSelect;
 		}
 
+		@Override
 		public void update()
 		{
 			JEditTextArea textArea = view.getTextArea();
@@ -96,6 +97,7 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 			}
 		}
 
+		@Override
 		public void propertiesChanged()
 		{
 			// retarded GTK look and feel!
