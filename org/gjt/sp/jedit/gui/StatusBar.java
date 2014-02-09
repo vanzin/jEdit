@@ -334,6 +334,7 @@ public class StatusBar extends JPanel
 	} //}}}
 
 	//{{{ updateCaretStatus() method
+	/** Updates the status bar with information about the caret position, line number, etc */
 	public void updateCaretStatus()
 	{
 		if (showCaretStatus)
