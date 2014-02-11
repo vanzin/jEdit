@@ -38,10 +38,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -963,16 +966,24 @@ public class View extends JFrame implements InputHandlerProvider
 
 	//{{{ getBuffers() method
 	/**
-	 * Returns all Buffers opened in this View.
+	 * Returns all Buffers opened in this View,
+	 * sorted according to View options. (as of jEdit 5.2)
 	 * @since jEdit 5.1
 	 */
 	public Buffer[] getBuffers()
 	{
 		BufferSetManager mgr = jEdit.getBufferSetManager();
-		Collection<Buffer> retval = new HashSet<Buffer>();
+		Collection<Buffer> retval = null;
 		for (EditPane ep: getEditPanes())
 		{
 			BufferSet bs = ep.getBufferSet();
+			if (retval == null) {
+				Comparator<Buffer> sorter = bs.getSorter();
+				if (sorter == null)
+					retval = new HashSet<Buffer>();
+				else
+					retval = new TreeSet<Buffer>(sorter);
+			}
 			Collections.addAll(retval, bs.getAllBuffers());
 			// If scope is not editpane, then all buffersets
 			// are the same and we got what we need.
@@ -1398,11 +1409,11 @@ public class View extends JFrame implements InputHandlerProvider
 	} //}}}
 
 	//{{{ isFullScreenMode method
-	public boolean isFullScreenMode() 
+	public boolean isFullScreenMode()
 	{
 		return fullScreenMode;
 	}//}}}
-	
+
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
 	{

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import javax.annotation.Nullable;
 //}}}
 
 /** An ordered list of buffers, normally attached to an EditPane
@@ -154,6 +155,16 @@ public class BufferSet
 		return buffers.get(index);
 	} //}}}
 
+	//{{{ getSorter()
+	/** @return the Comparator used for this bufferset
+	    can be null if there is no sorting 
+		@since jEdit 5.2
+	*/
+	@Nullable
+	public Comparator<Buffer> getSorter() {
+		return sorter;
+	}//}}}
+	
 	//{{{ getPreviousBuffer() method
 	public Buffer getPreviousBuffer(int index)
 	{
@@ -349,7 +360,7 @@ public class BufferSet
 	//}}}
 
 	//{{{ NameSorter class
-	private static class NameSorter implements Comparator<Buffer>
+	public static class NameSorter implements Comparator<Buffer>
 	{
 		public int compare(Buffer o1, Buffer o2)
 		{
@@ -364,7 +375,7 @@ public class BufferSet
 	} //}}}
 
 	//{{{ PathSorter class
-	private static class PathSorter implements Comparator<Buffer>
+	public static class PathSorter implements Comparator<Buffer>
 	{
 		public int compare(Buffer o1, Buffer o2)
 		{
