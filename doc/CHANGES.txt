@@ -30,6 +30,13 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 
 - Fix java installer bug: Installing from jedit5.1.0install.jar failure
    (#3837 - Eric Le Lay)
+   
+- Several fixes for html mode: (Dale Anson/Marc Häfner)
+  #504 HTML mode: Fix mode properties in <script> blocks.
+  #3850 Html edit mode 
+  #3842 HTML syntax highlighting error: & in href 
+  #3839 Syntax highlight is wrong for some HTML file 
+  
 }}}
 {{{ API Changes
 
