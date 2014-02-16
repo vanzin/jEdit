@@ -6,7 +6,7 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer, 
 Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin, 
-Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
+Yihua Zhang, Marc Häfner, Alan Ezust and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -31,11 +31,6 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 - Fix java installer bug: Installing from jedit5.1.0install.jar failure
    (#3837 - Eric Le Lay)
    
-- Several fixes for html mode: (Dale Anson/Marc Häfner)
-  #504 HTML mode: Fix mode properties in <script> blocks.
-  #3850 Html edit mode 
-  #3842 HTML syntax highlighting error: & in href 
-  #3839 Syntax highlight is wrong for some HTML file 
   
 }}}
 {{{ API Changes
@@ -52,6 +47,8 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
   whether platform modifier symbols are desired or not. (#3615046 Makarius) 
 
 - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
+
+- View.getBuffers() returns an array that is now sorted according to View option.
 
 - New status "REMOVED" added to PluginUpdate message.
 
@@ -84,6 +81,12 @@ Yihua Zhang, Alan Ezust and Eric Le Lay for contributing to this release.
 
 - Patch to toggle word completion of words with digits.
   (#3614607, Patrick Eibl)
+
+- Several fixes for html mode: (Dale Anson/Marc Häfner)
+  #504 HTML mode: Fix mode properties in <script> blocks.
+  #3850 Html edit mode 
+  #3842 HTML syntax highlighting error: & in href 
+  #3839 Syntax highlight is wrong for some HTML file 
 
 }}}
 {{{ Miscellaneous
