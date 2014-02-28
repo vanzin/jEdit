@@ -55,6 +55,8 @@ Yihua Zhang, Marc Häfner, Alan Ezust and Eric Le Lay for contributing to this r
 }}}
 {{{ UI improvements
 
+- Important speedup of LogViewer (Matthieu Casanova)
+
 - Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
 
 - The bufferSwitcher now supports Drag&Drop (patch #3615177 - Yihua Zhang)

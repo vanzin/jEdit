@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -41,6 +43,9 @@ import org.gjt.sp.util.ThreadUtilities;
  */
 public class LogViewer extends JPanel implements DefaultFocusComponent
 {
+
+	private final ColorizerCellRenderer cellRenderer;
+
 	//{{{ LogViewer constructor
 	public LogViewer()
 	{
@@ -120,6 +125,8 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 
 		list = new LogList(listModel);
 		listModel.setList(list);
+		cellRenderer = new ColorizerCellRenderer();
+		list.setCellRenderer(cellRenderer);
 		setFilter();
 
 		add(BorderLayout.NORTH,caption);
@@ -136,7 +143,6 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
-		list.setCellRenderer( new ColorizerCellRenderer() );
 		super.setBounds(x, y, width, height);
 		scrollLaterIfRequired();
 	} //}}}
@@ -153,6 +159,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	public void addNotify()
 	{
 		super.addNotify();
+		cellRenderer.updateColors();
 		ListModel model = Log.getLogListModel();
 		model.addListDataListener(listModel);
 		model.addListDataListener(listHandler = new ListHandler());
@@ -206,6 +213,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	//{{{ propertiesChanged() method
 	private void propertiesChanged()
 	{
+		cellRenderer.updateColors();
 		list.setFont(jEdit.getFontProperty("view.font"));
 		list.setFixedCellHeight(list.getFontMetrics(list.getFont())
 					.getHeight());
@@ -350,6 +358,16 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	//{{{ ColorizerCellRenderer class
 	private static class ColorizerCellRenderer extends JLabel implements ListCellRenderer
 	{
+		private static Color debugColor;
+		private static Color messageColor;
+		private static Color noticeColor;
+		private static Color warningColor;
+		private static Color errorColor;
+
+		private ColorizerCellRenderer()
+		{
+			updateColors();
+		}
 
 		// This is the only method defined by ListCellRenderer.
 		// We just reconfigure the JLabel each time we're called.
@@ -374,30 +392,39 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				Color color = list.getForeground();
 				if (s.contains("[debug]"))
 				{
-					color = jEdit.getColorProperty("log-viewer.message.debug.color", Color.BLUE);
+					color = debugColor;
 				}
 				else if (s.contains("[message]"))
 				{
-					color = jEdit.getColorProperty("log-viewer.message.message.color", Color.BLACK);
+					color = messageColor;
 				}
 				else if (s.contains("[notice]"))
 				{
-					color = jEdit.getColorProperty("log-viewer.message.notice.color", Color.GREEN);
+					color = noticeColor;
 				}
 				else if (s.contains("[warning]"))
 				{
-					color = jEdit.getColorProperty("log-viewer.message.warning.color", Color.ORANGE);
+					color = warningColor;
 				}
 				else if (s.contains("[error]"))
 				{
-					color = jEdit.getColorProperty("log-viewer.message.error.color", Color.RED);
+					color = errorColor;
 				}
-				setForeground( color );
+				setForeground(color);
 			}
-			setEnabled( list.isEnabled() );
-			setFont( list.getFont() );
-			setOpaque( true );
+			setEnabled(list.isEnabled());
+			setFont(list.getFont());
+			setOpaque(true);
 			return this;
+		}
+
+		public void updateColors()
+		{
+			debugColor = jEdit.getColorProperty("log-viewer.message.debug.color", Color.BLUE);
+			messageColor = jEdit.getColorProperty("log-viewer.message.message.color", Color.BLACK);
+			noticeColor = jEdit.getColorProperty("log-viewer.message.notice.color", Color.GREEN);
+			warningColor = jEdit.getColorProperty("log-viewer.message.warning.color", Color.ORANGE);
+			errorColor = jEdit.getColorProperty("log-viewer.message.error.color", Color.RED);
 		}
 	} //}}}
 
@@ -418,6 +445,8 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		@Override
 		public boolean passFilter(int row, @Nullable String filter)
 		{
+			if (filter == null || filter.isEmpty())
+				return true;
 			String text = delegated.getElementAt(row).toString().toLowerCase();
 			if (!showDebug && text.contains("[debug]"))
 				return false;
@@ -429,7 +458,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				return false;
 			if (!showError && text.contains("[error]"))
 				return false;
-			return filter != null && (filter.isEmpty() || text.contains(filter));
+			return text.contains(filter);
 		}
 	} //}}}
 
