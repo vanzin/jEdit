@@ -64,7 +64,7 @@ persistentMarkers=true
 twoStageSave=true
 
 # Strip trailing EOL
-stripTrailingEOL=true
+stripTrailingEOL=false
 
 # Complete words from all open buffers
 completeFromAllBuffers=false
