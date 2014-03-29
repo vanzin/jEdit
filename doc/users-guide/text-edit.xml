@@ -1171,6 +1171,13 @@
             <para>Running searches can be stopped in the
             <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
             Progress Monitor</guimenuitem> dialog box.</para>
+
+            <para>Once the results are shown in the Hypersearch dockable, you can
+            left-click on a result to jump to the position, or right-click to see some
+            "hidden actions". From the top tree-node, for example, you can
+            <guimenuitem>Redo Hypersearch</guimenuitem>, and <guimenuitem>Copy to
+            Clipboard</guimenuitem>. </para>
+            
         </section>
 
         <section>
