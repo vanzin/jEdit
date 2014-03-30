@@ -1,6 +1,7 @@
 /*
  * SplashScreen.java - Splash screen
  * Copyright (C) 1998, 2004 Slava Pestov
+ * Copyright (C) 2014 Eric Le Lay
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,57 +33,75 @@ import org.gjt.sp.util.Log;
  */
 public class SplashScreen extends JComponent
 {
+	private static final long serialVersionUID = 1L;
+
 	//{{{ SplashScreen constructor
 	public SplashScreen()
 	{
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		setBackground(Color.white);
+		realSplash = java.awt.SplashScreen.getSplashScreen();
+		fm = getFontMetrics(labelFont);
+		if(realSplash == null)
+		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			setBackground(Color.white);
 
-		setFont(defaultFont);
-		fm = getFontMetrics(defaultFont);
-		image = getToolkit().getImage(
-			getClass().getResource("/org/gjt/sp/jedit/icons/splash.png"));
-		MediaTracker tracker = new MediaTracker(this);
-		tracker.addImage(image,0);
+			image = getToolkit().getImage(
+				getClass().getResource("/org/gjt/sp/jedit/icons/splash.png"));
+			MediaTracker tracker = new MediaTracker(this);
+			tracker.addImage(image,0);
 
-		try
-		{
-			tracker.waitForAll();
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-		Dimension screen = getToolkit().getScreenSize(); // sane default
-		win = new JWindow();
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		GraphicsDevice gd = gs[0];
-		if (gd != null)
-		{
-			GraphicsConfiguration gconf = gd.getDefaultConfiguration();
-			if (gconf != null)
+			try
 			{
-				Rectangle bounds = gconf.getBounds();
-				screen = new Dimension(bounds.width, bounds.height);
+				tracker.waitForAll();
 			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+			Dimension screen = getToolkit().getScreenSize(); // sane default
+			win = new JWindow();
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			GraphicsDevice[] gs = ge.getScreenDevices();
+			GraphicsDevice gd = gs[0];
+			if (gd != null)
+			{
+				GraphicsConfiguration gconf = gd.getDefaultConfiguration();
+				if (gconf != null)
+				{
+					Rectangle bounds = gconf.getBounds();
+					screen = new Dimension(bounds.width, bounds.height);
+				}
+			}
+			Dimension size = new Dimension(image.getWidth(this) + 2,
+				image.getHeight(this)+2);
+			win.setSize(size);
+			win.getContentPane().add(this, BorderLayout.CENTER);
+			win.setLocation((screen.width - size.width) / 2,
+				(screen.height - size.height) / 2);
+			win.validate();
+			win.setVisible(true);
 		}
-		Dimension size = new Dimension(image.getWidth(this) + 2,
-			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
-		win.setSize(size);
-
-		win.getContentPane().add(this, BorderLayout.CENTER);
-
-		win.setLocation((screen.width - size.width) / 2,
-			(screen.height - size.height) / 2);
-		win.validate();
-		win.setVisible(true);
+		else
+		{
+			win = null;
+			image=null;
+		}
 	} //}}}
 
 	//{{{ dispose() method
 	public void dispose()
 	{
-		win.dispose();
+		if(realSplash==null)
+		{
+			win.dispose();
+		}
+		else
+		{
+			if(realSplash.isVisible())
+			{
+				realSplash.close();
+			}
+		}
 	} //}}}
 
 	//{{{ advance() methods
@@ -92,15 +111,18 @@ public class SplashScreen extends JComponent
 		progress++;
 		repaint();
 
-		// wait for it to be painted to ensure progress is updated
-		// continuously
-		try
+		if(realSplash == null)
 		{
-			wait();
-		}
-		catch(InterruptedException ie)
-		{
-			Log.log(Log.ERROR,this,ie);
+			// wait for it to be painted to ensure progress is updated
+			// continuously
+			try
+			{
+				wait();
+			}
+			catch(InterruptedException ie)
+			{
+				Log.log(Log.ERROR,this,ie);
+			}
 		}
 	}
 
@@ -111,15 +133,18 @@ public class SplashScreen extends JComponent
 		this.label = label;
 		repaint();
 
-		// wait for it to be painted to ensure progress is updated
-		// continuously
-		try
+		if(realSplash == null)
 		{
-			wait();
-		}
-		catch(InterruptedException ie)
-		{
-			Log.log(Log.ERROR,this,ie);
+			// wait for it to be painted to ensure progress is updated
+			// continuously
+			try
+			{
+				wait();
+			}
+			catch(InterruptedException ie)
+			{
+				Log.log(Log.ERROR,this,ie);
+			}
 		}
 	} //}}}
 
@@ -141,41 +166,82 @@ public class SplashScreen extends JComponent
 		}
 	} //}}}
 
+	//{{{ repaint() method
+	@Override
+	public void repaint()
+	{
+		if(realSplash == null)
+		{
+			// fallback to the default code
+			super.repaint();
+			return;
+		}
+
+		Graphics2D g = realSplash.createGraphics();
+		if (g == null)
+		{
+			Log.log(Log.ERROR, SplashScreen.class,
+					"using native splash screen, but can't obtain graphics from it");
+			return;
+		}
+
+		Dimension size = realSplash.getSize();
+
+		// tell the splash screen the zone to repaint (everything)
+		g.setComposite(AlphaComposite.Clear);
+		g.fillRect(0,0,size.width,size.height);
+		g.setPaintMode();
+
+		doPaintContents(g, size);
+
+		realSplash.update();
+	} //}}}
+
 	//{{{ paintComponent() method
 	@Override
 	public synchronized void paintComponent(Graphics g)
 	{
 		Dimension size = getSize();
 
+		g.drawImage(image,1,1,this);
+
+		doPaintContents(g, size);
+
+		// for the wait() inside advance(...)
+		notify();
+	} //}}}
+
+	//{{{ doPaintContents() method
+	/**
+	 *  Code common to the native and swing splash screens
+	 */
+	private void doPaintContents(Graphics g, Dimension size)
+	{
 		g.setColor(Color.black);
 		g.drawRect(0,0,size.width - 1,size.height - 1);
 
-		g.drawImage(image,1,1,this);
-
-		// XXX: This should not be hardcoded
 		g.setColor(Color.white);
-		g.fillRect(1,image.getHeight(this) + 1,
-			((win.getWidth() - 2) * progress) / PROGRESS_COUNT, PROGRESS_HEIGHT);
+		g.fillRect(1,size.height - 1 - PROGRESS_HEIGHT,
+			((size.width - 2) * progress) / PROGRESS_COUNT, PROGRESS_HEIGHT);
 
 		g.setColor(Color.black);
 
 		if (label != null)
 		{
-			int drawOffsetX = (getWidth() - fm.stringWidth(label)) / 2;
-			int drawOffsetY = image.getHeight(this) + (PROGRESS_HEIGHT
-							      + fm.getAscent() + fm.getDescent()) / 2;
+			int drawOffsetX = (size.width - fm.stringWidth(label)) / 2;
+			int drawOffsetY = size.height - 2 - PROGRESS_HEIGHT
+					+ (PROGRESS_HEIGHT + fm.getAscent() + fm.getDescent()) / 2;
 
 			paintString(g, label, drawOffsetX, drawOffsetY);
 		}
 
 		String version = "version " + jEdit.getVersion();
 
-		int drawOffsetX = (getWidth() / 2) - (fm.stringWidth(version) / 2);
-		int drawOffsetY = image.getHeight(this) - fm.getDescent() - 2;
+		int drawOffsetX = (size.width / 2) - (fm.stringWidth(version) / 2);
+		int drawOffsetY = size.height - PROGRESS_HEIGHT - fm.getDescent() - 3;
 
 		paintString(g, version, drawOffsetX, drawOffsetY);
 
-		notify();
 	} //}}}
 
 	//{{{ paintString() method
@@ -202,9 +268,9 @@ public class SplashScreen extends JComponent
 	private String lastLabel;
 	private long firstAdvanceTime = System.currentTimeMillis();
 	private long lastAdvanceTime = System.currentTimeMillis();
-	private Font defaultFont = new Font("Dialog",Font.PLAIN,10);
 	private Font labelFont = UIManager.getFont("Label.font").deriveFont(9.8f);
 	private Color versionColor1 = new Color(55, 55, 55);
 	private Color versionColor2 = new Color(255, 255, 255, 50);
+	private java.awt.SplashScreen realSplash;
 	//}}}
 }

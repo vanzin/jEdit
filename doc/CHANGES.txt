@@ -78,6 +78,8 @@ Yihua Zhang, Marc Häfner, Alan Ezust and Eric Le Lay for contributing to this r
 
 - In plugin manager's install panel plugin dependencies are unchecked
   if they are not required (Eric Le Lay)
+
+- Use a native splash screen if available (patch #519 - Eric Le Lay)
 }}}
 {{{ Editing
 
