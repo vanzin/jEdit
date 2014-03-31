@@ -80,6 +80,9 @@ Yihua Zhang, Marc Häfner, Alan Ezust and Eric Le Lay for contributing to this r
   if they are not required (Eric Le Lay)
 
 - Use a native splash screen if available (patch #519 - Eric Le Lay)
+
+- Improved layout manager for text area (patch #518 - Dale Anson)
+
 }}}
 {{{ Editing
 

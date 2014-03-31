@@ -4744,7 +4744,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		add(ScrollLayout.TOP,comp);
 	} //}}}
-
+	
 	//{{{ removeTopComponent() method
 	/**
 	 * Removes a component from above the gutter, text area, and vertical scroll bar.
@@ -4754,6 +4754,50 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void removeTopComponent(Component comp)
 	{
 		remove(comp);
+	} //}}}
+
+	//{{{ addTopLeftComponent() method	
+	/**
+	 * Adds a component above the gutter.
+	 *
+	 * @since jEdit 5.2pre1
+	 */
+	public void addTopLeftComponent(Component comp)
+	{
+		add(ScrollLayout.TOP_LEFT, comp);
+	} //}}}
+	
+	//{{{ addTopRightComponent() method
+	/**
+	 * Adds a component above the vertical scroll bar.
+	 *
+	 * @since jEdit 5.2pre1
+	 */
+	public void addTopRightComponent(Component comp)
+	{
+		add(ScrollLayout.TOP_RIGHT, comp);
+	} //}}}
+	
+	//{{{ addBottomLeftComponent() method
+	/**
+	 * Adds a component below the gutter.
+	 *
+	 * @since jEdit 5.2pre1
+	 */
+	public void addBottomLeftComponent(Component comp)
+	{
+		add(ScrollLayout.BOTTOM_LEFT, comp);
+	} //}}}
+	
+	//{{{ addBottomLeftComponent() method
+	/**
+	 * Adds a component below the vertical scroll bar.
+	 *
+	 * @since jEdit 5.2pre1
+	 */
+	public void addBottomRightComponent(Component comp)
+	{
+		add(ScrollLayout.BOTTOM_RIGHT, comp);
 	} //}}}
 
 	//{{{ getInputMethodRequests() method
