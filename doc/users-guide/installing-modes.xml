@@ -69,4 +69,14 @@
         an edit mode in the system catalog, the version in the user-specific
         catalog will override the system default.</para>
     </tip>
+
+    <para> When a buffer is opened, jEdit must choose an edit mode for that buffer.
+    It checks conditions in this order to decide which edit mode to use: </para>
+
+    <orderedlist>
+    <listitem><para> the filename is an exact match for the <literal>FILE_NAME_GLOB</literal>. </para></listitem>
+    <listitem><para> the filename matches the <literal>FILE_NAME_GLOB</literal> and the first line of the file matches the <literal>FIRST_LINE_GLOB</literal></para></listitem>
+    <listitem><para> the filename matches the <literal>FILE_NAME_GLOB</literal> </para></listitem>
+    <listitem><para> the first line of the file matches the <literal>FIRST_LINE_GLOB</literal></para></listitem>
+    </orderedlist>
 </chapter>
