@@ -50,9 +50,10 @@ public class MouseHandler extends TextAreaMouseHandler
 	{
 		showCursor();
 
-		if (evt.getButton() == MouseEvent.NOBUTTON)
+		int btn = evt.getButton();
+		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
 		{
-			// Suppress presses with no button, to avoid
+			// Suppress presses with unknown button, to avoid
 			// problems due to horizontal scrolling.
 			return;
 		}
@@ -141,9 +142,10 @@ public class MouseHandler extends TextAreaMouseHandler
 	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
-		if (evt.getButton() == MouseEvent.NOBUTTON)
+		int btn = evt.getButton();
+		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
 		{
-			// Suppress releases with no button, to avoid
+			// Suppress releases with unknown button, to avoid
 			// problems due to horizontal scrolling.
 			return;
 		}
