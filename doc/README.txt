@@ -3,7 +3,7 @@ jEdit README
 * About jEdit
 
 jEdit is a cross platform programmer's text editor written in Java.
-jEdit requires Java 2 version 1.7 or later.
+jEdit requires Java 7 Runtime or later.
 It will not run with earlier versions of Java.
 
 jEdit comes with full online help; to read it, select 'jEdit Help' from

@@ -27,7 +27,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
   - Sun's javadoc tool, which is included in the JDK.
     Get it from <http://www.java.com/download> or from your package
-    manager - e. g. sun-java6-jdk.
+    manager - e. g. sun-java7-jdk.
 
  For building the windows installer (for the final step):
 
