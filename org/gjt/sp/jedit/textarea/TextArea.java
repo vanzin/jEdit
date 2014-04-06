@@ -39,6 +39,7 @@ import java.awt.*;
 import java.awt.im.InputMethodRequests;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.LayerUI;
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 
@@ -105,12 +106,14 @@ public abstract class TextArea extends JComponent
 		add(ScrollLayout.LEFT,gutter);
 
 		// some plugins add stuff in a "right-hand" gutter
+		RequestFocusLayerUI reqFocus = new RequestFocusLayerUI();
 		verticalBox = new Box(BoxLayout.X_AXIS);
-		verticalBox.add(vertical = new JScrollBar(Adjustable.VERTICAL));
+		verticalBox.add(new JLayer(
+			vertical = new JScrollBar(Adjustable.VERTICAL), reqFocus));
 		vertical.setRequestFocusEnabled(false);
 		add(ScrollLayout.RIGHT,verticalBox);
-		add(ScrollLayout.BOTTOM,
-			horizontal = new JScrollBar(Adjustable.HORIZONTAL));
+		add(ScrollLayout.BOTTOM, new JLayer(
+			horizontal = new JScrollBar(Adjustable.HORIZONTAL), reqFocus));
 		horizontal.setRequestFocusEnabled(false);
 
 		horizontal.setValues(0,0,0,0);
@@ -6722,6 +6725,34 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				}
 			}
 		}
+	} //}}}
+
+	//{{{ RequestFocusLayerUI class
+	private class RequestFocusLayerUI extends LayerUI<JComponent>
+	{
+		//{{{ processMouseEvent() method
+		@Override
+		protected void processMouseEvent(MouseEvent e, JLayer<? extends JComponent> l)
+		{
+			if (e.getID() == MouseEvent.MOUSE_PRESSED)
+			{
+				requestFocus();
+			}
+		} //}}}
+
+		//{{{ installUI() method
+		@Override
+		public void installUI(JComponent c) {
+			super.installUI(c);
+			((JLayer)c).setLayerEventMask(AWTEvent.MOUSE_EVENT_MASK);
+		} //}}}
+
+		//{{{ uninstallUI() method
+		@Override
+		public void uninstallUI(JComponent c) {
+			super.uninstallUI(c);
+			((JLayer)c).setLayerEventMask(0);
+		} //}}}
 	} //}}}
 
 	//}}}

@@ -950,12 +950,14 @@ public class Gutter extends JComponent implements SwingConstants
 				if (e.getX() >= FOLD_MARKER_SIZE)
 				{
 					selectionStart = textArea.getLineStartOffset(line);
+					int selectionEnd = getFoldEndOffset(line);
 					Selection s = new Selection.Range(
-						selectionStart, getFoldEndOffset(line));
+						selectionStart, selectionEnd);
 					if(textArea.isMultipleSelectionEnabled())
 						textArea.addToSelection(s);
 					else
 						textArea.setSelection(s);
+					textArea.moveCaretPosition(selectionEnd, false);
 					selectLines = true;
 					selAnchorLine = line;
 					return;
@@ -1086,11 +1088,13 @@ public class Gutter extends JComponent implements SwingConstants
 				{
 					selStart = textArea.getLineStartOffset(line);
 					selEnd = getFoldEndOffset(selAnchorLine);
+					textArea.moveCaretPosition(selStart, false);
 				}
 				else
 				{
 					selStart = textArea.getLineStartOffset(selAnchorLine);
 					selEnd = getFoldEndOffset(line);
+					textArea.moveCaretPosition(selEnd, false);
 				}
 
 				textArea.resizeSelection(selStart, selEnd, 0, false);

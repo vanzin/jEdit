@@ -6,8 +6,8 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer, 
 Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin, 
-Yihua Zhang, Marc Häfner, EdorFaus, Alan Ezust and Eric Le Lay for contributing to this
-release.
+Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Alan Ezust and Eric Le Lay for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -56,7 +56,11 @@ release.
 }}}
 {{{ UI improvements
 
-- Fix for the scroll click suppression [patches:#505] (EdorFaus)
+- Focus the text area when scroll bar is clicked (patch #521 - Jordan Miner)
+
+- Selecting line from gutter should move caret (patch #520 - Jordan Miner)
+
+- Fix for the scroll click suppression (patch #505 - EdorFaus)
 
 - Important speedup of LogViewer (Matthieu Casanova)
 
