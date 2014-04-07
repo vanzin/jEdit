@@ -1716,6 +1716,8 @@ helpviewer.title=Помощь jEdit
 helpviewer.loading=Загрузка...
 helpviewer.back.label=Назад
 helpviewer.forward.label=Вперёд
+# FIXME: missing translation
+helpviewer.copy-link.label=Copy link to clipboard
 
 helpviewer.toc.loading=Загрузка...
 helpviewer.toc.label=Содержание

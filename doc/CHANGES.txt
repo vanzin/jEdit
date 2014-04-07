@@ -90,6 +90,7 @@ contributing to this release.
 
 - Improved layout manager for text area (patch #518 - Dale Anson)
 
+- "Copy link to clipboard" popup menu in HelpViewer (Eric Le Lay)
 }}}
 {{{ Editing
 

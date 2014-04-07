@@ -1731,6 +1731,8 @@ helpviewer.title=jEdit Pomoc
 helpviewer.loading=Načítání...
 helpviewer.back.label=Zpět
 helpviewer.forward.label=Dopředu
+# FIXME: no translation
+helpviewer.copy-link.label=Copy link to clipboard
 
 helpviewer.toc.loading=Načítání...
 helpviewer.toc.label=Obsah

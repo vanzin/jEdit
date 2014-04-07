@@ -27,12 +27,18 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
+import java.awt.datatransfer.StringSelection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -48,7 +54,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -60,6 +68,10 @@ import javax.swing.event.HyperlinkListener;
 
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
+import javax.swing.text.html.HTML;
+
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Element;
 
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -82,6 +94,8 @@ import static org.gjt.sp.jedit.help.HelpHistoryModel.HistoryEntry;
  */
 public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHistoryModelListener
 {
+	private static final long serialVersionUID = 1L;
+
 	//{{{ HelpViewer constructor
 	/**
 	 * Creates a new help viewer with the default help page.
@@ -116,7 +130,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 		try
 		{
 			baseURL = new File(MiscUtilities.constructPath(
-				jEdit.getJEditHome(),"doc")).toURL().toString();
+				jEdit.getJEditHome(),"doc")).toURI().toURL().toString();
 		}
 		catch(MalformedURLException mu)
 		{
@@ -160,6 +174,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 		viewer.setFont(jEdit.getFontProperty("helpviewer.font"));
 		viewer.addPropertyChangeListener(new PropertyChangeHandler());
 		viewer.addKeyListener(new KeyHandler());
+		viewer.addMouseListener(new MouseHandler());
 
 		viewerScrollPane = new JScrollPane(viewer);
 
@@ -572,9 +587,76 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 				scrollBar.setValue(scrollBar.getValue()+scrollBar.getUnitIncrement(1));
 				ke.consume();
 				break;
+			case KeyEvent.VK_HOME:
+				scrollBar = viewerScrollPane.getHorizontalScrollBar();
+				scrollBar.setValue(0);
+				scrollBar = viewerScrollPane.getVerticalScrollBar();
+				scrollBar.setValue(0);
+				ke.consume();
+				break;
+			case KeyEvent.VK_END:
+				scrollBar = viewerScrollPane.getHorizontalScrollBar();
+				scrollBar.setValue(scrollBar.getMaximum());
+				scrollBar = viewerScrollPane.getVerticalScrollBar();
+				scrollBar.setValue(scrollBar.getMaximum());
+				ke.consume();
+				break;
 			}
 		}
 	} //}}}
 
+	//{{{ MouseHandler class
+	private class MouseHandler extends MouseAdapter
+	{
+		@Override
+		public void mousePressed(MouseEvent me)
+		{
+			if(me.isPopupTrigger())
+			{
+				handlePopupTrigger(me);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent me)
+		{
+			if(me.isPopupTrigger())
+			{
+				handlePopupTrigger(me);
+			}
+		}
+
+		private void handlePopupTrigger(MouseEvent me)
+		{
+            int caret = viewer.getUI().viewToModel(viewer, me.getPoint());
+            if (caret >= 0 && viewer.getDocument() instanceof HTMLDocument)
+            {
+                HTMLDocument hdoc = (HTMLDocument) viewer.getDocument();
+                Element elem = hdoc.getCharacterElement(caret);
+                if (elem.getAttributes().getAttribute(HTML.Tag.A) != null)
+                {
+                    Object attribute = elem.getAttributes().getAttribute(HTML.Tag.A);
+                    if (attribute instanceof AttributeSet)
+                    {
+                        AttributeSet set = (AttributeSet) attribute;
+                        final String href = (String) set.getAttribute(HTML.Attribute.HREF);
+                        if (href != null)
+                        {
+							JPopupMenu popup = new JPopupMenu();
+							JMenuItem copy = popup.add(jEdit.getProperty("helpviewer.copy-link.label"));
+							copy.addActionListener(new ActionListener(){
+								public void actionPerformed(ActionEvent e)
+								{
+									StringSelection url = new StringSelection(href);
+									Toolkit.getDefaultToolkit().getSystemClipboard().setContents(url, url);
+								}
+							});
+							popup.show(viewer, me.getX(), me.getY());
+                        }
+                    }
+                }
+            }
+		}
+	} //}}}
 	//}}}
 }

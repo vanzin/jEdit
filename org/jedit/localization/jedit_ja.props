@@ -1723,6 +1723,8 @@ helpviewer.title=jEdit ヘルプ
 helpviewer.loading=ロード中...
 helpviewer.back.label=戻る
 helpviewer.forward.label=進む
+# FIXME: no translation
+helpviewer.copy-link.label=Copy link to clipboard
 
 helpviewer.toc.loading=ロード中...
 helpviewer.toc.label=コンテンツ

@@ -1761,6 +1761,8 @@ helpviewer.title=jEdit Hilfe
 helpviewer.loading=Laden...
 helpviewer.back.label=Zurück
 helpviewer.forward.label=Vorwärts
+# FIXME: is it ok?
+helpviewer.copy-link.label=Copy-link
 
 helpviewer.toc.loading=Laden...
 helpviewer.toc.label=Inhalt

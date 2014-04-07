@@ -1728,6 +1728,7 @@ helpviewer.title=Aide de jEdit
 helpviewer.loading=Chargement en cours...
 helpviewer.back.label=Précédente
 helpviewer.forward.label=Suivante
+helpviewer.copy-link.label=Copier l'adresse du lien
 
 helpviewer.toc.loading=Chargement en cours...
 helpviewer.toc.label=Contenus

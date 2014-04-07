@@ -1710,6 +1710,8 @@ helpviewer.title=jEdit帮助
 helpviewer.loading=加载...
 helpviewer.back.label=返回
 helpviewer.forward.label=向前
+# FIXME: missing translation
+helpviewer.copy-link.label=Copy link to clipboard
 
 helpviewer.toc.loading=加载...
 helpviewer.toc.label=目录
