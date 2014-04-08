@@ -4,35 +4,34 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer, 
-Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin, 
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
+Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin,
 Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Alan Ezust and Eric Le Lay for
 contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix for #3843: Russian localization breaks Search dialog 
+- Fix for bug #3843: Russian localization breaks Search dialog
 
-- Fixed Whole word search (#3614975, patch #3615185 - Benjamin Zengin)
+- Fixed Whole word search (bug #3824, patch #516 - Benjamin Zengin)
 
 - Fixed the systray not added on EDT thread (Matthieu Casanova)
 
 - Fix the integration with Unity and other Linux Desktop Environments,
-  broken by Patch #3582760. (Björn "Vampire" Kautler)
+  broken by patch #464 (Björn "Vampire" Kautler)
 
 - Reload optionally dependent plugins when a plugin is unloaded.
-  (#3614456 - Dale Anson)
+  (bug #3807 - Dale Anson)
 
-- Applied patch #3615045 (Makarius), plus some additional cleanup of setting 
+- Applied patch #513 (Makarius), plus some additional cleanup of setting
   the look and feel (Dale Anson)
 
 - Fixed a bug in pluginmanager: transitive deps not installed when filtering
-  (#3614985 - Eric Le Lay)
+  (bug #3825 - Eric Le Lay)
 
 - Fix java installer bug: Installing from jedit5.1.0install.jar failure
-   (#3837 - Eric Le Lay)
-   
-  
+   (bug #3837 - Eric Le Lay)
+
 }}}
 {{{ API Changes
 
@@ -42,10 +41,10 @@ contributing to this release.
 - jEdit now depends on Java 1.7
 
 - New method: VFSFile.getModified() which allows sorting by date in the FSB
-  for other VFSs (Patch #3615214 Yihua Zhang)
+  for other VFSs (plugin patch #161 Yihua Zhang)
 
 - GUIUtilities.getShortcutLabel() has a second boolean argument to specify
-  whether platform modifier symbols are desired or not. (#3615046 Makarius) 
+  whether platform modifier symbols are desired or not. (patch #514 Makarius)
 
 - Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
 
@@ -66,20 +65,20 @@ contributing to this release.
 
 - Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
 
-- The bufferSwitcher now supports Drag&Drop (patch #3615177 - Yihua Zhang)
+- The bufferSwitcher now supports Drag&Drop (patch #515 - Yihua Zhang)
 
-- Added "loading" icon for task status bar widget (request #3615068 -
+- Added "loading" icon for task status bar widget (request #474 -
   Matthieu Casanova)
 
 - The TextArea will not scroll anymore when dragging files on jEdit
   (Matthieu Casanova)
 
 - EnhancedDialog instances (Search/Replace, Options, Open) now can be closed
-  using a single-key close-buffer.shortcut. (#3613007, #3588892 - László Schmidt,
-  Zsombor Franczia, Bence Pintér)
+  using a single-key close-buffer.shortcut. (patch #497, request #454 -
+  László Schmidt, Zsombor Franczia, Bence Pintér)
 
 - Plugin dependencies are shown in the plugin manager details pane for all three
-  tabs. (#3614465 - Dale Anson)
+  tabs. (request #469 - Dale Anson)
 
 - Increased the scrolling speed in option pane (Matthieu Casanova)
 
@@ -95,13 +94,13 @@ contributing to this release.
 {{{ Editing
 
 - Patch to toggle word completion of words with digits.
-  (#3614607, Patrick Eibl)
+  (patch #503, Patrick Eibl)
 
 - Several fixes for html mode: (Dale Anson/Marc Häfner)
-  #504 HTML mode: Fix mode properties in <script> blocks.
-  #3850 Html edit mode 
-  #3842 HTML syntax highlighting error: & in href 
-  #3839 Syntax highlight is wrong for some HTML file 
+  patch #504 HTML mode: Fix mode properties in <script> blocks.
+  bug #3850 Html edit mode
+  bug #3842 HTML syntax highlighting error: & in href
+  bug #3839 Syntax highlight is wrong for some HTML file
 
 }}}
 {{{ Miscellaneous
@@ -109,10 +108,10 @@ contributing to this release.
 - MiscUtilities.expandVariables() converts from Windows to Linux-style paths
   when necessary (the reverse was already true). (Alan Ezust)
 
-- New macros: Go To Offset, Reverse Selection (#3614563, #3614564 Thomas Meyer)
+- New macros: Go To Offset, Reverse Selection (patch #501, #502 Thomas Meyer)
 
-- Removed some no longer needed pre-Java7 MacOSX key handling workaround code 
-    (#3615043, #3615044 Makarius, Alan Ezust) 
+- Removed some no longer needed pre-Java7 MacOSX key handling workaround code
+    (patch #511, #512, Makarius, Alan Ezust)
 
 }}}
 
