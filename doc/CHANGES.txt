@@ -55,6 +55,9 @@ contributing to this release.
 }}}
 {{{ UI improvements
 
+- KP_ARROW keys now behave the same way as the regular arrow keys,
+  with modifiers, on all platforms. (startup/startup.bsh:100 - Alan Ezust)
+
 - Focus the text area when scroll bar is clicked (patch #521 - Jordan Miner)
 
 - Selecting line from gutter should move caret (patch #520 - Jordan Miner)
