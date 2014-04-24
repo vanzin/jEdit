@@ -5,7 +5,7 @@ jEdit 5.2 version history
 {{{ Version 5.2pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
-Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér Makarius, Benjamin Zengin,
+Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér, Makarius, Benjamin Zengin,
 Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Alan Ezust and Eric Le Lay for
 contributing to this release.
 
@@ -35,10 +35,10 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- jEdit now depends on Java 1.7
+
 - StandardUtilities.objectsEqual() is deprecated as Objects.equals() does the
   same job in Java 7 (Matthieu Casanova)
-
-- jEdit now depends on Java 1.7
 
 - New method: VFSFile.getModified() which allows sorting by date in the FSB
   for other VFSs (plugin patch #161 Yihua Zhang)
@@ -54,6 +54,9 @@ contributing to this release.
 
 }}}
 {{{ UI improvements
+
+- OptionsDialog now remembers and restores the last selected pane
+  under more circumstances (See Project Option pane for example) (Alan Ezust)
 
 - KP_ARROW keys now behave the same way as the regular arrow keys,
   with modifiers, on all platforms. (startup/startup.bsh:100 - Alan Ezust)

@@ -90,13 +90,11 @@ public abstract class OptionsDialog extends EnhancedDialog
 	{
 		getDefaultGroup().addOptionPane(pane);
 	} //}}}
-
+	
 	//{{{ ok() method
 	@Override
 	public void ok()
 	{
-		if(currentPane != null)
-			jEdit.setProperty(name + ".last",currentPane.getName());
 		ok(true);
 	} //}}}
 
@@ -112,6 +110,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ ok() method
 	public void ok(boolean dispose)
 	{
+		if(currentPane != null)
+			jEdit.setProperty(name + ".last",currentPane.getName());
+	
 		OptionTreeModel m = (OptionTreeModel) paneTree
 			.getModel();
 		save(m.getRoot());
@@ -294,9 +295,11 @@ public abstract class OptionsDialog extends EnhancedDialog
 	protected void init(String name, String pane)
 	{
 		this.name = name;
-
 		deferredOptionPanes = new HashMap<Object, OptionPane>();
 
+		if (pane == null) 
+			pane = jEdit.getProperty(name + ".last");		
+		
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
