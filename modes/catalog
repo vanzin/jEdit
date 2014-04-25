@@ -411,6 +411,10 @@
 <MODE NAME="PostgreSQL" FILE="pg-sql.xml"
 							FILE_NAME_GLOB="*.{pg_sql,pg-sql}" />
 
+<MODE NAME="PowerCenter Parameter File"
+    FILE="powercenter_parameter_file.xml" FILE_NAME_GLOB="*.par" />
+							
+							
 <MODE NAME="pl-sql"		FILE="osql.xml"
                            FILE_NAME_GLOB="*.{pls,sql}" />
 

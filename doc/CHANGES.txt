@@ -6,8 +6,8 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
 Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér, Makarius, Benjamin Zengin,
-Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Alan Ezust and Eric Le Lay for
-contributing to this release.
+Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Thiemo Kellner, Alan Ezust,
+and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -56,7 +56,7 @@ contributing to this release.
 {{{ UI improvements
 
 - OptionsDialog now remembers and restores the last selected pane
-  under more circumstances (See Project Option pane for example) (Alan Ezust)
+  under more circumstances (See Project Options Dialog for example) (Alan Ezust)
 
 - KP_ARROW keys now behave the same way as the regular arrow keys,
   with modifiers, on all platforms. (startup/startup.bsh:100 - Alan Ezust)
@@ -101,6 +101,8 @@ contributing to this release.
 
 - Patch to toggle word completion of words with digits.
   (patch #503, Patrick Eibl)
+
+- New PowerCenter Parameter File format (Patch # 524, Thiemo Kellner)
 
 - Several fixes for html mode: (Dale Anson/Marc Häfner)
   patch #504 HTML mode: Fix mode properties in <script> blocks.
