@@ -55,8 +55,12 @@ and Eric Le Lay for contributing to this release.
 }}}
 {{{ UI improvements
 
+- Relative line offsets are allowed in "Goto Line" dialog. (Patch #526, 
+  Feature Request # 286, grepppo)
+
 - OptionsDialog now remembers and restores the last selected pane
-  under more circumstances (See Project Options Dialog for example) (Alan Ezust)
+  under more circumstances. See Project Options Dialog for example.
+  (Alan Ezust)
 
 - KP_ARROW keys now behave the same way as the regular arrow keys,
   with modifiers, on all platforms. (startup/startup.bsh:100 - Alan Ezust)

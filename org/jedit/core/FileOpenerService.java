@@ -1,6 +1,6 @@
 /* FileOpenerService.java
  * :tabSize=4:indentSize=4:noTabs=false:
- * :folding=explicit:collapseFolds=1:
+ * :folding=sidekick:collapseFolds=1:
  *
  * Copyright © 2012 Alan Ezust
  *
