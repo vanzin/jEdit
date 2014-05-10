@@ -450,7 +450,9 @@
 
         <para><guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line</guimenuitem>
         (shortcut: <keycap>C+l</keycap>) prompts for a line number and moves the
-        caret there.</para>
+        caret there. A relative offset can be used here, if it is prefixed by
+        a + or a - sign. So for example <literal>-5</literal> moves the caret up by
+        5 lines. </para>
 
         <para><guimenu>Edit</guimenu>&gt;<guisubmenu>More
         Selection</guisubmenu>&gt;<guimenuitem>Select Line Range</guimenuitem>
