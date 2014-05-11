@@ -6,8 +6,8 @@ jEdit 5.2 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
 Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér, Makarius, Benjamin Zengin,
-Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Thiemo Kellner, Alan Ezust,
-and Eric Le Lay for contributing to this release.
+Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Thiemo Kellner, Tim Blackler,
+Alan Ezust, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -56,7 +56,7 @@ and Eric Le Lay for contributing to this release.
 {{{ UI improvements
 
 - Relative line offsets are allowed in "Goto Line" dialog. (Patch #526, 
-  Feature Request # 286, grepppo)
+  Feature Request #286, Tim Blackler)
 
 - OptionsDialog now remembers and restores the last selected pane
   under more circumstances. See Project Options Dialog for example.
