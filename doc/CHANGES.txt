@@ -1,132 +1,21 @@
-jEdit 5.2 version history
-       (changes since jEdit 5.1.0)
+jEdit 5.3 version history
+       (changes since jEdit 5.2pre1
 :encoding=UTF-8:
 
 {{{ Version 5.2pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
-Patrick Eibl, László Schmidt, Zsombor Franczia, Bence Pintér, Makarius, Benjamin Zengin,
-Yihua Zhang, Marc Häfner, EdorFaus, Jordan Miner, Thiemo Kellner, Tim Blackler,
-Alan Ezust, and Eric Le Lay for contributing to this release.
+Thanks to Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
-
-- Fix for bug #3843: Russian localization breaks Search dialog
-
-- Fixed Whole word search (bug #3824, patch #516 - Benjamin Zengin)
-
-- Fixed the systray not added on EDT thread (Matthieu Casanova)
-
-- Fix the integration with Unity and other Linux Desktop Environments,
-  broken by patch #464 (Björn "Vampire" Kautler)
-
-- Reload optionally dependent plugins when a plugin is unloaded.
-  (bug #3807 - Dale Anson)
-
-- Applied patch #513 (Makarius), plus some additional cleanup of setting
-  the look and feel (Dale Anson)
-
-- Fixed a bug in pluginmanager: transitive deps not installed when filtering
-  (bug #3825 - Eric Le Lay)
-
-- Fix java installer bug: Installing from jedit5.1.0install.jar failure
-   (bug #3837 - Eric Le Lay)
-
 }}}
 {{{ API Changes
-
-- jEdit now depends on Java 1.7
-
-- StandardUtilities.objectsEqual() is deprecated as Objects.equals() does the
-  same job in Java 7 (Matthieu Casanova)
-
-- New method: VFSFile.getModified() which allows sorting by date in the FSB
-  for other VFSs (plugin patch #161 Yihua Zhang)
-
-- GUIUtilities.getShortcutLabel() has a second boolean argument to specify
-  whether platform modifier symbols are desired or not. (patch #514 Makarius)
-
-- Removed deprecated (ambiguous) overloads of IOUtilities.closeQuietly().
-
-- View.getBuffers() returns an array that is now sorted according to View option.
-
-- New status "REMOVED" added to PluginUpdate message.
-
 }}}
 {{{ UI improvements
-
-- Relative line offsets are allowed in "Goto Line" dialog. (Patch #526, 
-  Feature Request #286, Tim Blackler)
-
-- OptionsDialog now remembers and restores the last selected pane
-  under more circumstances. See Project Options Dialog for example.
-  (Alan Ezust)
-
-- KP_ARROW keys now behave the same way as the regular arrow keys,
-  with modifiers, on all platforms. (startup/startup.bsh:100 - Alan Ezust)
-
-- Focus the text area when scroll bar is clicked (patch #521 - Jordan Miner)
-
-- Selecting line from gutter should move caret (patch #520 - Jordan Miner)
-
-- Fix for the scroll click suppression (patch #505 - EdorFaus)
-
-- Important speedup of LogViewer (Matthieu Casanova)
-
-- Support for shortcuts to "copy" the error in Error widget (Matthieu Casanova)
-
-- The bufferSwitcher now supports Drag&Drop (patch #515 - Yihua Zhang)
-
-- Added "loading" icon for task status bar widget (request #474 -
-  Matthieu Casanova)
-
-- The TextArea will not scroll anymore when dragging files on jEdit
-  (Matthieu Casanova)
-
-- EnhancedDialog instances (Search/Replace, Options, Open) now can be closed
-  using a single-key close-buffer.shortcut. (patch #497, request #454 -
-  László Schmidt, Zsombor Franczia, Bence Pintér)
-
-- Plugin dependencies are shown in the plugin manager details pane for all three
-  tabs. (request #469 - Dale Anson)
-
-- Increased the scrolling speed in option pane (Matthieu Casanova)
-
-- In plugin manager's install panel plugin dependencies are unchecked
-  if they are not required (Eric Le Lay)
-
-- Use a native splash screen if available (patch #519 - Eric Le Lay)
-
-- Improved layout manager for text area (patch #518 - Dale Anson)
-
-- "Copy link to clipboard" popup menu in HelpViewer (Eric Le Lay)
 }}}
 {{{ Editing
-
-- Patch to toggle word completion of words with digits.
-  (patch #503, Patrick Eibl)
-
-- New PowerCenter Parameter File format (Patch # 524, Thiemo Kellner)
-
-- Several fixes for html mode: (Dale Anson/Marc Häfner)
-  patch #504 HTML mode: Fix mode properties in <script> blocks.
-  bug #3850 Html edit mode
-  bug #3842 HTML syntax highlighting error: & in href
-  bug #3839 Syntax highlight is wrong for some HTML file
-
 }}}
 {{{ Miscellaneous
-
-- MiscUtilities.expandVariables() converts from Windows to Linux-style paths
-  when necessary (the reverse was already true). (Alan Ezust)
-
-- New macros: Go To Offset, Reverse Selection (patch #501, #502 Thomas Meyer)
-
-- Removed some no longer needed pre-Java7 MacOSX key handling workaround code
-    (patch #511, #512, Makarius, Alan Ezust)
-
 }}}
-
 }}}
 
 jEdit buffer local properties:

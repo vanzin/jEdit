@@ -130,7 +130,8 @@ public class VFSFileNameField extends HistoryTextField
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			char ch = evt.getKeyChar();
-			if(ch > 0x20 && ch != 0x7f && ch != 0xff)
+			//adding 0x20(space) and 0x16(ctrl+V) solved bug #3852
+			if((ch >= 0x20 || ch == 0x16) && ch != 0x7f && ch != 0xff)
 			{
 				super.processKeyEvent(evt);
 				String path = getText();
