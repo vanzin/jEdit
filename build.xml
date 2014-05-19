@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project name="jedit"
 	 default="build"
 	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"
@@ -20,7 +21,7 @@
 		  value="1.7+"/>
 	<!-- based on http://packages.slackverse.org/?v=1&p=92 -->
 	<property name="slackware.target.java.version"
-		  value="1_7"/>
+		  value="1_7_0"/>
 
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
@@ -424,7 +425,8 @@
 
 	<target name="test"
 		depends="init,retrieve,compile,compile-test"
-		description="run unit tests" unless="skip.tests">
+		description="run unit tests"
+		unless="skip.tests">
 		<delete dir="${build.dir}/test/raw-reports"/>
 		<mkdir dir="${build.dir}/test/raw-reports"/>
 		<junit printsummary="true"
@@ -786,6 +788,7 @@
 					 windowtitle="jEdit API Documentation"
 					 doctitle="jEdit API"
 					 failonerror="true"
+					 source="${target.java.version}"
 					 encoding="UTF-8"
 					 docencoding="UTF-8"
 					 charset="UTF-8">
@@ -805,7 +808,7 @@
 			</contrib:else>
 		</contrib:if>
 	</target>
- 
+
 	<target name="docs-javadoc"
 		depends="init,generate-javadoc"
 		description="generate JavaDoc API docs">
@@ -814,7 +817,6 @@
 				 includes="api/**"
 				 excludes="api/**/*.html"/>
 		</copy>
-
 		<copy todir="${jar.location}/doc">
 			<fileset dir="${classes.dir}/javadoc"
 				 includes="api/**/*.html"/>
@@ -832,8 +834,8 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
-        <copy todir="${jar.location}/doc/api" overwrite="true" flatten="true"
-            file="${basedir}/doc/stylesheet.css"/>
+		<copy todir="${jar.location}/doc/api" overwrite="true" flatten="true"
+		      file="${basedir}/doc/stylesheet.css"/>
 	</target>
 
 	<target name="generate-pdf-users-guide"
