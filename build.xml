@@ -1202,6 +1202,7 @@
 				   arguments="-background"
 				   build="${jedit.build.number}"
 				   bundleid="org.gjt.sp.jedit"
+				   developmentregion="English"
 				   extraclasspath="/System/Library/Java"
 				   icon="icons/icon.icns"
 				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
@@ -1209,13 +1210,10 @@
 				   shortname="jEdit"
 				   signature="JESP"
 				   stubfile="jedit"
-				   version="${jedit.version}">
-			<javaproperty name="apple.awt.antialiasing" value="true"/>
-			<javaproperty name="apple.awt.textantialiasing" value="true"/>
-			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
-			<!-- Commented due https://sourceforge.net/tracker/?func=detail&atid=100588&aid=2820535&group_id=588 discussion -->
-			<!--javaproperty name="apple.awt.graphics.UseQuartz" value="true" />
-			<javaproperty name="apple.awt.rendering"          value="speed" /-->
+				   version="${jedit.version}"
+				   antialiasedgraphics="true"
+				   antialiasedtext="true"
+				   screenmenu="true">
 			<javafileset dir="${dist.dir}"
 				     includes="doc/**
 					       jars/**
@@ -1229,15 +1227,6 @@
 				      ostypes="TEXT ****"
 				      iconfile="icons/file.icns"
 				      role="Editor"/>
-			<service message="openFile"
-				 menuitem="jEdit/Open Files"
-				 sendtypes="NSStringPboardType,NSFilenamesPboardType"/>
-			<service message="insertSelection"
-				 menuitem="jEdit/Insert Text"
-				 sendtypes="NSStringPboardType"/>
-			<service message="openSelection"
-				 menuitem="jEdit/New Buffer with Text"
-				 sendtypes="NSStringPboardType"/>
 		</jarbundler:create>
 		<delete file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
 		<exec executable="ln"
