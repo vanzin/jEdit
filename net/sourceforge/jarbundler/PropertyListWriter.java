@@ -1,26 +1,32 @@
 /*
  * Write the application bundle file: Info.plist
  *
- * Copyright (c) 2006, William A. Gilbert <gilbert@informagen.com> All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See  the GNU General Public License for
- * more details.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA  02111-1307, USA.
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package net.sourceforge.jarbundler;
 
 // This package's imports
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import net.sourceforge.jarbundler.AppBundleProperties;
 
 // Java I/O
@@ -58,12 +64,6 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.Attr;
-
-
-// Xerces serializer
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-import org.apache.xml.serialize.LineSeparator;
 
 
 
@@ -114,31 +114,24 @@ public class PropertyListWriter {
 
 			this.document = createDOM();
 			buildDOM();
-
-			// Serialize the DOM into the writer
-			writer = new BufferedWriter(new OutputStreamWriter(
-			                            new FileOutputStream(fileName), "UTF-8"));
-			// Prettify the XML Two space indenting, no line wrapping
-			OutputFormat outputFormat = new OutputFormat();
-			outputFormat.setMethod("xml");
-			outputFormat.setIndenting(true);
-			outputFormat.setIndent(2);
-			outputFormat.setLineWidth(0);             
-			
-			// Create a DOM serlializer and write the XML
-			XMLSerializer serializer = new XMLSerializer(writer, outputFormat);
-			serializer.asDOMSerializer();
-			serializer.serialize(this.document);
-
-		} catch (ParserConfigurationException pce) {
+                        
+            TransformerFactory transFactory = TransformerFactory.newInstance();                        
+            Transformer trans = transFactory.newTransformer();
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2" );
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+            trans.transform(new DOMSource(document), new StreamResult(writer));
+        } catch (TransformerConfigurationException tce) {
+            throw new BuildException(tce);
+        } catch (TransformerException te) {
+            throw new BuildException(te);
+        } catch (ParserConfigurationException pce) {
 			throw new BuildException(pce);
 		} catch (IOException ex) {
 			throw new BuildException("Unable to write  \"" + fileName + "\"");
 		} finally {
 			fileUtils.close(writer);
 		}
-
-
 	}
 
 	private Document createDOM() throws ParserConfigurationException {
@@ -179,8 +172,7 @@ public class PropertyListWriter {
 		
 		// Mac OS X required key, defaults to "false"
 		writeKeyStringPair("CFBundleAllowMixedLocalizations", 
-		     (bundleProperties.getCFBundleAllowMixedLocalizations() ? "true" : "false"),  
-		     dict);
+		     (bundleProperties.getCFBundleAllowMixedLocalizations() ? "true" : "false"), dict);
 
 		// Mac OS X required, defaults to "6.0"
 		writeKeyStringPair("CFBundleInfoDictionaryVersion", 
@@ -218,6 +210,14 @@ public class PropertyListWriter {
 		if (bundleProperties.getCFBundleHelpBookName() != null) 
 			writeKeyStringPair("CFBundleHelpBookName", bundleProperties.getCFBundleHelpBookName(), dict);
 
+		// Copyright, optional
+		if(bundleProperties.getNSHumanReadableCopyright() != null)
+			writeKeyStringPair("NSHumanReadableCopyright", bundleProperties.getNSHumanReadableCopyright(), dict);
+
+		// IsAgent, optional
+		if ( bundleProperties.getLSUIElement() != null )
+			writeKeyBooleanPair( "LSUIElement", bundleProperties.getLSUIElement(), dict );
+
 		// Document Types, optional
 		List documentTypes = bundleProperties.getDocumentTypes();
 
@@ -234,6 +234,22 @@ public class PropertyListWriter {
 		// Target JVM version, optional but recommended
 		if (bundleProperties.getJVMVersion() != null) 
 			writeKeyStringPair("JVMVersion", bundleProperties.getJVMVersion(), javaDict);
+        
+        // New in JarBundler 2.2.0; Tobias Bley ---------------------------------
+
+        // JVMArchs, optional
+        List jvmArchs = bundleProperties.getJVMArchs();
+        
+        if (jvmArchs != null && !jvmArchs.isEmpty())
+            writeJVMArchs(jvmArchs, javaDict);
+
+        // lsArchitecturePriority, optional
+        List lsArchitecturePriority = bundleProperties.getLSArchitecturePriority();
+        
+        if (lsArchitecturePriority != null && !lsArchitecturePriority.isEmpty())
+            writeLSArchitecturePriority(lsArchitecturePriority, javaDict);
+
+        //-----------------------------------------------------------------------
 
 
 		// Classpath is composed of two types, required
@@ -254,6 +270,16 @@ public class PropertyListWriter {
 		// Working directory, optional
 		if (bundleProperties.getWorkingDirectory() != null) 
 			writeKeyStringPair("WorkingDirectory", bundleProperties.getWorkingDirectory(), javaDict);
+
+		// StartOnMainThread, optional
+		if (bundleProperties.getStartOnMainThread() != null) {
+			writeKey("StartOnMainThread", javaDict);
+			createNode(bundleProperties.getStartOnMainThread().toString(), javaDict);
+	    }
+
+        // SplashFile, optional
+        if (bundleProperties.getSplashFile() != null) 
+            writeKeyStringPair("SplashFile", bundleProperties.getSplashFile(), javaDict);
 
 		// Main class arguments, optional
 		if (bundleProperties.getArguments() != null) 
@@ -319,6 +345,13 @@ public class PropertyListWriter {
 				writeArray(mimeTypes, documentDict);
 			}
 
+			List UTIs = documentType.getUTIs();
+			
+			if (UTIs.isEmpty() == false) {
+				writeKey("LSItemContentTypes", documentDict);
+				writeArray(UTIs, documentDict);
+			}
+			
 			// Only write this key if true
 			if (documentType.isBundle()) 
 				writeKeyStringPair("LSTypeIsPackage", "true", documentDict);
@@ -400,7 +433,24 @@ public class PropertyListWriter {
 		}
 	}
 
-	private Node createNode(String tag, Node appendTo) {
+    // New in JarBundler 2.2.0; Tobias Bley ---------------------------------
+
+    private void writeJVMArchs(List jvmArchs, Node appendTo)
+    {
+        writeKey("JVMArchs", appendTo);
+        writeArray(jvmArchs, appendTo);
+    }
+
+    private void writeLSArchitecturePriority(List lsArchitecturePriority, Node appendTo)
+    {
+        writeKey("LSArchitecturePriority", appendTo);
+        writeArray(lsArchitecturePriority, appendTo);
+    }
+
+    //----------------------------------------------------------------------
+
+    private Node createNode(String tag, Node appendTo)
+    {
 		Node node = this.document.createElement(tag);
 		appendTo.appendChild(node);
 		return node;
@@ -414,6 +464,16 @@ public class PropertyListWriter {
 	
 		writeKey(key, appendTo);
 		writeString(string, appendTo);
+	}
+
+
+	private void writeKeyBooleanPair(String key, Boolean b, Node appendTo) {
+
+		if ( b == null )
+			return;
+
+		writeKey( key, appendTo );
+		writeBoolean( b, appendTo );
 	}
 
 
@@ -438,5 +498,17 @@ public class PropertyListWriter {
 			writeString((String)it.next(), arrayNode);
 		
 	}
+	
+	private void writeBoolean( Boolean b, Node appendTo ) {
+		Element booleanNode = null;
 
+		if ( b.booleanValue() ) {
+			booleanNode = this.document.createElement( "true" );
+		}
+		else {
+			booleanNode = this.document.createElement( "false" );
+
+		}
+		appendTo.appendChild( booleanNode );
+	}
 }

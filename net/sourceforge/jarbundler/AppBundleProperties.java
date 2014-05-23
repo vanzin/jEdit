@@ -3,19 +3,18 @@
  *
  * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See  the GNU General Public License for
- * more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
  */
 
 
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.LinkedList;
+// import java.util.Scanner;
 
 // Java language imports
 import java.lang.String;
@@ -54,8 +54,18 @@ public class AppBundleProperties {
 	// Help Book name, optional
 	private String mCFHelpBookName = null;
 
+	// StartOnMainThread, optional
+	private Boolean	mStartOnMainThread = null;
+
+	// StartAsAgent, optional (per Michael Bader <nufan_k@me.com>)
+	private Boolean	 mLSUIElement = null;
+
 	// Explicit default: false
 	private boolean mCFBundleAllowMixedLocalizations = false;
+
+	// Copyright, optional
+
+	private String mNSHumanReadableCopyright = null;
 
 	// Explicit default: JavaApplicationStub
 	private String mCFBundleExecutable = "JavaApplicationStub";
@@ -78,6 +88,7 @@ public class AppBundleProperties {
 	// Optional keys, with no defaults.
 
 	private String mCFBundleIconFile = null;
+    private String mSplashFile = null;
 	private String mCFBundleIdentifier = null;
 	private String mVMOptions = null; // Java VM options
 	private String mWorkingDirectory = null; // Java Working Dir
@@ -86,6 +97,12 @@ public class AppBundleProperties {
 	// Class path and extra class path elements
 	private List mClassPath = new ArrayList();
 	private List mExtraClassPath = new ArrayList();
+
+    // New in JarBundler 2.2.0; Tobias Bley ----------------
+    private List mJVMArchs = new ArrayList();
+    private List mLSArchitecturePriority = new ArrayList();
+    private String mSUFeedURL = null;
+    // -----------------------------------------------------
 
 	// Java properties
 	private Hashtable mJavaProperties = new Hashtable();
@@ -110,7 +127,20 @@ public class AppBundleProperties {
 		return mJavaProperties;
 	}
 
-	public void addToClassPath(String s) {
+    // New in JarBundler 2.2.0; Tobias Bley ----------------
+    
+    public void addToJVMArchs(String s) {
+        mJVMArchs.add(s);
+    }
+
+    public List getJVMArchs() {
+        return mJVMArchs;
+    }
+    
+    //------------------------------------------------------
+
+    public void addToClassPath(String s)
+    {
 		mClassPath.add("$JAVAROOT/" + s);
 	}
 
@@ -234,12 +264,28 @@ public class AppBundleProperties {
 		return mCFBundleIconFile;
 	}
 
+    public void setSplashFile(String s) {
+        mSplashFile = s;
+    }
+
+    public String getSplashFile() {
+        return mSplashFile;
+    }
+
 	public void setCFBundleAllowMixedLocalizations(boolean b) {
 		mCFBundleAllowMixedLocalizations = b;
 	}
 
 	public boolean getCFBundleAllowMixedLocalizations() {
 		return mCFBundleAllowMixedLocalizations;
+	}
+
+	public void setNSHumanReadableCopyright(String s) {
+		mNSHumanReadableCopyright = s;
+	}
+
+	public String getNSHumanReadableCopyright() {
+		return mNSHumanReadableCopyright;
 	}
 
 	public void setCFBundleExecutable(String s) {
@@ -290,7 +336,30 @@ public class AppBundleProperties {
 		return mCFHelpBookName;
 	}
 
-	public void setMainClass(String s) {
+
+	public void setStartOnMainThread(Boolean b) {
+		mStartOnMainThread = b;
+	}
+
+	public Boolean getStartOnMainThread() {
+		return mStartOnMainThread;
+	}
+
+
+
+	public Boolean getLSUIElement() {
+		return mLSUIElement;
+	}
+
+
+
+	public void setLSUIElement( Boolean b ) {
+		this.mLSUIElement = b;
+	}
+
+
+
+	public void setMainClass( String s ) {
 		mMainClass = s;
 	}
 
@@ -334,4 +403,55 @@ public class AppBundleProperties {
 		return mClassPath;
 	}
 
+    // New in JarBundler 2.2.0; Tobias Bley ----------------------------------------------------
+
+    /**
+     * @param archs space separated archs, e.g. i386 x64_64 ppc
+     */
+     
+    public void setJVMArchs(String archs) {
+        
+        // Use for 1.4 backwards compatability
+        String[] tokens = archs.split("\\s+");
+        for (int i=0; i<tokens.length; i++)
+            mJVMArchs.add(tokens[i]);
+
+        // 'java.util.Scanner' is available in JDK 1.5
+        // Scanner s = new Scanner(archs);
+        // s = s.useDelimiter("\\s+");
+        // while (s.hasNext())
+        //     mJVMArchs.add(s.next());
+    }
+
+    public List getLSArchitecturePriority() {
+        return mLSArchitecturePriority;
+
+    }
+
+    /**
+     * @param lsArchitecturePriority space separated LSArchitecturePriority, e.g. i386 x64_64 ppc
+     */
+    public void setLSArchitecturePriority(String lsArchitecturePriority) {
+
+        // Use for 1.4 backwards compatability
+        String[] tokens = lsArchitecturePriority.split("\\s+");
+        for (int i=0; i<tokens.length; i++)
+            mLSArchitecturePriority.add(tokens[i]);
+
+        // 'java.util.Scanner' is available in JDK 1.5
+        // Scanner s = new Scanner(lsArchitecturePriority);
+        // s = s.useDelimiter("\\s+");
+        // while (s.hasNext())
+        //     mLSArchitecturePriority.add(s.next());
+    }
+
+    public String getSUFeedURL() {
+        return mSUFeedURL;
+    }
+ 
+    public void setSUFeedURL(String suFeedURL) {
+        this.mSUFeedURL = suFeedURL;
+    }
+    
+    //------------------------------------------------------------------------------------------
 }

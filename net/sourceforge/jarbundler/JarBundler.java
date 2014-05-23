@@ -1,21 +1,20 @@
 /*
  * A Mac OS X Jar Bundler Ant Task.
  *
+ *
  * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See  the GNU General Public License for
- * more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package net.sourceforge.jarbundler;
@@ -406,6 +405,16 @@ public class JarBundler extends MatchingTask {
 	}
 
 	/**
+     * Setter for the "splashfile" attribute (optional). If it is somewhere
+     * in a jar file, which contains a Splash-Screen manifest entry,
+     * use "$JAVAROOT/myjar.jar"
+     */
+
+    public void setSplashFile(String s) {
+        bundleProperties.setSplashFile(s);
+    }
+
+    /**
 	 * Setter for the "bundleid" attribute (optional) This key specifies a
 	 * unique identifier string for the bundle. This identifier should be in the
 	 * form of a Java-style package name, for example com.mycompany.myapp. The
@@ -419,16 +428,32 @@ public class JarBundler extends MatchingTask {
 	}
 
 	/**
-	 * Setter for the "developmentregion" attribute(optional) Default "English".
+	 * Setter for the "developmentregion" attribute (optional) Default "English".
 	 */
 	public void setDevelopmentregion(String s) {
 		bundleProperties.setCFBundleDevelopmentRegion(s);
 	}
 
+	/**  Tobias Fischer, v2.3.0
+	 * Setter for the "allowmixedlocalizations" attribute (optional) Default "false".
+	 */
+	public void setAllowMixedLocalizations(boolean b) {
+		bundleProperties.setCFBundleAllowMixedLocalizations(b);
+	}
+
+	/** Tobias Fisher, v2.3.1
+	 * Setter for the "NSHumanReadableCopyright" attribute (optional)
+	 */
+
+	public void setCopyright(String s) {
+		bundleProperties.setNSHumanReadableCopyright(s);
+	}
+
 	/**
-	 * Setter for the "aboutmenuname" attribute (optional)
+	 * Setter for the deprecated "aboutmenuname" attribute (optional)
 	 */
 	public void setAboutmenuname(String s) {
+		System.err.println("WARNING: 'aboutmenuname' is deprecated! Use JarBundler attribute 'shortname' instead!");
 		bundleProperties.setCFBundleName(s);
 	}
 
@@ -510,6 +535,40 @@ public class JarBundler extends MatchingTask {
 		bundleProperties.setJVMVersion(s);
 	}
 
+    // New in JarBundler 2.2.0; Tobias Bley ----------------
+
+	/**
+     * Setter for the "JVMArchs" attribute (optional)
+     */
+    public void setJvmArchs(String s) {
+        bundleProperties.setJVMArchs(s);
+    }
+
+    /**  Michael Bader <nufan_k@me.com> --------------------
+     * Setter for the "LSArchitecturePriority" attribute (optional)
+     */
+    public void setLSArchitecturePriority(String s) {
+        bundleProperties.setLSArchitecturePriority(s);
+    }
+    
+    //-------------------------------------------------------
+
+    /**
+	 * Setter for the "startonmainthread" attribute (optional)
+	 */
+	public void setStartonmainthread(boolean b) {
+		bundleProperties.setStartOnMainThread(new Boolean(b));
+	}
+
+
+	/**
+	 * Setter for the "startasagent" attribute (optional)
+	 */
+	public void setIsAgent( boolean b ) {
+		bundleProperties.setLSUIElement( new Boolean( b ) );
+	}
+
+
 	/**
 	 * Setter for the "infostring" attribute (optional) This key identifies a
 	 * human-readable plain text string displaying the copyright information for
@@ -540,6 +599,7 @@ public class JarBundler extends MatchingTask {
 	 * build.
 	 */
 	public void setShortInfoString(String s) {
+		System.err.println("WARNING: 'shortinfostring' is deprecated! Use JarBundler attribute 'infostring' instead!");
 		setVersion(s);
 	}
 
@@ -597,6 +657,7 @@ public class JarBundler extends MatchingTask {
 		bundleProperties.setCFBundleHelpBookName(s);
 	}
 
+
 	/**
 	 * Setter for the "jars" attribute (required if no "jarfileset" is present)
 	 */
@@ -636,6 +697,7 @@ public class JarBundler extends MatchingTask {
 	 * Setter for the "extraclasspath" attribute (optional)
 	 */
 	public void setExtraclasspath(String s) {
+		if (s == null || s.trim().equals("")) return;
 		PatternSet patset = new PatternSet();
 		patset.setIncludes(s);
 
@@ -1159,7 +1221,8 @@ public class JarBundler extends MatchingTask {
 		for (Iterator jarIter = mExtraClassPathAttrs.iterator(); jarIter
 				.hasNext();) {
 			File src = (File) jarIter.next();
-			bundleProperties.addToExtraClassPath(src.getPath());
+			String path = src.getPath().replace(File.separatorChar, '/');
+			bundleProperties.addToExtraClassPath(path);
 		}
 	}
 
@@ -1178,7 +1241,8 @@ public class JarBundler extends MatchingTask {
 
 			for (int i = 0; i < files.length; i++) {
 				File f = new File(srcDir, files[i]);
-				bundleProperties.addToExtraClassPath(f.getPath());
+				String path = f.getPath().replace(File.separatorChar, '/');
+				bundleProperties.addToExtraClassPath(path);
 			}
 		}
 	}
@@ -1194,7 +1258,8 @@ public class JarBundler extends MatchingTask {
 
 			for (int i = 0; i < files.length; i++) {
 				File f = new File(srcDir, files[i]);
-				bundleProperties.addToExtraClassPath(f.getPath());
+				String path = f.getPath().replace(File.separatorChar, '/');
+				bundleProperties.addToExtraClassPath(path);
 			}
 		}
 	}

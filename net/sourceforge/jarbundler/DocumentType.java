@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package net.sourceforge.jarbundler;
 
 import java.lang.String;
@@ -19,7 +35,14 @@ import java.util.ArrayList;
  * 
  * Name - The name of the document type.
  * 
- * 
+ * UTI - A list of Uniform Type Identifier (UTI) strings for the document. UTIs
+ * are strings that uniquely identify abstract types. They can be used to
+ * describe a file format or data type but can also be used to describe type
+ * information for other sorts of entities, such as directories, volumes, or
+ * packages. For more information on UTIs, see the header file UTType.h,
+ * available as part of LaunchServices.framework in Mac OS X v10.3 and later.
+ *
+ *  
  * Extensions - A list of the filename extensions for this document type. Don't
  * include the period in the extension.
  * 
@@ -89,6 +112,17 @@ public class DocumentType {
 
 	public String[] mimeTypes = null;
 
+    /**
+	 * UTI. A list of Uniform Type Identifier (UTI) strings for the document.
+	 * UTIs are strings that uniquely identify abstract types. They can be used
+	 * to describe a file format or data type but can also be used to describe
+	 * type information for other sorts of entities, such as directories,
+	 * volumes, or packages. For more information on UTIs, see the header file
+	 * UTType.h, available as part of LaunchServices.framework in Mac OS X v10.3
+	 * and later.
+	 */
+    public String[] UTIs = null;
+	
 	/**
 	 * Icon File. The name of the file that contains the document types icon.
 	 */
@@ -158,6 +192,15 @@ public class DocumentType {
 		return (mimeTypes == null) ? EMPTYLIST : Arrays.asList(this.mimeTypes);
 	}
 
+	// Uniform Type Identifiers
+	public void setUTIs(String UTIs) {
+		this.UTIs = UTIs.split("[\\s,]");
+	}
+
+	public List getUTIs() {
+		return this.UTIs == null ? EMPTYLIST : Arrays.asList(this.UTIs);
+	}
+	
 	// Document icon file
 	public void setIconFile(File iconFile) {
 		this.iconFile = iconFile;

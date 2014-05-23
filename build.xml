@@ -1158,15 +1158,11 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="1.4"
-		       target="1.4"
+		       source="1.6"
+		       target="1.6"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
-			<classpath>
-				<fileset dir="${lib.dir}/jarbundler"
-					 includes="*.jar"/>
-			</classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -1185,10 +1181,6 @@
 			 classname="net.sourceforge.jarbundler.JarBundler"
 			 classpath="${dist.dir}/classes/jarbundler"
 			 uri="antlib:net.sourceforge.jarbundler">
-			<classpath>
-				<fileset dir="${lib.dir}/jarbundler"
-					 includes="*.jar"/>
-			</classpath>
 		</taskdef>
 		<tstamp>
 			<format property="current.year"
@@ -1206,6 +1198,7 @@
 				   extraclasspath="/System/Library/Java"
 				   icon="icons/icon.icns"
 				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
+				   copyright="Copyright &#169; 1998-${current.year} Contributors"
 				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
 				   signature="JESP"
@@ -1225,6 +1218,7 @@
 			<documenttype name="jEdit TEXT Document"
 				      extensions="*"
 				      ostypes="TEXT ****"
+				      utis="public.text"
 				      iconfile="icons/file.icns"
 				      role="Editor"/>
 		</jarbundler:create>
