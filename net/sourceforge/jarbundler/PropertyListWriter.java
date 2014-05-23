@@ -88,7 +88,7 @@ public class PropertyListWriter {
 
 
 	private FileUtils fileUtils = FileUtils.getFileUtils();
-	
+
 	/**
 	 * Create a new Property List writer.
 	 */
@@ -114,18 +114,20 @@ public class PropertyListWriter {
 
 			this.document = createDOM();
 			buildDOM();
-                        
-            TransformerFactory transFactory = TransformerFactory.newInstance();                        
-            Transformer trans = transFactory.newTransformer();
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
-            trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2" );
+
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer trans = transFactory.newTransformer();
+			trans.setOutputProperty(OutputKeys.INDENT, "yes");
+			trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2");
+			trans.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "-//Apple Computer//DTD PLIST 1.0//EN");
+			trans.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "http://www.apple.com/DTDs/PropertyList-1.0.dtd");
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
-            trans.transform(new DOMSource(document), new StreamResult(writer));
-        } catch (TransformerConfigurationException tce) {
-            throw new BuildException(tce);
-        } catch (TransformerException te) {
-            throw new BuildException(te);
-        } catch (ParserConfigurationException pce) {
+			trans.transform(new DOMSource(document), new StreamResult(writer));
+		} catch (TransformerConfigurationException tce) {
+			throw new BuildException(tce);
+		} catch (TransformerException te) {
+			throw new BuildException(te);
+		} catch (ParserConfigurationException pce) {
 			throw new BuildException(pce);
 		} catch (IOException ex) {
 			throw new BuildException("Unable to write  \"" + fileName + "\"");
@@ -135,14 +137,14 @@ public class PropertyListWriter {
 	}
 
 	private Document createDOM() throws ParserConfigurationException {
-	
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
 		DOMImplementation domImpl = documentBuilder.getDOMImplementation();
 
-		// We needed to reference using the full class name here because we already have 
+		// We needed to reference using the full class name here because we already have
 		//  a class named "DocumentType"
-		
+
 		org.w3c.dom.DocumentType doctype = domImpl.createDocumentType(
 		       "plist",
 		       "-//Apple Computer//DTD PLIST 1.0//EN",
@@ -155,10 +157,10 @@ public class PropertyListWriter {
 	private void buildDOM()  {
 
 		Element plist = this.document.getDocumentElement();
-		plist.setAttribute("version","1.0");		
+		plist.setAttribute("version","1.0");
 
 		// Open the top level dictionary, <dict>
-		
+
 		Node dict = createNode("dict", plist);
 
 		// Application short name i.e. About menu name
@@ -166,16 +168,16 @@ public class PropertyListWriter {
 
 		// Finder 'Version' label, defaults to "1.0"
 		writeKeyStringPair("CFBundleShortVersionString", bundleProperties.getCFBundleShortVersionString(), dict);
-		
+
 		// Finder 'Get Info'
 		writeKeyStringPair("CFBundleGetInfoString", bundleProperties.getCFBundleGetInfoString(), dict);
-		
+
 		// Mac OS X required key, defaults to "false"
-		writeKeyStringPair("CFBundleAllowMixedLocalizations", 
+		writeKeyStringPair("CFBundleAllowMixedLocalizations",
 		     (bundleProperties.getCFBundleAllowMixedLocalizations() ? "true" : "false"), dict);
 
 		// Mac OS X required, defaults to "6.0"
-		writeKeyStringPair("CFBundleInfoDictionaryVersion", 
+		writeKeyStringPair("CFBundleInfoDictionaryVersion",
 		     bundleProperties.getCFBundleInfoDictionaryVersion(), dict);
 
 		// Bundle Executable name, required, defaults to "JavaApplicationStub"
@@ -191,23 +193,23 @@ public class PropertyListWriter {
 		writeKeyStringPair("CFBundleSignature", bundleProperties.getCFBundleSignature(), dict);
 
 		// Application build number, optional
-		if (bundleProperties.getCFBundleVersion() != null) 
+		if (bundleProperties.getCFBundleVersion() != null)
 			writeKeyStringPair("CFBundleVersion", bundleProperties.getCFBundleVersion(), dict);
-		
+
 		// Application Icon file, optional
-		if (bundleProperties.getCFBundleIconFile() != null) 
+		if (bundleProperties.getCFBundleIconFile() != null)
 			writeKeyStringPair("CFBundleIconFile", bundleProperties.getCFBundleIconFile(), dict);
 
 		// Bundle Identifier, optional
-		if (bundleProperties.getCFBundleIdentifier() != null) 
+		if (bundleProperties.getCFBundleIdentifier() != null)
 			writeKeyStringPair("CFBundleIdentifier", bundleProperties.getCFBundleIdentifier(), dict);
 
 		// Help Book Folder, optional
-		if (bundleProperties.getCFBundleHelpBookFolder() != null) 
+		if (bundleProperties.getCFBundleHelpBookFolder() != null)
 			writeKeyStringPair("CFBundleHelpBookFolder", bundleProperties.getCFBundleHelpBookFolder(), dict);
 
 		// Help Book Name, optional
-		if (bundleProperties.getCFBundleHelpBookName() != null) 
+		if (bundleProperties.getCFBundleHelpBookName() != null)
 			writeKeyStringPair("CFBundleHelpBookName", bundleProperties.getCFBundleHelpBookName(), dict);
 
 		// Copyright, optional
@@ -221,7 +223,7 @@ public class PropertyListWriter {
 		// Document Types, optional
 		List documentTypes = bundleProperties.getDocumentTypes();
 
-		if (documentTypes.size() > 0) 
+		if (documentTypes.size() > 0)
  			writeDocumentTypes(documentTypes, dict);
 
 		// Java entry in the plist dictionary
@@ -232,20 +234,20 @@ public class PropertyListWriter {
 		writeKeyStringPair("MainClass", bundleProperties.getMainClass(), javaDict);
 
 		// Target JVM version, optional but recommended
-		if (bundleProperties.getJVMVersion() != null) 
+		if (bundleProperties.getJVMVersion() != null)
 			writeKeyStringPair("JVMVersion", bundleProperties.getJVMVersion(), javaDict);
-        
+
         // New in JarBundler 2.2.0; Tobias Bley ---------------------------------
 
         // JVMArchs, optional
         List jvmArchs = bundleProperties.getJVMArchs();
-        
+
         if (jvmArchs != null && !jvmArchs.isEmpty())
             writeJVMArchs(jvmArchs, javaDict);
 
         // lsArchitecturePriority, optional
         List lsArchitecturePriority = bundleProperties.getLSArchitecturePriority();
-        
+
         if (lsArchitecturePriority != null && !lsArchitecturePriority.isEmpty())
             writeLSArchitecturePriority(lsArchitecturePriority, javaDict);
 
@@ -259,16 +261,16 @@ public class PropertyListWriter {
 		List classPath = bundleProperties.getClassPath();
 		List extraClassPath = bundleProperties.getExtraClassPath();
 
-		if ((classPath.size() > 0) || (extraClassPath.size() > 0)) 
+		if ((classPath.size() > 0) || (extraClassPath.size() > 0))
 			writeClasspath(classPath, extraClassPath, javaDict);
-		
+
 
 		// JVM options, optional
-		if (bundleProperties.getVMOptions() != null) 
+		if (bundleProperties.getVMOptions() != null)
 			writeKeyStringPair("VMOptions", bundleProperties.getVMOptions(), javaDict);
 
 		// Working directory, optional
-		if (bundleProperties.getWorkingDirectory() != null) 
+		if (bundleProperties.getWorkingDirectory() != null)
 			writeKeyStringPair("WorkingDirectory", bundleProperties.getWorkingDirectory(), javaDict);
 
 		// StartOnMainThread, optional
@@ -278,32 +280,32 @@ public class PropertyListWriter {
 	    }
 
         // SplashFile, optional
-        if (bundleProperties.getSplashFile() != null) 
+        if (bundleProperties.getSplashFile() != null)
             writeKeyStringPair("SplashFile", bundleProperties.getSplashFile(), javaDict);
 
 		// Main class arguments, optional
-		if (bundleProperties.getArguments() != null) 
+		if (bundleProperties.getArguments() != null)
 			writeKeyStringPair("Arguments", bundleProperties.getArguments(), javaDict);
 
 		// Java properties, optional
 		Hashtable javaProperties = bundleProperties.getJavaProperties();
 
-		if (javaProperties.isEmpty() == false) 
+		if (javaProperties.isEmpty() == false)
  			writeJavaProperties(javaProperties, javaDict);
 
 
 		// Services, optional
 		List services = bundleProperties.getServices();
-		if (services.size() > 0) 
+		if (services.size() > 0)
  			writeServices(services,dict);
-		
+
 	}
 
 
 	private void writeDocumentTypes(List documentTypes, Node appendTo) {
 
 		writeKey("CFBundleDocumentTypes", appendTo);
-		
+
 		Node array = createNode("array", appendTo);
 
 		Iterator itor = documentTypes.iterator();
@@ -337,7 +339,7 @@ public class PropertyListWriter {
 				writeArray(osTypes, documentDict);
 			}
 
-			
+
 			List mimeTypes = documentType.getMimeTypes();
 
 			if (mimeTypes.isEmpty() == false) {
@@ -346,24 +348,24 @@ public class PropertyListWriter {
 			}
 
 			List UTIs = documentType.getUTIs();
-			
+
 			if (UTIs.isEmpty() == false) {
 				writeKey("LSItemContentTypes", documentDict);
 				writeArray(UTIs, documentDict);
 			}
-			
+
 			// Only write this key if true
-			if (documentType.isBundle()) 
+			if (documentType.isBundle())
 				writeKeyStringPair("LSTypeIsPackage", "true", documentDict);
 		}
 	}
-	
+
 	private void writeServices(List services, Node appendTo) {
-	
+
 		writeKey("NSServices",appendTo);
 		Node array = createNode("array",appendTo);
 		Iterator itor = services.iterator();
-		
+
 		while (itor.hasNext()) {
 			Service service = (Service)itor.next();
 			Node serviceDict = createNode("dict",array);
@@ -371,37 +373,37 @@ public class PropertyListWriter {
 			String portName = service.getPortName();
             if (portName == null)
             	portName = bundleProperties.getCFBundleName();
-			
+
 			writeKeyStringPair("NSPortName", portName, serviceDict);
 			writeKeyStringPair("NSMessage",service.getMessage(),serviceDict);
-			
+
 			List sendTypes = service.getSendTypes();
 			if (!sendTypes.isEmpty()) {
 				writeKey("NSSendTypes",serviceDict);
 				writeArray(sendTypes,serviceDict);
 			}
-			
+
 			List returnTypes = service.getReturnTypes();
 			if (!returnTypes.isEmpty()) {
 				writeKey("NSReturnTypes",serviceDict);
 				writeArray(returnTypes,serviceDict);
 			}
-			
+
 			writeKey("NSMenuItem",serviceDict);
 			Node menuItemDict = createNode("dict",serviceDict);
 			writeKeyStringPair("default",service.getMenuItem(),menuItemDict);
-			
+
 			String keyEquivalent = service.getKeyEquivalent();
 			if (null != keyEquivalent) {
 				writeKey("NSKeyEquivalent",serviceDict);
 				Node keyEquivalentDict = createNode("dict",serviceDict);
 				writeKeyStringPair("default",keyEquivalent,keyEquivalentDict);
 			}
-			
+
 			String userData = service.getUserData();
 			if (null != userData)
 				writeKeyStringPair("NSUserData", userData, serviceDict);
-			
+
 			String timeout = service.getTimeout();
 			if (null != timeout)
 				writeKeyStringPair("NSTimeout",timeout,serviceDict);
@@ -416,9 +418,9 @@ public class PropertyListWriter {
 
 
 	private void writeJavaProperties(Hashtable javaProperties, Node appendTo) {
-	
+
 		writeKey("Properties", appendTo);
-		
+
 		Node propertiesDict = createNode("dict", appendTo);
 
 		for (Iterator i = javaProperties.keySet().iterator(); i.hasNext();) {
@@ -458,10 +460,10 @@ public class PropertyListWriter {
 
 
 	private void writeKeyStringPair(String key, String string, Node appendTo) {
-	
+
 		if (string == null)
 			return;
-	
+
 		writeKey(key, appendTo);
 		writeString(string, appendTo);
 	}
@@ -491,14 +493,14 @@ public class PropertyListWriter {
 	}
 
 	private void writeArray(List stringList, Node appendTo) {
-	
-		Node arrayNode = createNode("array", appendTo);	
 
-		for (Iterator it = stringList.iterator(); it.hasNext();) 
+		Node arrayNode = createNode("array", appendTo);
+
+		for (Iterator it = stringList.iterator(); it.hasNext();)
 			writeString((String)it.next(), arrayNode);
-		
+
 	}
-	
+
 	private void writeBoolean( Boolean b, Node appendTo ) {
 		Element booleanNode = null;
 
