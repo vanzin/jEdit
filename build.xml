@@ -1202,7 +1202,7 @@
 				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
 				   signature="JESP"
-				   stubfile="jedit"
+				   stubfile="package-files/osx/jedit"
 				   version="${jedit.version}"
 				   antialiasedgraphics="true"
 				   antialiasedtext="true"
@@ -1222,13 +1222,6 @@
 				      iconfile="icons/file.icns"
 				      role="Editor"/>
 		</jarbundler:create>
-		<delete file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
-		<exec executable="ln"
-		      failonerror="true">
-			<arg value="-s" />
-			<arg file="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub" />
-			<arg file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
-		</exec>
 		<delete file="${dist.dir}/${mac.disk.image.filename}"
 			failonerror="false"/>
 		<exec executable="hdiutil"

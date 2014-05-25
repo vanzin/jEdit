@@ -81,6 +81,7 @@ public class AppBundleProperties {
 
 	// Explicit default: 1.3+
 	private String mJVMVersion = "1.3+";
+	private double mJavaVersion = 1.3;
 
 	// Explicit default: 6.0
 	private final String mCFBundleInfoDictionaryVersion = "6.0";
@@ -112,7 +113,7 @@ public class AppBundleProperties {
 
 	// Services
 	private List mServices = new LinkedList();
-	
+
 	// ================================================================================
 
 	/**
@@ -128,7 +129,7 @@ public class AppBundleProperties {
 	}
 
     // New in JarBundler 2.2.0; Tobias Bley ----------------
-    
+
     public void addToJVMArchs(String s) {
         mJVMArchs.add(s);
     }
@@ -136,7 +137,7 @@ public class AppBundleProperties {
     public List getJVMArchs() {
         return mJVMArchs;
     }
-    
+
     //------------------------------------------------------
 
     public void addToClassPath(String s)
@@ -170,18 +171,18 @@ public class AppBundleProperties {
 	public Service createService() {
 		return new Service();
 	}
-	
+
 	public List getServices() {
 		return mServices;
 	}
-	
+
 	/**
 	 * Add a service to the services list.
 	 */
 	public void addService(Service service) {
 		mServices.add(service);
 	}
-	
+
 	// ================================================================================
 
 	public void setApplicationName(String s) {
@@ -369,10 +370,16 @@ public class AppBundleProperties {
 
 	public void setJVMVersion(String s) {
 		mJVMVersion = s;
+		mJavaVersion = Double.parseDouble(s.substring(0, 3));
 	}
 
 	public String getJVMVersion() {
 		return mJVMVersion;
+	}
+
+	public double getJavaVersion()
+	{
+		return mJavaVersion;
 	}
 
 	public void setVMOptions(String s) {
@@ -408,9 +415,7 @@ public class AppBundleProperties {
     /**
      * @param archs space separated archs, e.g. i386 x64_64 ppc
      */
-     
     public void setJVMArchs(String archs) {
-        
         // Use for 1.4 backwards compatability
         String[] tokens = archs.split("\\s+");
         for (int i=0; i<tokens.length; i++)
@@ -448,10 +453,10 @@ public class AppBundleProperties {
     public String getSUFeedURL() {
         return mSUFeedURL;
     }
- 
+
     public void setSUFeedURL(String suFeedURL) {
         this.mSUFeedURL = suFeedURL;
     }
-    
+
     //------------------------------------------------------------------------------------------
 }

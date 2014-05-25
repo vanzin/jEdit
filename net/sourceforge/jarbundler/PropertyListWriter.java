@@ -38,6 +38,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 // Java Utility
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +50,7 @@ import java.lang.ClassCastException;
 import java.lang.Double;
 import java.lang.String;
 import java.lang.System;
+import java.util.Map;
 
 // Apache Ant
 import org.apache.tools.ant.BuildException;
@@ -81,8 +84,6 @@ public class PropertyListWriter {
 	// Our application bundle properties
 	private AppBundleProperties bundleProperties;
 
-	private double version = 1.3;
-
 	// DOM version of Info.plist file
 	private Document document = null;
 
@@ -94,17 +95,7 @@ public class PropertyListWriter {
 	 */
 	public PropertyListWriter(AppBundleProperties bundleProperties) {
 		this.bundleProperties = bundleProperties;
-		setJavaVersion(bundleProperties.getJVMVersion());
 	}
-
-	private void setJavaVersion(String version) {
-
-		if (version == null)
-			return;
-
-		this.version = Double.valueOf(version.substring(0, 3)).doubleValue();
-	}
-
 
 	public void writeFile(File fileName) throws BuildException {
 
@@ -226,73 +217,111 @@ public class PropertyListWriter {
 		if (documentTypes.size() > 0)
  			writeDocumentTypes(documentTypes, dict);
 
-		// Java entry in the plist dictionary
-		writeKey("Java", dict);
-		Node javaDict = createNode("dict", dict);
+		// Java entries in the plist dictionary
+		if (bundleProperties.getJavaVersion() < 1.7) {
+			// Apple Java Version
 
-		// Main class, required
-		writeKeyStringPair("MainClass", bundleProperties.getMainClass(), javaDict);
+			writeKey("Java", dict);
+			Node javaDict = createNode("dict", dict);
 
-		// Target JVM version, optional but recommended
-		if (bundleProperties.getJVMVersion() != null)
-			writeKeyStringPair("JVMVersion", bundleProperties.getJVMVersion(), javaDict);
+			// Main class, required
+			writeKeyStringPair("MainClass", bundleProperties.getMainClass(), javaDict);
 
-        // New in JarBundler 2.2.0; Tobias Bley ---------------------------------
+			// Target JVM version, optional but recommended
+			if (bundleProperties.getJVMVersion() != null)
+				writeKeyStringPair("JVMVersion", bundleProperties.getJVMVersion(), javaDict);
 
-        // JVMArchs, optional
-        List jvmArchs = bundleProperties.getJVMArchs();
+			// New in JarBundler 2.2.0; Tobias Bley ---------------------------------
 
-        if (jvmArchs != null && !jvmArchs.isEmpty())
-            writeJVMArchs(jvmArchs, javaDict);
+			// JVMArchs, optional
+			List jvmArchs = bundleProperties.getJVMArchs();
 
-        // lsArchitecturePriority, optional
-        List lsArchitecturePriority = bundleProperties.getLSArchitecturePriority();
+			if (jvmArchs != null && !jvmArchs.isEmpty())
+				writeJVMArchs(jvmArchs, javaDict);
 
-        if (lsArchitecturePriority != null && !lsArchitecturePriority.isEmpty())
-            writeLSArchitecturePriority(lsArchitecturePriority, javaDict);
+			// lsArchitecturePriority, optional
+			List lsArchitecturePriority = bundleProperties.getLSArchitecturePriority();
 
-        //-----------------------------------------------------------------------
+			if (lsArchitecturePriority != null && !lsArchitecturePriority.isEmpty())
+				writeLSArchitecturePriority(lsArchitecturePriority, javaDict);
 
-
-		// Classpath is composed of two types, required
-		// 1: Jars bundled into the JAVA_ROOT of the application
-		// 2: External directories or files with an absolute path
-
-		List classPath = bundleProperties.getClassPath();
-		List extraClassPath = bundleProperties.getExtraClassPath();
-
-		if ((classPath.size() > 0) || (extraClassPath.size() > 0))
-			writeClasspath(classPath, extraClassPath, javaDict);
+			//-----------------------------------------------------------------------
 
 
-		// JVM options, optional
-		if (bundleProperties.getVMOptions() != null)
-			writeKeyStringPair("VMOptions", bundleProperties.getVMOptions(), javaDict);
+			// Classpath is composed of two types, required
+			// 1: Jars bundled into the JAVA_ROOT of the application
+			// 2: External directories or files with an absolute path
 
-		// Working directory, optional
-		if (bundleProperties.getWorkingDirectory() != null)
-			writeKeyStringPair("WorkingDirectory", bundleProperties.getWorkingDirectory(), javaDict);
+			List classPath = bundleProperties.getClassPath();
+			List extraClassPath = bundleProperties.getExtraClassPath();
 
-		// StartOnMainThread, optional
-		if (bundleProperties.getStartOnMainThread() != null) {
-			writeKey("StartOnMainThread", javaDict);
-			createNode(bundleProperties.getStartOnMainThread().toString(), javaDict);
-	    }
+			if ((classPath.size() > 0) || (extraClassPath.size() > 0))
+				writeClasspath(classPath, extraClassPath, javaDict);
 
-        // SplashFile, optional
-        if (bundleProperties.getSplashFile() != null)
-            writeKeyStringPair("SplashFile", bundleProperties.getSplashFile(), javaDict);
 
-		// Main class arguments, optional
-		if (bundleProperties.getArguments() != null)
-			writeKeyStringPair("Arguments", bundleProperties.getArguments(), javaDict);
+			// JVM options, optional
+			if (bundleProperties.getVMOptions() != null)
+				writeKeyStringPair("VMOptions", bundleProperties.getVMOptions(), javaDict);
 
-		// Java properties, optional
-		Hashtable javaProperties = bundleProperties.getJavaProperties();
+			// Working directory, optional
+			if (bundleProperties.getWorkingDirectory() != null)
+				writeKeyStringPair("WorkingDirectory", bundleProperties.getWorkingDirectory(), javaDict);
 
-		if (javaProperties.isEmpty() == false)
- 			writeJavaProperties(javaProperties, javaDict);
+			// StartOnMainThread, optional
+			if (bundleProperties.getStartOnMainThread() != null) {
+				writeKey("StartOnMainThread", javaDict);
+				createNode(bundleProperties.getStartOnMainThread().toString(), javaDict);
+			}
 
+			// SplashFile, optional
+			if (bundleProperties.getSplashFile() != null)
+				writeKeyStringPair("SplashFile", bundleProperties.getSplashFile(), javaDict);
+
+			// Main class arguments, optional
+			if (bundleProperties.getArguments() != null)
+				writeKeyStringPair("Arguments", bundleProperties.getArguments(), javaDict);
+
+			// Java properties, optional
+			Hashtable javaProperties = bundleProperties.getJavaProperties();
+
+			if (javaProperties.isEmpty() == false)
+				writeJavaProperties(javaProperties, javaDict);
+		} else {
+			// Oracle Java Version
+
+			// Main class, required
+			writeKeyStringPair("JVMMainClassName", bundleProperties.getMainClass(), dict);
+
+			// Main class arguments, optional
+			if (bundleProperties.getArguments() != null) {
+				writeKey("JVMArguments", dict);
+				writeArray(Arrays.asList(bundleProperties.getArguments().split("\\s+")), dict);
+			}
+
+			// JVM options and Java properties, optional
+			if ((bundleProperties.getVMOptions() != null) || !bundleProperties.getJavaProperties().isEmpty()) {
+				writeKey("JVMOptions", dict);
+
+				List<String> jvmOptions = new ArrayList<String>();
+
+				if (bundleProperties.getVMOptions() != null)
+					jvmOptions.addAll(Arrays.asList(bundleProperties.getVMOptions().split("\\s+")));
+
+				Iterator javaPropertiesIterator = bundleProperties.getJavaProperties().entrySet().iterator();
+				while (javaPropertiesIterator.hasNext())
+				{
+					Map.Entry entry = (Map.Entry) javaPropertiesIterator.next();
+					if (((String) entry.getKey()).startsWith("com.apple.")) {
+						System.out.println("Deprecated as of 1.4: " + entry.getKey());
+						continue;
+					}
+					jvmOptions.add("-D" + entry.getKey() + '=' + entry.getValue());
+				}
+
+				writeArray(jvmOptions, dict);
+			}
+
+		}
 
 		// Services, optional
 		List services = bundleProperties.getServices();
@@ -426,7 +455,7 @@ public class PropertyListWriter {
 		for (Iterator i = javaProperties.keySet().iterator(); i.hasNext();) {
 			String key = (String) i.next();
 
-			if (key.startsWith("com.apple.") && (version >= 1.4)) {
+			if (key.startsWith("com.apple.") && (bundleProperties.getJavaVersion() >= 1.4)) {
 				System.out.println("Deprecated as of 1.4: " + key);
 				continue;
 			}
