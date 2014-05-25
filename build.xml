@@ -1272,6 +1272,7 @@
 					       icons/file.icns
 					       icons/icon.icns
 					       org/gjt/sp/jedit/jEdit.java
+					       package-files/osx/**
 					       ${config.dist.dir}/${jar.filename}
 					       ${config.dist.dir}/classes/jarbundler/**
 					       ${config.dist.dir}/doc/**
