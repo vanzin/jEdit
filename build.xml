@@ -1222,22 +1222,59 @@
 				      iconfile="icons/file.icns"
 				      role="Editor"/>
 		</jarbundler:create>
-		<delete file="${dist.dir}/${mac.disk.image.filename}"
-			failonerror="false"/>
+		<delete failonerror="false">
+			<fileset dir="${dist.dir}"
+				 includes="*${mac.disk.image.filename}"/>
+		</delete>
 		<exec executable="hdiutil"
 		      failonerror="true">
 			<arg value="create"/>
-			<arg value="-quiet"/>
 			<arg value="-volname"/>
-			<arg value="jEdit ${jedit.version}"/>
+			<arg value="jEdit"/>
 			<arg value="-srcfolder"/>
 			<arg file="${dist.dir}/classes/mac/jEdit.app"/>
-			<arg file="${dist.dir}/${mac.disk.image.filename}"/>
+			<arg value="-srcfolder"/>
+			<arg file="package-files/osx/.background"/>
+			<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
 		</exec>
 		<exec executable="hdiutil"
 		      failonerror="true">
-			<arg value="internet-enable"/>
-			<arg value="-quiet"/>
+			<arg value="convert"/>
+			<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
+			<arg value="-format"/>
+			<arg value="UDRW"/>
+			<arg value="-o"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+		</exec>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="attach"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+		</exec>
+		<exec executable="ln"
+		      failonerror="true">
+			<arg value="-sF" />
+			<arg file="/Applications" />
+			<arg file="/Volumes/jEdit/ " />
+		</exec>
+		<copy file="package-files/osx/DS_Store"
+		      tofile="/Volumes/jEdit/.DS_Store"
+		      overwrite="true"/>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="detach"/>
+			<arg file="/Volumes/jEdit"/>
+			<arg value="-force"/>
+		</exec>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="convert"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+			<arg value="-format"/>
+			<arg value="UDZO"/>
+			<arg value="-imagekey"/>
+			<arg value="zlib-level=9"/>
+			<arg value="-o"/>
 			<arg file="${dist.dir}/${mac.disk.image.filename}"/>
 		</exec>
 		<property name="wipe.dist.files"
@@ -2037,6 +2074,7 @@ Press Return key to continue...
 									  negate="true"/>
 							</and>
 							<filename name="classes/**"/>
+							<filename name="*-${mac.disk.image.filename}"/>
 						</or>
 					</fileset>
 				</delete>
