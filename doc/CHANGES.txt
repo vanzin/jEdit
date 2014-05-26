@@ -30,7 +30,7 @@ Alan Ezust, and Eric Le Lay for contributing to this release.
   (bug #3825 - Eric Le Lay)
 
 - Fix java installer bug: Installing from jedit5.1.0install.jar failure
-   (bug #3837 - Eric Le Lay)
+  (bug #3837 - Eric Le Lay)
 
 }}}
 {{{ API Changes
@@ -100,6 +100,7 @@ Alan Ezust, and Eric Le Lay for contributing to this release.
 - Improved layout manager for text area (patch #518 - Dale Anson)
 
 - "Copy link to clipboard" popup menu in HelpViewer (Eric Le Lay)
+
 }}}
 {{{ Editing
 
@@ -123,7 +124,20 @@ Alan Ezust, and Eric Le Lay for contributing to this release.
 - New macros: Go To Offset, Reverse Selection (patch #501, #502 Thomas Meyer)
 
 - Removed some no longer needed pre-Java7 MacOSX key handling workaround code
-    (patch #511, #512, Makarius, Alan Ezust)
+  (patch #511, #512, Makarius, Alan Ezust)
+
+- Make the OS X application bundle work with Oracle Java 7
+  (bug #3743, #3841, #3862 - Björn "Vampire" Kautler)
+
+- Add copyright tag to the OS X application bundle (Björn "Vampire" Kautler)
+
+- Add UTI to the document type in the OS X application bundle (Björn "Vampire" Kautler)
+
+- Bunde version 1.3 of the MacOSX plugin (Björn "Vampire" Kautler)
+
+- Customize the look of the DMG root folder to provide a simple yet convenient
+  installation GUI for OS X users and to tell them how to work-around Gatekeeper
+  blocking jEdit (bug #3821, #3757 - Björn "Vampire" Kautler)
 
 }}}
 

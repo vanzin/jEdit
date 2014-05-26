@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project name="jedit"
 	 default="build"
 	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"
@@ -20,7 +21,7 @@
 		  value="1.7+"/>
 	<!-- based on http://packages.slackverse.org/?v=1&p=92 -->
 	<property name="slackware.target.java.version"
-		  value="1_7"/>
+		  value="1_7_0"/>
 
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
@@ -424,7 +425,8 @@
 
 	<target name="test"
 		depends="init,retrieve,compile,compile-test"
-		description="run unit tests" unless="skip.tests">
+		description="run unit tests"
+		unless="skip.tests">
 		<delete dir="${build.dir}/test/raw-reports"/>
 		<mkdir dir="${build.dir}/test/raw-reports"/>
 		<junit printsummary="true"
@@ -786,6 +788,7 @@
 					 windowtitle="jEdit API Documentation"
 					 doctitle="jEdit API"
 					 failonerror="true"
+					 source="${target.java.version}"
 					 encoding="UTF-8"
 					 docencoding="UTF-8"
 					 charset="UTF-8">
@@ -805,7 +808,7 @@
 			</contrib:else>
 		</contrib:if>
 	</target>
- 
+
 	<target name="docs-javadoc"
 		depends="init,generate-javadoc"
 		description="generate JavaDoc API docs">
@@ -814,7 +817,6 @@
 				 includes="api/**"
 				 excludes="api/**/*.html"/>
 		</copy>
-
 		<copy todir="${jar.location}/doc">
 			<fileset dir="${classes.dir}/javadoc"
 				 includes="api/**/*.html"/>
@@ -832,8 +834,9 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
-        <copy todir="${jar.location}/doc/api" overwrite="true" flatten="true"
-            file="${basedir}/doc/stylesheet.css"/>
+		<copy file="${basedir}/doc/stylesheet.css"
+		      todir="${jar.location}/doc/api"
+		      overwrite="true"/>
 	</target>
 
 	<target name="generate-pdf-users-guide"
@@ -1156,15 +1159,11 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="1.4"
-		       target="1.4"
+		       source="1.6"
+		       target="1.6"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
-			<classpath>
-				<fileset dir="${lib.dir}/jarbundler"
-					 includes="*.jar"/>
-			</classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -1183,10 +1182,6 @@
 			 classname="net.sourceforge.jarbundler.JarBundler"
 			 classpath="${dist.dir}/classes/jarbundler"
 			 uri="antlib:net.sourceforge.jarbundler">
-			<classpath>
-				<fileset dir="${lib.dir}/jarbundler"
-					 includes="*.jar"/>
-			</classpath>
 		</taskdef>
 		<tstamp>
 			<format property="current.year"
@@ -1200,20 +1195,19 @@
 				   arguments="-background"
 				   build="${jedit.build.number}"
 				   bundleid="org.gjt.sp.jedit"
+				   developmentregion="English"
 				   extraclasspath="/System/Library/Java"
 				   icon="icons/icon.icns"
 				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
+				   copyright="Copyright &#169; 1998-${current.year} Contributors"
 				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
 				   signature="JESP"
-				   stubfile="jedit"
-				   version="${jedit.version}">
-			<javaproperty name="apple.awt.antialiasing" value="true"/>
-			<javaproperty name="apple.awt.textantialiasing" value="true"/>
-			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
-			<!-- Commented due https://sourceforge.net/tracker/?func=detail&atid=100588&aid=2820535&group_id=588 discussion -->
-			<!--javaproperty name="apple.awt.graphics.UseQuartz" value="true" />
-			<javaproperty name="apple.awt.rendering"          value="speed" /-->
+				   stubfile="package-files/osx/jedit"
+				   version="${jedit.version}"
+				   antialiasedgraphics="true"
+				   antialiasedtext="true"
+				   screenmenu="true">
 			<javafileset dir="${dist.dir}"
 				     includes="doc/**
 					       jars/**
@@ -1225,41 +1219,63 @@
 			<documenttype name="jEdit TEXT Document"
 				      extensions="*"
 				      ostypes="TEXT ****"
+				      utis="public.text"
 				      iconfile="icons/file.icns"
 				      role="Editor"/>
-			<service message="openFile"
-				 menuitem="jEdit/Open Files"
-				 sendtypes="NSStringPboardType,NSFilenamesPboardType"/>
-			<service message="insertSelection"
-				 menuitem="jEdit/Insert Text"
-				 sendtypes="NSStringPboardType"/>
-			<service message="openSelection"
-				 menuitem="jEdit/New Buffer with Text"
-				 sendtypes="NSStringPboardType"/>
 		</jarbundler:create>
-		<delete file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
-		<exec executable="ln"
-		      failonerror="true">
-			<arg value="-s" />
-			<arg file="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub" />
-			<arg file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
-		</exec>
-		<delete file="${dist.dir}/${mac.disk.image.filename}"
-			failonerror="false"/>
+		<delete failonerror="false">
+			<fileset dir="${dist.dir}"
+				 includes="*${mac.disk.image.filename}"/>
+		</delete>
 		<exec executable="hdiutil"
 		      failonerror="true">
 			<arg value="create"/>
-			<arg value="-quiet"/>
 			<arg value="-volname"/>
-			<arg value="jEdit ${jedit.version}"/>
+			<arg value="jEdit"/>
 			<arg value="-srcfolder"/>
 			<arg file="${dist.dir}/classes/mac/jEdit.app"/>
-			<arg file="${dist.dir}/${mac.disk.image.filename}"/>
+			<arg value="-srcfolder"/>
+			<arg file="package-files/osx/.background"/>
+			<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
 		</exec>
 		<exec executable="hdiutil"
 		      failonerror="true">
-			<arg value="internet-enable"/>
-			<arg value="-quiet"/>
+			<arg value="convert"/>
+			<arg file="${dist.dir}/orig-${mac.disk.image.filename}"/>
+			<arg value="-format"/>
+			<arg value="UDRW"/>
+			<arg value="-o"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+		</exec>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="attach"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+		</exec>
+		<exec executable="ln"
+		      failonerror="true">
+			<arg value="-sF" />
+			<arg file="/Applications" />
+			<arg file="/Volumes/jEdit/ " />
+		</exec>
+		<copy file="package-files/osx/DS_Store"
+		      tofile="/Volumes/jEdit/.DS_Store"
+		      overwrite="true"/>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="detach"/>
+			<arg file="/Volumes/jEdit"/>
+			<arg value="-force"/>
+		</exec>
+		<exec executable="hdiutil"
+		      failonerror="true">
+			<arg value="convert"/>
+			<arg file="${dist.dir}/udrw-${mac.disk.image.filename}"/>
+			<arg value="-format"/>
+			<arg value="UDZO"/>
+			<arg value="-imagekey"/>
+			<arg value="zlib-level=9"/>
+			<arg value="-o"/>
 			<arg file="${dist.dir}/${mac.disk.image.filename}"/>
 		</exec>
 		<property name="wipe.dist.files"
@@ -1294,6 +1310,7 @@
 					       icons/file.icns
 					       icons/icon.icns
 					       org/gjt/sp/jedit/jEdit.java
+					       package-files/osx/**
 					       ${config.dist.dir}/${jar.filename}
 					       ${config.dist.dir}/classes/jarbundler/**
 					       ${config.dist.dir}/doc/**
@@ -2058,6 +2075,7 @@ Press Return key to continue...
 									  negate="true"/>
 							</and>
 							<filename name="classes/**"/>
+							<filename name="*-${mac.disk.image.filename}"/>
 						</or>
 					</fileset>
 				</delete>

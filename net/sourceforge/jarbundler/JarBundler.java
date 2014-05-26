@@ -1,21 +1,20 @@
 /*
  * A Mac OS X Jar Bundler Ant Task.
  *
+ *
  * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See  the GNU General Public License for
- * more details.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package net.sourceforge.jarbundler;
@@ -72,7 +71,7 @@ import java.lang.System;
  * An ant task which creates a Mac OS X Application Bundle for a Java
  * application.
  * </p>
- * 
+ *
  * <dl>
  * <dt>dir</dt>
  * <dd>The directory into which to put the new application bundle.</dd>
@@ -83,10 +82,10 @@ import java.lang.System;
  * <dt>mainclass</dt>
  * <dd>The main Java class to call when running the application.</dd>
  * </dl>
- * 
+ *
  * <p>
  * One of the following three MUST be used:
- * 
+ *
  * <ol>
  * <li>jars Space or comma-separated list of JAR files to include.; OR</li>
  * <li>One or more nested &lt;jarfileset&gt;s. These are normal ANT FileSets;
@@ -94,77 +93,77 @@ import java.lang.System;
  * <li>One or more nested &lt;jarfilelist&gt;s. These are standard ANT
  * FileLists. </li>
  * </ol>
- * 
+ *
  * <p>
  * Optional attributes:
- * 
+ *
  * <p>
  * The following attributes are not required, but you can use them to override
  * default behavior.
- * 
+ *
  * <dl>
  * <dt>verbose
  * <dd>If true, show more verbose output while running the task
- * 
+ *
  * <dt>version
  * <dd>Version information about your application (e.g., "1.0")
- * 
+ *
  * <dt>infostring
  * <dd>String to show in the "Get Info" dialog
  * </dl>
- * 
+ *
  * These attributes control the fine-tuning of the "Mac OS X" look and feel.
- * 
+ *
  * <dl>
  * <dt>arguments
  * <dd>Command line arguments. (no default)
- * 
+ *
  * <dt>smalltabs
  * <dd>Use small tabs. (default "false") Deprecated under JVM 1.4.1
- * 
+ *
  * <dt>antialiasedgraphics
  * <dd>Use anti-aliased graphics (default "false")
- * 
+ *
  * <dt>antialiasedtext
  * <dd>Use anti-aliased text (default "false")
- * 
+ *
  * <dt>bundleid
  * <dd>Unique identifier for this bundle, in the form of a Java package. No
  * default.
- * 
+ *
  * <dt>buildnumber
  * <dd>Unique identifier for this build
- * 
+ *
  * <dt>developmentregion
  * <dd>Development Region. Default "English".
- * 
+ *
  * <dt>execs
  * <dd>Files to be copied into "Resources/MacOS" and made executable
- * 
+ *
  * <dt>liveresize
  * <dd>Use "Live resizing" (default "false") Deprecated under JVM 1.4.1
- * 
- * 
+ *
+ *
  * <dt>growbox
  * <dd>Show growbox (default "true")
- * 
+ *
  * <dt>growboxintrudes
  * <dd>Intruding growbox (default "false") Deprecated under JVM 1.4.1
- * 
+ *
  * <dt>screenmenu
  * <dd>Put swing menu into Mac OS X menu bar.
- * 
+ *
  * <dt>type
  * <dd>Bundle type (default "APPL")
- * 
+ *
  * <dt>signature
  * <dd>Bundle Signature (default "????")
- * 
+ *
  * <dt>stubfile
  * <dd>The Java Application Stub file to copy for your application (default
  * MacOS system stub file)
  * </dl>
- * 
+ *
  * <p>
  * Rarely used optional attributes.
  * <dl>
@@ -172,7 +171,7 @@ import java.lang.System;
  * <dd>Full path to the chmod command. This almost certainly does NOT need to
  * be set.
  * </dl>
- * 
+ *
  * <p>
  * The task also supports nested &lt;execfileset&gt; and/or &lt;execfilelist&gt;
  * elements, and &lt;resourcefileset&gt; and/or &lt;resourcefilelist&gt;
@@ -184,16 +183,16 @@ import java.lang.System;
  * the same relation to the <code>Contents/Resources</code> directory as the
  * files in the FileSet or FileList have to the 'dir' attribute. Thus in the
  * case:
- * 
+ *
  * <pre>
  *   &lt;resourcefileset dir=&quot;builddir/architectures&quot;
  *                       includes=&quot;ppc/*.jnilib&quot;/&gt;
  * </pre>
- * 
+ *
  * <p>
  * the <code>*.jnilib</code> files will be installed in
  * <code>Contents/Resources/ppc</code>.
- * 
+ *
  * <p>
  * The task supports a nested &lt;javaproperty&gt; element, which allows you to
  * specify further properties which are set for the JVM when the application is
@@ -206,19 +205,19 @@ import java.lang.System;
  * <code>$APP_PACKAGE</code> is set to the root directory of the bundle (ie,
  * the path to the <code>foo.app</code> directory), and <code>$JAVAROOT</code>
  * to the directory <code>Contents/Resources/Java</code>.
- * 
+ *
  * <p>
  * Minimum example:
- * 
+ *
  * <pre>
- *  
+ *
  *    &lt;jarbundler dir=&quot;release&quot; name=&quot;Bar Project&quot; mainclass=&quot;org.bar.Main&quot;
  *        jars=&quot;bin/Bar.jar&quot; /&gt;
  * </pre>
- * 
+ *
  * <p>
  * Using Filesets
- * 
+ *
  * <pre>
  *    &lt;jarbundler dir=&quot;release&quot; name=&quot;Bar Project&quot; mainclass=&quot;org.bar.Main&quot;&gt;
  *      &lt;jarfileset dir=&quot;bin&quot;&gt;
@@ -230,17 +229,17 @@ import java.lang.System;
  *      &lt;/execfileset&gt;
  *    &lt;/jarbundler&gt;
  * </pre>
- * 
+ *
  * <p>
  * Much Longer example:
  * </p>
- * 
+ *
  * <pre>
  *    &lt;jarbundler dir=&quot;release&quot;
  *                name=&quot;Foo Project&quot;
  *                mainclass=&quot;org.bar.Main&quot;
  *                version=&quot;1.0 b 1&quot;
- *                infostring=&quot;Foo Project (c) 2002&quot; 
+ *                infostring=&quot;Foo Project (c) 2002&quot;
  *                type=&quot;APPL&quot;
  *                jars=&quot;bin/foo.jar bin/bar.jar&quot;
  *                execs=&quot;exec/foobar&quot;
@@ -250,7 +249,7 @@ import java.lang.System;
  *                jvmversion=&quot;1.4.1+&quot;
  *                vmoptions=&quot;-Xmx256m&quot;/&gt;
  * </pre>
- * 
+ *
  * http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/
  */
 public class JarBundler extends MatchingTask {
@@ -283,7 +282,7 @@ public class JarBundler extends MatchingTask {
 	private final List mExecAttrs = new ArrayList();
 
 	private final List mExtraClassPathAttrs = new ArrayList();
-	
+
 	private final List mHelpBooks = new ArrayList();
 
 	private boolean mVerbose = false;
@@ -337,7 +336,7 @@ public class JarBundler extends MatchingTask {
 
 	/**
 	 * Arguments to the
-	 * 
+	 *
 	 * @param s
 	 *            The arguments to pass to the application being launched.
 	 */
@@ -347,7 +346,7 @@ public class JarBundler extends MatchingTask {
 
 	/**
 	 * Override the stub file path to build on non-MacOS platforms
-	 * 
+	 *
 	 * @param file
 	 *            the path to the stub file
 	 */
@@ -406,12 +405,22 @@ public class JarBundler extends MatchingTask {
 	}
 
 	/**
+     * Setter for the "splashfile" attribute (optional). If it is somewhere
+     * in a jar file, which contains a Splash-Screen manifest entry,
+     * use "$JAVAROOT/myjar.jar"
+     */
+
+    public void setSplashFile(String s) {
+        bundleProperties.setSplashFile(s);
+    }
+
+    /**
 	 * Setter for the "bundleid" attribute (optional) This key specifies a
 	 * unique identifier string for the bundle. This identifier should be in the
 	 * form of a Java-style package name, for example com.mycompany.myapp. The
 	 * bundle identifier can be used to locate the bundle at runtime. The
 	 * preferences system uses this string to identify applications uniquely.
-	 * 
+	 *
 	 * No default.
 	 */
 	public void setBundleid(String s) {
@@ -419,16 +428,32 @@ public class JarBundler extends MatchingTask {
 	}
 
 	/**
-	 * Setter for the "developmentregion" attribute(optional) Default "English".
+	 * Setter for the "developmentregion" attribute (optional) Default "English".
 	 */
 	public void setDevelopmentregion(String s) {
 		bundleProperties.setCFBundleDevelopmentRegion(s);
 	}
 
+	/**  Tobias Fischer, v2.3.0
+	 * Setter for the "allowmixedlocalizations" attribute (optional) Default "false".
+	 */
+	public void setAllowMixedLocalizations(boolean b) {
+		bundleProperties.setCFBundleAllowMixedLocalizations(b);
+	}
+
+	/** Tobias Fisher, v2.3.1
+	 * Setter for the "NSHumanReadableCopyright" attribute (optional)
+	 */
+
+	public void setCopyright(String s) {
+		bundleProperties.setNSHumanReadableCopyright(s);
+	}
+
 	/**
-	 * Setter for the "aboutmenuname" attribute (optional)
+	 * Setter for the deprecated "aboutmenuname" attribute (optional)
 	 */
 	public void setAboutmenuname(String s) {
+		System.err.println("WARNING: 'aboutmenuname' is deprecated! Use JarBundler attribute 'shortname' instead!");
 		bundleProperties.setCFBundleName(s);
 	}
 
@@ -510,6 +535,40 @@ public class JarBundler extends MatchingTask {
 		bundleProperties.setJVMVersion(s);
 	}
 
+    // New in JarBundler 2.2.0; Tobias Bley ----------------
+
+	/**
+     * Setter for the "JVMArchs" attribute (optional)
+     */
+    public void setJvmArchs(String s) {
+        bundleProperties.setJVMArchs(s);
+    }
+
+    /**  Michael Bader <nufan_k@me.com> --------------------
+     * Setter for the "LSArchitecturePriority" attribute (optional)
+     */
+    public void setLSArchitecturePriority(String s) {
+        bundleProperties.setLSArchitecturePriority(s);
+    }
+
+    //-------------------------------------------------------
+
+    /**
+	 * Setter for the "startonmainthread" attribute (optional)
+	 */
+	public void setStartonmainthread(boolean b) {
+		bundleProperties.setStartOnMainThread(new Boolean(b));
+	}
+
+
+	/**
+	 * Setter for the "startasagent" attribute (optional)
+	 */
+	public void setIsAgent( boolean b ) {
+		bundleProperties.setLSUIElement( new Boolean( b ) );
+	}
+
+
 	/**
 	 * Setter for the "infostring" attribute (optional) This key identifies a
 	 * human-readable plain text string displaying the copyright information for
@@ -533,13 +592,14 @@ public class JarBundler extends MatchingTask {
 	 * are minor revision numbers. You may omit minor revision numbers as
 	 * appropriate. The value of this key is displayed in the default About box
 	 * for Cocoa applications.
-	 * 
+	 *
 	 * The value for this key differs from the value for "CFBundleVersion",
 	 * which identifies a specific build number. The CFBundleShortVersionString
 	 * value represents a more formal version that does not change with every
 	 * build.
 	 */
 	public void setShortInfoString(String s) {
+		System.err.println("WARNING: 'shortinfostring' is deprecated! Use JarBundler attribute 'infostring' instead!");
 		setVersion(s);
 	}
 
@@ -565,12 +625,12 @@ public class JarBundler extends MatchingTask {
 	 * second and third numbers are minor revision numbers and must be a single
 	 * numeric digit. The fourth set of digits is the specific build number for
 	 * the release.
-	 * 
+	 *
 	 * You may omit minor revision and build number information as appropriate.
 	 * You may also omit major and minor revision information and specify only a
 	 * build number. For example, valid version numbers include: 1.0.1,
 	 * 1.2.1b10, 1.2d200, d125, 101, and 1.0.
-	 * 
+	 *
 	 * The value of this key typically changes between builds and is displayed
 	 * in the Cocoa About panel in parenthesis. To specify the version
 	 * information of a released bundle, use the CFBundleShortVersionString key.
@@ -596,6 +656,7 @@ public class JarBundler extends MatchingTask {
 	public void setHelpBookName(String s) {
 		bundleProperties.setCFBundleHelpBookName(s);
 	}
+
 
 	/**
 	 * Setter for the "jars" attribute (required if no "jarfileset" is present)
@@ -636,6 +697,7 @@ public class JarBundler extends MatchingTask {
 	 * Setter for the "extraclasspath" attribute (optional)
 	 */
 	public void setExtraclasspath(String s) {
+		if (s == null || s.trim().equals("")) return;
 		PatternSet patset = new PatternSet();
 		patset.setIncludes(s);
 
@@ -739,26 +801,26 @@ public class JarBundler extends MatchingTask {
 	}
 
 	public void addConfiguredService(Service service) {
-	
+
 		//if (service.getPortName() == null)
 		//	throw new BuildException("\"<service>\" must have a \"portName\" attribute");
-		
+
 		if (service.getMessage() == null)
 			throw new BuildException("\"<service>\" must have a \"message\" attribute");
-		
+
 		String menuItem = service.getMenuItem();
 		if (menuItem == null)
 			throw new BuildException("\"<service>\" must have a \"menuItem\" attribute");
 		if (!menuItems.add(menuItem))
 			throw new BuildException("\"<service>\" \"menuItem\" value must be unique");
-		
+
 		if (service.getSendTypes().isEmpty() && service.getReturnTypes().isEmpty())
 			throw new BuildException("\"<service>\" must have either a \"sendTypes\" attribute, a \"returnTypes\" attribute or both");
-		
+
 		String keyEquivalent = service.getKeyEquivalent();
 		if ((keyEquivalent != null) && (1 != keyEquivalent.length()))
 			throw new BuildException("\"<service>\" \"keyEquivalent\" must be one character if present");
-		
+
 		String timeoutString = service.getTimeout();
 		if (timeoutString != null) {
 			long timeout = -1;
@@ -770,12 +832,12 @@ public class JarBundler extends MatchingTask {
 			if (timeout < 0)
 				throw new BuildException("\"<service>\" \"timeout\" must not be negative");
 		}
-		
+
 		bundleProperties.addService(service);
 	}
-	
+
 	public void addConfiguredHelpBook(HelpBook helpBook) {
-	
+
 		// Validity check on 'foldername'
 		if (helpBook.getFolderName() == null) {
 			if (bundleProperties.getCFBundleHelpBookFolder() == null)
@@ -941,7 +1003,7 @@ public class JarBundler extends MatchingTask {
 					+ mResourcesDir);
 
 		// Make the Resources/Java directory
-		mJavaDir = new File(mResourcesDir, "Java");
+		mJavaDir = new File(bundleProperties.getJavaVersion() < 1.7 ? mResourcesDir : mContentsDir, "Java");
 
 		if (!mJavaDir.mkdir())
 			throw new BuildException("Unable to create directory " + mJavaDir);
@@ -950,7 +1012,7 @@ public class JarBundler extends MatchingTask {
 		// is supplied, the default icon will be used.
 
 		if (mAppIcon != null) {
-		
+
 
 			try {
 				File dest = new File(mResourcesDir, mAppIcon.getName());
@@ -1064,12 +1126,12 @@ public class JarBundler extends MatchingTask {
 	 * 1.3 the Java property to tell the VM to display Swing menu bars as screen
 	 * menus is "com.apple.macos.useScreenMenuBar". Under 1.4, it becomes
 	 * "apple.laf.useScreenMenuBar". Such is the price of progress, I suppose.
-	 * 
+	 *
 	 * Obviously, this logic may need refactoring in the future.
 	 */
 
 	private boolean useOldPropertyNames() {
-		return (bundleProperties.getJVMVersion().startsWith("1.3"));
+		return (bundleProperties.getJavaVersion() <= 1.3);
 	}
 
 	private void processJarAttrs() throws BuildException {
@@ -1080,9 +1142,9 @@ public class JarBundler extends MatchingTask {
 				File src = (File) jarIter.next();
 				File dest = new File(mJavaDir, src.getName());
 
-				if (mVerbose) 
+				if (mVerbose)
 					log("Copying JAR file to \"" + bundlePath(dest) + "\"");
-				
+
 
 				mFileUtils.copyFile(src, dest);
 				bundleProperties.addToClassPath(dest.getName());
@@ -1141,9 +1203,9 @@ public class JarBundler extends MatchingTask {
 					File src = new File(srcDir, fileName);
 					File dest = new File(mJavaDir, fileName);
 
-					if (mVerbose) 
+					if (mVerbose)
 						log("Copying JAR file to \"" + bundlePath(dest) + "\"");
-					
+
 
 					mFileUtils.copyFile(src, dest);
 					bundleProperties.addToClassPath(fileName);
@@ -1159,7 +1221,8 @@ public class JarBundler extends MatchingTask {
 		for (Iterator jarIter = mExtraClassPathAttrs.iterator(); jarIter
 				.hasNext();) {
 			File src = (File) jarIter.next();
-			bundleProperties.addToExtraClassPath(src.getPath());
+			String path = src.getPath().replace(File.separatorChar, '/');
+			bundleProperties.addToExtraClassPath(path);
 		}
 	}
 
@@ -1178,7 +1241,8 @@ public class JarBundler extends MatchingTask {
 
 			for (int i = 0; i < files.length; i++) {
 				File f = new File(srcDir, files[i]);
-				bundleProperties.addToExtraClassPath(f.getPath());
+				String path = f.getPath().replace(File.separatorChar, '/');
+				bundleProperties.addToExtraClassPath(path);
 			}
 		}
 	}
@@ -1194,7 +1258,8 @@ public class JarBundler extends MatchingTask {
 
 			for (int i = 0; i < files.length; i++) {
 				File f = new File(srcDir, files[i]);
-				bundleProperties.addToExtraClassPath(f.getPath());
+				String path = f.getPath().replace(File.separatorChar, '/');
+				bundleProperties.addToExtraClassPath(path);
 			}
 		}
 	}
@@ -1207,9 +1272,9 @@ public class JarBundler extends MatchingTask {
 				File src = (File) execIter.next();
 				File dest = new File(mMacOsDir, src.getName());
 
-				if (mVerbose) 
+				if (mVerbose)
 					log("Copying exec file to \"" + bundlePath(dest) + "\"");
-				
+
 
 				mFileUtils.copyFile(src, dest);
 				setExecutable(dest);
@@ -1259,12 +1324,12 @@ public class JarBundler extends MatchingTask {
 						String fileName = files[i];
 						File src = new File(srcDir, fileName);
 						File dest = new File(targetdir, fileName);
-						
-						if (mVerbose) 
+
+						if (mVerbose)
 							log("Copying "
 									+ (setExec ? "exec" : "resource")
 									+ " file to \"" + bundlePath(dest) +"\"");
-						
+
 						mFileUtils.copyFile(src, dest);
 						if (setExec)
 							setExecutable(dest);
@@ -1312,12 +1377,12 @@ public class JarBundler extends MatchingTask {
 						String fileName = files[i];
 						File src = new File(srcDir, fileName);
 						File dest = new File(targetDir, fileName);
-						
-						if (mVerbose) 
+
+						if (mVerbose)
 							log("Copying "
 									+ (setExec ? "exec" : "resource")
 									+ " file to \"" + bundlePath(dest) +"\"");
-						
+
 						mFileUtils.copyFile(src, dest);
 						if (setExec)
 							setExecutable(dest);
@@ -1336,35 +1401,35 @@ public class JarBundler extends MatchingTask {
 		for (Iterator itor = mHelpBooks.iterator(); itor.hasNext();) {
 
 			HelpBook helpBook = (HelpBook)itor.next();
-			
+
 			String folderName = helpBook.getFolderName();
 			String name = helpBook.getName();
 			String locale = helpBook.getLocale();
-			
+
 			List fileLists = helpBook.getFileLists();
 			List fileSets = helpBook.getFileSets();
 
 
 			File helpBookDir = null;
-			
+
 			if (locale == null) {
-			
+
 				// Set the Bundle entries for a nonlocalized Help Book
 				if (folderName != null)
 					bundleProperties.setCFBundleHelpBookFolder(folderName);
-				
+
 				if (name != null)
 					bundleProperties.setCFBundleHelpBookName(name);
-				
+
 				// The non-localized Help Book is top level "/Resources"
 				helpBookDir = new File(mResourcesDir, folderName);
 				helpBookDir.mkdir();
 
 				if(mVerbose)
-					log("Creating Help Book at \"" + 
+					log("Creating Help Book at \"" +
 					                    bundlePath(helpBookDir) + "\"");
 
-				
+
 			} else {
 
 				// The localized Help Book is "/Resources/locale.lproj"
@@ -1430,8 +1495,8 @@ public class JarBundler extends MatchingTask {
 		File infoPlist = new File(mContentsDir, "Info.plist");
 
 		listWriter.writeFile(infoPlist);
-		
-		if (mVerbose) 
+
+		if (mVerbose)
 			log("Creating \"" + bundlePath(infoPlist) + "\" file");
 
 
@@ -1439,12 +1504,12 @@ public class JarBundler extends MatchingTask {
 			try {
 				BufferedReader in = new BufferedReader(new FileReader(infoPlist));
 				String str;
-				while ((str = in.readLine()) != null) 
+				while ((str = in.readLine()) != null)
 					log(str);
 				in.close();
     		} catch (IOException e) {
     			throw new BuildException(e);
-    		}			
+    		}
 		}
 	}
 
@@ -1470,11 +1535,11 @@ public class JarBundler extends MatchingTask {
 	}
 
 	private String bundlePath(File bundleFile) {
-	
+
 		String rootPath = bundleDir.getAbsolutePath();
 		String thisPath = bundleFile.getAbsolutePath();
-	
+
 		return thisPath.substring(rootPath.length());
-	
+
 	}
 }
