@@ -15,14 +15,14 @@ Workflow
 
 1. Execute the BeanShell snippet at the end of this file ("Utilities -> BeanShell -> Evaluate Selection"). This will replace the version tags in this document by actual version numbers for easy copy & paste.
 
-2. Review http://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/branches/[branch]/doc/CHANGES.txt for formatting errors (like missing newline characters, wrong indentation or empty blocks), fix them and check them in.
+2. Review https://svn.code.sf.net/p/jedit/svn/jEdit/branches/[branch]/doc/CHANGES.txt for formatting errors (like missing newline characters, wrong indentation or empty blocks), fix them and check them in.
 
 3. Tag the sourcecode for release in the SVN repository by doing
-        svn copy https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/branches/[branch] https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/tags/[tag] -m "Tagging [version] for release."
+        svn copy https://svn.code.sf.net/p/jedit/svn/jEdit/branches/[branch] https://svn.code.sf.net/p/jedit/svn/jEdit/tags/[tag] -m "Tagging [version] for release."
    with the correct version in the second URL and in the commit message
 
 4. To be sure to work with the exact tagged source, check out the newly tagged source in a new directory by doing
-        svn checkout https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/tags/[tag]
+        svn checkout https://svn.code.sf.net/p/jedit/svn/jEdit/tags/[tag]
    no matter where. You will find the source in a subfolder [tag] where you executed the command
 
 5. Copy build.properties from your jEdit source directory to the newly created [tag] source directory if needed. If you don't have it, then create it if needed. You find a template called build.properties.sample in the root directory.
