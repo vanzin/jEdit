@@ -4,7 +4,7 @@ jEdit 5.2 version history
 
 {{{ Version 5.2pre2
 
-Thanks to  for contributing to this release.
+Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
