@@ -1,21 +1,28 @@
 jEdit 5.3 version history
-       (changes since jEdit 5.2pre1
+       (changes since jEdit 5.2pre1)
 :encoding=UTF-8:
 
-{{{ Version 5.2pre1
+{{{ Version 5.3pre1
 
 Thanks to Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
-}}}
-{{{ API Changes
-}}}
-{{{ UI improvements
-}}}
-{{{ Editing
+
+
 }}}
 {{{ Miscellaneous
+
+
 }}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
 }}}
 
 jEdit buffer local properties:
