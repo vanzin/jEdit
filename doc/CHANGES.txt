@@ -2,6 +2,29 @@ jEdit 5.2 version history
        (changes since jEdit 5.1.0)
 :encoding=UTF-8:
 
+{{{ Version 5.2pre2
+
+Thanks to  for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 5.2pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dale Anson, Thomas Meyer,
