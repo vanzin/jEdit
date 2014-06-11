@@ -23,7 +23,7 @@
 	       DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))">
 		<MARK_FOLLOWING TYPE="LABEL">@</MARK_FOLLOWING>
 		<IMPORT DELEGATE="PRIMARY"/>
-  </RULES>
+	</RULES>
 
 	<RULES SET="PRIMARY">
 		<!-- Silly comment -->
@@ -52,10 +52,48 @@
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">)</SEQ>
 
-		<!-- XML literals; keep this in sync with the XML_LITERAL rule set! -->
-		<IMPORT DELEGATE="XML_SHARED"/>
+		<!-- XML literals; keep this in sync with the INLINE_XML rule set! -->
+		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2">&lt;[\w_].\s?/&gt;</SEQ_REGEXP>
+		<SPAN_REGEXP DELEGATE="INLINE_XML" HASH_CHAR="&lt;"
+		             TYPE="LITERAL2" NO_LINE_BREAK="FALSE">
+			<BEGIN>&lt;([\w_][\d\w_\-:.]*?)(?:\s.*?)?&gt;</BEGIN>
+			<END>&lt;/$1&gt;</END>
+		</SPAN_REGEXP>
 
 		<!-- string and character literals -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="FALSE"
+		      DELEGATE="S_INTERP">
+			<BEGIN>s"""</BEGIN>
+			<END>"""</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\"
+		      DELEGATE="S_INTERP">
+			<BEGIN>s"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="FALSE"
+		      DELEGATE="RAW_INTERP">
+			<BEGIN>raw"""</BEGIN>
+			<END>"""</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\"
+		      DELEGATE="RAW_INTERP">
+			<BEGIN>raw"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="FALSE"
+		      DELEGATE="F_INTERP">
+			<BEGIN>f"""</BEGIN>
+			<END>"""</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\"
+		      DELEGATE="F_INTERP">
+			<BEGIN>f"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="FALSE">
 			<BEGIN>"""</BEGIN>
 			<END>"""</END>
@@ -100,9 +138,6 @@
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
-
-		<!-- Function calls -->
-		<!-- <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS> -->
 
 		<!-- Function declarations (overloaded for different spacing styles)-->
 		<MARK_FOLLOWING TYPE="FUNCTION" MATCH_TYPE="KEYWORD1" AT_WORD_START="TRUE">def </MARK_FOLLOWING>
@@ -271,15 +306,10 @@
 
 	<RULES SET="SCALADOC_PRE" DEFAULT="COMMENT3" />
 
-	<RULES SET="XML_SHARED">
+	<RULES SET="INLINE_XML" DEFAULT="LITERAL1">
    		<SPAN TYPE="COMMENT2">
-			<BEGIN>&lt;!--</BEGIN>
-			<END>--&gt;</END>
-		</SPAN>
-
-		<SPAN TYPE="LITERAL3">
-			<BEGIN>&lt;?</BEGIN>
-			<END>?&gt;</END>
+			<BEGIN>&lt;!- -</BEGIN>
+			<END>- -&gt;</END>
 		</SPAN>
 
 		<SPAN MATCH_TYPE="LITERAL3" TYPE="COMMENT4">
@@ -287,34 +317,36 @@
 			<END>]]&gt;</END>
 		</SPAN>
 
-		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL3">&lt;([\d\w_\-:.]+)(\s+[\d\w_\-:.]+=('[^']*'|"[^"]*"))*\s*/\s*&gt;</SEQ_REGEXP>
-
-		<SPAN_REGEXP DELEGATE="XML_LITERAL" HASH_CHAR="&lt;" MATCH_TYPE="LITERAL3" TYPE="NULL">
-			<BEGIN>&lt;([\d\w_\-:.]+)(\s+[\d\w_\-:.]+=('[^']*'|"[^"]*"))*\s*&gt;</BEGIN>
-			<END>&lt;/$1&gt;</END>
-		</SPAN_REGEXP>
-	</RULES>
-
-	<!-- TODO find a way to highlight attribute names as LABEL, attribute values as LITERAL1 -->
-	<RULES SET="XML_LITERAL" DEFAULT="COMMENT4">
- 		<PROPS>
-			<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
-			<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-			<PROPERTY NAME="lineComment" VALUE="" />
-		</PROPS>
-
-		<IMPORT DELEGATE="XML_SHARED"/>
-
-		<SPAN DELEGATE="MAIN">
+		<SPAN TYPE="OPERATOR" DELEGATE="MAIN">
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
 
-		<SPAN TYPE="LABEL" NO_WORD_BREAK="TRUE">
-			<BEGIN>&amp;</BEGIN>
-			<END>;</END>
-		</SPAN>
+		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL3">&lt;([\d\w_\-:.]+)(\s+[\d\w_\-:.]+=('[^']*'|"[^"]*"))*\s*/\s*&gt;</SEQ_REGEXP>
 
-		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="INVALID">&lt;/[\d\w_\-:.]+&gt;</SEQ_REGEXP> <!-- unmatched closing tags -->
+		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2">&lt;[\w_].\s?/&gt;</SEQ_REGEXP>
+		<SPAN_REGEXP DELEGATE="INLINE_XML" HASH_CHAR="&lt;"
+		             TYPE="LITERAL2" NO_LINE_BREAK="FALSE">
+			<BEGIN>&lt;([\w_][\d\w_\-:.]*?)(?:\s.*?)?&gt;</BEGIN>
+			<END>&lt;/$1&gt;</END>
+		</SPAN_REGEXP>
+	</RULES>
+
+	<RULES SET="RAW_INTERP" DEFAULT="LITERAL1">
+		<SPAN TYPE="LITERAL4" NO_WORD_BREAK="FALSE" DELEGATE="MAIN">
+			<BEGIN>${</BEGIN>
+			<END>}</END>
+		</SPAN>
+		<MARK_FOLLOWING TYPE="LITERAL4">$</MARK_FOLLOWING>
+	</RULES>
+
+	<RULES SET="S_INTERP" DEFAULT="LITERAL1">
+		<SEQ_REGEXP HASH_CHAR="\" TYPE="LITERAL3">\\.</SEQ_REGEXP>
+		<IMPORT DELEGATE="RAW_INTERP" />
+	</RULES>
+
+	<RULES SET="F_INTERP" DEFAULT="LITERAL1">
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL3">%[\d.]*[diouxXeEfFgGcrs]</SEQ_REGEXP>
+		<IMPORT DELEGATE="S_INTERP" />
 	</RULES>
 </MODE>
