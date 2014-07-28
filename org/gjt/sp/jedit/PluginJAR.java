@@ -980,8 +980,7 @@ public class PluginJAR
 			Buffer buffer = jEdit.getFirstBuffer();
 			while(buffer != null)
 			{
-				if(buffer.getFoldHandler() != null
-					&& buffer.getFoldHandler().getClass()
+				if(buffer.getFoldHandler().getClass()
 					.getClassLoader() == classLoader)
 				{
 					buffer.setFoldHandler(
@@ -1674,9 +1673,7 @@ public class PluginJAR
 				FoldHandler.getFoldHandler(
 				buffer.getStringProperty("folding"));
 			// == null before loaded
-			if(buffer.getFoldHandler() != null
-				&& handler != null
-				&& handler != buffer.getFoldHandler())
+			if(handler != null && handler != buffer.getFoldHandler())
 			{
 				buffer.setFoldHandler(handler);
 			}
