@@ -8,6 +8,9 @@ Thanks to Alan Ezust, Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix a bug preventing from removing an unloaded plugin
+  (#3877 - Matthieu Casanova)
+
 - The native splashscreen is removed as it was not possible to disable it
   (#3876 - Matthieu Casanova)
 

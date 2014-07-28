@@ -265,7 +265,14 @@ public class ManagePanel extends JPanel
 		PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
 		if (pluginCacheEntry == null)
 		{
-			pluginCacheEntry = pluginJAR.generateCache();
+			try
+			{
+				pluginCacheEntry = pluginJAR.generateCache();
+			}
+			finally
+			{
+				IOUtilities.closeQuietly(pluginJAR.getZipFile());
+			}
 		}
 		if(pluginCacheEntry == null)
 		{
