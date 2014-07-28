@@ -4,10 +4,12 @@ jEdit 5.3 version history
 
 {{{ Version 5.3pre1
 
-Thanks to Alan Ezust for contributing to this release.
+Thanks to Alan Ezust, Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
+- The native splashscreen is removed as it was not possible to disable it
+  (#3876 - Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
