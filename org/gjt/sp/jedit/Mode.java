@@ -25,11 +25,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.lang.reflect.Method;
-import java.util.Hashtable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -64,7 +60,7 @@ public class Mode
 	{
 		this.name = name;
 		this.ignoreWhitespace = true;
-		props = new Hashtable<String, Object>();
+		props = new Hashtable<>();
 	} //}}}
 
 	//{{{ init() method
@@ -89,7 +85,9 @@ public class Mode
 				{
 					// replace path separators by both separator possibilities in the regex
 					filepathRE = filepathRE.replaceAll("/|\\\\\\\\", "[/\\\\\\\\]");
-				} else {
+				}
+				else
+				{
 					// glob is for a filename without path, prepend the regex with
 					// an optional path prefix to be able to match against full paths
 					filepathRE = String.format("(?:.*[/\\\\])?%s", filepathRE);
@@ -325,7 +323,7 @@ public class Mode
 			int lastWindowsPos = filePath.lastIndexOf('\\');
 			int index = Math.max(lastUnixPos, lastWindowsPos);
 			String filename = filePath.substring(index + 1);
-			return filename != null && filename.equalsIgnoreCase(filenameGlob);
+			return filename.equalsIgnoreCase(filenameGlob);
 		}
 
 		return false;
@@ -477,7 +475,7 @@ public class Mode
 			if(value != null)
 			{
 				Method m = IndentRuleFactory.class.getMethod(
-					prop,new Class[] { String.class });
+					prop, String.class);
 				return (IndentRule)m.invoke(null, value);
 			}
 		}
@@ -493,7 +491,7 @@ public class Mode
 
 	//{{{ createBracketIndentRules() method
 	private void createBracketIndentRules(String prop,
-						List<IndentRule> rules)
+						Collection<IndentRule> rules)
 	{
 		String value = (String) getProperty(prop + 's');
 
@@ -506,7 +504,7 @@ public class Mode
 					char ch = value.charAt(i);
 
 					Method m = IndentRuleFactory.class.getMethod(
-						prop,new Class[] { char.class });
+						prop, char.class);
 					rules.add((IndentRule) m.invoke(null, ch));
 				}
 			}
