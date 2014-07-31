@@ -4,15 +4,15 @@ jEdit 5.3 version history
 
 {{{ Version 5.3pre1
 
-Thanks to Alan Ezust, Matthieu Casanova for contributing to this release.
+Thanks to Alan Ezust and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fix a bug preventing from removing an unloaded plugin
-  (#3877 - Matthieu Casanova)
+  (#3877 - Matthieu Casanova) [Merged into 5.2.x]
 
 - The native splashscreen is removed as it was not possible to disable it
-  (#3876 - Matthieu Casanova)
+  (#3876 - Matthieu Casanova) [Merged into 5.2.x]
 
 }}}
 {{{ Miscellaneous
