@@ -799,6 +799,10 @@
                 contains numbered backups of all automatically-written settings
                 files.</para>
             </listitem>
+            <listitem><para><filename>startup</filename> - This directory
+              contains startup scripts in beanshell or other plugin-supported scripting
+              languages. They are run at the time jEdit starts, after the <filename>startup</filename> scripts in the jEdit install directory have been run. See <xref linkend="startup-scripts" /></para>
+            </listitem>
         </itemizedlist>
 
         <section id="propertiesfile">
