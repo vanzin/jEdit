@@ -4,7 +4,8 @@ jEdit 5.3 version history
 
 {{{ Version 5.3pre1
 
-Thanks to Alan Ezust and Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust and Matthieu Casanova for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -31,5 +32,5 @@ Thanks to Alan Ezust and Matthieu Casanova for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:maxLineLen=90:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
+:maxLineLen=80:wrap=hard:autoIndent=simple:noTabs=true:indentSize=2:tabSize=2:
 :folding=explicit:collapseFolds=2:
