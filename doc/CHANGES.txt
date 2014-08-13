@@ -9,6 +9,12 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Make the TextArea a JPanel instead of a JComponent, so that it draws its
+  background and set the background color to the Gutter background color. This
+  prevents the parent component to shine through, which would e. g. show blue
+  edges with the BufferTabs plugin installed and active.
+  (Björn "Vampire" Kautler)
+
 - Fix a bug preventing from removing an unloaded plugin
   (#3877 - Matthieu Casanova) [Merged into 5.2.x]
 
