@@ -73,7 +73,7 @@ import org.gjt.sp.util.ThreadUtilities;
  * @author kpouer (rafactoring into standalone text area)
  * @version $Id$
  */
-public abstract class TextArea extends JComponent
+public abstract class TextArea extends JPanel
 {
 	//{{{ TextArea constructor
 	/**
@@ -4466,12 +4466,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				buffer.indentLine(caretLine, true);
 			}
-			
+
 			try
 			{
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
-				
+
 				if ("full".equals(autoIndent))
 				{
 					if (!buffer.indentLine(caretLine, true))
@@ -4538,7 +4538,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			selectNone();
  		}
  	} //}}}
- 	
+
 	//{{{ turnOnElasticTabstops() method
 	/**
 	 * Turn ON elastic tab stops.
@@ -4733,7 +4733,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		getInputHandler().processKeyEvent(evt, 1 /* source=TEXTAREA (1) */, false);
 		if(!evt.isConsumed())
-			super.processKeyEvent(evt);	
+			super.processKeyEvent(evt);
 
 	} //}}}
 
@@ -4747,7 +4747,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		add(ScrollLayout.TOP,comp);
 	} //}}}
-	
+
 	//{{{ removeTopComponent() method
 	/**
 	 * Removes a component from above the gutter, text area, and vertical scroll bar.
@@ -4759,7 +4759,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		remove(comp);
 	} //}}}
 
-	//{{{ addTopLeftComponent() method	
+	//{{{ addTopLeftComponent() method
 	/**
 	 * Adds a component above the gutter.
 	 *
@@ -4769,7 +4769,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		add(ScrollLayout.TOP_LEFT, comp);
 	} //}}}
-	
+
 	//{{{ addTopRightComponent() method
 	/**
 	 * Adds a component above the vertical scroll bar.
@@ -4780,7 +4780,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		add(ScrollLayout.TOP_RIGHT, comp);
 	} //}}}
-	
+
 	//{{{ addBottomLeftComponent() method
 	/**
 	 * Adds a component below the gutter.
@@ -4791,7 +4791,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		add(ScrollLayout.BOTTOM_LEFT, comp);
 	} //}}}
-	
+
 	//{{{ addBottomLeftComponent() method
 	/**
 	 * Adds a component below the vertical scroll bar.
@@ -4846,24 +4846,24 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		if(buffer == null)
 			return;
-		
+
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
 			//call this only if it was previously off
 			if(!buffer.elasticTabstopsOn)
-			{	
+			{
 				turnOnElasticTabstops();
-			}	
+			}
 			if(buffer.getColumnBlock()!=null)
-			{	
+			{
 				buffer.getColumnBlock().setTabSizeDirtyStatus(true, true);
-			}	
+			}
 		}
 		else
 		{
 			buffer.elasticTabstopsOn = false;
 		}
-		
+
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
 		for(int i = 0; i < foo.length; i++)
@@ -5145,7 +5145,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			caretTimer.restart();
 
 			if(!displayManager.isLineVisible(caretLine))
-			{			
+			{
 				// If we've jumped outside of a narrowed display, just reset all
 				// folds to their default level, so that we don't get disconnected
 				// islands of visible lines.
@@ -6400,7 +6400,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				return offset + 1;
 			}
 			return following + index0Offset;
-			
+
 		}
 
 		public int previousOf(int offset)
@@ -6777,7 +6777,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		structureTimer.setRepeats(false);
 	} //}}}
 
-	public TabExpander getTabExpander() 
+	public TabExpander getTabExpander()
 	{
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{

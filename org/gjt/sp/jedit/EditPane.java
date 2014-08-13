@@ -903,8 +903,9 @@ public class EditPane extends JPanel implements BufferSetListener
 			"view.gutter.structureHighlight"));
 		gutter.setStructureHighlightColor(
 			jEdit.getColorProperty("view.gutter.structureHighlightColor"));
-		gutter.setBackground(
-			jEdit.getColorProperty("view.gutter.bgColor"));
+		Color backgroundColor = jEdit.getColorProperty("view.gutter.bgColor");
+		gutter.setBackground(backgroundColor);
+		textArea.setBackground(backgroundColor);
 		gutter.setForeground(
 			jEdit.getColorProperty("view.gutter.fgColor"));
 		gutter.setHighlightedForeground(
