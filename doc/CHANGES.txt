@@ -13,7 +13,7 @@ contributing to this release.
   background and set the background color to the Gutter background color. This
   prevents the parent component to shine through, which would e. g. show blue
   edges with the BufferTabs plugin installed and active.
-  (Björn "Vampire" Kautler)
+  (Björn "Vampire" Kautler) [Merged into 5.2.x]
 
 - Fix a bug preventing from removing an unloaded plugin
   (#3877 - Matthieu Casanova) [Merged into 5.2.x]

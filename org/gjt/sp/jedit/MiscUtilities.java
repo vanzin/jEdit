@@ -198,7 +198,7 @@ public class MiscUtilities
 	 *
 	 *	@return an abbreviated path, replacing values with variables, if a prefix exists.	
 	 *  @see #expandVariables
-	 *  @since jEdit 4.3pre16
+	 *  @since jEdit 4.3
 	 */
 	public static String abbreviate(String path)
 	{
