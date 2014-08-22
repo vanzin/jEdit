@@ -15,6 +15,9 @@
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
+<MODE NAME="ans-forth94"		FILE="ans-forth94.xml" 
+  				FILE_NAME_GLOB="*.4th"/>
+
 <MODE NAME="ant"		FILE="ant.xml"
 				FILE_NAME_GLOB="*build.xml"
 				FIRST_LINE_GLOB="*&lt;project*" />

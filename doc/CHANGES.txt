@@ -32,6 +32,7 @@ contributing to this release.
 }}}
 {{{ Editing
 
+  - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
 
 }}}
 
