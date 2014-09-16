@@ -1230,7 +1230,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				return;
 
 			float x = indent = textArea.getHorizontalOffset();
-			float baseLine = y + fm.getHeight() -
+			float baseLine = y + getLineHeight() -
 				(fm.getLeading()+1) - fm.getDescent();
 
 			DefaultTokenHandler tokenHandler = new DefaultTokenHandler();

@@ -9,6 +9,10 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- When using extra vertical line spacing and a selection foreground color, the
+  selected text was painted twice, once with the extra spacing, once without.
+  Now the selected text is drawn correctly. (Björn "Vampire" Kautler)
+
 - Make the TextArea a JPanel instead of a JComponent, so that it draws its
   background and set the background color to the Gutter background color. This
   prevents the parent component to shine through, which would e. g. show blue
