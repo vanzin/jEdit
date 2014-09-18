@@ -1,6 +1,6 @@
 ###
 ### jEdit user interface definitions,
-### :tabSize=8:indentSize=8:noTabs=false:
+### :tabSize=4:indentSize=4:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ### :encoding=UTF-8:
 ###
@@ -903,6 +903,10 @@ fullScreenIncludesStatus=true
 
 # Enable subpixel antialiasing by default in textarea.
 view.antiAlias=subpixel HRGB
+
+# Fancy Java2D stuff
+view.fracFontMetrics=false
+
 #}}}
 
 #{{{ File System Browser panes

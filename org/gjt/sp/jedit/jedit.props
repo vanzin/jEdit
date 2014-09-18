@@ -1,6 +1,6 @@
 ###
 ### jEdit global properties
-### :tabSize=8:indentSize=8:noTabs=false:
+### :tabSize=4:indentSize=4:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ### :encoding=UTF-8:
 ###
@@ -162,10 +162,10 @@ largefilemode=ask
 buffer.encodingAutodetect=true
 
 # Tab width
-buffer.tabSize=8
+buffer.tabSize=4
 
 # Indent width
-buffer.indentSize=8
+buffer.indentSize=4
 
 # Automatic indentation
 buffer.autoIndent=full
@@ -398,10 +398,6 @@ view.style.literal4=color:#6600cc
 view.style.markup=color:#0000ff
 view.style.operator=color:#000000 style:b
 #}}}
-
-# Fancy Java2D stuff
-view.antiAlias=false
-view.fracFontMetrics=false
 
 # Docking and tool bar positioning
 view.docking.alternateLayout=false
