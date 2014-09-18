@@ -185,7 +185,7 @@ public abstract class EnhancedDialog extends JDialog
 				if(s[0].contains(" "))  //primary shortcut is a multiple-key shortcut
 					return false;
 				else{
-					return KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[0]));
+					return KeyEventTranslator.parseKey(s[0]).equals(KeyEventTranslator.translateKeyEvent(evt));
 				}
 			}
 			else{ // w/ alternative shortcut
@@ -193,10 +193,11 @@ public abstract class EnhancedDialog extends JDialog
 				primarymatch=altmatch=false;
 
 				if(!s[0].contains(" "))
-					primarymatch=KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[0]));
+					primarymatch=KeyEventTranslator.parseKey(s[0]).equals(KeyEventTranslator.translateKeyEvent(
+						evt));
 
 				if(!primarymatch && !s[1].contains(" "))
-					altmatch=KeyEventTranslator.translateKeyEvent(evt).equals(KeyEventTranslator.parseKey(s[1]));
+					altmatch=KeyEventTranslator.parseKey(s[1]).equals(KeyEventTranslator.translateKeyEvent(evt));
 
 				if(primarymatch || altmatch)
 					return true;

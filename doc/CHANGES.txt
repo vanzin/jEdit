@@ -9,6 +9,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- EnhancedDialog does not throw NullPointerExceptions anymore when checking
+  whether a pressed key is the buffer close shortcut. (Björn "Vampire" Kautler)
+
 - When using extra vertical line spacing and a selection foreground color, the
   selected text was painted twice, once with the extra spacing, once without.
   Now the selected text is drawn correctly. (Björn "Vampire" Kautler)
