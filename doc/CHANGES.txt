@@ -31,6 +31,10 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Upgrade Launch4J to the latest version 3.5.0. This makes it possible to UTF-8
+  encode the config file and build the EXE launcher on Mac OS again, removing
+  the need for Rosetta being installed, which is not supported anymore anyway
+  since Mac OS 10.7. (Björn "Vampire" Kautler)
 
 }}}
 {{{ API Changes

@@ -1,8 +1,25 @@
-<?xml version="1.0" encoding="US-ASCII"?>
-<!-- US-ASCII is the best encoding to avoid problem of Launch4j which
-uses system default encoding no matter what encoding the config file
-declare in it. Here, "best" means a common subset of system default
-encodings on many of known OS and locales. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ jEdit - Programmer's Text Editor
+  ~ :tabSize=8:indentSize=8:noTabs=false:
+  ~ :folding=explicit:collapseFolds=1:
+  ~
+  ~ Copyright © 2014 jEdit contributors
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 2
+  ~ of the License, or any later version.
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program; if not, write to the Free Software
+  ~ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  -->
+
 <launch4jConfig>
 	<headerType>gui</headerType>
 	<outfile>jedit.exe</outfile>
@@ -12,7 +29,6 @@ encodings on many of known OS and locales. -->
 	<downloadUrl>http://www.java.com/download</downloadUrl>
 	<supportUrl>http://www.jEdit.org</supportUrl>
 	<cmdLine>-reuseview</cmdLine>
-	<customProcName>false</customProcName>
 	<stayAlive>true</stayAlive>
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
@@ -24,7 +40,7 @@ encodings on many of known OS and locales. -->
 		<fileVersion>@jedit.build.number@</fileVersion>
 		<txtFileVersion>@jedit.version@</txtFileVersion>
 		<fileDescription>jEdit - Programmer&apos;s Text Editor</fileDescription>
-		<copyright>Copyright (C) 1998-@current.year@ Contributors</copyright>
+		<copyright>Copyright © 1998-@current.year@ Contributors</copyright>
 		<productVersion>@jedit.build.number@</productVersion>
 		<txtProductVersion>@jedit.version@</txtProductVersion>
 		<productName>jEdit</productName>

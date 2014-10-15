@@ -29,17 +29,11 @@
 	<include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml"/>
 
 	<resolvers>
-		<!-- Don't validate because of https://issues.apache.org/jira/browse/IVY-1322,
-		     remove validate after that bug was fixed in Ivy (Bug #3437212) -->
-		<url name="launch4j" validate="false">
-			<artifact pattern="http://downloads.sourceforge.net/project/launch4j/launch4j-3/[revision]/[artifact]-[revision]-[classifier].[ext]" />
-		</url>
 		<url name="jedit-plugins">
 			<artifact pattern="jar:http://downloads.sourceforge.net/project/jedit-plugins/[artifact]/[revision]/[artifact]-[revision]-bin.zip!/[artifact].jar" />
 		</url>
 	</resolvers>
 	<modules>
-		<module organisation="net.sf.launch4j" resolver="launch4j" />
 		<module organisation="org.jedit.plugins" resolver="jedit-plugins" />
 	</modules>
 </ivysettings>

@@ -36,10 +36,6 @@ General jEdit documentation can be found in the 'doc' directory.
     run via wine, a wine version of at least 1.3.10 is required because
     of a bug in earlier wine versions.
 
- For building the EXE launcher on Mac OS X:
-
-  - Rosetta. Get it from your installation DVD at "Optional Installs".
-
  For building the Mac OS X disk image (DMG) for easy distribution
  (for the final step):
 

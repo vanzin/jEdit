@@ -532,22 +532,29 @@
 		</contrib:if>
 		<contrib:switch value="${osfamily}">
 			<contrib:case value="windows">
-				<unzip src="${lib.dir}/launch4j/launch4j-win32.zip"
-				       dest="${build.dir}/"/>
+				<unjar src="${lib.dir}/launch4j/launch4j-workdir-win32.jar"
+				       dest="${build.dir}/launch4j"/>
+				<copy todir="${lib.dir}/launch4j">
+					<fileset dir="${build.dir}/launch4j/launch4j-3.5.0-workdir-win32/"/>
+				</copy>
 			</contrib:case>
 			<contrib:case value="unix">
-				<untar src="${lib.dir}/launch4j/launch4j-linux.tgz"
-				       dest="${build.dir}/"
-				       compression="gzip"/>
-				<chmod dir="${build.dir}/launch4j/bin/"
+				<unjar src="${lib.dir}/launch4j/launch4j-workdir-linux.jar"
+				       dest="${build.dir}/launch4j/"/>
+				<copy todir="${lib.dir}/launch4j">
+					<fileset dir="${build.dir}/launch4j/launch4j-3.5.0-workdir-linux/"/>
+				</copy>
+				<chmod dir="${lib.dir}/launch4j/bin"
 				       perm="+x"
 				       includes="**"/>
 			</contrib:case>
 			<contrib:case value="mac">
-				<untar src="${lib.dir}/launch4j/launch4j-macosx.tgz"
-				       dest="${build.dir}/"
-				       compression="gzip"/>
-				<chmod dir="${build.dir}/launch4j/bin/"
+				<unjar src="${lib.dir}/launch4j/launch4j-workdir-mac.jar"
+				       dest="${build.dir}/launch4j/"/>
+				<copy todir="${lib.dir}/launch4j">
+					<fileset dir="${build.dir}/launch4j/launch4j-3.5.0-workdir-mac/"/>
+				</copy>
+				<chmod dir="${lib.dir}/launch4j/bin"
 				       perm="+x"
 				       includes="**"
 				       osfamily="mac"/>
@@ -558,8 +565,12 @@
 		</contrib:switch>
 		<taskdef name="create"
 			 classname="net.sf.launch4j.ant.Launch4jTask"
-			 classpath="${build.dir}/launch4j/launch4j.jar"
-			 uri="antlib:net.sf.launch4j.ant"/>
+			 uri="antlib:net.sf.launch4j.ant">
+			<classpath>
+				<fileset dir="${lib.dir}/launch4j"
+					 includes="*.jar"/>
+			</classpath>
+		 </taskdef>
 		<launch4j:create configFile="${classes.dir}/package-files/windows/jedit.launch4j.xml"
 				 outfile="${jar.location}/jedit.exe"/>
 	</target>
