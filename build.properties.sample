@@ -68,6 +68,3 @@
 #build.nowarn=false
 #build.deprecation=true
 #build.compilerarg=-Xlint:unchecked
-
-# skip the tests (like native2ascii test)
-#skip.tests=true

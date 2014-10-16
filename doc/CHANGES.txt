@@ -31,6 +31,10 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Configure the JUnit task to fork off the Ant process, with manually adding the
+  needed Ant libraries. This ensures that there are no unwanted classpath
+  entries during test execution (Bug #1732 - Björn "Vampire" Kautler)
+
 - Upgrade Launch4J to the latest version 3.5.0. This makes it possible to UTF-8
   encode the config file and build the EXE launcher on Mac OS again, removing
   the need for Rosetta being installed, which is not supported anymore anyway

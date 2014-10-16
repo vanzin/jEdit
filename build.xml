@@ -424,15 +424,21 @@
 
 	<target name="test"
 		depends="init,retrieve,compile,compile-test"
-		description="run unit tests"
-		unless="config.skip.tests">
+		description="run unit tests">
 		<delete dir="${build.dir}/test/raw-reports"/>
 		<mkdir dir="${build.dir}/test/raw-reports"/>
-		<junit printsummary="true"
+		<junit fork="true"
+		       forkmode="once"
+		       printsummary="true"
 		       failureproperty="tests.failed"
+		       includeantruntime="false"
+		       showoutput="true"
 		       enabletestlistenerevents="true">
 			<classpath refid="classpath.test"/>
 			<classpath location="${classes.dir}/test"/>
+			<classpath location="${ant.library.dir}/ant.jar"/>
+			<classpath location="${ant.library.dir}/ant-junit.jar"/>
+			<classpath location="${ant.library.dir}/ant-junit4.jar"/>
 			<formatter type="xml"/>
 			<batchtest todir="${build.dir}/test/raw-reports">
 				<fileset dir="test"/>
@@ -448,7 +454,7 @@
 	</target>
 
 	<target name="build"
-		depends="init,retrieve,setup,compile"
+		depends="init,retrieve,setup,compile,test"
 		description="build the jEdit JAR-file with full debug-information">
 		<mkdir dir="${jar.location}"/>
 		<jar destfile="${jar.location}/${jar.filename}"
@@ -503,7 +509,6 @@
 				</copy>
 			</contrib:then>
 		</contrib:if>
-		<antcall target="test" />
 	</target>
 
 	<target name="build-exe-launcher"
