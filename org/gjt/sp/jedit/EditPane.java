@@ -220,7 +220,7 @@ public class EditPane extends JPanel implements BufferSetListener
 					// This must happen after loadCaretInfo.
 					// Otherwise caret is not restored properly.
 					int check = jEdit.getIntegerProperty("checkFileStatus");
-					if (jEdit.isStartupDone() && (check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0);
+					if (jEdit.isStartupDone() && (check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0)
 						jEdit.checkBufferStatus(view, true);
 				}
 			});
