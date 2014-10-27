@@ -35,7 +35,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
@@ -50,7 +50,7 @@ import org.gjt.sp.jedit.jEdit;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class FloatingWindowContainer extends JFrame implements DockableWindowContainer,
+public class FloatingWindowContainer extends JDialog implements DockableWindowContainer,
 	PropertyChangeListener
 {
 	String dockableName = null;
@@ -58,6 +58,8 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	public FloatingWindowContainer(DockableWindowManagerImpl dockableWindowManager,
 		boolean clone)
 	{
+		super(dockableWindowManager.getView());
+
 		this.dockableWindowManager = dockableWindowManager;
 
 		dockableWindowManager.addPropertyChangeListener(this);
@@ -93,7 +95,6 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		pack();
 		Container parent = dockableWindowManager.getView();
 		GUIUtilities.loadGeometry(this, parent, dockableName);
-		GUIUtilities.addSizeSaver(this, parent, dockableName);
 		KeyListener listener = dockableWindowManager.closeListener(dockableName);
 		addKeyListener(listener);
 		getContentPane().addKeyListener(listener);
@@ -160,8 +161,11 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	@Override
 	public void dispose()
 	{
-		entry.container = null;
-		entry.win = null;
+		GUIUtilities.saveGeometry(this, dockableWindowManager.getView(), dockableName);
+		if (entry != null) {
+			entry.container = null;
+			entry.win = null;
+		}
 		super.dispose();
 	} //}}}
 

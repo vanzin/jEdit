@@ -29,6 +29,12 @@ for contributing to this release.
   (#3876 - Matthieu Casanova) [Merged into 5.2.x]
 
 }}}
+
+{{{ UI Improvements
+
+- Floating dockables as JDialog (Patch #537 - Makarius)
+
+}}}
 {{{ Miscellaneous
 
 - Properties are sorted when saved (Patch #536 - Makarius)
