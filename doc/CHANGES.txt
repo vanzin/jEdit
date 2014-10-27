@@ -4,8 +4,8 @@ jEdit 5.3 version history
 
 {{{ Version 5.3pre1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, and Matthieu Casanova
-for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
+Matt Galligan, and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -28,11 +28,17 @@ for contributing to this release.
 - The native splashscreen is removed as it was not possible to disable it
   (#3876 - Matthieu Casanova) [Merged into 5.2.x]
 
+- Bugfix in EditPane.java related to file status checks.
+  (Patch #534 - Matt Galligan)
+
+
 }}}
 
 {{{ UI Improvements
 
 - Floating dockables as JDialog (Patch #537 - Makarius)
+
+- CompletionPopup should accept TAB for completion selection (Patch # 525 - Jakub Holý)
 
 }}}
 {{{ Miscellaneous
