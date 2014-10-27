@@ -15,7 +15,7 @@
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
-<MODE NAME="ans-forth94"		FILE="ans-forth94.xml" 
+<MODE NAME="ans-forth94"		FILE="ans-forth94.xml"
   				FILE_NAME_GLOB="*.4th"/>
 
 <MODE NAME="ant"		FILE="ant.xml"
@@ -359,6 +359,9 @@
 <MODE NAME="mqsc"		FILE="mqsc.xml"
 				FILE_NAME_GLOB="*.mqsc" />
 
+<MODE NAME="Mustache Template" FILE="mustache.xml"
+        FILE_NAME_GLOB="*.mustache" />
+
 <MODE NAME="myghty"		FILE="myghty.xml"
 				FILE_NAME_GLOB="{autohandler,dhandler,*.myt}"/>
 
@@ -416,8 +419,8 @@
 
 <MODE NAME="PowerCenter Parameter File"
     FILE="powercenter_parameter_file.xml" FILE_NAME_GLOB="*.par" />
-							
-							
+
+
 <MODE NAME="pl-sql"		FILE="osql.xml"
                            FILE_NAME_GLOB="*.{pls,sql}" />
 

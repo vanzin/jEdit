@@ -5,7 +5,8 @@ jEdit 5.3 version history
 {{{ Version 5.3pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Matt Galligan, and Matthieu Casanova for contributing to this release.
+Matt Galligan, Kevin Hunter Kesling, Dibsco, and Matthieu Casanova for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -62,6 +63,8 @@ Matt Galligan, and Matthieu Casanova for contributing to this release.
 {{{ Editing
 
   - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
+
+  - New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
 
 }}}
 
