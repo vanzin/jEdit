@@ -1491,6 +1491,27 @@ loop:		for(;;)
 
 	//}}}
 
+	//{{{ storeProperties() method
+	/**
+	 * Stores properties with sorted keys.
+     * @param props  Given properties.
+     * @param out  Output stream.
+     * @param comments  Description of the property list.
+     * @since jEdit 5.3
+	 */
+	public static void storeProperties(Properties props, OutputStream out, String comments)
+        throws IOException
+	{
+		Properties sorted = new Properties() {
+			@Override
+			public synchronized Enumeration<Object> keys() {
+				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+			}
+		};
+		sorted.putAll(props);
+		sorted.store(out, comments);
+	} //}}}
+
 	static VarCompressor svc = null;
 
 	//{{{ VarCompressor class

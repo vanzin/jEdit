@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 //}}}
@@ -150,7 +151,7 @@ class KeymapImpl implements Keymap
 			try
 			{
 				out = new BufferedOutputStream(new FileOutputStream(userKeymapFile));
-				props.store(out, "jEdit's keymap " + name);
+				MiscUtilities.storeProperties(props, out, "jEdit's keymap " + name);
 			}
 			catch (IOException e)
 			{

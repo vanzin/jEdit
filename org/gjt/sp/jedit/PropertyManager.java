@@ -77,7 +77,7 @@ class PropertyManager
 	void saveUserProps(OutputStream out)
 		throws IOException
 	{
-		user.store(out,"jEdit properties");
+		MiscUtilities.storeProperties(user, out, "jEdit properties");
 	} //}}}
 
 	//{{{ loadPluginProps() method

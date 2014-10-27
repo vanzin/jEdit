@@ -4,8 +4,8 @@ jEdit 5.3 version history
 
 {{{ Version 5.3pre1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust and Matthieu Casanova for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, and Matthieu Casanova
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -30,6 +30,8 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Properties are sorted when saved (Patch #536 - Makarius)
 
 - Configure the JUnit task to fork off the Ant process, with manually adding the
   needed Ant libraries. This ensures that there are no unwanted classpath
