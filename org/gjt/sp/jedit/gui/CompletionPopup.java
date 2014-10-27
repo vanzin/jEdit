@@ -113,6 +113,7 @@ public class CompletionPopup extends JWindow
 		list.setCellRenderer(new CellRenderer());
 		list.addKeyListener(keyHandler);
 		list.addMouseListener(new MouseHandler());
+		list.setFocusTraversalKeysEnabled(false);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setFocusTraversalKeysEnabled(false);
