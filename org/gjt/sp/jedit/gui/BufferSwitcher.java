@@ -21,9 +21,10 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.event.*;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
-import javax.swing.plaf.metal.MetalComboBoxUI;
+import javax.swing.plaf.ComboBoxUI;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import java.lang.reflect.Field;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -106,7 +107,7 @@ public class BufferSwitcher extends JComboBox
 				setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
 				setSelectedItem(editPane.getBuffer());
 				setToolTipText(editPane.getBuffer().getPath(true));
-				setUI(new CustomComboBoxUI());
+				addDnD();
 				updating = false;
 			}
 		};
@@ -135,33 +136,43 @@ public class BufferSwitcher extends JComboBox
 		}
 	}
 	
-	private class CustomComboBoxUI extends MetalComboBoxUI
+	private void addDnD() 
 	{
-		@Override
-		protected ComboPopup createPopup()
+		ComboBoxUI ui = getUI();
+		if (ui instanceof BasicComboBoxUI)
 		{
-			return new CustomComboBoxPopup(this.comboBox);
+			try
+			{
+				Field listBoxField = getField(ui.getClass(), "listBox");
+				listBoxField.setAccessible(true);
+				JList list = (JList)listBoxField.get(ui);
+				list.setDragEnabled(true);
+				list.setDropMode(DropMode.INSERT);
+				list.setTransferHandler(new BufferSwitcherTransferHandler());
+			}
+			catch (Exception ignored) // NOPMD
+			{
+				// don't do anything if the above fails, it just means dnd won't work.
+			}
 		}
 	}
-
-	private class CustomComboBoxPopup extends BasicComboPopup
-	{
-		public CustomComboBoxPopup(JComboBox combo)
+	
+	/**
+	 * Return the named field from the given class.
+	 */
+	private Field getField( Class aClass, String fieldName ) throws NoSuchFieldException {
+		if ( aClass == null )
+			throw new NoSuchFieldException( "Invalid field : " + fieldName );
+		try 
 		{
-			super(combo);
+			return aClass.getDeclaredField( fieldName );
 		}
-
-		@Override
-		protected JList createList()
+		catch ( NoSuchFieldException e ) 
 		{
-			JList list = super.createList();
-			list.setDragEnabled(true);
-			list.setDropMode(DropMode.INSERT);
-			list.setTransferHandler(new BufferSwitcherTransferHandler());
-			return list;
+			return getField( aClass.getSuperclass(), fieldName );
 		}
 	}
-
+	
 	private class ComboBoxTransferHandler extends TransferHandler
 	{
 		JComboBox comboBox;
