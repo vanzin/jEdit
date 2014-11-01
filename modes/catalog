@@ -359,7 +359,7 @@
 <MODE NAME="mqsc"		FILE="mqsc.xml"
 				FILE_NAME_GLOB="*.mqsc" />
 
-<MODE NAME="Mustache Template" FILE="mustache.xml"
+<MODE NAME="mustache-template" FILE="mustache.xml"
         FILE_NAME_GLOB="*.mustache" />
 
 <MODE NAME="myghty"		FILE="myghty.xml"
