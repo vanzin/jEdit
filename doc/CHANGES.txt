@@ -10,6 +10,8 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Support for negative line spacing (Patch #535 - Makarius)
+
 - EnhancedDialog does not throw NullPointerExceptions anymore when checking
   whether a pressed key is the buffer close shortcut. (Björn "Vampire" Kautler)
 
@@ -32,8 +34,8 @@ contributing to this release.
 - Bugfix in EditPane.java related to file status checks.
   (Patch #534 - Matt Galligan)
 
-- Fix for bug #3389 in BufferSwitcher.java where look and feel was locked to 
-  Metal. (Dale Anson)  
+- Fix for bug #3389 in BufferSwitcher.java where look and feel was locked to
+  Metal. (Dale Anson)
 
 }}}
 

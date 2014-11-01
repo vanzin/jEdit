@@ -1471,8 +1471,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					    offset, textArea.offsetXY);
 			int caretX = textArea.offsetXY.x;
 			int lineHeight = getLineHeight();
-			int charHeight = getFontHeight();
-			int charOffset = lineHeight - charHeight;
+			int charHeight = Math.min(lineHeight, getFontHeight());
+			int charOffset = Math.max(lineHeight - charHeight, 0);
 
 			gfx.setColor(caretColor);
 
