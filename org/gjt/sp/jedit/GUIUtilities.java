@@ -65,13 +65,14 @@ import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 
 
 import java.awt.*;
 import java.awt.event.*;
 //}}}
 
-/** Various GUI utility functions related to icons, menus, toolbars, keyboard shortcuts, etc. 
+/** Various GUI utility functions related to icons, menus, toolbars, keyboard shortcuts, etc.
  *
  * The most frequently used members of this class are:
  *
@@ -574,7 +575,7 @@ public class GUIUtilities
 				out.append(' ');
 			out.append(getMacShortcutLabel(strokes[i]));
 		}
-		
+
 		return out.toString();
         } //}}}
 
@@ -582,7 +583,7 @@ public class GUIUtilities
 	/**
 	 * Returns a label string to show users what shortcut are
 	 * assigned to the action.
-	 * @param platform if true, show fancy platform-specific label for the modifiers. 
+	 * @param platform if true, show fancy platform-specific label for the modifiers.
 	 */
 	public static String getShortcutLabel(String action, Boolean platform)
 	{
@@ -664,13 +665,13 @@ public class GUIUtilities
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
-	
+
 			JOptionPane.showMessageDialog(comp,
 				jEdit.getProperty(name.concat(".message"),args),
 				jEdit.getProperty(name.concat(".title"),args),
 				JOptionPane.INFORMATION_MESSAGE);
 		}
-                else 
+                else
                 {
                         try
                         {
@@ -708,13 +709,13 @@ public class GUIUtilities
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
-	
+
 			JOptionPane.showMessageDialog(comp,
 				jEdit.getProperty(name.concat(".message"),args),
 				jEdit.getProperty(name.concat(".title"),args),
 				JOptionPane.ERROR_MESSAGE);
 		}
-                else 
+                else
                 {
                         try
                         {
@@ -784,7 +785,7 @@ public class GUIUtilities
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
-	
+
 			return (String)JOptionPane.showInputDialog(comp,
 				jEdit.getProperty(name.concat(".message"),args),
 				jEdit.getProperty(name.concat(".title")),
@@ -807,7 +808,7 @@ public class GUIUtilities
 			return null;
 		}
 		return retValue[0];
-		
+
 	} //}}}
 
 	//{{{ inputProperty() method
@@ -829,7 +830,7 @@ public class GUIUtilities
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
-	
+
 			String retVal = (String)JOptionPane.showInputDialog(comp,
 				jEdit.getProperty(name.concat(".message"),args),
 				jEdit.getProperty(name.concat(".title")),
@@ -856,7 +857,7 @@ public class GUIUtilities
 			return null;
 		}
 		return retValue[0];
-		
+
 	} //}}}
 
 	//{{{ confirm() method
@@ -881,7 +882,7 @@ public class GUIUtilities
 		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
-	
+
 			return JOptionPane.showConfirmDialog(comp,
 				jEdit.getProperty(name + ".message",args),
 				jEdit.getProperty(name + ".title"),buttons,type);
@@ -975,12 +976,12 @@ public class GUIUtilities
 		{
 			JList list = new JList(listModel);
 			list.setVisibleRowCount(8);
-	
+
 			Object[] message = {
 				jEdit.getProperty(name + ".message",args),
 				new JScrollPane(list)
 			};
-	
+
 			return JOptionPane.showConfirmDialog(comp,
 				message,
 				jEdit.getProperty(name + ".title"),
@@ -1004,7 +1005,7 @@ public class GUIUtilities
 			return JOptionPane.CANCEL_OPTION;
 		}
 		return retValue[0];
-		
+
 	} //}}}
 
 	//{{{ listConfirm() method
@@ -1026,19 +1027,19 @@ public class GUIUtilities
 	public static int listConfirm(final Component comp, final String name, final String[] args,
 		final Object[] listModel, final List selectedItems)
 	{
-		
+
 		if (EventQueue.isDispatchThread())
 		{
 			JList list = new JList(listModel);
 			list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			list.setVisibleRowCount(8);
 			list.addSelectionInterval(0,listModel.length - 1);
-	
+
 			Object[] message = {
 				jEdit.getProperty(name + ".message",args),
 				new JScrollPane(list)
 			};
-	
+
 			int ret = JOptionPane.showConfirmDialog(comp,
 								message,
 								jEdit.getProperty(name + ".title"),
@@ -1065,7 +1066,7 @@ public class GUIUtilities
 			return JOptionPane.CANCEL_OPTION;
 		}
 		return retValue[0];
-		
+
 	} //}}}
 
 	//{{{ showVFSFileDialog() methods
@@ -1506,25 +1507,25 @@ public class GUIUtilities
 
 	//{{{ applyTextAreaColors() method
 	/**
-	 * experimental - applies the text area colors on a Component 
-	 * (such as a dockable window) and its children. 
+	 * experimental - applies the text area colors on a Component
+	 * (such as a dockable window) and its children.
 	 * @since jEdit 5.0pre1
 	 * @author ezust
-	 * 
+	 *
 	 */
-	public static void applyTextAreaColors(Container win) 
-	{		
-		for (Component child: win.getComponents()) 
+	public static void applyTextAreaColors(Container win)
+	{
+		for (Component child: win.getComponents())
 		{
 			child.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE));
 			child.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK));
-			if (child instanceof JTextPane)  
+			if (child instanceof JTextPane)
 				((JTextPane)child).setUI(new javax.swing.plaf.basic.BasicEditorPaneUI());
 			if (child instanceof Container)
 				applyTextAreaColors((Container)child);
 		}
 	} //}}}
-	
+
 	//{{{ createMultilineLabel() method
 	/**
 	 * Creates a component that displays a multiple line message. This
@@ -1834,6 +1835,21 @@ public class GUIUtilities
 		return (View)getComponentParent(comp,View.class);
 	} //}}}
 
+	//{{{ setButtonContentMargin() method
+	/**
+	 * Sets the content margin of a button (for Nimbus L&F).
+	 * @param button  the button to modify
+	 * @param margin  the new margin
+	 * @since jEdit 5.3
+	 */
+	public static void setButtonContentMargin(AbstractButton button, Insets margin)
+	{
+		UIDefaults defaults = new UIDefaults();
+		defaults.put("Button.contentMargins", margin);
+		defaults.put("ToggleButton.contentMargins", margin);
+		button.putClientProperty("Nimbus.Overrides", defaults);
+	} //}}}
+
 	//{{{ addSizeSaver() method
 	/**
 	* Adds a SizeSaver to the specified Frame. For non-Frame's use {@link #saveGeometry(Window,String)}
@@ -2050,7 +2066,7 @@ public class GUIUtilities
 	} //}}}
 
 	private static HashMap<String, String> macKeySymbols = null;
-	
+
 	/*
 	 * Create a list of unicode characters to be used in displaying keyboard shortcuts
 	 * on Mac OS X.
@@ -2058,7 +2074,7 @@ public class GUIUtilities
 	static
 	{
 		macKeySymbols = new HashMap<String, String>();
-		
+
 		// These are the unicode code points used in cocoa apps for displaying
 		// shortcuts.
 		macKeySymbols.put("ENTER",         "\u21A9");
@@ -2083,9 +2099,9 @@ public class GUIUtilities
 	 * names and modifiers (e.g. C+PERIOD) to symbols.
 	 */
 	private static String getMacShortcutLabel(String label)
-	{	
+	{
 		StringBuilder out = new StringBuilder();
-		
+
 		// Show the list of modifiers in standard order
 		int endOfModifiers = label.indexOf('+');
 		if (endOfModifiers != -1)
@@ -2108,13 +2124,13 @@ public class GUIUtilities
 				out.append('\u2318');  // cmd
 			}
 		}
-		
+
 		// We've done the modifiers, now do the key
 		String key = label.substring(endOfModifiers + 1);
-		
+
 		// Some keys have Mac-specific symbols
 		String text = macKeySymbols.get(key);
-		
+
 		// Others don't
 		if (text == null)
 		{
@@ -2124,7 +2140,7 @@ public class GUIUtilities
 			{
 				// e.g., convert the string "PERIOD" to the int KeyEvent.VK_PERIOD
 				int keyCode = KeyEvent.class.getField("VK_".concat(key)).getInt(null);
-				
+
 				// And then convert KeyEvent.VK_PERIOD to the string "."
 				text = KeyEvent.getKeyText(keyCode).toUpperCase();
 			}
@@ -2136,10 +2152,10 @@ public class GUIUtilities
 			}
 		}
 		out.append(text);
-		
+
 		return out.toString();
 	} //}}}
-	
+
 	private GUIUtilities() {}
 	//}}}
 

@@ -95,6 +95,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			closeBox.putClientProperty("JButton.buttonType","toolbar");
 
 		closeBox.setMargin(new Insets(0,0,0,0));
+		GUIUtilities.setButtonContentMargin(closeBox, closeBox.getMargin());
 
 		closeBox.addActionListener(new ActionHandler());
 
@@ -105,6 +106,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			menuBtn.putClientProperty("JButton.buttonType","toolbar");
 
 		menuBtn.setMargin(new Insets(0,0,0,0));
+		GUIUtilities.setButtonContentMargin(menuBtn, menuBtn.getMargin());
 
 		menuBtn.addMouseListener(new MenuMouseHandler());
 
@@ -148,6 +150,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 
 		JToggleButton button = new JToggleButton();
 		button.setMargin(new Insets(1,1,1,1));
+		GUIUtilities.setButtonContentMargin(button, new Insets(6,6,6,6));
 		button.setRequestFocusEnabled(false);
 		button.setIcon(new RotatedTextIcon(rotation,button.getFont(),
 			entry.shortTitle()));

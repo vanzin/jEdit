@@ -41,6 +41,8 @@ and Dale Anson for contributing to this release.
 
 {{{ UI Improvements
 
+- Proper button margins for Nimbus L&F (Patch #538 - Makarius)
+
 - Floating dockables as JDialog (Patch #537 - Makarius)
 
 - CompletionPopup should accept TAB for completion selection (Patch # 525 - Jakub Holý)
