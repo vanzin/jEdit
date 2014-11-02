@@ -5,8 +5,8 @@ jEdit 5.3 version history
 {{{ Version 5.3pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Matt Galligan, Kevin Hunter Kesling, Dibsco, Matthieu Casanova and Dale Anson
-for contributing to this release.
+Matt Galligan, Kevin Hunter Kesling, Dibsco, Darien Brown, Matthieu Casanova
+and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -35,7 +35,7 @@ for contributing to this release.
   (Patch #534 - Matt Galligan)
 
 - Fix for bug #3389 in BufferSwitcher.java where look and feel was locked to
-  Metal. (Dale Anson)
+  Metal. (Dale Anson) [Merged into 5.2.x]
 
 }}}
 
@@ -68,6 +68,8 @@ for contributing to this release.
 
 }}}
 {{{ Editing
+
+  - Updates to cfscript mode (Patch #531 - Darien Brown)
 
   - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
 
