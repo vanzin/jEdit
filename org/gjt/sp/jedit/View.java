@@ -1452,6 +1452,7 @@ public class View extends JFrame implements InputHandlerProvider
 		closeAllMenus();
 		// so you can keep typing in your editpane afterwards...
 		editPane.getTextArea().requestFocus();
+		EditBus.send(new ViewUpdate(this,ViewUpdate.FULL_SCREEN_TOGGLED));
 	} //}}}
 
 	//{{{ confirmToCloseDirty() methods

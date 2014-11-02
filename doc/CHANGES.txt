@@ -5,8 +5,8 @@ jEdit 5.3 version history
 {{{ Version 5.3pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Matt Galligan, Kevin Hunter Kesling, Dibsco, and Matthieu Casanova for
-contributing to this release.
+Matt Galligan, Kevin Hunter Kesling, Dibsco, Matthieu Casanova and Dale Anson
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -62,6 +62,9 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- View now sends ViewUpdate message on EditBus when full screen mode is toggled.
+  This is useful to plugins that may need to adjust their appearance when the
+  screen mode is toggled. (Dale Anson)
 
 }}}
 {{{ Editing

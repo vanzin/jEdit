@@ -54,6 +54,13 @@ public class ViewUpdate extends EBMessage
 	 * @since jEdit 4.3pre4
 	 */
 	public static final Object ACTIVATED = "VIEW_ACTIVATED";
+	
+	
+	/**
+	 * Full screen mode has been toggled.
+	 * @since jEdit 5.3pre1
+	 */
+	public static final Object FULL_SCREEN_TOGGLED = "FULL_SCREEN_TOGGLED";
 
 	//{{{ ViewUpdate constructor
 	/**
