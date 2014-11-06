@@ -5,8 +5,8 @@ jEdit 5.3 version history
 {{{ Version 5.3pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Matt Galligan, Kevin Hunter Kesling, Dibsco, Darien Brown, Matthieu Casanova
-and Dale Anson for contributing to this release.
+Matt Galligan, Kevin Hunter Kesling, Dibsco, Darien Brown, Matthieu Casanova,
+Dale Anson and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -37,6 +37,8 @@ and Dale Anson for contributing to this release.
 - Fix for bug #3389 in BufferSwitcher.java where look and feel was locked to
   Metal. (Dale Anson) [Merged into 5.2.x]
 
+- Fix for bug #3893 where PluginResURLConnection.openStream returning null for
+  non existing resources made jEdit hang on Java 8, Mac OS 10.10. (Eric Le Lay)
 }}}
 
 {{{ UI Improvements
@@ -67,6 +69,10 @@ and Dale Anson for contributing to this release.
 - View now sends ViewUpdate message on EditBus when full screen mode is toggled.
   This is useful to plugins that may need to adjust their appearance when the
   screen mode is toggled. (Dale Anson)
+
+- PluginResURLConnection.openStream() is garanteed to return non-null stream;
+  PluginResURLConnection.connect() and PluginResURLConnection.openStream()
+  throw an IOException when the resource is not found.
 
 }}}
 {{{ Editing
