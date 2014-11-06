@@ -25,15 +25,17 @@ package org.gjt.sp.jedit.proto.jeditresource;
 //{{{ Imports
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.annotation.Nonnull;
+
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.jEdit;
-
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -71,7 +73,11 @@ public class PluginResURLConnection extends URLConnection
 	}//}}}
 
 	//{{{ connect()
-	public void connect() throws IOException
+	/**
+	 * @throws	IOException	on error
+	 * @throws	FileNotFoundException if resource is not found 
+	 */
+	public void connect() throws IOException, FileNotFoundException
 	{
 		if(!connected)
 		{
@@ -106,15 +112,31 @@ public class PluginResURLConnection extends URLConnection
 				File f = new File(jEdit.getJEditHome(), resource);
 				if (f.exists()) 
 					in = new FileInputStream(f);
-			if (in == null) throw new IOException("Resource not found: " + plugin + "!" + resource);
 			}
 			connected = true;
+		}
+		if(in == null)
+		{
+			if(plugin != null)
+			{
+				throw new FileNotFoundException("Resource not found: " + plugin + "!" + resource);
+			}
+			else
+			{
+				throw new FileNotFoundException("Resource not found: " + getURL());
+			}
 		}
 	}//}}}
 
 	//{{{ getInputStream()
+	/**
+	 * @return	input stream to read the resource's contents. never null
+	 * @throws	IOException	on error
+	 * @throws	FileNotFoundException if resource is not found 
+	 */
+	@Nonnull
 	public InputStream getInputStream()
-		throws IOException
+		throws IOException, FileNotFoundException
 	{
 		connect();
 		return in;
