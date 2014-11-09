@@ -39,8 +39,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 - Fix for bug #3893 where PluginResURLConnection.openStream returning null for
   non existing resources made jEdit hang on Java 8, Mac OS 10.10. (Eric Le Lay)
+  [Merged into 5.2.x]
 }}}
-
 {{{ UI Improvements
 
 - Proper button margins for Nimbus L&F (Patch #538 - Makarius)
@@ -72,7 +72,7 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 - PluginResURLConnection.openStream() is garanteed to return non-null stream;
   PluginResURLConnection.connect() and PluginResURLConnection.openStream()
-  throw an IOException when the resource is not found.
+  throw an IOException when the resource is not found. [Merged into 5.2.x]
 
 }}}
 {{{ Editing
