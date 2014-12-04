@@ -27,9 +27,9 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.io.*;
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
 import java.util.*;
@@ -127,7 +127,7 @@ public class MiscUtilities
 	static final Pattern winPattern = Pattern.compile(winPatternString);
 
 
-	/** A helper function for expandVariables when handling Windows paths on non-windows systems. 
+	/** A helper function for expandVariables when handling Windows paths on non-windows systems.
 	*/
 	private static String win2unix(String winPath)
 	{
@@ -196,7 +196,7 @@ public class MiscUtilities
 	 *
 	 *  Uses platform convention (%varname% on windows, $varname on other platforms)
 	 *
-	 *	@return an abbreviated path, replacing values with variables, if a prefix exists.	
+	 *	@return an abbreviated path, replacing values with variables, if a prefix exists.
 	 *  @see #expandVariables
 	 *  @since jEdit 4.3
 	 */
@@ -608,14 +608,16 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ openInDesktop() method
-	/** Opens a file using the desktop file associations.
+	/** Opens a file or URI using the desktop file associations.
 		<p>
 		Uses native desktop commands for each platform, which ask the user to choose an
 		association for files that do not already have one, using the desktop's
 		dialog, in contrast to Desktop.open() which just throws an IOException
 		for unknown types.
 
-		@param path path or URL (supported on Linux, anyway) of thing to open
+		If a URI is supplied, use desktop browser.
+
+		@param path: path or URI of thing to open/browse
 		@author Alan Ezust
 		@since jEdit 5.0
 	*/
@@ -624,8 +626,20 @@ public class MiscUtilities
 		StringList sl = new StringList();
 		if (OperatingSystem.isWindows())
 		{
-			sl.add("rundll32");
-			sl.add("SHELL32.DLL,ShellExec_RunDLL");
+			if (MiscUtilities.isURL(path)) try {
+				URI uri = new URI(path);
+				java.awt.Desktop.getDesktop().browse(uri);
+				return;
+			}
+			catch (IOException ioe) {
+				Log.log(Log.ERROR, path, "Can't open URI", ioe);
+			} catch (URISyntaxException use) {
+				Log.log(Log.ERROR, path, "Bad URI syntax:", use);
+			}
+			else {
+				sl.add("rundll32");
+				sl.add("SHELL32.DLL,ShellExec_RunDLL");
+			}
 		}
 		else if (OperatingSystem.isMacOS())
 			sl.add("open");
