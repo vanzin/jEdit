@@ -54,6 +54,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- HelpIndex includes .txt files again (Bug #3896 - Alan Ezust)
+
 - MiscUtilities.openInDesktop() works with URIs on Windows now. (Alan Ezust)
 
 - Properties are sorted when saved (Feature Request #342, Patch #536 - Makarius)
