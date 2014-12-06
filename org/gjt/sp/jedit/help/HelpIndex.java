@@ -144,7 +144,7 @@ class HelpIndex
 			ZipEntry entry = (ZipEntry)e.nextElement();
 			String name = entry.getName();
 			String lname = name.toLowerCase();
-			if(lname.endsWith(".html")/*  || lname.endsWith(".txt") */)
+			if(lname.endsWith(".html") || lname.endsWith(".txt") )
 			{
 				// only works for jEdit plugins
 				String url = "jeditresource:/" +
@@ -164,8 +164,10 @@ class HelpIndex
 	 */
 	public void indexURL(String path) throws Exception
 	{
-		URL url = new URL(path);
-		if (!MiscUtilities.isURL(path))
+		URL url;		
+		if (MiscUtilities.isURL(path))
+			url = new URL(path);
+		else 
 		{
 			File f = new File(path);
 			url = f.toURI().toURL();
