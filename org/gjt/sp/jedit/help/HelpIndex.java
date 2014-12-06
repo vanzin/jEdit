@@ -162,20 +162,17 @@ class HelpIndex
 	 * index.
 	 * @param url The HTML file's URL
 	 */
-	public void indexURL(String url) throws Exception
+	public void indexURL(String path) throws Exception
 	{
-		InputStream _in;
-
-		if(MiscUtilities.isURL(url))
-			_in =  new URL(url).openStream();
-		else
+		URL url = new URL(path);
+		if (!MiscUtilities.isURL(path))
 		{
-			_in = new FileInputStream(url);
-			// hack since HelpViewer needs a URL...
-			url = "file:" + url;
+			File f = new File(path);
+			url = f.toURI().toURL();
 		}
-
-		indexStream(_in,url);
+		InputStream _in;
+		_in =  url.openStream();
+		indexStream(_in, url.toString());
 	} //}}}
 
 	//{{{ lookupWord() method

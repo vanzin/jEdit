@@ -10,6 +10,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix for Bugs #3895, #3897: Help crashes jEdit on Windows (Alan Ezust)
+
 - Support for negative line spacing (Patch #535 - Makarius)
 
 - EnhancedDialog does not throw NullPointerExceptions anymore when checking
