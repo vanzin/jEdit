@@ -10,7 +10,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix for Bugs #3895, #3897: Help crashes jEdit on Windows (Alan Ezust)
+- Fix for Bugs #3895, #3897: Invalid HelpIndex URLs on windows.
+  (Alan Ezust,  Eric Le Lay)
 
 - Support for negative line spacing (Patch #535 - Makarius)
 
@@ -54,9 +55,10 @@ Dale Anson and Eric Le Lay for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- HelpIndex includes .txt files again (Bug #3896 - Alan Ezust)
+- HelpIndex includes .txt files again. (Bug #3896 - Alan Ezust)
 
 - MiscUtilities.openInDesktop() works with URIs on Windows now. (Alan Ezust)
+  [Merged into 5.2.x]
 
 - Properties are sorted when saved (Feature Request #342, Patch #536 - Makarius)
 

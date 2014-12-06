@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright © 1999 - 2014 Slava Pestov, Eric Le Lay, Alan Ezust
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,10 @@ import org.gjt.sp.util.Log;
 //}}}
 
 //{{{ class PluginResURLConnection
+/** An implementation of jeditresource:/ url protocol.
+
+	Can be used for accessing jEdit core resources as well.
+*/
 public class PluginResURLConnection extends URLConnection
 {
 	//{{{ constructor
@@ -75,7 +79,7 @@ public class PluginResURLConnection extends URLConnection
 	//{{{ connect()
 	/**
 	 * @throws	IOException	on error
-	 * @throws	FileNotFoundException if resource is not found 
+	 * @throws	FileNotFoundException if resource is not found
 	 */
 	public void connect() throws IOException, FileNotFoundException
 	{
@@ -108,9 +112,9 @@ public class PluginResURLConnection extends URLConnection
 
 			if((in == null) && (plugin == null))
 			{
-				// can't find it in jEdit.jar, look for file in jEditHome(). 
+				// can't find it in jEdit.jar, look in getJEditHome().
 				File f = new File(jEdit.getJEditHome(), resource);
-				if (f.exists()) 
+				if (f.exists())
 					in = new FileInputStream(f);
 			}
 			connected = true;
@@ -132,7 +136,7 @@ public class PluginResURLConnection extends URLConnection
 	/**
 	 * @return	input stream to read the resource's contents. never null
 	 * @throws	IOException	on error
-	 * @throws	FileNotFoundException if resource is not found 
+	 * @throws	FileNotFoundException if resource is not found
 	 */
 	@Nonnull
 	public InputStream getInputStream()
