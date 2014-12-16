@@ -43,6 +43,9 @@ Dale Anson and Eric Le Lay for contributing to this release.
 - Fix for bug #3893 where PluginResURLConnection.openStream returning null for
   non existing resources made jEdit hang on Java 8, Mac OS 10.10. (Eric Le Lay)
   [Merged into 5.2.x]
+
+- Fix bug #3671: autodetect text file encoding in HelpViewer
+  (patch #540 - Eric Le Lay)
 }}}
 {{{ UI Improvements
 
