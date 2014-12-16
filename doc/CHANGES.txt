@@ -93,6 +93,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
   - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
 
   - New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
+  
+  - New mode for Antlr 4 (Dale Anson)
 
 }}}
 

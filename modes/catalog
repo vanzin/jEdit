@@ -25,6 +25,9 @@
 <MODE NAME="antlr"		FILE="antlr.xml"
 				FILE_NAME_GLOB="*.g" />
 
+<MODE NAME="antlr4"		FILE="antlr4.xml"
+				FILE_NAME_GLOB="*.g4" />
+
 <MODE NAME="apacheconf"		FILE="apacheconf.xml"
 				FILE_NAME_GLOB="{/etc/apache2/{*.conf,{conf.d,{mods,sites}-{available,enabled}}/*},*httpd*.conf}" />
 
