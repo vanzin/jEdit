@@ -629,7 +629,7 @@ largeBufferDialog.defaultMode=Mode d'édition brut
 #{{{ I/O error dialog box
 ioerror.title=Erreur I/O
 ioerror.caption=Les {0} opérations I/O suivantes ont été interrompues :
-ioerror.caption-1=Cette opération I/O a été inerrompue :
+ioerror.caption-1=Cette opération I/O a été interrompue :
 
 ioerror={0}
 ioerror.directory-error=Impossible de lister les fichiers du dossier : {0}
