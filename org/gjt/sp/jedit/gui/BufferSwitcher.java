@@ -32,11 +32,16 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.ThreadUtilities;
+
 //}}}
 
 /** BufferSwitcher class
@@ -87,6 +92,7 @@ public class BufferSwitcher extends JComboBox
 				setSelectedItem(itemSelectedBefore);
 			}
 		});
+		EditBus.addToBus(this);
 	}
 
 	public void updateBufferList()
@@ -104,7 +110,19 @@ public class BufferSwitcher extends JComboBox
 			{
 				updating = true;
 				setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
-				setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
+				Buffer[] buffers = bufferSet.getAllBuffers();
+				if (jEdit.getBooleanProperty("bufferswitcher.sortBuffers", true)) {
+					Arrays.sort(buffers, new Comparator<Buffer>(){
+							public int compare(Buffer a, Buffer b) {
+								if (jEdit.getBooleanProperty("bufferswitcher.sortByName", true)) {
+									return a.getName().toLowerCase().compareTo(b.getName().toLowerCase());		
+								} else {
+									return a.getPath().toLowerCase().compareTo(b.getPath().toLowerCase());	
+								}
+							}
+					});
+				}
+				setModel(new DefaultComboBoxModel(buffers));
 				setSelectedItem(editPane.getBuffer());
 				setToolTipText(editPane.getBuffer().getPath(true));
 				addDnD();
@@ -113,6 +131,12 @@ public class BufferSwitcher extends JComboBox
 		};
 		ThreadUtilities.runInDispatchThread(runnable);
 	}
+
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		updateBufferList();
+	} 
 
 	static class BufferCellRenderer extends DefaultListCellRenderer
 	{

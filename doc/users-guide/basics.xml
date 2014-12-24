@@ -254,6 +254,17 @@
         <guimenu>(Global|View|EditPane) Buffer Set</guimenu>.
         A change to the bufferset scope affects all editpanes immediately.
         </para>
+        
+        <bridgehead>Sorting of Buffer Sets and Buffer Switchers</bridgehead>
+        
+        <para>Buffer Switchers and Buffer Sets can be sorted independently. Both can be
+        sorted by name or by path. Both can be left unsorted. Possibly the most useful
+        combination is to sort the Buffer Switchers and leave the Buffer Sets unsorted. 
+        In this case, it is easy to find the buffer to work with in the Buffer Switcher
+        since the buffer names are sorted alphabetically, and leaving the Buffer Set unsorted
+        means the "go to previous" and "go to next" actions follow the order in which the
+        buffers were last used rather than by name. However, some users prefer Buffer
+        Sets to also be sorted by name or path, so jEdit supports multiple sorting methods.</para>
 
     </section>
 

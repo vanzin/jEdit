@@ -55,6 +55,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 - CompletionPopup should accept TAB for completion selection (Patch # 525 - Jakub Holý)
 
+- Separated sorting of Buffer Sets and Buffer Switcher (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
