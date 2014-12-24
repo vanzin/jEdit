@@ -187,7 +187,19 @@ public class ViewOptionPane extends AbstractOptionPane
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				sortByName.setEnabled(sortBuffers.isSelected());
+				if (sortBuffers.isSelected())
+				{
+					sortByName.setEnabled(true);
+					sortBufferSwitcher.setEnabled(false);
+					sortBufferSwitcher.setSelected(true);
+					sortBufferSwitcherByName.setEnabled(false);
+				}
+				else
+				{
+					sortByName.setEnabled(false);
+					sortBufferSwitcher.setEnabled(true);
+					sortBufferSwitcherByName.setEnabled(true);
+				}
 			}
 		});
 
