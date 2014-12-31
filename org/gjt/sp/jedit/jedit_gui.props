@@ -531,8 +531,7 @@ plugins.code=new PluginsProvider();
 #{{{ Help menu
 help-menu=about \
      help \
-     tip-of-the-day \
-     userFeedback
+     tip-of-the-day
 #}}}
 
 #}}}
