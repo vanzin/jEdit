@@ -1,10 +1,10 @@
 /*
  * TextAreaPainter.java - Paints the text area
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=4:indentSize=4:noTabs=false:encoding=UTF-8:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999-2013 Slava Pestov, Shlomy Reinstein
- * Matthieu Casanova, Kazutoshi Satoda, Alan Ezust, Dale Anson  
+ * Matthieu Casanova, Kazutoshi Satoda, Alan Ezust, Dale Anson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,7 +215,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		if (defaultCursor)
 		{
-		       setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+			   setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 	} //}}}
 
@@ -757,17 +757,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		return fm;
 	} //}}}
-	
+
 	//{{{ getLineHeight() method
 	/**
-	 * Returns the line height as given by the font metrics plus the 
+	 * Returns the line height as given by the font metrics plus the
 	 * added line spacing.
 	 */
 	public int getLineHeight()
 	{
 		return fm.getHeight() + extraLineSpacing;
 	} //}}}
-	
+
 	//{{{ getFontHeight() method
 	/**
 	 * Returns the font height as given by the font metrics.
@@ -776,7 +776,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		return fm.getHeight();
 	} //}}}
-	
+
 	//{{{ getLineExtraSpacing() method
 	/**
 	 * Returns the number of pixels from the start of the line to the start
@@ -795,7 +795,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		extraLineSpacing = spacing;
 	} //}}}
-	
+
 	//{{{ setFont() method
 	/**
 	 * Sets the font for this component. This is overridden to update the
@@ -835,14 +835,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ getRenderingHints() method
 	/**
 	 * Returns the rendering hints used by the Graphics2D class; in this
-         * case, for anti-aliasing of text.
+		 * case, for anti-aliasing of text.
 	 *
 	 * @since jEdit 4.5pre1
 	 */
-        public RenderingHints getRenderingHints()
+		public RenderingHints getRenderingHints()
 	{
-            return renderingHints;
-        } //}}}
+			return renderingHints;
+		} //}}}
 
 	//{{{ update() method
 	/**
@@ -903,7 +903,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		textArea.updateMaxHorizontalScrollWidth();
 	} //}}}
-	
+
 	//{{{ nextTabStop() method
 	/**
 	 * Implementation of TabExpander interface. Returns next tab stop after
@@ -1011,7 +1011,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(TEXT_LAYER,new PaintText());
 		addExtension(TEXT_LAYER,new PaintSelectionText());
 		caretExtension = new PaintCaret();
-		
+
 		extraLineSpacing = 0;
 	} //}}}
 
@@ -1026,7 +1026,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private Cursor hiddenCursor;
 	private boolean defaultCursor = true;
 	//}}}
-	
+
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
 	{
@@ -1037,7 +1037,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
 		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, antiAlias.renderHint());
-		
+
 
 		if (antiAlias.val() == 0)
 		{
@@ -1045,13 +1045,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
 		/* Subpixel antialiasing mode */
-		else if (antiAlias.val() > 1) 
+		else if (antiAlias.val() > 1)
 		{
 			Object fontRenderHint = fracFontMetrics ?
 				RenderingHints.VALUE_FRACTIONALMETRICS_ON :
 				RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
-			fontRenderContext = new FontRenderContext(null, antiAlias.renderHint(), 
-				fontRenderHint);			
+			fontRenderContext = new FontRenderContext(null, antiAlias.renderHint(),
+				fontRenderHint);
 		}
 		else /** Standard Antialias Version */
 		{
@@ -1211,7 +1211,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if(textArea.getSelectionCount() == 0)
 				return;
-			if ((! isSelectionFgColorEnabled()) || (getSelectionFgColor() == null)) 
+			if ((! isSelectionFgColorEnabled()) || (getSelectionFgColor() == null))
 				return;
 
 			Iterator<Selection> iter = textArea.getSelectionIterator();
@@ -1280,7 +1280,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 							x = nextX(x, style, sub, tokenStart, startOffset);
 						}
 						else
-							strStart = tokenStart; 
+							strStart = tokenStart;
 						int strEnd = (endOffset > next) ? next : endOffset;
 						sub = textArea.getText(strStart, strEnd - strStart);
 						gfx.drawString(sub, x, baseLine);
@@ -1444,7 +1444,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				gfx.setFont(defaultFont);
 				gfx.setColor(eolMarkerColor);
-				gfx.drawString(".",x,baseLine);
+				gfx.drawString("·",x,baseLine);
 				x += textArea.charWidth;
 			}
 
@@ -1468,7 +1468,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
 			textArea.offsetToXY(physicalLine,
-					    offset, textArea.offsetXY);
+						offset, textArea.offsetXY);
 			int caretX = textArea.offsetXY.x;
 			int lineHeight = getLineHeight();
 			int charHeight = Math.min(lineHeight, getFontHeight());
@@ -1478,22 +1478,22 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(textArea.isOverwriteEnabled())
 			{
-				if (thickCaret) 
+				if (thickCaret)
 					gfx.fillRect(caretX, y + lineHeight - 4, textArea.charWidth, 3);
-				
-				else  gfx.drawLine(caretX, y + lineHeight - 1, 
+
+				else  gfx.drawLine(caretX, y + lineHeight - 1,
 					caretX + textArea.charWidth, y + lineHeight - 1);
 			}
 			else if(blockCaret)
-				gfx.drawRect(caretX, y + charOffset, 
+				gfx.drawRect(caretX, y + charOffset,
 					textArea.charWidth - 1, charHeight - 1);
 			else
 			{
-				if (thickCaret) 
+				if (thickCaret)
 					gfx.fillRect(caretX, y + charOffset, 3, charHeight - 1);
 				else
-					gfx.drawLine(caretX, y + charOffset, caretX, 
-						     y + charOffset + charHeight - 1);
+					gfx.drawLine(caretX, y + charOffset, caretX,
+							 y + charOffset + charHeight - 1);
 			}
 		}
 	} //}}}

@@ -28,7 +28,7 @@ Dale Anson and Eric Le Lay for contributing to this release.
   edges with the BufferTabs plugin installed and active.
   (Björn "Vampire" Kautler) [Merged into 5.2.x]
 
-- Fix a bug preventing from removing an unloaded plugin
+- Fix a bug preventing removal of an unloaded plugin
   (#3877 - Matthieu Casanova) [Merged into 5.2.x]
 
 - The native splashscreen is removed as it was not possible to disable it
@@ -48,6 +48,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
   (patch #540 - Eric Le Lay)
 }}}
 {{{ UI Improvements
+
+- EOL marker is now a raised dot (·) instead of a period. (#3902 - Alan Ezust)
 
 - Proper button margins for Nimbus L&F (Patch #538 - Makarius)
 
@@ -95,7 +97,7 @@ Dale Anson and Eric Le Lay for contributing to this release.
   - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
 
   - New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
-  
+
   - New mode for Antlr 4 (Dale Anson)
 
 }}}

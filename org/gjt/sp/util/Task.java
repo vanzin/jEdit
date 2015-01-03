@@ -24,7 +24,8 @@ package org.gjt.sp.util;
 import javax.swing.*;
 
 /**
- * A Task is basically a Runnable but with some information about it's progression.
+ * A Task is a Runnable with progress.
+ *
  * @since jEdit 4.4pre1
  * @author Matthieu Casanova
  */
