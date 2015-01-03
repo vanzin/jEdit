@@ -11,7 +11,7 @@ Dale Anson and Eric Le Lay for contributing to this release.
 {{{ Bug Fixes
 
 - Fix for Bugs #3895, #3897: Invalid HelpIndex URLs on windows.
-  (Alan Ezust,  Eric Le Lay)
+  (Alan Ezust,  Eric Le Lay) [Merged into 5.2.x]
 
 - Support for negative line spacing (Patch #535 - Makarius)
 
