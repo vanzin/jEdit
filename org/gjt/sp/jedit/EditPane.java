@@ -770,36 +770,36 @@ public class EditPane extends JPanel implements BufferSetListener
 	EditPane(@Nonnull View view, @Nullable BufferSet bufferSetSource, @Nonnull Buffer buffer)
 	{
 		super(new BorderLayout());
-        BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
-        BufferSet source = bufferSetSource;
-        switch (scope)
-        {
-            case editpane:
-                // do nothing
-                break;
-            case view:
-                {
-                    EditPane editPane = view.getEditPane();
-                    if (editPane != null)
-                    {
-                        // if we have an editpane we copy it
-                        source = editPane.getBufferSet();
-                    }
-                }
-                break;
-            case global:
-                View activeView = jEdit.getActiveView();
-                if (activeView != null)
-                {
-                    EditPane editPane = activeView.getEditPane();
-                    if (editPane != null)
-                    {
-                        source = editPane.getBufferSet();
-                    }
-                }
-                break;
-        }
-        bufferSet = new BufferSet(source);
+		BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
+		BufferSet source = bufferSetSource;
+		switch (scope)
+		{
+			case editpane:
+				// do nothing
+				break;
+			case view:
+				{
+					EditPane editPane = view.getEditPane();
+					if (editPane != null)
+					{
+						// if we have an editpane we copy it
+						source = editPane.getBufferSet();
+					}
+				}
+				break;
+			case global:
+				View activeView = jEdit.getActiveView();
+				if (activeView != null)
+				{
+					EditPane editPane = activeView.getEditPane();
+					if (editPane != null)
+					{
+						source = editPane.getBufferSet();
+					}
+				}
+				break;
+		}
+		bufferSet = new BufferSet(source);
 
 		init = true;
 
@@ -999,6 +999,8 @@ public class EditPane extends JPanel implements BufferSetListener
 			jEdit.getColorProperty("view.structureHighlightColor"));
 		painter.setEOLMarkersPainted(jEdit.getBooleanProperty(
 			"view.eolMarkers"));
+		painter.setEOLMarkerChar(
+			jEdit.getProperty("view.eolMarkerChar", "·"));
 		painter.setEOLMarkerColor(
 			jEdit.getColorProperty("view.eolMarkerColor"));
 		painter.setWrapGuidePainted(jEdit.getBooleanProperty(

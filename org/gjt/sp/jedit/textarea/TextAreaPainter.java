@@ -521,6 +521,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.invalidateLine(textArea.getCaretLine());
 	} //}}}
 
+	public String getEOLMarkerChar() {
+		return eolMarkerChar;
+	}
+	public void setEOLMarkerChar(String emc) {
+		eolMarkerChar = emc;
+	}
+
 	//{{{ getEOLMarkerColor() method
 	/**
 	 * Returns the EOL marker color.
@@ -959,6 +966,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	Color lineHighlightColor;
 	Color structureHighlightColor;
 	Color eolMarkerColor;
+	String eolMarkerChar;
 	Color wrapGuideColor;
 
 	SyntaxStyle[] foldLineStyle;
@@ -993,7 +1001,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		this.textArea = textArea;
 		antiAlias = new AntiAlias(0);
 		extensionMgr = new ExtensionManager();
-
+		eolMarkerChar = "·";
 		setAutoscrolls(true);
 		setOpaque(true);
 		setRequestFocusEnabled(false);
@@ -1444,7 +1452,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				gfx.setFont(defaultFont);
 				gfx.setColor(eolMarkerColor);
-				gfx.drawString("·",x,baseLine);
+				gfx.drawString(eolMarkerChar,x,baseLine);
 				x += textArea.charWidth;
 			}
 
