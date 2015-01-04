@@ -371,12 +371,12 @@
             </informaltable>
         </section>
     </section>
-    <section id="jvm-options"> 
+    <section id="jvm-options">
     <title> Java Virtual Machine Options </title>
 
       <para> To enable AntiAliasing in the TextArea, see <xref
       linkend="text-area-pane" />. </para>
-    
+
       <para> It is possible to pass command line options to the Java
       Virtual Machine (JVM). These options can change certain things about how
       Java runs, such as the maximum heap size, or whether antialiasing is used
@@ -391,19 +391,23 @@
       parameter must be the last <literal>java</literal> option, followed
       immediately by the path to <filename>jedit.jar</filename> and then any
       jEdit command line options.</para>
-      
+
       <para> On a Windows install that uses <literal>jEdit.exe</literal>, the
       JVM options are located in a separate file, called
       <literal>jEdit.l4j.ini</literal>. Create or edit this file in the same
       directory as <literal>jEdit.exe</literal> and place one JVM option per
       line. </para>
-      
+
+      <para> On Mac OS X, the jEdit.app bundle gets JVM options from a file called
+      <literal>Contents/Info.plist</literal>, which can be edited with a text editor.
+      </para>
+
       <para> There is no complete list of options to <literal>java</literal>,
       since it can vary from one platform to another. Some of can be found by
       typing the commands <literal>java -?</literal> or <literal>man
       java</literal>. Common JVM options that are used with jEdit and work on
       all platforms are: </para>
-      
+
       <informaltable>
         <tgroup cols="2">
             <colspec colnum="1" colwidth="1.5in" />
@@ -427,10 +431,10 @@
               </row>
               <row>
                   <entry><userinput>-Djedit.home=/path/to/jedit</userinput>
-                  </entry> 
+                  </entry>
                   <entry> Sets/overrides the java System property
                   <literal>jedit.home</literal> to be the path to the jEdit
-                  install. This tells jEdit where to find its site properties, 
+                  install. This tells jEdit where to find its site properties,
                   default keymaps, macros, edit modes, and documentation. You can override
                   this setting to create a custom install that is shared by multiple
                   users. See <xref linkend="sitepropertiesfiles"/> for more information.
@@ -438,12 +442,13 @@
                   </row>
               <row>
                   <entry><userinput>-mx768m</userinput></entry>
-                  <entry> Sets maximum heap size to 768 megabytes. 
+                  <entry> Sets maximum heap size to 768 megabytes.
                   Adjust this value depending on your own personal needs /
-                  plugins. </entry> 
+                  plugins. On at least one platform, <literal>-Xmx768m</literal> works
+                  when <literal>-mx768m</literal> does not (or vice-versa). </entry>
               </row>
-            </tbody> 
+            </tbody>
           </tgroup>
-       </informaltable>      
-    </section>    
+       </informaltable>
+    </section>
 </chapter>

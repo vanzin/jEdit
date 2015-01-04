@@ -49,7 +49,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 }}}
 {{{ UI Improvements
 
-- EOL marker is now a raised dot (·) instead of a period. (#3902 - Alan Ezust)
+- EOL marker character is now a localizable property (view.eolMarkerChar),
+  and default is now a raised dot (·) instead of period. (#3902 - Alan Ezust)
 
 - Proper button margins for Nimbus L&F (Patch #538 - Makarius)
 

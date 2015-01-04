@@ -539,12 +539,9 @@
 										<para>How can I get antialiased text everywhere, even dockables and menus? </para>
 								</question>
 								<answer>
-									 <para>
-									 See the <ulink url="../users-guide/jvm-options.html">page on JVM options</ulink> in the users guide.
-									 </para>
-
-									 <para> On Mac OS X, the jEdit.app bundle already provides certain antialiasing properties in
-									 <literal>Contents/Info.plist</literal> to enable that by default.</para>
+									<para>
+										See the <ulink url="../users-guide/jvm-options.html">page on JVM options</ulink> in the users guide.
+									</para>
 					</answer>
 						</qandaentry>
 						<qandaentry>
