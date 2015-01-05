@@ -246,7 +246,7 @@ view.structureHighlightColor=#000000
 # EOL markers
 view.eolMarkers=false
 view.eolMarkerColor=#ff6633
-view.eolMarkerChar=·
+view.eolMarkerChar=↩
 
 # Wrap guide
 view.wrapGuide=true
