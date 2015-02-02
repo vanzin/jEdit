@@ -89,6 +89,6 @@
 		<dependency org="org.beanshell" name="bsh" rev="2.0b4" conf="scripting"/>
 		<dependency org="org.bouncycastle" name="bcpg-jdk16" rev="1.46" conf="scripting"/>
 
-		<dependency org="com.google.code.findbugs" name="jsr305" rev="2.0.0"/>
+		<dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.0"/>
 	</dependencies>
 </ivy-module>
