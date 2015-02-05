@@ -1,5 +1,5 @@
 jEdit 5.3 version history
-       (changes since jEdit 5.2pre1)
+       (changes since jEdit 5.2.0)
 :encoding=UTF-8:
 
 {{{ Version 5.3pre1
