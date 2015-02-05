@@ -10,41 +10,7 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix for Bugs #3895, #3897: Invalid HelpIndex URLs on windows.
-  (Alan Ezust,  Eric Le Lay) [Merged into 5.2.x]
-
 - Support for negative line spacing (Patch #535 - Makarius)
-
-- EnhancedDialog does not throw NullPointerExceptions anymore when checking
-  whether a pressed key is the buffer close shortcut. (Björn "Vampire" Kautler)
-  [Merged into 5.2.x]
-
-- When using extra vertical line spacing and a selection foreground color, the
-  selected text was painted twice, once with the extra spacing, once without.
-  Now the selected text is drawn correctly. (Björn "Vampire" Kautler)
-  [Merged into 5.2.x]
-
-- Make the TextArea a JPanel instead of a JComponent, so that it draws its
-  background and set the background color to the Gutter background color. This
-  prevents the parent component to shine through, which would e. g. show blue
-  edges with the BufferTabs plugin installed and active.
-  (Björn "Vampire" Kautler) [Merged into 5.2.x]
-
-- Fix a bug preventing removal of an unloaded plugin
-  (#3877 - Matthieu Casanova) [Merged into 5.2.x]
-
-- The native splashscreen is removed as it was not possible to disable it
-  (#3876 - Matthieu Casanova) [Merged into 5.2.x]
-
-- Bugfix in EditPane.java related to file status checks.
-  (Patch #534 - Matt Galligan) [Merged into 5.2.x]
-
-- Fix for bug #3389 in BufferSwitcher.java where look and feel was locked to
-  Metal. (Dale Anson) [Merged into 5.2.x]
-
-- Fix for bug #3893 where PluginResURLConnection.openStream returning null for
-  non existing resources made jEdit hang on Java 8, Mac OS 10.10. (Eric Le Lay)
-  [Merged into 5.2.x]
 
 - Fix bug #3671: autodetect text file encoding in HelpViewer
   (patch #540 - Eric Le Lay)
@@ -67,19 +33,11 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 - HelpIndex includes .txt files again. (Bug #3896 - Alan Ezust)
 
-- MiscUtilities.openInDesktop() works with URIs on Windows now. (Alan Ezust)
-  [Merged into 5.2.x]
-
 - Properties are sorted when saved (Feature Request #342, Patch #536 - Makarius)
 
 - Configure the JUnit task to fork off the Ant process, with manually adding the
   needed Ant libraries. This ensures that there are no unwanted classpath
   entries during test execution (Plugin Bug #1732 - Björn "Vampire" Kautler)
-
-- Upgrade Launch4J to the latest version 3.5.0. This makes it possible to UTF-8
-  encode the config file and build the EXE launcher on Mac OS again, removing
-  the need for Rosetta being installed, which is not supported anymore anyway
-  since Mac OS 10.7. (Björn "Vampire" Kautler) [Merged into 5.2.x]
 
 }}}
 {{{ API Changes
@@ -87,10 +45,6 @@ Dale Anson and Eric Le Lay for contributing to this release.
 - View now sends ViewUpdate message on EditBus when full screen mode is toggled.
   This is useful to plugins that may need to adjust their appearance when the
   screen mode is toggled. (Dale Anson)
-
-- PluginResURLConnection.openStream() is garanteed to return non-null stream;
-  PluginResURLConnection.connect() and PluginResURLConnection.openStream()
-  throw an IOException when the resource is not found. [Merged into 5.2.x]
 
 }}}
 {{{ Editing
