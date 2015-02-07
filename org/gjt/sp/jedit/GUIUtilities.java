@@ -60,7 +60,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
@@ -70,6 +69,12 @@ import javax.swing.UIDefaults;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 //}}}
 
 /** Various GUI utility functions related to icons, menus, toolbars, keyboard shortcuts, etc.
@@ -2161,6 +2166,15 @@ public class GUIUtilities
 
 	//{{{ Inner classes
 
+	private static final AtomicLong executorThreadsCounter = new AtomicLong();
+	private static final ScheduledExecutorService schedExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory()
+	{
+		@Override
+		public Thread newThread(Runnable r)
+		{
+			return new Thread(r, "SizeSaver-" + executorThreadsCounter.incrementAndGet());
+		}
+	});
 	//{{{ SizeSaver class
 	/**
 	 * A combined ComponentListener and WindowStateListener to continually save a Frames size.<br />
@@ -2176,6 +2190,7 @@ public class GUIUtilities
 		private final Frame frame;
 		private final Container parent;
 		private final String name;
+		private Future<?> resizeDelayFuture;
 
 		//{{{ SizeSaver constructors
 		/**
@@ -2209,6 +2224,8 @@ public class GUIUtilities
 		//{{{ save() method
 		private void save(int extendedState, Rectangle bounds)
 		{
+			cancelResizeSave();
+
 			switch (extendedState)
 			{
 				case Frame.MAXIMIZED_VERT:
@@ -2226,6 +2243,16 @@ public class GUIUtilities
 					break;
 			}
 		} //}}}
+		
+		//{{{ cancelResizeSave() method
+		private void cancelResizeSave()
+		{
+			if (resizeDelayFuture != null) {
+				resizeDelayFuture.cancel(false);
+				resizeDelayFuture = null;
+			}
+		}
+		//}}}
 
 		//{{{ componentResized() method
 		@Override
@@ -2244,25 +2271,19 @@ public class GUIUtilities
 				@Override
 				public void run()
 				{
-					int extendedState = frame.getExtendedState();
-					save(extendedState, bounds);
+					EventQueue.invokeLater(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							save(frame.getExtendedState(), bounds);
+						}
+					});
 				}
 			};
-			new Thread("Sizesavingdelay")
-			{
-				@Override
-				public void run()
-				{
-					try
-					{
-						Thread.sleep(500L);
-					}
-					catch (InterruptedException ie)
-					{
-					}
-					EventQueue.invokeLater(sizeSaver);
-				}
-			}.start();
+
+			cancelResizeSave();
+			resizeDelayFuture = schedExecutor.schedule(sizeSaver, 500, TimeUnit.MILLISECONDS);
 		} //}}}
 	} //}}}
 

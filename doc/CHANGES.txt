@@ -6,7 +6,7 @@ jEdit 5.3 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Matt Galligan, Kevin Hunter Kesling, Dibsco, Darien Brown, Matthieu Casanova,
-Dale Anson and Eric Le Lay for contributing to this release.
+Sergey Mashkov, Dale Anson and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -30,6 +30,8 @@ Dale Anson and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Resize performance improvement (Patch #547 - Sergey Mashkov)
 
 - HelpIndex includes .txt files again. (Bug #3896 - Alan Ezust)
 
