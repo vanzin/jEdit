@@ -33,8 +33,6 @@ Sergey Mashkov, Dale Anson and Eric Le Lay for contributing to this release.
 
 - Resize performance improvement (Patch #547 - Sergey Mashkov)
 
-- HelpIndex includes .txt files again. (Bug #3896 - Alan Ezust)
-
 - Properties are sorted when saved (Feature Request #342, Patch #536 - Makarius)
 
 - Configure the JUnit task to fork off the Ant process, with manually adding the
