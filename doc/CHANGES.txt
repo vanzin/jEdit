@@ -5,8 +5,9 @@ jEdit 5.3 version history
 {{{ Version 5.3pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Matt Galligan, Kevin Hunter Kesling, Dibsco, Darien Brown, Matthieu Casanova,
-Sergey Mashkov, Dale Anson and Eric Le Lay for contributing to this release.
+Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
+Matthieu Casanova, Sergey Mashkov, Dale Anson and Eric Le Lay
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -24,7 +25,8 @@ Sergey Mashkov, Dale Anson and Eric Le Lay for contributing to this release.
 
 - Floating dockables as JDialog (Patch #537 - Makarius)
 
-- CompletionPopup should accept TAB for completion selection (Patch # 525 - Jakub Holý)
+- CompletionPopup should accept TAB for completion selection
+  (Patch # 525 - Jakub Holý)
 
 - Separated sorting of Buffer Sets and Buffer Switcher (Dale Anson)
 
@@ -51,7 +53,7 @@ Sergey Mashkov, Dale Anson and Eric Le Lay for contributing to this release.
 
   - Updates to cfscript mode (Patch #531 - Darien Brown)
 
-  - New mode for ANS Forth 1994 (Patch #530 - Dibsco)
+  - New mode for ANS Forth 1994 (Patch #530 - Mark Corbin)
 
   - New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
 
