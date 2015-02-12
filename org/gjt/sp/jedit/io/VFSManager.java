@@ -260,7 +260,7 @@ public class VFSManager
 	{
 		error(comp,path,messageProp,args,Log.ERROR);
 	}
-	
+
 	/**
 	 * Reports an I/O error.
 	 *
@@ -271,27 +271,39 @@ public class VFSManager
 	 * @param urgency Logging urgency (level)
 	 * @since jEdit 5.0pre1
 	 */
-	public static void error(Component comp,
+	public static void error(final Component comp,
 		final String path,
-		String messageProp,
-		Object[] args,
-		int urgency)
+		final String messageProp,
+		final Object[] args,
+		final int urgency)
 	{
-		final Frame frame = JOptionPane.getFrameForComponent(comp);
-
-		synchronized(errorLock)
+		Runnable r = new Runnable()
 		{
-			error = true;
-
-			errors.add(new ErrorListDialog.ErrorEntry(
-				path,messageProp,args,urgency));
-
-			if(errors.size() == 1)
+			@Override
+			public void run()
 			{
-				if (!errorDisplayerActive)
-					ThreadUtilities.runInBackground(new ErrorDisplayer(frame));
+				final Frame frame =
+					JOptionPane.getFrameForComponent(comp);
+
+				synchronized(errorLock)
+				{
+					error = true;
+
+					errors.add(new ErrorListDialog.ErrorEntry(
+						path,messageProp,args,urgency));
+
+					if(errors.size() == 1)
+					{
+						if (!errorDisplayerActive)
+						{
+							ThreadUtilities.runInBackground(
+								new ErrorDisplayer(frame));
+						}
+					}
+				}
 			}
-		}
+		};
+		ThreadUtilities.runInDispatchThreadAndWait(r);
 	} //}}}
 
 	//{{{ sendVFSUpdate() method
@@ -393,12 +405,12 @@ public class VFSManager
 	private static class ErrorDisplayer implements Runnable
 	{
 		private Frame frame;
-		
+
 		public ErrorDisplayer(Frame frame)
 		{
 			this.frame = frame;
 		}
-		
+
 		private void showDialog(final Frame frame,
 			final Vector<ErrorListDialog.ErrorEntry> errors)
 		{
@@ -430,7 +442,7 @@ public class VFSManager
 				Log.log(Log.ERROR, ErrorDisplayer.class, ite);
 			}
 		}
-		
+
 		public void run()
 		{
 			synchronized(errorLock)
@@ -440,11 +452,11 @@ public class VFSManager
 					return;
 				errorDisplayerActive = true;
 			}
-			
+
 			// The loop breaks only when errors.size() == 0
 			while (true)
 			{
-			
+
 				synchronized(errorLock)
 				{
 					if (errors.size() == 0) {
@@ -476,7 +488,7 @@ public class VFSManager
 					}
 					errCount2 = errors.size();
 				} //}}}
-				
+
 				// For a while new errors didn't appear.
 				// Let's display those which we already have.
 				// While the dialog will be displayed,
@@ -491,10 +503,10 @@ public class VFSManager
 				}
 				showDialog(frame, errorsCopy);
 			}
-			
+
 		}
 	} //}}}
-	
+
 	private VFSManager() {}
 	//}}}
 }
