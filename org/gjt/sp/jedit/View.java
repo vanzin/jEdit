@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -980,7 +980,7 @@ public class View extends JFrame implements InputHandlerProvider
 			if (retval == null) {
 				Comparator<Buffer> sorter = bs.getSorter();
 				if (sorter == null)
-					retval = new HashSet<Buffer>();
+					retval = new LinkedHashSet<Buffer>();
 				else
 					retval = new TreeSet<Buffer>(sorter);
 			}
@@ -2132,7 +2132,7 @@ loop:		while (true)
 	//{{{ getOpenBuffers() method
 	private Set<Buffer> getOpenBuffers()
 	{
-		Set<Buffer> openBuffers = new HashSet<Buffer>();
+		Set<Buffer> openBuffers = new LinkedHashSet<Buffer>();
 		for (EditPane editPane: getEditPanes())
 		{
 			openBuffers.addAll(Arrays.asList(

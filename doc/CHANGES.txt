@@ -11,6 +11,9 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- Order of unsorted buffers now preserved in View.getBuffers()
+  (Patch # 548 - Kevin Leblanc)
+
 - Support for negative line spacing (Patch #535 - Makarius)
 
 - Fix bug #3671: autodetect text file encoding in HelpViewer
