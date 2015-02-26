@@ -6,10 +6,12 @@ jEdit 5.3 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
-Matthieu Casanova, Sergey Mashkov, Dale Anson and Eric Le Lay
-for contributing to this release.
+Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
+Marcelo Vanizn, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
+
+- Fix AWT thread-safety issue in VFSManager.error(). (Marcelo Vanizn)
 
 - Order of unsorted buffers now preserved in View.getBuffers()
   (Patch # 548 - Kevin Leblanc)
@@ -54,16 +56,15 @@ for contributing to this release.
 }}}
 {{{ Editing
 
-  - Updates to cfscript mode (Patch #531 - Darien Brown)
+- Updates to cfscript mode (Patch #531 - Darien Brown)
 
-  - New mode for ANS Forth 1994 (Patch #530 - Mark Corbin)
+- New mode for ANS Forth 1994 (Patch #530 - Mark Corbin)
 
-  - New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
+- New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
 
-  - New mode for Antlr 4 (Dale Anson)
+- New mode for Antlr 4 (Dale Anson)
 
 }}}
-
 }}}
 
 jEdit buffer local properties:
