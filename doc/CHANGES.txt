@@ -7,11 +7,11 @@ jEdit 5.3 version history
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
 Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
-Marcelo Vanizn, and Eric Le Lay for contributing to this release.
+Marcelo Vanzin, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix AWT thread-safety issue in VFSManager.error(). (Marcelo Vanizn)
+- Fix AWT thread-safety issue in VFSManager.error(). (Marcelo Vanzin)
 
 - Order of unsorted buffers now preserved in View.getBuffers()
   (Patch # 548 - Kevin Leblanc)
