@@ -173,7 +173,8 @@ public class BufferSetManager
 	//{{{ addBuffer() methods
 	/**
 	 * Add a buffer into the current editPane of the given view.
-	 * If the view is null, it will be added to the global bufferSet
+	 * If the view is null, it will be added to the current
+	 * editPane of the active view.
 	 * @param view a view (or null)
 	 * @param buffer the buffer to add
 	 */
@@ -184,8 +185,9 @@ public class BufferSetManager
 	}
 
 	/**
-	 * Add a buffer into the current editPane of the given editPane.
-	 * If the editPane is null, it will be added to the global bufferSet
+	 * Add a buffer into the given editPane.
+	 * If the editPane is null, it will be added to the current
+	 * editPane of the active view.
 	 * @param editPane an EditPane (or null)
 	 * @param buffer the buffer to add
 	 */
