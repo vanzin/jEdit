@@ -53,6 +53,9 @@ Marcelo Vanzin, and Eric Le Lay for contributing to this release.
   This is useful to plugins that may need to adjust their appearance when the
   screen mode is toggled. (Dale Anson)
 
+- close-all sends BufferClosing events on EditBus for each buffer closed.
+  This is useful to plugins that record closed files. (patch #550, Eric Le Lay)
+
 }}}
 {{{ Editing
 

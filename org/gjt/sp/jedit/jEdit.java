@@ -2141,6 +2141,11 @@ public class jEdit
 					buffer.getMode().getName());
 			}
 
+			if(!isExiting)
+			{
+				EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSING));
+			}
+
 			buffer.close();
 			DisplayManager.bufferClosed(buffer);
 			if(!isExiting)
