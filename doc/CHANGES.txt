@@ -7,7 +7,7 @@ jEdit 5.3 version history
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
 Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
-Marcelo Vanzin, and Eric Le Lay for contributing to this release.
+Marcelo Vanzin, yaraba, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -40,6 +40,8 @@ Marcelo Vanzin, and Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- New Korean translation file (Patch #551 - yaraba)
 
 - Resize performance improvement (Patch #547 - Sergey Mashkov)
 

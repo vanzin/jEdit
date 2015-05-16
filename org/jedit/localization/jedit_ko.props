@@ -1,0 +1,2519 @@
+###
+### jEdit user interface definitions,
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+### :encoding=UTF-8:
+###
+### Copyright (C) 1998, 2005 Slava Pestov
+###
+
+#{{{ jEdit core (jedit_gui.props)
+
+#{{{ Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+#}}}
+
+#{{{ Common strings
+common.ok=확인
+common.cancel=취소
+common.close=닫기
+common.error=오류
+common.apply=적용
+common.more=더보기
+common.insert=삽입
+common.add=추가
+common.remove=삭제
+common.removeCurrent=현재의 것을 삭제
+common.moveUp=위로
+common.moveDown=아래로
+common.clearAll=전체 삭제
+common.selectAll=전체 선택
+common.selectNone=선택 해제
+common.loading=로딩...
+
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
+#}}}
+
+#{{{ Miscellaneous
+history.caption=입력 내역:
+
+action-set.jEdit=내장 명령
+action-set.browser=파일 시스템 브라우저
+action-set.macros=매크로
+action-set.plugin=플러그인: {0}
+
+macro-handler.beanshell.label=BeanShell 스크립트
+macro-handler.beanshell.glob=*.bsh
+
+save-layout-failed.message=도킹 레이아웃 저장 실패.
+load-layout.title=도킹 레이아웃 로드
+load-layout.message=로드할 도킹 레이아웃:
+save-layout.title=도킹 레이아웃 저장
+save-layout.message=저장할 도킹 레이아웃:
+#}}}
+
+#{{{ Tool bar
+view.search.find=검색 :
+view.search.close-tooltip=검색 바 숨기기 (ESC)
+
+view.action.prompt=액션 :
+view.action.no-completions=해당 액션이 없습니다.
+view.action.close-tooltip=액션 스크립트 창 닫기(ESC)
+#}}}
+
+#{{{ Context menu
+view.context.customize=이 메뉴를 설정하기...
+#}}}
+
+#{{{ System tray menu
+tray.newView.label=새 편집창
+tray.newPlainView.label=새 단순창
+tray.exit.label=종료
+#}}}
+
+#{{{ Menu bar
+
+#{{{ File menu
+file.label=파일($F)
+new-file.label=새 파일($N)
+new-file-in-mode.label=모드 지정 새 파일($M)
+new-file-in-mode.dialog.title=새 파일
+new-file-in-mode.dialog.message=편집 모드:
+open-file.label=열기($O)...
+reload.label=새로 고침($R)
+reload-all.label=전체 새로 고침($d)
+close-buffer.label=닫기($C)
+close-buffer.tooltip=현재 편집창 닫기
+global-close-buffer.label=닫기(global)
+global-close-buffer.tooltip=모든 창 및 편집창에서 버퍼를 닫습니다.
+closeall-except-active.tooltip=현재 편집창을 제외한 다른 창 닫기
+closeall-except-active.label=다른 창 닫기($t)
+closeall-bufferset.label=모두 닫기($e)
+closeall-bufferset.tooltip=모든 버퍼를 닫습니다.
+bufferset-toggle-exclusive.label=단독 버퍼 전환($x)
+bufferset-toggle-exclusive.tooltip=한 편집창을 선택하면, 버퍼 범위에 따라 해당 버퍼를 사용하는 다른 창을 닫습니다.
+close-all.label=모두 닫기(global)
+close-all.tooltip=모든 jEdit 뷰의 모든 버퍼를 닫습니다.
+save.label=저장($S)
+save-as.label=다른 이름으로 저장($a)...
+save-a-copy-as.label=사본 저장($y)...
+save-a-copy-as.tooltip=현재 편집 상태를 유지한 상태로 사본 저장
+save-all.label=전체 저장($l)...
+print.label=인쇄($P)...
+page-setup.label=인쇄 설정($g)...
+# Print selection not yet implemented
+#print-selection.label=Prin$t Selection...
+exit.label=종료($x)
+
+#{{{ Recent Files menu
+recent-files.label=최근 파일($F)
+recent-files.textfield.tooltip=필터나 와일드 카드를 입력해서 빠르게 찾을 수 있습니다.
+no-recent-files.label=최근 파일이 없습니다.
+clear-recent-files.label=최근 파일 지우기
+#}}}
+
+reload-encoding.label=인코딩 지정해서 다시 열기($E)
+reload-encoding.error=인코딩이 올바르지 않습니다. {0}
+
+#}}}
+
+#{{{ Edit menu
+
+edit.label=편집($E)
+undo.label=취소($U)
+redo.label=다시실행($R)
+cut.label=잘라내기($C)
+copy.label=복사($o)
+paste.label=붙여넣기($P)
+select-all.label=모두선택($A)
+word-count.label=단어수통계($W)...
+complete-word.label=단어자동완성($m)
+expand-abbrev.label=약어적용($x)
+goto-line.label=지정라인이동($G)...
+
+#{{{ More Clipboard menu
+clipboard.label=클립보드($b)
+cut-append.label=잘라서 덧붙이기($C)
+copy-append.label=복사 덧붙이기($o)
+vertical-paste.label=사각 붙여넣기($V)
+paste-previous.label=최근 붙여넣기($)...
+paste-deleted.label=삭제 항목 붙여넣기($D)...
+paste-special.label=형식을 선택해서 붙여넣기...
+cut-string-register.label=레지스터에 잘라내기($t)
+copy-string-register.label=레지스터에 복사($p)
+paste-string-register.label=레지스터 붙여넣기($R)
+clear-string-register.label=레지스터 지우기
+cut-append-string-register.label=레지스터에 잘라서 덧붙이기($n)
+copy-append-string-register.label=레지스터에 복사 덧붙이기($A)
+vertical-paste-string-register.label=레지스터 사각붙여넣기($e)
+view-registers.label=레지스터 보기($w)
+#}}}
+
+#{{{ More Selection menu
+selection.label=선택($S)
+select-none.label=선택 해제($N)
+select-word.label=단어 선택($W)
+select-line.label=행 선택($L)
+select-paragraph.label=단락 선택($P)
+invert-selection.label=반전 선택($I)
+toggle-multi-select.label=다중선택 모드($M)
+toggle-rect-select.label=사각선택 모드($R)
+select-line-range.label=행범위 선택($c)...
+#}}}
+
+#{{{ Text menu
+text.label=텍스트($T)
+delete-line.label=행단위 삭제($D)
+delete-start-line.label=행의 시작까지 삭제($S)
+delete-end-line.label=행의 끝까지 삭제($E)
+join-lines.label=한 행으로 만들기($J)
+delete-paragraph.label=단락 삭제($P)
+format-paragraph.label=단락 형식 정비($F)
+to-lower.label=소문자로($L)
+to-upper.label=대문자로($U)
+#}}}
+
+#{{{ Indent menu
+indent.label=들여쓰기($I)
+indent-lines.label=들여쓰기 취소($I)
+shift-left.label=좌측 들여쓰기($L)
+shift-right.label=우측 들여쓰기($R)
+remove-trailing-ws.label=후행 공백 제거($W)
+spaces-to-tabs.label=공백을 탭으로($S)
+tabs-to-spaces.label=탭을 공백으로($T)
+#}}}
+
+#{{{ Source menu
+source.label=소스 코드($e)
+range-comment.label=블럭 주석($R)
+line-comment.label=행 주석($L)
+select-block.label=코드블럭 선택($S)
+match-bracket.label=짝 괄호로 이동($M)
+prev-bracket.label=이전 괄호로($P)
+next-bracket.label=다음 괄호로($N)
+#}}}
+
+#}}}
+
+#{{{ Search menu
+search.label=검색($S)
+find.label=찾기/바꾸기($F)...
+find-next.label=다음 찾기($n)
+find-prev.label=이전 찾기($v)
+search-in-open-buffers.label=모든 버퍼에서 검색($B)...
+search-in-directory.label=디렉토리에서 검색($D)...
+replace-in-selection.label=선택 범위에서 바꾸기($R)
+replace-and-find-next.label=바꾸기 및 다음 찾기($p)
+replace-all.label=모두 바꾸기($A)
+quick-search.label=빠른 검색($I)
+hypersearch.label=빠른 하이퍼 검색($H)
+quick-search-word.label=선택 단어 빠른 검색($n)
+hypersearch-word.label=선택 단어 빠른 하이퍼 검색($y)
+whole-word.label=단어 일치 옵션($W)
+ignore-case.label=대소문자 가리지 않음($C)
+regexp.label=정규식($x)
+hypersearch-results.label=하이퍼 검색 결과
+#}}}
+
+#{{{ Markers menu
+markers.label= 마커($M)
+add-marker.label=마커 추가/삭제($A)
+add-marker-shortcut.label=단축키로 마커 추가($W)
+remove-all-markers.label=모든 마커 지우기($m)
+goto-marker.label=마커로 이동($G)
+select-marker.label=마커까지 선택($S)
+swap-marker.label=마커 교환 및 이동($p)
+prev-marker.label=이전 마커로 이동($P)
+next-marker.label=다음 마커로 이동($N)
+no-markers.label=마커가 없습니다
+markers.blank-line=[빈라인]
+#}}}
+
+#{{{ Folding menu
+folds.label=접기($o)
+collapse-fold.label=접기($C)
+expand-one-level.label=한 단계 펴기($E)
+expand-fold.label=모든 단계 펴기($F)
+collapse-all-folds.label=모든 묶음 접기($A)
+expand-folds.label=단계를 지정해서 펴기($l)
+expand-all-folds.label=모든 묶음 펴기($x)
+select-fold.label=묶음 선택($S)
+add-explicit-fold.label=명시적 묶음 추가($d)
+narrow-to-fold.label=묶음만 보기($r)
+narrow-to-selection.label=선택만 보기($w)
+parent-fold.label=상위 묶음으로 이동($G)
+prev-fold.label=이전 묶음으로($P)
+next-fold.label=다음 묶음으로($N)
+#}}}
+
+#{{{ View menu
+view.label=보기($V)
+new-view.label=jEdit 뷰 추가 열기($V)
+new-view.tooltip=별도의 새 jEdit 뷰를 엽니다.
+new-plain-view.label=jEdit 단순뷰 추가 열기($w)
+new-plain-view.tooltip=툴바와 도구창이 없는 jEdit 뷰를 새로 엽니다. 
+close-view.label=jEdit 닫기($C)
+close-view.tooltip=jEdit를 닫습니다, 다른 jEdit 창이 없으면 jEdit를 종료합니다.
+prev-buffer.label=이전 버퍼로 이동($P)
+next-buffer.label=다음 버퍼로 이동($N)
+recent-buffer.label=최근 버퍼로 이동($R)
+toggle-buffer-switcher.label=버퍼 전환창 보기($B)
+focus-buffer-switcher.label=버퍼 전환창 바로가기($w)
+toggle-line-numbers.label=행번호 보기($L)
+toggle-statusbar.label=상태창 보기($t)
+toggle-gutter.label=행 정보영역 보기($G)
+show-context-menu.label=Show Context Menu
+set-view-title.label=jEdit 창 이름 설정...
+set-view-title.tooltip=jEdit 창 사이에 분별하기 쉽도록 이름을 붙입니다.
+toggle-full-screen.label=창 최대화 보기($f)
+
+#{{{ Scrolling menu
+scrolling.label=스크롤($g)
+scroll-to-current-line.label=현재 라인까지 스크롤($t)
+scroll-and-center.label=스크롤하고 화면 가운데 커서 위치($S)
+center-caret.label=화면 가운데 커서 위치($C)
+scroll-up-line.label=위로 행 스크롤($U)
+scroll-down-line.label=아래로 행 스크롤($D)
+scroll-up-page.label=위로 페이지 스크롤($p)
+scroll-down-page.label=아래로 페이지 스크롤($o)
+#}}}
+
+#{{{ Splitting menu
+splitting.label=창 나누기($S)
+split-horizontal.label=상하로 나누기($H)
+split-vertical.label=좌우로 나누기($V)
+unsplit-current.label=현재창 합치기($U)
+unsplit.label=모든창 합치기($A)
+resplit.label=복원($R)
+prev-textarea.label=이전 창으로 이동($P)
+next-textarea.label=다음 창으로 이동($N)
+buffersets.label=버퍼($B)
+global-bufferset.label=전역 버퍼($G)
+global-bufferset.tooltip=모든 편집창은 동일한 버퍼를 다룹니다.
+view-bufferset.label=jEdit 뷰 단위 버퍼($V)
+view-bufferset.tooltip=jEdit 뷰 단위 내에서만 동일한 버퍼를 다룹니다.
+editpane-bufferset.label=편집창 단위 버퍼($E)
+editpane-bufferset.tooltip=각 편집창은 독립된 버퍼를 다룹니다.
+#}}}
+
+#{{{ Docking menu
+docking.label=도킹($D)
+docking.menu.label=도킹 가능 메뉴
+toggle-dock-areas.label=도킹 영역($A)
+left-docking-area.label=좌측 도킹 영역으로($L)
+top-docking-area.label=상단 도킹 영역으로($T)
+right-docking-area.label=우측 도킹 영역으로($R)
+bottom-docking-area.label=하단 도킹 영역으로($B)
+focus-textarea.label=편집창 영역으로
+close-docking-area.label=현재 도킹 영역 닫기($C)
+layout-load.label=도킹 레이아웃 들여오기($L)...
+layout-save.label=도킹 레이아웃 저장($S)...
+layout-load-current-mode.label=현재 모드 도킹 레이아웃 들여오기
+layout-save-current-mode.label=현재 모드 도킹 레이아웃 저장
+#}}}
+
+#}}}
+
+#{{{ Utilities menu
+
+utils.label=도구($U)
+vfs.browser.label=파일 시스템 브라우저($F)
+action-bar.label=액션 스크립트 창($A)
+last-action.label=마지막 액션 다시수행($p)
+buffer-options.label=버퍼 옵션($B)...
+global-options.label=전역 옵션($G)...
+combined-options.label=옵션($O)...
+
+#{{{ Recent Directories menu
+recent-directories.label=최근 디렉토리($R)
+no-recent-dirs.label=최근 디렉토리가 없습니다
+#}}}
+
+#{{{ Favorites menu
+favorites.label=즐겨찾기($v)
+add-buffer-to-favorites.label=즐겨찾기에 버퍼 추가
+add-dir-to-favorites.label=즐겨찾기에 디렉토리 추가
+edit-favorites.label=즐겨찾기 편집
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=현재 디렉토리($C)
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=jEdit 홈 디렉토리($j)
+#}}}
+
+#{{{ Settings Directory menu
+settings-directory.label=jEdit 설정 디렉토리($S)
+#}}}
+
+#{{{ BeanShell menu
+beanshell.label=B$eanShell
+eval.label=BeanShell 실행($E)...
+eval-for-selected-lines.label=선택행에 BeanShell 실행($F)...
+eval-selection.label=선택 스크립트 실행($S)
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting.label=문제 해결($T)
+log-viewer.label=작업 로그 보기($A)
+update-log.label=작업 로그 디스크에 갱신($U)
+io-progress-monitor.label=$I/O 진행 상황
+task-monitor.label=작업 관리자($T)
+keyboard-tester.label=키보드 테스터($K)...
+memory-status.label=메모리 정리 및 상태 조회($M)...
+reload-modes.label=편집모드 재정리($R)
+#}}}
+
+#{{{ Quick options menu
+quick-options.label=$빠른 설정
+edit-syntax-style.label=커서 위치에 있는 문법 스타일을 수정합니다.
+#}}}
+
+#}}}
+
+#{{{ Macros menu
+macros.label=매크로($c)
+new-macro.label=새 매크로
+record-macro.label=매크로 기록($R)...
+stop-recording.label=매크로 기록 중지($S)
+last-macro.label=마지막 매크로 다시 실행
+record-temp-macro.label=임시 매크로 기록($T)
+run-temp-macro.label=임시 매크로 실행($p)
+run-other-macro.label=다른 매크로 실행($O)...
+rescan-macros.label=매크로 재정리($n)
+no-macros.label=매크로가 없습니다.
+#}}}
+
+#{{{ Plugins menu
+plugins.label=플러그인($P)
+plugin-manager.label=플러그인 관리자($M)...
+plugin-options.label=플러그인 옵션($O)...
+no-plugins.label=설치된 플러그인이 없습니다
+#}}}
+
+#{{{ Help menu
+help-menu.label=도움말($H)
+about.label= jEdit에 대하여($A)...
+help.label=jEdit 도움말($H)
+tip-of-the-day.label=오늘의 팁($T)
+userFeedback.label=건의하기...
+#}}}
+
+#}}}
+
+#{{{ Macro strings
+
+macro.temp.header=// 임시 매크로입니다. 우선 의도하신대로 매크로가\n\
+		  // 작성되었는지 확인하세요.\n\
+		  // 그 다음에 임시 매크로를 적용할 버퍼로 이동한후\n\
+		  // 매크로>임시 매크로 실행을 선택하세요.
+
+macro.header=// 기록 완료한 매크로입니다. 우선 의도하신대로\n\
+	     // 매크로가 작성되었는지 확인하세요. 그 다음에 \n\
+	     // 이 버퍼를 저장하시면 매크로 메뉴에 보여집니다.
+
+#}}}
+
+#{{{ Commands that don't appear in menus
+backspace-word.label=이전 단어 삭제
+backspace-word-std.label=이전 단어 삭제(공백 포함)
+backspace-word-std-after.label=이전 단어 삭제(단어 뒤 공백 포함)
+backspace.label=이전 문자 삭제
+delete-word.label=다음 단어 삭제
+delete-word-std.label=다음 단어 삭제(공백 포함)
+delete.label=다음 문자 삭제
+document-end.label=버퍼 끝으로 이동
+document-home.label=버퍼 시작으로 이동
+end.label=끝
+home.label=시작
+smart-end.label=끝(공백 제외)
+smart-home.label=시작(공백 제외)
+insert-literal.label=직후에 리터럴 문자 삽입
+insert-newline.label=줄 바꿈 삽입
+insert-newline-indent.label=줄 바꿈과 들여쓰기 삽입
+insert-tab.label=탭 삽입
+insert-tab-indent.label=탭과 들여쓰기 삽입
+line-end.label=행 끝으로
+line-home.label=행 시작으로
+next-char.label=다음 문자로
+next-line.label=다음 행으로
+next-page.label=다음 페이지로
+next-paragraph.label=다음 단락으로
+next-word.label=다음 단어로
+next-word-std.label=다음 단어로(공백 포함)
+overwrite.label=덮어쓰기 모드
+prev-char.label=이전 문자로
+prev-line.label=이전 행으로
+prev-page.label=이전 페이지로
+prev-paragraph.label=이전 단락으로
+prev-word.label=이전 단어로
+prev-word-std.label=이전 단어로(공백 포함)
+prev-word-std-after.label=이전 단어로(단어 뒤 공백 포함)
+select-document-end.label=버퍼 끝까지 선택
+select-document-home.label=버퍼 시작까지 선택
+select-end.label=버퍼 끝(공백 제외)까지 선택
+select-home.label=버퍼 시작(공백 제외)까지 선택
+select-line-end.label=행 끝까지 선택
+select-line-home.label=행 시작까지 선택
+select-next-char.label=다음 문자까지 선택
+select-next-line.label=다음 행까지 선택
+select-next-page.label=다음 페이지까지 선택
+select-next-paragraph.label=다음 단락까지 선택
+select-next-word.label=다음 단어까지 선택
+select-next-word-std.label=다음 단어까지 선택(공백 포함)
+select-prev-char.label=이전 문자까지 선택
+select-prev-line.label=이전 행까지 선택
+select-prev-page.label=이전 페이지까지 선택
+select-prev-paragraph.label=이전 단락까지 선택
+select-prev-word.label=이전 단어까지 선택
+select-prev-word-std.label=이전 단어까지 선택(공백 포함)
+select-prev-word-std-after.label=이전 단어까지 선택(단어 뒤 공백 포함)
+select-visible-end.label=마지막 표시줄까지 선택
+select-visible-home.label=첫 표시줄까지 선택
+select-whitespace-end.label=공백 끝까지 선택
+select-whitespace-home.label=공백 시작까지 선택
+toggle-line-separator.label=행 구분자 전환
+toggle-word-wrap.label=폭 맞추기 전환
+visible-end.label=마지막 표시줄로 이동
+visible-home.label=첫 표시줄로 이동
+whitespace-end.label=공백 끝으로 이동
+whitespace-home.label=공백 시작으로 이동
+#}}}
+
+#{{{ View stuff
+
+# Title
+view.title=jEdit -\u0020
+view.title.dirty=\ (변경함)
+
+view.docking.close-tooltip=현재 도킹창을 숨김
+view.docking.menu-tooltip=도킹 옵션
+view.docking.menu-floating=유동
+view.docking.menu-top=상단 도킹
+view.docking.menu-left=좌측 도킹
+view.docking.menu-bottom=하단 도킹
+view.docking.menu-right=우측 도킹
+view.docking.menu-clone=새 유동 창
+view.docking.menu-close=닫기
+view.docking.menu-undock=도킹 해제
+
+view.docking.toggle.label={0}
+view.docking.float.label={0} (새 유동 창)
+
+directory.not-local=원격 파일 시스템의 파일 목록을 볼수 없습니다.
+directory.no-files=파일이 없습니다
+
+#{{{ Gutter highlight
+view.gutter.marker.no-name=마커
+view.gutter.marker=마커: {0}
+#}}}
+
+#{{{ Status messages
+view.status.add-marker=새로운 마커에 대한 단축키? [{0}]
+view.status.auto-wrap=검색어를 찾을 수 없습니다; 처음/끝부터 다시 검색합니다!
+view.status.bracket=찾은 행 {0}: {1}
+view.status.caret-tooltip=행, 열 (위치/길이)
+view.status.copy-append-string-register=복사 덧붙이기할 레지스터? [{0}]
+view.status.copy-string-register=복사할 레지스터? [{0}]
+view.status.cut-append-string-register=잘라서 덧붙이기할 레지스터 ? [{0}]
+view.status.cut-string-register=잘라내기해서 붙일 레지스터? [{0}]
+view.status.expand-folds=묶음 단계? [1-9]
+view.status.goto-marker=이동할 마커의 단축키? [{0}]
+view.status.incomplete-abbrev={0}개 파라미터를 입력했으나 {1}개를 입력해야 합니다!
+view.status.insert-literal=리터럴 문자로 삽입한 키?
+view.status.io-1=I/O: 한 개의 작업이 진행중입니다
+view.status.io.done=입출력 종료
+view.status.io=I/O: {0}개의 작업이 진행중입니다
+view.status.linesep-changed={0}로 행 구분자 변경
+view.status.linesep-tooltip=행 구분자(변경하려면 클릭하세요)
+view.status.memory-tooltip=자바 메모리: {0}Kb/{1}Kb
+view.status.mode-tooltip=현재 편집모드, 접기모드, 인코딩
+view.status.multi-changed=다중선택모드 {0,choice,0#끔|1#켬}
+view.status.multi-tooltip=다중선택모드(변경하려면 클릭하세요)
+view.status.narrow=모든 텍스트를 다시 보려면 "모든 묶음 펴기"를 수행하세요 
+view.status.no-markers=마커가 없습니다.
+view.status.no-registers=정의한 레지스터가 없습니다.
+view.status.overwrite-changed=덮어쓰기 모드 {0,choice,0#끔|1#켬}
+view.status.overwrite-tooltip=덮어쓰기/삽입 모드(변경하려면 클릭하세요)
+view.status.paste-string-register=붙여넣기할 레지스터? [{0}]
+view.status.print={0} 페이지 인쇄중
+view.status.quick-copy=빠른 복사 모드 - 표시된 텍스트로 선택 영역을 바꿉니다
+view.status.recording=매크로 기록중
+view.status.rect-select-changed=사각선택모드 {0,choice,0#끔|1#켬}
+view.status.rect-tooltip=사각선택모드(변경하려면 클릭하세요)
+view.status.replace-all={1}파일에서 {0}개를 바꾸었습니다
+view.status.search-not-found=찾기 대상을 찾지 못했습니다!
+view.status.select-marker=선택할 마커의 단축키? [{0}]
+view.status.swap-marker=교환/이동에 적용할 마커의 단축키? [{0}]
+view.status.vertical-paste-string-register=사각 붙여넣기에 사용할 레지스터? [{0}]
+view.status.wrap-changed=폭맞추기 모드 "{0}"
+view.status.wrap-tooltip=<html>폭맞추기 모드: {0} (변경하려면 클릭하세요)</html>
+view.status.indent-tooltip=자동들여쓰기(변경하려면 클릭하세요)
+view.status.autoindent-changed=자동들여쓰기 상태 "{0}"
+view.status.bufferset-tooltip=버퍼 범위 : {0}
+wrap.none=사용안함
+wrap.hard=하드
+wrap.soft=소프트
+#}}}
+
+#{{{ Status bar component visibility
+
+#}}}
+
+#}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: {1} 페이지
+
+print-error.title=인쇄 오류
+print-error.message=인쇄 과정에서 오류가 발생했습니다:\n\
+	{0}
+#}}}
+
+#{{{ Various dialog boxes
+
+#{{{ About dialog
+about.title=jEdit에 대하여
+about.version=jEdit {0} {1} 모드, {2} Java {3} 사용
+about.mode.standalone=단독
+about.mode.server=서버
+about.mode.server-background=서버-백그라운드
+about.navigate=자세한 내용을 보시려면 방향키를 사용하세요
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text.prefix=jEdit 기여자는 다음과 같습니다
+about.text.suffix=이들의 의견과 버그 리포팅에 감사 드립니다.
+#}}}
+
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=플러그인 관리자
+#}}}
+
+#{{{
+largeBufferDialog.title=매우 큰 파일 {0}
+largeBufferDialog.message=매우 큰 파일은 문법 표시로 인해 응답이 없을 수도 있습니다 \n\
+	다음과 같은 옵션을 검토하세요.\n\
+	-전체 문법 표시 : jEdit의 문법 표시 기능은 그대로 동작 시킴 \n\
+	매우 느려집니다. 사용에 주의해야 합니다.\n\
+	-불완전하게 문법 표시 : 이경우 jEdit는 빠르게 동작할 수 \n\
+	있지만, 문맥을 무시한 문법 표시로 불완전한 결과이며\n\
+	soft 폭 맞추기도 동작하지 않습니다\n\
+	-텍스트 편집 모드 : 문법 표시와 soft 폭 맞추기 안함
+largeBufferDialog.fullSyntax=전체 문법 표시
+largeBufferDialog.contextInsensitive=불완전하게 문법 표시
+largeBufferDialog.defaultMode=텍스트 편집 모드
+#}}}
+
+#{{{ I/O error dialog box
+ioerror.title=입출력 에러
+ioerror.caption={0} 입출력 작업을 완료할 수 없습니다:
+ioerror.caption-1=입출력 작업을 완료할 수 없습니다:
+
+ioerror={0}
+ioerror.directory-error=디렉토리 리스팅 불가: {0}
+ioerror.directory-error-nomsg=디렉토리 리스팅 불가.
+ioerror.encoding-error="{0}"인코딩으로 파일을 읽을 수 없습니다(데이터 소실 가능).\n\
+	({1})\n\
+	다른 인코딩으로 다시 시도해 보세요.\n\
+	파일->인코딩 지정해서 다시 읽기로 가능합니다.\n\
+	다시 읽기를 자동으로 하려면 전역옵션->인코딩 섹션에\n\
+	대체 인코딩 목록으로 인코딩 후보 군을 입력하세요.
+ioerror.write-encoding-error=문자 인코딩 실패\n\
+	{3} 열:{2} 행:{1} 인코딩:"{0}".
+ioerror.read-error=읽기 불가: {0}
+ioerror.write-error=저장 불가: {0}
+ioerror.unsupported-encoding-error={0} 문자세트는 현재 Java 가상머신에서 지원하지 않습니다
+ioerror.open-directory=디렉토리는 버퍼로 열수 없습니다.
+ioerror.save-directory=디렉토리에 버퍼를 저장할 수 없습니다.
+ioerror.no-read=파일을 읽을 권한이 부족합니다.
+ioerror.no-write=파일을 저장할 권한이 부족합니다.
+ioerror.write-error-readonly=저장할 수 없습니다. 파일은 읽기 전용입니다.
+ioerror.save-readonly-twostagefail=저장할 수 없습니다. 파일이 읽기 전용이고 2단계 저장이 불가능합니다.
+ioerror.badurl=잘못된 URL: {0}
+ioerror.delete-error=파일을 삭제할 수 없습니다.
+ioerror.rename-exists=기존 파일 {0}을 덮어 쓸 수 없습니다.
+ioerror.rename-error={0}로 이름을 변경할 수 없습니다.
+ioerror.mkdir-error=디렉토리를 만들 수 없습니다.
+ioerror.backup-failed=백업 실패. "저장 및 백업" 옵션을 확인하세요.
+ioerror.backup-same-name=백업 파일명과 원본 파일명이 동일합니다.
+ioerror.copy-self=파일을 자신에게 복사하는 것은 파괴적입니다. 작업이 거부되었습니다: {0}
+
+vfs.not-supported.list="{0}" 파일 시스템의 디렉토리는 조회할 수 없습니다.
+vfs.not-supported.load="{0}" 파일 시스템의 파일은 열수 없습니다.
+vfs.not-supported.save="{0}" 파일 시스템에 파일을 저장 할 수 없습니다.
+
+vfs.overwrite-readonly.title=파일은 읽기 전용입니다
+vfs.overwrite-readonly.message={0}은 읽기 전용입니다.\n\
+	읽기 전용 플래그를 재설정하여 저장을 계속하겠습니까?\n\
+	2단계 저장을 사용합니다
+
+vfs.twostageimpossible.title=2단계 저장 사용 불가
+vfs.twostageimpossible.message=2단계 저장을 사용할 수 없습니다.\n\
+	저장을 계속 하시겠습니까 ?
+
+out-of-memory-error=요청 수행을 위한 자바 메모리가 부족합니다.\n\
+	최대 메모리 크기를 늘리세요.\n\
+	\n\
+	-mx640m 처럼 자바 가상머신에 메모리 옵션을 부여합니다.
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=입출력 에러가 발생했습니다. ({0})
+
+read-error.title=읽기 에러
+# {0} - the path name {1} - the error message
+read-error.message={0} 파일은\n\
+	입출력 에러 때문에 읽을 수 없습니다.\n\
+	({1})
+
+write-error.title=쓰기 에러
+# {0} - the path name {1} - the error message
+write-error.message={0} 파일은\n\
+	입출력 에러 때문에 저장할 수 없습니다.\n\
+	({1})
+
+directory-error.title=디렉토리 에러
+# {0} - the path name {1} - the error message
+directory-error.message={0} 디텍토리는\n\
+	입출력 에러 때문에 목록을 조회할 수 없습니다.\n\
+	({1})
+
+directory-error-nomsg.title=디렉토리 에러
+# {0} - the path name
+directory-error-nomsg.message={0} 디텍토리는\n\
+	입출력 에러 때문에 목록을 조회할 수 없습니다.
+
+encoding-error.title=호환되지 않은 인코딩
+encoding-error.message={0} 파일은\n\
+	"{1}" 인코딩으로 읽을 수 없습니다.\n\
+	({2})\n\
+	\n\
+	다른 인코딩으로 다시 시도해 보세요.\n\
+	파일->인코딩 지정해서 다시 읽기로 가능합니다.\n\
+	\n\
+	인코딩을 잘모르면 "ASCII" 또는 "8859_1"로 시도해 보세요.
+
+open-directory.title=디렉토리를 열수 없습니다
+open-directory.message={0}는 디렉토리입니다.\n\
+	편집용으로 디렉토리를 열수 없습니다.
+
+save-directory.title=디렉토리를 저장할 수 없습니다
+save-directory.message={0}는 디렉토리입니다.\n\
+	버퍼를 디렉토리에 저장할 수 없습니다.
+
+no-read.title=파일을 열 수 없습니다
+no-read.message={0}에서 읽을 수 없습니다.\n\
+	권한을 확인해 보세요.
+
+no-write.title=파일을 저장할 수 없습니다
+no-write.message={0}에 저장할 수 없습니다.\n\
+	권한을 확인해 보세요.
+
+badurl.title=잘못된 URL
+# {0} - the URL
+# {1} - the error
+badurl.message=다음은 잘못된 URL입니다: {0}\n\
+	({1})
+#}}}
+
+#{{{ Go to line dialog
+goto-line.title=행번호로 이동
+goto-line.message=행번호 ({0} - {1}):
+#}}}
+
+#{{{ Word count dialog
+wordcount.title=단어수 통계
+# {0} - 문자
+# {1} - 단어
+# {2} - 행
+wordcount.message=문자수: {0}\n단어수: {1}\n행수: {2}
+#}}}
+
+#{{{ Set marker dialog
+setmarker.title=마커 설정
+setmarker.message=마커 이름:
+#}}}
+
+#{{{ File not saved dialog
+notsaved.title=파일을 저장하지 않았습니다.
+# {0} - file name
+notsaved.message={0}에 변경 내용을 저장하시겠습니까?
+#}}}
+
+#{{{ File changed, still reload dialog
+changedreload.title=파일이 변경됨
+changedreload.message={0} 파일이\n\
+	변경되었습니다;  변경 내용을 불러오면,\n\
+	현재 변경 내용이 지워집니다. 계속하시겠습니까?
+#}}}
+
+#{{{ Autosave file exists dialog
+autosave-found.title=자동 저장 파일 있음
+# {0} - autosave file name
+autosave-found.message={0} 자동 저장 파일이 있습니다!\n\
+	이전 작업에서 저장하기 전에 jEdit가 비정상 종료했을 가능성이 있습니다.\n\
+	자동 저장 파일을 여시겠습니까?
+
+autosave-loaded.title=자동 저장 파일을 로드했습니다
+autosave-loaded.message={0} 자동 저장 파일을 로드했습니다. \n\
+	저장하지 않은 자료가 있는지 확인하고 해당 자료를 유지하려면 저장하세요.\n\
+	저장하지 않았던 자료를 무시하려면 파일->새로고침 하세요.
+#}}}
+
+#{{{ Save all confirm dialog
+saveall.title=모든 버퍼 저장
+saveall.message=변경한 모든 버퍼를 저장 하시겠습니까?
+#}}}
+
+#{{{ Reload all confirm dialog
+reload-all.title=모든 버퍼 새로고침
+reload-all.message=모든 버퍼를 원본으로부터 새로고침 하시겠습니까?\n\
+	버퍼 내용중 저장하지 않은 것은 버려집니다!
+#}}}
+
+#{{{ Encoding prompt
+encoding-prompt.title=인코딩 지정해서 다시 읽기
+encoding-prompt.message=사용할 문자 인코딩:
+#}}}
+
+#{{{ Macro recording already in progress dialog
+already-recording.title=이미 기록중입니다
+already-recording.message=한 매크로가 현재 기록중입니다.
+#}}}
+
+#{{{ No temporary macro dialog
+no-temp-macro.title=임시 매크로가 없습니다
+no-temp-macro.message=아직 임시매크로를 기록하지 않았습니다.
+#}}}
+
+#{{{ Record macro dialog
+record.title=매크로 기록
+record.message=매크로 이름:
+#}}}
+
+#{{{ Some features don't work with -nosettings dialog
+no-settings.title=기능을 사용할 수 없습니다
+no-settings.message=jEdit를 -nosettings 스위치로 시작했습니다.\n\
+	이 기능을 사용하려면 이 스위치를 빼고 jEdit를 시작하세요.
+#}}}
+
+#{{{ Some features don't work with the web start version
+no-webstart.title=기능을 사용할 수 없습니다
+no-webstart.message=이 기능은 jEdit 웹 가동 버전에서는 사용할 수 없습니다.
+#}}}
+
+#{{{ Search and replace dialog
+search.title=찾기/바꾸기
+
+search.find=찾기 대상:
+search.find.tooltip=위/아래 페이지 이동키 또는 우측 마우스 클릭 하면 이전 찾기를 선택할 수 있습니다
+search.find.mnemonic=s
+search.replace=바꾸기 내용:
+search.replace.mnemonic=w
+search.string-replace-btn=텍스트
+search.beanshell-replace-btn=BeanShell 코드의 리턴값
+
+search.settings=설정:
+search.keep=창유지
+search.keep.mnemonic=k
+search.word=전체 단어 (q)
+search.word.bar=전체 단어
+search.word.mnemonic=q
+search.case=대소문자 구분 안함
+search.case.mnemonic=i
+search.regexp=정규식
+search.regexp.mnemonic=x
+search.hypersearch=하이퍼검색
+search.hypersearch.mnemonic=h
+search.wrap=자동 순환
+search.wrap.mnemonic=t
+
+search.direction=방향:
+search.back=뒤로
+search.back.mnemonic=b
+search.forward=앞으로
+search.forward.mnemonic=o
+
+search.fileset=찾기 영역:
+search.selection=선택 범위
+search.selection.mnemonic=n
+search.current=현재 버퍼
+search.current.mnemonic=c
+search.all=모든 버퍼
+search.all.mnemonic=l
+search.directory=디렉토리:
+search.directory.mnemonic=d
+search.skipHidden=백업이나 숨김 파일 생략
+search.skipBinary=이진파일 생략
+search.skipHidden.mnemonic=h
+search.skipBinary.mnemonic=b
+
+search.directoryField=디렉토리:
+search.directoryField.mnemonic=y
+search.filterField=필터:
+search.filterField.mnemonic=f
+glob.tooltip=여러 확장자 표시 방식 {*.c,*.h}
+search.subdirs=하위 디렉토리 검색
+search.subdirs.mnemonic=u
+search.choose=선택...
+search.choose.mnemonic=e
+search.synchronize=동기화
+search.synchronize.mnemonic=z
+search.synchronize.tooltip=필터와 디렉토리를 현재 버퍼의 내용을 참조해서 설정.
+search.findBtn=찾기
+search.findBtn.mnemonic=f
+search.replaceBtn=바꾸기
+search.replaceBtn.mnemonic=p
+search.replaceAndFindBtn=바꾸고 계속 찾기
+search.replaceAndFindBtn.mnemonic=r
+search.replaceAllBtn=모두 바꾸기
+search.replaceAllBtn.mnemonic=a
+
+# Beep when searching automatically wraps?
+
+#}}}
+
+#{{{ Keep searching dialog
+keepsearching.title=더이상 일치하는 내용을 찾을 수 없습니다
+keepsearching.message=더이상 일치하는 내용을 찾을 수 없습니다. \n\
+	{0,choice,0#처음|1#끝} 부터 계속 찾겠습니까?
+#}}}
+
+#{{{ HyperSearch results dialog
+hypersearch-results.title=하이퍼검색 결과
+hypersearch-results.result-caption={0} ({1,choice,1#1 항목|1<{1,number,integer} 항목,  '{2,choice,1#1 파일|1<{2,number,integer} 파일}'})
+hypersearch-results.open=열기
+hypersearch-results.open-view=새 jEdit 뷰에서 열기
+hypersearch-results.open-plain-view=새 jEdit 단순뷰에서 열기
+hypersearch-results.open-split=새 분할에서 열기
+hypersearch-results.remove-node=항목 지우기
+hypersearch-results.new-search=여기서 새 검색
+hypersearch-results.expand-child-nodes=하위 노드 열기
+hypersearch-results.collapse-child-nodes=하위 노드 접기
+hypersearch-results.copy-to-clipboard=클립보드에 복사
+hypersearch-results.redo=하이퍼검색 다시 수행
+hypersearch-results.tree-view=트리 형태 결과
+hypersearch-results.clear.label=모든 항목 지우기
+hypersearch-results.stop.label=하이퍼검색을 중단하고 현재 결과 출력
+hypersearch-results.multi.label=다중 검색 결과
+hypersearch-results.highlight.label=검색 결과 출력 스타일 설정
+hypersearch-results.file-caption={0} ({1,choice,1#1 항목|1<{1,number,integer} 항목, '{2,choice,1#1 행|1<{2,number,integer} 행}'})
+hypersearch-results.searching="{0}"검색 결과...
+hypersearch-results.no-results="{0}"에 대한 검색 결과가 없습니다.
+hypersearch-results.done="{0}"결과:
+
+hypersearch-status=검색중
+#}}}
+
+#{{{ HyperSearch too many results
+hypersearch.tooManyResults.label=결과가 너무 많습니다
+hypersearch.tooManyResults.title=결과가 너무 많습니다
+hypersearch.tooManyResults.message={0}개의 검색 결과가 있고 \
+	아직 끝나지 않은 상태입니다. 멈출까요 ?
+#}}}
+
+
+#{{{ Search and replace error dialog
+searcherror.title=찾기/바꾸기 오류
+# {0} - error message
+searcherror.message=작업중 오류가 발생했습니다.
+#}}}
+
+#{{{ Search and replace error dialog
+searcherror-bsh.title=찾기/바꾸기 오류
+# {0} - error message
+searcherror-bsh.message=작업중 오류가 발생했습니다.\n\
+	\n\
+	바꾸기 내용이 BeanShell 코드로 처리되는 의도가 아니라면  \n\
+	바꾸기 모드가 "텍스트"로 되어 있는지 확인하세요.
+#}}}
+
+#{{{ Empty fileset error dialog
+empty-fileset.title=대상 파일이 없습니다
+empty-fileset.message=검색 대상 파일이 없습니다.\n\
+	검색할 파일 필터와 디렉토리를 확인하세요.
+#}}}
+
+#{{{ Can only search local directories dialog
+remote-dir-search.title=로컬 디렉토리 확인
+remote-dir-search.message=검색 대상이 로컬 디렉토리가 아닙니다.\n\
+	네트워크 문제 등으로 매우 느릴 수 있습니다.\n\
+	계속 하시겠습니까?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=선택하지 않았습니다
+search-no-selection.message=검색 대상을 선택하거나 \n\
+	검색 범위에서 "선택 영역"을 해제하세요.
+#}}}
+
+#{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<whitespace>
+paste-previous.title=최근 붙여넣기
+paste-previous.caption=최근에 복사/붙여넣기한 텍스트:
+paste-deleted.title=삭제항목 붙여넣기
+paste-deleted.caption=최근에 삭제한 텍스트:
+#}}}
+
+#{{{ File changed on disk dialog
+filechanged-save.title=파일이 변경됨
+filechanged-save.message={0} 파일이\n\
+	다른 프로그램에 의해서 변경되었습니다.\n\
+	저장을 계속하시겠습니까?
+#}}}
+
+#{{{ File exists dialog
+fileexists.title=파일이 존재합니다
+fileexists.message={0} 파일이 이미 존재합니다. \n\
+	덮어쓰기를 하시겠습니까?
+#}}}
+
+#{{{ Select line range dialog
+selectlinerange.title=행범위 선택
+selectlinerange.caption=행범위 선택:
+selectlinerange.start=시작 행:
+selectlinerange.end=끝 행:
+#}}}
+
+#{{{ View registers dialog
+view-registers.title=레지스터
+view-registers.caption=레지스터:
+view-registers.clipboard=$ (클립보드)
+view-registers.selection=% (마지막선택영역)
+view-registers.none=정의한 레지스터가 없습니다.
+view-registers.register=레지스터:
+view-registers.contents=내용:
+view-registers.undefined=__UNDEFINED__
+#}}}
+
+#{{{ Close all buffers dialog
+close.title=저장하지 않은 변경 내역
+close.caption=변경후 저장하지 않은 버퍼 목록:
+close.selectAll=모두 선택
+close.selectAll.mnemonic=a
+close.save=선택 버퍼 저장
+close.save.mnemonic=s
+close.discard=선택 버퍼 버림
+close.discard.mnemonic=d
+#}}}
+
+#{{{ Files changed on disk dialog
+files-changed.title=파일이 변경됨
+files-changed.caption=다음의 파일이 다른 프로그램에 의해서 변경되었습니다.
+files-changed.deleted=삭제됨; 다시 만들려면 저장:
+files-changed.changed-auto=자동으로 새로고침:
+files-changed.changed=변경됨:
+files-changed.changed-dirty-auto=변경됨; 아직 새로고침 안함:
+files-changed.changed-dirty=변경됨;원본 변경됨:
+files-changed.select-all=모두 선택
+files-changed.select-all.mnemonic=a
+files-changed.reload=새로고침
+files-changed.reload.mnemonic=r
+files-changed.ignore=무시
+files-changed.ignore.mnemonic=i
+#}}}
+
+#{{{ Abbrev dialogs
+add-abbrev.title=약어 추가
+add-abbrev.mode=특정 모드 약어로 추가
+add-abbrev.global=전체 적용 약어로 추가
+
+edit-abbrev.title=약어 편집
+
+edit-abbrev.duplicate.title=중복 약어
+edit-abbrev.duplicate.message=\
+	기존에 존재하는 약어입니다.\n\
+	\n\
+	기존 자료를 수정하겠습니까?
+
+abbrev-editor.abbrev=약어:
+abbrev-editor.before=커서 앞에 삽입할 텍스트:
+abbrev-editor.after=커서 뒤에 삽입할 텍스트:
+#}}}
+
+#{{{ XMode errors
+xmode-error.title=XML 분석 에러
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message={0} 분석 과정에서 {1}행에 에러가 발생했습니다:\n\
+	{3}
+xmode-error.dtd=DTD를 로드할 수 없습니다\n({0})
+xmode-error.termchar-invalid=AT_CHAR 속성값 오류 ({0})
+xmode-error.doctype-invalid=MODE의 문서 타입이 필요합니다, {0}
+xmode-error.empty-tag={0} 태그가 없습니다
+xmode-error.token-invalid={0} 토큰 타입 오류
+xmode-error.empty-keyword=키워드를 입력하지 않았습니다
+xmode-error.regexp=잘못된 정규식입니다\n({0})
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR, HASH_CHARS 중 하나만 입력하세요
+xmode-error.delegate-invalid=Delegate 오류입니다: {0}
+#}}}
+
+#{{{ JARClassLoader errors
+plugin-error.title=플러그인 에러
+plugin-error.caption=다음의 플러그인을 불러올 수 없습니다:
+plugin-error.caption-1=다음의 플러그인을 불러올 수 없습니다:
+
+plugin-error.load-error=로드 불가: {0}\n\
+	많은 경우 JAR 파일 오류입니다. 재설치하세요.\n\
+	상세내역은 도구->문제해결->작업 로그로 확인하세요.
+plugin-error.start-error=시작 불가: {0}\n\
+	플러그인의 새버전으로 업데이트 하세요.
+plugin-error.already-loaded=두개를 설치했습니다. 둘중 하나를 제거하세요.
+plugin-error.dep-jdk=Java {0} 이상이 필요하지만 {1}만 있습니다.
+plugin-error.dep-jedit=jEdit {0} 이상이 필요하지만 {1}만 있습니다.\n\
+	<http://www.jedit.org>에서 새로운 버전을 다운로드하세요.
+plugin-error.dep-plugin.no-version={1}의 버전 {0}이상이 필요합니다만,\n\
+	{1}을 설치하지 않았습니다.
+plugin-error.dep-plugin.broken={0}이 필요하지만 {0}을 불러올 수 없습니다.
+plugin-error.dep-plugin={1}의 버전 {0}이상이 필요합니다만, \
+	{1} 버전 {2}만 있습니다.
+plugin-error.dep-class={0} 클래스가 필요합니다.\n\
+	적절한 플러그인이나 클래스 라이브러리를 설치하세요.
+plugin-error.missing-jar={0} JAR 파일이 필요합니다.\n\
+	이 JAR 파일은 이 플러그인의 일부이지만 찾을 수 없습니다.\n\
+	플러그인을 재설치 해보세요.
+plugin-error.not-42=이 플러그인은 동적 로딩을 지원하지 않습니다.\n\
+	이 플러그인을 삭제하거나 설치한 다음에는 반드시 jEdit를 재가동해야 합니다.
+
+plugin-error-download.title=플러그인 에러
+plugin-error-download.message=플러그인 다운로드 과정에서 에러가 발생했습니다. 다른 서버를 시도해 보세요\n{0}
+#}}}
+
+#{{{ Macro dialogs
+macro-input.title=매크로 입력
+macro-error.title=매크로 에러
+macro-message.title=매크로 메시지
+macro-confirm.title=매크로 확인
+#}}}
+
+#{{{ BeanShell stuff
+beanshell-error.title=BeanShell 에러
+beanshell-error.message==BeanShell 에러가 발생했습니다.
+
+beanshell-eval-input.title=BeanShell 실행
+beanshell-eval-input.message=BeanShell 스크립트:\n\
+	\n\
+	변수명:\n\
+	view - 현재 jEdit 뷰 오브젝트\n\
+	editPane - 현재 편집창 오브젝트\n\
+	textArea - 현재 편집 영역 오브젝트\n\
+	buffer - 현재 버퍼 오브젝트
+
+beanshell-eval.title=BeanShell 실행
+beanshell-eval.message={0}
+
+beanshell-eval-line.title=BeanShell 실행
+beanshell-eval-line.message=선택한 행에 대해서 수행할 BeanShell 스크립트:\n\
+	\n\
+	변수명:\n\
+	line - 행번호\n\
+	index - 선택 행 범위의 행 순번\n\
+	text - 행의 문자열\n\
+	view - 현재 jEdit 뷰 오브젝트\n\
+	editPane - 현재 편집창 오브젝트\n\
+	textArea - 현재 편집 영역 오브젝트\n\
+	buffer - 현재 버퍼 오브젝트
+#}}}
+
+#{{{ Macro not recording dialog
+macro-not-recording.title=매크로를 기록하지 않음
+macro-not-recording.message=아직 매크로가 기록되지 않았습니다.
+#}}}
+
+#{{{ Large repeat count warning
+large-repeat-count.title=너무 큰 반복 횟수
+large-repeat-count.message="{0}"를 {1}회 수행하시겠습니까?
+
+large-repeat-count.user-input.title=너무 큰 반복 횟수
+large-repeat-count.user-input.message="{0}"를 {1}회 삽입하시겠습니까?
+#}}}
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=접기 모드 오류
+folding-not-explicit.message=이 명령은 명시적(explicit) 접기 모드에서만 사용할 수 있습니다.
+#}}}
+
+#{{{ Memory status dialog box
+memory-status.title=자바 메모리
+memory-status.gc={0} Kb를 정리 했습니다.
+memory-status.use=전체{1} Kb, {0} Kb 사용 
+#}}}
+
+#{{{ Multiple I/O request errors
+buffer-multiple-io.title=입출력 에러
+buffer-multiple-io.message=각 버퍼는 한번에 하나의 입출력만 수행할 수 있습니다.\n\
+	다른 작업을 하시려면, 현재의 작업이 끝나기를 기다리거나\n\
+	작업관리자에서 현재 작업을 취소하세요.
+
+browser-multiple-io.title=입출력 에러
+browser-multiple-io.message=각 파일 시스템 브라우저는 하나의 입출력만 수행\n\
+	할 수 있습니다. 다른 작업을 하시려면, 현재의 작업이 끝나기를\n\
+	기다리거나 작업관리자에서 현재 작업을 취소하세요.
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=폭 맞추기 크기
+format-maxlinelen.message=이 명령을 사용하시려면 폭 맞추기 크기를 \n\
+	0보다 큰 값으로 설정해야 합니다.
+#}}}
+
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=문법 스타일 수정
+syntax-style-no-token.message=현재 커서 위치에는 수정할 문법 스타일이 없습니다.
+#}}}
+
+#{{{ View title dialog
+view.title.select=이 jEdit뷰의 이름을 입력하세요:
+#}}}
+#}}}
+
+#{{{ Buffer options dialog
+buffer-options.title=버퍼 옵션
+buffer-options.caption=현재 편집 버퍼에 대한 각종 옵션을 설정합니다.\n\
+	편집 모드에 대한 기본값 변경은 전역 옵션->편집을 참조하세요.
+buffer-options.loading-saving=읽기 및 저장
+buffer-options.lineSeparator=행 구분자:
+buffer-options.encoding=인코딩:
+buffer-options.gzipped=압축 파일로 저장(GZIP)
+buffer-options.editing=편집
+buffer-options.mode=편집 모드:
+#}}}
+
+#{{{ Global options dialog
+options.title=옵션
+options.title-template={0}: {1}
+options.jedit.label=jEdit
+
+# Option pane to show by default
+options.last=편집
+
+#{{{ Options groups
+
+#}}}
+
+#{{{ General pane
+options.general.label=일반
+options.general.lineSeparator=기본 행 구분자:
+options.general.encoding=기본 인코딩:
+options.general.encodingAutodetect=파일 인코딩 자동 인식(가능할 때)
+options.general.checkModStatus=편집 파일을 외부에서 수정한 경우 :
+options.general.checkModStatus.nothing=아무것도 하지 않음
+options.general.checkModStatus.prompt=묻기
+options.general.checkModStatus.reload=자동으로 다시 읽고 사용자에게 알림
+options.general.checkModStatus.silentReload=알리지 않고 자동으로 다시 읽음
+options.general.checkModStatusUpon=파일 변경 여부 확인 시점:
+options.general.checkModStatusUpon.focus=포커스가 오면 모든 버퍼 확인
+options.general.checkModStatusUpon.all=포커스가 오거나 해당 버퍼를 방문할 때
+options.general.checkModStatusUpon.visitBuffer=버퍼를 방문할 때
+options.general.checkModStatusUpon.none=없음
+options.general.recentFiles=기억할 최근 파일수:
+options.general.hypersearch.maxWarningResults=최대 하이퍼 검색 항목수:
+options.general.sortRecent=최근 파일 목록을 정렬함
+options.general.saveCaret=최근 파일 목록에 커서 위치 저장
+options.general.persistentMarkers=마커 위치 저장
+options.general.resetUndo=저장할 때 작업 취소(Undo) 기록 지우기
+options.general.restore=시작할 때 앞서 작업하던 편집창 복원
+options.general.restore.splits=창 분할 환경 복원
+options.general.restore.remote=... 앞서 작업하던 VFS를 통한 원격 파일도 포함
+options.general.restore.cli=... 앞서 작업하던 콘솔 입력 파일명도 포함
+options.general.encodingDetectors=인코딩 자동인식기 목록:
+options.general.fallbackEncodings=대체 인코딩 목록:
+options.general.fallbackEncodings.tooltip=인코딩 인식 불가시 사용할 인코딩 목록을 공백으로 구분해서 입력합니다.
+options.general.systrayicon=작업표시줄에 아이콘 표시
+#}}}
+
+#{{{ Abbreviations pane
+options.abbrevs.label=약어
+options.abbrevs.set=약어 적용 모드:
+options.abbrevs.expandOnInput=공백키 입력시 약어 확장
+options.abbrevs.abbrev=약어
+options.abbrevs.expand=확장어
+options.abbrevs.add=추가...
+options.abbrevs.edit=수정...
+options.abbrevs.remove=삭제
+#}}}
+
+#{{{ Appearance pane
+options.appearance.label=모양
+options.appearance.iconTheme=아이콘 종류:
+options.appearance.fonts.antialias=안티-알리아스 비텍스트영역 폰트
+options.appearance.lf=Swing 테마 종류:
+options.appearance.primaryFont=버튼, 메뉴, 레이블 폰트:
+options.appearance.secondaryFont=목록, 텍스트 항목 폰트:
+options.appearance.helpViewerFont=도움말 보기/브라우저 폰트:
+options.appearance.history=기록 저장 항목수:
+options.appearance.menuSpillover=메뉴 최대 확장 크기:
+options.appearance.startup.label=시작 옵션
+options.appearance.showSplash=시작할 때 로고 창 표시
+options.appearance.showTips=시작할 때 팁 표시
+options.appearance.experimental.label=특수 옵션
+options.appearance.experimental.caption=아래의 옵션들은 정상적으로 동작하지 않을 수 있습니다 \n\
+	자바 버전에 따라 문제가 있는 경우에는 옵션을 해제하세요.
+
+options.appearance.textColors=모든 텍스트에 jEdit 텍스트 영역 색상 적용
+options.appearance.decorateFrames=창틀에 Swing 테마 적용
+options.appearance.decorateDialogs=다이얼로그 창틀에 Swing 테마 적용
+
+options.appearance.localization.section.label=지역/언어
+options.appearance.usedefaultlocale.label=기본값 사용
+options.appearance.lang.label=언어 (변경 내역을 적용하려면 재시작해야 합니다)
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=팝업 메뉴
+options.context.caption=텍스트 영역에서 우측 마우스 클릭시 나오는 메뉴 항목:
+options.context.add=추가...
+options.context.remove=삭제
+options.context.moveUp=위로 이동
+options.context.moveDown=아래로 이동
+options.context.reset=기본값으로 초기화
+options.context.add.title=팝업 메뉴에 추가
+options.context.add.caption=기본값으로 초기화:
+options.context.add.separator=구분자
+options.context.add.action=명령 또는 매크로:
+options.context.includeOptionsLink.label="이 메뉴를 설정하기..." 링크 포함
+
+options.context.reset.dialog.title=기본값으로 초기화
+options.context.reset.dialog.message=팝업 메뉴를 기본값으로 초기화하시겠습니까?
+#}}}
+
+#{{{ Docking pane
+options.docking.label=도킹
+options.docking.title=기능창
+options.docking.dockPosition=도킹 위치
+options.docking.selectFramework.label=도킹 프레임워크
+options.docking.autoSaveModeLayout.label=편집모드별 도킹 레이아웃 자동 저장
+options.docking.autoLoadModeLayout.label=편집모드별 도킹 레이아웃 자동 로드
+options.docking.selectSet.label=기능창 그룹:
+options.docking.system-change.note=적용하기 위해서는 jEdit를 재가동해야 합니다.
+#}}}
+
+#{{{ Editing pane
+options.editing.label=편집
+options.editing.defaultMode=기본 편집 모드:
+options.editing.undoCount=작업 취소(Undo) 개수:
+options.editing.caption-0=\
+	편집 모드별 설정은 아래 메뉴에서 편집모드를 선택하세요.
+options.editing.caption-1=\
+	편집 모드별 설정을 하시려면 "기본 설정값 사용"을 해제하세요\n\
+	그렇지 않으면 <전역 기본값>을 사용합니다.
+options.editing.mode=편집 모드:
+options.editing.global=<전역 기본값>
+options.editing.useDefaults=기본 설정값 사용
+options.editing.filenameGlob=편집 모드별 파일 확장자:
+options.editing.firstlineGlob=편집 모드별 첫 행 구분자:
+options.editing.folding=접기 모드:
+options.editing.collapseFolds=초기에 묶음을 접을 단계:
+options.editing.wrap=폭 맞추기:
+options.editing.maxLineLen=폭 크기:
+options.editing.maxLineLen.tooltip=soft 폭 맞추기는 값을 0으로 하세요.
+options.editing.tabSize=탭 크기:
+options.editing.indentSize=들여쓰기 크기:
+options.editing.noWordSep=영숫자외에 단어로 취급할 문자:
+options.editing.camelCasedWords="CamelCased" 문자열을 각각 분리해서 단어로 인식
+options.editing.noTabs=소프트 탭(공백으로 대치)
+options.editing.elasticTabstops=탄력적 탭으로 들여쓰기
+options.editing.elasticTabstops.tooltip=고정 탭 대신 탄력적 탭으로 위 아래 행 간에 위치가 맞도록 자동 조정합니다.
+options.editing.deepIndent=괄호에 맞추어 들여쓰기(Deep indent)
+options.editing.autoIndent=자동 들여쓰기:
+options.editing.largefilemode.title=대용량 파일 모드
+options.editing.largefilemode=매우 큰 파일 처리 방법:
+options.editing.largefilemode.option.ask=<html><b>묻기</b> 큰 파일을 열때 무엇을 할지 묻는다</html>
+options.editing.largefilemode.option.full=<html><b>전체 문법 표시</b> : jEdit의 문법 표시 기능은 그대로 동작 시킴 \
+                                               	<br/><b>매우 느려집니다. 주의하세요</b></html>
+options.editing.largefilemode.option.limited=<html><b>불완전하게 문법 표시</b>: 이경우 jEdit는 \
+		빠르게 동작할 수 있지만<br/>문맥을 무시한 문법 표시로 불완전한 결과이며 \
+		soft 폭 맞추기도 동작하지 않습니다<b>(추천)</b></html>
+options.editing.largefilemode.option.nohighlight=문법 표시와 soft 폭 맞추기 안함
+#}}}
+
+#{{{ Encodings pane
+options.encodings.label=인코딩
+options.encodings.selectEncodings=인코딩 대화창에 표시할 인코딩을 선택하세요:
+options.encodings.available=사용가능한 인코딩
+options.encodings.selected=선택한 인코딩
+options.encodings.available.tooltip=<html>이 항목은 인코딩 콤보박스에 표시되지 않습니다. 표시하려면 우측으로 끌어다 놓으세요.</html>
+options.encodings.selected.tooltip=<html>이 항목을 인코딩 콤보박스에 표시합니다. 표시하지 않으려면 좌측으로 끌어다 놓으세요.</html>
+#}}}
+
+#{{{ Gutter pane
+options.gutter.label=행 정보영역
+options.gutter.enabled=행 정보영역 보이기
+options.gutter.optionalComponents=행 정보영역 요소 설정
+options.gutter.lineNumbers=행번호
+options.gutter.minLineNumberDigits=행번호를 위한 최소 자릿수:
+options.gutter.selectionAreaEnabled=행번호를 표시하지 않을 때 행 선택 영역 사용
+options.gutter.selectionAreaBgColor=행 선택 영역 배경색:
+options.gutter.selectionAreaWidth=행 선택 영역 폭(픽셀):
+options.gutter.font=영역 폰트:
+options.gutter.foreground=행번호 색:
+options.gutter.background=배경색:
+options.gutter.borderWidth=영역 경계선 폭:
+options.gutter.numberAlignment=행번호 맞춤:
+options.gutter.interval-1=구분 표시 간격 \u0020
+options.gutter.interval-2=행:
+options.gutter.currentLineHighlight=현재행 구분:
+options.gutter.structureHighlight=구조 범위 보이기:
+options.gutter.markerHighlight=마커 위치 보이기:
+options.gutter.foldColor=묶음 표시자:
+options.gutter.focusBorderColor=포커스가 있는 영역 경계선:
+options.gutter.noFocusBorderColor=포커스가 없는 영역 경계선:
+options.gutter.foldStyle.label=묶음 표시 스타일:
+options.gutter.foldStyleNames.Triangle=삼각형
+options.gutter.foldStyleNames.Square=사각형
+options.gutter.foldStyleNames.Circle=원형
+#}}}
+
+#{{{ Mouse pane
+options.mouse.label=마우스
+options.mouse.dragAndDrop=텍스트 영역에서 끌어다 놓기(Drag and drop) 사용
+options.mouse.joinNonWordChars=특수문자에 대해서도 더블클릭으로 단어 범위 선택
+options.mouse.middleMousePaste=중간버튼 또는 Alt+클릭으로 빠른 복사 사용
+options.mouse.ctrlForRectangularSelection=Ctrl+끌어다 놓기시 사각 선택으로 자동 전환
+options.mouse.singleClickToOpen=파일/디렉토리 열기시 단일 클릭 사용
+options.mouse.gutter.foldClick=행 정보영역 클릭시:
+options.mouse.gutter.SfoldClick=행 정보영역 Shift-클릭시:
+options.mouse.gutter.toggle-fold=묶음 접기/펴기
+options.mouse.gutter.toggle-fold-fully=묶음 전체 접기/펴기
+#}}}
+
+#{{{ Plugin Manager pane
+options.plugin-manager.label=플러그인 관리자
+options.plugin-manager.updateMirrors=서버 목록 갱신
+options.plugin-manager.workthread=서버 목록 갱신 ...
+options.plugin-manager.downloadSource=플러그인 소스 코드 다운로드
+options.plugin-manager.deleteDownloads=설치후에 다운로드 디렉토리에서 보관자료 삭제
+options.plugin-manager.mirror=자주 사용하는 다운로드 서버:
+options.plugin-manager.location=플러그인 설치 위치:
+options.plugin-manager.settings-dir=jEdit 설정 디렉토리
+options.plugin-manager.app-dir=jEdit 홈 디렉토리
+options.plugin-manager.none=플러그인 센터 기본값
+options.plugin-manager.disable-obsolete=사용되지 않는 플러그인 해제
+options.plugin-manager.list-cache.minutes=플러그인 목록 캐시 시간(분) :
+options.plugin-manager.no-plugin-available=가능한 플러그인이 없습니다
+options.plugin-manager.no-plugin-uptodate=모든 플러그인이 최신 상태입니다
+#}}}
+
+#{{{ Printing pane
+options.print.label=인쇄
+options.print.font=인쇄용 폰트:
+options.print.fontstyle=인쇄용 폰트 스타일:
+options.print.fontsize=인쇄용 폰트 크기:
+options.print.header=상단에 파일명 인쇄
+options.print.footer=하단에 일자, 시간, 페이지 번호 인쇄
+options.print.lineNumbers=행번호 인쇄
+options.print.color=컬러 인쇄
+options.print.tabSize=인쇄용 탭 크기:
+options.print.workarounds=자바 오류에 대한 대처
+options.print.glyphVector=인쇄 용량 문제 대처(SPOOL 크기 확대 필요)
+options.print.force13=이전 버전의 인쇄 API 사용(문제가 있을 경우만 사용)
+options.print.folds=접힌 영역 인쇄
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=프록시 서버
+options.firewall.http.enabled=HTTP 프록시 서버 사용
+options.firewall.http.host=HTTP 프록시 호스트:
+options.firewall.http.port=HTTP 프록시 포트:
+options.firewall.http.user=사용자:
+options.firewall.http.password=비밀번호:
+options.firewall.http.nonProxy=직접 연결 대상:
+options.firewall.socks.enabled=SOCKS 프록시 서버
+options.firewall.socks.host=SOCKS 프록시 호스트:
+options.firewall.socks.port=SOCKS 프록시 포트:
+#}}}
+
+#{{{ Save & Backup pane
+options.save-back.label=저장/백업
+
+options.save-back.autosave=자동저장 주기(초):
+options.save-back.backups=최대 백업 개수:
+options.save-back.backupDirectory=백업 디렉토리:
+options.save-back.backupPrefix=백업 파일명 접두어:
+options.save-back.backupSuffix=백업 파일명 접미어:
+options.save-back.backupEverySave=매 저장마다 백업
+options.save-back.twoStageSave=2단계 저장(좀더 안전하지만 일부 파일시스템에서 소유자 권한을 수정합니다)
+options.save-back.twoStageSave.tooltip=1단계:임시파일에 저장합니다. 2단계:임시파일을 실제 파일로 이름을 변경합니다.
+options.save-back.confirmSaveAll="모든 버퍼 저장"시 확인 요구
+options.save-back.autosaveUntitled=아직 이름 없는 편집창도 자동 저장
+options.save-back.suppressNotSavedConfirmUntitled=이름 없는 편집창은 "변경함"으로 표시하지 않음.
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=이 옵션을 체크하면 새 파일을 열때 버퍼가 지워지므로 주의하세요.
+options.save-back.useMD5forDirtyCalculation=실제 내용에 변경이 없으면 "변경함"으로 표시하지 않음.
+options.save-back.useMD5forDirtyCalculation.tooltip=파일 길이와 MD5 해시 비교를 통해서 실제 내용의 변경 여부를 확인합니다.
+options.save-back.saveAsUsesFSB="다른이름으로 저장시" 파일 시스템 브라우저 디렉토리 사용
+#}}}
+
+#{{{ Shortcuts pane
+options.shortcuts.deletekeymap.label=삭제
+options.shortcuts.deletekeymap.dialog.label=키맵 삭제
+options.shortcuts.deletekeymap.dialog.title=삭제
+options.shortcuts.duplicatekeymap.label=복사
+options.shortcuts.duplicatekeymap.dialog.label=새로운 키맵 이름 선택
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=이름이 이미 존재합니다, 다른 이름을 선택하세요
+options.shortcuts.duplicatekeymap.dialog.title=키맵 이름
+options.shortcuts.resetkeymap.label=리셋
+options.shortcuts.resetkeymap.dialog.label=키맵 리셋
+options.shortcuts.resetkeymap.dialog.title=키맵 리셋
+options.shortcuts.keymap.label=키맵 선택:
+options.shortcuts.label=단축키
+options.shortcuts.select.label=단축키 편집:
+options.shortcuts.select.tooltip=전역/플러그인  단축키, 매크로를 선택할 수 있습니다
+options.shortcuts.name=기능
+options.shortcuts.actionset=기능 그룹
+options.shortcuts.shortcut1=기본 단축키
+options.shortcuts.shortcut2=부가 단축키
+options.shortcuts.filter.label=필터:
+options.shortcuts.filter.tooltip=입력한 텍스트를 포함하는 기능만 보입니다
+options.shortcuts.clear.label=지우기
+
+grab-key.title=단축키를 입력하세요
+grab-key.caption="{0}"에 대한 단축키를 누르고 확인을 클릭하세요.
+grab-key.keyboard-test=문제가 있는 키를 입력하세요
+grab-key.assigned-to=현재 할당: {0}
+grab-key.assigned-to.none=<없음>
+grab-key.assigned-to.prefix={0} 확장
+grab-key.clear=지우기
+grab-key.remove=현재 단축키 해제
+
+grab-key.remove-ask.title=단축키를 해제 하겠습니까?
+grab-key.remove-ask.message=\
+	새로운 단축키를 지정하지 않았습니다.\n\
+	현재 단축키를 해제 하겠습니까?
+
+grab-key.duplicate-alt-shortcut.title=중복 단축키
+grab-key.duplicate-alt-shortcut.message=\
+	선택한 단축키가 다른 항목과 중복됩니다\n\
+	다른 항목을 선택하세요.
+
+grab-key.duplicate-shortcut.title=중복 단축키
+grab-key.duplicate-shortcut.message=\
+	이 단축키는 이미 다른 항목에 할당되었습니다.\n\
+	"{0}".\n\
+	\n\
+	이 설정으로 대치할까요?
+
+grab-key.prefix-shortcut.title=단축키 오류
+grab-key.prefix-shortcut.message=\
+	이 단축키는 사용할 수 없습니다.\n\
+	추가적인 단축키를 위하여 확장용으로 사용합니다.\n\
+	다른 단축키를 선택하세요.
+#}}}
+
+#{{{ Status bar pane
+options.status.label=상태창
+options.status.visible=상태창 보이기
+options.status.plainview.visible=단순 jEdit 뷰에서 상태창 보이기
+options.status.foreground=상태창 글씨 색상:
+options.status.background=상태창 배경 색상:
+options.status.memory.foreground=메모리 표시 전경색:
+options.status.memory.background=메모리 표시 배경색:
+options.status.edit.title=상태창 항목 편집
+options.status.edit.labelRadioButton=이름
+options.status.edit.widgetRadioButton=위젯
+options.status.edit.labelLabel=이름을 입력하세요:
+options.status.edit.widgetLabel=위젯을 선택하세요:
+options.status.caret.linenumber=커서의 행번호 표시
+options.status.caret.dot=커서의 열 표시
+options.status.caret.virtual=커서의 가상 위치 표시
+options.status.caret.offset=커서의 파일내 위치 표시
+options.status.caret.bufferlength=파일 길이 표시
+options.status.caret.title=커서 위치 표시 설정:
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=문법 표시
+options.syntax.object=토큰 타입
+options.syntax.style=텍스트 스타일
+options.syntax.foldLine.1=접힌 행, 1단계
+options.syntax.foldLine.2=접힌 행, 2단계
+options.syntax.foldLine.3=접힌 행, 3단계
+options.syntax.foldLine.0=접힌 행, 4단계 이상
+#}}}
+
+#{{{ Text Area pane
+options.textarea.label=텍스트 영역
+options.textarea.font=텍스트 폰트:
+options.textarea.fontSubst=부가 폰트 사용
+options.textarea.fontSubst.tooltip=그래픽 문자등 텍스트 폰트에 없는 문자를 표시하기 위하여 사각형으로 표시하는 대신 다른 폰트를 찾습니다
+options.textarea.fontSubstList=부가 폰트: 자주 사용하는 폰트:
+options.textarea.fontSubstSystemFonts=부가 폰트: 모든 시스템 폰트 검색
+options.textarea.fontSubstWarning.label=부가 폰트
+options.textarea.fontSubstWarning=시스템 폰트를 사용하지 않으면 별도의 폰트를 설정해야 합니다
+options.textarea.foreground=텍스트 색상:
+options.textarea.background=배경 색상:
+options.textarea.caret=커서:
+options.textarea.blinkCaret=깜박임
+options.textarea.blockCaret=박스
+options.textarea.thickCaret=굵게
+options.textarea.selection=단일 선택:
+options.textarea.multipleSelection=다중 선택:
+options.textarea.selectionFg=선택 영역 전경색:
+options.textarea.lineHighlight=현재 행 구분:
+options.textarea.structureHighlight=일치(검색) 항목 구분:
+options.textarea.eolMarkers=행 끝 표시자:
+options.textarea.wrapGuide=폭 맞춤 표시기:
+options.textarea.electricBorders=자동 스크롤 테두리
+options.textarea.stdNextPrevWord=이전/다음 단어로 이동시 공백 감안
+options.textarea.antiAlias=부드러운 텍스트 표시
+options.textarea.antiAlias.tooltip=몇몇 시스템에서는 시스템이 느려질 수 있습니다.
+options.textarea.fracFontMetrics=부분적인 폰트 조정
+options.textarea.fracFontMetrics.tooltip=subpixel 부드러운 텍스트 표시 방법과는 같이 사용하지 마세요
+options.textarea.stripTrailingEOL=마지막 개행 문자 숨김
+options.textarea.completeFromAllBuffers=단어 자동 완성을 모든 버퍼를 대상으로 함(기본값은 현재 버퍼를 대상으로 함)
+options.textarea.insertCompletionWithDigit=단어 자동 완성시 숫자를 누르면 다른 단어로 인식(체크하지 않으면 숫자를 단어에 포함시켜 인식)
+options.textarea.lineSpacing.label=추가적인 행 간격(픽셀):
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=툴바
+options.toolbar.showToolbar=툴바 표시
+options.toolbar.caption=툴바에 표시할 버튼:
+options.toolbar.add=추가...
+options.toolbar.edit=편집...
+options.toolbar.remove=삭제
+options.toolbar.moveUp=위로 이동
+options.toolbar.moveDown=아래로 이동
+options.toolbar.reset=기본값으로 초기화
+options.toolbar.edit.title=툴바 항목 편집
+options.toolbar.edit.caption=타입:
+options.toolbar.edit.separator=구분자
+options.toolbar.edit.action=명령 또는 매크로:
+options.toolbar.edit.builtin=내장 아이콘 사용:
+options.toolbar.edit.file=파일에서 아이콘 가져오기:
+options.toolbar.edit.choose=선택
+options.toolbar.edit.no-icon=아이콘을 선택하지 않았습니다
+
+options.toolbar.reset.dialog.title=기본값으로 초기화
+options.toolbar.reset.dialog.message=설치시 기본값으로 초기화 하시겠습니까?
+#}}}
+
+#{{{ View pane
+options.view.label=보기
+options.view.viewLayout=jEdit 뷰 레이아웃
+options.view.floatableToolbars=유동 툴바
+options.view.alternateDockingLayout=도킹 창 위치 전환
+options.view.alternateToolBarLayout=툴바 위치 전환
+options.view.abbreviatePaths=환경변수로 단축 경로 사용
+options.view.showFullPath=제목에 버퍼의 전체 경로 표시
+options.view.showSearchbar=항상 검색창 표시
+options.view.beepOnSearchAutoWrap=자동 순환 검색시 소리 내기
+options.view.showBufferSwitcher=버퍼 전환창 표시
+options.view.bufferSwitcherMaxRowsCount=버퍼 전환창 표시 개수:
+options.view.sortBuffers=버퍼 정렬
+options.view.sortByName=버퍼 정렬시 경로 대신 파일명 사용
+options.view.fullScreenIncludesMenu=전체 화면 모드에서 메뉴 표시
+options.view.fullScreenIncludesToolbar=전체 화면 모드에서 툴바 표시
+options.view.fullScreenIncludesStatus=전체 화면 모드에서 상태창 표시
+options.bufferset.scope=버퍼 범위:
+#}}}
+
+
+
+#{{{ File System Browser panes
+options.browser.label=파일 시스템 브라우저
+
+options.browser.colors.label=색상
+options.browser.colors.glob=파일 그룹 필터
+options.browser.colors.color=색상
+options.browser.colors.add=추가
+options.browser.colors.remove=삭제
+
+options.browser.general.label=일반
+options.browser.general.defaultPath=기본 경로:
+options.browser.general.defaultPath.favorites=즐겨찾기
+options.browser.general.defaultPath.home=홈 디렉토리
+options.browser.general.defaultPath.last=가장 최근에 방문한 디렉토리
+options.browser.general.defaultPath.buffer=현재 버퍼의 상위 디렉토리
+options.browser.general.defaultPath.working=jEdit 작업 디렉토리
+options.browser.general.showMenubar=메뉴 표시
+options.browser.general.showToolbar=툴바 표시
+options.browser.general.showIcons=아이콘 표시
+options.browser.general.showHiddenFiles=숨김 파일 표시
+options.browser.general.sortIgnoreCase=정렬시 대소문자 구분 안함
+options.browser.general.sortMixFilesAndDirs=파일과 디렉토리를 섞음
+options.browser.general.doubleClickClose=열린 파일을 더블클릭하면 닫음
+options.browser.general.currentBufferFilter=파일 대화창의 필터는 현재 버퍼의 확장자
+options.browser.general.useDefaultIcons=기본 아이콘 사용
+#}}}
+
+#{{{ Browser Context Menu
+options.browser.custom.context.label=팝업 메뉴
+options.browser.custom.context.caption=우 클릭시의 메뉴 설정:
+#}}}
+
+#{{{ Font selector
+font-selector.title=폰트 선택기
+font-selector.family=폰트 종류:
+font-selector.size=폰트 크기:
+font-selector.style=폰트 스타일:
+font-selector.plain=일반
+font-selector.bold=굵게
+font-selector.italic=이탤릭
+font-selector.bolditalic=굵고 이탤릭
+font-selector.preview=미리보기
+font-selector.long-text=The AbCd 국어사랑 Hello 안녕.
+#}}}
+
+#{{{ Color chooser, used by options.syntaxs
+colorChooser.title=색상 선택
+#}}}
+
+#{{{ Style editor, used by options.syntaxs
+style-editor.title=스타일 편집기
+style-editor.tokenType=스타일 타입:
+style-editor.italics=이탤릭
+style-editor.bold=강조
+style-editor.fgColor=텍스트 색상:
+style-editor.bgColor=배경 색상:
+#}}}
+
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=옵션
+options.plugins.label=플러그인
+options.no-plugins.label=플러그인 옵션 없음
+#}}}
+
+#{{{ Help viewer
+helpviewer.title=jEdit 도움말
+helpviewer.loading=로딩...
+helpviewer.back.label=뒤로
+helpviewer.forward.label=앞으로
+helpviewer.copy-link.label=클립보드에 링크 복사
+
+helpviewer.toc.loading=로딩...
+helpviewer.toc.label=내용
+helpviewer.toc.welcome=jEdit에 오신 것을 환영합니다
+helpviewer.toc.readme=일반적인 정보
+helpviewer.toc.changes=자세한 변경 기록
+helpviewer.toc.todo=앞으로 할일과 알려진 버그
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.copying-apache=Apache License
+helpviewer.toc.copying-plugins=Plugin Licensing Amendment
+helpviewer.toc.plugins=플러그인
+helpviewer.toc.online-apidocs=온라인 jEdit API 레퍼런스
+
+helpviewer.search.label=검색
+helpviewer.search.caption=검색 대상:
+helpviewer.searching=검색중...
+helpviewer.no-results=검색 결과가 없습니다
+#}}}
+
+#{{{ Tip of the day window
+tip.title=오늘의 팁
+tip.caption=혹시 이거 아세요...
+tip.show-next-time=시작할 때 팁 보이기
+tip.next-tip=다음 팁
+
+tip.not-found=문서/팁 디렉토리를 찾을 수 없습니다
+#}}}
+
+#{{{ Activity log
+log-viewer.title=작업 로그
+log-viewer.caption={0}에 전체 로그가 있습니다.
+log-viewer.copy=복사
+log-viewer.tail.label=끝부분 보기
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=마커 보기($w)
+view-markers.title=마커
+#}}}
+
+#{{{ I/O progress monitor
+io-progress-monitor.title=입출력 진행 상황 모니터
+io-progress-monitor.caption={0}개의 요구가 대기중입니다.
+io-progress-monitor.idle=대기
+io-progress-monitor.abort=취소
+
+#{{{ I/O abort dialog box
+abort.title=입출력 취소
+abort.message=현재 진행중인 입출력을 취소하시겠습니까?\n\
+	파일 저장을 취소하시면 자료가 소실될 수 있습니다.
+#}}}
+
+#}}}
+
+#{{{ Task  monitor
+task-monitor.title=작업 관리자
+#}}}
+
+#{{{ VFS browser
+vfs.browser.title=파일 브라우저
+vfs.browser.longtitle=파일 시스템 브라우저
+vfs.browser.title.open=파일 브라우저 - 열기
+vfs.browser.title.save=파일 브라우저 - 저장
+vfs.browser.title.dialog=파일 브라우저 - 열기
+vfs.browser.path=경로:
+vfs.browser.path.mnemonic=p
+vfs.browser.filter=필터:
+vfs.browser.tree.loading=로딩...
+
+vfs.browser.name=이름
+vfs.browser.type=타입
+vfs.browser.type.file=파일
+vfs.browser.type.directory=디렉토리
+vfs.browser.type.filesystem=파일 시스템
+vfs.browser.status=상태
+vfs.browser.status.no=접근 불가
+vfs.browser.status.ro=읽기 전용
+vfs.browser.status.append=덧붙이기 전용
+vfs.browser.status.rw=읽기/쓰기
+vfs.browser.size=크기
+vfs.browser.modified=최종변경
+
+vfs.browser.file_filter.glob=Glob 파일 필터
+vfs.browser.file_filter.dir_only=디렉토리만
+
+#{{{ Actions
+vfs.browser.browse-window.label=새창에서 보기
+vfs.browser.browse.label=보기
+vfs.browser.close.label=닫기
+vfs.browser.copy-path.label=복사
+vfs.browser.delete.label=삭제...
+vfs.browser.home.label=홈 디렉토리
+vfs.browser.properties.label=속성
+vfs.browser.properties.title=파일/디렉토리 속성
+vfs.browser.insert.label=삽입
+vfs.browser.new-directory.label=새 디렉토리...
+vfs.browser.new-file.label=새 파일
+vfs.browser.open.label=열기
+vfs.browser.open-desktop.label=데스크탑에서 열기($D)
+vfs.browser.other-encoding-2.label=다른 인코딩({0})...
+vfs.browser.other-encoding.label=다른 인코딩...
+vfs.browser.reload.label=디렉토리 새로고침
+vfs.browser.rename.label=이름변경...
+vfs.browser.roots.label=루트 디렉토리
+vfs.browser.search-directory.label=디렉토리에서 검색...
+vfs.browser.show-hidden-files.label=숨김 파일 보기
+vfs.browser.synchronize.label=현재 버퍼의 디렉토리
+vfs.browser.up.label=상위 디렉토리
+vfs.browser.paste.label=붙여넣기
+vfs.browser.previous.label=이전 디렉토리
+vfs.browser.next.label=다음 디렉토리
+#}}}
+
+#{{{ Tool bar
+
+#}}}
+
+#{{{ Commands menu
+vfs.browser.commands.label=기능($C)
+vfs.browser.commands.encoding.label=인코딩
+vfs.browser.commands.encoding.auto-detect=자동 인식
+
+vfs.browser.open-in.label=추가 열기
+vfs.browser.open-view.label=jEdit 뷰 추가 열기
+vfs.browser.open-plain-view.label=jEdit 단순뷰 추가 열기
+vfs.browser.open-split.label=새 분할에서 열기
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=플러그인($P)
+vfs.browser.plugins.plugin-manager.label=플러그인 관리자...
+vfs.browser.plugins.plugin-options.label=플러그인 옵션...
+vfs.browser.plugins.no-plugins.label=플러그인이 없습니다
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=즐겨찾기($v)
+vfs.browser.favorites.add-to-favorites.label=즐겨찾기에 추가
+vfs.browser.favorites.edit-favorites.label=즐겨찾기 편집
+vfs.browser.favorites.no-favorites.label=즐겨찾기가 없습니다
+#}}}
+
+vfs.browser.dialog.open=열기
+vfs.browser.dialog.save=저장
+vfs.browser.dialog.choose-dir=선택
+vfs.browser.dialog.filename=파일명:
+vfs.browser.dialog.filename.mnemonic=f
+
+#{{{ Dialogs
+vfs.browser.bad-filter.title=필터 오류
+vfs.browser.bad-filter.message={0}필터에 문제가 있습니다 ({1})
+
+vfs.browser.recurse-favorites.title=스스로에게는 즐겨찾기를 추가할 수 없습니다.
+vfs.browser.recurse-favorites.message=스스로에게 즐겨찾기 목록을 추가할 수 없습니다.
+
+vfs.browser.delete-confirm.title=파일 삭제 확인
+vfs.browser.delete-confirm.message={1}를 확실히 삭제하시겠습니까?
+
+vfs.browser.delete-favorites.title=즐겨찾기에서 삭제
+vfs.browser.delete-favorites.message=아래 파일들을 즐겨찾기에서 삭제하시겠습니까?
+
+vfs.browser.rename.title=파일 이름 변경
+vfs.browser.rename.message={0}에 대한 새이름을 입력하세요:
+
+vfs.browser.mkdir.title=새 디렉토리
+vfs.browser.mkdir.message=새 디렉토리의 이름 및 경로:
+#}}}
+
+#}}}
+
+#{{{ I/O status messages
+vfs.status.load=로딩 {0}
+vfs.status.load-markers={0}의 마커 로딩
+vfs.status.save={0} 저장중
+vfs.status.save-markers={0}의 마커 저장중
+vfs.status.autosave={0} 자동 저장중
+vfs.status.listing-directory={0} 디렉토리 리스팅
+vfs.status.deleting={0} 삭제중
+vfs.status.renaming={0}를 {1}로 이름변경
+#}}}
+
+#{{{ Plugin manager
+
+plugin-manager.title=플러그인 관리자
+
+plugin-manager.hide-libraries=라이브러리 숨김
+
+plugin-manager.mgr-options=다운로드 옵션...
+plugin-manager.plugin-options=플러그인 옵션...
+plugin-manager.done=닫기
+
+plugin-manager.remove-confirm.title=플러그인 삭제
+plugin-manager.remove-confirm.message=다음의 플러그인을 삭제하시겠습니까?
+
+plugin-manager.dependency.title=플러그인 의존성
+lugin-manager.dependency.message={0}를 다음과 같은 플러그인에서 필요로 합니다.\n\
+	{0}를 해제하시면 아래의 플러그인도 해제합니다:
+
+plugin-manager.remove-dependencies.title=플러그인 의존성
+plugin-manager.remove-dependencies.message=삭제된 플러그인을 다음과 같은 플러그인에서 필요로 합니다.\n\
+	해당 플러그인 삭제로 아래의 플러그인도 해제할 것입니다:
+
+plugin-manager.cleanup.label=지우기
+plugin-manager.cleanup.title=플러그인 자료 지우기
+plugin-manager.cleanup.message=아래의 플러그인 자료 삭제:
+
+plugin-manager.noOrphan.label=사용하지 않는 JAR 찾기
+plugin-manager.noOrphan.title=사용하지 않는 JAR가 없습니다
+plugin-manager.noOrphan.message=현재 설치에 사용하지 않는 JAR가 없습니다
+
+plugin-manager.findOrphan.label=사용하지 않는 JAR 찾기
+plugin-manager.findOrphan.title=사용하지 않는 JAR 찾기
+plugin-manager.findOrphan.message=다음 JAR들은 어떤 플러그인에도 속하지 않습니다. 삭제하시겠습니까?\n\
+	(주의하세요. JDBC 드라이버처럼 몇몇 플러그인에서 동적으로 정의해서 사용할 수도 있습니다):
+
+install-plugins.depend.title=의존성 있는 플러그인 설치
+install-plugins.depend.message=설치하는 플러그인이 추가적인 다른 플러그인을 필요로 합니다\n\
+	계속하시면 필요한 것을 자동으로 설치합니다.
+
+plugin-manager.status.loaded=로드 완료
+plugin-manager.status.disabled=지원되지 않음
+plugin-manager.status.not-loaded=로드되지 않음
+plugin-manager.status.error=에러
+
+plugin-manager.list-download-connect=plugins.jedit.org에 연결중
+plugin-manager.list-download=plugins.jedit.org에서 플러그인 목록을 다운로드하고 있습니다
+plugin-manager.list-download.mirror-autoselect-error.title=서버 선택 에러
+plugin-manager.list-download.mirror-autoselect-error.message=서버 자동 선택 에러:\n\
+	{0}\n\
+	특정 서버를 선택하면 정상 동작 할 수 있습니다.
+plugin-manager.list-download.need-password.title=HTTP 프록시가 비밀번호를 필요로 합니다
+plugin-manager.list-download.need-password.message=HTTP 프록시가 비밀번호를 필요로 합니다.\n\
+	"다운로드 옵션"에서 적절한 사용자/비밀번호를 설정하세요.
+plugin-manager.list-download.disconnected.title=플러그인 목록 다운로드 에러
+plugin-manager.list-download.disconnected.message=플러그인 목록을 다운로드 할 수 없습니다:\n\
+	{0}호스트에 접근할 수 없습니다. 인터넷 연결을 확인해 보세요...
+plugin-manager.list-download.generic-error.title=플러그인 목록 다운로드 에러
+plugin-manager.list-download.generic-error.message=플러그인 목록 다운로드 에러:\n\
+	{0} - {1}
+plugin-manager.filterField=이 텍스트를 포함하는 플러그인만 보이기
+
+#{{{ Plugin management
+manage-plugins.title=관리
+
+manage-plugins.info.name=이름
+manage-plugins.info.version=버전
+manage-plugins.info.status=상태
+manage-plugins.info.data=데이터
+
+manage-plugins.data-size.unknown=<모름>
+
+manage-plugins.remove=삭제...
+manage-plugins.help=도움말...
+plugin-load-error.message=플러그인을 로드할 수 없습니다
+plugin-load-error.title=플러그인 로드 에러
+#}}}
+
+#{{{ Plugin installation
+install-plugins.title=설치
+
+install-plugins.info.name=이름
+install-plugins.info.size=크기
+install-plugins.info.releaseDate=릴리즈 일자
+install-plugins.info.version=버전
+install-plugins.info.category=분류
+install-plugins.info.author=저자
+install-plugins.info.released=릴리즈 일자
+install-plugins.info.depends=의존성
+install-plugins.info.optionalDepends=옵션 의존성
+
+install-plugins.totalSize={0} 플러그인, 총크기: {1}
+install-plugins.select-all=모두 선택
+install-plugins.install=설치
+install-plugins.show-updates=업데이트 보이기
+
+update-plugins.title=업데이트
+
+plugin-manager.progress={1}에서 {0}를 다운로드중
+plugin-manager.progress.title=플러그인 설치중
+plugin-manager.progress.stop=중지
+#}}}
+
+#{{{ Plugin remove error
+plugin-manager.remove-failed.title=삭제 실패
+plugin-manager.remove-failed.message={0} 플러그인을 삭제할 수 없습니다.
+#}}}
+
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=이름
+fileprop.path=경로
+fileprop.lastmod=최종 변경
+fileprop.size=크기
+fileprop.properties=속성
+fileprop.readable=읽기가능
+fileprop.writeable=쓰기가능
+fileprop.attribute=속성
+fileprop.okBtn=확인
+fileprop.cancelBtn=취소
+fileprop.selectedFiles=선택한 파일
+fileprop.selectedDirectories=선택한 디렉토리
+#}}}
+
+#{{{ Activity log viewer
+log-viewer.dialog.title=작업 로그 설정
+log-viewer.settings.label=설정
+log-viewer.message.label=메시지:
+log-viewer.message.debug.label=디버그
+log-viewer.message.message.label=메시지
+log-viewer.message.notice.label=주의
+log-viewer.message.warning.label=경고
+log-viewer.message.error.label=에러
+# This one should be actually placed in Debugging options, but
+# we don't have such a pane yet
+debug.beepOnOutput.label=출력시 경고음
+#}}}
+
+logs-remove-all-errors.label=모든 에러 지움
+
+taskmanager.remainingtasks.label=남은 작업 {0}개
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=편집 모드 (ex:java)
+statusbar.mode.sample=java
+statusbar.fold.label=접기 모드 (ex:explicit)
+statusbar.fold.sample=explicit
+statusbar.encoding.label=인코딩 (ex:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=폭 맞추기 모드(ex:N)
+statusbar.wrap.sample=N
+statusbar.indent.label=자동 들여쓰기 (ex:F)
+statusbar.indent.sample=F
+statusbar.multiSelect.label=다중 선택 모드 (ex:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=사각 선택 모드 (ex:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=덮어쓰기 (ex:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=행 구분자 (ex:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=메모리 상태 (ex:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=시각 (ex:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=버퍼 범위 (ex:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=선택 길이 (ex:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=파일 최종 변경 일시 (ex:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+statusbar.task-monitor.label=작업 관리자 (예: 7 작업)
+statusbar.task-monitor.tooltip=진행중인 작업 보려면 클릭하세요
+statusbar.task-monitor.sample=7 작업
+statusbar.task-monitor.template={0} 작업
+#}}}
+
+killring.load-memoryerror.message=<html>앞서 삭제한 텍스트를 로드할 수 없습니다. 메모리 공간을 확장시켜주세요.<br>\
+  <b>시작</b>을 누르면 jEdit를 그냥 시작합니다. <br><b>중지</b>를 누르면 실행을 중지하고 설정을 수정합니다. <br>또한 <b>기록 파일을 삭제</b>하고 jEdit를 시작할 수 있습니다</html>
+killring.load-memoryerror.title=메모리 에러
+killring.start=시작
+killring.stop=중지
+killring.delete=기록 파일을 삭제하고 시작
+
+#}}}
+
+#{{{ Macros
+
+#{{{ Properties used by macros
+
+#{{{ common
+macro.rs.general.ErrorNotEditableDialog.title=쓰기 권한
+macro.rs.general.ErrorNotEditableDialog.message=버퍼를 수정할 수 없습니다!
+#}}}
+
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=다음을 포함하는 행 복사:
+macro.rs.CopyLinesContaining.LinesCopied.message=행 복사
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=다음을 포함하는 행 잘라내기:
+macro.rs.CutLinesContaining.LinesCut.message=행 잘라내기
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.label=열 (1 과 {0} 사이):
+#}}}
+
+# Go To Offset
+macro.rs.GoToOffset.label=위치 (0 과 {0} 사이): 
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=키워드를 대문자로 변환했습니다
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=편집모드 전환기
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=편집 모드를 입력하세요:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=버퍼의 편집모드 변환
+macro.rs.BufferModeSwitcher.To.label=로
+macro.rs.BufferModeSwitcher.Mode.label=모드
+macro.rs.BufferModeSwitcher.NotFound.label=찾을 수 없습니다
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=다중 선택 모드에서는 행이동을 할 수 없습니다.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=조회할 디렉토리:
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=버퍼 편집중
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] 전환; [SPACE] 대화창 유지하며 전환 ; [DEL] 버퍼 닫기
+macro.rs.BufferSwitcher.Help1.label=버퍼 전환기 안내:
+macro.rs.BufferSwitcher.Help2.label=DELETE 선택 버퍼 닫음.
+macro.rs.BufferSwitcher.Help3.label=ENTER 대화창 닫으며 전환.
+macro.rs.BufferSwitcher.Help4.label=ESCAPE 대화창 닫음.
+macro.rs.BufferSwitcher.Help5.label=SPACE 대화창 유지하며 전환.
+macro.rs.BufferSwitcher.Help6.label=이 창은 한번만 표시합니다
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=버퍼 원본이 저장소에 존재하지 않습니다.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=삭제를 지원하지 않습니다.
+macro.rs.DeleteCurrent.Deleted.message=삭제:
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=와일드 카드 패턴(예 *.txt 또는 /usr/include/*):
+macro.rs.GlobClose.ErrorGlobPattern.error=와일드 카드 패턴에 오류가 있습니다:
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=변경한 다른 버퍼가 없습니다
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=변경한 버퍼가 없습니다
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=경로 이름:
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=이 매크로는 내부 파일만 지원합니다.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=이 매크로는 Windows, Unix, & MacOS X에서만 지원합니다.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=현재 폰트 크기:
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=타입 이름과 변수 지정 오류.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=자바 인터프리트에서는 이 매크로가 동작하지 않습니다
+macro.rs.GetPackageName.NotWorking2.error=jEdit를 '-jar' 옵션으로 시작하세요
+macro.rs.GetPackageName.NotFind.error=패키지 이름을 찾을 수 없습니다.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=무한 루프:
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=코드 생성
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=Get 메소드 생성
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=Set 메소드 생성
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=Get/Set 메소드 생성
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error=하이퍼 검색 결과 창이 열리지 않습니다.
+macro.rs.HyperSearchResults.NotMatch.error=하이퍼 검색 결과가 없습니다.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=버퍼 디버깅
+macro.rs.DebugBuffersets.BufferCount.label=버퍼 개수:
+macro.rs.DebugBuffersets.BufferList.label=버퍼 목록
+macro.rs.DebugBuffersets.EndBufferList.label=버퍼 목록 끝
+macro.rs.DebugBuffersets.EditpaneList.label=편집창 목록
+macro.rs.DebugBuffersets.EndEditpaneList.label=편집창 목록 끝
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=약어
+macro.rs.DisplayAbbreviations.Expansion.label=확장
+macro.rs.DisplayAbbreviations.Close.label=닫기
+macro.rs.DisplayAbbreviations.WriteSet.label=약어 그룹 내보내기
+macro.rs.DisplayAbbreviations.WriteAll.label=약어 전체 내보내기
+macro.rs.DisplayAbbreviations.AbbreviationList.label=약어 목록
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=새 버퍼에 약어 테이블 쓰기 호출
+macro.rs.DisplayAbbreviations.SizeVector.label=벡터 크기:
+macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit 약어 테이블
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=약어 그룹:
+macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=약어    확장
+macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< 약어가 없습니다 >>
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=jEdit 액션 스크립트 창은 일반적으로 도구 메뉴를 통해 사용합니다
+macro.rs.DisplayActions.jEditActionBar2.label=C+ENTER 키보드 단축키가 할당되어 있습니다.
+macro.rs.DisplayActions.NoLabel.label=<이름 없음>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=커서 위치의 문자 코드:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit 단축키 테이블
+macro.rs.DisplayShortcuts.Name.label=이름
+macro.rs.DisplayShortcuts.Shortcut1.label=단축키 - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=단축키 - 2
+macro.rs.DisplayShortcuts.Close.label=닫기
+macro.rs.DisplayShortcuts.WriteToBuffer.label=버퍼로 내보내기
+macro.rs.DisplayShortcuts.ShortcutList.label=키보드 단축키 목록
+macro.rs.DisplayShortcuts.Center.label=가운데
+macro.rs.DisplayShortcuts.South.label=아래
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=이전:
+macro.rs.HexConvert.After.label=이후:
+macro.rs.HexConvert.NotValidHex.label=는 올바른 16진 스트링이 아닙니다.
+macro.rs.HexConvert.ByteToString.label=스트링으로 변환할 바이트:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=작업 로그 열기 오류.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=버그 리포트에 유용한 작업 로그 항목:\n\n.
+macro.rs.MakeBugReport.MessagejEdit.label=[메시지] jEdit:
+macro.rs.MakeBugReport.NoticejEdit.label=[주의] jEdit:
+macro.rs.MakeBugReport.NoticeJarClassLoader.label=[주의] JARClassLoader:
+macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[메시지] jEdit: 시작 완료
+macro.rs.MakeBugReport.Error.label=[에러]
+macro.rs.MakeBugReport.ReadingActivityLog.error=작업 로그 읽기 오류
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=스크립트 실행에 필요한 파라미터를 입력하세요
+macro.rs.RunScript.ScriptExecutionCancelled.message=스크립트 실행이 취소됨.
+macro.rs.RunScript.FileNotScript.error=현재 파일은 스크립트가 아닙니다.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=대몬
+macro.rs.ShowThreads.Priority.label=우선순위
+macro.rs.ShowThreads.NotStarted.label=시작되지 않음
+macro.rs.ShowThreads.Interrupted.label=가로채기 됨
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] 닫기      [U] 업데이트
+macro.rs.ShowThreads.CurrentThreads.label=현재 쓰레드
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=버퍼 속성 삽입
+macro.rs.InsertBufferProperties.Properties.label=속성:
+macro.rs.InsertBufferProperties.Insert.label=삽입
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=jEdit가 버퍼 속성을 자동으로 인식케 하려면 처음 또는 끝 10행 안에 버퍼 속성을 기술해야 합니다.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--사용자 인터페이스(UI) 속성 목록--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=시스템 속성
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=선택 행 범위에 행단위 접두어/접미어 붙이기
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=추가할 접두어:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=추가할 접미어:
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=색상 선택기
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=인터넷 시간
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=태그 이름 입력:
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=라인 필터
+macro.rs.LineFilter.ignoreCaseCheckBox.label=대소문자 구분 안함
+macro.rs.LineFilter.regexpPanelBorder.title=비교에 사용할 정규식
+macro.rs.LineFilter.processModeRadioButtonMatching.label=정규식에 맞는 행
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=정규식에 맞지 않는 행
+macro.rs.LineFilter.processModeOptionPanelBorder.title=대상 행
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=새 버퍼로 내보내기
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=삭제
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=작업
+
+macro.rs.LineFilter.DeleteActionDisabled.message=삭제 할 수 없습니다
+macro.rs.LineFilter.MultipleSelection.message=다중 선택은 지원하지 않습니다
+macro.rs.LineFilter.BlockSelection.message=사각 선택은 지원하지 않습니다
+
+macro.rs.LineFilter.SummaryDeleted.label=삭제 했습니다!
+macro.rs.LineFilter.SummaryWritten.label=새 버퍼로 내보내기 했습니다!
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=잘못된 정규식
+macro.rs.LineFilter.ErrorRegexpDialog.message=잘못된 정규식입니다!
+#}}}
+
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=문자를 입력하세요
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=죄송합니다, 이 매크로는 사각 선택에는 동작하지 않습니다.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=빈 행이 아닌 행이 있습니다:
+macro.rs.SingleSpaceBuffer.Line.message=행
+macro.rs.SingleSpaceBuffer.NotBlank.message=에 내용이 있습니다.
+#}}}
+
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C
+macros.folder.C.label=C 언어
+
+C/Include_Guard.label=중복 Include 방지 구문
+C/Toggle_Header_Source.label=헤더/소스간 전환
+#}}}
+
+#{{{ Clipboard
+macros.folder.Clipboard.label=클립보드
+
+Clipboard/Copy_Lines.label=행 복사
+Clipboard/Copy_Lines_Containing.label=검색어를 포함하는 행 복사 
+Clipboard/Copy_Visible_Lines.label=보여진(펴진) 행 복사
+Clipboard/Cut_Lines.label=행 잘라내기
+Clipboard/Cut_Lines_Containing.label=검색어를 포함하는 행 잘라내기 
+Clipboard/Paste_Indent.label=들여쓰기로 붙여넣기
+#}}}
+
+#{{{ Editing
+macros.folder.Editing.label=편집
+
+Editing/Duplicate_Lines_Above.label=행범위를 위에 복제
+Editing/Duplicate_Lines_Below.label=행범위를 아래에 복제
+Editing/Go_to_Column.label=특정 열로 이동
+Editing/Greedy_Backspace.label=소프트 탭 Backspace
+Editing/Greedy_Delete.label=소프트 탭 Delete
+Editing/Greedy_Left.label=소프트 탭 Left
+Editing/Greedy_Right.label=소프트 탭 Right
+Editing/Keywords_to_Upper_Case.label=키워드 스타일 단어를 대문자로
+Editing/Mode_Switcher.label=편집 모드 전환기
+Editing/Move_Lines_Down.label=행범위를 아래로 이동
+Editing/Move_Lines_Up.label=행범위를 위로 이동
+Editing/Open_Line_Above.label=위에 빈행 삽입
+Editing/Open_Line_Below.label=아래에 빈행 삽입
+Editing/Toggle_Fold.label=현재 묶음 접기/펴기
+#}}}
+
+#{{{ Emacs
+macros.folder.Emacs.label=Emacs
+Emacs/Emacs_Align_Decls.label=Emacs Align Decls
+Emacs/Emacs_Backward_Sentence.label=Emacs Backward Sentence
+Emacs/Emacs_Capitalize_Word.label=Emacs Capitalize Word
+Emacs/Emacs_Center_Line.label=Emacs Center Line
+Emacs/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Emacs/Emacs_Downcase_Word.label=Emacs Downcase Word
+Emacs/Emacs_Exchange_Point_and_Mark.label=Emacs Exchange Point and Mark
+Emacs/Emacs_Fixup_Whitespace.label=Emacs Fixup Whitespace
+Emacs/Emacs_Forward_Sentence.label=Emacs Forward Sentence
+Emacs/Emacs_Insert_File.label=Emacs Insert File
+Emacs/Emacs_Kill_Line.label=Emacs Kill Line
+Emacs/Emacs_Kill_Region.label=Emacs Kill Region
+Emacs/Emacs_Kill_Ring_Save.label=Emacs Kill Ring Save
+Emacs/Emacs_Kill_Sentence.label=Emacs Kill Sentence
+Emacs/Emacs_Next_Line.label=Emacs Next Line
+Emacs/Emacs_Open_Line.label=Emacs Open Line
+Emacs/Emacs_Previous_Line.label=Emacs Previous Line
+Emacs/Emacs_Set_Mark.label=Emacs Set Mark
+Emacs/Emacs_Set_Wrap=Emacs Set Wrap
+Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
+Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
+Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
+#}}}
+
+#{{{ Files
+macros.folder.Files.label=파일
+
+Files/Browse_Buffer_Directory.label=버퍼 디렉토리 보기
+Files/Browse_Directory.label=디렉토리 보기
+Files/Buffer_Switcher.label=버퍼 전환기
+Files/Close_All_Except_Active.label=작업중인것 제외하고 모두 닫기
+Files/Copy_Name_to_Clipboard.label=이름을 클립보드에 복사
+Files/Copy_Path_to_Clipboard.label=경로를 클립보드에 복사
+Files/Delete_Current.label=현재 파일 삭제
+Files/Duplicate_Buffer.label=버퍼 복제
+Files/Glob_Close.label=파일 와일드 카드로 닫기
+Files/Insert_Selection.label=선택 텍스트로 지정한 파일 이름의 내용을 읽어 선택 영역에 삽입
+Files/Next_Dirty_Buffer.label=변경한 다음 버퍼
+Files/Open_Path.label=경로 열기
+Files/Open_Selection.label=선택 텍스트로 지정한 파일 이름 열기
+Files/Send_Buffer_To_Next_Split.label=버퍼 내용을 다음 분할에 전송
+Files/Toggle_ReadOnly.label=읽기 전용 설정/해제
+#}}}
+
+#{{{ Interface
+macros.folder.Interface.label=UI(사용자 인터페이스)
+
+Interface/Decrease_Font_Size.label=폰트 크기 줄이기
+Interface/Increase_Font_Size.label=폰트 크기 늘이기
+Interface/Open_Context_Menu.label=팝업 메뉴 열기
+Interface/Reset_TextArea.label=텍스트 영역 초기화
+Interface/Splitpane_Grow.label=현재 분할창 크게하기
+Interface/Toggle_Bottom_Docking_Area.label=하단 도킹 영역 전환
+Interface/Toggle_Left_Docking_Area.label=좌측 도킹 영역 전환
+Interface/Toggle_Right_Docking_Area.label=우측 도킹 영역 전환
+Interface/Toggle_Top_Docking_Area.label=상단 도킹 영역 전환
+#}}}
+
+#{{{ Java
+macros.folder.Java.label=Java언어
+
+Java/Create_Constructor.label=생성자 만들기
+Java/Get_Class_Name.label=클래스 이름 가져오기
+Java/Get_Package_Name.label=패키지 이름 가져오기
+Java/Java_File_Save.label=자바 파일 저장
+Java/Make_Get_and_Set_Methods.label=Get/Set 메소드 만들기
+Java/Preview_JavaDoc_Of_Current_Buffer.label=현재 버퍼의 JavaDoc 미리보기
+#}}}
+
+#{{{ Misc
+macros.folder.Misc.label=기타
+
+Misc/Buffer_to_HyperSearch_Results.label=버퍼 내용을 하이퍼 검색 결과로
+Misc/Debug_BufferSets.label=버퍼 디버깅
+Misc/Display_Abbreviations.label=약어표 내보내기
+Misc/Display_Actions.label=액션 스크립트 목록 내보내기
+Misc/Display_Character_Code.label=현재 커서 위치의 문자코드 출력
+Misc/Display_Shortcuts.label=단축키 테이블 내보내기
+Misc/Evaluate_Buffer_in_BeanShell.label=현재 버퍼의 내용을 BeanShell로 실행하고 결과를 새 버퍼에 담음
+Misc/Hex_Convert.label=16진 변환기
+Misc/HyperSearch_Results_to_Buffer.label=하이퍼 검색 결과를 버퍼로
+Misc/Make_Bug_Report.label=버그 리포트 제작
+Misc/Run_Script.label=스크립트 실행
+Misc/Show_Threads.label=쓰레드 보기
+#}}}
+
+#{{{ Properties
+macros.folder.Properties.label=속성
+
+Properties/Create_Plugin_Announcement.label=Plugin Announcement 만들기
+Properties/Insert_Buffer_Properties.label=버퍼 속성 가져오기
+Properties/jEdit_Properties.label=jEdit 속성 가져오기
+Properties/Look_and_Feel_Properties.label=사용자 인터페이스(UI) 속성 가져오기
+Properties/System_Properties.label=시스템 속성 가져오기
+#}}}
+
+#{{{ Text
+macros.folder.Text.label=텍스트
+
+Text/Add_Prefix_and_Suffix.label=행범위에 접두어/접미어 붙이기
+Text/Color_Picker.label=색상 선택기
+Text/Compose_Tag.label=태그 생성하기
+Text/Duplicate_Line.label=행 복제
+Text/Insert_Date.label=일자 삽입
+Text/Insert_Tag.label=태그 삽입
+Text/Line_Filter.label=라인 필터
+Text/Next_Char.label=다음 문자
+Text/Reverse_Lines.label=행 뒤집기
+Text/Single_Space_Buffer.label=버퍼 정리(공백 문자 하나로 만들기)
+#}}}
+
+#}}}
+
+#}}}
