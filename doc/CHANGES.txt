@@ -24,6 +24,8 @@ Marcelo Vanzin, and Eric Le Lay for contributing to this release.
 }}}
 {{{ UI Improvements
 
+- More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)
+
 - EOL marker character is a localizable property (view.eolMarkerChar),
   and an arrow (↩) instead of period (.) (#3902 - Alan Ezust)
 

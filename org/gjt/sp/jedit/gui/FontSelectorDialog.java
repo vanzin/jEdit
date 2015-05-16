@@ -168,7 +168,7 @@ public class FontSelectorDialog extends EnhancedDialog
 			familyList = new JList(fonts));
 		listPanel.add(familyPanel);
 
-		String[] sizes = { "9", "10", "12", "14", "16", "18", "24" };
+		String[] sizes = { "9", "10", "12", "14", "16", "18", "24", "30", "36", "42" };
 		JPanel sizePanel = createTextFieldAndListPanel(
 			"font-selector.size",
 			sizeField = new JTextField(),
@@ -227,7 +227,7 @@ public class FontSelectorDialog extends EnhancedDialog
 		updatePreview();
 
 		Dimension prefSize = preview.getPreferredSize();
-		prefSize.height = 50;
+		prefSize.height = 100;
 		preview.setPreferredSize(prefSize);
 
 		content.add(BorderLayout.CENTER,preview);
