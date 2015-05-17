@@ -261,7 +261,7 @@ view.label=보기($V)
 new-view.label=jEdit 뷰 추가 열기($V)
 new-view.tooltip=별도의 새 jEdit 뷰를 엽니다.
 new-plain-view.label=jEdit 단순뷰 추가 열기($w)
-new-plain-view.tooltip=툴바와 도구창이 없는 jEdit 뷰를 새로 엽니다. 
+new-plain-view.tooltip=툴바와 도구창이 없는 jEdit 뷰를 새로 엽니다.
 close-view.label=jEdit 닫기($C)
 close-view.tooltip=jEdit를 닫습니다, 다른 jEdit 창이 없으면 jEdit를 종료합니다.
 prev-buffer.label=이전 버퍼로 이동($P)
@@ -542,7 +542,7 @@ view.status.memory-tooltip=자바 메모리: {0}Kb/{1}Kb
 view.status.mode-tooltip=현재 편집모드, 접기모드, 인코딩
 view.status.multi-changed=다중선택모드 {0,choice,0#끔|1#켬}
 view.status.multi-tooltip=다중선택모드(변경하려면 클릭하세요)
-view.status.narrow=모든 텍스트를 다시 보려면 "모든 묶음 펴기"를 수행하세요 
+view.status.narrow=모든 텍스트를 다시 보려면 "모든 묶음 펴기"를 수행하세요
 view.status.no-markers=마커가 없습니다.
 view.status.no-registers=정의한 레지스터가 없습니다.
 view.status.overwrite-changed=덮어쓰기 모드 {0,choice,0#끔|1#켬}
@@ -1151,7 +1151,7 @@ folding-not-explicit.message=이 명령은 명시적(explicit) 접기 모드에�
 #{{{ Memory status dialog box
 memory-status.title=자바 메모리
 memory-status.gc={0} Kb를 정리 했습니다.
-memory-status.use=전체{1} Kb, {0} Kb 사용 
+memory-status.use=전체{1} Kb, {0} Kb 사용
 #}}}
 
 #{{{ Multiple I/O request errors
@@ -1335,7 +1335,7 @@ options.editing.largefilemode.title=대용량 파일 모드
 options.editing.largefilemode=매우 큰 파일 처리 방법:
 options.editing.largefilemode.option.ask=<html><b>묻기</b> 큰 파일을 열때 무엇을 할지 묻는다</html>
 options.editing.largefilemode.option.full=<html><b>전체 문법 표시</b> : jEdit의 문법 표시 기능은 그대로 동작 시킴 \
-                                               	<br/><b>매우 느려집니다. 주의하세요</b></html>
+						<br/><b>매우 느려집니다. 주의하세요</b></html>
 options.editing.largefilemode.option.limited=<html><b>불완전하게 문법 표시</b>: 이경우 jEdit는 \
 		빠르게 동작할 수 있지만<br/>문맥을 무시한 문법 표시로 불완전한 결과이며 \
 		soft 폭 맞추기도 동작하지 않습니다<b>(추천)</b></html>
@@ -2097,7 +2097,7 @@ macro.rs.GoToColumn.label=열 (1 과 {0} 사이):
 #}}}
 
 # Go To Offset
-macro.rs.GoToOffset.label=위치 (0 과 {0} 사이): 
+macro.rs.GoToOffset.label=위치 (0 과 {0} 사이):
 
 #{{{ Key Words to Uppercase
 macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=키워드를 대문자로 변환했습니다
@@ -2375,10 +2375,10 @@ C/Toggle_Header_Source.label=헤더/소스간 전환
 macros.folder.Clipboard.label=클립보드
 
 Clipboard/Copy_Lines.label=행 복사
-Clipboard/Copy_Lines_Containing.label=검색어를 포함하는 행 복사 
+Clipboard/Copy_Lines_Containing.label=검색어를 포함하는 행 복사
 Clipboard/Copy_Visible_Lines.label=보여진(펴진) 행 복사
 Clipboard/Cut_Lines.label=행 잘라내기
-Clipboard/Cut_Lines_Containing.label=검색어를 포함하는 행 잘라내기 
+Clipboard/Cut_Lines_Containing.label=검색어를 포함하는 행 잘라내기
 Clipboard/Paste_Indent.label=들여쓰기로 붙여넣기
 #}}}
 

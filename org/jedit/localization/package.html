@@ -1,9 +1,21 @@
 <html>
+<!-- :encoding=utf-8: -->
 <body>
-This folder contains property files for localization in different
+<p>This folder contains property files for localization in different
 languages. To add another localization to jEdit, you can add
-a new property file to this folder, but be sure to also update the
+a new property file to this folder, but be sure to also do the following. </p>
+<ol>
+<li> Update the
 <tt>available.lang</tt> property in <tt>jedit.props</tt> to list
 the 2-letter localization code for the language you added.
+</li>
+<li> Add a new property in <tt>jedit_gui.props</tt> for the "display name"
+of the new language, preferably in the language itself. For example:
+<pre>
+options.appearance.lang.ja=日本語
+</pre>
+</li>
+</ol>
+
 </body>
 </html>
