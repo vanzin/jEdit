@@ -519,6 +519,9 @@
         FILE_NAME_GLOB="*.{rb,rbw}"
         FIRST_LINE_GLOB="#!*/*ruby*" />
 
+<MODE NAME="rust"		FILE="rust.xml"
+				FILE_NAME_GLOB="*.rs" />
+
 <MODE NAME="rview"		FILE="rview.xml"
         FILE_NAME_GLOB="*.rvw" />
 
