@@ -4873,9 +4873,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		// Calculate an average to use a reasonable value for
 		// propotional fonts.
 		String charWidthSample = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		charWidth = (int)Math.round(
+		charWidthDouble =
 			painter.getFont().getStringBounds(charWidthSample,
-				painter.getFontRenderContext()).getWidth() / charWidthSample.length());
+				painter.getFontRenderContext()).getWidth() / charWidthSample.length();
+	    charWidth = (int)Math.round(charWidthDouble);
+
 
 		String oldWrap = wrap;
 		wrap = buffer.getStringProperty("wrap");
@@ -4959,6 +4961,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	int wrapMargin;
 	float tabSize;
 	int charWidth;
+	double charWidthDouble;
 
 	boolean scrollBarsInitialized;
 
@@ -6007,7 +6010,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			int estimate = charWidth * maxLineLen;
+			int estimate = (int)Math.ceil(charWidthDouble * maxLineLen);
 			if (softWrap && painter.getWidth() < estimate)
 			{
 				wrapToWidth = true;

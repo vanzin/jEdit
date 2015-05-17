@@ -12,6 +12,8 @@ to this release.
 
 {{{ Bug Fixes
 
+- More accurate wrap margin calculation (Patch#555 - Makarius)
+
 - Fix AWT thread-safety issue in VFSManager.error(). (Marcelo Vanzin)
 
 - Order of unsorted buffers now preserved in View.getBuffers()
@@ -64,6 +66,8 @@ to this release.
 
 }}}
 {{{ Editing
+
+- Updates to Scala Mode (Patch #554 - Makarius)
 
 - New mode for rust (Patch #553 - Jordan Miner)
 

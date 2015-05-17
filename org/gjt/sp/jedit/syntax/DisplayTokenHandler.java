@@ -60,13 +60,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		this.fontRenderContext = fontRenderContext;
 		this.expander = expander;
 		this.out = out;
-
-		// SILLY: allow for anti-aliased characters' "fuzz"
-		if(wrapMargin != 0.0f)
-			this.wrapMargin = wrapMargin + 2.0f;
-		else
-			this.wrapMargin = 0.0f;
-
+		this.wrapMargin = wrapMargin;
 		this.physicalLineOffset = physicalLineOffset;
 	} //}}}
 
