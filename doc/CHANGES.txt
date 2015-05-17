@@ -64,6 +64,8 @@ Marcelo Vanzin, yaraba, and Eric Le Lay for contributing to this release.
 }}}
 {{{ Editing
 
+- New mode for Kotlin syntax (Patch #552 - Sergey Mashkov)
+
 - Updates to cfscript mode (Patch #531 - Darien Brown)
 
 - New mode for ANS Forth 1994 (Patch #530 - Mark Corbin)
