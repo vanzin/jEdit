@@ -1889,8 +1889,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isFoldEnd(int line)
 	{
-		return line != getLineCount() - 1
-			&& getFoldLevel(line) > getFoldLevel(line + 1);
+        int foldLevel = getFoldLevel(line);
+        int nextLineFoldLevel = line == getLineCount() - 1 ? 0 : getFoldLevel(line + 1);
+        return foldLevel > nextLineFoldLevel;
 	} //}}}
 
 	//{{{ invalidateCachedFoldLevels() method
