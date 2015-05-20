@@ -22,7 +22,6 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.gui.KeyEventTranslator;
 
 import java.awt.event.*;
 import java.awt.*;
@@ -38,13 +37,13 @@ import java.awt.*;
  */
 public abstract class EnhancedDialog extends JDialog
 {
-	public EnhancedDialog(Frame parent, String title, boolean modal)
+	protected EnhancedDialog(Frame parent, String title, boolean modal)
 	{
 		super(parent,title,modal);
 		_init();
 	}
 
-	public EnhancedDialog(Dialog parent, String title, boolean modal)
+    protected EnhancedDialog(Dialog parent, String title, boolean modal)
 	{
 		super(parent,title,modal);
 		_init();
@@ -67,7 +66,7 @@ public abstract class EnhancedDialog extends JDialog
 	private void _init()
 	{
 		((Container)getLayeredPane()).addContainerListener(
-			new ContainerHandler());
+                new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
 
 		keyHandler = new KeyHandler();
@@ -87,12 +86,14 @@ public abstract class EnhancedDialog extends JDialog
 	// Recursively adds our key listener to sub-components
 	class ContainerHandler extends ContainerAdapter
 	{
-		public void componentAdded(ContainerEvent evt)
+		@Override
+        public void componentAdded(ContainerEvent evt)
 		{
 			componentAdded(evt.getChild());
 		}
 
-		public void componentRemoved(ContainerEvent evt)
+		@Override
+        public void componentRemoved(ContainerEvent evt)
 		{
 			componentRemoved(evt.getChild());
 		}
@@ -126,7 +127,8 @@ public abstract class EnhancedDialog extends JDialog
 
 	class KeyHandler extends KeyAdapter
 	{
-		public void keyPressed(KeyEvent evt)
+		@Override
+        public void keyPressed(KeyEvent evt)
 		{
 			if(evt.isConsumed()) return;
 			Component comp = getFocusOwner();
@@ -136,7 +138,7 @@ public abstract class EnhancedDialog extends JDialog
 				{
 					if(comp instanceof JComboBox)
 					{
-						JComboBox combo = (JComboBox)comp;
+						JComboBox<?> combo = (JComboBox<?>)comp;
 						if(combo.isEditable())
 						{
 							Object selected = combo.getEditor().getItem();
@@ -157,58 +159,52 @@ public abstract class EnhancedDialog extends JDialog
 				evt.consume();
 				ok();
 			}
-			else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE
-					||
-					isCloseBufferShortcut(evt)
-					)
+			else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE ||
+					isCloseBufferShortcut(evt))
 			{
 				evt.consume();
-				if(comp instanceof JComboBox)
+				if (comp instanceof JComboBox)
 				{
-					JComboBox combo = (JComboBox)comp;
+					JComboBox<?> combo = (JComboBox<?>)comp;
 					if (combo.isPopupVisible())
-					{
 						combo.setPopupVisible(false);
-					}
 					else cancel();
 				}
-				else cancel();
+				else
+					cancel();
 			}
 		}
 
-		private boolean isCloseBufferShortcut(KeyEvent evt) {
-
+		private boolean isCloseBufferShortcut(KeyEvent evt)
+		{
 			String[] s = GUIUtilities.getShortcutLabel("close-buffer", false).split(" or ");
 
-			if(s.length == 1){ // w/o alternative shortcut
-
+			if(s.length == 1)
+			{ // w/o alternative shortcut
 				if(s[0].contains(" "))  //primary shortcut is a multiple-key shortcut
 					return false;
-				else{
+				else
 					return KeyEventTranslator.parseKey(s[0]).equals(KeyEventTranslator.translateKeyEvent(evt));
-				}
-			}
-			else{ // w/ alternative shortcut
-				boolean primarymatch,altmatch;
-				primarymatch=altmatch=false;
+			} // w/ alternative shortcut
+			boolean primarymatch,altmatch;
+			primarymatch=altmatch=false;
 
-				if(!s[0].contains(" "))
-					primarymatch=KeyEventTranslator.parseKey(s[0]).equals(KeyEventTranslator.translateKeyEvent(
-						evt));
+			if(!s[0].contains(" "))
+				primarymatch = KeyEventTranslator.parseKey(s[0]).equals(KeyEventTranslator.translateKeyEvent(evt));
 
-				if(!primarymatch && !s[1].contains(" "))
-					altmatch=KeyEventTranslator.parseKey(s[1]).equals(KeyEventTranslator.translateKeyEvent(evt));
+			if(!primarymatch && !s[1].contains(" "))
+				altmatch = KeyEventTranslator.parseKey(s[1]).equals(KeyEventTranslator.translateKeyEvent(evt));
 
-				if(primarymatch || altmatch)
-					return true;
-			}
+			if (primarymatch || altmatch)
+				return true;
 			return false;
 		}
 	}
 
 	class WindowHandler extends WindowAdapter
 	{
-		public void windowClosing(WindowEvent evt)
+		@Override
+        public void windowClosing(WindowEvent evt)
 		{
 			cancel();
 		}
