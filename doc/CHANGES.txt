@@ -46,6 +46,9 @@ to this release.
 }}}
 {{{ Miscellaneous
 
+- More conventional color scheme for diffs and changesets
+  (Patch #560 - Makarius)
+
 - New Korean translation file (Patch #551 - yaraba)
 
 - Resize performance improvement (Patch #547 - Sergey Mashkov)
