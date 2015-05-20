@@ -5,7 +5,7 @@
 -->
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- updated for Rust 1.0-beta -->
+<!-- updated for Rust 1.0 -->
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
@@ -21,19 +21,19 @@
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0b[01_]+|0o[0-8_]+|0x[0-9a-fA-F_]+|[0-9_]+)([iu](8|16|32|64)|is|us)?|[0-9_]+([eE][0-9_]*)?(f32|f64)?">
+		DIGIT_RE="(0b[01_]+|0o[0-8_]+|0x[0-9a-fA-F_]+|[0-9_]+)([iu](8|16|32|64)|isize|usize)?|[0-9_]+([eE][0-9_]*)?(f32|f64)?">
 
 		<!-- Silly comment -->
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
 
 		<!-- Doc comment -->
-		<SPAN TYPE="COMMENT3">
+		<SPAN TYPE="COMMENT3" DELEGATE="NESTED_DOC_COMMENT">
 			<BEGIN>/**</BEGIN>
 			<END>*/</END>
 		</SPAN>
 
 		<!-- Range comment -->
-		<SPAN TYPE="COMMENT1">
+		<SPAN TYPE="COMMENT1" DELEGATE="NESTED_COMMENT">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
 		</SPAN>
@@ -277,6 +277,23 @@
 
 		<KEYWORD2>derive</KEYWORD2>
 	</KEYWORDS>
+	</RULES> <!--}}}-->
+
+	<!--{{{ NESTED_DOC_COMMENT rule -->
+	<RULES SET="NESTED_DOC_COMMENT" DEFAULT="COMMENT3">
+		<!-- mark everything in doc comment as doc comment -->
+		<SPAN TYPE="COMMENT3" DELEGATE="NESTED_DOC_COMMENT">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+	</RULES> <!--}}}-->
+
+	<!--{{{ NESTED_COMMENT rule -->
+	<RULES SET="NESTED_COMMENT" DEFAULT="COMMENT1">
+		<SPAN TYPE="COMMENT1" DELEGATE="NESTED_COMMENT">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
 	</RULES> <!--}}}-->
 
 </MODE>

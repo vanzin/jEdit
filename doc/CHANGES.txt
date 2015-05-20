@@ -71,7 +71,7 @@ to this release.
 
 - Updates to Scala Mode (Patch #554 - Makarius)
 
-- New mode for rust (Patch #553 - Jordan Miner)
+- New mode for rust (Patches #553, #556 - Jordan Miner)
 
 - New mode for Kotlin syntax (Patch #552 - Sergey Mashkov)
 
