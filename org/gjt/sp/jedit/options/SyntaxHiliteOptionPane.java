@@ -228,10 +228,11 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 		//{{{ addStyleChoice() method
 		private void addStyleChoice(String label, String property)
 		{
+			Font font = new JLabel().getFont();
 			styleChoices.add(new StyleChoice(label,
 			                                 property,
 			                                 GUIUtilities.parseStyle(jEdit.getProperty(property),
-			                                                         "Dialog",12)));
+			                                                         font.getFamily(), font.getSize())));
 		} //}}}
 
 		//{{{ StyleChoice class

@@ -29,6 +29,8 @@ to this release.
 }}}
 {{{ UI Improvements
 
+- Proper L&F font for syntax style table (Patch #558 - Makarius)
+
 - Proper row height default for JTable (Patch #557 - Makarius)
 
 - More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)
