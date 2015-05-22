@@ -303,6 +303,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		}
 
 		paneTree = new JTree(optionTreeModel);
+		paneTree.setRowHeight(0);
 		paneTree.setRootVisible(false);
 		paneTree.setCellRenderer(new PaneNameRenderer());
 		

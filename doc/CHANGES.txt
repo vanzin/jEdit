@@ -12,7 +12,8 @@ to this release.
 
 {{{ Bug Fixes
 
-- JEditBuffer.isFoldEnd() was unable to detect the fold end when it was the last line (#3917 - Matthieu Casanova)
+- JEditBuffer.isFoldEnd() was unable to detect the fold end when it was the
+  last line (#3917 - Matthieu Casanova)
 
 - More accurate wrap margin calculation (Patch#555 - Makarius)
 

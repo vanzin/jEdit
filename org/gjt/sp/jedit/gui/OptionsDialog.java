@@ -306,6 +306,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		stage = new JScrollPane();
 
 		paneTree = new JTree(createOptionTreeModel());
+		paneTree.setRowHeight(0);
 		paneTree.setVisibleRowCount(1);
 		paneTree.setCellRenderer(new PaneNameRenderer());
 

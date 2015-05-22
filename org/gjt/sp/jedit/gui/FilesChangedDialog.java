@@ -113,6 +113,7 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		bufferTreeModel = new DefaultTreeModel(root);
 		bufferTree = new JTree(bufferTreeModel);
+		bufferTree.setRowHeight(0);
 		bufferTree.setRootVisible(false);
 		bufferTree.setVisibleRowCount(10);
 		bufferTree.setCellRenderer(new Renderer());

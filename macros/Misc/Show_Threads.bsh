@@ -120,6 +120,7 @@ JFrame createThreadsFrame() {
 
 
 	tree = new JTree(createModel());
+	tree.setRowHeight(0);
 	tree.putClientProperty("JTree.lineStyle", "Angled");
 	tree.addKeyListener(this);
 
