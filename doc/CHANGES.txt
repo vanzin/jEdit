@@ -31,7 +31,7 @@ to this release.
 
 - Proper L&F font for syntax style table (Patch #558 - Makarius)
 
-- Proper row height default for JTable (Patch #557 - Makarius)
+- Proper row height default for JTable, JTree (Patch #557, #559 - Makarius)
 
 - More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)
 
