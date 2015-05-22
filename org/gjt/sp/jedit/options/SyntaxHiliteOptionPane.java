@@ -84,6 +84,7 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	{
 		styleModel = createStyleTableModel();
 		styleTable = new JTable(styleModel);
+		styleTable.setRowHeight(GUIUtilities.defaultRowHeight());
 		styleTable.setRowSelectionAllowed(false);
 		styleTable.setColumnSelectionAllowed(false);
 		styleTable.setCellSelectionEnabled(false);

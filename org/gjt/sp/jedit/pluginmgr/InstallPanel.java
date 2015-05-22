@@ -98,7 +98,7 @@ class InstallPanel extends JPanel implements EBComponent
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0,0));
-		table.setRowHeight(table.getRowHeight() + 2);
+		table.setRowHeight(GUIUtilities.defaultRowHeight() + 2);
 		table.setPreferredScrollableViewportSize(new Dimension(500,200));
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));

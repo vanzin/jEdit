@@ -29,6 +29,8 @@ to this release.
 }}}
 {{{ UI Improvements
 
+- Proper row height default for JTable (Patch #557 - Makarius)
+
 - More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)
 
 - EOL marker character is a localizable property (view.eolMarkerChar),
@@ -45,9 +47,6 @@ to this release.
 
 }}}
 {{{ Miscellaneous
-
-- More conventional color scheme for diffs and changesets
-  (Patch #560 - Makarius)
 
 - New Korean translation file (Patch #551 - yaraba)
 
@@ -71,6 +70,9 @@ to this release.
 
 }}}
 {{{ Editing
+
+- More conventional color scheme for diffs and changesets
+  (Patch #560 - Makarius)
 
 - Updates to Scala Mode (Patch #554 - Makarius)
 

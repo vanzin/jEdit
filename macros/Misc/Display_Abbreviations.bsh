@@ -153,6 +153,7 @@ void showAbbrevs()
 	columnNames.addElement(new String(AbbreviationLabel));
 	columnNames.addElement(new String(ExpansionLabel));
 	table = new JTable();
+	table.setRowHeight(GUIUtilities.defaultRowHeight());
 	table.setModel(new DefaultTableModel(data, columnNames));
 	table.setRowSelectionAllowed(true);
 	/* 	The next line prevents the table from being edited.

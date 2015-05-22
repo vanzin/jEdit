@@ -59,6 +59,7 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 
 		colorsModel = new BrowserColorsModel();
 		colorsTable = new JTable(colorsModel);
+		colorsTable.setRowHeight(GUIUtilities.defaultRowHeight());
 		colorsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		colorsTable.getTableHeader().setReorderingAllowed(false);
 		colorsTable.addMouseListener(new MouseHandler());

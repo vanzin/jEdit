@@ -72,6 +72,7 @@ public class TaskMonitor extends JPanel implements TaskListener
 			}
 		});
 		table = new JTable(model);
+		table.setRowHeight(GUIUtilities.defaultRowHeight());
 		table.setDefaultRenderer(Object.class, new TaskCellRenderer());
 		table.getTableHeader().setVisible(false);
 		table.setDefaultEditor(Object.class, new TaskTableEditor());

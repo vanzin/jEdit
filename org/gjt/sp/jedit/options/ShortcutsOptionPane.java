@@ -153,6 +153,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		keyTable = new JTable(filteredModel);
 		filteredModel.setTable(keyTable);
+		keyTable.setRowHeight(GUIUtilities.defaultRowHeight());
 		keyTable.getTableHeader().setReorderingAllowed(false);
 		keyTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
 		keyTable.addMouseListener(new TableMouseHandler());

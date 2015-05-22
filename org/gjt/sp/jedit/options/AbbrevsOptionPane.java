@@ -96,6 +96,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
 		abbrevsTable = new JTable(globalAbbrevs);
+		abbrevsTable.setRowHeight(GUIUtilities.defaultRowHeight());
 		abbrevsTable.getColumnModel().getColumn(1).setCellRenderer(
 			new Renderer());
 		abbrevsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

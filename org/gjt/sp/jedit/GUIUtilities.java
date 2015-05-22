@@ -65,6 +65,7 @@ import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 
 
 import java.awt.*;
@@ -1853,6 +1854,19 @@ public class GUIUtilities
 		defaults.put("Button.contentMargins", margin);
 		defaults.put("ToggleButton.contentMargins", margin);
 		button.putClientProperty("Nimbus.Overrides", defaults);
+	} //}}}
+
+	//{{{ defaultRowHeight() method
+	/**
+	 * Row height for JTable, based on global defaults.
+	 */
+	public static int defaultRowHeight()
+	{
+		JLabel label = new JLabel("dummy");
+		UIDefaults defaults = UIManager.getDefaults();
+		Object font = defaults.get("Table.font");
+		if (font instanceof Font) label.setFont((Font)font);
+		return label.getPreferredSize().height;
 	} //}}}
 
 	//{{{ addSizeSaver() method

@@ -157,6 +157,7 @@ void showShortcuts(View view)
 	Collections.sort(v, new StandardUtilities.StringCompare());
 
 	table = new JTable(v, makeRow( NameLabel, Shortcut1Label, Shortcut2Label));
+	table.setRowHeight(GUIUtilities.defaultRowHeight());
 	table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	table.setRowSelectionAllowed(true);
 	/* 	The next line prevents the table from being edited.
