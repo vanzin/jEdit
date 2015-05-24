@@ -30,9 +30,11 @@ to this release.
 }}}
 {{{ UI Improvements
 
+- Scalable ColorWell icon according to UI font (Makarius)
+
 - Proper L&F font for syntax style table (Patch #558 - Makarius)
 
-- Proper row height default for JTable, JTree with 4k displays
+- Proper row height default for JTable, JTree with 4K displays
   (Patches #557, #559, #562, #563 - Makarius)
 
 - More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)

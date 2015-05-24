@@ -76,14 +76,16 @@ public class ColorWellButton extends JButton
 			this.color = color;
 		}
 
+		private Dimension dim = new JLabel("******").getPreferredSize();
+
 		public int getIconWidth()
 		{
-			return 35;
+			return dim.width - 4;
 		}
 
 		public int getIconHeight()
 		{
-			return 10;
+			return dim.height - 4;
 		}
 
 		public void paintIcon(Component c, Graphics g, int x, int y)
