@@ -30,6 +30,8 @@ to this release.
 }}}
 {{{ UI Improvements
 
+- Scalable GUI for tip-of-the-day (Makarius)
+
 - Scalable ColorWell icon according to UI font (Makarius)
 
 - Proper L&F font for syntax style table (Patch #558 - Makarius)

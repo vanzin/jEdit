@@ -46,7 +46,7 @@ public class TipOfTheDay extends EnhancedDialog
 		setContentPane(content);
 
 		JLabel label = new JLabel(jEdit.getProperty("tip.caption"));
-		label.setFont(new Font("SansSerif",Font.PLAIN,24));
+		label.setFont(label.getFont().deriveFont(label.getFont().getSize2D() * 2.0f));
 		label.setForeground(UIManager.getColor("Button.foreground"));
 		content.add(BorderLayout.NORTH,label);
 
