@@ -104,6 +104,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
 		resultTree = new HighlightingTree(resultTreeModel);
+		resultTree.setRowHeight(0);
 		resultTree.setToolTipText(null);
 		resultTree.setCellRenderer(new ResultCellRenderer());
 		resultTree.setVisibleRowCount(16);

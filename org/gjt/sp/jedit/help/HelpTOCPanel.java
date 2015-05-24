@@ -62,6 +62,7 @@ public class HelpTOCPanel extends JPanel
 		if(!OperatingSystem.isMacOSLF())
 			toc.putClientProperty("JTree.lineStyle", "Angled");
 
+		toc.setRowHeight(0);
 		toc.setCellRenderer(new TOCCellRenderer());
 		toc.setEditable(false);
 		toc.setShowsRootHandles(true);

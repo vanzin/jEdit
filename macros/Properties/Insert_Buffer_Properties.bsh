@@ -97,6 +97,7 @@ BufferLocalPropertiesDialog(View view){
 	_entries.copyInto(entries);
 
 	checkBox = new JCheckBoxList(entries);
+	checkBox.setRowHeight(GUIUtilities.defaultRowHeight());
 	checkBox.addKeyListener(this);
 	content.add(new JScrollPane(checkBox),
 		BorderLayout.CENTER);
