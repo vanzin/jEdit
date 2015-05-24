@@ -58,7 +58,7 @@ public class TipOfTheDay extends EnhancedDialog
 		nextTip();
 
 		JScrollPane scroller = new JScrollPane(tipText);
-		scroller.setPreferredSize(new Dimension(150,150));
+		scroller.setPreferredSize(new Dimension(250,250));
 		content.add(BorderLayout.CENTER,scroller);
 
 		ActionHandler actionHandler = new ActionHandler();
