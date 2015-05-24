@@ -53,6 +53,7 @@ public class TipOfTheDay extends EnhancedDialog
 		tipText = new JEditorPane();
 		tipText.setEditable(false);
 		tipText.setContentType("text/html");
+		tipText.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 
 		nextTip();
 
