@@ -3936,6 +3936,8 @@ public class jEdit
 
 		defaults.remove("SplitPane.border");
 		defaults.remove("SplitPaneDivider.border");
+		
+		defaults.put("Tree.rowHeight", 0);
 
 		JFrame.setDefaultLookAndFeelDecorated(
 			getBooleanProperty("decorate.frames"));
