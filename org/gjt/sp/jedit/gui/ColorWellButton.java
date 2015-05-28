@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
@@ -76,16 +78,18 @@ public class ColorWellButton extends JButton
 			this.color = color;
 		}
 
-		private Dimension dim = new JLabel("******").getPreferredSize();
+		private Rectangle2D bounds =
+				new JLabel("").getFont().createGlyphVector(
+						new FontRenderContext(null, false, false), "AAAA").getVisualBounds();
 
 		public int getIconWidth()
 		{
-			return dim.width - 4;
+			return (int)Math.ceil(bounds.getWidth());
 		}
 
 		public int getIconHeight()
 		{
-			return dim.height - 4;
+			return (int)Math.ceil(bounds.getHeight());
 		}
 
 		public void paintIcon(Component c, Graphics g, int x, int y)
