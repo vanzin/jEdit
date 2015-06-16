@@ -184,8 +184,8 @@
             <listitem>
                 <informalexample>
                     <programlisting>public class QuickNotepadPlugin extends EditPlugin {
-	public static final String NAME = "quicknotepad";
-	public static final String OPTION_PREFIX = "options.quicknotepad.";
+  public static final String NAME = "quicknotepad";
+  public static final String OPTION_PREFIX = "options.quicknotepad.";
 }
 </programlisting>
                 </informalexample>
@@ -206,26 +206,26 @@
                     <programlisting>
 &lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
 &lt;ACTIONS&gt;
-	&lt;ACTION NAME="quicknotepad.choose-file"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.choose-file"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 
-	&lt;ACTION NAME="quicknotepad.save-file"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.save-file"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 
-	&lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 &lt;/ACTIONS&gt;
 </programlisting>
                 </informalexample>
@@ -260,15 +260,15 @@ plugin.QuickNotepadPlugin.version=4.5
 plugin.QuickNotepadPlugin.docs=index.html
 
 # we only have one dependency, jEdit 4.5
-# See jEdit.getBuild() to understand version numbering scheme. 
+# See jEdit.getBuild() to understand version numbering scheme.
 plugin.QuickNotepadPlugin.depend.0=jedit 4.05.99.00
 
 # quicknotepad's plugin menu - a list of actions or separators
 plugin.QuickNotepadPlugin.menu=quicknotepad \
-	- \
-	quicknotepad.choose-file \
-	quicknotepad.save-file \
-	quicknotepad.copy-to-buffer
+  - \
+  quicknotepad.choose-file \
+  quicknotepad.save-file \
+  quicknotepad.copy-to-buffer
 
 # action labels for actions supplied by dockables.xml
 quicknotepad.label=QuickNotepad
@@ -454,15 +454,15 @@ options.quicknotepad.filepath=</programlisting>
         </tip>
 
 
-      <section id="localizationfiles"> 
+      <section id="localizationfiles">
       <title> Localization Files </title>
-      
+
       <para> In addition to property files ending in <literal>.props</literal>,
       you will find property files with the names like       <literal>lang_de.properties</literal>. Each of these files provides
-      localized strings for a particular locale. In the example above, it is for the German locale. These files are loaded by jEdit automatically when that locale is in use. They need to have a different filename extension from the other property files so they can be treated differently from 
+      localized strings for a particular locale. In the example above, it is for the German locale. These files are loaded by jEdit automatically when that locale is in use. They need to have a different filename extension from the other property files so they can be treated differently from
       the regular properties. </para>
       </section>
-      
+
     </section>
     <section id="plugin-implement-editbus">
         <title>The EditBus</title>
@@ -577,34 +577,34 @@ else if(msg instanceof ViewUpdate) {
 
         <informalexample>
             <programlisting>&lt;ACTIONS&gt;
-	&lt;ACTION NAME="quicknotepad.choose-file"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.choose-file"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 
-	&lt;ACTION NAME="quicknotepad.save-file"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.save-file"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 
-	&lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
-		&lt;CODE&gt;
-			wm.addDockableWindow(QuickNotepadPlugin.NAME);
-			wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
-		&lt;/CODE&gt;
-	&lt;/ACTION&gt;
+  &lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
+    &lt;CODE&gt;
+      wm.addDockableWindow(QuickNotepadPlugin.NAME);
+      wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
+    &lt;/CODE&gt;
+  &lt;/ACTION&gt;
 &lt;/ACTIONS&gt;</programlisting>
         </informalexample>
 
         <tip> <title> Actions in jEdit core </title>
         <para> You can see how each action in jEdit core is implemented by
         inspecting the <literal>actions.xml</literal> file that is there. </para>
-        </tip>        
-        
+        </tip>
+
         <para>This file defines three actions. They each use a built-in variable
         <literal>wm</literal>, which refers to the current view's <ulink
         url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
@@ -665,9 +665,9 @@ else if(msg instanceof ViewUpdate) {
 &lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
 
 &lt;DOCKABLES&gt;
-	&lt;DOCKABLE NAME="quicknotepad"&gt;
-		new QuickNotepad(view, position);
-	&lt;/DOCKABLE&gt;
+  &lt;DOCKABLE NAME="quicknotepad"&gt;
+    new QuickNotepad(view, position);
+  &lt;/DOCKABLE&gt;
 &lt;/DOCKABLES&gt;</programlisting>
         </informalexample>
 
@@ -698,12 +698,12 @@ else if(msg instanceof ViewUpdate) {
         also contains the public interface you should use for getting, showing,
         hiding, and other interactions with the plugin's top-level
         windows.</para>
-        
-        
+
+
         <tip> <title> jEdit's dockables </title> <para> jEdit has its own
         <literal>dockables.xml</literal> file that you can inspect to see how
         jEdit creates its own dockables. </para> </tip>
-        
+
     </section>
 
     <section id="plugin-implement-services">
@@ -734,7 +734,7 @@ else if(msg instanceof ViewUpdate) {
     &lt;/SERVICE&gt;
   [...]
 &lt;/SERVICES&gt;
-    
+
 </programlisting>
         </informalexample>
 
@@ -756,7 +756,7 @@ else if(msg instanceof ViewUpdate) {
         attributes mean, as well as how to register and use services.
         You can also inspect the <literal>services.xml</literal> file of jEdit
         core to see what services are offered by jEdit itself. </para>
-        
+
     </section>
 
     <section id="plugin-implement-quicknotepad">
@@ -1223,7 +1223,7 @@ else if(msg instanceof ViewUpdate) {
             </listitem>
         </itemizedlist>
 
-        <para>Because this build file and the one of most plugins import a
+        <para>Because this build file and those used by most plugins import a
         <literal>build.properties</literal> file from the current and the parent
         directories, it is possible to build most of jEdit's plugins in a
         uniform way by setting the common properties in a single
