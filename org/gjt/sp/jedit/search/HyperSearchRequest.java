@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+import java.util.concurrent.Callable;
 import javax.swing.tree.*;
 import javax.swing.*;
 
@@ -123,7 +124,7 @@ class HyperSearchRequest extends Task
 							break;
 						}
 					}
-					String file = files[i];
+					final String file = files[i];
 					current++;
 
 					long currentTime = System.currentTimeMillis();
@@ -134,7 +135,14 @@ class HyperSearchRequest extends Task
 						results.setSearchStatus(searchingCaption + file);
 					}
 
-					Buffer buffer = jEdit.openTemporary(null,null,file,false);
+					Buffer buffer = ThreadUtilities.callInDispatchThread(
+						new Callable<Buffer>()
+						{
+							@Override
+							public Buffer call() {
+								return jEdit.openTemporary(null,null,file,false);
+							}
+						});
 					if(buffer != null)
 					{
 						// Wait for the buffer to load
