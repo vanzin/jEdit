@@ -807,6 +807,7 @@
 					 encoding="UTF-8"
 					 docencoding="UTF-8"
 					 charset="UTF-8">
+					<arg value="-Xdoclint:none" />
 					<group title="jEdit 5 API"
 					       packages="org.jedit.*"/>
 					<group title="jEdit 4 API"
