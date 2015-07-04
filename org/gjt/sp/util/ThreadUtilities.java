@@ -25,19 +25,21 @@ package org.gjt.sp.util;
 //{{{ Imports
 import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 //}}}
 
 /**
  * The threadpool of jEdit.
  * It uses a ExecutorService from the java.util.concurrent package.
  * You can run {@link Task} or {@link Runnable} in it, Runnables will be
- * encapsulated in Task and displayed in the Task Monitor. 
+ * encapsulated in Task and displayed in the Task Monitor.
  *
  * @author Matthieu Casanova
  * @author Marcelo Vanzin
@@ -53,7 +55,7 @@ public class ThreadUtilities
 	 * The difference with VFSManager.runInAWTThread() method is that
 	 * this one will not wait for IO Request before being executed
 	 *
-	 * @param runnable the runnable to run - it should return something meaningful from 
+	 * @param runnable the runnable to run - it should return something meaningful from
 	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThread(Runnable runnable)
@@ -74,7 +76,7 @@ public class ThreadUtilities
 	 *  <ul><li>this method runs the runnable after them</li>
 	 *  <li><code>invokeAndWait</code> runs the runnable before them
 	 *  </li></ul>
-	 * @param runnable the runnable to run - it should return something meaningful from 
+	 * @param runnable the runnable to run - it should return something meaningful from
 	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThreadAndWait(Runnable runnable)
@@ -111,7 +113,7 @@ public class ThreadUtilities
 	 * From the article:
 	 * <a href="http://java.sun.com/products/jfc/tsc/articles/threads/threads1.html#event_dispatching">
 	 * Threads and Swing</a>
-	 * @param runnable the runnable to run - it should return something meaningful from 
+	 * @param runnable the runnable to run - it should return something meaningful from
 	 *    toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInDispatchThreadNow(Runnable runnable)
@@ -160,7 +162,7 @@ public class ThreadUtilities
 	 * The runnable will be encapsulated in a {@link Task}
 	 * @see #runInBackground(Task)
 	 *
-	 * @param runnable the runnable to run - it should return something meaningful from 
+	 * @param runnable the runnable to run - it should return something meaningful from
 	     toString() so that we can display it in the Task Monitor.
 	 */
 	public static void runInBackground(Runnable runnable)
@@ -187,6 +189,46 @@ public class ThreadUtilities
 	{
 		TaskManager.instance.fireWaiting(task);
 		threadPool.execute(task);
+	} //}}}
+
+	//{{{ callInDispatchThread() method
+	/**
+	 * Calls the given object in EventDispatch Thread.
+	 *
+	 * @param callable The callable to call.
+	 * @return The value returned by the callable.
+	 */
+	public static <T> T callInDispatchThread(final Callable<T> callable)
+		throws Exception
+	{
+		if (EventQueue.isDispatchThread())
+		{
+			return callable.call();
+		}
+		else
+		{
+			final AtomicReference<T> result = new AtomicReference<>();
+			final AtomicReference<Exception> error = new AtomicReference<>();
+			Runnable r = new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						result.set(callable.call());
+					}
+					catch (Exception e)
+					{
+						error.set(e);
+					}
+				}
+			};
+			runInDispatchThreadAndWait(r);
+			if (error.get() != null)
+				throw error.get();
+			return result.get();
+		}
 	} //}}}
 
 	private ThreadUtilities()
