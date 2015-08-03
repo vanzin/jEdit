@@ -96,6 +96,8 @@ to this release.
 
 - New mode for Antlr 4 (Dale Anson)
 
+- Updates to properties mode (Bug #2640 - Dale Anson)
+
 }}}
 }}}
 
