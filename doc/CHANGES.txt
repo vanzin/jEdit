@@ -53,6 +53,9 @@ to this release.
 
 - Separated sorting of Buffer Sets and Buffer Switcher (Dale Anson)
 
+- Font properties were not applied after change in Appearances settings
+  (Bug #3919 - Dale Anson)
+
 }}}
 {{{ Miscellaneous
 

@@ -3786,12 +3786,6 @@ public class jEdit
 		if (lfOld != null)
 			sLfOld = lfOld.getClass().getName();
 
-		// do not change anything if Look and Feel did not change
-		if (isStartupDone() && sLf.equals(sLfOld))
-		{
-			return;
-		}
-
 		Font primaryFont = jEdit.getFontProperty(
 			"metal.primary.font");
 		if(primaryFont != null)
