@@ -67,7 +67,7 @@ public class VFSDirectoryEntryTable extends JTable
 			renderer = new FileCellRenderer());
 
 		header = getTableHeader();
-		header.setReorderingAllowed(false);
+		header.setReorderingAllowed(true);
 		addMouseListener(new MainMouseHandler());
 		header.addMouseListener(new MouseHandler());
 		header.setDefaultRenderer(new HeaderRenderer(
@@ -576,7 +576,9 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		public void columnAdded(TableColumnModelEvent e) {}
 		public void columnRemoved(TableColumnModelEvent e) {}
-		public void columnMoved(TableColumnModelEvent e) {}
+		public void columnMoved(TableColumnModelEvent e) {
+			((VFSDirectoryEntryTableModel)getModel()).columnMoved(e.getFromIndex(), e.getToIndex());
+		}
 		public void columnSelectionChanged(ListSelectionEvent e) {}
 
 		public void columnMarginChanged(ChangeEvent e)

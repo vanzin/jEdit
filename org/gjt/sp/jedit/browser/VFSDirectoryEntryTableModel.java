@@ -272,6 +272,18 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			+ extAttr + ".width",w);
 	} //}}}
 	
+	//{{{ columnMoved() method
+	protected void columnMoved(int from, int to) {
+		if (from == to)
+			return;
+		if (from < 1 || from > getColumnCount())
+			return;
+		if (to < 1 || to > getColumnCount())
+			return;
+		ExtendedAttribute ea = extAttrs.remove(from - 1);
+		extAttrs.add(to - 1, ea);
+	} //}}}
+	
 	//{{{ getFiles() method
 	public VFSFile[] getFiles()
 	{

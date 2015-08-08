@@ -55,6 +55,9 @@ to this release.
 
 - Font properties were not applied after change in Appearances settings
   (Bug #3919 - Dale Anson)
+  
+- Allow columns to be rearranged in FSB (Feature request 489, 40, and old
+  tracker 1442812 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
