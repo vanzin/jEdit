@@ -185,6 +185,8 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 	
 		int y = clip.y - clip.y % lineHeight;
+		if (y == 0)
+			y = textArea.getPainter().getLineExtraSpacing();
 
 		extensionMgr.paintScreenLineRange(textArea,gfx,
 			firstLine,lastLine,y,lineHeight);

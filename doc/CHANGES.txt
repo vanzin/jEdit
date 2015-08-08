@@ -58,6 +58,9 @@ to this release.
   
 - Allow columns to be rearranged in FSB (Feature request 489, 40, and old
   tracker 1442812 - Dale Anson)
+  
+- Align gutter numbers with lines when using additional vertical line spacing.
+  (Bug #3717 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
