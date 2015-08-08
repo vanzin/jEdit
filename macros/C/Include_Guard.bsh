@@ -68,7 +68,4 @@ void includeGuard()
     textArea.setCaretPosition(pos + pos1);
 }
 
-if( buffer.isReadOnly() ) 
-    Macros.error(view, "Buffer is read-only.");
-else 
     includeGuard();

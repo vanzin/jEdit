@@ -210,9 +210,6 @@ BufferLocalPropertiesDialog(View view){
 	dialog.setVisible(true);
 }
 
-if(buffer.isReadOnly())
-	Macros.error(view, NotEditableMessage);
-else
 	BufferLocalPropertiesDialog(view);
 
 /*

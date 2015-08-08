@@ -35,7 +35,4 @@ cutLinesContaining(){
 	view.getStatus().setMessageAndClear(count + " " + LinesCutMessage);
 }
 
-if(buffer.isReadOnly())
-	Toolkit.getDefaultToolkit().beep();
-else
 	cutLinesContaining();

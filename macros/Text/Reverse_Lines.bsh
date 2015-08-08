@@ -80,9 +80,6 @@ void reverseLines(textArea)
 	}
 }
 
-if(buffer.isReadOnly())
-	Macros.error(view, NotEditableMessage);
-else
 	reverseLines(textArea);
 
 /*

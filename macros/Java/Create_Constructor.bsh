@@ -236,7 +236,4 @@ void parseSelection()
   textArea.indentSelectedLines();
 }
 
-if( buffer.isReadOnly() )
-	Macros.error( view, NotEditableMessage );
-else
 	parseSelection();

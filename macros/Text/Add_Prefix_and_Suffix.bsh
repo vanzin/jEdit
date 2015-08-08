@@ -142,9 +142,6 @@ void prefixSuffixDialog(View view)
 
 // this single line of code is the script's main routine
 // it calls the methods and exits
-if(buffer.isReadOnly())
-	Macros.error(view, NotEditableMessage);
-else
 	prefixSuffixDialog(view);
 
 /*

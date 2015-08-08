@@ -33,13 +33,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
 final static String NoMultipleSelectionError = jEdit.getProperty("macro.rs.MoveLines.NoMultipleSelection.error", "Line move does not work with multiple selection.");
 
-// check buffer read-only status
-if (buffer.isReadOnly())
-{
-	Macros.error( view, NotEditableMessage );
-	return;
-}
-
 // get the current selection or the current line if no selection
 Selection[] selections = textArea.getSelection();
 
@@ -50,55 +43,66 @@ if (selections.length > 1)
 	return;
 }
 
-int lineStart; 
-int lineEnd;
-if (selections.length == 0)
-{
-	lineStart = textArea.getCaretLine();
-	lineEnd = lineStart;
+// the approach is to get the line immediately following the selection
+// and insert it immediately preceeding the selection
+int startLine;
+int endLine;
+int nextLine;
+int insertionPoint;
+
+if (selections.length == 0) {
+	// nothing is selected, so use the line containing the caret
+	startLine = textArea.getCaretLine();
+	endLine = startLine;
 }
-else
-{
-	lineEnd = selections[0].getEndLine();
-	lineStart = selections[0].getStartLine();
-}
-
-if (lineEnd == buffer.getLineCount() - 1)
-	return;
-
-int start_offset = textArea.getLineStartOffset(lineStart);
-
-int nextLine = lineEnd + 1;
-String nextLineText = buffer.getLineText(nextLine);
-int nextLineLength = nextLineText.length();
-
-boolean lastLine = nextLine == buffer.getLineCount() - 1;
-
-if (lastLine)
-	buffer.remove(buffer.getLineStartOffset(nextLine), nextLineLength);
-else
-	buffer.remove(buffer.getLineStartOffset(nextLine), nextLineLength + 1);
-String lineSeparator = buffer.getStringProperty( "lineSeparator" );
-buffer.insert(start_offset, nextLineText + lineSeparator);
-
-if (lastLine)
-{
-	buffer.remove(buffer.getLength() - 1, 1);
-}
-	
-Mode mode = buffer.getMode();
-String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets",
-	"unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", 
-	"unindentThisLine", "electricKeys", "doubleBracketIndent", 
-	"lineUpClosingBracket"};
-for (String name : indentProps) 
-{
-	if (mode.getProperty(name) != null)
-	{
-		buffer.indentLines(lineStart + 1, lineEnd + 1);
-		break;
+else {
+	startLine = textArea.getLineOfOffset(selections[0].getStart());
+	endLine = textArea.getLineOfOffset(selections[0].getEnd());
+	// limit to lines that are actually selected
+	if (textArea.getLineStartOffset(endLine) == selections[0].getEnd()) {
+		-- endLine;	
 	}
 }
 
+insertionPoint = textArea.getLineStartOffset(startLine);
+nextLine = endLine + 1;
+
+if (nextLine == buffer.getLineCount()) {
+	// at bottom, can't move further down.
+	return;	
+}
+
+// get the text of the line immediately following the selection, this is the 
+// text to be moved
+String nextLineText = buffer.getLineText(nextLine);
+
+// need to check if the next line is also the last line in the buffer
+boolean nextIsLast = nextLine == buffer.getLineCount() - 1;
+
+// remove the next line from the buffer
+int removalStart = buffer.getLineStartOffset(nextLine);
+int removalLength = nextIsLast? buffer.getLineLength(nextLine) : buffer.getLineStartOffset(nextLine + 1) - removalStart;
+buffer.remove(removalStart, removalLength);
+
+// then insert the next line immediately before the selection
+String lineSeparator = buffer.getStringProperty("lineSeparator");
+buffer.insertIndented(insertionPoint, nextLineText + lineSeparator);
+if (nextIsLast) {
+	buffer.remove(buffer.getLength() - 1, 1);	
+}
+
+// indent the selection	
+Mode mode = buffer.getMode();
+boolean shouldIndent = false;
+String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"} ;
+for (String name : indentProps) {
+    if (mode.getProperty(name) != null) {
+        shouldIndent = true;
+        break;
+    }
+}
+if (shouldIndent) {
+	buffer.indentLines(startLine + 1, endLine + 1);	
+}
 
 

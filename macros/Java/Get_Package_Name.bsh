@@ -98,10 +98,6 @@ String determinePackageName(String path)
     return packagePath;
 }
 
-if( buffer.isReadOnly() )
-	Macros.error( view, NotEditableMessage );
-else
-{
 	// main routine
 	if(!testClassPath())
 	{
@@ -116,7 +112,6 @@ else
 		}
 		else textArea.setSelectedText(result);
 	}
-}
 
 /*
 	Macro index data (in DocBook format)

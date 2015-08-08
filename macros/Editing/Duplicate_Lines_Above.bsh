@@ -29,17 +29,6 @@ final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.Err
 // Process
 void duplicateLinesAbove()
 {
-	/*
-	 * Guard for readonly files because Buffer.insert()
-	 * ignores the flag
-	 *
-	 */
-	if(buffer.isReadOnly())
-	{
-		Macros.error(view, NotEditableMessage);
-		return;
-	}
-
 	selections = textArea.getSelectedLines();
 	if(selections.length == 0){
 		selections = new int [] {textArea.getCaretLine()};

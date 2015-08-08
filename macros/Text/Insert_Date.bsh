@@ -60,9 +60,6 @@ void insertDate()
 		+ " @" + (int)swatch + " /" + InternetTimeLabel + "/");
 }
 
-if(buffer.isReadOnly())
-	Macros.error(view, NotEditableMessage);
-else
 	insertDate();
 
 /*

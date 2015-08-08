@@ -21,9 +21,6 @@ void composeTag()
     textArea.setCaretPosition(caret + text.length() + 2);
 }
 
-if(buffer.isReadOnly())
-	Macros.error(view, NotEditableMessage);
-else
 	composeTag();
 
 /*

@@ -80,8 +80,5 @@ void greedyDelete(View view, boolean onlyFullTabs)
 		textArea.delete();
 }
 
-if(buffer.isReadOnly())
-	Toolkit.getDefaultToolkit().beep();
-else
 	greedyDelete(view,true);
 

@@ -423,7 +423,4 @@ void displayPrompt() {
 
 
 final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
-if ( buffer.isReadOnly() )
-    Macros.error( view, NotEditableMessage );
-else
     displayPrompt();

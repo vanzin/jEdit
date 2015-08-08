@@ -195,7 +195,7 @@ public class JEditBuffer
 	 */
 	public boolean isEditable()
 	{
-		return !(isReadOnly() || isPerformingIO());
+		return !(isPerformingIO());
 	} //}}}
 
 	//{{{ isReadOnly() method
@@ -708,9 +708,6 @@ public class JEditBuffer
 		if(len == 0)
 			return;
 
-		if(isReadOnly())
-			throw new RuntimeException("buffer read-only");
-
 		try
 		{
 			writeLock();
@@ -752,9 +749,6 @@ public class JEditBuffer
 	{
 		if(length == 0)
 			return;
-
-		if(isReadOnly())
-			throw new RuntimeException("buffer read-only");
 
 		try
 		{

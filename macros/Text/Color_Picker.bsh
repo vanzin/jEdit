@@ -34,9 +34,6 @@ else
 color = JColorChooser.showDialog(view, ColorPickerLabel, color);
 
 if (color != null){
-	if(buffer.isReadOnly())
-		Macros.error(view, NotEditableMessage);
-	else
 		textArea.setSelectedText(SyntaxUtilities.getColorHexString(color));
 }
 

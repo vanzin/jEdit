@@ -23,9 +23,6 @@ cutLines(){
 	Registers.cut(textArea,'$');
 }
 
-if(buffer.isReadOnly())
-	Toolkit.getDefaultToolkit().beep();
-else
 	cutLines();
 
 /*
