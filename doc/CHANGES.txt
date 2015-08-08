@@ -106,6 +106,9 @@ to this release.
 
 - Updated Go mode (Feature request 496, ahlearn). This also fixes bug #3921.
 
+- Allow editing, but not saving, of read only files. 
+  (Feature request #422 - Dale Anson) 
+
 }}}
 }}}
 
