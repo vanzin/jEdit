@@ -101,6 +101,8 @@ to this release.
 
 - Updates to properties mode (Bug #2640 - Dale Anson)
 
+- Updated Go mode (Feature request 496, ahlearn). This also fixes bug #3921.
+
 }}}
 }}}
 
