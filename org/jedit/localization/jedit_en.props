@@ -1410,6 +1410,11 @@ options.gutter.foldStyleNames.Square=Square
 options.gutter.foldStyleNames.Circle=Circle
 #}}}
 
+#{{{ Large files pane
+options.large-files.label=Large files
+#}}}
+
+
 #{{{ Mouse pane
 options.mouse.label=Mouse
 options.mouse.dragAndDrop=Drag and drop in text area

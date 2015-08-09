@@ -162,37 +162,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(resetUndoOnSave);
 		//}}}
 
-		//{{{ Large file mode
-		addSeparator(jEdit.getProperty("options.editing.largefilemode.title"));
-
-		addComponent(new JLabel(jEdit.getProperty("options.editing.largefilemode")));
-		addComponent(askLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.ask")));
-		addComponent(fullSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.full")));
-		addComponent(limitedSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.limited")));
-		addComponent(noHighlightLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.nohighlight")));
-		String option = jEdit.getProperty("largefilemode", "ask");
-		if ("full".equals(option))
-		{
-			fullSyntaxLargeFileMode.setSelected(true);
-		}
-		else if ("limited".equals(option))
-		{
-			limitedSyntaxLargeFileMode.setSelected(true);
-		}
-		else if ("nohighlight".equals(option))
-		{
-			noHighlightLargeFileMode.setSelected(true);
-		}
-		else
-		{
-			askLargeFileMode.setSelected(true);
-		}
-		ButtonGroup largeFileModeButtonGroup = new ButtonGroup();
-		largeFileModeButtonGroup.add(askLargeFileMode);
-		largeFileModeButtonGroup.add(fullSyntaxLargeFileMode);
-		largeFileModeButtonGroup.add(limitedSyntaxLargeFileMode);
-		largeFileModeButtonGroup.add(noHighlightLargeFileMode);
-		//}}}
 	} //}}}
 
 	//{{{ _save() method
@@ -211,23 +180,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		for (ModeProperties modeProp : modeProps)
 		{
 			modeProp.save();
-		}
-
-		if (fullSyntaxLargeFileMode.isSelected())
-		{
-			jEdit.setProperty("largefilemode", "full");
-		}
-		else if (limitedSyntaxLargeFileMode.isSelected())
-		{
-			jEdit.setProperty("largefilemode", "limited");
-		}
-		else if (noHighlightLargeFileMode.isSelected())
-		{
-			jEdit.setProperty("largefilemode", "nohighlight");
-		}
-		else
-		{
-			jEdit.setProperty("largefilemode", "ask");
 		}
 	} //}}}
 
@@ -257,11 +209,6 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JCheckBox elasticTabstops;
 	private JComboBox autoIndent;
 	private JCheckBox deepIndent;
-	private JRadioButton largeFileMode;
-	private JRadioButton askLargeFileMode;
-	private JRadioButton noHighlightLargeFileMode;
-	private JRadioButton limitedSyntaxLargeFileMode;
-	private JRadioButton fullSyntaxLargeFileMode;
 	//}}}
 
 	//{{{ saveMode() method
