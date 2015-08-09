@@ -134,6 +134,8 @@ public class RecentFilesProvider implements DynamicMenuProvider
 		while(iter.hasNext())
 		{
 			String path = iter.next().path;
+			if (jEdit.getBooleanProperty("hideOpen") && jEdit.getBuffer(path) != null)
+				continue;
 			JMenuItem menuItem = new JMenuItem(MiscUtilities
 				.getFileName(path));
 			menuItem.setToolTipText(path);

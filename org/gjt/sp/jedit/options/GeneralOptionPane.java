@@ -62,6 +62,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JSpinner hypersearchResultsWarning;
 	private JCheckBox saveCaret;
 	private JCheckBox sortRecent;
+	private JCheckBox hideOpen;
 	private JCheckBox persistentMarkers;
 	private JCheckBox restore;
 	private JCheckBox restoreRemote;
@@ -137,6 +138,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 				"options.general.sortRecent"));
 		sortRecent.setSelected(jEdit.getBooleanProperty("sortRecent"));
 		addComponent(sortRecent);
+
+		/* Hide open buffers recent file list */
+		hideOpen = new JCheckBox(jEdit.getProperty(
+				"options.general.hideOpen"));
+		hideOpen.setSelected(jEdit.getBooleanProperty("hideOpen", true));
+		addComponent(hideOpen);
 
 		/* Save caret positions */
 		saveCaret = new JCheckBox(jEdit.getProperty(
@@ -246,6 +253,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setIntegerProperty("checkFileStatus", checkModStatusUpon.getSelectedIndex());
 		jEdit.setIntegerProperty("recentFiles", (Integer) recentFiles.getModel().getValue());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
+		jEdit.setBooleanProperty("hideOpen", hideOpen.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 				persistentMarkers.isSelected());

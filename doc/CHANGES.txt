@@ -61,6 +61,8 @@ to this release.
   
 - Align gutter numbers with lines when using additional vertical line spacing.
   (Bug #3717 - Dale Anson)
+  
+- Added option to hide open files from recent file list (FR #481 - Dale Anson)  
 
 }}}
 {{{ Miscellaneous

@@ -1247,6 +1247,7 @@ options.general.checkModStatusUpon.none=none
 options.general.recentFiles=Recent files to remember:
 options.general.hypersearch.maxWarningResults=Max Hypersearch Results:
 options.general.sortRecent=Sort recent file list
+options.general.hideOpen=Hide open files from recent file list
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
 options.general.resetUndo=Reset undo history on save
