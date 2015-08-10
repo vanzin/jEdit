@@ -47,7 +47,7 @@
 	    long. The tokenizer consumes that character, which means the ending
 	    regex for the span_regexp doesn't work.
 	    -->
-	    <SEQ_REGEXP	TYPE="LITERAL1">.{1}$</SEQ_REGEXP>
+	    <SEQ_REGEXP	TYPE="LITERAL1">[^\\]{1}$</SEQ_REGEXP>
         <SPAN_REGEXP TYPE="LITERAL1">
             <BEGIN>.</BEGIN>
             <END REGEXP="TRUE">[^\\]$</END>
