@@ -27,7 +27,7 @@ import org.gjt.sp.util.Task;
  * @author Vadim Voituk
  * @since jEdit 4.5pre
  *
- * TODO: Add setLabel() && ProgressObserver methods
+ * TODO: Add setLabel() &amp; ProgressObserver methods
  */
 public class LocalFileSaveTask extends Task
 {

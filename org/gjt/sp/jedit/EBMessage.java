@@ -63,7 +63,7 @@ public abstract class EBMessage
 
 	//{{{ getSource() method
 	/**
-	 * Returns the sender of this message.
+	 * @return the sender of this message.
 	 * @since jEdit 4.2pre1
 	 */
 	public Object getSource()
@@ -86,7 +86,7 @@ public abstract class EBMessage
 
 	//{{{ paramString() method
 	/**
-	 * Returns a string representation of this message's parameters.
+	 * @return a string representation of this message's parameters.
 	 */
 	public String paramString()
 	{

@@ -311,7 +311,7 @@ public abstract class VFS
 	 * and the protocol separator character and then delegates
 	 * to eventually present sub-VFS-paths present in the VFS path
 	 * like "jode:archive:/test.zip!/test.txt".
-	 * <p/>
+	 * <p>
 	 * If a VFS implementation can have additional
 	 * information in the VFS path like username / password / host / port
 	 * for FTP VFS or archive filename for archive VFS, this

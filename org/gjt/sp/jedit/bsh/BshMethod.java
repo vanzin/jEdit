@@ -45,7 +45,7 @@ import java.lang.reflect.InvocationTargetException;
 	When a method is located in a subordinate namespace or invoked from an 
 	arbitrary namespace it must nontheless execute with its 'super' as the 
 	context in which it was declared.
-	<p/>
+	<p>
 */
 /*
 	Note: this method incorrectly caches the method structure.  It needs to

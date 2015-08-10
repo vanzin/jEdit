@@ -37,17 +37,16 @@ import java.util.*;
  * visible, and false otherwise.
  * It is also possible to override the method prepareFilter() that allow you to
  * transform the filter String. Usually you can return it as lowercase
- * <p/>
+ * <p>
  * Here is an example of how to use it extracted from the InstallPanel
  * <code>
  * PluginTableModel tableModel = new PluginTableModel();
- * filteredTableModel = new FilteredTableModel<PluginTableModel>(tableModel)
+ * filteredTableModel = new FilteredTableModel&lt;PluginTableModel&gt;(tableModel)
  * {
  * public String prepareFilter(String filter)
  * {
  * return filter.toLowerCase();
  * }
- * <p/>
  * public boolean passFilter(int row, String filter)
  * {
  * String pluginName = (String) delegated.getValueAt(row, 1);

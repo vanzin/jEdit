@@ -796,7 +796,7 @@ public class PluginJAR
 	//{{{ getAllDependentPlugins() method
 	/**
 	* @return an array of plugin names that have a dependency or an optional dependency on this plugin,
-	* this returns a combination of <code>getDependentPlugins</code> and getOptionallyDependentPlugins</code>.
+	* this returns a combination of <code>getDependentPlugins</code> and <code>getOptionallyDependentPlugins</code>.
 	*/
 	public String[] getAllDependentPlugins()
 	{

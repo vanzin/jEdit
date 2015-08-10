@@ -72,6 +72,8 @@ public class BeanShell
 	//{{{ evalSelection() method
 	/**
 	 * Evaluates the text selected in the specified text area.
+	 * @param view The view
+	 * @param textArea The text area
 	 * @since jEdit 2.7pre2
 	 */
 	public static void evalSelection(View view, JEditTextArea textArea)
@@ -82,6 +84,7 @@ public class BeanShell
 	//{{{ showEvaluateDialog() method
 	/**
 	 * Prompts for a BeanShell expression to evaluate.
+	 * @param view the View
 	 * @since jEdit 2.7pre2
 	 */
 	public static void showEvaluateDialog(View view)
@@ -125,6 +128,7 @@ public class BeanShell
 	//{{{ showEvaluateLinesDialog() method
 	/**
 	 * Evaluates the specified script for each selected line.
+	 * @param view The view
 	 * @since jEdit 4.0pre1
 	 */
 	public static void showEvaluateLinesDialog(View view)
@@ -370,6 +374,7 @@ public class BeanShell
 	 * are determined with reference to this parameter.
 	 * @param namespace The namespace
 	 * @param command The expression
+	 * @return an object
 	 * @since jEdit 4.0pre8
 	 */
 	public static Object eval(View view, NameSpace namespace, String command)
@@ -387,6 +392,7 @@ public class BeanShell
 	 * are determined with reference to this parameter.
 	 * @param namespace The namespace
 	 * @param command The expression
+	 * @return the object
 	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
 	 * @since jEdit 3.2pre7
@@ -404,6 +410,7 @@ public class BeanShell
 	 * @param id An identifier. If null, a unique identifier is generated
 	 * @param code The code
 	 * @param namespace If true, the namespace will be set
+	 * @return a bsh method
 	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 * @since jEdit 4.1pre1
@@ -421,6 +428,7 @@ public class BeanShell
 	 * @param method The method instance returned by cacheBlock()
 	 * @param view The view
 	 * @param namespace The namespace to run the code in
+	 * @return an object
 	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
 	 * @since jEdit 4.1pre1
@@ -433,7 +441,7 @@ public class BeanShell
 
 	//{{{ isScriptRunning() method
 	/**
-	 * Returns if a BeanShell script or macro is currently running.
+	 * @return if a BeanShell script or macro is currently running.
 	 * @since jEdit 2.7pre2
 	 */
 	public static boolean isScriptRunning()
@@ -443,7 +451,7 @@ public class BeanShell
 
 	//{{{ getNameSpace() method
 	/**
-	 * Returns the global namespace.
+	 * @return the global namespace.
 	 * @since jEdit 3.2pre5
 	 */
 	public static NameSpace getNameSpace()

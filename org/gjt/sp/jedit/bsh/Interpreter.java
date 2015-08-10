@@ -51,9 +51,9 @@ import java.lang.reflect.InvocationTargetException;
 		// Evaluate statements and expressions
 		bsh.eval("foo=Math.sin(0.5)");
 		bsh.eval("bar=foo*5; bar=Math.cos(bar);");
-		bsh.eval("for(i=0; i<10; i++) { print(\"hello\"); }");
+		bsh.eval("for(i=0; i&lt;10; i++) { print(\"hello\"); }");
 		// same as above using java syntax and apis only
-		bsh.eval("for(int i=0; i<10; i++) { System.out.println(\"hello\"); }");
+		bsh.eval("for(int i=0; i&lt;10; i++) { System.out.println(\"hello\"); }");
 
 		// Source from files or streams
 		bsh.source("myscript.bsh");  // or bsh.eval("source(\"myscript.bsh\")");
@@ -1202,7 +1202,7 @@ public class Interpreter
 		end of input.  If true, when in interactive mode the interpreter will
 		issue a System.exit(0) upon eof.  If false the interpreter no
 		System.exit() will be done.
-		<p/>
+		<p>
 		Note: if you wish to cause an EOF externally you can try closing the
 		input stream.  This is not guaranteed to work in older versions of Java
 		due to Java limitations, but should work in newer JDK/JREs.  (That was

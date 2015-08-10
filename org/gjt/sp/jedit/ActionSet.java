@@ -33,7 +33,7 @@ import org.gjt.sp.util.Log;
 
 /**
  * A set of actions, either loaded from an XML file, or constructed at runtime
- * by a plugin. <p>
+ * by a plugin. 
  *
  * <h3>Action sets loaded from XML files</h3>
  *
@@ -229,7 +229,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 
 	//{{{ getLabel() method
 	/**
-	 * Return the action source label.
+	 * @return the action source label.
 	 * @since jEdit 4.0pre1
 	 */
 	public String getLabel()
@@ -252,7 +252,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 
 	//{{{ getPluginJAR() method
 	/**
-	 * Return the plugin this action set was loaded from, or null.
+	 * @return the plugin this action set was loaded from, or null.
 	 * @since jEdit 4.2pre13
 	 */
 	public PluginJAR getPluginJAR()

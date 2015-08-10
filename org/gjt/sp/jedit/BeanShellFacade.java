@@ -73,6 +73,8 @@ public abstract class BeanShellFacade<T>
 	//{{{ evalSelection() method
 	/**
 	 * Evaluates the text selected in the specified text area.
+	 * @param param some sort of parameter
+	 * @param textArea the textArea
 	 */
 	public void evalSelection(T param, TextArea textArea)
 	{
@@ -92,6 +94,7 @@ public abstract class BeanShellFacade<T>
 	 * Evaluates the specified BeanShell expression with the global namespace
 	 * @param param The parameter
 	 * @param command The expression
+	 * @return an object
 	 */
 	public Object eval(T param, String command)
 	{
@@ -105,6 +108,7 @@ public abstract class BeanShellFacade<T>
 	 * @param param The parameter
 	 * @param namespace The namespace
 	 * @param command The expression
+	 * @return an object
 	 */
 	public Object eval(T param, NameSpace namespace, String command)
 	{
@@ -132,6 +136,7 @@ public abstract class BeanShellFacade<T>
 	 * are determined with reference to this parameter.
 	 * @param namespace The namespace
 	 * @param command The expression
+	 * @return an object
 	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
 	 */
@@ -173,6 +178,7 @@ public abstract class BeanShellFacade<T>
 	 * @param id An identifier.
 	 * @param code The code
 	 * @param namespace If true, the namespace will be set
+	 * @return a hsh method
 	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 */
@@ -202,7 +208,9 @@ public abstract class BeanShellFacade<T>
 	 * Runs a cached block of code in the specified namespace. Faster than
 	 * evaluating the block each time.
 	 * @param method The method instance returned by cacheBlock()
+	 * @param param a parameter
 	 * @param namespace The namespace to run the code in
+	 * @return an object
 	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
 	 */
@@ -248,7 +256,7 @@ public abstract class BeanShellFacade<T>
 
 	//{{{ getNameSpace() method
 	/**
-	 * Returns the global namespace.
+	 * @return the global namespace.
 	 */
 	public NameSpace getNameSpace()
 	{
@@ -271,7 +279,7 @@ public abstract class BeanShellFacade<T>
 	 * @param nameSpace the namespace
 	 * @param name the name of the variable
 	 * @param object the value of the variable
-	 * @throws UtilEvalError
+	 * @throws UtilEvalError when there is an error
 	 */
 	protected void setVariable(NameSpace nameSpace, String name, Object object) throws UtilEvalError
 	{
@@ -303,6 +311,8 @@ public abstract class BeanShellFacade<T>
 	/**
 	 * This extracts an exception from a 'wrapping' exception, as BeanShell
 	 * sometimes throws. This gives the user a more accurate error traceback
+	 * @param e the exception
+	 * @throws Exception on error
 	 */
 	protected static void unwrapException(Exception e) throws Exception
 	{

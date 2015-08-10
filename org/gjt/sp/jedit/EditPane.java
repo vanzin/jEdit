@@ -494,6 +494,7 @@ public class EditPane extends JPanel implements BufferSetListener
 	//{{{ goToNextMarker() method
 	/**
 	 * Moves the caret to the next marker.
+	 * @param select whether to select the marker
 	 * @since jEdit 4.3pre3
 	 */
 	public void goToNextMarker(boolean select)
@@ -531,6 +532,7 @@ public class EditPane extends JPanel implements BufferSetListener
 	//{{{ goToPrevMarker() method
 	/**
 	 * Moves the caret to the previous marker.
+	 * @param select whether to select the marker
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevMarker(boolean select)

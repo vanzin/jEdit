@@ -104,6 +104,7 @@ public class GUIUtilities
 	//{{{ setIconPath() method
 	/**
 	 * Sets the path where jEdit looks for icons.
+	 * @param iconPath the icon path
 	 * @since jEdit 4.2pre5
 	 */
 	public static void setIconPath(String iconPath)
@@ -116,6 +117,7 @@ public class GUIUtilities
 	/**
 	 * Loads an icon.
 	 * @param iconName The icon name
+	 * @return the icon
 	 * @since jEdit 2.6pre7
 	 */
 	public static Icon loadIcon(String iconName)
@@ -175,7 +177,7 @@ public class GUIUtilities
 
 	//{{{ getEditorIcon() method
 	/**
-	 * Returns the default editor window image.
+	 * @return the default editor window image.
 	 */
 	public static Image getEditorIcon()
 	{
@@ -184,7 +186,7 @@ public class GUIUtilities
 
 	//{{{ getPluginIcon() method
 	/**
-	 * Returns the default plugin window image.
+	 * @return the default plugin window image.
 	 */
 	public static Image getPluginIcon()
 	{
@@ -199,6 +201,7 @@ public class GUIUtilities
 	/**
 	 * Creates a menubar. Plugins should not need to call this method.
 	 * @param name The menu bar name
+	 * @return the menu bar
 	 * @since jEdit 3.2pre5
 	 */
 	public static JMenuBar loadMenuBar(String name)
@@ -211,6 +214,7 @@ public class GUIUtilities
 	 * Creates a menubar. Plugins should not need to call this method.
 	 * @param context An action context
 	 * @param name The menu bar name
+	 * @return the menu bar
 	 * @since jEdit 4.2pre1
 	 */
 	public static JMenuBar loadMenuBar(ActionContext context, String name)
@@ -237,6 +241,7 @@ public class GUIUtilities
 	 * separated list of action names. An action name of <code>-</code>
 	 * inserts a separator in the menu.
 	 * @param name The menu name
+	 * @return a menu
 	 * @see #loadMenuItem(String)
 	 * @since jEdit 2.6pre2
 	 */
@@ -256,6 +261,7 @@ public class GUIUtilities
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The menu name
+	 * @return a menu
 	 * @see #loadMenuItem(String)
 	 * @since jEdit 4.2pre1
 	 */
@@ -270,6 +276,9 @@ public class GUIUtilities
 	/**
 	 * Creates a popup menu.
 	 * @param name The menu name
+	 * @param evt mouse event
+	 * @param textArea the text area
+	 * @return a popup menu
 	 * @since jEdit 2.6pre2
 	 */
 	public static JPopupMenu loadPopupMenu(String name, JEditTextArea textArea, MouseEvent evt)
@@ -279,8 +288,7 @@ public class GUIUtilities
 
 	//{{{ loadPopupMenu() method
 	/**
-	 * Creates a popup menu.
-
+	 * @return a popup menu.
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
 	 */
@@ -297,6 +305,7 @@ public class GUIUtilities
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The menu name
+	 * @return a popup menu
 	 * @since jEdit 4.2pre1
 	 */
 	public static JPopupMenu loadPopupMenu(ActionContext context, String name)
@@ -314,6 +323,7 @@ public class GUIUtilities
 	 * @param textArea the textArea wanting to show the popup.
 	 * 	If not null, include context menu items defined by services.
 	 * @param evt additional context info about where the mouse was when menu was requested
+	 * @return the popup menu
 	 * @since jEdit 4.3pre15
 	 */
 	public static JPopupMenu loadPopupMenu(ActionContext context, String name, JEditTextArea textArea, MouseEvent evt)
@@ -355,6 +365,7 @@ public class GUIUtilities
 	 * @return a list of menu items defined by services.
 	 *
 	 * @param textArea the TextArea desiring to display these menu items
+	 * @param evt a mouse event
 	 * @since jEdit 4.3pre15
 	 */
 	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt)
@@ -388,6 +399,7 @@ public class GUIUtilities
 	 * {@link EditAction#getLabel()} method.
 	 *
 	 * @param name The menu item name
+	 * @return the menu item
 	 * @see #loadMenu(String)
 	 * @since jEdit 2.6pre1
 	 */
@@ -401,6 +413,7 @@ public class GUIUtilities
 	 * Creates a menu item.
 	 * @param name The menu item name
 	 * @param setMnemonic True if the menu item should have a mnemonic
+	 * @return a menu item
 	 * @since jEdit 3.1pre1
 	 */
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
@@ -416,6 +429,7 @@ public class GUIUtilities
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The menu item name
 	 * @param setMnemonic True if the menu item should have a mnemonic
+	 * @return the menu item
 	 * @since jEdit 4.2pre1
 	 */
 	public static JMenuItem loadMenuItem(ActionContext context, String name,
@@ -439,7 +453,7 @@ public class GUIUtilities
 
 	//{{{ loadToolBar() method
 	/**
-	 * Creates a toolbar.
+	 * @return a toolbar.
 	 * @param name The toolbar name
 	 * @since jEdit 4.2pre2
 	 */
@@ -455,6 +469,7 @@ public class GUIUtilities
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The toolbar name
+	 * @return the toolbar
 	 * @since jEdit 4.2pre2
 	 */
 	public static Container loadToolBar(ActionContext context, String name)
@@ -495,6 +510,7 @@ public class GUIUtilities
 	 * from the resource named '/org/gjt/sp/jedit/icons/' suffixed
 	 * with the value of the <code><i>name</i>.icon</code> property.
 	 * @param name The name of the button
+	 * @return a button
 	 */
 	public static EnhancedButton loadToolButton(String name)
 	{
@@ -512,6 +528,7 @@ public class GUIUtilities
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The name of the button
+	 * @return the button
 	 * @since jEdit 4.2pre1
 	 */
 	public static EnhancedButton loadToolButton(ActionContext context,
@@ -550,6 +567,8 @@ public class GUIUtilities
 	 * `Prettifies' a menu item label by removing the `$' sign. This
 	 * can be used to process the contents of an <i>action</i>.label
 	 * property.
+	 * @param label the label
+	 * @return a pretty label
 	 */
 	public static String prettifyMenuLabel(String label)
 	{
@@ -1446,7 +1465,7 @@ public class GUIUtilities
 	 * Saves a window's geometry to the properties.
 	 * The geometry is saved to the <code><i>name</i>.x</code>,
 	 * <code><i>name</i>.y</code>, <code><i>name</i>.width</code> and
-	 * <code><i>name</i>.height</code> properties.<br />
+	 * <code><i>name</i>.height</code> properties.<br>
 	 * For Frame's and descendents use {@link #addSizeSaver(Frame,String)} to save the sizes
 	 * correct even if the Frame is in maximized or iconified state.
 	 * @param win The window to load geometry from
@@ -1463,7 +1482,7 @@ public class GUIUtilities
 	 * Saves a window's geometry to the properties.
 	 * The geometry is saved to the <code><i>name</i>.x</code>,
 	 * <code><i>name</i>.y</code>, <code><i>name</i>.width</code> and
-	 * <code><i>name</i>.height</code> properties.<br />
+	 * <code><i>name</i>.height</code> properties.<br>
 	 * For Frame's and descendents use {@link #addSizeSaver(Frame,Container,String)} to save the sizes
 	 * correct even if the Frame is in maximized or iconified state.
 	 * @param win The window to load geometry from
@@ -1843,7 +1862,7 @@ public class GUIUtilities
 
 	//{{{ setButtonContentMargin() method
 	/**
-	 * Sets the content margin of a button (for Nimbus L&F).
+	 * Sets the content margin of a button (for Nimbus L&amp;F).
 	 * @param button  the button to modify
 	 * @param margin  the new margin
 	 * @since jEdit 5.3

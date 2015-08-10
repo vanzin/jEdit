@@ -36,7 +36,7 @@ import java.awt.Component;
 public interface OptionPane
 {
 	/**
-	 * Returns the internal name of this option pane. The option pane's label
+	 * @return the internal name of this option pane. The option pane's label
 	 * is set to the value of the property named
 	 * <code>options.<i>name</i>.label</code>.
 	 * @see jEdit#getProperty(String)
@@ -44,7 +44,7 @@ public interface OptionPane
 	String getName();
 
 	/**
-	 * Returns the component that should be displayed for this option pane.
+	 * @return the component that should be displayed for this option pane.
 	 */
 	Component getComponent();
 

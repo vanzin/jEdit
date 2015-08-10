@@ -756,7 +756,7 @@ public class MiscUtilities
 	 * Checks whether the last backup was not earlier than
 	 * <code>backupTimeDistance</code> ms ago.
 	 * @param path The file to back up.
-	 * @param backups The number of backups. Must be >= 1. If > 1, backup
+	 * @param backups The number of backups. Must be &gt;= 1. If &gt; 1, backup
 	 * files will be numbered.
 	 * @param backupDirectory The directory determined externally or
 	 * obtained from <code>prepareBackupDirectory</code>.
@@ -848,7 +848,7 @@ public class MiscUtilities
 	/**
 	 * Saves a backup (optionally numbered) of a file.
 	 * @param file A local file
-	 * @param backups The number of backups. Must be >= 1. If > 1, backup
+	 * @param backups The number of backups. Must be &gt;= 1. If &gt; 1, backup
 	 * files will be numbered.
 	 * @param backupPrefix The backup file name prefix
 	 * @param backupSuffix The backup file name suffix
@@ -867,7 +867,7 @@ public class MiscUtilities
 	 * Saves a backup (optionally numbered) of a file. Requires
 	 * specifying the backup directory and generates the backup filename.
 	 * @param file A local file
-	 * @param backups The number of backups. Must be >= 1. If > 1, backup
+	 * @param backups The number of backups. Must be &gt;= 1. If &gt; 1, backup
 	 * files will be numbered.
 	 * @param backupPrefix The backup file name prefix
 	 * @param backupSuffix The backup file name suffix

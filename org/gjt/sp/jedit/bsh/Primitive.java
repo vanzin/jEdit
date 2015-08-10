@@ -852,7 +852,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 		Wrap primitive values (as indicated by type param) and nulls in the 
 		Primitive class.  Values not primitive or null are left unchanged.
 		Primitive values are represented by their wrapped values in param value.
-		<p/>
+		<p>
 		The value null is mapped to Primitive.NULL.
 		Any value specified with type Void.TYPE is mapped to Primitive.VOID.
 	*/
@@ -893,7 +893,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 	/**
 		Get the corresponding java.lang wrapper class for the primitive TYPE
 		class.
-		e.g.  Integer.TYPE -> Integer.class
+		e.g.  Integer.TYPE -&gt; Integer.class
 	*/
 	public static Class boxType( Class primitiveType )
 	{
@@ -907,7 +907,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 	/**
 		Get the corresponding primitive TYPE class for the java.lang wrapper
 		class type.
-		e.g.  Integer.class -> Integer.TYPE
+		e.g.  Integer.class -&gt; Integer.TYPE
 	*/
 	public static Class unboxType( Class wrapperType )
 	{

@@ -174,7 +174,7 @@ public class Buffer extends JEditBuffer
 	 * @param view The view
 	 * @param reload If true, user will not be asked to recover autosave
 	 * file, if any
-	 *
+	 * @return true if loaded
 	 * @since 2.5pre1
 	 */
 	public boolean load(final View view, final boolean reload)
@@ -311,7 +311,7 @@ public class Buffer extends JEditBuffer
 	 * Loads a file from disk, and inserts it into this buffer.
 	 * @param view The view
 	 * @param path the path of the file to insert
-	 *
+	 * @return true if the file was inserted
 	 * @since 4.0pre1
 	 */
 	public boolean insertFile(View view, String path)
@@ -631,6 +631,7 @@ public class Buffer extends JEditBuffer
 	public static final int FILE_DELETED = 2;
 	/**
 	 * Check if the buffer has changed on disk.
+	 * @param view the View
 	 * @return One of <code>FILE_NOT_CHANGED</code>, <code>FILE_CHANGED</code>, or
 	 * <code>FILE_DELETED</code>.
 	 *
@@ -681,7 +682,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getLastModified() method
 	/**
-	 * Returns the last time jEdit modified the file on disk.
+	 * @return the last time jEdit modified the file on disk.
 	 * This method is thread-safe.
 	 */
 	public long getLastModified()
@@ -701,7 +702,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getAutoReload() method
 	/**
-	 * Returns the status of the AUTORELOAD flag
+	 * @return the status of the AUTORELOAD flag
 	 * If true, reload changed files automatically
 	 */
 	public boolean getAutoReload()
@@ -735,7 +736,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getAutoReloadDialog() method
 	/**
-	 * Returns the status of the AUTORELOAD_DIALOG flag
+	 * @return the status of the AUTORELOAD_DIALOG flag
 	 * If true, prompt for reloading or notify user
 	 * when the file has changed on disk
 	 */
@@ -761,6 +762,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * Returns the virtual filesystem responsible for loading and
 	 * saving this buffer. This method is thread-safe.
+	 * @return the VFS
 	 */
 	public VFS getVFS()
 	{
@@ -769,7 +771,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getAutosaveFile() method
 	/**
-	 * Returns the autosave file for this buffer. This may be null if
+	 * @return the autosave file for this buffer. This may be null if
 	 * the file is non-local.
 	 */
 	public File getAutosaveFile()
@@ -793,7 +795,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getName() method
 	/**
-	 * Returns the name of this buffer. This method is thread-safe.
+	 * @return the name of this buffer. This method is thread-safe.
 	 */
 	public String getName()
 	{
@@ -802,7 +804,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getPath() method
 	/**
-	 * Returns the path name of this buffer. This method is thread-safe.
+	 * @return the path name of this buffer. This method is thread-safe.
 	 */
 	public String getPath()
 	{
@@ -812,6 +814,7 @@ public class Buffer extends JEditBuffer
 	//{{{ getPath() method
 	/**
 	  * @param shortVersion if true, replaces home path with ~/ on unix
+	  * @return the path
 	  */
 	public String getPath(Boolean shortVersion)
 	{
@@ -821,7 +824,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getSymlinkPath() method
 	/**
-	 * If this file is a symbolic link, returns the link destination.
+	 * @return If this file is a symbolic link, returns the link destination.
 	 * Otherwise returns the file's path. This method is thread-safe.
 	 * @since jEdit 4.2pre1
 	 */
@@ -832,7 +835,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getDirectory() method
 	/**
-	 * Returns the directory containing this buffer.
+	 * @return the directory containing this buffer.
 	 * @since jEdit 4.1pre11
 	 */
 	public String getDirectory()
@@ -842,7 +845,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ isClosed() method
 	/**
-	 * Returns true if this buffer has been closed with
+	 * @return true if this buffer has been closed with
 	 * {@link org.gjt.sp.jedit.jEdit#closeBuffer(View,Buffer)}.
 	 * This method is thread-safe.
 	 */
@@ -853,7 +856,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ isLoaded() method
 	/**
-	 * Returns true if the buffer is loaded. This method is thread-safe.
+	 * @return true if the buffer is loaded. This method is thread-safe.
 	 */
 	public boolean isLoaded()
 	{
@@ -862,7 +865,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ isNewFile() method
 	/**
-	 * Returns whether this buffer lacks a corresponding version on disk.
+	 * @return whether this buffer lacks a corresponding version on disk.
 	 * This method is thread-safe.
 	 */
 	public boolean isNewFile()
@@ -884,7 +887,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ isUntitled() method
 	/**
-	 * Returns true if this file is 'untitled'. This method is thread-safe.
+	 * @return true if this file is 'untitled'. This method is thread-safe.
 	 */
 	public boolean isUntitled()
 	{
@@ -931,7 +934,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ isTemporary() method
 	/**
-	 * Returns if this is a temporary buffer. This method is thread-safe.
+	 * @return if this is a temporary buffer. This method is thread-safe.
 	 * @see jEdit#openTemporary(View,String,String,boolean)
 	 * @see jEdit#commitTemporary(Buffer)
 	 * @since jEdit 2.2pre7
@@ -943,7 +946,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getIcon() method
 	/**
-	 * Returns this buffer's icon.
+	 * @return this buffer's icon.
 	 * @since jEdit 2.6pre6
 	 */
 	public Icon getIcon()
@@ -1248,6 +1251,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Do not call this method, use {@link #getPath()}
 	 * instead.
+	 * @return the file
 	 */
 	@Deprecated
 	public File getFile()
@@ -1261,7 +1265,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarkers() method
 	/**
-	 * Returns a vector of markers.
+	 * @return a vector of markers.
 	 * @since jEdit 3.2pre1
 	 */
 	public Vector<Marker> getMarkers()
@@ -1271,7 +1275,8 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarkerStatusPrompt() method
 	/**
-	 * Returns the status prompt for the given marker action. Only
+	 * @param action some action
+	 * @return the status prompt for the given marker action. Only
 	 * intended to be called from <code>actions.xml</code>.
 	 * @since jEdit 4.2pre2
 	 */
@@ -1283,7 +1288,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarkerNameString() method
 	/**
-	 * Returns a string of all set markers, used by the status bar
+	 * @return a string of all set markers, used by the status bar
 	 * (eg, "a b $ % ^").
 	 * @since jEdit 4.2pre2
 	 */
@@ -1379,7 +1384,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarkerInRange() method
 	/**
-	 * Returns the first marker within the specified range.
+	 * @return the first marker within the specified range.
 	 * @param start The start offset
 	 * @param end The end offset
 	 * @since jEdit 4.0pre4
@@ -1398,7 +1403,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarkerAtLine() method
 	/**
-	 * Returns the first marker at the specified line, or <code>null</code>
+	 * @return the first marker at the specified line, or <code>null</code>
 	 * if there is none.
 	 * @param line The line number
 	 * @since jEdit 3.2pre2
@@ -1461,7 +1466,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getMarker() method
 	/**
-	 * Returns the marker with the specified shortcut.
+	 * @return the marker with the specified shortcut.
 	 * @param shortcut The shortcut
 	 * @since jEdit 3.2pre2
 	 */
@@ -1481,6 +1486,7 @@ public class Buffer extends JEditBuffer
 	 * @param vfs The appropriate VFS
 	 * @param path the path of the buffer, it can be different from the field
 	 * when using save-as
+	 * @return the marker path
 	 * @since jEdit 4.3pre10
 	 */
 	public static String getMarkersPath(VFS vfs, String path)
@@ -1496,6 +1502,7 @@ public class Buffer extends JEditBuffer
 	 * Handling markers is now independent from saving the buffer.
 	 * Changing markers will not set the buffer dirty any longer.
 	 * @param view The current view
+	 * @return true if markers were updated
 	 * @since jEdit 4.3pre7
 	 */
 	public boolean updateMarkersFile(View view)
@@ -1522,7 +1529,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ markersChanged() method
 	/**
-	 * Return true when markers have changed and the markers file needs
+	 * @return true when markers have changed and the markers file needs
 	 * to be updated
 	 * @since jEdit 4.3pre7
 	 */
@@ -1534,6 +1541,7 @@ public class Buffer extends JEditBuffer
 	//{{{ setMarkersChanged() method
 	/**
 	 * Sets/unsets the MARKERS_CHANGED flag
+	 * @param changed changed
 	 * @since jEdit 4.3pre7
 	 */
 	public void setMarkersChanged(boolean changed)
@@ -1548,6 +1556,7 @@ public class Buffer extends JEditBuffer
 	//{{{ setWaitSocket() method
 	/**
 	 * This socket is closed when the buffer is closed.
+	 * @param waitSocket the socket
 	 */
 	public void setWaitSocket(Socket waitSocket)
 	{
@@ -1556,7 +1565,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getNext() method
 	/**
-	 * Returns the next buffer in the list.
+	 * @return the next buffer in the list.
 	 */
 	public Buffer getNext()
 	{
@@ -1565,7 +1574,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getPrev() method
 	/**
-	 * Returns the previous buffer in the list.
+	 * @return the previous buffer in the list.
 	 */
 	public Buffer getPrev()
 	{
@@ -1574,7 +1583,7 @@ public class Buffer extends JEditBuffer
 
 	//{{{ getIndex() method
 	/**
-	 * Returns the position of this buffer in the buffer list.
+	 * @return the position of this buffer in the buffer list.
 	 */
 	public int getIndex()
 	{

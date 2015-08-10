@@ -289,13 +289,13 @@ public class KeyEventTranslator
 	 *
 	 * You can map more than one Java modifier to a symobolic modifier, for
 	 * example :
-	 * <p><code><pre>
-	 *	setModifierMapping(
-	 *		InputEvent.CTRL_MASK,
-	 *		InputEvent.ALT_MASK | InputEvent.META_MASK,
-	 *		0,
-	 *		InputEvent.SHIFT_MASK);
-	 *<pre></code></p>
+	 * <p><code>
+	 	setModifierMapping(
+	 		InputEvent.CTRL_MASK,
+	 		InputEvent.ALT_MASK | InputEvent.META_MASK,
+	 		0,
+	 		InputEvent.SHIFT_MASK);
+	   </code></p>
 	 *
 	 * You cannot map a Java modifer to more than one symbolic modifier.
 	 *

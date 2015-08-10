@@ -58,7 +58,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 			
 	//{{{ getLabel() method
 	/**
-	 * Returns the action's label. This returns the
+	 * @return the action's label. This returns the
 	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.label</code>.
 	 * 
@@ -74,7 +74,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ getMouseOverText() method
 	/**
-	 * Returns the action's mouse over message. This returns the
+	 * @return the action's mouse over message. This returns the
 	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.mouse-over</code>.
 	 */
@@ -97,7 +97,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ isToggle() method
 	/**
-	 * Returns if this edit action should be displayed as a check box
+	 * @return if this edit action should be displayed as a check box
 	 * in menus. This returns the
 	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.toggle</code>.
@@ -111,7 +111,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ isSelected() method
 	/**
-	 * If this edit action is a toggle, returns if it is selected or not.
+	 * @return If this edit action is a toggle, returns if it is selected or not.
 	 * @param comp The component
 	 * @since jEdit 4.2pre1
 	 */
@@ -122,7 +122,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ noRepeat() method
 	/**
-	 * Returns if this edit action should not be repeated. Returns false
+	 * @return if this edit action should not be repeated. Returns false
 	 * by default.
 	 * @since jEdit 2.7pre2
 	 */
@@ -133,7 +133,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ noRecord() method
 	/**
-	 * Returns if this edit action should not be recorded. Returns false
+	 * @return if this edit action should not be recorded. Returns false
 	 * by default.
 	 * @since jEdit 2.7pre2
 	 */
@@ -144,7 +144,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ noRememberLast() method
 	/**
-	 * Returns if this edit action should not be remembered as the most
+	 * @return if this edit action should not be remembered as the most
 	 * recently invoked action.
 	 * @since jEdit 4.2pre1
 	 */
@@ -155,7 +155,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 
 	//{{{ getCode() method
 	/**
-	 * Returns the BeanShell code that will replay this action.
+	 * @return the BeanShell code that will replay this action.
 	 * BeanShellAction.getCode() returns something more interesting for Actions that were loaded
 	 * from the actions.xml file. 
 	 * You do not need to override this method if your action name is unique,
@@ -184,6 +184,8 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 		
 		/**
 		 * Creates a new action listener wrapper.
+		 * @param context the action context
+		 * @param actionName the name of the action
 		 * @since jEdit 4.2pre1
 		 */
 		public Wrapper(ActionContext context, String actionName)

@@ -55,7 +55,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 	//{{{ addActionSet() method
 	/**
-	 * Adds a new action set to the context.
+	 * @param actionSet Adds a new action set to the context.
 	 * @since jEdit 4.3pre13
 	 */
 	public void addActionSet(E actionSet)
@@ -79,7 +79,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 	//{{{ removeActionSet() method
 	/**
-	 * Removes an action set from the context.
+	 * @param actionSet Removes an action set from the context.
 	 * @since jEdit 4.23pre13
 	 */
 	public void removeActionSet(E actionSet)
@@ -101,7 +101,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 	//{{{ getActionSets() method
 	/**
-	 * Returns all registered action sets.
+	 * @return all registered action sets.
 	 * @since jEdit 4.3pre13
 	 */
 	public E[] getActionSets()
@@ -145,7 +145,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 	//{{{ getActionNames() method
 	/**
-	 * Returns all registered action names.
+	 * @return all registered action names.
 	 */
 	public String[] getActionNames()
 	{

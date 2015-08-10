@@ -144,7 +144,7 @@ public class JEditBuffer
 
 	//{{{ isDirty() method
 	/**
-	 * Returns whether there have been unsaved changes to this buffer.
+	 * @return whether there have been unsaved changes to this buffer.
 	 * This method is thread-safe.
 	 */
 	public boolean isDirty()
@@ -166,7 +166,7 @@ public class JEditBuffer
 
 	//{{{ isPerformingIO() method
 	/**
-	 * Returns true if the buffer is currently performing I/O.
+	 * @return true if the buffer is currently performing I/O.
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
@@ -177,7 +177,7 @@ public class JEditBuffer
 
 	//{{{ setPerformingIO() method
 	/**
-	 * Returns true if the buffer is currently performing I/O.
+	 * @param io true if the buffer is currently performing I/O.
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
@@ -188,7 +188,7 @@ public class JEditBuffer
 
 	//{{{ isEditable() method
 	/**
-	 * Returns true if this file is editable, false otherwise. A file may
+	 * @return true if this file is editable, false otherwise. A file may
 	 * become uneditable if it is read only, or if I/O is in progress.
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
@@ -200,7 +200,7 @@ public class JEditBuffer
 
 	//{{{ isReadOnly() method
 	/**
-	 * Returns true if this file is read only, false otherwise.
+	 * @return true if this file is read only, false otherwise.
 	 * This method is thread-safe.
 	 */
 	public boolean isReadOnly()
@@ -220,7 +220,7 @@ public class JEditBuffer
 
 	//{{{ setDirty() method
 	/**
-	 * Sets the 'dirty' (changed since last save) flag of this buffer.
+	 * @param d Sets the 'dirty' (changed since last save) flag of this buffer.
 	 */
 	public void setDirty(boolean d)
 	{
@@ -298,7 +298,7 @@ public class JEditBuffer
 
 	//{{{ getLength() method
 	/**
-	 * Returns the number of characters in the buffer. This method is thread-safe.
+	 * @return the number of characters in the buffer. This method is thread-safe.
 	 */
 	public int getLength()
 	{
@@ -308,7 +308,7 @@ public class JEditBuffer
 
 	//{{{ getLineCount() method
 	/**
-	 * Returns the number of physical lines in the buffer.
+	 * @return the number of physical lines in the buffer.
 	 * This method is thread-safe.
 	 * @since jEdit 3.1pre1
 	 */
@@ -323,6 +323,7 @@ public class JEditBuffer
 	 * Returns the line containing the specified offset.
 	 * This method is thread-safe.
 	 * @param offset The offset
+	 * @return the line of the offset
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineOfOffset(int offset)
@@ -400,7 +401,7 @@ public class JEditBuffer
 
 	//{{{ getLineLength() method
 	/**
-	 * Returns the length of the specified line.
+	 * @return the length of the specified line.
 	 * This method is thread-safe.
 	 * @param line The line
 	 * @since jEdit 4.0pre1
@@ -423,6 +424,8 @@ public class JEditBuffer
 	//{{{ getPriorNonEmptyLine() method
 	/**
 	 * Auto indent needs this.
+	 * @param lineIndex the line
+	 * @return the previous non-empty line
 	 */
 	public int getPriorNonEmptyLine(int lineIndex)
 	{
@@ -486,13 +489,14 @@ public class JEditBuffer
 	/**
 	 * Returns the specified line in a <code>Segment</code>.<p>
 	 *
-	 * Using a <classname>Segment</classname> is generally more
-	 * efficient than using a <classname>String</classname> because it
+	 * Using a <code>Segment</code> is generally more
+	 * efficient than using a <code>String</code> because it
 	 * results in less memory allocation and array copying.<p>
 	 *
 	 * This method is thread-safe.
 	 *
 	 * @param line The line
+	 * @param segment the segment
 	 * @since jEdit 4.0pre1
 	 */
 	public void getLineText(int line, Segment segment)
@@ -503,13 +507,15 @@ public class JEditBuffer
 	/**
 	 * Returns the specified line from the starting point passed in relativeStartOffset  in a <code>Segment</code>.<p>
 	 *
-	 * Using a <classname>Segment</classname> is generally more
-	 * efficient than using a <classname>String</classname> because it
+	 * Using a <code>Segment</code> is generally more
+	 * efficient than using a <code>String</code> because it
 	 * results in less memory allocation and array copying.<p>
 	 *
 	 * This method is thread-safe.
 	 *
 	 * @param line The line
+	 * @param segment the segment
+	 * @param relativeStartOffset the relative start offset
 	 * @since jEdit 4.0pre1
 	 */
 	public void getLineText(int line,int relativeStartOffset, Segment segment)
@@ -570,7 +576,7 @@ public class JEditBuffer
 
 	//{{{ getText() methods
 	/**
-	 * Returns the specified text range. This method is thread-safe.
+	 * @return the specified text range. This method is thread-safe.
 	 * @param start The start offset
 	 * @param length The number of characters to get
 	 */
@@ -593,7 +599,7 @@ public class JEditBuffer
 	}
 
 	/**
-	 * Returns the full buffer content. This method is thread-safe
+	 * @return the full buffer content. This method is thread-safe
 	 * @since 4.4.1
 	 */
 	public String getText()
@@ -612,8 +618,8 @@ public class JEditBuffer
 	/**
 	 * Returns the specified text range in a <code>Segment</code>.<p>
 	 *
-	 * Using a <classname>Segment</classname> is generally more
-	 * efficient than using a <classname>String</classname> because it
+	 * Using a <code>Segment</code> is generally more
+	 * efficient than using a <code>String</code> because it
 	 * results in less memory allocation and array copying.<p>
 	 *
 	 * This method is thread-safe.
@@ -1060,7 +1066,7 @@ public class JEditBuffer
 
 	//{{{ getCurrentIndentForLine() method
 	/**
-	 * Returns the line's current leading indent.
+	 * @return the line's current leading indent.
 	 * @param lineIndex The line number
 	 * @param whitespaceChars If this is non-null, the number of whitespace
 	 * characters is stored at the 0 index
@@ -1100,7 +1106,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getIdealIndentForLine() method
 	/**
-	 * Returns the ideal leading indent for the specified line.
+	 * @return the ideal leading indent for the specified line.
 	 * This will apply the various auto-indent rules.
 	 * @param lineIndex The line number
 	 */
@@ -1150,7 +1156,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getVirtualWidth() method
 	/**
-	 * Returns the virtual column number (taking tabs into account) of the
+	 * @return the virtual column number (taking tabs into account) of the
 	 * specified position.
 	 *
 	 * @param line The line number
@@ -1295,6 +1301,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?
+	 * @param ch a character
+	 * @param line the line
+	 * @return true if is electric key
 	 * @since jEdit 4.3pre9
 	 */
 	public boolean isElectricKey(char ch, int line)
@@ -1399,6 +1408,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * The position is retained despite text editions.
 	 * <p>No explicit removal of position is necessary, only dereferencing it.
 	 * @param offset The offset
+	 * @return the position
 	 */
 	public Position createPosition(int offset)
 	{
@@ -1444,7 +1454,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getTabSize() method
 	/**
-	 * Returns the tab size used in this buffer. This is equivalent
+	 * @return the tab size used in this buffer. This is equivalent
 	 * to calling <code>getProperty("tabSize")</code>.
 	 * This method is thread-safe.
 	 */
@@ -1459,7 +1469,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getIndentSize() method
 	/**
-	 * Returns the indent size used in this buffer. This is equivalent
+	 * @return the indent size used in this buffer. This is equivalent
 	 * to calling <code>getProperty("indentSize")</code>.
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
@@ -1475,7 +1485,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getProperty() method
 	/**
-	 * Returns the value of a buffer-local property.<p>
+	 * @return the value of a buffer-local property.
 	 *
 	 * Using this method is generally discouraged, because it returns an
 	 * <code>Object</code> which must be cast to another type
@@ -1586,7 +1596,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getStringProperty() method
 	/**
-	 * Returns the value of a string property. This method is thread-safe.
+	 * @return the value of a string property. This method is thread-safe.
 	 * @param name The property name
 	 * @since jEdit 4.0pre1
 	 */
@@ -1613,7 +1623,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getBooleanProperty() methods
 	/**
-	 * Returns the value of a boolean property. This method is thread-safe.
+	 * @return the value of a boolean property. This method is thread-safe.
 	 * @param name The property name
 	 * @since jEdit 4.0pre1
 	 */
@@ -1623,7 +1633,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	}
 
 	/**
-	 * Returns the value of a boolean property. This method is thread-safe.
+	 * @return the value of a boolean property. This method is thread-safe.
 	 * @param name The property name
 	 * @param def The default value
 	 * @since jEdit 4.3pre17
@@ -1648,8 +1658,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getIntegerProperty() method
 	/**
-	 * Returns the value of an integer property. This method is thread-safe.
+	 * @return the value of an integer property. This method is thread-safe.
 	 * @param name The property name
+	 * @param defaultValue the default value to use
 	 * @since jEdit 4.0pre1
 	 */
 	public int getIntegerProperty(String name, int defaultValue)
@@ -1705,7 +1716,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getPatternProperty()
 	/**
-	 * Returns the value of a property as a regular expression.
+	 * @return the value of a property as a regular expression.
 	 * This method is thread-safe.
 	 * @param name The property name
 	 * @param flags Regular expression compilation flags
@@ -1746,7 +1757,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getRuleSetAtOffset() method
 	/**
-	 * Returns the syntax highlighting ruleset at the specified offset.
+	 * @return the syntax highlighting ruleset at the specified offset.
+	 * @param offset the offset
 	 * @since jEdit 4.1pre1
 	 */
 	public ParserRuleSet getRuleSetAtOffset(int offset)
@@ -1764,7 +1776,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getKeywordMapAtOffset() method
 	/**
-	 * Returns the syntax highlighting keyword map in effect at the
+	 * @return the syntax highlighting keyword map in effect at the
 	 * specified offset. Used by the <b>Complete Word</b> command to
 	 * complete keywords.
 	 * @param offset The offset
@@ -1782,6 +1794,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * JavaScript, for example).
 	 * @param offset The offset
 	 * @param name The property name
+	 * @return the property value
 	 * @since jEdit 4.0pre3
 	 */
 	public String getContextSensitiveProperty(int offset, String name)
@@ -1802,7 +1815,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getMode() method
 	/**
-	 * Returns this buffer's edit mode. This method is thread-safe.
+	 * @return this buffer's edit mode. This method is thread-safe.
 	 */
 	public Mode getMode()
 	{
@@ -1867,7 +1880,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ isFoldStart() method
 	/**
-	 * Returns if the specified line begins a fold.
+	 * @param line the line
+	 * @return if the specified line begins a fold.
 	 * @since jEdit 3.1pre1
 	 */
 	public boolean isFoldStart(int line)
@@ -1878,7 +1892,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ isFoldEnd() method
 	/**
-	 * Returns if the specified line ends a fold.
+	 * @return if the specified line ends a fold.
+	 * @param line the line
 	 * @since jEdit 4.2pre5
 	 */
 	public boolean isFoldEnd(int line)
@@ -1901,7 +1916,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getFoldLevel() method
 	/**
-	 * Returns the fold level of the specified line.
+	 * @return the fold level of the specified line.
 	 * @param line A physical line index
 	 * @since jEdit 3.1pre1
 	 */
@@ -1976,7 +1991,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getFoldAtLine() method
 	/**
-	 * Returns an array. The first element is the start line, the
+	 * @return an array. The first element is the start line, the
 	 * second element is the end line, of the fold containing the
 	 * specified line number.
 	 * @param line The line number
@@ -2035,7 +2050,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getFoldHandler() method
 	/**
-	 * Returns the current buffer's fold handler.
+	 * @return the current buffer's fold handler.
 	 * @since jEdit 4.2pre1
 	 */
 	@Nonnull
@@ -2047,6 +2062,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ setFoldHandler() method
 	/**
 	 * Sets the buffer's fold handler.
+	 * @param foldHandler the fold handler
 	 * @since jEdit 4.2pre2
 	 */
 	public void setFoldHandler(@Nonnull FoldHandler foldHandler)
@@ -2070,7 +2086,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ undo() method
 	/**
 	 * Undoes the most recent edit.
-	 *
+	 * @param textArea the text area
 	 * @since jEdit 4.0pre1
 	 */
 	public void undo(TextArea textArea)
@@ -2112,7 +2128,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ redo() method
 	/**
 	 * Redoes the most recently undone edit.
-	 *
+	 * @param textArea the textArea
 	 * @since jEdit 2.7pre2
 	 */
 	public void redo(TextArea textArea)
@@ -2154,7 +2170,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ isTransactionInProgress() method
 	/**
-	 * Returns if an undo or compound edit is currently in progress. If this
+	 * @return if an undo or compound edit is currently in progress. If this
 	 * method returns true, then eventually a
 	 * {@link org.gjt.sp.jedit.buffer.BufferListener#transactionComplete(JEditBuffer)}
 	 * buffer event will get fired.
@@ -2216,7 +2232,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ insideCompoundEdit() method
 	/**
-	 * Returns if a compound edit is currently active.
+	 * @return if a compound edit is currently active.
 	 * @since jEdit 3.1pre1
 	 */
 	public boolean insideCompoundEdit()
@@ -2226,7 +2242,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ isUndoInProgress() method
 	/**
-	 * Returns if an undo or redo is currently being performed.
+	 * @return if an undo or redo is currently being performed.
 	 * @since jEdit 4.3pre3
 	 */
 	public boolean isUndoInProgress()
@@ -2236,7 +2252,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getUndoId() method
 	/**
-	 * Returns an object that identifies the undo operation to which the
+	 * @return an object that identifies the undo operation to which the
 	 * current content change belongs. This method can be used by buffer
 	 * listeners during content changes (contentInserted/contentRemoved)
 	 * to find out which content changes belong to the same "undo" operation.
@@ -2323,7 +2339,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getBufferListeners() method
 	/**
-	 * Returns an array of registered buffer change listeners.
+	 * @return an array of registered buffer change listeners.
 	 * @since jEdit 4.3pre3
 	 */
 	public BufferListener[] getBufferListeners()
@@ -2353,7 +2369,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ canUndo() method
 	/**
-	 * Returns true if an undo operation can be performed.
+	 * @return true if an undo operation can be performed.
 	 * @since jEdit 4.3pre18
 	 */
 	public boolean canUndo()
@@ -2365,7 +2381,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ canRedo() method
 	/**
-	 * Returns true if a redo operation can be performed.
+	 * @return true if a redo operation can be performed.
 	 * @since jEdit 4.3pre18
 	 */
 	public boolean canRedo()

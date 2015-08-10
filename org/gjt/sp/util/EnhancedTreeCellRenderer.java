@@ -37,7 +37,7 @@ import java.util.WeakHashMap;
  * tree cell renderers. Using {@code DefaultTreeCellRenderer} as superclass for a custom tree
  * cell renderer without further measures is not stable in regards to on-the-fly Look and Feel
  * changes, at least not with Java 6. For Java 7 it should be tested again.
- * <p/>
+ * <p>
  * With Java 6 the {@code DefaultTreeCellRenderer} initializes some values according to the
  * Look and Feel in its constructor. If the {@code DefaultTreeCellRenderer} is created by the
  * {@link JTree} code, it is recreated on a Look and Feel change. This way all works fine. But
@@ -55,7 +55,7 @@ import java.util.WeakHashMap;
  *         The Look and Feel change is first applied to the {@code JTree}, then the sizes of
  *         the tree cells which are saved in a cache are recalculated. Only <b>after</b> that,
  *         the children of the {@code JTree} get the new Look and Feel applied, amongst them
- *         also the tree cell renderer.<br/>
+ *         also the tree cell renderer.<br>
  *         So even if a custom tree cell renderer is aware of on-the-fly Look and Feel changes
  *         by reinitializing values from the Look and Feel if it changes, those cached sizes
  *         are still calculated for the old Look and Feel. The only way to work around this is
@@ -63,7 +63,7 @@ import java.util.WeakHashMap;
  *         significant property of the {@code JTree} which influences size calculations.
  *     </li>
  * </ol>
- * <p/>
+ * <p>
  * To work around the described problems this enhanced tree cell renderer listens for Look
  * and Feel changes on the {@code JTree} where this renderer is used, requests a subclass
  * to create a new instance of the renderer and sets it on the {@code JTree}. By doing so
@@ -113,11 +113,11 @@ public abstract class EnhancedTreeCellRenderer extends DefaultTreeCellRenderer
 	 * Creates a new instance of the tree cell renderer. Each invocation has to
 	 * return a different object. Saving a reference and returning the same
 	 * instance from different calls of this method is <b>not</b> appropriate.
-	 * <p/>
+	 * <p>
 	 * Any one-time initializations that are necessary and are not made in the
 	 * constructor should be made in this method. The simplest implementation
 	 * of this method will just call the constructor and return the result.
-	 * <p/>
+	 * <p>
 	 * This is an instance method so that the new instance can be set up with
 	 * information from the current instance.
 	 *

@@ -33,7 +33,7 @@ import javax.swing.text.Segment;
  * <code>services.xml</code> files like so:
  *
  * <pre>&lt;SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="<i>name</i>"&gt;
- *    new <i>MyFoldHandler<i>();
+ *    new <i>MyFoldHandler</i>();
  *&lt;/SERVICE&gt;</pre>
  *
  * See {@link org.gjt.sp.jedit.ServiceManager} for details.

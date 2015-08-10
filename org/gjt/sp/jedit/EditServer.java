@@ -175,7 +175,8 @@ public class EditServer extends Thread
 	 * @param newView Open a new view?
 	 * @param newPlainView Open a new plain view?
 	 * @param parent The client's parent directory
-	 * @param args A list of files. Null entries are ignored, for convinience
+	 * @param args A list of files. Null entries are ignored, for convenience
+	 * @return the buffer
 	 * @since jEdit 4.2pre1
 	 */
 	public static Buffer handleClient(boolean restore,

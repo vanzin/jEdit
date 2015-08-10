@@ -36,7 +36,7 @@ package org.gjt.sp.jedit.bsh;
 
 /**
 	This class needs logic to prevent the right hand side of boolean logical
-	expressions from being naively evaluated...  e.g. for "foo && bar" bar 
+	expressions from being naively evaluated...  e.g. for "foo &amp;&amp; bar" bar 
 	should not be evaluated in the case where foo is true.
 */
 class BSHTernaryExpression extends SimpleNode {

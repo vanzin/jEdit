@@ -908,7 +908,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 	//{{{ PluginInfoBox class
 	/**
-	 * @TODO refactor to use the PluginDetailPanel?
+	 * TODO: refactor to use the PluginDetailPanel?
 	 */
 	private class PluginInfoBox extends JEditorPane implements ListSelectionListener
 	{

@@ -378,7 +378,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Compares two strings.<p>
 	 *
-	 * Unlike <function>String.compareTo()</function>,
+	 * Unlike <code>String.compareTo()</code>,
 	 * this method correctly recognizes and handles embedded numbers.
 	 * For example, it places "My file 2" before "My file 10".<p>
 	 *

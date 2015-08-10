@@ -21,15 +21,15 @@
 package org.jedit.core;
 
 /** A Migration service.
- * <br />
+ * <br>
  * The goal of migration is usually to replace old properties or data files
  * with a new set, located elsewhere. The fact is that depending on where
  * the data needs to be updated, the migration may need to be done at
-*  different places during jEdit's startup. <br />
+*  different places during jEdit's startup. <br>
  * There is no specific time that all migration services are called currently.
  * The service and interface exists primarily so you don't need to add a compilation
- * dependency of the org.gjt.sp.jEdit class to your MigrationService class. <br />
- * <br />
+ * dependency of the org.gjt.sp.jEdit class to your MigrationService class. <br>
+ * <br>
  * Concrete instances need to guarantee that the migration itself is only done
  * once.
  * @see org.jedit.migration.OneTimeMigrationService

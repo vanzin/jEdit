@@ -226,7 +226,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ getAction() method
 	/**
-	 * Returns an action with the specified name.<p>
+	 * @return an action with the specified name.<p>
 	 *
 	 * <b>Deferred loading:</b> this will load the action set if necessary.
 	 *
@@ -252,7 +252,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ getActionCount() method
 	/**
-	 * Returns the number of actions in the set.
+	 * @return the number of actions in the set.
 	 * @since jEdit 4.0pre1
 	 */
 	public int getActionCount()
@@ -262,7 +262,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ getActionNames() method
 	/**
-	 * Returns an array of all action names in this action set.
+	 * @return an array of all action names in this action set.
 	 * @since jEdit 4.2pre1
 	 */
 	public String[] getActionNames()
@@ -279,7 +279,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ getCacheableActionNames() method
 	/**
-	 * Returns an array of all action names in this action set that should
+	 * @return an array of all action names in this action set that should
 	 * be cached; namely, <code>BeanShellAction</code>s.
 	 * @since jEdit 4.2pre1
 	 */
@@ -314,7 +314,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ getActions() method
 	/**
-	 * Returns an array of all actions in this action set.<p>
+	 * @return an array of all actions in this action set.<p>
 	 *
 	 * <b>Deferred loading:</b> this will load the action set if necessary.
 	 *
@@ -335,7 +335,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ contains() method
 	/**
-	 * Returns if this action set contains the specified action.
+	 * @return if this action set contains the specified action.
 	 * @param action The action
 	 * @since jEdit 4.2pre1
 	 */
@@ -348,7 +348,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 
 	//{{{ size() method
 	/**
-	 * Returns the number of actions in this action set.
+	 * @return the number of actions in this action set.
 	 * @since jEdit 4.2pre2
 	 */
 	public int size()
@@ -407,6 +407,13 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	/**
 	 * This method should be implemented to return an action that will execute
 	 * the given code
+	 * @param actionName the action name
+	 * @param code the code
+	 * @param selected selected
+	 * @param noRepeat noRepeat
+	 * @param noRecord noRecord
+	 * @param noRememberLast noRememberLast
+	 * @return an action
 	 * @since 4.3pre13
 	 */
 	protected abstract JEditAbstractEditAction createBeanShellAction(String actionName,

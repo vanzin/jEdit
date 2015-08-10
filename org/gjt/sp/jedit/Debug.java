@@ -154,6 +154,7 @@ public class Debug
 	 * the given period of time. Used to force conditions that are
 	 * hard to reproduce, for example deadlock cases.
 	 * @param time Required delay, in ms
+	 * @return an integer
 	 */
 	public static int compDelay(long time)
 	{

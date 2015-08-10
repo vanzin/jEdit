@@ -11,22 +11,22 @@ import java.io.*;
 	<p>
 	You can use the Parser from the command line to do basic structural 
 	validation of BeanShell files without actually executing them. e.g.
-	<code><pre>
+	<code>
 		java bsh.Parser [ -p ] file [ file ] [ ... ]
-	</pre></code>
+	</code>
 	<p>
 	The -p option causes the abstract syntax to be printed.
 	<p>
 
 	From code you'd use the Parser like this:
-	<p
-	<code><pre>
+	<p>
+	<code>
 		Parser parser = new Parser(in);
 		while( !(eof=parser.Line()) ) {
 			SimpleNode node = parser.popNode();
 			// use the node, etc. (See bsh.BSH* classes)
 		}
-	</pre></code>
+	</code>
 */
 public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants, ParserConstants {/*@bgen(jjtree)*/
   protected JJTParserState jjtree = new JJTParserState();boolean retainComments = false;

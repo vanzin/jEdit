@@ -208,7 +208,7 @@ public class BshClassManager
         classloader.
         If a BshClassManager implementation is loaded the call will be
         delegated to it, to allow for additional hooks.
-        <p/>
+        <p>
 
         This simply wraps that bottom level class lookup call and provides a
         central point for monitoring and handling certain Java version
@@ -417,7 +417,7 @@ public class BshClassManager
     /**
         Reload all classes in the specified package: e.g. "com.sun.tools"
 
-        The special package name "<unpackaged>" can be used to refer
+        The special package name "&lt;unpackaged&gt;" can be used to refer
         to unpackaged classes.
     */
     public void reloadPackage( String pack )

@@ -172,7 +172,6 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * property <code>plugin.<i>className</i>.browser-menu.code</code> to be BeanShell
  * code that evaluates to an implementation of
  * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.</p>
- *<p>
  *
  *<p> In all cases, each action's
  * menu item label is taken from the <code><i>actionName</i>.label</code>
@@ -201,7 +200,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * for the pane in the dialog box.</li>
  * <li><code>options.<i>paneName</i>.code</code> - BeanShell code that
  * evaluates to an instance of the {@link OptionPane} class.</li>
- *
+ * </ul>
  * <h3>Example</h3>
  *
  * Here is an example set of plugin properties:
@@ -541,7 +540,7 @@ public abstract class EditPlugin
 
 	//{{{ getResourceAsOutputStream() method
 	/**
-	 * <p>Returns an output stream to the specified resource, or <code>null</node> if access
+	 * <p>Returns an output stream to the specified resource, or <code>null</code> if access
 	 * to that resource is denied.</p>
 	 *
 	 * <p>This method doesn't need the plugin to be activated. You can pass
@@ -684,7 +683,7 @@ public abstract class EditPlugin
 
 	//{{{ getClassName() method
 	/**
-	 * Returns the plugin's class name. This might not be the same as
+	 * @return the plugin's class name. This might not be the same as
 	 * the class of the actual <code>EditPlugin</code> instance, for
 	 * example if the plugin is not loaded yet.
 	 *
@@ -697,7 +696,7 @@ public abstract class EditPlugin
 
 	//{{{ getPluginJAR() method
 	/**
-	 * Returns the JAR file containing this plugin.
+	 * @return the JAR file containing this plugin.
 	 * @since jEdit 4.2pre1
 	 */
 	public PluginJAR getPluginJAR()
@@ -710,7 +709,7 @@ public abstract class EditPlugin
 	 * Called by the view when constructing its <b>Plugins</b> menu.
 	 * See the description of this class for details about how the
 	 * menu items are constructed from plugin properties.
-	 *
+	 * @return the menu item
 	 * @since jEdit 4.2pre1
 	 */
 	public final JMenuItem createMenuItems()
@@ -742,6 +741,7 @@ public abstract class EditPlugin
 	 * <b>Plugins</b> menu.
 	 * See the description of this class for details about how the
 	 * menu items are constructed from plugin properties.
+	 * @return the menu item
 	 *
 	 * @since jEdit 4.2pre1
 	 */

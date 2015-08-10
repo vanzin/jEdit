@@ -113,7 +113,7 @@ public class EditBus
 	public static @interface EBHandler
 	{
 		/**
-		 * Whether the message should match the exact type of
+		 * @return Whether the message should match the exact type of
 		 * the parameter, instead of a compatible type.
 		 */
 		boolean exact() default false;

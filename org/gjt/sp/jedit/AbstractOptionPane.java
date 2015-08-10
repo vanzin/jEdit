@@ -119,6 +119,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 
 	//{{{ newLabel()
 	/**
+	 * @param label The label to associate with comp
+	 * @param comp The component to associate the label
 	 * @return a label which has the same tooltiptext as the Component
 	 *    that it is a label for. This is used to create labels from inside
 	 *    AbstractOptionPane.

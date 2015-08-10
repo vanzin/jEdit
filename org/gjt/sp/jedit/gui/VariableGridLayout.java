@@ -82,13 +82,13 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	 * and the specified distance to the borders.
 	 *
 	 * @param mode The mode in which to operate. Either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS
-	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS (>0)
-	 * @param hgap The horizontal space between cells (>=0)
-	 * @param vgap The vertical space between cells (>=0)
+	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS (&gt;0)
+	 * @param hgap The horizontal space between cells (&gt;=0)
+	 * @param vgap The vertical space between cells (&gt;=0)
 	 * @param takeSizesIntoAccount Whether to take minimum and maximum sizes into account when distributing free space
 	 *        Javier Diaz Soto (jbds) warns in #2997417 that this may cause gui freeze and provides a patch
 	 * @param distanceToBorders The distances to the borders
-	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is <= 0 or hgap or vgap is < 0
+	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is &lt;= 0 or hgap or vgap is &lt; 0
 	 */
 	public VariableGridLayout(int mode, int size, int hgap, int vgap, boolean takeSizesIntoAccount, Insets distanceToBorders)
 	{
@@ -123,12 +123,12 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	 * and zero distance to borders.
 	 *
 	 * @param mode The mode in which to operate. Either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS
-	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS (>0)
-	 * @param hgap The horizontal space between cells (>=0)
-	 * @param vgap The vertical space between cells (>=0)
+	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS (&gt;0)
+	 * @param hgap The horizontal space between cells (&gt;=0)
+	 * @param vgap The vertical space between cells (&gt;=0)
 	 * @param takeSizesIntoAccount Whether to take minimum and maximum sizes into account when distributing free space
 	 *        Javier Diaz Soto (jbds) warns in #2997417 that this may cause gui freeze and provides a patch
-	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is <= 0 or hgap or vgap is < 0
+	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is &lt;= 0 or hgap or vgap is &lt; 0
 	 */
 	public VariableGridLayout(int mode, int size, int hgap, int vgap, boolean takeSizesIntoAccount)
 	{
@@ -145,7 +145,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS
 	 * @param hgap The horizontal space between cells
 	 * @param vgap The vertical space between cells
-	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is <= 0 or hgap or vgap is < 0
+	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is&lt;= 0 or hgap or vgap is &lt; 0
 	 */
 	public VariableGridLayout(int mode, int size, int hgap, int vgap)
 	{
@@ -160,7 +160,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	 *
 	 * @param mode The mode in which to operate. Either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS
 	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS
-	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is <= 0
+	 * @throws IllegalArgumentException if mode is not either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS or size is &lt;= 0
 	 */
 	public VariableGridLayout(int mode, int size)
 	{
