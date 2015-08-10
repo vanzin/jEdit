@@ -343,6 +343,9 @@
 <MODE NAME="maple"		FILE="maple.xml"
         FILE_NAME_GLOB="*.{mpl,mws}" />
 
+<MODE NAME="markdown" FILE="markdown.xml"
+        FILE_NAME_GLOB="*.md" />
+
 <MODE NAME="maven"		FILE="maven.xml"
         FILE_NAME_GLOB="pom.xml"/>
 
