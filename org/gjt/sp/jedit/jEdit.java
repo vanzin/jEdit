@@ -1423,11 +1423,11 @@ public class jEdit
 
 		//{{{ Load the global catalog first
 		if(jEditHome == null)
-			loadModeCatalog("/modes/catalog",true);
+			loadModeCatalog("/modes/catalog", true, false);
 		else
 		{
 			loadModeCatalog(MiscUtilities.constructPath(jEditHome,
-				"modes","catalog"),false);
+				"modes","catalog"), false, false);
 		} //}}}
 
 		//{{{ Load user catalog second so user modes override global modes.
@@ -1460,7 +1460,7 @@ public class jEdit
 				}
 			}
 
-			loadModeCatalog(userCatalog.getPath(),false);
+			loadModeCatalog(userCatalog.getPath(), false, true);
 		} //}}}
 
 		Buffer buffer = buffersFirst;
@@ -4548,7 +4548,7 @@ loop:
 	 * Loads a mode catalog file.
 	 * @since jEdit 3.2pre2
 	 */
-	private static void loadModeCatalog(String path, boolean resource)
+	private static void loadModeCatalog(String path, boolean resource, final boolean userMode)
 	{
 		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
 
@@ -4558,7 +4558,9 @@ loop:
 			@Override
 			protected Mode instantiateMode(String modeName)
 			{
-				return new JEditMode(modeName);
+				Mode mode = new JEditMode(modeName);
+				mode.setUserMode(userMode);
+				return mode;
 			}
 		};
 		try

@@ -62,7 +62,10 @@ to this release.
 - Align gutter numbers with lines when using additional vertical line spacing.
   (Bug #3717 - Dale Anson)
   
-- Added option to hide open files from recent file list (FR #481 - Dale Anson)  
+- Added option to hide open files from recent file list (FR #481 - Dale Anson)
+
+- UI adjustment to allow adding new mode files by point and click.
+  (FR # 471 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
@@ -112,7 +115,7 @@ to this release.
 - Updated Go mode (Feature request 496, ahlearn). This also fixes bug #3921.
 
 - Allow editing, but not saving, of read only files. 
-  (Feature request #422 - Dale Anson) 
+  (Feature request #422 - Dale Anson)   
 
 }}}
 }}}

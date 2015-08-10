@@ -154,6 +154,18 @@ public class Mode
 		}
 	} //}}}
 
+	//{{{ isUserMode method
+	public boolean isUserMode() 
+	{
+		return isUserMode;	
+	} //}}}
+	
+	//{{{ setUserMode method
+	public void setUserMode(boolean b) 
+	{
+		isUserMode = b;	
+	} //}}}
+	
 	//{{{ getProperty() method
 	/**
 	 * Returns a mode property.
@@ -528,5 +540,6 @@ public class Mode
 	private List<IndentRule> indentRules;
 	private String electricKeys;
 	private boolean ignoreWhitespace;
+	private boolean isUserMode;
 	//}}}
 }

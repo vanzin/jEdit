@@ -31,6 +31,8 @@ import java.util.Objects;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.gui.AddModeDialog;
+import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -50,21 +52,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	@Override
 	protected void _init()
 	{
-		Mode[] modes = jEdit.getModes();
-		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
-
-		global = new ModeProperties();
-		modeProps = new ModeProperties[modes.length];
-
-		String[] modeNames = new String[modes.length + 1];
-		modeNames[0] = jEdit.getProperty("options.editing.global");
-
-		for(int i = 0; i < modes.length; i++)
-		{
-			modeProps[i] = new ModeProperties(modes[i]);
-			modeNames[i + 1] = modes[i].getName();
-		}
-
+		Mode[] modes = reloadModes();
 		mode = new JComboBox(modeNames);
 		mode.addActionListener(new ActionHandler());
 
@@ -72,6 +60,12 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(captionBox);
 
 		addComponent(jEdit.getProperty("options.editing.mode"),mode);
+
+		deleteMode = new JButton(jEdit.getProperty("options.editing.deleteMode"));
+		deleteMode.setEnabled(false);
+		deleteMode.setVisible(false);
+		deleteMode.addActionListener(new ActionHandler());
+		addComponent(deleteMode);
 
 		useDefaults = new JCheckBox(jEdit.getProperty("options.editing.useDefaults"));
 		useDefaults.addActionListener(new ActionHandler());
@@ -141,7 +135,7 @@ public class EditingOptionPane extends AbstractOptionPane
 
 		addComponent(jEdit.getProperty("options.editing.firstlineGlob"),
 			firstlineGlob = new JTextField());
-
+		
 		selectMode();
 
 		addSeparator();
@@ -161,8 +155,33 @@ public class EditingOptionPane extends AbstractOptionPane
 		resetUndoOnSave.setSelected(jEdit.getBooleanProperty("resetUndoOnSave"));
 		addComponent(resetUndoOnSave);
 		//}}}
+		
+		addSeparator();
+
+		addMode = new JButton(jEdit.getProperty("options.editing.addMode"));
+		addMode.addActionListener(new ActionHandler());
+		addComponent(addMode);
 
 	} //}}}
+	
+	private Mode[] reloadModes()
+	{
+		Mode[] modes = jEdit.getModes();
+		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
+
+		global = new ModeProperties();
+		modeProps = new ModeProperties[modes.length];
+
+		modeNames = new String[modes.length + 1];
+		modeNames[0] = jEdit.getProperty("options.editing.global");
+
+		for(int i = 0; i < modes.length; i++)
+		{
+			modeProps[i] = new ModeProperties(modes[i]);
+			modeNames[i + 1] = modes[i].getName();
+		}
+		return modes;
+	}
 
 	//{{{ _save() method
 	@Override
@@ -197,6 +216,8 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JCheckBox useDefaults;
 	private JTextField filenameGlob;
 	private JTextField firstlineGlob;
+	private JButton deleteMode;
+	private JButton addMode;
 	private JTextField noWordSep;
 	private JCheckBox camelCasedWords;
 	private JComboBox folding;
@@ -209,6 +230,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JCheckBox elasticTabstops;
 	private JComboBox autoIndent;
 	private JCheckBox deepIndent;
+	private String[] modeNames;
 	//}}}
 
 	//{{{ saveMode() method
@@ -234,7 +256,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	//{{{ selectMode() method
 	private void selectMode()
 	{
-		int index = mode.getSelectedIndex();
+		int index = mode.getSelectedIndex() < 0 ? 0 : mode.getSelectedIndex();
 		current = index == 0 ? global : modeProps[index - 1];
 		current.edited = true;
 		current.load();
@@ -259,6 +281,8 @@ public class EditingOptionPane extends AbstractOptionPane
 		elasticTabstops.setSelected(current.elasticTabstops);
 		autoIndent.setSelectedItem(current.autoIndent);
 		deepIndent.setSelected(current.deepIndent);
+		deleteMode.setEnabled(current.isUserMode);
+		deleteMode.setVisible(current.isUserMode);
 
 		updateEnabled();
 		revalidate();
@@ -317,6 +341,43 @@ public class EditingOptionPane extends AbstractOptionPane
 					useDefaults.isSelected();
 				updateEnabled();
 			}
+			else if (source == deleteMode)
+			{
+				int answer = JOptionPane.showConfirmDialog(EditingOptionPane.this, jEdit.getProperty("options.editing.deleteMode.dialog.message"), jEdit.getProperty("options.editing.deleteMode.dialog.title"), JOptionPane.YES_NO_OPTION);
+				if (JOptionPane.YES_OPTION == answer && current.mode != null)
+				{
+					String modeName = current.mode.getName();
+					ModeProvider.instance.removeMode(modeName);
+					mode.removeItem(modeName);
+				}
+			}
+			else if (source == addMode)
+			{
+				AddModeDialog dialog = new AddModeDialog(jEdit.getActiveView());
+				if (dialog.isCanceled())
+					return;
+				String modeName = dialog.getModeName();
+				boolean exists = jEdit.getMode(modeName) != null;
+				if (exists)
+				{
+					int answer = JOptionPane.showConfirmDialog(EditingOptionPane.this, jEdit.getProperty("options.editing.addMode.dialog.warning.message"), jEdit.getProperty("options.editing.addMode.dialog.warning.title") + " " + modeName, JOptionPane.YES_NO_OPTION);
+					if (JOptionPane.YES_OPTION != answer)
+						return;
+				}
+				
+				// create mode and set properties from dialog values
+				Mode newMode = new Mode(modeName);
+				newMode.setProperty("file", dialog.getModeFile());
+				newMode.setProperty("filenameGlob", dialog.getFilenameGlob());
+				newMode.setProperty("firstlineGlob", dialog.getFirstLineGlob());
+				ModeProvider.instance.addUserMode(newMode);
+				
+				// refresh the mode dropdown so the new mode is in the list
+				jEdit.reloadModes();
+				reloadModes();
+				mode.setModel(new DefaultComboBoxModel(modeNames));
+				mode.setSelectedItem(modeName);
+			}
 		}
 	} //}}}
 
@@ -343,6 +404,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		boolean elasticTabstops;
 		String autoIndent;
 		boolean deepIndent;
+		boolean isUserMode;
 		//}}}
 
 		//{{{ ModeProperties constructor
@@ -384,6 +446,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				elasticTabstops = mode.getBooleanProperty("elasticTabstops");
 				autoIndent = mode.getProperty("autoIndent").toString();
 				deepIndent = mode.getBooleanProperty("deepIndent");
+				isUserMode = mode.isUserMode();
 			}
 			else
 			{
