@@ -28,6 +28,7 @@ public class ListModelEditor
 		final JTable table = new JTable(tableModel);
 		table.setToolTipText("Move: PgUp/PgDown; Edit: Double-Click or Insert/Delete");
 		table.setRowHeight(GUIUtilities.defaultRowHeight());
+		table.getColumnModel().getColumn(0).setPreferredWidth(GUIUtilities.defaultColumnWidth());
 
 		table.addKeyListener(new KeyAdapter()
 		{
