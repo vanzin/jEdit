@@ -417,7 +417,9 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
-			<classpath refid="classpath.compile"/>
+            <classpath id="classpath.compile">
+                <fileset dir="${lib.dir}/compile" includes="*.jar"/>
+            </classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>

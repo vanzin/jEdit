@@ -22,7 +22,6 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -31,15 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -75,7 +66,7 @@ public class ModeProvider
 	/**
  	 * Will only remove user modes.	
  	 */
-	public void removeMode(String name)
+	public void removeMode(String name) throws IOException
 	{
 		Mode mode = modes.get(name);
 		if (mode.isUserMode())
@@ -89,18 +80,9 @@ public class ModeProvider
 			File modeFile = new File(modeFilename);
 			if (modeFile.exists()) 
 			{
-				try 
-				{
-					Path path = FileSystems.getDefault().getPath(modeFilename);
-					Files.move(path, path.resolveSibling(modeFilename + "_unused"), StandardCopyOption.REPLACE_EXISTING);
-				}
-				catch(Exception e) {
-					JOptionPane.showMessageDialog(jEdit.getActiveView(), 
-						jEdit.getProperty("options.editing.deleteMode.dialog.message1") + " " + modeFilename + 
-						"\n" + jEdit.getProperty("options.editing.deleteMode.dialog.message2") + " " + mode.getName());
-					return;
-				}
-				
+				Path path = FileSystems.getDefault().getPath(modeFilename);
+				Files.move(path, path.resolveSibling(modeFilename + "_unused"), StandardCopyOption.REPLACE_EXISTING);
+
 				// delete entry from mode catalog, catalog is in the same directory as the mode file
 				File catalogFile = new File(modeFile.getParent(),"catalog");
 				if (catalogFile.exists())
@@ -133,7 +115,6 @@ public class ModeProvider
 					}
 				}
 			}
-			
 		}
 	} //}}}
 
@@ -268,7 +249,7 @@ public class ModeProvider
 	 * @see org.gjt.sp.jedit.jEdit#reloadModes reloadModes
 	 * @param mode The edit mode
 	 */
-	public void addUserMode(Mode mode)
+	public void addUserMode(Mode mode, Path target) throws IOException
 	{
 		mode.setUserMode(true);
 		String name = mode.getName();
@@ -277,19 +258,9 @@ public class ModeProvider
 		String firstLineGlob = (String)mode.getProperty("firstlineGlob");
 		
 		// copy mode file to user mode directory
-		Path target = null;
-		try 
-		{
-			File file = new File(modeFile);
-			Path source = FileSystems.getDefault().getPath(modeFile);
-			target = FileSystems.getDefault().getPath(jEdit.getSettingsDirectory(), "modes", file.getName());
-			target = Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-		}
-		catch(Exception e) {
-			JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.warning.message1") + " " + modeFile + "\n--> " + target);
-			return;
-		}
-		
+		Path source = FileSystems.getDefault().getPath(modeFile);
+		Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+
 		// add entry to mode catalog, catalog is in the same directory as the mode file
 		File catalogFile = new File(target.toFile().getParent(),"catalog");
 		if (catalogFile.exists())
@@ -300,7 +271,8 @@ public class ModeProvider
 				BufferedReader br = new BufferedReader(new FileReader(catalogFile));
 				String line = null;
 				StringBuilder contents = new StringBuilder();
-				while((line = br.readLine()) != null) {
+				while((line = br.readLine()) != null)
+				{
 					contents.append(line).append('\n');
 				}
 				br.close();

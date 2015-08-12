@@ -26,6 +26,9 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -347,7 +350,17 @@ public class EditingOptionPane extends AbstractOptionPane
 				if (JOptionPane.YES_OPTION == answer && current.mode != null)
 				{
 					String modeName = current.mode.getName();
-					ModeProvider.instance.removeMode(modeName);
+					try
+					{
+						ModeProvider.instance.removeMode(modeName);
+					}
+					catch (IOException e)
+					{
+						Mode mode = ModeProvider.instance.getMode(modeName);
+						JOptionPane.showMessageDialog(jEdit.getActiveView(),
+								jEdit.getProperty("options.editing.deleteMode.dialog.message1") + ' ' + mode.getProperty("file") +
+										'\n' + jEdit.getProperty("options.editing.deleteMode.dialog.message2") + ' ' + EditingOptionPane.this.mode.getName());
+					}
 					mode.removeItem(modeName);
 				}
 			}
@@ -367,11 +380,22 @@ public class EditingOptionPane extends AbstractOptionPane
 				
 				// create mode and set properties from dialog values
 				Mode newMode = new Mode(modeName);
-				newMode.setProperty("file", dialog.getModeFile());
+				String modeFile = dialog.getModeFile();
+				newMode.setProperty("file", modeFile);
 				newMode.setProperty("filenameGlob", dialog.getFilenameGlob());
 				newMode.setProperty("firstlineGlob", dialog.getFirstLineGlob());
-				ModeProvider.instance.addUserMode(newMode);
-				
+
+				File file = new File(modeFile);
+				Path target = FileSystems.getDefault().getPath(jEdit.getSettingsDirectory(), "modes", file.getName());
+				try
+				{
+					ModeProvider.instance.addUserMode(newMode, target);
+				}
+				catch (IOException e)
+				{
+					JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.warning.message1") + " " + modeFile + "\n--> " + target);
+				}
+
 				// refresh the mode dropdown so the new mode is in the list
 				jEdit.reloadModes();
 				reloadModes();
