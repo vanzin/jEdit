@@ -1875,17 +1875,35 @@ public class GUIUtilities
 		button.putClientProperty("Nimbus.Overrides", defaults);
 	} //}}}
 
+	//{{{ defaultTableDimension() method
+	/**
+	 * JTable cell size, based on global defaults.
+	 */
+	public static Dimension defaultTableCellSize()
+	{
+		JLabel label = new JLabel("miniminiminiminiminiminiminiminiminimini");
+		UIDefaults defaults = UIManager.getDefaults();
+		Object font = defaults.get("Table.font");
+		if (font instanceof Font) label.setFont((Font)font);
+		return label.getPreferredSize();
+	} //}}}
+
+	//{{{ defaultColumnWidth() method
+	/**
+	 * Column width for JTable, based on global defaults.
+	 */
+	public static int defaultColumnWidth()
+	{
+		return defaultTableCellSize().width;
+	} //}}}
+
 	//{{{ defaultRowHeight() method
 	/**
 	 * Row height for JTable, based on global defaults.
 	 */
 	public static int defaultRowHeight()
 	{
-		JLabel label = new JLabel("dummy");
-		UIDefaults defaults = UIManager.getDefaults();
-		Object font = defaults.get("Table.font");
-		if (font instanceof Font) label.setFont((Font)font);
-		return label.getPreferredSize().height;
+		return defaultTableCellSize().height;
 	} //}}}
 
 	//{{{ addSizeSaver() method
