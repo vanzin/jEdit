@@ -4872,7 +4872,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		// Calculate an average to use a reasonable value for
 		// propotional fonts.
-		String charWidthSample = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String charWidthSample = "mix";
 		charWidthDouble =
 			painter.getFont().getStringBounds(charWidthSample,
 				painter.getFontRenderContext()).getWidth() / charWidthSample.length();
