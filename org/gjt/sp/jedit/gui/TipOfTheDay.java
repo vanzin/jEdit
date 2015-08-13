@@ -54,6 +54,7 @@ public class TipOfTheDay extends EnhancedDialog
 		tipText.setEditable(false);
 		tipText.setContentType("text/html");
 		tipText.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+		tipText.setFont(jEdit.getFontProperty("helpviewer.font"));
 
 		nextTip();
 
