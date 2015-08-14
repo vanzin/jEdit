@@ -158,7 +158,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			w = d.width;
 			h = d.height;
 			iBottomLineXOffset = (w / 2) - (fmBottom.stringWidth(sBottomLine) / 2);
-			iBottomLineYOffset = h-iLineHeight/2;
+			iBottomLineYOffset = h - fmBottom.getHeight() / 2;
 
 			String aboutText = jEdit.getProperty("about.text.prefix") + "\n \n"
 				+ jEdit.getProperty("about.text.contributors") + "\n \n" +
