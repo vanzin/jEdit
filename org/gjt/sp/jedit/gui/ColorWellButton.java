@@ -80,7 +80,7 @@ public class ColorWellButton extends JButton
 
 		private Rectangle2D bounds =
 				new JLabel("").getFont().createGlyphVector(
-						new FontRenderContext(null, false, false), "AAAA").getVisualBounds();
+						new FontRenderContext(null, true, false), "AAAA").getVisualBounds();
 
 		public int getIconWidth()
 		{

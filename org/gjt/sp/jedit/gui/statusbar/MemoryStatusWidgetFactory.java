@@ -97,8 +97,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			//Font font = UIManager.getFont("Label.font");
 			MemoryStatus.this.setFont(font);
 
-			FontRenderContext frc = new FontRenderContext(
-				null,false,false);
+			FontRenderContext frc = new FontRenderContext(null,true,false);
 			Rectangle2D bounds = font.getStringBounds(
 				memoryTestStr,frc);
 			Dimension dim = new Dimension((int)bounds.getWidth(),
@@ -190,7 +189,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			String str = (used / 1024 / 1024) + "/"
 				+ (total / 1024 / 1024) + "MB";
 
-			FontRenderContext frc = new FontRenderContext(null,false,false);
+			FontRenderContext frc = new FontRenderContext(null,true,false);
 
 			Rectangle2D bounds = g.getFont().getStringBounds(str,frc);
 

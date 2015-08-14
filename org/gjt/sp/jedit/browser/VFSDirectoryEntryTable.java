@@ -495,8 +495,7 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)getModel();
 
-		FontRenderContext fontRenderContext = new FontRenderContext(
-			null,false,false);
+		FontRenderContext fontRenderContext = new FontRenderContext(null,true,false);
 		int[] widths = new int[model.getColumnCount()];
 		for(int i = 0; i < widths.length; i++)
 		{
