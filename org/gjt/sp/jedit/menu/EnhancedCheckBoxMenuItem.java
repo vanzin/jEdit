@@ -124,9 +124,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			Insets insets = getInsets();
 			g.drawString(shortcut,getWidth() - (fm.stringWidth(
 				shortcut) + insets.right + insets.left + 5),
-				getFont().getSize() + (insets.top - 
-				(OperatingSystem.isMacOSLF() ? 0 : 1))
-				/* XXX magic number */);
+				fm.getAscent() + insets.top);
 		}
 	} //}}}
 
