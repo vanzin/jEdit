@@ -94,8 +94,8 @@ public class EnhancedMenuItem extends JMenuItem
 
 		if(shortcut != null)
 		{
-			d.width += (getFontMetrics(acceleratorFont)
-				.stringWidth(shortcut) + 15);
+			FontMetrics fm = getFontMetrics(acceleratorFont);
+			d.width += (fm.stringWidth(shortcut) + fm.stringWidth("AAAA"));
 		}
 		return d;
 	} //}}}
@@ -107,7 +107,9 @@ public class EnhancedMenuItem extends JMenuItem
 
 		if(shortcut != null)
 		{
+			Graphics2D g2 = (Graphics2D)g;
 			g.setFont(acceleratorFont);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setColor(getModel().isArmed() ?
 				acceleratorSelectionForeground :
 				acceleratorForeground);
@@ -137,21 +139,8 @@ public class EnhancedMenuItem extends JMenuItem
 	//{{{ Class initializer
 	static
 	{
-		String shortcutFont;
-		if (OperatingSystem.isMacOSLF())
-		{
-			shortcutFont = "Lucida Grande";
-		}
-		else
-		{
-			shortcutFont = "Monospaced";
-		}
-		
-		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
-		if(acceleratorFont == null)
-		{
-			acceleratorFont = new Font(shortcutFont,Font.PLAIN,12);
-		}
+		acceleratorFont = GUIUtilities.menuAcceleratorFont();
+
 		acceleratorForeground = UIManager
 			.getColor("MenuItem.acceleratorForeground");
 		if(acceleratorForeground == null)
