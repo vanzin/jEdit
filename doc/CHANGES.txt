@@ -117,7 +117,7 @@ to this release.
 - Allow editing, but not saving, of read only files. 
   (Feature request #422 - Dale Anson)   
   
-- Added Markdown mode (FR 495 - Dale Anson)  
+- Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)  
 
 }}}
 }}}
