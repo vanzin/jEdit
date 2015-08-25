@@ -1308,7 +1308,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isElectricKey(char ch, int line)
 	{
-		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
+		TokenMarker.LineContext ctx = getLineContext(line);
 		Mode mode = ModeProvider.instance.getMode(ctx.rules.getModeName());
 
 		// mode can be null, though that's probably an error "further up":
@@ -1320,6 +1320,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Syntax highlighting
+
+	//{{{ getLineContext() method
+	/**
+	 * Returns the line context of the token marker for the specified line.
+	 */
+	public TokenMarker.LineContext getLineContext(int line)
+	{
+		return lineMgr.getLineContext(line);
+	}
+	//}}}
 
 	//{{{ markTokens() method
 	/**
@@ -1356,11 +1366,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			getLineText(i,seg);
 
-			oldContext = lineMgr.getLineContext(i);
+			oldContext = getLineContext(i);
 
 			TokenMarker.LineContext prevContext = (
 				(i == 0 || contextInsensitive) ? null
-				: lineMgr.getLineContext(i - 1)
+				: getLineContext(i - 1)
 			);
 
 			TokenHandler _tokenHandler = i == lineIndex ? tokenHandler : DummyTokenHandler.INSTANCE;
@@ -2890,7 +2900,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private List<IndentRule> getIndentRules(int line)
 	{
 		String modeName = null;
-		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
+		TokenMarker.LineContext ctx = getLineContext(line);
 		if (ctx != null && ctx.rules != null)
 			modeName = ctx.rules.getModeName();
 		if (modeName == null)
