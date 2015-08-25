@@ -84,7 +84,7 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 
 	} // }}}
 
-	// {{{ OptionsDialog constructor
+	// {{{ TabbedOptionDialog constructor
 	public TabbedOptionDialog(Dialog dialog, String name)
 	{
 		super(dialog, jEdit.getProperty(name + ".title"), true);
