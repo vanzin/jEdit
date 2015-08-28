@@ -24,7 +24,7 @@ metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
 #}}}
 
-#{{{ Metal system and user text font
+#{{{ HelpViewer and Tip of the Day font
 helpviewer.font=Dialog
 helpviewer.fontsize=12
 helpviewer.fontstyle=0
