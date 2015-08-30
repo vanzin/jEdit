@@ -55,13 +55,13 @@ to this release.
 
 - Font properties were not applied after change in Appearances settings
   (Bug #3919 - Dale Anson)
-  
+
 - Allow columns to be rearranged in FSB (Feature request 489, 40, and old
   tracker 1442812 - Dale Anson)
-  
+
 - Align gutter numbers with lines when using additional vertical line spacing.
   (Bug #3717 - Dale Anson)
-  
+
 - Added option to hide open files from recent file list (FR #481 - Dale Anson)
 
 - UI adjustment to allow adding new mode files by point and click.
@@ -93,6 +93,8 @@ to this release.
 }}}
 {{{ Editing
 
+- Updates to Clojure mode (Marc M. Adkins, patch #565)
+
 - More conventional color scheme for diffs and changesets
   (Patch #560 - Makarius)
 
@@ -114,10 +116,10 @@ to this release.
 
 - Updated Go mode (Feature request 496, ahlearn). This also fixes bug #3921.
 
-- Allow editing, but not saving, of read only files. 
-  (Feature request #422 - Dale Anson)   
-  
-- Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)  
+- Allow editing, but not saving, of read only files.
+  (Feature request #422 - Dale Anson)
+
+- Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)
 
 }}}
 }}}

@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Execute misc/clojure/$1.clj to generate misc/clojure/$1.csv.
+# $1 defaults to 'keywords'
+#
+
+# This needs to be accurate per the current installation.
+CLOJURE_JAR=/usr/local/share/clojure/clojure-1.6.0/clojure-1.6.0.jar
+
+# The rest of the definitions should take care of themselves.
+
+# Figure out what the misc/clojure directory is
+# based on where this script is located:
+SCRIPT_DIR=`dirname $0`
+MISC_CLOJURE_DIR=`readlink -f $SCRIPT_DIR`
+# Do two hops up to the jEdit working directory:
+MISC_DIR=`dirname $MISC_CLOJURE_DIR`
+JEDIT_DIR=`dirname $MISC_DIR`
+
+# There really is only one script.
+SCRIPT=${1:-keywords}
+
+# Before
+ls -l $MISC_CLOJURE_DIR/$SCRIPT.csv
+
+# Bring up the Clojure jar directory and load misc/clojure/$SCRIPT.clj.
+# Specify the jEdit working directory to the loading script.
+# Put the output into the misc/clojure directory.
+java -cp $CLOJURE_JAR clojure.main \
+     $MISC_CLOJURE_DIR/$SCRIPT.clj \
+     :jedit $JEDIT_DIR \
+   > $MISC_CLOJURE_DIR/$SCRIPT.csv
+
+# After
+ls -l $MISC_CLOJURE_DIR/$SCRIPT.csv
+
+# column -s, -t < "$MISC_CLOJURE_DIR/$1.csv" | less -#2 -N -S
+
