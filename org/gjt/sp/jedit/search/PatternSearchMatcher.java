@@ -122,8 +122,17 @@ public class PatternSearchMatcher extends SearchMatcher
 		}
 
 		Matcher match = re.matcher(text);
-		if (!match.find(matchStart))
-			return null;
+		if (!match.find(matchStart)) {
+			// Check for special constructs, groups starting with (? are either pure, 
+			// non-capturing groups that do not capture text and do not count towards 
+			// the group total, or named-capturing group. Either way, need to remove
+			// them and try again since they won't match because the selection doesn't
+			// necessarily include the non-capturing part.
+			Pattern p = removeNonCapturingGroups(re, flags);
+			match = p.matcher(text);
+			if (!match.matches())
+				return null;
+		}
 
 		// Special care for zero width matches. Without this care,
 		// the caller will fall into an infinite loop, for non-reverse
@@ -221,10 +230,28 @@ public class PatternSearchMatcher extends SearchMatcher
 			returnValue.start = text.length() - returnValue.end;
 			returnValue.end = returnValue.start + len;
 		}
-
 		return returnValue;
+
 	} //}}}
 
+	//{{{ removeNonCapturingGroups() method
+    public static Pattern removeNonCapturingGroups( Pattern re, int flags ) 
+    {
+        String p = re.pattern();
+        String ncgroups = "[(][?].+?[)]";
+        Pattern nc_pattern = Pattern.compile( ncgroups, flags );
+        Matcher nc_matcher = nc_pattern.matcher( p );
+        if ( nc_matcher.find() ) 
+        {
+            String newRegex = nc_matcher.replaceAll( "" );
+            return Pattern.compile(newRegex, flags);
+        } 
+        else 
+        {
+            return re;
+        }
+    } //}}}
+    
 	//{{{ toString() method
 	@Override
 	public String toString()
