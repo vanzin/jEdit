@@ -30,6 +30,9 @@ contributing to this release.
 - Fix bug #3881, non-capturing lookahead in regex search didn't work.
   (Dale Anson)
 
+- Fix bug #3184: File browser completion dives into wrong directory
+  (Eric Le Lay)
+
 }}}
 {{{ UI Improvements
 

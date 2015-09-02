@@ -47,7 +47,8 @@ public class VFSFile implements Serializable
 	//{{{ findCompletion() method
 	/**
 	 * Return the index of a file whose name matches the given string,
-	 * in a case-insensitive manner. Exact matches are preferred.
+	 * in a case-insensitive manner. Exact matches are preferred,
+	 * then same length with different cases, then longest match.
 	 * @param files The list of files
 	 * @param start The start index, inclusive
 	 * @param end The end index, exclusive
@@ -58,22 +59,43 @@ public class VFSFile implements Serializable
 	public static int findCompletion(VFSFile[] files, int start, int end,
 		String str, boolean dirsOnly)
 	{
+		boolean strIsAbsolute = MiscUtilities.isAbsolutePath(str);
+		int strLen = str.length();
+		int potentialMatchLen = 0;
+		int iPotentialMatch = -1;
+		boolean potentialMatchGTStr = false;
+
 		for(int i = start; i < end; i++)
 		{
 			VFSFile file = files[i];
-			String matchAgainst = (MiscUtilities.isAbsolutePath(str)
+			String matchAgainst = (strIsAbsolute
 				? file.getPath() : file.getName());
 
 			if(dirsOnly && file.getType() == FILE)
+			{
 				continue;
+			}
 			/* try exact match first */
 			else if(matchAgainst.equals(str))
+			{
 				return i;
-			else if(matchAgainst.regionMatches(true,0,str,0,str.length()))
-				return i;
+			}
+			else if(matchAgainst.regionMatches(true,0,str,0,strLen))
+			{
+				/* Keep the first match with exact length but different case.
+				 * If the first match is not same length, prefer longest match */
+				if(iPotentialMatch == -1
+						|| (potentialMatchGTStr
+							&& (matchAgainst.length() > potentialMatchLen)))
+				{
+					potentialMatchLen = matchAgainst.length();
+					iPotentialMatch = i;
+					potentialMatchGTStr = potentialMatchLen > strLen;
+				}
+			}
 		}
 
-		return -1;
+		return iPotentialMatch;
 	} //}}}
 
 	//{{{ findCompletion() method
