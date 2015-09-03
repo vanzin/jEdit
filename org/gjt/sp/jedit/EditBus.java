@@ -238,7 +238,7 @@ public class EditBus
 				     EBMessage msg)
 		throws Exception
 	{
-		if (emh.handler != null)
+		if (emh.handler != null && emh.comp != null)
 			emh.handler.invoke(emh.comp, msg);
 		else
 		{
