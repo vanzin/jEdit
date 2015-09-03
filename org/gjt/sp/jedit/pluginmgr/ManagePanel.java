@@ -291,11 +291,9 @@ public class ManagePanel extends JPanel
 
 			if (jars != null)
 			{
-				String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
-				StringTokenizer st = new StringTokenizer(jars);
-				while (st.hasMoreTokens())
+				Collection<String> jarsPaths = PluginJAR.parseJarsFilesString(pluginJAR.getPath(), jars);
+				for(String _jarPath: jarsPaths)
 				{
-					String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
 					if (new File(_jarPath).exists())
 						jarList.add(_jarPath);
 				}
@@ -375,32 +373,8 @@ public class ManagePanel extends JPanel
 				author = jEdit.getProperty("plugin."+clazz+".author");
 				docs = jEdit.getProperty("plugin."+clazz+".docs");
 				description = jEdit.getProperty("plugin."+clazz+".description");
-				String jarsProp = jEdit.getProperty("plugin."+clazz+".jars");
-				if(jarsProp != null)
-				{
-					String directory = MiscUtilities.getParentOfPath(this.jar);
-
-					StringTokenizer st = new StringTokenizer(jarsProp);
-					while(st.hasMoreElements())
-					{
-						jars.add(MiscUtilities.constructPath(
-							directory,st.nextToken()));
-					}
-				}
-
-				String filesProp = jEdit.getProperty("plugin."+clazz+".files");
-
-				if(filesProp != null)
-				{
-					String directory = MiscUtilities.getParentOfPath(this.jar);
-
-					StringTokenizer st = new StringTokenizer(filesProp);
-					while(st.hasMoreElements())
-					{
-						jars.add(MiscUtilities.constructPath(
-							directory,st.nextToken()));
-					}
-				}
+				jars.addAll(jar.getJars());
+				jars.addAll(jar.getFiles());
 			}
 			else
 			{
@@ -1125,11 +1099,7 @@ public class ManagePanel extends JPanel
 
 					if (jars != null)
 					{
-						StringTokenizer st = new StringTokenizer(jars);
-						while (st.hasMoreTokens())
-						{
-							neededJars.add(st.nextToken());
-						}
+						neededJars.addAll(PluginJAR.parseJarsFilesStringNames(jars));
 					}
 				}
 				catch (IOException e1)

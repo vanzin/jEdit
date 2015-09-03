@@ -299,9 +299,29 @@ class Roster
 			if(path == null)
 				return;
 
-			// if download OK, remove existing version
+			/* if download OK, remove existing version
+			 * and bundled jars and files */
 			if(installed != null)
-				new Remove(installed).runInAWTThread(comp);
+			{
+				PluginJAR pluginJar = jEdit.getPluginJAR(installed);
+				Collection<String> libs = new LinkedList<>();
+				libs.add(installed);
+				if(pluginJar == null)
+				{
+					Log.log(Log.ERROR, Roster.Remove.class,
+						 "unable to get PluginJAR for "+installed);
+				}
+				else
+				{
+					 libs.addAll(pluginJar.getJars());
+					 libs.addAll(pluginJar.getFiles());
+				}
+
+				for(String lib: libs)
+				{
+					new Remove(lib).runInAWTThread(comp);
+				}
+			}
 
 			ZipFile zipFile = null;
 

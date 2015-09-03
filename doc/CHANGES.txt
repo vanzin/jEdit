@@ -33,6 +33,8 @@ contributing to this release.
 - Fix bug #3184: File browser completion dives into wrong directory
   (Eric Le Lay)
 
+- Fix bug #2833 Plugin jars dependencies not removed (Eric Le Lay)
+
 }}}
 {{{ UI Improvements
 
