@@ -4904,15 +4904,22 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		chunkCache.reset();
 		gutter.repaint();
 		painter.repaint();
+		
+		// reset the horizontal scrollbar and caret
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
-				horizontal.setValue(hbarPosition);
-				setCaretPosition(caretPosition);	
+				if (hbarPosition >= horizontal.getMinimum() && hbarPosition <= horizontal.getMaximum())
+				{
+					horizontal.setValue(hbarPosition);
+				}
+				if (caretPosition >= 0 && caretPosition < buffer.getLength())
+				{
+					setCaretPosition(caretPosition);
+				}
 			}
 		});
-		
 	} //}}}
 
 	//{{{ addActionSet() method
