@@ -2201,8 +2201,6 @@ public class Buffer extends JEditBuffer
 						!newMode.equals(getMode()
 						.getName()))
 						setMode();
-					else
-						propertiesChanged();
 				}
 
 				updateHash();
