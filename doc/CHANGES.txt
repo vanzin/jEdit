@@ -35,6 +35,8 @@ contributing to this release.
 
 - Fix bug #2833 Plugin jars dependencies not removed (Eric Le Lay)
 
+- Fix bug #3911, text area was scrolling to the left when saving. (Dale Anson)
+
 }}}
 {{{ UI Improvements
 

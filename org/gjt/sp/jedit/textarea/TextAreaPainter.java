@@ -155,12 +155,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
+		// for some reason, the height is always off by one when the bounds have
+		// not changed at all, hence the +1 on the height check. Without the +1, 
+		// everything gets reset every time, which leads to other problems.
 		if(x == getX() && y == getY() && width == getWidth()
-			&& height == getHeight())
+			&& (height == getHeight() || height == getHeight() + 1))
 		{
 			return;
 		}
-
 		super.setBounds(x,y,width,height);
 
 		textArea.recalculateVisibleLines();
