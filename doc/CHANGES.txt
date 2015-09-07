@@ -80,6 +80,7 @@ contributing to this release.
 - No error message when PluginManager doesn't find a file to be removed and
   show files to be removed in alphabetical order (end of Bug #3530 - Eric
   Le Lay)
+
 }}}
 {{{ Miscellaneous
 
