@@ -978,13 +978,19 @@ public class ManagePanel extends JPanel
 
 			for (String jar : jarsToRemove)
 			{
-				listModel.add(jar);
-				roster.addRemove(jar);
+				if(new File(jar).exists())
+				{
+					listModel.add(jar);
+					roster.addRemove(jar);
+				}
 			}
+
+			Object[] sortedConfirm = listModel.toArray();
+			Arrays.sort(sortedConfirm);
 
 			int button = GUIUtilities.listConfirm(window,
 				"plugin-manager.remove-confirm",
-				null,listModel.toArray());
+				null, sortedConfirm);
 			if(button == JOptionPane.YES_OPTION)
 			{
 

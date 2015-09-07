@@ -77,6 +77,9 @@ contributing to this release.
 - UI adjustment to allow adding new mode files by point and click.
   (FR # 471 - Dale Anson)
 
+- No error message when PluginManager doesn't find a file to be removed and
+  show files to be removed in alphabetical order (end of Bug #3530 - Eric
+  Le Lay)
 }}}
 {{{ Miscellaneous
 

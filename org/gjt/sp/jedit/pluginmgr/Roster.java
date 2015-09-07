@@ -203,27 +203,29 @@ class Roster
 
 			toLoad.remove(this.jar);
 
-			// move JAR first
 			File jarFile = new File(this.jar);
 			File srcFile = new File(this.jar.substring(0, this.jar.length() - 4));
 
-			Log.log(Log.NOTICE,this,"Deleting " + jarFile);
-
-			boolean ok = jarFile.delete();
-			if (ok) 
+			if(jarFile.exists())
 			{
-				EditBus.send(new PluginUpdate(jarFile, PluginUpdate.REMOVED, false));	
-			}
+				Log.log(Log.NOTICE,this,"Deleting " + jarFile);
 
-			if(srcFile.exists())
-			{
-				ok &= recursiveDelete(srcFile);
-			}
+				boolean ok = jarFile.delete();
+				if (ok)
+				{
+					EditBus.send(new PluginUpdate(jarFile, PluginUpdate.REMOVED, false));
+				}
 
-			if(!ok)
-			{
-				String[] args = {this.jar};
-				GUIUtilities.error(comp,"plugin-manager.remove-failed",args);
+				if(srcFile.exists())
+				{
+					ok &= recursiveDelete(srcFile);
+				}
+
+				if(!ok)
+				{
+					String[] args = {this.jar};
+					GUIUtilities.error(comp,"plugin-manager.remove-failed",args);
+				}
 			}
 		} //}}}
 
