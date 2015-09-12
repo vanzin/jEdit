@@ -248,13 +248,14 @@ public class PluginManager extends JFrame
 			return;
 		}
 
+		installer.loading();
+		updater.loading();
+
 		ThreadUtilities.runInBackground(new Task()
 		{
 			@Override
 			public void _run()
 			{
-				installer.loading();
-				updater.loading();
 				try
 				{
 					downloadingPluginList = true;

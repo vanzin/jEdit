@@ -277,7 +277,7 @@ class InstallPanel extends JPanel implements EBComponent
 	boolean loadPluginSet(String path)
 	{
 		pluginSet.clear();
-		pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+		pluginModel.clearSelection();
 
 		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path, InstallPanel.this);
@@ -296,42 +296,31 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ updateModel() method
+	/**
+	 * Must be called from the EDT.
+	 **/
 	public void updateModel()
 	{
-		final Set<String> savedChecked = new HashSet<String>();
-		final Set<String> savedSelection = new HashSet<String>();
-		pluginModel.saveSelection(savedChecked, savedSelection);
-		pluginModel.clear();
-		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
-
-		ThreadUtilities.runInDispatchThread(new Runnable()
+		infoBox.setText(null);
+		pluginModel.update();
+		if (pluginModel.getRowCount() == 0)
 		{
-			@Override
-			public void run()
+			if (updates)
+				layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
+			else
+				layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
+		}
+		else
+		{
+			layout.show(InstallPanel.this, "INSTALL");
+			EventQueue.invokeLater(new Runnable()
 			{
-				infoBox.setText(null);
-				pluginModel.update();
-				pluginModel.restoreSelection(savedChecked, savedSelection);
-				if (pluginModel.getRowCount() == 0)
+				public void run()
 				{
-					if (updates)
-						layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
-					else
-						layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
+					searchField.requestFocusInWindow();
 				}
-				else
-				{
-					layout.show(InstallPanel.this, "INSTALL");
-					EventQueue.invokeLater(new Runnable()
-					{
-						public void run()
-						{
-							searchField.requestFocusInWindow();
-						}
-					});
-				}
-			}
-		});
+			});
+		}
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -344,7 +333,7 @@ class InstallPanel extends JPanel implements EBComponent
 			 if (chooseButton.path.length() > 0)
 			 {
 				 loadPluginSet(chooseButton.path);
-				 pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+				 pluginModel.clearSelection();
 				 chooseButton.updateUI();
 			 }
 		}
@@ -809,6 +798,12 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 		} //}}}
 
+		//{{{ clearSelection() method
+		public void clearSelection()
+		{
+			restoreSelection(Collections.<String>emptySet(), Collections.<String>emptySet());
+		} //}}}
+
 		//{{{ restoreSelection() method
 		public void restoreSelection(Set<String> savedChecked, Set<String> savedSelection)
 		{
@@ -1141,7 +1136,7 @@ class InstallPanel extends JPanel implements EBComponent
 		public void actionPerformed(ActionEvent e)
 		{
 			pluginSet.clear();
-			pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+			pluginModel.clearSelection();
 			jEdit.unsetProperty(PluginManager.PROPERTY_PLUGINSET);
 			chooseButton.updateUI();
 		} //}}}
