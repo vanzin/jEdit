@@ -80,6 +80,7 @@ class InstallPanel extends JPanel implements EBComponent
 	private final boolean updates;
 	private final CardLayout layout;
 	private final JTextField searchField;
+	private boolean hideInstalled;
 
 	private final Collection<String> pluginSet = new HashSet<String>();
 	//}}}
@@ -221,9 +222,27 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 		});
+
+		final JCheckBox hideInstalledCB = new JCheckBox("Hide installed plugins", true);
+		hideInstalledCB.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				InstallPanel.this.hideInstalled = hideInstalledCB.isSelected();
+				updateModel();
+			}
+		});
+		hideInstalledCB.setAlignmentX(0);
+
 		Box filterBox = Box.createHorizontalBox();
 		filterBox.add(new JLabel("Filter : "));
 		filterBox.add(searchField);
+		filterBox.setAlignmentX(0);
+		Box topBox = new Box(BoxLayout.PAGE_AXIS);
+		topBox.add(filterBox);
+		topBox.add(hideInstalledCB);
 
 		/* Create buttons */
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -237,7 +256,7 @@ class InstallPanel extends JPanel implements EBComponent
 		buttons.add(new SizeLabel());
 
 		JPanel _installPanel = new JPanel(new BorderLayout(12, 12));
-		_installPanel.add(BorderLayout.NORTH,filterBox);
+		_installPanel.add(BorderLayout.NORTH,topBox);
 		_installPanel.add(BorderLayout.CENTER,split);
 		_installPanel.add(BorderLayout.SOUTH, buttons);
 
@@ -768,7 +787,7 @@ class InstallPanel extends JPanel implements EBComponent
 					}
 					else
 					{
-						if(installedVersion == null && plugin.canBeInstalled())
+						if( (!hideInstalled || installedVersion == null) && plugin.canBeInstalled())
 							entries.add(new Entry(plugin,set.name));
 					}
 				}
