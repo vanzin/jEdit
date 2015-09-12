@@ -42,6 +42,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -77,6 +79,7 @@ class InstallPanel extends JPanel implements EBComponent
 	private final ChoosePluginSet chooseButton;
 	private final boolean updates;
 	private final CardLayout layout;
+	private final JTextField searchField;
 
 	private final Collection<String> pluginSet = new HashSet<String>();
 	//}}}
@@ -155,7 +158,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 		});
 
-		final JTextField searchField = new JTextField();
+		searchField = new JTextField();
 		searchField.addKeyListener(new KeyAdapter()
 		{
 			@Override
@@ -199,11 +202,22 @@ class InstallPanel extends JPanel implements EBComponent
 			public void keyPressed(KeyEvent e)
 			{
 				int i = table.getSelectedRow(), n = table.getModel().getRowCount();
-				if (e.getKeyCode() == KeyEvent.VK_DOWN && i == (n - 1) ||
+				if (e.getKeyChar() == '/' ||
+					e.getKeyCode() == KeyEvent.VK_DOWN && i == (n - 1) ||
 					e.getKeyCode() == KeyEvent.VK_UP && i == 0) 
 				{
 					searchField.requestFocus();
 					searchField.selectAll();
+				}
+			}
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+				char c = e.getKeyChar();
+				if(c != KeyEvent.CHAR_UNDEFINED && Character.isAlphabetic(c))
+				{
+					searchField.dispatchEvent(e);
+					searchField.requestFocus();
 				}
 			}
 		});
@@ -306,7 +320,16 @@ class InstallPanel extends JPanel implements EBComponent
 						layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
 				}
 				else
+				{
 					layout.show(InstallPanel.this, "INSTALL");
+					EventQueue.invokeLater(new Runnable()
+					{
+						public void run()
+						{
+							searchField.requestFocusInWindow();
+						}
+					});
+				}
 			}
 		});
 	} //}}}
