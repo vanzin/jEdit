@@ -222,8 +222,8 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 		});
-
-		final JCheckBox hideInstalledCB = new JCheckBox("Hide installed plugins", true);
+		hideInstalled = true;
+		final JCheckBox hideInstalledCB = new JCheckBox("Hide installed plugins", hideInstalled);
 		hideInstalledCB.addActionListener(new ActionListener()
 		{
 
