@@ -32,7 +32,6 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.StringList;
-import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -42,8 +41,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -81,6 +78,7 @@ class InstallPanel extends JPanel implements EBComponent
 	private final CardLayout layout;
 	private final JTextField searchField;
 	private boolean hideInstalled;
+	private boolean isLoading;
 
 	private final Collection<String> pluginSet = new HashSet<String>();
 	//}}}
@@ -340,6 +338,7 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			});
 		}
+		isLoading = false;
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -362,9 +361,17 @@ class InstallPanel extends JPanel implements EBComponent
 	void loading()
 	{
 		layout.show(this, "LOADING");
+		isLoading = true;
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ isDownloadingList() method
+	private boolean isDownloadingList()
+	{
+		return isLoading;
+	} //}}}
+
 
 	//{{{ formatSize() method
 	private static String formatSize(int size)
@@ -387,9 +394,8 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ PluginTableModel class
 	private class PluginTableModel extends AbstractTableModel
 	{
-		/** This List can contain String or Entry. */
-		private final List entries = new ArrayList();
-		private final List filteredEntries = new ArrayList();
+		private final List<Entry> entries = new ArrayList<Entry>();
+		private final List<Entry> filteredEntries = new ArrayList<Entry>();
 		private int sortType = EntryCompare.COLUMN_NAME;
 		private String filterString;
 		int sortDirection = 1;
@@ -410,12 +416,8 @@ class InstallPanel extends JPanel implements EBComponent
 			else
 			{
 				String[] words = filterString.toLowerCase().split("\\s+");
-				for (Object o : entries)
+				for (Entry e : entries)
 				{
-					if (!(o instanceof Entry))
-						continue;
-					Entry e = (Entry)o;
-
 					if (e.install)
 					{
 						filteredEntries.add(e);
@@ -611,11 +613,8 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			if (column != 0) return;
 
-			Object obj = filteredEntries.get(row);
-			if(obj instanceof String)
-				return;
+			Entry entry = filteredEntries.get(row);
 
-			Entry entry = (Entry)obj;
 			boolean before = entry.install;
 			entry.install = Boolean.TRUE.equals(aValue);
 			if (before == entry.install) return;
@@ -639,13 +638,9 @@ class InstallPanel extends JPanel implements EBComponent
 			 * Removes dependencies no longer required and such */
 
 			List<Entry> selected = new ArrayList<Entry>(entries.size());
-			for(Object en: entries)
+			for(Entry temp: entries)
 			{
-				if(en instanceof Entry)
-				{
-					Entry temp = (Entry)en;
-					if(temp.install)selected.add(temp);
-				}
+				if(temp.install)selected.add(temp);
 			}
 
 			List<Entry> toRemove = new ArrayList<Entry>(selected.size());
@@ -692,9 +687,8 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				if ("plugin".equals(dep.what))
 				{
-					for (Object en: entries)
+					for (Entry temp: entries)
 					{
-						Entry temp = (Entry)en;
 						if (temp.plugin == dep.plugin)
 						{
 							if (entry.install)
@@ -739,19 +733,6 @@ class InstallPanel extends JPanel implements EBComponent
 			table.getTableHeader().repaint();
 		}
 		//}}}
-
-		//{{{ isDownloadingList() method
-		private boolean isDownloadingList()
-		{
-			return entries.size() == 1 && entries.get(0) instanceof String;
-		} //}}}
-
-		//{{{ clear() method
-		public void clear()
-		{
-			entries.clear();
-			updateFilteredEntries();
-		} //}}}
 
 		//{{{ update() method
 		public void update()
@@ -986,7 +967,7 @@ class InstallPanel extends JPanel implements EBComponent
 					params.add(sl.join(", "));
 					// params.add(entry.dependencies.replaceAll("\n", ", "));
 				}
-				text = MessageFormat.format(pattern, params.toArray(new String[0]));
+				text = MessageFormat.format(pattern, params.toArray());
 			}
 			setText(text);
 			setCaretPosition(0);
@@ -1010,7 +991,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
-				if(pluginModel.isDownloadingList())
+				if(isDownloadingList())
 					return;
 
 				size = 0;
@@ -1057,7 +1038,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void tableChanged(TableModelEvent e)
 		{
-			if(pluginModel.isDownloadingList())
+			if(isDownloadingList())
 				return;
 
 			setEnabled(pluginModel.getRowCount() != 0);
@@ -1175,7 +1156,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(pluginModel.isDownloadingList())
+			if(isDownloadingList())
 				return;
 
 			boolean downloadSource = jEdit.getBooleanProperty(
@@ -1234,7 +1215,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void tableChanged(TableModelEvent e)
 		{
-			if(pluginModel.isDownloadingList())
+			if(isDownloadingList())
 				return;
 
 			if (e.getType() == TableModelEvent.UPDATE)
