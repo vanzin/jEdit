@@ -253,37 +253,17 @@ public class ManagePanel extends JPanel
 	 * If the plugin is loaded use {@link org.gjt.sp.jedit.PluginJAR#getRequiredJars()}
 	 * instead
 	 *
-	 * @param jarName the jar name of the plugin
+	 * @param jarPath the path to the jar of the plugin
 	 * @return a collection containing jars path
 	 * @throws IOException if jEdit cannot generate cache
 	 * @since jEdit 4.3pre12
 	 */
-	private static Collection<String> getDeclaredJars(String jarName) throws IOException
+	private static Collection<String> getDeclaredJars(String jarPath) throws IOException
 	{
 		Collection<String> jarList = new ArrayList<String>();
-		PluginJAR pluginJAR = new PluginJAR(new File(jarName));
-		PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
-		if (pluginCacheEntry == null)
-		{
-			try
-			{
-				pluginCacheEntry = pluginJAR.generateCache();
-			}
-			finally
-			{
-				IOUtilities.closeQuietly(pluginJAR.getZipFile());
-			}
-		}
-		if(pluginCacheEntry == null)
-		{
-			// this happens when, for some reason, two versions
-			// of a plugin are installed, e.g when XSLT.jar and
-			// xslt.jar are both in $JEDIT_HOME/jars on Linux.
-			Log.log(Log.WARNING, ManagePanel.class,
-					"couldn't load plugin "+pluginJAR.getPath()
-					+" (most likely other version exists)");
-		}
-		else
+		PluginJAR pluginJAR = new PluginJAR(new File(jarPath));
+		PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCacheEntry(jarPath);
+		if(pluginCacheEntry != null)
 		{
 			Properties cachedProperties = pluginCacheEntry.cachedProperties;
 
@@ -299,7 +279,7 @@ public class ManagePanel extends JPanel
 				}
 			}
 		}
-		jarList.add(jarName);
+		jarList.add(jarPath);
 		return jarList;
 	}//}}}
 
@@ -349,6 +329,26 @@ public class ManagePanel extends JPanel
 			if (jEdit.getBooleanProperty("plugin." + MiscUtilities.getFileName(jar) + ".disabled"))
 				status = DISABLED;
 			else status = NOT_LOADED;
+
+			PluginJAR.PluginCacheEntry cacheEntry;
+			try
+			{
+				cacheEntry = PluginJAR.getPluginCacheEntry(jar);
+				if(cacheEntry != null)
+				{
+					clazz = cacheEntry.pluginClass;
+					Properties props = cacheEntry.cachedProperties;
+					name = props.getProperty("plugin."+clazz+".name");
+					version = props.getProperty("plugin."+clazz+".version");
+					author = props.getProperty("plugin."+clazz+".author");
+					docs = props.getProperty("plugin."+clazz+".docs");
+					description = props.getProperty("plugin."+clazz+".description");
+				}
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.WARNING, "Unable to load cache for "+jar, e);
+			}
 		}
 
 		/**
