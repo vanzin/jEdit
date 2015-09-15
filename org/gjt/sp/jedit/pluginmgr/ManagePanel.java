@@ -549,34 +549,41 @@ public class ManagePanel extends JPanel
 
 		//{{{ setValueAt() method
 		@Override
-		public void setValueAt(Object value, int rowIndex,
-			int columnIndex)
+		public void setValueAt(final Object value, int rowIndex,
+			final int columnIndex)
 		{
-			Entry entry = entries.get(rowIndex);
-			if(columnIndex == 0)
+			final Entry entry = entries.get(rowIndex);
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				PluginJAR jar = jEdit.getPluginJAR(entry.jar);
-				if(jar == null)
+				@Override
+				public void run()
 				{
-					if(value.equals(Boolean.FALSE))
-						return;
-
-					PluginJAR load = PluginJAR.load(entry.jar, true);
-					if (load == null)
+					if(columnIndex == 0)
 					{
-						GUIUtilities.error(ManagePanel.this, "plugin-load-error", null);
+						PluginJAR jar = jEdit.getPluginJAR(entry.jar);
+						if(jar == null)
+						{
+							if(value.equals(Boolean.FALSE))
+								return;
+
+							PluginJAR load = PluginJAR.load(entry.jar, true);
+							if (load == null)
+							{
+								GUIUtilities.error(ManagePanel.this, "plugin-load-error", null);
+							}
+						}
+						else
+						{
+							if(value.equals(Boolean.TRUE))
+								return;
+
+							unloadPluginJARWithDialog(jar);
+						}
 					}
-				}
-				else
-				{
-					if(value.equals(Boolean.TRUE)) 
-						return;
 
-					unloadPluginJARWithDialog(jar);
+					update();
 				}
-			}
-
-			update();
+			});
 		} //}}}
 
 		//{{{ setSortType() method
