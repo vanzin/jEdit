@@ -412,7 +412,22 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			filteredEntries.clear();
 			if (filterString == null)
-				filteredEntries.addAll(entries);
+			{
+				if(!hideInstalled)
+				{
+					filteredEntries.addAll(entries);
+				}
+				else
+				{
+					for(Entry e: entries)
+					{
+						if(e.install || e.installedVersion == null)
+						{
+							filteredEntries.add(e);
+						}
+					}
+				}
+			}
 			else
 			{
 				String[] words = filterString.toLowerCase().split("\\s+");
@@ -424,6 +439,10 @@ class InstallPanel extends JPanel implements EBComponent
 						continue;
 					}
 
+					if(hideInstalled && e.installedVersion != null)
+					{
+						continue;
+					}
 					
 					String s = (e.name + ' ' + e.set + ' ' + e.description).toLowerCase();
 					boolean hasAll = true;
@@ -523,7 +542,7 @@ class InstallPanel extends JPanel implements EBComponent
 					case 2:
 						return entry.set;
 					case 3:
-						if (updates)
+						if (entry.installedVersion != null)
 							return entry.installedVersion + "->" + entry.version;
 						return entry.version;
 					case 4:
@@ -696,7 +715,14 @@ class InstallPanel extends JPanel implements EBComponent
 								temp.dependents.add(entry);
 								if(!temp.install)
 								{
-									temp.install = true;
+									if(temp.installedVersion == null)
+									{
+										temp.install = true;
+									}
+									else if(!temp.plugin.loaded)
+									{
+										temp.install = true;
+									}
 									updateDeps(temp);
 								}
 							}
@@ -723,9 +749,6 @@ class InstallPanel extends JPanel implements EBComponent
 				sortDirection = 1;
 			}
 			sortType = type;
-
-			if(isDownloadingList())
-				return;
 
 			Collections.sort(entries,new EntryCompare(type, sortDirection));
 			updateFilteredEntries();
@@ -768,14 +791,13 @@ class InstallPanel extends JPanel implements EBComponent
 					}
 					else
 					{
-						if( (!hideInstalled || installedVersion == null) && plugin.canBeInstalled())
+						if(plugin.canBeInstalled())
 							entries.add(new Entry(plugin,set.name));
 					}
 				}
 			}
 
 			sort(sortType);
-			updateFilteredEntries();
 			restoreSelection(savedChecked, savedSelection);
 		} //}}}
 

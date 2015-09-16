@@ -66,6 +66,12 @@ class Roster
 		addOperation(new Install(installed,url,installDirectory,size));
 	} //}}}
 
+	//{{{ addLoad() method
+	void addLoad(String path)
+	{
+		toLoad.add(path);
+	} //}}}
+
 	//{{{ getOperation() method
 	public Operation getOperation(int i)
 	{

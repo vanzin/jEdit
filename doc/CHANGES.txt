@@ -40,6 +40,9 @@ contributing to this release.
 - Fix bug #3599 Key typing in Install panel. Search Field gets focus on show
   and when one types '/' or a letter in the list. (Eric Le Lay)
 
+- Fix bug #2877 "Hide installed" checkbox in Install panel. Don't re-install
+  unloaded plugins (Eric Le Lay)
+
 }}}
 {{{ UI Improvements
 
