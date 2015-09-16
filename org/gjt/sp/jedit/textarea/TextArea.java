@@ -43,6 +43,7 @@ import javax.swing.plaf.LayerUI;
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 
+import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditActionContext;
@@ -4847,7 +4848,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer == null)
 			return;
 
-		final int caretPosition = getCaretPosition();
+		final int caretPosition = buffer.getIntegerProperty(Buffer.CARET, getCaretPosition());
 		final int hbarPosition = horizontal.getValue();
 		
 		if(buffer.getBooleanProperty("elasticTabstops"))
