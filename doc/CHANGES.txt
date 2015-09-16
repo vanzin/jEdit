@@ -87,6 +87,9 @@ contributing to this release.
   show files to be removed in alphabetical order (end of Bug #3530 - Eric
   Le Lay)
 
+- Plugin Manager Manage Panel sortable on all columns and all directions
+ (Eric Le Lay)
+
 }}}
 {{{ Miscellaneous
 
@@ -109,6 +112,9 @@ contributing to this release.
 
 - close-all sends BufferClosing events on EditBus for each buffer closed.
   This is useful to plugins that record closed files. (patch #550, Eric Le Lay)
+
+- org.gjt.sp.util.StandardUtilities#compareStrings accepts null Strings
+  (Eric Le Lay)
 
 }}}
 {{{ Editing

@@ -142,6 +142,8 @@ public class ManagePanel extends JPanel
 
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
+		header.setDefaultRenderer(new HeaderRenderer(
+				(DefaultTableCellRenderer)header.getDefaultRenderer()));
 		HeaderMouseHandler mouseHandler = new HeaderMouseHandler();
 		header.addMouseListener(mouseHandler);
 		table.addMouseListener(mouseHandler);
@@ -414,6 +416,7 @@ public class ManagePanel extends JPanel
 		private int sortType = EntryCompare.NAME;
 		private ConcurrentHashMap<String, Object> unloaded;
 		// private HashSet<String> unloaded;
+		private int sortDirection;
 
 		//{{{ Constructor
 		PluginTableModel()
@@ -586,21 +589,22 @@ public class ManagePanel extends JPanel
 			});
 		} //}}}
 
-		//{{{ setSortType() method
-		public void setSortType(int type)
-		{
-			sortType = type;
-			sort(type);
-		} //}}}
-
 		//{{{ sort() method
 		public void sort(int type)
 		{
 			List<String> savedSelection = new ArrayList<String>();
 			saveSelection(savedSelection);
-			Collections.sort(entries,new EntryCompare(type));
+
+			if (sortType != type)
+			{
+				sortDirection = 1;
+			}
+			sortType = type;
+
+			Collections.sort(entries,new EntryCompare(type, sortDirection));
 			fireTableChanged(new TableModelEvent(this));
 			restoreSelection(savedSelection);
+			table.getTableHeader().repaint();
 		}
 		//}}}
 
@@ -1223,27 +1227,41 @@ public class ManagePanel extends JPanel
 	private static class EntryCompare implements Comparator<Entry>
 	{
 		public static final int NAME = 1;
-		public static final int STATUS = 2;
+		public static final int VERSION = 2;
+		public static final int STATUS = 3;
+		public static final int DATA = 4;
 
 		private final int type;
+		private final int direction;
 
-		EntryCompare(int type)
+		EntryCompare(int type, int direction)
 		{
 			this.type = type;
+			this.direction = direction;
 		}
 
 		@Override
 		public int compare(Entry e1, Entry e2)
 		{
-			if (type == NAME)
-				return compareNames(e1,e2);
-			else
+			int result;
+			switch(type)
 			{
-				int result;
-				if ((result = e1.status.compareToIgnoreCase(e2.status)) == 0)
-					return compareNames(e1,e2);
-				return result;
+			case NAME:
+				result = compareNames(e1,e2);
+				break;
+			case VERSION:
+				result = StandardUtilities.compareStrings(e1.version, e2.version, true);
+				break;
+			case STATUS:
+				result = e1.status.compareToIgnoreCase(e2.status);
+				break;
+			case DATA:
+				result = StandardUtilities.compareStrings(e1.dataSize,e2.dataSize, false);
+				break;
+			default:
+				throw new IllegalStateException("Invalid sort type "+type);
 			}
+			return result * direction;
 		}
 
 		private static int compareNames(Entry e1, Entry e2)
@@ -1261,6 +1279,7 @@ public class ManagePanel extends JPanel
 
 			return s1.compareToIgnoreCase(s2);
 		}
+
 	} //}}}
 
 	//{{{ HeaderMouseHandler class
@@ -1271,17 +1290,9 @@ public class ManagePanel extends JPanel
 		{
 			if (evt.getSource() == table.getTableHeader())
 			{
-				switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
-				{
-					case 1:
-						pluginModel.setSortType(EntryCompare.NAME);
-						break;
-					case 3:
-						pluginModel.setSortType(EntryCompare.STATUS);
-						break;
-					default:
-						break;
-				}
+				int column = table.getTableHeader().columnAtPoint(evt.getPoint());
+				pluginModel.sortDirection *= -1;
+				pluginModel.sort(column);
 			}
 			else
 			{
@@ -1401,6 +1412,31 @@ public class ManagePanel extends JPanel
 			{
 				table.setColumnSelectionInterval(0,0);
 			}
+		}
+	} //}}}
+
+	//{{{ HeaderRenderer
+	private static class HeaderRenderer extends DefaultTableCellRenderer
+	{
+		private final DefaultTableCellRenderer tcr;
+
+		HeaderRenderer(DefaultTableCellRenderer tcr)
+		{
+			this.tcr = tcr;
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value,
+							       boolean isSelected, boolean hasFocus,
+							       int row, int column)
+		{
+			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+			PluginTableModel model = (PluginTableModel) table.getModel();
+			Icon icon = (column == model.sortType)
+				? (model.sortDirection == 1) ? InstallPanel.ASC_ICON : InstallPanel.DESC_ICON
+				: null;
+			l.setIcon(icon);
+			return l;
 		}
 	} //}}}
 

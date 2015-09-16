@@ -1296,26 +1296,7 @@ class InstallPanel extends JPanel implements EBComponent
 					}
 					break;
 				case COLUMN_VERSION:
-					// lets avoid NPE. Maybe we should move
-					// this code to StandardUtilities.compareStrings
-					if (e1.version == e2.version)
-					{
-						result = 0;
-					}
-					else if (e1.version == null)
-					{
-						result = -1;
-					}
-					else if(e2.version == null)
-					{
-						result = 1;
-					}
-					else
-					{
-						result = StandardUtilities.compareStrings(e1.version,
-											  e2.version,
-											  true);
-					}
+					result = StandardUtilities.compareStrings(e1.version, e2.version, true);
 					break;
 				case COLUMN_SIZE:
 					result = (e1.size < e2.size)
@@ -1454,7 +1435,6 @@ class InstallPanel extends JPanel implements EBComponent
 				? (model.sortDirection == 1) ? ASC_ICON : DESC_ICON
 				: null;
 			l.setIcon(icon);
-			// l.setHorizontalTextPosition(l.LEADING);
 			return l;
 		}
 	} //}}}
