@@ -400,7 +400,7 @@ class PluginList
 				&& branch.canSatisfyDependencies();
 		}
 
-		void install(Roster roster, String installDirectory, boolean downloadSource)
+		void install(Roster roster, String installDirectory, boolean downloadSource, boolean asDependency)
 		{
 			String installed = getInstalledPath();
 
@@ -415,7 +415,7 @@ class PluginList
 			//branch.satisfyDependencies(roster,installDirectory,
 			//	downloadSource);
 
-			if(installedVersion != null && installedPath!= null && !loaded)
+			if(installedVersion != null && installedPath!= null && !loaded && asDependency)
 			{
 				roster.addLoad(installedPath);
 				return;
@@ -593,7 +593,7 @@ class PluginList
 						      branch.version,to,false) <= 0))
 					{
 						plugin.install(roster,installDirectory,
-							downloadSource);
+							downloadSource, false);
 						return;
 					}
 				}

@@ -220,7 +220,7 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 		});
-		hideInstalled = true;
+		hideInstalled = !updates;
 		final JCheckBox hideInstalledCB = new JCheckBox("Hide installed plugins", hideInstalled);
 		hideInstalledCB.addActionListener(new ActionListener()
 		{
@@ -240,7 +240,9 @@ class InstallPanel extends JPanel implements EBComponent
 		filterBox.setAlignmentX(0);
 		Box topBox = new Box(BoxLayout.PAGE_AXIS);
 		topBox.add(filterBox);
-		topBox.add(hideInstalledCB);
+		if(!updates){
+			topBox.add(hideInstalledCB);
+		}
 
 		/* Create buttons */
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -421,7 +423,7 @@ class InstallPanel extends JPanel implements EBComponent
 				{
 					for(Entry e: entries)
 					{
-						if(e.install || e.installedVersion == null)
+						if(e.install || e.installedVersion == null || updates)
 						{
 							filteredEntries.add(e);
 						}
@@ -1205,7 +1207,7 @@ class InstallPanel extends JPanel implements EBComponent
 				Entry entry = (Entry)pluginModel.entries.get(i);
 				if (entry.install)
 				{
-					entry.plugin.install(roster,installDirectory,downloadSource);
+					entry.plugin.install(roster,installDirectory,downloadSource, !entry.checked);
 					if (updates)
 						entry.plugin.getCompatibleBranch().satisfyDependencies(
 						roster,installDirectory,downloadSource);
