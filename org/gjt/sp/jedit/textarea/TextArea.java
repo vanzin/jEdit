@@ -4848,9 +4848,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer == null)
 			return;
 
-		final int caretPosition = buffer.getIntegerProperty(Buffer.CARET, getCaretPosition());
-		final int hbarPosition = horizontal.getValue();
-		
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
 			//call this only if it was previously off
@@ -4911,14 +4908,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			public void run()
 			{
-				if (hbarPosition >= horizontal.getMinimum() && hbarPosition <= horizontal.getMaximum())
-				{
-					horizontal.setValue(hbarPosition);
-				}
-				if (caretPosition >= 0 && caretPosition < buffer.getLength())
-				{
-					setCaretPosition(caretPosition);
-				}
+				int caret = buffer.getIntegerProperty(Buffer.CARET, 0);
+				if(caret != -1)
+					setCaretPosition(Math.min(caret, buffer.getLength()));
 			}
 		});
 	} //}}}
