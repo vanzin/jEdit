@@ -443,7 +443,6 @@ public class Buffer extends JEditBuffer
 			GUIUtilities.error(view,"buffer-multiple-io",null);
 			return false;
 		}
-		view.getEditPane().saveCaretInfo();
 		
 		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
 

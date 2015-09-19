@@ -43,7 +43,6 @@ import javax.swing.plaf.LayerUI;
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditActionContext;
@@ -4902,17 +4901,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		chunkCache.reset();
 		gutter.repaint();
 		painter.repaint();
-		
-		// reset the horizontal scrollbar and caret
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				int caret = buffer.getIntegerProperty(Buffer.CARET, 0);
-				if(caret != -1)
-					setCaretPosition(Math.min(caret, buffer.getLength()));
-			}
-		});
 	} //}}}
 
 	//{{{ addActionSet() method
