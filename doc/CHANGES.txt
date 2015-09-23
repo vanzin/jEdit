@@ -147,6 +147,9 @@ contributing to this release.
 
 - Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)
 
+- Better mode selection for files that match multiple modes, also fixes/applies 
+  patch #571. (Dale Anson)
+
 }}}
 }}}
 

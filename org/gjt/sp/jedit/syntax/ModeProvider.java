@@ -197,12 +197,33 @@ public class ModeProvider
 					return mode;
 				}
 			}
-			// next best is filepath match
+			// next best is filepath match, there could be multiple matches,
+			// need to choose the best one
+			List<Mode> filepathMatch = new ArrayList<Mode>();
 			for (Mode mode : acceptable)
 			{
-				if (mode.acceptFile(filepath, filename)) {
-					return mode;
+				if (mode.acceptFile(filepath, filename)) 
+				{
+					filepathMatch.add(mode);
 				}
+			}
+			if (filepathMatch.size() == 1) 
+			{
+				return filepathMatch.get(0); 	
+			}
+			else if (filepathMatch.size() > 1)
+			{
+				// return the one with the longest glob pattern since that one
+				// is most likely to be more specific and hence the best choice
+				Mode longest = filepathMatch.get(0);
+				for (Mode mode : filepathMatch) 
+				{
+					if (((String)mode.getProperty("filenameGlob")).length() > ((String)longest.getProperty("filenameGlob")).length())
+					{
+						longest = mode;	
+					}
+				}
+				return longest;
 			}
 			// all acceptable choices are by first line glob, and
 			// they all match, so just return the first one.

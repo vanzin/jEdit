@@ -115,7 +115,7 @@
         FILE_NAME_GLOB="*.clj" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
-        FILE_NAME_GLOB="CMakeLists.txt"/>
+        FILE_NAME_GLOB="(re)(CMakeLists[.]txt)|(*[.]cmake)|(*[.]cmake[.]*)"/>
 
 <MODE NAME="cobol"		FILE="cobol.xml"
         FILE_NAME_GLOB="*.{cbl,cob}" />
@@ -609,8 +609,6 @@
 <MODE NAME="text"		FILE="text.xml"
         FILE_NAME_GLOB="*.txt" />
 
-<!-- This mode MUST be placed after text mode
-     because filename globs are checked in reverse order -->
 <MODE NAME="rfc"		FILE="rfc.xml"
         FILE_NAME_GLOB="rfc*.txt" />
 
