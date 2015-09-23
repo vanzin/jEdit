@@ -115,7 +115,7 @@
         FILE_NAME_GLOB="*.clj" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
-        FILE_NAME_GLOB="(re)(CMakeLists[.]txt)|(*[.]cmake)|(*[.]cmake[.]*)"/>
+        FILE_NAME_GLOB="{CMakeLists.txt,*.cmake,*.cmake.*}"/>
 
 <MODE NAME="cobol"		FILE="cobol.xml"
         FILE_NAME_GLOB="*.{cbl,cob}" />
@@ -502,6 +502,9 @@
         FILE_NAME_GLOB="*.{rst,rest}"
         FIRST_LINE_GLOB="{===,~~~}*"/>
 
+<MODE NAME="rfc"		FILE="rfc.xml"
+        FILE_NAME_GLOB="rfc*.txt" />
+
 <MODE NAME="rhtml"		FILE="rhtml.xml"
         FILE_NAME_GLOB="*.{rhtml,html.erb}" />
 
@@ -608,9 +611,6 @@
 
 <MODE NAME="text"		FILE="text.xml"
         FILE_NAME_GLOB="*.txt" />
-
-<MODE NAME="rfc"		FILE="rfc.xml"
-        FILE_NAME_GLOB="rfc*.txt" />
 
 <MODE NAME="tld"		FILE="tld.xml"
         FILE_NAME_GLOB="*.tld"/>
