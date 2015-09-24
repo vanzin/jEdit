@@ -416,7 +416,7 @@ public class ManagePanel extends JPanel
 		private int sortType = EntryCompare.NAME;
 		private ConcurrentHashMap<String, Object> unloaded;
 		// private HashSet<String> unloaded;
-		private int sortDirection;
+		private int sortDirection = 1;
 
 		//{{{ Constructor
 		PluginTableModel()
@@ -601,7 +601,7 @@ public class ManagePanel extends JPanel
 			}
 			sortType = type;
 
-			Collections.sort(entries,new EntryCompare(type, sortDirection));
+			Collections.sort(entries, new EntryCompare(type, sortDirection));
 			fireTableChanged(new TableModelEvent(this));
 			restoreSelection(savedSelection);
 			table.getTableHeader().repaint();
