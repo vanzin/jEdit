@@ -129,7 +129,7 @@ public class KeyEventWorkaround
 		case KeyEvent.VK_OPEN_BRACKET :
 		case KeyEvent.VK_BACK_SLASH   :
 		case KeyEvent.VK_CLOSE_BRACKET:
-	/*	case KeyEvent.VK_NUMPAD0 :
+		case KeyEvent.VK_NUMPAD0 :
 		case KeyEvent.VK_NUMPAD1 :
 		case KeyEvent.VK_NUMPAD2 :
 		case KeyEvent.VK_NUMPAD3 :
@@ -144,7 +144,7 @@ public class KeyEventWorkaround
 		case KeyEvent.VK_SEPARATOR:
 		case KeyEvent.VK_SUBTRACT   :
 		case KeyEvent.VK_DECIMAL    :
-		case KeyEvent.VK_DIVIDE     :*/
+		case KeyEvent.VK_DIVIDE     :
 		case KeyEvent.VK_BACK_QUOTE:
 		case KeyEvent.VK_QUOTE:
 		case KeyEvent.VK_DEAD_GRAVE:
@@ -182,33 +182,6 @@ public class KeyEventWorkaround
 		case KeyEvent.VK_PLUS:
 		case KeyEvent.VK_RIGHT_PARENTHESIS:
 		case KeyEvent.VK_UNDERSCORE:
-			return true;
-		default:
-			return false;
-		}
-	} //}}}
-
-	//{{{ isNumericKeypad() method
-	public static boolean isNumericKeypad(int keyCode)
-	{
-		switch(keyCode)
-		{
-		case KeyEvent.VK_NUMPAD0:
-		case KeyEvent.VK_NUMPAD1:
-		case KeyEvent.VK_NUMPAD2:
-		case KeyEvent.VK_NUMPAD3:
-		case KeyEvent.VK_NUMPAD4:
-		case KeyEvent.VK_NUMPAD5:
-		case KeyEvent.VK_NUMPAD6:
-		case KeyEvent.VK_NUMPAD7:
-		case KeyEvent.VK_NUMPAD8:
-		case KeyEvent.VK_NUMPAD9:
-		case KeyEvent.VK_MULTIPLY:
-		case KeyEvent.VK_ADD:
-		/* case KeyEvent.VK_SEPARATOR: */
-		case KeyEvent.VK_SUBTRACT:
-		case KeyEvent.VK_DECIMAL:
-		case KeyEvent.VK_DIVIDE:
 			return true;
 		default:
 			return false;
@@ -258,10 +231,7 @@ public class KeyEventWorkaround
 						return null;
 				}
 
-				if(isNumericKeypad(keyCode))
-					last = LAST_NUMKEYPAD;
-				else
-					last = LAST_NOTHING;
+				last = LAST_NOTHING;
 
 				break;
 			}
@@ -293,20 +263,8 @@ public class KeyEventWorkaround
 				return null;
 			}
 
-			// if the last key was a numeric keypad key
-			// and NumLock is off, filter it out
-			if(last == LAST_NUMKEYPAD)
-			{
-				last = LAST_NOTHING;
-				if((ch >= '0' && ch <= '9') || ch == '.'
-					|| ch == '/' || ch == '*'
-					|| ch == '-' || ch == '+')
-				{
-					return null;
-				}
-			}
 			// Windows JDK workaround
-			else if(last == LAST_ALT)
+			if(last == LAST_ALT)
 			{
 				last = LAST_NOTHING;
 				switch(ch)
@@ -363,20 +321,9 @@ public class KeyEventWorkaround
 		return evt;
 	} //}}}
 
-	//{{{ numericKeypadKey() method
-	/**
-	 * A workaround for non-working NumLock status in some Java versions.
-	 * @since jEdit 4.0pre8
-	 */
-	public static void numericKeypadKey()
-	{
-		last = LAST_NOTHING;
-	} //}}}
-
 	//{{{ Private members
 	private static int last;
 	private static final int LAST_NOTHING = 0;
-	private static final int LAST_NUMKEYPAD = 1;
-	private static final int LAST_ALT = 2;
+	private static final int LAST_ALT = 1;
 	//}}}
 }

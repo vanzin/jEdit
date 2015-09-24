@@ -167,13 +167,6 @@ public class DefaultInputHandler extends InputHandler
 						userInput(input);
 					}
 				}
-				else
-				{
-					// this is retarded. excuse me while I drool
-					// and make stupid noises
-					if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
-						KeyEventWorkaround.numericKeypadKey();
-				}
 				sendShortcutPrefixOff();
 			}
 		}

@@ -292,13 +292,6 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 						userInput(input);
 					}
 				}
-				else
-				{
-					// this is retarded. excuse me while I drool
-					// and make stupid noises
-					if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
-						KeyEventWorkaround.numericKeypadKey();
-				}
 				sendShortcutPrefixOff();
 			}
 		}

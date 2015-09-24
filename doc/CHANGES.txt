@@ -46,6 +46,8 @@ contributing to this release.
 }}}
 {{{ UI Improvements
 
+- Handling of NUMPAD keys cleanup (Patch #567 - Makarius)
+
 - Scalable GUI for tip-of-the-day (Makarius)
 
 - Scalable ColorWell icon according to UI font (Makarius)
