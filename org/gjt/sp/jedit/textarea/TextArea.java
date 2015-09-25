@@ -1095,8 +1095,7 @@ public abstract class TextArea extends JPanel
 
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 
-		retVal.x = (int)(horizontalOffset + Chunk.offsetToX(
-			info.chunks,offset));
+		retVal.x = (int)(horizontalOffset + Chunk.offsetToX(info.chunks, offset));
 
 		return retVal;
 	} //}}}
@@ -1355,6 +1354,8 @@ public abstract class TextArea extends JPanel
 	{
 		int offset = -getHorizontalOffset();
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		if (lineInfo.physicalLine == -1)
+			return "";
 		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
 		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
 		int begin = xyToOffset(offset + point.x, point.y);
@@ -1372,6 +1373,8 @@ public abstract class TextArea extends JPanel
 	{
 		int offset = -getHorizontalOffset();
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		if (lineInfo.physicalLine == -1)
+			return;
 		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
 		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
 		int begin = xyToOffset(offset + point.x, point.y);
@@ -1392,6 +1395,8 @@ public abstract class TextArea extends JPanel
 	{
 		int offset = -getHorizontalOffset();
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		if (lineInfo.physicalLine == -1)
+			return "";
 		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
 		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
 		int begin = xyToOffset(offset + point.x, point.y);
@@ -5763,14 +5768,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		for(int i = visibleLines - 1; i >= 0; i--)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
-			if(info.physicalLine != -1)
+			if(info.physicalLine > -1)
 			{
 				physLastLine = info.physicalLine;
 				screenLastLine = i;
 				break;
 			}
 		}
-		invalidateScreenLineRange(oldScreenLastLine,screenLastLine);
+		invalidateScreenLineRange(oldScreenLastLine, screenLastLine);
 	} //}}}
 
 	//{{{ getRectParams() method

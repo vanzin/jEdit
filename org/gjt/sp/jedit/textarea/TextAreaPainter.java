@@ -1152,14 +1152,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			} //}}}
 
 			//{{{ Paint token backgrounds
-			ChunkCache.LineInfo lineInfo = textArea.chunkCache
-				.getLineInfo(screenLine);
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache.getLineInfo(screenLine);
 
 			if(lineInfo.chunks != null)
 			{
-				float baseLine = y + getLineHeight() - (fm.getLeading()+1) - fm.getDescent();
+				float baseLine = y + getLineHeight() - (fm.getLeading() + 1) - fm.getDescent();
 				Chunk.paintChunkBackgrounds(
-					lineInfo.chunks,gfx,
+					lineInfo.chunks, 
+					gfx,
 					textArea.getHorizontalOffset(),
 					baseLine, getLineHeight());
 			} //}}}
@@ -1378,8 +1378,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
-			ChunkCache.LineInfo lineInfo = textArea.chunkCache
-				.getLineInfo(screenLine);
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache.getLineInfo(screenLine);
 			Font defaultFont = getFont();
 			Color defaultColor = getForeground();
 
@@ -1393,9 +1392,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(lineInfo.chunks != null)
 			{
-				x += Chunk.paintChunkList(lineInfo.chunks,
-					gfx,textArea.getHorizontalOffset(),
-					baseLine,!Debug.DISABLE_GLYPH_VECTOR);
+				x += Chunk.paintChunkList(
+					lineInfo.chunks,
+					gfx,
+					textArea.getHorizontalOffset(),
+					baseLine,
+					!Debug.DISABLE_GLYPH_VECTOR);
 			}
 
 			JEditBuffer buffer = textArea.getBuffer();

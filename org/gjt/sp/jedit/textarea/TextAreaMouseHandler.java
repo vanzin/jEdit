@@ -131,8 +131,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		int x = evt.getX();
 
 		int extraEndVirt = 0;
-		if(textArea.chunkCache.getLineInfo(
-			textArea.getLastScreenLine()).lastSubregion)
+		if(textArea.chunkCache.getLineInfo(textArea.getLastScreenLine()).lastSubregion)
 		{
 			int dragStart = textArea.xyToOffset(x,evt.getY(),
 				!textArea.getPainter().isBlockCaretEnabled()
@@ -346,9 +345,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		int dotLine = textArea.getLineOfOffset(dot);
 		int extraEndVirt = 0;
 
-		if(textArea.chunkCache.getLineInfo(
-			textArea.getLastScreenLine())
-			.lastSubregion)
+		if(textArea.chunkCache.getLineInfo(	textArea.getLastScreenLine()).lastSubregion)
 		{
 			int screenLine = textArea.getScreenLineOfOffset(dot);
 			ChunkCache.LineInfo lineInfo = textArea.chunkCache.getLineInfo(screenLine);

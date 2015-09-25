@@ -842,15 +842,15 @@ class ChunkCache
 		/**
 		 * The physical line.
 		 */
-		int physicalLine;
+		int physicalLine = -1;
 		/**
 		 * The offset where begins the line.
 		 */
-		int offset;
+		int offset = 0;;
 		/**
 		 * The line length.
 		 */
-		int length;
+		int length = 0;
 		/**
 		 * true if it is the first subregion of a line.
 		 */
@@ -859,10 +859,10 @@ class ChunkCache
 		 * True if it is the last subregion of a line.
 		 */
 		boolean lastSubregion;
-		Chunk chunks;
+		Chunk chunks = null;
 		/** The line width. */
-		int width;
-		TokenMarker.LineContext lineContext;
+		int width = 0;
+		TokenMarker.LineContext lineContext = null;
 
 		@Override
 		public String toString()
