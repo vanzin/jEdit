@@ -29,7 +29,7 @@
         <EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 
         <!-- string literal -->
-        <SPAN TYPE="LITERAL1" ESCAPE="\">
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
             <BEGIN>'</BEGIN>
             <END>'</END>
         </SPAN>
