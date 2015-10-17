@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Runtime Dependencies">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/runtime" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/lib/javadoc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib/sources" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/sources" recursive="false" type="SOURCES" />
+  </library>
+</component>
