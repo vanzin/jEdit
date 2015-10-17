@@ -417,9 +417,9 @@
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
-            <classpath id="classpath.compile">
-                <fileset dir="${lib.dir}/compile" includes="*.jar"/>
-            </classpath>
+			<classpath id="classpath.compile">
+				<fileset dir="${lib.dir}/compile" includes="*.jar"/>
+			</classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -577,7 +577,7 @@
 				<fileset dir="${lib.dir}/launch4j"
 					 includes="*.jar"/>
 			</classpath>
-		 </taskdef>
+		</taskdef>
 		<launch4j:create configFile="${classes.dir}/package-files/windows/jedit.launch4j.xml"
 				 outfile="${jar.location}/jedit.exe"/>
 	</target>
@@ -839,15 +839,13 @@
 				 includes="api/**/*.html"/>
 			<filterchain>
 				<tokenfilter>
-					<replacestring
-						from="&lt;TD BGCOLOR=&quot;#FFFFFF&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"
-						to="&lt;TD BGCOLOR=&quot;#00008B&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"/>
+					<replacestring from="&lt;TD BGCOLOR=&quot;#FFFFFF&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"
+						       to="&lt;TD BGCOLOR=&quot;#00008B&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"/>
 				</tokenfilter>
 				<tokenfilter>
 					<filetokenizer/>
-					<replaceregex
-						pattern="(&lt;SCRIPT type=&quot;text/javascript&quot;&gt;.*?&lt;/SCRIPT&gt;|onload=&quot;.*?&quot;)"
-						flags="gs"/>
+					<replaceregex pattern="(&lt;SCRIPT type=&quot;text/javascript&quot;&gt;.*?&lt;/SCRIPT&gt;|onload=&quot;.*?&quot;)"
+						      flags="gs"/>
 				</tokenfilter>
 			</filterchain>
 		</copy>
@@ -1271,9 +1269,9 @@
 		</exec>
 		<exec executable="ln"
 		      failonerror="true">
-			<arg value="-sF" />
-			<arg file="/Applications" />
-			<arg file="/Volumes/jEdit/ " />
+			<arg value="-sF"/>
+			<arg file="/Applications"/>
+			<arg file="/Volumes/jEdit/"/>
 		</exec>
 		<copy file="package-files/osx/DS_Store"
 		      tofile="/Volumes/jEdit/.DS_Store"
@@ -1642,7 +1640,7 @@
 					   properties/**
 					   startup/**
 					   ${jar.filename}"
-				excludes="jars/MacOSX.jar"/>
+				 excludes="jars/MacOSX.jar"/>
 		</mod:calculatesize>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
 		      encoding="UTF-8"
@@ -1928,7 +1926,7 @@ Press Return key to continue...
 				fIn = new BufferedInputStream(new FileInputStream(new File (project.getProperty("dist.dir"), "Release")));
 				while ((ch = fIn.read()) >= 0)
 				{
-				    sGen.update((byte)ch);
+					sGen.update((byte)ch);
 				}
 				out = new BCPGOutputStream(new ArmoredOutputStream(new BufferedOutputStream(new FileOutputStream(new File (project.getProperty("dist.dir"), "Release.gpg")))));
 				sGen.generate().encode(out);
