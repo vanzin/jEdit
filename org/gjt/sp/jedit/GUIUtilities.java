@@ -1179,7 +1179,7 @@ public class GUIUtilities
 
 	//{{{ menuAcceleratorFont() method
 	/**
-	 * Menu accelerator font according to L&F defaults, with workarounds.
+	 * Menu accelerator font according to L&amp;F defaults, with workarounds.
 	 */
 	public static Font menuAcceleratorFont()
 	{

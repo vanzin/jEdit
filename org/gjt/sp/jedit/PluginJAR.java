@@ -1203,7 +1203,7 @@ public class PluginJAR
 	 * Returns the cache entry for an installed but not loaded plugin.
 	 * There is no need to use this method if the plugin is loaded.
 	 *
-	 * @param jarName path to the the plugin jar
+	 * @param path path to the the plugin jar
 	 * @return cache entry or null
 	 * @throws IOException if jEdit cannot generate cache
 	 * @since jEdit 5.3pre1
