@@ -15,10 +15,10 @@ Workflow
 
 1. Execute the BeanShell snippet at the end of this file ("Utilities -> BeanShell -> Evaluate Selection"). This will replace the version tags in this document by actual version numbers for easy copy & paste.
 
-2. Review https://svn.code.sf.net/p/jedit/svn/jEdit/branches/[branch]/doc/CHANGES.txt for formatting errors (like missing newline characters, wrong indentation or empty blocks), fix them and check them in.
+2. Review https://svn.code.sf.net/p/jedit/svn/jEdit[ifbranch]/branches[/ifbranch]/[branch]/doc/CHANGES.txt for formatting errors (like missing newline characters, wrong indentation or empty blocks), fix them and check them in.
 
 3. Tag the sourcecode for release in the SVN repository by doing
-        svn copy https://svn.code.sf.net/p/jedit/svn/jEdit/branches/[branch] https://svn.code.sf.net/p/jedit/svn/jEdit/tags/[tag] -m "Tagging [version] for release."
+        svn copy https://svn.code.sf.net/p/jedit/svn/jEdit[ifbranch]/branches[/ifbranch]/[branch] https://svn.code.sf.net/p/jedit/svn/jEdit/tags/[tag] -m "Tagging [version] for release."
    with the correct version in the second URL and in the commit message
 
 4. To be sure to work with the exact tagged source, check out the newly tagged source in a new directory by doing
@@ -111,8 +111,8 @@ Workflow
 10. Update the plugin wizard
      - Go to http://plugins.jedit.org/wiz/release_list.php?package_id=24
      - Find or create the entry for this jEdit Release
-          The entry may already exist but have an invalid date 
-          if a plugin was released that depends on it. 
+          The entry may already exist but have an invalid date
+          if a plugin was released that depends on it.
      - Switch "Head of Branch" to "[ifdevel]devel[/ifdevel][iffinal]main[/iffinal]"
      - Check the "Remove" checkbox for the jEdit dependency
      - Switch the "Low Version" of the JDK dependency to "1.7 [jdk-1.7]"
@@ -165,7 +165,7 @@ Thanks to  for contributing to this release.
      - Submit your changes by doing
             svn commit -m "Update the version number to [nextVersion]"
        in the root source directory
-
+[ifbranch]
 16. If the release is from the latest release branch, clean up doc/CHANGES.txt on trunk.
      - Update the version number which is the base of CHANGES.txt.
             "changes since jEdit [version]"
@@ -174,13 +174,14 @@ Thanks to  for contributing to this release.
      - Submit your changes by doing
             svn commit -m "Update the base version of CHANGES.txt to [version]" doc/CHANGES.txt
        in trunk.
-
+[/ifbranch]
 ====================================================================================================
 import java.util.regex.Pattern;
 file = new File(new File(buffer.getPath()).getParentFile(), "../org/gjt/sp/jedit/jEdit.java");
 fileChars = new char[file.length()];
 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 reader.read(fileChars, 0, fileChars.length);
+reader.close();
 pattern = Pattern.compile("public static String getBuild\\(\\)[^}]+return \"([^\"]{11})\"");
 matcher = pattern.matcher(new String(fileChars));
 matcher.find();
@@ -189,7 +190,11 @@ major = Integer.parseInt(build.substring(0,2));
 minor = Integer.parseInt(build.substring(3,5));
 beta = Integer.parseInt(build.substring(6,8));
 micro = Integer.parseInt(build.substring(9,11));
-branch = major + "." + minor + ".x";
+branch = Macros.input(view, "Current branch or \"trunk\" (\"t\" is also possible)?", major + "." + minor + ".x");
+if (branch == null) {
+    return;
+}
+branch = "t".equals(branch) ? "trunk" : branch;
 tag = "jedit-"
       + major
       + "-" + minor
@@ -205,7 +210,10 @@ nextBuild = String.format("%02d.%02d.%02d.%02d",
                                          Integer.valueOf(minor),
                                          Integer.valueOf(beta == 99 ? beta : beta + 1),
                                          Integer.valueOf(beta == 99 ? micro + 1 : micro) });
-sourceForgeUsername = Macros.input(view, "Your SourceForge Username?", "Vampire0");
+sourceForgeUsername = Macros.input(view, "Your SourceForge Username?", "vampire0");
+if (sourceForgeUsername == null) {
+    return;
+}
 SearchAndReplace.setBeanShellReplace(false);
 SearchAndReplace.setIgnoreCase(false);
 SearchAndReplace.setRegexp(false);
@@ -242,6 +250,9 @@ SearchAndReplace.setReplaceString(beta != 99 ? "_1" : "");
 SearchAndReplace.replaceAll(view);
 SearchAndReplace.setSearchString("\\[iffinal\\]((?:.|\n)*?)\\[/iffinal\\]");
 SearchAndReplace.setReplaceString(beta != 99 ? "" : "_1");
+SearchAndReplace.replaceAll(view);
+SearchAndReplace.setSearchString("\\[ifbranch\\]((?:.|\n)*?)\\[/ifbranch\\]");
+SearchAndReplace.setReplaceString(branch.equals("trunk") ? "" : "_1");
 SearchAndReplace.replaceAll(view);
 textArea.replaceSelection("Variables replaced\n");
 buffer.endCompoundEdit();
