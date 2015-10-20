@@ -26,7 +26,7 @@ contributing to this release.
 
 - Fix bug #3671: autodetect text file encoding in HelpViewer
   (patch #540 - Eric Le Lay)
-  
+
 - Fix bug #3881, non-capturing lookahead in regex search didn't work.
   (Dale Anson)
 
@@ -90,7 +90,7 @@ contributing to this release.
   Le Lay)
 
 - Plugin Manager Manage Panel sortable on all columns and all directions
- (Eric Le Lay)
+  (Eric Le Lay)
 
 }}}
 {{{ Miscellaneous
@@ -153,6 +153,7 @@ contributing to this release.
   patch #571. (Dale Anson)
 
 }}}
+
 }}}
 
 jEdit buffer local properties:
