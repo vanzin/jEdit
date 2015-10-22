@@ -2,6 +2,29 @@ jEdit 5.3 version history
        (changes since jEdit 5.2.0)
 :encoding=UTF-8:
 
+{{{ Version 5.3.1
+
+Thanks to  for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 5.3.0
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
