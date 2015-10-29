@@ -203,7 +203,7 @@ class InstallPanel extends JPanel implements EBComponent
 				int i = table.getSelectedRow(), n = table.getModel().getRowCount();
 				if (e.getKeyChar() == '/' ||
 					e.getKeyCode() == KeyEvent.VK_DOWN && i == (n - 1) ||
-					e.getKeyCode() == KeyEvent.VK_UP && i == 0) 
+					e.getKeyCode() == KeyEvent.VK_UP && i == 0)
 				{
 					searchField.requestFocus();
 					searchField.selectAll();
@@ -401,14 +401,14 @@ class InstallPanel extends JPanel implements EBComponent
 		private int sortType = EntryCompare.COLUMN_NAME;
 		private String filterString;
 		int sortDirection = 1;
-		
+
 		//{{{ setFilterString() method
 		public void setFilterString(String filterString)
 		{
 			this.filterString = filterString;
 			updateFilteredEntries();
 		} //}}}
-		
+
 		//{{{ updateFilteredEntries() method
 		void updateFilteredEntries()
 		{
@@ -445,7 +445,7 @@ class InstallPanel extends JPanel implements EBComponent
 					{
 						continue;
 					}
-					
+
 					String s = (e.name + ' ' + e.set + ' ' + e.description).toLowerCase();
 					boolean hasAll = true;
 					boolean negative = false;
@@ -458,7 +458,7 @@ class InstallPanel extends JPanel implements EBComponent
 						}
 						if (word.length() == 0)
 							continue;
-						
+
 						if (negative == s.contains(word))
 						{
 							hasAll = false;
@@ -771,7 +771,7 @@ class InstallPanel extends JPanel implements EBComponent
 			if (pluginList == null) return;
 
 			entries.clear();
-			
+
 			for(PluginList.PluginSet set : pluginList.pluginSets)
 			{
 				for(int j = 0; j < set.plugins.size(); j++)
@@ -844,7 +844,7 @@ class InstallPanel extends JPanel implements EBComponent
 				else setValueAt(savedChecked.contains(name), i, 0);
 			}
 			if (table == null) return;
-			
+
 			table.setColumnSelectionInterval(0,0);
 			if (!savedSelection.isEmpty())
 			{
@@ -983,7 +983,7 @@ class InstallPanel extends JPanel implements EBComponent
 				if (entry.dependencies == null || entry.dependencies.isEmpty())
 				{
 					pattern = "<b>{0}</b>: {1}<br><b>{2}</b>: {3} {4}";
-				} 
+				}
 				else
 				{
 					params.add(jEdit.getProperty("install-plugins.info.depends", "Depends on"));
@@ -1050,7 +1050,7 @@ class InstallPanel extends JPanel implements EBComponent
 			super(jEdit.getProperty("install-plugins.select-all"));
 			addActionListener(this);
 			pluginModel.addTableModelListener(this);
-			setEnabled(false);
+			// setEnabled(false);
 		}
 
 		@Override
@@ -1127,7 +1127,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void actionPerformed(ActionEvent ae)
 		{
-			
+
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET,
 				jEdit.getSettingsDirectory() + File.separator);
 			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window,
