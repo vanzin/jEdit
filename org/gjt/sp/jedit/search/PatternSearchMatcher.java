@@ -243,13 +243,58 @@ public class PatternSearchMatcher extends SearchMatcher
         Matcher nc_matcher = nc_pattern.matcher( p );
         if ( nc_matcher.find() ) 
         {
-            String newRegex = nc_matcher.replaceAll( "" );
-            return Pattern.compile(newRegex, flags);
+        	int index = nc_matcher.start();
+        	int open_count = 0;
+        	for (int i = index; i < p.length(); i++) 
+        	{
+        		if (p.charAt(i) == '(' && (i == 0 || p.charAt(i - 1) != '\\')) 
+        		{
+        			++ open_count;	
+        		}
+        		if (p.charAt(i) == ')' && (i == 0 || p.charAt(i - 1) != '\\')) 
+        		{
+        			-- open_count;	
+        		}
+        		if (open_count == 0) 
+        		{
+        		    int end = i + 1;
+        		    char c = p.charAt( end );
+        		    
+        		    // check for "{n,m}" quantifiers
+        		    if (c == '{')
+        		    {
+        		        while (c != '}')
+        		        {
+        		            ++ end;
+        		            c = p.charAt(end);
+        		        }
+        		        ++ end;
+        		    }
+                    
+        		    // check for ?+* quanitifiers
+                    c = p.charAt(end);
+                    if (c == '?' || c == '+' || c == '*') 
+                    {
+                        ++ end;
+                    }
+                    
+                    // check for ?+ quantifier quantifiers
+                    c = p.charAt(end);
+                    if (c == '?' || c == '+') 
+                    {
+                        ++ end;
+                    }
+                    
+                    // delete the non-capturing group
+        			StringBuilder sb = new StringBuilder(p);
+        			sb.delete(index, end);
+        			
+        			// recurse to find any remaining non-capturing groups
+        			return removeNonCapturingGroups(Pattern.compile(sb.toString(), flags), flags);
+        		}
+        	}
         } 
-        else 
-        {
-            return re;
-        }
+        return re;
     } //}}}
     
 	//{{{ toString() method
