@@ -7,16 +7,6 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ### German translation initiated by Robert Schwenn (jedit@rstyx.de)
 ###
-###{{{ History:
-###    21.02.2012  R. Schwenn  4.4.2.3   - Core Localization separated from All-In-One
-###                                        .props file in order to support new Localization API
-###    16.12.2012  R. Schwenn  5.0.0.1   - re-built this file from scratch, means from 
-###                                        jedit_en.props (Revision 22535).
-###                                      - About 330 labels newly translated, many are new
-###                                        in jEdit 5, but some may have been missed before.
-###    21.11.2013  R. Schwenn  5.0.1.2   - Update for jEdit 5.1
-###}}}
-###
 ###{{{ Notes
 ###
 ###    {{{ Translations to check again:
@@ -1286,6 +1276,7 @@ options.general.checkModStatusUpon.none=Speichern der Datei
 options.general.recentFiles=Länge der Liste letzter Dateien:
 options.general.hypersearch.maxWarningResults=Maximale Anzahl Suchergebnisse für Hypersuche:
 options.general.sortRecent=Liste der letzten Dateien sortieren
+options.general.hideOpen=Liste der letzten Dateien zeigt keine offenen Dateien
 options.general.saveCaret=Cursor-Position merken in zuletzt verwendeten Dateien
 options.general.persistentMarkers=Lesezeichen merken
 options.general.resetUndo=Liste der rückgängig zu machenden Aktionen beim Speichern löschen
@@ -1394,17 +1385,22 @@ options.editing.noTabs=Soft-Tabs (Leerzeichen statt Tabulatoren einfügen)
 options.editing.elasticTabstops=Einrückung unter Verwendung elastischer Tabulatoren
 options.editing.elasticTabstops.tooltip=Spalten in Zeilen über und unter einer "Zelle" bleiben ausgerichtet auf Tab-Stops, die in Abhängigkeit der "Zellen"-Breite angepasst werden.
 options.editing.deepIndent=Tiefe Einrückung
-options.editing.autoIndent=Automatische Einrückung
-options.editing.largefilemode.title=Modus für große Dateien
-options.editing.largefilemode=Verhalten, wenn eine sehr große Datei geöffnet wird:
-options.editing.largefilemode.option.ask=<html><b>Fragen</b></html>
-options.editing.largefilemode.option.full=<html><b>Volle Syntaxhervorhebung</b> : \
-                jEdit könnte <b>sehr langsam</b> werden, <b>(nicht empfohlen)</b></html>
-options.editing.largefilemode.option.limited=<html><b>Kontext-unabhängige Syntaxhervorhebung</b>: <br/>\
-		Gewohnte Reaktionsgeschwindigkeit, aber schlechtere Qualität der Syntaxhervorhebung, wenn zur<br/>\
-		korrekten Darstellung mehr als eine Zeile berücksichtigt werden müsste (Mehrzeilige Kommentare, XML-Tags ...)<br/>\
-		Wortumbruch-Modus "Soft" wird auch deaktiviert<br/><b>(empfohlene Variante)</b></html>
-options.editing.largefilemode.option.nohighlight=Keine Syntaxhervorhebung, kein Wortumbruch-Modus "Soft"
+options.editing.autoIndent=Automatische Einrückung:
+options.editing.deleteMode=Lösche diesen Bearbeitungsmodus
+options.editing.addMode=Neuer Bearbeitungsmodus
+options.editing.addMode.dialog.title=Bearbeitungsmodus
+options.editing.addMode.dialog.browse=Auflisten
+options.editing.addMode.dialog.modeName=Bearbeitungsmodus Name:
+options.editing.addMode.dialog.modeFile=Definitionsdatei für Bearbeitungsmodus wählen:
+options.editing.addMode.dialog.filenameGlob="glob"-Muster für Dateiname:
+options.editing.addMode.dialog.firstLineGlob="glob"-Muster für erste Zeile der Datei:
+options.editing.addMode.dialog.warning.title=Bearbeitungsmodus ersetzen
+options.editing.addMode.dialog.warning.message=Dieser Bearbeitungsmodus existiert bereits. Soll er ersetzt werden?
+options.editing.addMode.dialog.warning.message1=Definitionsdatei für Bearbeitungsmodus konnte nicht kopiert werden
+options.editing.deleteMode.dialog.title=Bearbeitungsmodus löschen
+options.editing.deleteMode.dialog.message=Soll dieser Bearbeitungsmodus wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden.
+options.editing.deleteMode.dialog.message1=Definitionsdatei für Bearbeitungsmodus konnte nicht gelöscht werden
+options.editing.deleteMode.dialog.message2=für Bearbeitungsmodus
 #}}}
 
 #{{{ Encodings pane
@@ -1443,6 +1439,21 @@ options.gutter.foldStyleNames.Triangle=Dreieck
 options.gutter.foldStyleNames.Square=Quadrat
 options.gutter.foldStyleNames.Circle=Kreis
 #}}}
+
+#{{{ Large files pane
+options.large-files.label=Große Dateien
+options.editing.largefilemode.title=Modus für große Dateien
+options.editing.largefilemode=Verhalten, wenn eine sehr große Datei geöffnet wird:
+options.editing.largefilemode.option.ask=<html><b>Fragen</b></html>
+options.editing.largefilemode.option.full=<html><b>Volle Syntaxhervorhebung</b> : \
+                jEdit könnte <b>sehr langsam</b> werden, <b>(nicht empfohlen)</b></html>
+options.editing.largefilemode.option.limited=<html><b>Kontext-unabhängige Syntaxhervorhebung</b>: <br/>\
+		Gewohnte Reaktionsgeschwindigkeit, aber schlechtere Qualität der Syntaxhervorhebung, wenn zur<br/>\
+		korrekten Darstellung mehr als eine Zeile berücksichtigt werden müsste (Mehrzeilige Kommentare, XML-Tags ...)<br/>\
+		Wortumbruch-Modus "Soft" wird auch deaktiviert<br/><b>(empfohlene Variante)</b></html>
+options.editing.largefilemode.option.nohighlight=Keine Syntaxhervorhebung, kein Wortumbruch-Modus "Soft"
+#}}}
+
 
 #{{{ Mouse pane
 options.mouse.label=Maus
@@ -1679,6 +1690,8 @@ options.view.showFullPath=Zeige vollständigen Dateipfad in der Titelleiste
 options.view.showSearchbar=Suchzeile immer anzeigen
 options.view.beepOnSearchAutoWrap=Pieps, wenn Suche automatisch am anderen Dateiende fortsetzt
 options.view.showBufferSwitcher=Zeige Datei-Umschalter (Auswahlliste)
+options.view.bufferswitcher.sortBuffers=Sortiere Datei-Umschalter
+options.view.bufferswitcher.sortByName=Sortiere Datei-Umschalter nach Dateiname statt Pfadname
 options.view.bufferSwitcherMaxRowsCount= ... Zeilenanzahl in dieser Liste:
 options.view.sortBuffers=Dateisätze sortieren
 options.view.sortByName=... nach Dateiname (statt nach Pfadname)
