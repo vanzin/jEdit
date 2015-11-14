@@ -1149,6 +1149,20 @@
                     <programlisting>eval(_1)</programlisting>
                 </informalexample>
 
+                <informalexample>
+                    <para>To replace 3d6 with 3 simulated dice throws:</para>
+
+                    <programlisting>3d6</programlisting>
+
+                    <para>Replacing it with the following BeanShell
+                    snippet (note the braces around multi-instruction beanshell code):</para>
+
+                    <programlisting>
+                    <![CDATA[{r = new java.util.Random(); b = "";
+                    for(i=0;i<3;i++)b+=(r.nextInt(5)+1) + " ";
+                    return b;}]]>
+                    </programlisting>
+                </informalexample>
                 <para>These examples only scratch the surface; the possibilities
                 are endless.</para>
             </section>
