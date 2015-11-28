@@ -4,12 +4,14 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Eric Le Lay for contributing to this release.
+Thanks to Eric Le Lay and Jesse Pavel for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fix bug #3983: filename completion prefered longest filename when no
   match with exact length was found. Prefer the first one (Eric Le Lay)
+
+- Fix bug #3913: beanshell do-while loop bug (Patch #572 Jesse Pavel)
 
 }}}
 {{{ Miscellaneous
