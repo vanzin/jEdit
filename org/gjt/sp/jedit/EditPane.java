@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -907,7 +908,6 @@ public class EditPane extends JPanel implements BufferSetListener
 			jEdit.getColorProperty("view.gutter.structureHighlightColor"));
 		Color backgroundColor = jEdit.getColorProperty("view.gutter.bgColor");
 		gutter.setBackground(backgroundColor);
-		textArea.setBackground(backgroundColor);
 		gutter.setForeground(
 			jEdit.getColorProperty("view.gutter.fgColor"));
 		gutter.setHighlightedForeground(
@@ -975,6 +975,9 @@ public class EditPane extends JPanel implements BufferSetListener
 
 		textArea.setCtrlForRectangularSelection(jEdit.getBooleanProperty(
 			"view.ctrlForRectangularSelection"));
+		
+		textArea.setBackground(UIManager.getDefaults().getColor(
+			"ScrollBar.background"));
 
 		textArea.propertiesChanged();
 
