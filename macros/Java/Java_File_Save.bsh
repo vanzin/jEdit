@@ -56,7 +56,7 @@ if (buffer.isNewFile() && buffer.getPath() != null)
       import java.util.regex.Pattern;
       import java.util.regex.Matcher;
       // Build the regex - based on the offical java language spec.
-      Pattern regex = Pattern.compile("^\\s*(public|protected|private|static|abstract|final|native|synchronized|transient|volatile|strictfp)?\\s*(class|interface)\\s*([^ {/]*)");
+      Pattern regex = Pattern.compile("^\\s*(public|protected|private|static|abstract|final|native|synchronized|transient|volatile|strictfp)?\\s*(class|interface)\\s*([^ {/]+).*");
       boolean inComment = false;
       for(int i=0;i<maxLine;i++)
       {

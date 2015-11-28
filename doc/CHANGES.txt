@@ -13,6 +13,8 @@ Thanks to Eric Le Lay and Jesse Pavel for contributing to this release.
 
 - Fix bug #3913: beanshell do-while loop bug (Patch #572 Jesse Pavel)
 
+- Fix Java_File_Save macro: accept text after class name (Eric Le Lay)
+
 }}}
 {{{ Miscellaneous
 
