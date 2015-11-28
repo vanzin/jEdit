@@ -18,6 +18,8 @@ release.
 
 - Fix bug #3936, better choice for text area corner colors (Dale Anson)
 
+- Fix bug #3717, gutter lines not aligning with text area lines (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
