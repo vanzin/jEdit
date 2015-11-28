@@ -255,7 +255,7 @@ public class PatternSearchMatcher extends SearchMatcher
         		{
         			-- open_count;	
         		}
-        		if (open_count == 0) 
+        		if (open_count == 0 && i < p.length() - 1) 
         		{
         		    int end = i + 1;
         		    char c = p.charAt( end );
@@ -263,7 +263,7 @@ public class PatternSearchMatcher extends SearchMatcher
         		    // check for "{n,m}" quantifiers
         		    if (c == '{')
         		    {
-        		        while (c != '}')
+        		        while (c != '}' && end < p.length() - 1)
         		        {
         		            ++ end;
         		            c = p.charAt(end);
@@ -273,14 +273,14 @@ public class PatternSearchMatcher extends SearchMatcher
                     
         		    // check for ?+* quanitifiers
                     c = p.charAt(end);
-                    if (c == '?' || c == '+' || c == '*') 
+                    if ((c == '?' || c == '+' || c == '*') && end < p.length() - 1) 
                     {
                         ++ end;
                     }
                     
                     // check for ?+ quantifier quantifiers
                     c = p.charAt(end);
-                    if (c == '?' || c == '+') 
+                    if ((c == '?' || c == '+') && end < p.length() - 1) 
                     {
                         ++ end;
                     }

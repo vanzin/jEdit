@@ -20,6 +20,9 @@ release.
 
 - Fix bug #3717, gutter lines not aligning with text area lines (Dale Anson)
 
+- Fix bug #3937, issue with non-capturing groups in regex search and replace
+  (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
