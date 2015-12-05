@@ -27,15 +27,18 @@ import org.jedit.core.MigrationService;
 
 //{{{ OneTimeMigrationService class
 /** Base class from which one can more easily implement a migration step
-    that should be executed only once per installation. 
+    that should be executed only once per installation.
     <p>
     Concrete implementations of this class should register themselves in services.xml.
     jEdit will call doMigration() on each object, which will skip the ones that
     have been done before.
-    <p> 
+    <p>
     The time that these services are automatically executed by jEdit is during the
     "initializing properties" step. This means that implementations that need to
-    update or remove certain properties during upgrades can take advantage of this class. 
+    update or remove certain properties during upgrades can take advantage of this class.
+    <p> NOTE: This happens after plugins are started, which might be too late for some
+    plugins, such as the XMLPlugin, so using the services API to start them is not always
+    desireable.
     <p>
     Example:
     <pre>
@@ -45,10 +48,10 @@ import org.jedit.core.MigrationService;
 	</pre>
     @author Alan Ezust
     @since jEdit 5.1
-*/ 
-abstract public class OneTimeMigrationService implements MigrationService 
+*/
+abstract public class OneTimeMigrationService implements MigrationService
 {
-	/** Performs doMigrate() on each installed 
+	/** Performs doMigrate() on each installed
 		OneTimeMigrationService */
 	public static void execute()
 	{
@@ -65,14 +68,14 @@ abstract public class OneTimeMigrationService implements MigrationService
 	protected String name;
 
 	/** @param name of this service. Used to identify and determine if it's been
-        done eariler. */	
+        done eariler. */
 	public OneTimeMigrationService(String name)
 	{
 		this.name = name;
 	}
-	
+
 	/** Calls migrate() but only once per installation. */
-	public void doMigration() 
+	public void doMigration()
 	{
 		if (!jEdit.getBooleanProperty("migration.step." + name)) {
 			Log.log(Log.MESSAGE, this, "Performing migration step: " + name);
