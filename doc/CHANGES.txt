@@ -4,7 +4,7 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Eric Le Lay, Jesse Pavel, and Dale anson for contributing to this 
+Thanks to Eric Le Lay, Jesse Pavel, and Dale anson for contributing to this
 release.
 
 {{{ Bug Fixes
@@ -26,6 +26,7 @@ release.
 }}}
 {{{ Miscellaneous
 
+- Rollback Patch #537- Floating dockables as JDialog.
 
 }}}
 {{{ API Changes
@@ -186,7 +187,7 @@ contributing to this release.
 
 - Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)
 
-- Better mode selection for files that match multiple modes, also fixes/applies 
+- Better mode selection for files that match multiple modes, also fixes/applies
   patch #571. (Dale Anson)
 
 }}}
