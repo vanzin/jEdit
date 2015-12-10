@@ -269,7 +269,7 @@ public class HelpSearchPanel extends JPanel
 									jEdit.getProperty(
 									"helpviewer.no-results") });
 
-								getToolkit().beep();
+								javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 							}
 							else
 								results.setListData(resultModel);

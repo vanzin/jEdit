@@ -152,7 +152,7 @@ public class HistoryText
 			}
 		}
 
-		text.getToolkit().beep();
+		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ doForwardSearch() method
@@ -188,7 +188,7 @@ public class HistoryText
 			}
 		}
 
-		text.getToolkit().beep();
+		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ historyPrevious() method
@@ -198,7 +198,7 @@ public class HistoryText
 			return;
 
 		if(index == historyModel.getSize() - 1)
-			text.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		else if(index == -1)
 		{
 			current = getText();
@@ -221,7 +221,7 @@ public class HistoryText
 			return;
 
 		if(index == -1)
-			text.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		else if(index == 0)
 			setText(current);
 		else

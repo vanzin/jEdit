@@ -362,7 +362,7 @@ public class DisplayManager
 	{
 		if(digit < '1' || digit > '9')
 		{
-			Toolkit.getDefaultToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		}
 		else
 			expandFolds((digit - '1') + 1);

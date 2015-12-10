@@ -68,7 +68,7 @@ public class CompleteWord extends CompletionPopup
 
 		if(!buffer.isEditable())
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class CompleteWord extends CompletionPopup
 			caret,noWordSep);
 		if(word == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -87,7 +87,7 @@ public class CompleteWord extends CompletionPopup
 
 		if(completions.length == 0)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		}
 		//{{{ if there is only one competion, insert in buffer
 		else if(completions.length == 1)
@@ -96,7 +96,7 @@ public class CompleteWord extends CompletionPopup
 
 			if(c.text.equals(word))
 			{
-				textArea.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			}
 			else
 			{

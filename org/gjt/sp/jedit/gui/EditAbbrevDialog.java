@@ -150,7 +150,7 @@ public class EditAbbrevDialog extends JDialog
 				if(editor.getAbbrev() == null
 					|| editor.getAbbrev().length() == 0)
 				{
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					return;
 				}
 

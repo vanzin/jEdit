@@ -152,7 +152,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 		else if(filename == null || filename.length() == 0)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 

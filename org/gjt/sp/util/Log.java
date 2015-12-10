@@ -452,7 +452,7 @@ public class Log
 				
 				if (time - lastBeepTime > 1000)
 				{
-					Toolkit.getDefaultToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					lastBeepTime = System.currentTimeMillis();
 				}
 			}

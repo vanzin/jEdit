@@ -144,7 +144,7 @@ public class BeanShell
 		Selection[] selection = textArea.getSelection();
 		if(selection.length == 0)
 		{
-			view.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 

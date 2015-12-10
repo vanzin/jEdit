@@ -271,7 +271,7 @@ public class EmacsUtil {
 	
 	public void beep()
 	{
-		jEdit.getActiveView().getToolkit().beep();
+		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	}
 	
 	public Selection getKillRegion()

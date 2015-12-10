@@ -505,7 +505,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 				HistoryEntry entry = historyModel.back(HelpViewer.this);
 				if(entry == null)
 				{
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 				}
 				else
 				{
@@ -517,7 +517,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 				HistoryEntry entry = historyModel.forward(HelpViewer.this);
 				if(entry == null)
 				{
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 				}
 				else
 				{

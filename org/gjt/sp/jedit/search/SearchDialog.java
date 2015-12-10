@@ -880,7 +880,7 @@ public class SearchDialog extends EnhancedDialog
 			if(find.getText().length() == 0)
 			{
 				if(!cancel)
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 				return false;
 			}
 
@@ -1091,7 +1091,7 @@ public class SearchDialog extends EnhancedDialog
 				if(SearchAndReplace.replace(view))
 					ok();
 				else
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			}
 			else if(source == replaceAllBtn)
 			{
@@ -1108,7 +1108,7 @@ public class SearchDialog extends EnhancedDialog
 				if(!save(false))
 				{
 					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					return;
 				}
 
@@ -1117,14 +1117,14 @@ public class SearchDialog extends EnhancedDialog
 					if(SearchAndReplace.replace(view))
 						closeOrKeepDialog();
 					else
-						getToolkit().beep();
+						javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 				}
 				else
 				{
 					if(SearchAndReplace.replaceAll(view))
 						closeOrKeepDialog();
 					else
-						getToolkit().beep();
+						javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 				}
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

@@ -78,7 +78,7 @@ public class Abbrevs
 		JEditTextArea textArea = view.getTextArea();
 		if(!buffer.isEditable())
 		{
-			view.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return false;
 		}
 
@@ -90,7 +90,7 @@ public class Abbrevs
 		if(lineText.length() == 0)
 		{
 			if(add)
-				view.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return false;
 		}
 
@@ -98,7 +98,7 @@ public class Abbrevs
 		if(pos == 0)
 		{
 			if(add)
-				view.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return false;
 		} //}}}
 

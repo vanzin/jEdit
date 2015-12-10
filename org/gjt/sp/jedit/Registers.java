@@ -111,7 +111,7 @@ public class Registers
 			textArea.setSelectedText("");
 		}
 		else
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ append() methods
@@ -151,7 +151,7 @@ public class Registers
 	{
 		if(cut && !textArea.isEditable())
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -231,7 +231,7 @@ public class Registers
 	{
 		if(!textArea.isEditable())
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -239,7 +239,7 @@ public class Registers
 
 		if(reg == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 		Transferable transferable = reg.getTransferable();
@@ -268,7 +268,7 @@ public class Registers
 		}
 		if(selection == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
@@ -295,7 +295,7 @@ public class Registers
 		}
 		if(!textArea.isEditable())
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -303,7 +303,7 @@ public class Registers
 
 		if(reg == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 		Transferable transferable = reg.getTransferable();
@@ -318,7 +318,7 @@ public class Registers
 		}
 		if(selection == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();

@@ -93,7 +93,7 @@ public class AddAbbrevDialog extends JDialog
 				String _abbrev = editor.getAbbrev();
 				if(_abbrev == null || _abbrev.length() == 0)
 				{
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					return;
 				}
 				Abbrevs.addGlobalAbbrev(_abbrev,editor.getExpansion());
@@ -104,7 +104,7 @@ public class AddAbbrevDialog extends JDialog
 				String _abbrev = editor.getAbbrev();
 				if(_abbrev == null || _abbrev.length() == 0)
 				{
-					getToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					return;
 				}
 				Abbrevs.addModeAbbrev(view.getBuffer().getMode().getName(),

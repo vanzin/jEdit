@@ -400,7 +400,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	public void invokeLastAction()
 	{
 		if(lastAction == null)
-			view.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		else
 			invokeAction(lastAction);
 	} //}}}

@@ -256,7 +256,7 @@ public class SearchBar extends JToolBar
 					// beep if beep property set
 					if(jEdit.getBooleanProperty("search.beepOnSearchAutoWrap"))
 					{
-						getToolkit().beep();
+						javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					}
 				}
 			}

@@ -81,7 +81,7 @@ public abstract class BeanShellFacade<T>
 		String command = textArea.getSelectedText();
 		if(command == null)
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 		Object returnValue = eval(param,global,command);

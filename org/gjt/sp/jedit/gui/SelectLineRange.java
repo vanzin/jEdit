@@ -89,7 +89,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		}
 		catch(NumberFormatException nf)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		if(startLine < 0 || endLine >= buffer.getLineCount()
 			|| startLine > endLine)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 

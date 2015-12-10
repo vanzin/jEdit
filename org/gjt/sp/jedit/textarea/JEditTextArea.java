@@ -237,7 +237,7 @@ public class JEditTextArea extends TextArea
 				return;
 			}
 		}
-		getToolkit().beep();
+		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 
@@ -294,7 +294,7 @@ public class JEditTextArea extends TextArea
 		}
 		catch(Exception e)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		}
 	} //}}}
 

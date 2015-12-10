@@ -129,6 +129,11 @@ contributing to this release.
 
 - Plugin Manager Manage Panel sortable on all columns and all directions
   (Eric Le Lay)
+  
+- Replaced all Toolkit.beep() calls with 
+  javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);, which 
+  allows look and feels to provide their own implementation of error signals.
+  (Dale Anson)
 
 }}}
 {{{ Miscellaneous

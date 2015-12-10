@@ -227,7 +227,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	{
 		if(dockables.isEmpty())
 		{
-			Toolkit.getDefaultToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 

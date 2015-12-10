@@ -154,7 +154,7 @@ public class DefaultInputHandler extends InputHandler
 				// beep when caps lock is pressed, etc.
 				if(currentBindings != bindings)
 				{
-					Toolkit.getDefaultToolkit().beep();
+					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					// F10 should be passed on, but C+e F10
 					// shouldn't
 					repeatCount = 1;

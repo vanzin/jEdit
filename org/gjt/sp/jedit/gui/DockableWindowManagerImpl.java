@@ -487,7 +487,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 					comp = comp.getParent();
 				}
 
-				getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			}
 		});
 	} //}}}

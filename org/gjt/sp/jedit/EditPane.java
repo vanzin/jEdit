@@ -260,7 +260,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		if(recentBuffer != null)
 			setBuffer(recentBuffer);
 		else
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ focusOnTextArea() method
@@ -310,7 +310,7 @@ public class EditPane extends JPanel implements BufferSetListener
 	public void focusBufferSwitcher()
 	{
 		if(bufferSwitcher == null)
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		else
 		{
 			SwingUtilities.invokeLater(new Runnable()
@@ -503,7 +503,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		java.util.List<Marker> markers = buffer.getMarkers();
 		if(markers.isEmpty())
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -541,7 +541,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		java.util.List<Marker> markers = buffer.getMarkers();
 		if(markers.isEmpty())
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -581,7 +581,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		Marker marker = buffer.getMarker(shortcut);
 		if(marker == null)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -632,7 +632,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		Marker marker = buffer.getMarker(shortcut);
 		if(marker == null)
 		{
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 

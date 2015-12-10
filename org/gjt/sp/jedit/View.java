@@ -777,7 +777,7 @@ public class View extends JFrame implements InputHandlerProvider
 			editPane.focusOnTextArea();
 		}
 		else
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ unsplitCurrent() method
@@ -838,7 +838,7 @@ public class View extends JFrame implements InputHandlerProvider
 			editPane.focusOnTextArea();
 		}
 		else
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 	} //}}}
 
 	//{{{ resplit() method
@@ -850,7 +850,7 @@ public class View extends JFrame implements InputHandlerProvider
 	public void resplit()
 	{
 		if(lastSplitConfig == null)
-			getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 		else
 			setSplitConfig(null,lastSplitConfig);
 	} //}}}

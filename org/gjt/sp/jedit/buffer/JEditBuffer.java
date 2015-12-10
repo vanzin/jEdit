@@ -2106,7 +2106,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		if(!isEditable())
 		{
-			textArea.getToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -2118,7 +2118,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			fireBeginUndo();
 			Selection[] s = undoMgr.undo();
 			if(s == null || s.length == 0)
-				textArea.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			else
 			{
 				textArea.setCaretPosition(s[s.length - 1].getEnd());
@@ -2148,7 +2148,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		if(!isEditable())
 		{
-			Toolkit.getDefaultToolkit().beep();
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
 		}
 
@@ -2160,7 +2160,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			fireBeginRedo();
 			Selection[] s = undoMgr.redo();
 			if(s == null || s.length == 0)
-				textArea.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			else
 			{
 				textArea.setCaretPosition(s[s.length - 1].getEnd());

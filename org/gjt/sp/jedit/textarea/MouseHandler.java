@@ -173,7 +173,7 @@ public class MouseHandler extends TextAreaMouseHandler
 
 			textArea.setCaretPosition(dragStart,false);
 			if(!textArea.isEditable())
-				textArea.getToolkit().beep();
+				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			else
 				Registers.paste(textArea,'%',control);
 		}
