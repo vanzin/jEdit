@@ -44,11 +44,9 @@ class SettingsReloader
 	//{{{ maybeReload() method
 	private void maybeReload(String path)
 	{
+		String originalPath = path;
 		String jEditHome = jEdit.getJEditHome();
 		String settingsDirectory = jEdit.getSettingsDirectory();
-
-		if(!MiscUtilities.isURL(path))
-			path = MiscUtilities.resolveSymlinks(path);
 
 		// On Windows and MacOS, path names are case insensitive
 		if((VFSManager.getVFSForPath(path).getCapabilities()
@@ -84,7 +82,6 @@ class SettingsReloader
 
 		if(path.startsWith(File.separator) || path.startsWith("/"))
 			path = path.substring(1);
-
 		if(path.startsWith("macros"))
 			Macros.loadMacros();
 		else if(path.startsWith("modes") && (path.endsWith(".xml")

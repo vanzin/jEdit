@@ -22,6 +22,9 @@ release.
 
 - Fix bug #3937, issue with non-capturing groups in regex search and replace
   (Dale Anson)
+  
+- Fix bug #3924, changes to mode files are not detected when ~/.jedit/modes
+  is a symlink. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
