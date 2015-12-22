@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 
@@ -73,6 +72,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	{
 		name = internalName;
 		setLayout(gridBag = new GridBagLayout());
+		setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 	} //}}}
 
 	//{{{ getName() method
@@ -155,7 +155,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	public void addComponent(String label, Component comp)
 	{
 		JLabel l = newLabel(label, comp);
-		l.setBorder(new EmptyBorder(0,0,0,12));
+		l.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
 		addComponent(l,comp,GridBagConstraints.BOTH);
 	}
 
@@ -171,7 +171,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	public void addComponent(String label, Component comp, int fill)
 	{
 		JLabel l = newLabel(label, comp);
-		l.setBorder(new EmptyBorder(0,0,0,12));
+		l.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
 		addComponent(l,comp,fill);
 	}
 

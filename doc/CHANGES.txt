@@ -4,7 +4,7 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Eric Le Lay, Jesse Pavel, and Dale anson for contributing to this
+Thanks to Eric Le Lay, Jesse Pavel, and Dale Anson for contributing to this
 release.
 
 {{{ Bug Fixes
@@ -25,6 +25,12 @@ release.
   
 - Fix bug #3924, changes to mode files are not detected when ~/.jedit/modes
   is a symlink. (Dale Anson)
+
+}}}
+{{{ UI Improvements
+
+- UI clean up, button spacing, borders, etc. (Dale Anson)
+
 
 }}}
 {{{ Miscellaneous
