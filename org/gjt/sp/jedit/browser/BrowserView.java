@@ -85,12 +85,6 @@ class BrowserView extends JPanel
 		{
 			public void run()
 			{
-				String prop = browser.isHorizontalLayout() ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
-				int loc = jEdit.getIntegerProperty(prop,-1);
-				if(loc == -1)
-					loc = parentScroller.getPreferredSize().height;
-
-				splitPane.setDividerLocation(loc);
 				parentDirectories.ensureIndexIsVisible(
 					parentDirectories.getModel()
 					.getSize());
@@ -115,16 +109,6 @@ class BrowserView extends JPanel
 	public void focusOnFileView()
 	{
 		table.requestFocus();
-	} //}}}
-
-	//{{{ removeNotify() method
-	@Override
-	public void removeNotify()
-	{
-		String prop = browser.isHorizontalLayout() ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
-		jEdit.setIntegerProperty(prop,splitPane.getDividerLocation());
-
-		super.removeNotify();
 	} //}}}
 
 	//{{{ getSelectedFiles() method
@@ -430,7 +414,7 @@ class BrowserView extends JPanel
 				isSelected,cellHasFocus);
 
 			ParentDirectoryRenderer.this.setBorder(new EmptyBorder(
-				1,index * 5 + 1,1,1));
+				1, index * 5 + 1, 1, 1));
 
 			if(value instanceof LoadingPlaceholder)
 			{
@@ -507,7 +491,7 @@ class BrowserView extends JPanel
 					{
 						browser.setDirectory(dirEntry.getPath());
 						if(browser.getMode() == VFSBrowser.BROWSER)
-						focusOnFileView();
+							focusOnFileView();
 					}
 				}
 			}
@@ -617,7 +601,7 @@ class BrowserView extends JPanel
 			if(GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
 				if(row == -1)
-					/* nothing */;
+					return;
 				else if(evt.isShiftDown())
 					table.getSelectionModel().addSelectionInterval(row,row);
 				else
@@ -660,6 +644,13 @@ class BrowserView extends JPanel
 	
 	class ParentDirectoryList extends JList
 	{
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension d = super.getPreferredSize();
+			splitPane.setDividerLocation(browser.isHorizontalLayout() ? d.width + 3 : d.height + 3);
+			return d;
+		}
+		
 		@Override
 		protected void processKeyEvent(KeyEvent evt)
 		{
