@@ -25,11 +25,13 @@ package org.gjt.sp.jedit.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,7 +40,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.jEdit;
@@ -113,11 +114,11 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 	}
 	private void initialize(Component comp, SyntaxStyle style, String styleName)
 	{
-		JPanel content = new JPanel(new BorderLayout(12,12));
-		content.setBorder(new EmptyBorder(12,12,12,12));
+		JPanel content = new JPanel(new BorderLayout(12, 12));
+		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		setContentPane(content);
 
-		JPanel panel = new JPanel(new GridLayout(5,2,12,12));
+		JPanel panel = new JPanel(new GridLayout(5, 2, 12, 12));
 
 		panel.add(new JLabel(jEdit.getProperty("style-editor.tokenType")));
 		panel.add(new JLabel(styleName));
@@ -156,15 +157,23 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		content.add(BorderLayout.CENTER,panel);
 
 		Box box = new Box(BoxLayout.X_AXIS);
-		box.add(Box.createGlue());
-		box.add(ok = new JButton(jEdit.getProperty("common.ok")));
+		box.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 0));
+		ok = new JButton(jEdit.getProperty("common.ok"));
 		getRootPane().setDefaultButton(ok);
 		ok.addActionListener(this);
-		box.add(Box.createHorizontalStrut(6));
-		box.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
+		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
+		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
+		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
+		Dimension d = new Dimension(width, height);
+		ok.setPreferredSize(d);
+		cancel.setPreferredSize(d);
+		
 		box.add(Box.createGlue());
-
+		box.add(ok);
+		box.add(Box.createHorizontalStrut(6));
+		box.add(cancel);
+		
 		content.add(BorderLayout.SOUTH,box);
 
 		pack();

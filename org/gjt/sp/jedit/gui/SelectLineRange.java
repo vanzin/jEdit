@@ -60,7 +60,11 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		ok.setPreferredSize(cancel.getPreferredSize());
+		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
+		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
+		Dimension d = new Dimension(width, height);
+		ok.setPreferredSize(d);
+		cancel.setPreferredSize(d);
 
 		panel.add(Box.createGlue());
 		panel.add(ok);

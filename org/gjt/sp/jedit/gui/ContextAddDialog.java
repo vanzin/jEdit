@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -132,17 +133,22 @@ public class ContextAddDialog extends EnhancedDialog
 
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
-		southPanel.setBorder(new EmptyBorder(12,0,0,0));
-		southPanel.add(Box.createGlue());
+		southPanel.setBorder(new EmptyBorder(17, 0, 0, 0));
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(actionHandler);
 		getRootPane().setDefaultButton(ok);
-		southPanel.add(ok);
-		southPanel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
-		southPanel.add(cancel);
+		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
+		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
+		Dimension d = new Dimension(width, height);
+		ok.setPreferredSize(d);
+		cancel.setPreferredSize(d);
+		
 		southPanel.add(Box.createGlue());
+		southPanel.add(ok);
+		southPanel.add(Box.createHorizontalStrut(6));
+		southPanel.add(cancel);
 
 		content.add(BorderLayout.SOUTH,southPanel);
 
