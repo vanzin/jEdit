@@ -31,6 +31,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -320,7 +321,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(12,12,12,12));
+		panel.setBorder(new EmptyBorder(12, 12, 12, 12));
 		
 		filenameField = new VFSFileNameField(browser,null);
 		filenameField.setText(name);
@@ -365,13 +366,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 
 		ok.addActionListener(new ActionHandler());
-		panel.add(ok);
-		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.setName("cancel");
 		cancel.addActionListener(new ActionHandler());
+		ok.setPreferredSize(cancel.getPreferredSize());
+		
+		panel.add(Box.createHorizontalStrut(6));
+		panel.add(ok);
+		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
-
+		
 		content.add(BorderLayout.SOUTH,panel);
 
 		TaskManager.instance.addTaskListener(

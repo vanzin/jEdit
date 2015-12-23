@@ -25,8 +25,8 @@ package org.jedit.options;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.TextEvent;
@@ -111,23 +111,26 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 		content.add(tabs, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
-		buttons.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
+		buttons.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
 		buttons.add(Box.createGlue());
 
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
-		buttons.add(ok);
-		buttons.add(Box.createHorizontalStrut(6));
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		buttons.add(cancel);
-		buttons.add(Box.createHorizontalStrut(6));
 		apply = new JButton(jEdit.getProperty("common.apply"));
 		apply.addActionListener(this);
+		int width = Math.max(Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width), apply.getPreferredSize().width);
+		ok.setPreferredSize(new Dimension(width, ok.getPreferredSize().height));
+		cancel.setPreferredSize(new Dimension(width, cancel.getPreferredSize().height));
+		apply.setPreferredSize(new Dimension(width, apply.getPreferredSize().height));
+		
+		buttons.add(ok);
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(cancel);
+		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(apply);
-
-		buttons.add(Box.createGlue());
 
 		content.add(buttons, BorderLayout.SOUTH);
 		setContentPane(content);
@@ -187,7 +190,6 @@ public class TabbedOptionDialog extends EnhancedDialog implements ActionListener
 			if (shownPanes.contains(op))
 				op.save();
 		}
-		Point p = getLocation();
 
 		/* This will fire the PROPERTIES_CHANGED event */
 		jEdit.propertiesChanged();

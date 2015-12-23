@@ -202,7 +202,6 @@ public class PluginManager extends JFrame
 		buttons.add(pluginOptions);
 		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(done);
-		buttons.add(Box.createGlue());
 
 		getRootPane().setDefaultButton(done);
 

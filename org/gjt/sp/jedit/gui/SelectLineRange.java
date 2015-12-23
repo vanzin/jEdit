@@ -40,12 +40,12 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		this.view = view;
 
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,0));
+		content.setBorder(new EmptyBorder(12, 12, 11, 11));
 		setContentPane(content);
 
 		JLabel label = new JLabel(jEdit.getProperty(
 			"selectlinerange.caption"));
-		label.setBorder(new EmptyBorder(0,0,6,12));
+		label.setBorder(new EmptyBorder(0, 0, 6, 12));
 		content.add(BorderLayout.NORTH,label);
 
 		JPanel panel = createFieldPanel();
@@ -54,22 +54,22 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(6,0,0,12));
-		panel.add(Box.createGlue());
-		panel.add(Box.createGlue());
+		panel.setBorder(new EmptyBorder(6, 0, 0, 0));
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
 		getRootPane().setDefaultButton(ok);
-		panel.add(ok);
-		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		panel.add(cancel);
+		ok.setPreferredSize(cancel.getPreferredSize());
+
 		panel.add(Box.createGlue());
+		panel.add(ok);
+		panel.add(Box.createHorizontalStrut(6));
+		panel.add(cancel);
 
 		content.add(panel,BorderLayout.SOUTH);
 
-		GUIUtilities.requestFocus(this,startField);
+		GUIUtilities.requestFocus(this, startField);
 
 		pack();
 		setLocationRelativeTo(view);
@@ -135,8 +135,8 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 	//{{{ Instance variables
 	private View view;
-	private JTextField startField;
-	private JTextField endField;
+	private NumberTextField startField;
+	private NumberTextField endField;
 	private JButton ok;
 	private JButton cancel;
 	//}}}
@@ -148,7 +148,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		JPanel panel = new JPanel(layout);
 
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(0,0,6,12);
+		cons.insets = new Insets(0, 0, 6, 0);
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
@@ -157,7 +157,23 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		startField = new JTextField(10);
+		startField = new NumberTextField("0", 10);
+		startField.setMinValue(0);
+		
+		FocusListener focusListener = new FocusListener()
+			{
+				public void focusGained(FocusEvent fe) 
+				{
+					((JTextField)fe.getSource()).selectAll();
+				}
+				
+				public void focusLost(FocusEvent fe)
+				{
+					JTextField source = (JTextField)fe.getSource();
+					source.setCaretPosition(source.getText().length());
+				}
+			};
+		startField.addFocusListener(focusListener);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 		layout.setConstraints(startField,cons);
@@ -171,7 +187,8 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		endField = new JTextField(10);
+		endField = new NumberTextField("0", 10);
+		endField.addFocusListener(focusListener);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 		layout.setConstraints(endField,cons);
