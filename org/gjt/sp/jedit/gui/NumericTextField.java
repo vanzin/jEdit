@@ -43,6 +43,11 @@ public class NumericTextField extends JTextField
 		super(text);
 		this.positiveOnly = positiveOnly;
 	}
+	
+	public NumericTextField(String text, int columns, boolean positiveOnly) {
+		super(text, columns);
+		this.positiveOnly = positiveOnly;
+	}
 
 	@Override
 	protected void processKeyEvent(KeyEvent e)

@@ -139,8 +139,8 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 	//{{{ Instance variables
 	private View view;
-	private NumberTextField startField;
-	private NumberTextField endField;
+	private NumericTextField startField;
+	private NumericTextField endField;
 	private JButton ok;
 	private JButton cancel;
 	//}}}
@@ -152,7 +152,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		JPanel panel = new JPanel(layout);
 
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.insets = new Insets(0, 0, 6, 0);
+		cons.insets = new Insets(0, 0, 6, 6);
 		cons.gridwidth = cons.gridheight = 1;
 		cons.gridx = cons.gridy = 0;
 		cons.fill = GridBagConstraints.BOTH;
@@ -161,8 +161,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		layout.setConstraints(label,cons);
 		panel.add(label);
 
-		startField = new NumberTextField("0", 10);
-		startField.setMinValue(0);
+		startField = new NumericTextField("0", 10, true);
 		
 		FocusListener focusListener = new FocusListener()
 			{
@@ -188,14 +187,14 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		cons.gridx = 0;
 		cons.weightx = 0.0f;
 		cons.gridy = 1;
-		layout.setConstraints(label,cons);
+		layout.setConstraints(label, cons);
 		panel.add(label);
 
-		endField = new NumberTextField("0", 10);
+		endField = new NumericTextField("0", 10, true);
 		endField.addFocusListener(focusListener);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
-		layout.setConstraints(endField,cons);
+		layout.setConstraints(endField, cons);
 		panel.add(endField);
 
 		return panel;
