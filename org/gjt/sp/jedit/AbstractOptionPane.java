@@ -156,7 +156,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	{
 		JLabel l = newLabel(label, comp);
 		l.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
-		addComponent(l,comp,GridBagConstraints.BOTH);
+		addComponent(l, comp, GridBagConstraints.BOTH);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	{
 		JLabel l = newLabel(label, comp);
 		l.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
-		addComponent(l,comp,fill);
+		addComponent(l, comp, fill);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addComponent(Component comp1, Component comp2)
 	{
-		addComponent(comp1,comp2,GridBagConstraints.BOTH);
+		addComponent(comp1, comp2, GridBagConstraints.BOTH);
 	}
 
 	/**
@@ -208,16 +208,16 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.gridheight = 1;
 		cons.gridwidth = 1;
 		cons.weightx = 0.0f;
-		cons.insets = new Insets(1,0,1,0);
+		cons.insets = new Insets(6, 0, 0, 6);
 		cons.fill = GridBagConstraints.BOTH;
 
-		gridBag.setConstraints(comp1,cons);
+		gridBag.setConstraints(comp1, cons);
 		add(comp1);
 
 		cons.fill = fill;
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
-		gridBag.setConstraints(comp2,cons);
+		gridBag.setConstraints(comp2, cons);
 		add(comp2);
 	}
 
@@ -235,9 +235,9 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.NONE;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
-		cons.insets = new Insets(1,0,1,0);
+		cons.insets = new Insets(6, 0, 0, 0);
 
-		gridBag.setConstraints(comp,cons);
+		gridBag.setConstraints(comp, cons);
 		add(comp);
 	}
 
@@ -257,9 +257,9 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = fill;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
-		cons.insets = new Insets(1,0,1,0);
+		cons.insets = new Insets(6, 0, 0, 0);
 
-		gridBag.setConstraints(comp,cons);
+		gridBag.setConstraints(comp, cons);
 		add(comp);
 	} //}}}
 
@@ -312,9 +312,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.BOTH;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
-		//cons.insets = new Insets(1,0,1,0);
 
-		gridBag.setConstraints(sep,cons);
+		gridBag.setConstraints(sep, cons);
 		add(sep);
 
 		addComponent(Box.createVerticalStrut(6));
@@ -352,7 +351,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.BOTH;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
-		cons.insets = new Insets(1,0,1,0);
+		cons.insets = new Insets(6, 0, 0, 0);
 
 		gridBag.setConstraints(box,cons);
 		add(box);
