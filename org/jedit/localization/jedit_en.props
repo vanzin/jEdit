@@ -38,6 +38,7 @@ common.clearAll=Clear All
 common.selectAll=Select All
 common.selectNone=Select None
 common.loading=Loading...
+common.reset=Reset
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)

@@ -32,6 +32,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import org.gjt.sp.jedit.gui.ColorChooserDialog;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -197,10 +198,10 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 			if(row == -1 || column != 1)
 				return;
 
-			Color color = JColorChooser.showDialog(
-				BrowserColorsOptionPane.this,
-				jEdit.getProperty("colorChooser.title"),
+			ColorChooserDialog dialog = new ColorChooserDialog(
+				(Window)SwingUtilities.getRoot(BrowserColorsOptionPane.this), 
 				(Color)colorsModel.getValueAt(row,1));
+			Color color = dialog.getColor();
 			if(color != null)
 				colorsModel.setValueAt(color,row,1);
 		}

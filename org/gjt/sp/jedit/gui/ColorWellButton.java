@@ -28,7 +28,6 @@ import java.awt.event.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 //}}}
@@ -46,7 +45,7 @@ public class ColorWellButton extends JButton
 	public ColorWellButton(Color color)
 	{
 		setIcon(new ColorWell(color));
-		setMargin(new Insets(2,2,2,2));
+		setMargin(new Insets(2, 2, 2, 2));
 		addActionListener(new ActionHandler());
 
 		// according to krisk this looks better on OS X...
@@ -113,18 +112,16 @@ public class ColorWellButton extends JButton
 			Color c = null;
 			if (parent != null)
 			{
-				c = JColorChooser.showDialog(parent,
-					jEdit.getProperty("colorChooser.title"),
-					ColorWellButton.this.getSelectedColor());
+				ColorChooserDialog dialog = new ColorChooserDialog(parent, getSelectedColor());
+				c = dialog.getColor();
 			}
 			else
 			{
-				c = JColorChooser.showDialog(
-					SwingUtilities.getRoot(ColorWellButton.this),
-					jEdit.getProperty("colorChooser.title"),
-					ColorWellButton.this.getSelectedColor());
+				ColorChooserDialog dialog = new ColorChooserDialog((Window)SwingUtilities.getRoot(ColorWellButton.this), getSelectedColor());
+				c = dialog.getColor();
 			}
-			if (c != null) {
+			if (c != null) 
+			{
 				setSelectedColor(c);
 			}
 		}
