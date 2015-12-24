@@ -98,7 +98,7 @@ public class PasteSpecialDialog extends EnhancedDialog
 
 				JPanel buttons = new JPanel();
 				buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-				buttons.setBorder(new EmptyBorder(12,0,0,0));
+				buttons.setBorder(new EmptyBorder(17, 0, 0, 0));
 				buttons.add(Box.createGlue());
 
 				ok = new JButton(jEdit.getProperty("common.ok"));
@@ -123,9 +123,14 @@ public class PasteSpecialDialog extends EnhancedDialog
 						}
 				});
 				buttons.add(cancel);
+				
+				int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
+				int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
+				Dimension d = new Dimension(width, height);
+				ok.setPreferredSize(d);
+				cancel.setPreferredSize(d);
 
-				buttons.add(Box.createGlue());
-				content.add(BorderLayout.SOUTH,buttons);
+				content.add(BorderLayout.SOUTH, buttons);
 
 				//}}}
 
