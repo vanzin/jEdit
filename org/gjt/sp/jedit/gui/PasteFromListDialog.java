@@ -41,9 +41,9 @@ public class PasteFromListDialog extends EnhancedDialog
 		this.listModel = model;
 
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
+		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
 		setContentPane(content);
-		JPanel center = new JPanel(new GridLayout(2,1,2,12));
+		JPanel center = new JPanel(new GridLayout(2, 1, 2, 12));
 
 		int maxItemLength =
 			jEdit.getIntegerProperty("paste-from-list.max-item-length", 1000);
@@ -58,29 +58,33 @@ public class PasteFromListDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 
 		JLabel label = new JLabel(jEdit.getProperty(name + ".caption"));
-		label.setBorder(new EmptyBorder(0,0,6,0));
+		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
 		content.add(BorderLayout.NORTH,label);
 
 		JScrollPane scroller = new JScrollPane(clips);
-		scroller.setPreferredSize(new Dimension(500,150));
+		scroller.setPreferredSize(new Dimension(500, 150));
 		center.add(scroller);
 
 		clipText = new JTextArea();
 		clipText.setEditable(false);
 		scroller = new JScrollPane(clipText);
-		scroller.setPreferredSize(new Dimension(500,150));
+		scroller.setPreferredSize(new Dimension(500, 150));
 		center.add(scroller);
 
 		content.add(center, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(12,0,0,0));
+		panel.setBorder(new EmptyBorder(17, 0, 0, 0));
 		panel.add(Box.createGlue());
 		panel.add(insert);
 		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
-		panel.add(Box.createGlue());
+		int width = Math.max(insert.getPreferredSize().width, cancel.getPreferredSize().width);
+		int height = Math.max(insert.getPreferredSize().height, cancel.getPreferredSize().height);
+		Dimension d = new Dimension(width, height);
+		insert.setPreferredSize(d);
+		cancel.setPreferredSize(d);
 		content.add(panel, BorderLayout.SOUTH);
 
 		if(model.getSize() >= 1)
