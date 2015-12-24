@@ -44,22 +44,16 @@ public class AboutDialog extends JDialog implements ActionListener
 	{
 		super(view,jEdit.getProperty("about.title"), true);
 		setResizable(false);
+
+		JPanel p = new JPanel(new BorderLayout());
+		p.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
+			
+		final AboutPanel aboutPanel = new AboutPanel();
+		p.add(aboutPanel);
+		
 		JButton closeBtn = new JButton(jEdit.getProperty("common.close"));
 		closeBtn.addActionListener(this);
 		getRootPane().setDefaultButton(closeBtn);
-
-		JPanel p = new JPanel(new BorderLayout());
-		final AboutPanel aboutPanel = new AboutPanel();
-		JPanel flowP = new JPanel(new FlowLayout());
-		flowP.add(closeBtn);
-		flowP.add(Box.createRigidArea(new Dimension(40, 40)));
-		Dimension dim = new Dimension(10, 0);
-		p.add(BorderLayout.WEST, Box.createRigidArea(dim));
-		p.add(BorderLayout.EAST, Box.createRigidArea(dim));
-		p.add(BorderLayout.NORTH, Box.createRigidArea(new Dimension(10, 10)));
-		p.add(BorderLayout.SOUTH, flowP);
-		p.add(BorderLayout.CENTER, aboutPanel);
-
 		closeBtn.setToolTipText(jEdit.getProperty("about.navigate"));
 		closeBtn.addKeyListener(new KeyAdapter()
 		{
@@ -68,6 +62,13 @@ public class AboutDialog extends JDialog implements ActionListener
 				aboutPanel.handleKeyEvent(e);
 			}
 		});
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 0));
+		buttonPanel.add(Box.createGlue());
+		buttonPanel.add(closeBtn);
+		p.add(buttonPanel, BorderLayout.SOUTH);
 
 		setContentPane(p);
 		pack();
