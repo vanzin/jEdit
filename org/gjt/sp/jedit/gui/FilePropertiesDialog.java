@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui;
 import java.io.File;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -82,21 +83,20 @@ public class FilePropertiesDialog extends EnhancedDialog
 	public void addComponentsToPane()
 	{
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,5,0,5));
+		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
 		setContentPane(content);
 
 		if (selectedFiles.length == 1)
 		{
 			content.add(BorderLayout.NORTH, createNorthPanel());
 			content.add(BorderLayout.CENTER, createCenterPanel());
-			content.add(BorderLayout.SOUTH, createSouthPanel());
 		}
 		else if(selectedFiles.length > 1)
 		{
 			content.add(BorderLayout.NORTH, createNorthPanelAll());
 			content.add(BorderLayout.CENTER, createCenterPanelAll());
-			content.add(BorderLayout.SOUTH, createSouthPanelAll());
 		}
+		content.add(BorderLayout.SOUTH, createSouthPanel());
 	} //}}}
 
 	//{{{createNorthPanelAll() method
@@ -163,25 +163,6 @@ public class FilePropertiesDialog extends EnhancedDialog
 		centerPanel.add(BorderLayout.CENTER, propField);
 
 		return centerPanel;
-	} //}}}
-
-	//{{{ createSouthPanelAll() method
-	public JPanel createSouthPanelAll()
-	{
-		ButtonActionHandler actionHandler = new ButtonActionHandler();
-		JPanel southPanel = new JPanel(new BorderLayout());
-
-		JPanel buttonsField = new JPanel();
-		okButton = new JButton(jEdit.getProperty("fileprop.okBtn"));
-		buttonsField.add(okButton);
-		okButton.addActionListener(actionHandler);
-		cancelButton = new JButton(jEdit.getProperty("fileprop.cancelBtn"));
-		buttonsField.add(cancelButton);
-		cancelButton.addActionListener(actionHandler);
-
-		southPanel.add(BorderLayout.EAST, buttonsField);
-
-		return southPanel;
 	} //}}}
 
 	//{{{ createNorthPanel() method
@@ -272,19 +253,30 @@ public class FilePropertiesDialog extends EnhancedDialog
 	public JPanel createSouthPanel()
 	{
 		ButtonActionHandler actionHandler = new ButtonActionHandler();
-		JPanel southPanel = new JPanel(new BorderLayout());
-
-		JPanel buttonsField = new JPanel();
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+		panel.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 0));
+		
 		okButton = new JButton(jEdit.getProperty("fileprop.okBtn"));
-		buttonsField.add(okButton);
 		okButton.addActionListener(actionHandler);
+		getRootPane().setDefaultButton(okButton);
+		
 		cancelButton = new JButton(jEdit.getProperty("fileprop.cancelBtn"));
-		buttonsField.add(cancelButton);
 		cancelButton.addActionListener(actionHandler);
+		
+		int width = Math.max(okButton.getPreferredSize().width, cancelButton.getPreferredSize().width);
+		int height = Math.max(okButton.getPreferredSize().height, cancelButton.getPreferredSize().height);
+		Dimension d = new Dimension(width, height);
+		okButton.setPreferredSize(d);
+		cancelButton.setPreferredSize(d);
 
-		southPanel.add(BorderLayout.EAST, buttonsField);
+		panel.add(Box.createGlue());
+		panel.add(okButton);
+		panel.add(Box.createHorizontalStrut(6));
+		panel.add(cancelButton);
 
-		return southPanel;
+		return panel;
 	} //}}}
 
 	//{{{ ok() method
