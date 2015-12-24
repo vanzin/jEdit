@@ -49,8 +49,8 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		this.view = view;
 
-		JPanel content = new JPanel(new BorderLayout(12,12));
-		content.setBorder(new EmptyBorder(12,12,12,12));
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
 		setContentPane(content);
 
 		Box iconBox = new Box(BoxLayout.Y_AXIS);
@@ -61,8 +61,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		JPanel centerPanel = new JPanel(new BorderLayout());
 
 		JLabel label = new JLabel(jEdit.getProperty("files-changed.caption"));
-		label.setBorder(new EmptyBorder(0,0,6,0));
-		centerPanel.add(BorderLayout.NORTH,label);
+		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
+		centerPanel.add(BorderLayout.NORTH, label);
 
 		DefaultMutableTreeNode deleted = new DefaultMutableTreeNode(
 			jEdit.getProperty("files-changed.deleted"),true);
@@ -121,11 +121,12 @@ public class FilesChangedDialog extends EnhancedDialog
 		bufferTree.getSelectionModel().setSelectionMode(
 			TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferTree));
+		centerPanel.add(BorderLayout.CENTER, new JScrollPane(bufferTree));
 
-		content.add(BorderLayout.CENTER,centerPanel);
+		content.add(BorderLayout.CENTER, centerPanel);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
+		buttons.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 0));
 		buttons.add(Box.createGlue());
 
 		if(!alreadyReloaded)
@@ -137,7 +138,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			buttons.add(selectAll);
 			selectAll.addActionListener(new ActionHandler());
 
-			buttons.add(Box.createHorizontalStrut(12));
+			buttons.add(Box.createHorizontalStrut(6));
 
 			reload = new JButton(jEdit.getProperty(
 				"files-changed.reload"));
@@ -146,7 +147,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			buttons.add(reload);
 			reload.addActionListener(new ActionHandler());
 
-			buttons.add(Box.createHorizontalStrut(12));
+			buttons.add(Box.createHorizontalStrut(6));
 
 			ignore = new JButton(jEdit.getProperty("files-changed.ignore"));
 			ignore.setMnemonic(jEdit.getProperty(
@@ -154,7 +155,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			buttons.add(ignore);
 			ignore.addActionListener(new ActionHandler());
 
-			buttons.add(Box.createHorizontalStrut(12));
+			buttons.add(Box.createHorizontalStrut(6));
 		}
 
 		close = new JButton(jEdit.getProperty("common.close"));
@@ -162,9 +163,7 @@ public class FilesChangedDialog extends EnhancedDialog
 		buttons.add(close);
 		close.addActionListener(new ActionHandler());
 
-		buttons.add(Box.createGlue());
-
-		content.add(BorderLayout.SOUTH,buttons);
+		content.add(BorderLayout.SOUTH, buttons);
 
 		bufferTree.expandPath(new TreePath(
 			new Object[] {
