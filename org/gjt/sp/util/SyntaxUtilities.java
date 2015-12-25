@@ -26,6 +26,7 @@ package org.gjt.sp.util;
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Font;
+import java.math.BigInteger;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
@@ -54,8 +55,9 @@ public class SyntaxUtilities
 	 */
 	public static String getColorHexString(Color c)
 	{
-		String colString = Integer.toHexString(c.getRGB() & 0xffffff);
-		return "#000000".substring(0,7 - colString.length()).concat(colString);
+	    String mask = "#ff000000";
+		String colString = Integer.toHexString(c.getRGB());
+		return mask.substring(0, mask.length() - colString.length()).concat(colString);
 	} //}}}
 	
 	//{{{ parseColor() method
@@ -72,7 +74,11 @@ public class SyntaxUtilities
 		{
 			try
 			{
-				return Color.decode(name);
+			    name = name.substring(1);
+			    if (name.length() == 6) 
+			        name = "ff" + name;    
+			    BigInteger bi = new BigInteger(name, 16);
+			    return new Color(bi.intValue(), true);
 			}
 			catch(NumberFormatException nf)
 			{

@@ -25,6 +25,9 @@ release.
   
 - Fix bug #3924, changes to mode files are not detected when ~/.jedit/modes
   is a symlink. (Dale Anson)
+  
+- Fix bug #3920, cannot change alpha value of a color in the syntax highlighting
+  settings. (Dale Anson)
 
 }}}
 {{{ UI Improvements
