@@ -535,11 +535,8 @@ class ToolBarEditDialog extends EnhancedDialog
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
-		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
-		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		ok.setPreferredSize(d);
-		cancel.setPreferredSize(d);
+		
+		GUIUtilities.makeSameSize(ok, cancel);
 		
 		southPanel.add(Box.createGlue());
 		southPanel.add(ok);

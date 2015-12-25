@@ -26,6 +26,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.GUIUtilities;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -124,12 +125,8 @@ public class PasteSpecialDialog extends EnhancedDialog
 				});
 				buttons.add(cancel);
 				
-				int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
-				int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
-				Dimension d = new Dimension(width, height);
-				ok.setPreferredSize(d);
-				cancel.setPreferredSize(d);
-
+				GUIUtilities.makeSameSize(ok, cancel);
+				
 				content.add(BorderLayout.SOUTH, buttons);
 
 				//}}}

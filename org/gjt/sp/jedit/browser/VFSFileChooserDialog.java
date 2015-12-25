@@ -369,11 +369,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.setName("cancel");
 		cancel.addActionListener(new ActionHandler());
-		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
-		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		ok.setPreferredSize(d);
-		cancel.setPreferredSize(d);
+		GUIUtilities.makeSameSize(ok, cancel);
 		
 		panel.add(Box.createHorizontalStrut(6));
 		panel.add(ok);

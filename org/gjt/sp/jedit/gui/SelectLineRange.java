@@ -54,17 +54,13 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(6, 0, 0, 0));
+		panel.setBorder(new EmptyBorder(17, 0, 0, 0));
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(this);
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
-		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		ok.setPreferredSize(d);
-		cancel.setPreferredSize(d);
+		GUIUtilities.makeSameSize(ok, cancel);
 
 		panel.add(Box.createGlue());
 		panel.add(ok);

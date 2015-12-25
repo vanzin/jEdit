@@ -80,11 +80,9 @@ public class PasteFromListDialog extends EnhancedDialog
 		panel.add(insert);
 		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
-		int width = Math.max(insert.getPreferredSize().width, cancel.getPreferredSize().width);
-		int height = Math.max(insert.getPreferredSize().height, cancel.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		insert.setPreferredSize(d);
-		cancel.setPreferredSize(d);
+		
+		GUIUtilities.makeSameSize(insert, cancel);
+
 		content.add(panel, BorderLayout.SOUTH);
 
 		if(model.getSize() >= 1)

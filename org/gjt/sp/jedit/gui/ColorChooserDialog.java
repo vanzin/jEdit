@@ -97,12 +97,7 @@ public class ColorChooserDialog extends JDialog
                 }
             }
         );
-        int width = Math.max(Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width), reset.getPreferredSize().width);
-        int height = Math.max(Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height), reset.getPreferredSize().height);
-        Dimension d = new Dimension(width, height);
-        ok.setPreferredSize(d);
-        cancel.setPreferredSize(d);
-        reset.setPreferredSize(d);
+		GUIUtilities.makeSameSize(ok, cancel, reset);
 
         buttonPanel.add(Box.createGlue());
         buttonPanel.add(ok);

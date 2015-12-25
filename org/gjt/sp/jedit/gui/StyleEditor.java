@@ -163,11 +163,8 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		ok.addActionListener(this);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		int width = Math.max(ok.getPreferredSize().width, cancel.getPreferredSize().width);
-		int height = Math.max(ok.getPreferredSize().height, cancel.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		ok.setPreferredSize(d);
-		cancel.setPreferredSize(d);
+		
+		GUIUtilities.makeSameSize(ok, cancel);
 		
 		box.add(Box.createGlue());
 		box.add(ok);

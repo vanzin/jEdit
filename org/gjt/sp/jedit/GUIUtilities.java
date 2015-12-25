@@ -1902,6 +1902,29 @@ public class GUIUtilities
 		defaults.put("ToggleButton.contentMargins", margin);
 		button.putClientProperty("Nimbus.Overrides", defaults);
 	} //}}}
+	
+	//{{{
+	/**
+ 	 * Makes components the same size by finding the largest width and height of the
+ 	 * given components then setting all components to that width and height. This is
+ 	 * especially useful for making JButtons the same size.
+ 	 * @param components The components to make the same size.
+ 	 */
+	public static void makeSameSize(Component... components) 
+	{
+		int width = 0;
+		int height = 0;
+		for (Component component : components) 
+		{
+			width = Math.max(width, component.getPreferredSize().width);
+			height = Math.max(height, component.getPreferredSize().height);
+		}
+		Dimension d = new Dimension(width, height);
+		for (Component component : components) 
+		{
+			component.setPreferredSize(d);	
+		}
+	} //}}}
 
 	//{{{ defaultTableDimension() method
 	/**

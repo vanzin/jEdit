@@ -264,12 +264,8 @@ public class FilePropertiesDialog extends EnhancedDialog
 		
 		cancelButton = new JButton(jEdit.getProperty("fileprop.cancelBtn"));
 		cancelButton.addActionListener(actionHandler);
-		
-		int width = Math.max(okButton.getPreferredSize().width, cancelButton.getPreferredSize().width);
-		int height = Math.max(okButton.getPreferredSize().height, cancelButton.getPreferredSize().height);
-		Dimension d = new Dimension(width, height);
-		okButton.setPreferredSize(d);
-		cancelButton.setPreferredSize(d);
+
+		GUIUtilities.makeSameSize(okButton, cancelButton);
 
 		panel.add(Box.createGlue());
 		panel.add(okButton);
