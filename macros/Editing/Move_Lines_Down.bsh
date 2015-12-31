@@ -1,6 +1,11 @@
 /*
 Move_Lines_Down.bsh - Beanshell macro to move a selection of lines down by one
-line.  This should handle multiple selections, but doesn't work quite right.
+line.  This does not handle multiple selections and will abort if there are
+multiple selections. Entire lines are selected for moving, so if the selection
+only includes part of a line, the entire line will be selected and moved. Note
+that if the selection places the caret at the start of a line, that line will 
+NOT be selected for moving. If no lines are selected, then the line containing
+the caret will be moved.
 
 Copyright (c) Dale Anson, 2004
  :tabSize=4:indentSize=4:noTabs=false:
@@ -30,7 +35,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 //Localization
-final static String NotEditableMessage = jEdit.getProperty("macro.rs.general.ErrorNotEditableDialog.message", "Buffer is not editable");
 final static String NoMultipleSelectionError = jEdit.getProperty("macro.rs.MoveLines.NoMultipleSelection.error", "Line move does not work with multiple selection.");
 
 // get the current selection or the current line if no selection
@@ -45,6 +49,7 @@ if (selections.length > 1)
 
 // the approach is to get the line immediately following the selection
 // and insert it immediately preceeding the selection
+Selection selection;
 int startLine;
 int endLine;
 int nextLine;
@@ -54,23 +59,26 @@ if (selections.length == 0) {
 	// nothing is selected, so use the line containing the caret
 	startLine = textArea.getCaretLine();
 	endLine = startLine;
+	selection = new Selection.Range(textArea.getLineStartOffset(startLine), textArea.getLineEndOffset(endLine));
 }
 else {
-	startLine = textArea.getLineOfOffset(selections[0].getStart());
-	endLine = textArea.getLineOfOffset(selections[0].getEnd());
+	selection = selections[0];
+	startLine = textArea.getLineOfOffset(selection.getStart());
+	endLine = textArea.getLineOfOffset(selection.getEnd());
 	// limit to lines that are actually selected
-	if (textArea.getLineStartOffset(endLine) == selections[0].getEnd()) {
+	if (textArea.getLineStartOffset(endLine) == selection.getEnd()) {
 		-- endLine;	
 	}
+}
+
+if (endLine == buffer.getLineCount() - 1) {
+	// at bottom, can't move further down.
+	return;	
 }
 
 insertionPoint = textArea.getLineStartOffset(startLine);
 nextLine = endLine + 1;
 
-if (nextLine == buffer.getLineCount()) {
-	// at bottom, can't move further down.
-	return;	
-}
 
 // get the text of the line immediately following the selection, this is the 
 // text to be moved
@@ -81,12 +89,11 @@ boolean nextIsLast = nextLine == buffer.getLineCount() - 1;
 
 // remove the next line from the buffer
 int removalStart = buffer.getLineStartOffset(nextLine);
-int removalLength = nextIsLast? buffer.getLineLength(nextLine) : buffer.getLineStartOffset(nextLine + 1) - removalStart;
+int removalLength = nextIsLast ? buffer.getLineLength(nextLine) : buffer.getLineStartOffset(nextLine + 1) - removalStart;
 buffer.remove(removalStart, removalLength);
 
 // then insert the next line immediately before the selection
-String lineSeparator = buffer.getStringProperty("lineSeparator");
-buffer.insertIndented(insertionPoint, nextLineText + lineSeparator);
+buffer.insert(insertionPoint, nextLineText + "\n");
 if (nextIsLast) {
 	buffer.remove(buffer.getLength() - 1, 1);	
 }
@@ -104,5 +111,8 @@ for (String name : indentProps) {
 if (shouldIndent) {
 	buffer.indentLines(startLine + 1, endLine + 1);	
 }
+
+// move the caret
+textArea.moveCaretPosition(selection.getEnd());
 
 
