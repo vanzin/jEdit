@@ -28,6 +28,8 @@ release.
   
 - Fix bug #3920, cannot change alpha value of a color in the syntax highlighting
   settings. (Dale Anson)
+  
+- Fix bug #3943, issues with move lines up and down macros. (Dale Anson)  
 
 }}}
 {{{ UI Improvements
