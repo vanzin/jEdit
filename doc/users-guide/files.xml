@@ -96,7 +96,7 @@
 
             <para>To prevent data loss in the unlikely case that jEdit should
             crash in the middle of saving a file, files are first saved to a
-            temporary file named
+            temporary file in the same directory named
             <filename>#<replaceable>filename</replaceable>#save#</filename>. If
             this operation is successful, the original file is replaced with the
             temporary file.</para>
@@ -117,10 +117,10 @@
 
             <para>The autosave feature protects your work from computer crashes
             and such. Every 30 seconds, all buffers with unsaved changes are
-            written out to their respective file names, enclosed in hash
-            (<quote>#</quote>) characters. For example,
-            <filename>program.c</filename> will be autosaved to
-            <filename>#program.c#</filename>.</para>
+            written out to the same directory with their respective file names, 
+            enclosed in hash (<quote>#</quote>) characters. For example,
+            <filename>/home/user/project/program.c</filename> will be autosaved to
+            <filename>/home/user/project/#program.c#</filename>.</para>
 
             <para>Saving a buffer using one of the commands in the previous
             section automatically deletes the autosave file, so they will only
