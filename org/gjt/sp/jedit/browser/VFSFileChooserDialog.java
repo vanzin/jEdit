@@ -31,7 +31,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -197,14 +196,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					isOK = true;
 					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
 					{
-						Hashtable props = new Hashtable();
+						Hashtable<String, Object> props = new Hashtable<String, Object>();
 						if(browser.currentEncoding != null)
 						{
-							props.put(JEditBuffer.ENCODING,browser.currentEncoding);
+							props.put(JEditBuffer.ENCODING, browser.currentEncoding);
 						}
 						jEdit.openFile(browser.getView(),
 							browser.getDirectory(),
-							path,false,props);
+							path, false, props);
 					}
 					dispose();
 					break;
