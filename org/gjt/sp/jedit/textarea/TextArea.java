@@ -4852,8 +4852,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer == null)
 			return;
 
-		final int hbarPosition = horizontal.getValue();
-		
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
 			//call this only if it was previously off
@@ -4912,7 +4910,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			public void run()
 			{
-				horizontal.setValue(hbarPosition);
+				scrollToCaret(false);
 			}
 		});
 		
