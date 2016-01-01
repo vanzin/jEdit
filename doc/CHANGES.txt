@@ -33,6 +33,8 @@ release.
 
 - Fix bug #3923, documentation bug about where auto-saved files are saved.
   (Dale Anson)
+  
+- Fix bug #3916, null pointer exception in ChunkCache. (Dale Anson) 
 
 }}}
 {{{ UI Improvements
