@@ -9,6 +9,8 @@ release.
 
 {{{ Bug Fixes
 
+- Fix bug #3944: Select All checkbox disabled.
+
 - Fix bug #3983: filename completion prefered longest filename when no
   match with exact length was found. Prefer the first one (Eric Le Lay)
 
@@ -22,19 +24,19 @@ release.
 
 - Fix bug #3937, issue with non-capturing groups in regex search and replace
   (Dale Anson)
-  
+
 - Fix bug #3924, changes to mode files are not detected when ~/.jedit/modes
   is a symlink. (Dale Anson)
-  
+
 - Fix bug #3920, cannot change alpha value of a color in the syntax highlighting
   settings. (Dale Anson)
-  
-- Fix bug #3943, issues with move lines up and down macros. (Dale Anson)  
+
+- Fix bug #3943, issues with move lines up and down macros. (Dale Anson)
 
 - Fix bug #3923, documentation bug about where auto-saved files are saved.
   (Dale Anson)
-  
-- Fix bug #3916, null pointer exception in ChunkCache. (Dale Anson) 
+
+- Fix bug #3916, null pointer exception in ChunkCache. (Dale Anson)
 
 }}}
 {{{ UI Improvements
@@ -44,8 +46,6 @@ release.
 
 }}}
 {{{ Miscellaneous
-
-- Rollback Patch #537- Floating dockables as JDialog.
 
 }}}
 {{{ API Changes
@@ -121,8 +121,6 @@ contributing to this release.
 
 - Proper button margins for Nimbus L&F (Patch #538 - Makarius)
 
-- Floating dockables as JDialog (Patch #537 - Makarius)
-
 - CompletionPopup should accept TAB for completion selection
   (Patch # 525 - Jakub Holý)
 
@@ -148,9 +146,9 @@ contributing to this release.
 
 - Plugin Manager Manage Panel sortable on all columns and all directions
   (Eric Le Lay)
-  
-- Replaced all Toolkit.beep() calls with 
-  javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);, which 
+
+- Replaced all Toolkit.beep() calls with
+  javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);, which
   allows look and feels to provide their own implementation of error signals.
   (Dale Anson)
 
