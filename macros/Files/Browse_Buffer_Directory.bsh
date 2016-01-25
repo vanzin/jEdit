@@ -23,13 +23,13 @@
 // begin browse_buffer_dir
 void Browse_Buffer_Directory()
 {
-	path = new File(buffer.getPath()).getParent();
-    
+	path = MiscUtilities.getParentOfPath(buffer.getPath());
+
 	if(path != null) {
 		VFSBrowser.browseDirectory(view,path);
         wm.showDockableWindow("vfs.browser");
     }
-    
+
 }
 
 Browse_Buffer_Directory();
