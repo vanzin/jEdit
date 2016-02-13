@@ -2477,6 +2477,7 @@ macros.folder.Editing.label=Bearbeiten
 Editing/Duplicate_Lines_Above.label=Dupliziere Zeilen nach oben
 Editing/Duplicate_Lines_Below.label=Dupliziere Zeilen nach unten
 Editing/Go_to_Column.label=Gehe zu Spalte
+Editing/Go_to_Offset.label=Gehe zu Offset
 Editing/Greedy_Backspace.label=Gefräßig Löschen nach links
 Editing/Greedy_Delete.label=Gefräßig Löschen
 Editing/Greedy_Left.label=Gefräßig nach Links
@@ -2577,6 +2578,9 @@ Misc/HyperSearch_Results_to_Buffer.label=Hypersuche-Ergebnisse - Zeilen-Export i
 Misc/Make_Bug_Report.label=jEdit-Info für Bug-Report
 Misc/Run_Script.label=Starte als Skript
 Misc/Show_Threads.label=Liste der Threads
+Misc/Generate_Encodings_List.label=Liste der Zeichenkodierungen
+Misc/Generate_Modes_List.label=Liste der Bearbeitungsmodi
+Misc/Insert_Plugins_List.label=Liste der Plugins
 #}}}
 
 #{{{ Properties
@@ -2601,6 +2605,7 @@ Text/Insert_Tag.label=XML-Tag einfügen
 Text/Line_Filter.label=Zeilenfilter
 Text/Next_Char.label=Auswahl bis Zeichen (eingeben)
 Text/Reverse_Lines.label=Zeilenreihenfolge umkehren
+Text/Reverse_Selection.label=Zeichenreihenfolge in Auswahl umkehren
 Text/Single_Space_Buffer.label=Zeilenabstand doppelt => einfach
 #}}}
 
