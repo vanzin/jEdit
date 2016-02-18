@@ -463,6 +463,9 @@
 <MODE NAME="properties"		FILE="props.xml"
         FILE_NAME_GLOB="*{properties,props}" />
 
+<MODE NAME="protobuf"		FILE="proto.xml"
+        FILE_NAME_GLOB="*.proto" />
+
 <MODE NAME="psp"		FILE="psp.xml"
         FILE_NAME_GLOB="*.psp" />
 
