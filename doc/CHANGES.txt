@@ -4,8 +4,8 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Eric Le Lay, Jesse Pavel, and Dale Anson for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel and Dale Anson for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -38,11 +38,14 @@ release.
 
 - Fix bug #3916, null pointer exception in ChunkCache. (Dale Anson)
 
+- Add missing source and target version to compile-installer task to not
+  accidentally get an installer that needs a newer Java version than jEdit
+  itself does. (Björn "Vampire" Kautler)
+
 }}}
 {{{ UI Improvements
 
 - UI clean up, button spacing, borders, etc. (Dale Anson)
-
 
 }}}
 {{{ Miscellaneous

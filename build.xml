@@ -963,6 +963,8 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
+		       source="${target.java.version}"
+		       target="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
