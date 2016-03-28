@@ -3,7 +3,7 @@
 	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"
 	 xmlns:contrib="antlib:net.sf.antcontrib"
 	 xmlns:launch4j="antlib:net.sf.launch4j.ant"
-	 xmlns:jarbundler="antlib:net.sourceforge.jarbundler"
+	 xmlns:jarbundler="antlib:com.ultramixer.jarbundler"
 	 xmlns:fop="antlib:org.apache.fop.tools.anttasks"
 	 xmlns:ivy="antlib:org.apache.ivy.ant">
 	<description>
@@ -1171,7 +1171,7 @@
 		</dependset>
 		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/jarbundler"
-		       includes="net/**"
+		       includes="com/**"
 		       debug="true"
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
@@ -1196,9 +1196,9 @@
 			</condition>
 		</fail>
 		<taskdef name="create"
-			 classname="net.sourceforge.jarbundler.JarBundler"
+			 classname="com.ultramixer.jarbundler.JarBundler"
 			 classpath="${dist.dir}/classes/jarbundler"
-			 uri="antlib:net.sourceforge.jarbundler">
+			 uri="antlib:com.ultramixer.jarbundler">
 		</taskdef>
 		<tstamp>
 			<format property="current.year"
@@ -1215,7 +1215,6 @@
 				   developmentregion="English"
 				   extraclasspath="/System/Library/Java"
 				   icon="icons/icon.icns"
-				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
 				   copyright="Copyright &#169; 1998-${current.year} Contributors"
 				   jvmversion="${mac.target.java.version}"
 				   shortname="jEdit"
@@ -1224,7 +1223,9 @@
 				   version="${jedit.version}"
 				   antialiasedgraphics="true"
 				   antialiasedtext="true"
-				   screenmenu="true">
+				   screenmenu="true"
+				   lsapplicationcategorytype="public.app-category.developer-tools"
+				   highresolutioncapable="true">
 			<javafileset dir="${dist.dir}"
 				     includes="doc/**
 					       jars/**

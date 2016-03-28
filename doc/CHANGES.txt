@@ -42,6 +42,9 @@ contributing to this release.
   accidentally get an installer that needs a newer Java version than jEdit
   itself does. (Björn "Vampire" Kautler)
 
+- Use new version of JarBundler that also sets LSApplicationCategoryType and
+  NSHighResolutionCapable. (Björn "Vampire" Kautler)
+
 }}}
 {{{ UI Improvements
 

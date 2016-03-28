@@ -1,13 +1,12 @@
 /*
- * A Mac OS X Jar Bundler Ant Task.
+ * Copyright (c) 2015, UltraMixer Digital Audio Solutions <info@ultramixer.com>, Seth J. Morabito <sethm@loomcom.com>
+ * All rights reserved.
  *
- * Copyright (c) 2003, Seth J. Morabito <sethm@loomcom.com> All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +17,7 @@
  */
 
 
-package net.sourceforge.jarbundler;
+package com.ultramixer.jarbundler;
 
 // Java Utility
 import java.util.ArrayList;
@@ -42,9 +41,6 @@ public class AppBundleProperties {
 	// Finder version, with default
 	private String mCFBundleShortVersionString = "1.0";
 
-	// Get Info string, optional
-	private String mCFBundleGetInfoString = null;
-
 	// Build number, optional
 	private String mCFBundleVersion = null;
 
@@ -66,6 +62,12 @@ public class AppBundleProperties {
 	// Copyright, optional
 
 	private String mNSHumanReadableCopyright = null;
+
+	// Window size, optional (per Adrien Quillet <aquillet@is2t.com>)
+	private String mNSPreferencesContentSize = null;
+
+	// Support for JavaX key, optional
+	private boolean mJavaXKey = false;
 
 	// Explicit default: JavaApplicationStub
 	private String mCFBundleExecutable = "JavaApplicationStub";
@@ -99,11 +101,16 @@ public class AppBundleProperties {
 	private List mClassPath = new ArrayList();
 	private List mExtraClassPath = new ArrayList();
 
-    // New in JarBundler 2.2.0; Tobias Bley ----------------
+    // New since JarBundler 2.2.0; Tobias Bley / UltraMixer ----------------
     private List mJVMArchs = new ArrayList();
     private List mLSArchitecturePriority = new ArrayList();
+    private String mLSApplicationCategoryType = null;
+
+
+    //Sparkle Properties
     private String mSUFeedURL = null;
-    // -----------------------------------------------------
+    //New 08/05/2015 Tobias Bkey / UltraMixer
+    private String mSUPublicDSAKeyFile;
 
 	// Java properties
 	private Hashtable mJavaProperties = new Hashtable();
@@ -114,7 +121,38 @@ public class AppBundleProperties {
 	// Services
 	private List mServices = new LinkedList();
 
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+    //HiDPI support (Retina)
+    //NSHighResolutionCapable
+	// HiRes capability, optional
+    private boolean mNSHighResolutionCapable;
+
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+	/**
+	 * LSEnvironment (Dictionary - OS X) defines environment variables to be set before launching this app. The names of the environment variables are the keys of the dictionary, with the values being the corresponding environment variable value. Both keys and values must be strings.
+	 * These environment variables are set only for apps launched through Launch Services. If you run your executable directly from the command line, these environment variables are not set.
+	 */
+	private Hashtable mLSEnvironments = new Hashtable();
+
+
 	// ================================================================================
+
+	//New since 08/05/2015 Tobias Bley / UltraMixer
+	/**
+	 * Add a LSEnvironment key-value pair to the mLSEnvironments hashtable.
+	 */
+
+	public void addLSEnvironment(String key, String value) {
+		mLSEnvironments.put(key, value);
+	}
+
+
+	//New since 08/05/2015 Tobias Bley / UltraMixer
+	public Hashtable getLSEnvironment() {
+		return mLSEnvironments;
+	}
 
 	/**
 	 * Add a Java runtime property to the properties hashtable.
@@ -238,17 +276,6 @@ public class AppBundleProperties {
 		return mCFBundleIdentifier;
 	}
 
-	public void setCFBundleGetInfoString(String s) {
-		mCFBundleGetInfoString = s;
-	}
-
-	public String getCFBundleGetInfoString() {
-		if (mCFBundleGetInfoString == null)
-			return getCFBundleShortVersionString();
-
-		return mCFBundleGetInfoString;
-	}
-
 	public void setCFBundleShortVersionString(String s) {
 		mCFBundleShortVersionString = s;
 	}
@@ -287,6 +314,30 @@ public class AppBundleProperties {
 
 	public String getNSHumanReadableCopyright() {
 		return mNSHumanReadableCopyright;
+	}
+
+	public void setNSHighResolutionCapable(boolean b) {
+		mNSHighResolutionCapable = b;
+	}
+
+	public boolean getNSHighResolutionCapable() {
+		return mNSHighResolutionCapable;
+	}
+
+	public void setNSPreferencesContentSize(String s) {
+		mNSPreferencesContentSize = s;
+	}
+
+	public String getNSPreferencesContentSize() {
+		return mNSPreferencesContentSize;
+	}
+
+	public void setJavaXKey(boolean b) {
+		mJavaXKey = b;
+	}
+
+	public boolean getJavaXKey() {
+		return mJavaXKey;
 	}
 
 	public void setCFBundleExecutable(String s) {
@@ -377,8 +428,7 @@ public class AppBundleProperties {
 		return mJVMVersion;
 	}
 
-	public double getJavaVersion()
-	{
+	public double getJavaVersion() {
 		return mJavaVersion;
 	}
 
@@ -415,7 +465,9 @@ public class AppBundleProperties {
     /**
      * @param archs space separated archs, e.g. i386 x64_64 ppc
      */
+
     public void setJVMArchs(String archs) {
+
         // Use for 1.4 backwards compatability
         String[] tokens = archs.split("\\s+");
         for (int i=0; i<tokens.length; i++)
@@ -457,6 +509,24 @@ public class AppBundleProperties {
     public void setSUFeedURL(String suFeedURL) {
         this.mSUFeedURL = suFeedURL;
     }
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+	public void setSUPublicDSAKeyFile(String file)
+	{
+		this.mSUPublicDSAKeyFile = file;
+	}
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+	public String getSUPublicDSAKeyFile()
+	{
+		return mSUPublicDSAKeyFile;
+	}
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+	public String getLSApplicationCategoryType() { return mLSApplicationCategoryType; }
+
+    //New since 08/05/2015 Tobias Bley / UltraMixer
+	public void setLSApplicationCategoryType(String lsApplicationCategoryType) { this.mLSApplicationCategoryType = lsApplicationCategoryType; }
 
     //------------------------------------------------------------------------------------------
 }
