@@ -64,6 +64,7 @@ public class SearchDialog extends EnhancedDialog
 		if (searchDialog == null)
 		{
 			searchDialog = new SearchDialog(view);
+			searchDialog.setAutoRequestFocus(true);
 			viewHash.put(view, searchDialog);
 		}
 		
@@ -97,6 +98,7 @@ public class SearchDialog extends EnhancedDialog
 		{
 			public void run() 
 			{
+				dialog.setVisible(true);
 				dialog.toFront();
 				dialog.requestFocus();
 					// Ensure that the dialog gets the focus. Just bringing
@@ -106,7 +108,6 @@ public class SearchDialog extends EnhancedDialog
 					// to the 'find' field.
 			}
 		});
-		dialog.setVisible(true);
 	} //}}}
 
 	//{{{ setSearchString() method
