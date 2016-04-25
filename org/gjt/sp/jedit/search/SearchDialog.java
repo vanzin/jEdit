@@ -85,29 +85,38 @@ public class SearchDialog extends EnhancedDialog
 	{
 		final SearchDialog dialog = getSearchDialog(view);
 
-		dialog.setSearchString(searchString,searchIn);
-
-		// ugly workaround
-		if(OperatingSystem.isUnix() && !OperatingSystem.isMacOS())
-			dialog.setVisible(false);
+		dialog.setSearchString(searchString, searchIn);
 
 		// I'm not sure if calling requestFocus() is strictly necessary
 		// (focus looks fine without this, on Linux at least), but
 		// it doesn't hurt to leave it here.
-		SwingUtilities.invokeLater(new Runnable() 
+		// -- Better is to use requestFocusInWindow
+		if (SwingUtilities.isEventDispatchThread()) 
 		{
-			public void run() 
+			dialog.setVisible(true);
+			dialog.toFront();
+			dialog.requestFocusInWindow();
+			dialog.find.requestFocusInWindow();
+		}
+		else
+		{
+			SwingUtilities.invokeLater(new Runnable() 
 			{
-				dialog.setVisible(true);
-				dialog.toFront();
-				dialog.requestFocus();
+				public void run() 
+				{
+					dialog.setVisible(true);
+					dialog.toFront();
+
 					// Ensure that the dialog gets the focus. Just bringing
 					// it to front just not necessarily give it the focus.
-				dialog.find.requestFocus();
+					dialog.requestFocusInWindow();
+
 					// Given that the dialog has the focus, set the focus
 					// to the 'find' field.
-			}
-		});
+					dialog.find.requestFocusInWindow();
+				}
+			});
+		}
 	} //}}}
 
 	//{{{ setSearchString() method
