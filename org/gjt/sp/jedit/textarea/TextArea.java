@@ -564,7 +564,11 @@ public abstract class TextArea extends JPanel
 	 */
 	public final int getFirstPhysicalLine()
 	{
-		return displayManager.firstLine.getPhysicalLine();
+		if (displayManager != null && displayManager.firstLine != null)
+		{
+			return displayManager.firstLine.getPhysicalLine();
+		}
+		return 0;
 	} //}}}
 
 	//{{{ setFirstPhysicalLine() methods
@@ -575,7 +579,9 @@ public abstract class TextArea extends JPanel
 	 */
 	public void setFirstPhysicalLine(int physFirstLine)
 	{
-		setFirstPhysicalLine(physFirstLine,0);
+		if (physFirstLine < 0)
+			physFirstLine = 0;
+		setFirstPhysicalLine(physFirstLine, 0);
 	}
 
 	/**
@@ -4851,6 +4857,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		if(buffer == null)
 			return;
+		
+		final int firstPhysicalLine = getFirstPhysicalLine();
 
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
@@ -4859,7 +4867,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				turnOnElasticTabstops();
 			}
-			if(buffer.getColumnBlock()!=null)
+			if(buffer.getColumnBlock() != null)
 			{
 				buffer.getColumnBlock().setTabSizeDirtyStatus(true, true);
 			}
@@ -4891,7 +4899,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		softWrap = "soft".equals(wrap) && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;
-		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
+		setMaxLineLength(buffer.getIntegerProperty("maxLineLen", 0));
 
 		boolean wrapSettingsChanged = !(wrap.equals(oldWrap)
 			&& oldWrapToWidth == wrapToWidth
@@ -4910,7 +4918,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			public void run()
 			{
-				scrollToCaret(false);
+				setFirstPhysicalLine(firstPhysicalLine);
 			}
 		});
 		
@@ -5019,13 +5027,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(max != maxHorizontalScrollWidth)
 		{
 			maxHorizontalScrollWidth = max;
-			horizontal.setValues(Math.max(0,
-				Math.min(maxHorizontalScrollWidth + charWidth
-				- painter.getWidth(),
-				-horizontalOffset)),
+			horizontal.setValues(
+				horizontal.getValue(),
 				painter.getWidth(),
-				0,maxHorizontalScrollWidth
-				+ charWidth);
+				0,
+				maxHorizontalScrollWidth + charWidth);
 			horizontal.setUnitIncrement(10);
 			horizontal.setBlockIncrement(painter.getWidth());
 		}
