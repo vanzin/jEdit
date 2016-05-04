@@ -44,11 +44,17 @@ contributing to this release.
 
 - Use new version of JarBundler that also sets LSApplicationCategoryType and
   NSHighResolutionCapable. (Björn "Vampire" Kautler)
+  
+- Set default colors for foreground and background in syntax highlighting 
+  style editor. (Dale Anson)
 
 }}}
 {{{ UI Improvements
 
 - UI clean up, button spacing, borders, etc. (Dale Anson)
+
+- Implemented feature request #493, ask for confirmation before closing all
+  buffers. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
