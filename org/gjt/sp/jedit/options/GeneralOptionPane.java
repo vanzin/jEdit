@@ -71,6 +71,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 
 	private JCheckBox useDefaultLocale;
 	private JComboBox lang;
+	
+	private JCheckBox closeAllConfirm;
 	//}}}
 
 	//{{{ GeneralOptionPane constructor
@@ -144,6 +146,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 				"options.general.hideOpen"));
 		hideOpen.setSelected(jEdit.getBooleanProperty("hideOpen", true));
 		addComponent(hideOpen);
+		
+		/* Close all confirmation */
+		closeAllConfirm = new JCheckBox(jEdit.getProperty(
+				"options.general.closeAllConfirm"));
+		closeAllConfirm.setSelected(jEdit.getBooleanProperty("closeAllConfirm", false));
+		addComponent(closeAllConfirm);
 
 		/* Save caret positions */
 		saveCaret = new JCheckBox(jEdit.getProperty(
@@ -254,6 +262,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setIntegerProperty("recentFiles", (Integer) recentFiles.getModel().getValue());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("hideOpen", hideOpen.isSelected());
+		jEdit.setBooleanProperty("closeAllConfirm", closeAllConfirm.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 				persistentMarkers.isSelected());

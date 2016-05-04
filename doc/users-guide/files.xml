@@ -693,13 +693,31 @@
         (shortcut: <keycap>C+w</keycap>) closes the current buffer. If it has
         unsaved changes, jEdit will ask if they should be saved first.</para>
 
+        <para><guimenu>File</guimenu>&gt;<guimenuitem>Close Others</guimenuitem>
+        closes all buffers except the current buffer. If any have
+        unsaved changes, jEdit will ask if they should be saved first.</para>
+
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Close All</guimenuitem>
-        (shortcut: <keycap>C+e C+w</keycap>) closes all buffers. If any buffers
+        closes all buffers in the current View. If any buffers
         have unsaved changes, they will be listed in a dialog box where they can
         be saved or discarded. In the dialog box, multiple buffers to operate on
         at once can be selected by clicking on them in the list while holding
         down <keycap>Control</keycap>. After all buffers have been closed, a new
         untitled buffer is opened.</para>
+
+        <para><guimenu>File</guimenu>&gt;<guimenuitem>Close (Global)</guimenuitem>
+        closes the current buffer in all Views. If it has
+        unsaved changes, jEdit will ask if they should be saved first.</para>
+
+        <para><guimenu>File</guimenu>&gt;<guimenuitem>Close All (Global)</guimenuitem>
+        (shortcut: <keycap>C+e C+w</keycap>) closes all buffers in all Views. If any
+        buffers have unsaved changes, they will be listed in a dialog box where they can
+        be saved or discarded. In the dialog box, multiple buffers to operate on
+        at once can be selected by clicking on them in the list while holding
+        down <keycap>Control</keycap>. After all buffers have been closed, a new
+        untitled buffer is opened.</para>
+        
+        <para><guimenuitem>Close Others</guimenuitem>, <guimenuitem>Close All</guimenuitem>, and <guimenuitem>Close All (Global)</guimenuitem> can ask for confirmation before closing. The confirmation dialog can be shown by checking the '"Close All" asks for confirmation' box in Utilities - Global Options - General.</para>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Exit</guimenuitem>
         (shortcut: <keycap>C+q</keycap>) will completely exit jEdit, prompting

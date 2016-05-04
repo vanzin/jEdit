@@ -1027,6 +1027,14 @@ close.discard=Discard Selected
 close.discard.mnemonic=d
 #}}}
 
+#{{{ Close all confirm dialog
+closeothers.title=Close All Other Buffers
+closeothers.message=Are you sure you want to close all other buffers?
+closeall.title=Close All Buffers
+closeall.message=Are you sure you want to close all buffers?
+#}}}
+
+
 #{{{ Files changed on disk dialog
 files-changed.title=Files Changed on Disk
 files-changed.caption=The following files were changed on disk by another program:
@@ -1249,6 +1257,7 @@ options.general.recentFiles=Recent files to remember:
 options.general.hypersearch.maxWarningResults=Max Hypersearch Results:
 options.general.sortRecent=Sort recent file list
 options.general.hideOpen=Hide open files from recent file list
+options.general.closeAllConfirm="Close All" asks for confirmation
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
 options.general.resetUndo=Reset undo history on save

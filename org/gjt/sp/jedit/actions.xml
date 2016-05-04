@@ -103,28 +103,55 @@
 
 <ACTION NAME="close-all">
 	<CODE>
-		jEdit.closeAllBuffers(view);
+		boolean closeAll = true;
+		if (jEdit.getBooleanProperty("closeAllConfirm"))
+		{
+			int answer = GUIUtilities.confirm(view, "closeall", null, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE);
+			closeAll = answer == javax.swing.JOptionPane.YES_OPTION;
+		}
+		if (closeAll)
+		{
+			jEdit.closeAllBuffers(view);
+		}
 	</CODE>
 </ACTION>
 
 <ACTION NAME="closeall-bufferset">
 	<CODE>
-		org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
-		Buffer[] buffers = bufferSet.getAllBuffers();
-		for (Buffer buff: buffers) {
-			jEdit.closeBuffer(editPane,buff);
+		boolean closeAll = true;
+		if (jEdit.getBooleanProperty("closeAllConfirm"))
+		{
+			int answer = GUIUtilities.confirm(view, "closeall", null, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE);
+			closeAll = answer == javax.swing.JOptionPane.YES_OPTION;
+		}
+		if (closeAll)
+		{
+			org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
+			Buffer[] buffers = bufferSet.getAllBuffers();
+			for (Buffer buff: buffers) {
+				jEdit.closeBuffer(editPane,buff);
+			}
 		}
 	</CODE>
 </ACTION>
 
 <ACTION NAME="closeall-except-active">
         <CODE>
-		org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
-		Buffer[] buffers = bufferSet.getAllBuffers();
-		for (Buffer buff:buffers)
+		boolean closeAll = true;
+		if (jEdit.getBooleanProperty("closeAllConfirm"))
 		{
-			if (buff != buffer)
-				jEdit.closeBuffer(editPane,buff);
+			int answer = GUIUtilities.confirm(view, "closeothers", null, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.WARNING_MESSAGE);
+			closeAll = answer == javax.swing.JOptionPane.YES_OPTION;
+		}
+		if (closeAll)
+		{
+			org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
+			Buffer[] buffers = bufferSet.getAllBuffers();
+			for (Buffer buff:buffers)
+			{
+				if (buff != buffer)
+					jEdit.closeBuffer(editPane,buff);
+			}
 		}
 	</CODE>
 </ACTION>
