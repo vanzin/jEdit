@@ -88,14 +88,13 @@ buffer.remove(removalStart, removalLength);
 // then insert the previous line immediately after the selection
 insertionLine = endLine;
 boolean endLineIsLast = endLine == buffer.getLineCount();
-String lineSeparator = buffer.getStringProperty("lineSeparator");
 if (endLineIsLast) {
 	insertionPoint = buffer.getLength();
-	buffer.insert(insertionPoint, lineSeparator + prevLineText);
+	buffer.insert(insertionPoint, '\n' + prevLineText);
 }
 else {
 	insertionPoint = textArea.getLineStartOffset(insertionLine);
-	buffer.insert(insertionPoint, prevLineText + lineSeparator);
+	buffer.insert(insertionPoint, prevLineText + '\n');
 }
 
 // indent the selection	
