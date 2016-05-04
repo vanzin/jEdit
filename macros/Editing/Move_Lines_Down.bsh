@@ -112,6 +112,11 @@ if (shouldIndent) {
 	buffer.indentLines(startLine + 1, endLine + 1);	
 }
 
+// reselect
+textArea.selectNone();
+selection = new Selection.Range(textArea.getLineStartOffset(startLine + 1), Math.min(textArea.getLineEndOffset(endLine + 1), buffer.length));
+textArea.addToSelection(selection);
+
 // move the caret
 textArea.moveCaretPosition(selection.getEnd());
 
