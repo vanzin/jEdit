@@ -4858,8 +4858,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer == null)
 			return;
 		
-		final int firstPhysicalLine = getFirstPhysicalLine();
-
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
 			//call this only if it was previously off
@@ -4914,14 +4912,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		chunkCache.reset();
 		gutter.repaint();
 		painter.repaint();
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				setFirstPhysicalLine(firstPhysicalLine);
-			}
-		});
-		
 	} //}}}
 
 	//{{{ addActionSet() method
@@ -5028,7 +5018,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			maxHorizontalScrollWidth = max;
 			horizontal.setValues(
-				horizontal.getValue(),
+				Math.max(0,
+					Math.min(
+					maxHorizontalScrollWidth + charWidth - painter.getWidth(),
+					-horizontalOffset)
+				),
 				painter.getWidth(),
 				0,
 				maxHorizontalScrollWidth + charWidth);
