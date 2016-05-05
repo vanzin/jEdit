@@ -48,6 +48,9 @@ contributing to this release.
 - Set default colors for foreground and background in syntax highlighting 
   style editor. (Dale Anson)
 
+- Fix plugin bug #1853 XML plugin crashes on JDK9. Don't pre-connect
+  the returned URLConnection in jeditresource: protocol handler (Eric Le Lay)
+
 }}}
 {{{ UI Improvements
 

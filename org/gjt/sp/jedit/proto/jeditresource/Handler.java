@@ -43,7 +43,6 @@ public class Handler extends URLStreamHandler
 		throws IOException
 	{
 		PluginResURLConnection c = new PluginResURLConnection(url);
-		c.connect();
 		return c;
 	}
 }
