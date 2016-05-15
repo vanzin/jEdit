@@ -24,14 +24,10 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.*;
-import java.util.Locale;
 
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.gui.NumericTextField;
@@ -41,7 +37,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 //}}}
 
-public class AppearanceOptionPane extends AbstractOptionPane
+public class AppearanceOptionPane extends AbstractOptionPane implements ItemListener
 {
 	/**
 	 * List of icon themes that are supported in jEdit core.
@@ -73,7 +69,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 				index = i;
 		}
 
-		lookAndFeel = new JComboBox(names);
+		lookAndFeel = new JComboBox<String>(names);
 		lookAndFeel.setSelectedIndex(index);
 		lookAndFeel.addActionListener(new ActionListener()
 		{
@@ -83,7 +79,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 				updateEnabled();
 			}
 		});
-
+		lookAndFeel.addItemListener( this );
 
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
@@ -91,9 +87,9 @@ public class AppearanceOptionPane extends AbstractOptionPane
 
 		/* Icon Theme */
 		String[] themes = IconTheme.builtInNames();
-		iconThemes = new JComboBox(themes);
+		iconThemes = new JComboBox<String>(themes);
 		addComponent(jEdit.getProperty("options.appearance.iconTheme"), iconThemes);
-		oldTheme = IconTheme.get();
+		String oldTheme = IconTheme.get();
 		for (int i=0; i<themes.length; ++i)
 		{
 			if (themes[i].equals(oldTheme))
@@ -181,14 +177,19 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"options.appearance.decorateDialogs"));
 		decorateDialogs.setSelected(jEdit.getBooleanProperty("decorate.dialogs"));
 		addComponent(decorateDialogs);
+		
+		lnfChanged = false;
 	} //}}}
 
 	//{{{ _save() method
 	@Override
 	protected void _save()
 	{
-		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
-		jEdit.setProperty("lookAndFeel",lf);
+		if (lnfChanged)
+		{
+			String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
+			jEdit.setProperty("lookAndFeel", lf);
+		}
 		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
 		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
 		jEdit.setFontProperty("helpviewer.font", helpViewerFont.getFont());
@@ -220,9 +221,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private String oldTheme;
 	private UIManager.LookAndFeelInfo[] lfs;
-	private JComboBox lookAndFeel;
+	private JComboBox<String> lookAndFeel;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
 	private FontSelector helpViewerFont;
@@ -234,10 +234,9 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JCheckBox textColors;
 	private JCheckBox decorateFrames;
 	private JCheckBox decorateDialogs;
-	private JComboBox antiAliasExtras;
-	private JComboBox iconThemes;
+	private JComboBox<String> iconThemes;
 	private JCheckBox systemTrayIcon;
-	private JCheckBox useQuartz;
+	private boolean lnfChanged = false;
 	//}}}
 
 	//{{{ updateEnabled() method
@@ -292,4 +291,10 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			}
 		}
 	} //}}}
+	
+	// {{{ itemStateChanged() methos
+    public final void itemStateChanged( ItemEvent evt ) 
+    {
+		lnfChanged = true;
+    } // }}}
 }
