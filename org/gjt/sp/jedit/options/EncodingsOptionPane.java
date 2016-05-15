@@ -57,11 +57,11 @@ import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 public class EncodingsOptionPane extends AbstractOptionPane
 {
 	//{{{ Instance variables
-	private JComboBox defaultEncoding;
+	private JComboBox<String> defaultEncoding;
 	private JCheckBox encodingAutodetect;
 	private JTextField encodingDetectors;
 	private JTextField fallbackEncodings;
-	private JComboBox lineSeparator;
+	private JComboBox<String> lineSeparator;
 	private PingPongList<String> pingPongList;
 	//}}}
 
@@ -80,7 +80,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
-		lineSeparator = new JComboBox(lineSeps);
+		lineSeparator = new JComboBox<String>(lineSeps);
 
 		String lineSep = jEdit.getProperty("buffer."+ JEditBuffer.LINESEP,
 			System.getProperty("line.separator"));
@@ -97,7 +97,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		// Default file encoding
 		String[] encodings = getEncodings(true);
 		sort(encodings,new StandardUtilities.StringCompare<String>(true));
-		defaultEncoding = new JComboBox(encodings);
+		defaultEncoding = new JComboBox<String>(encodings);
 		defaultEncoding.setEditable(true);
 		defaultEncoding.setSelectedItem(jEdit.getProperty("buffer."+JEditBuffer.ENCODING,
 			System.getProperty("file.encoding")));
