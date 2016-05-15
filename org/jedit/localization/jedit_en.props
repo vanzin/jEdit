@@ -1388,7 +1388,13 @@ options.editing.deleteMode.dialog.title=Confirm Mode Delete
 options.editing.deleteMode.dialog.message=Are you sure you want to delete this mode? It cannot be undone.
 options.editing.deleteMode.dialog.message1=Unable to delete mode file
 options.editing.deleteMode.dialog.message2=for mode
-
+options.editing.modes.selectModes=Select the modes that should be shown in modes dialogs:
+options.editing.modes.available=Available mode(s)
+options.editing.modes.selected=Selected modes(s)
+options.editing.modes.available.tooltip=<html>Modes in this column will <b>not</b> be shown as choices in modes comboboxes. Drag them to the right column to show them. </html>
+options.editing.modes.selected.tooltip=<html>Modes in this column will be shown as choices in modes comboboxes of jEdit's GUI. Drag them to the left column to hide them.</html>
+options.editing.modes.deleteSelected=Delete Selected
+options.editing.modes.Delete_these_modes?=Delete these modes?
 #}}}
 
 #{{{ Encodings pane

@@ -27,6 +27,7 @@ import org.gjt.sp.util.Log;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -51,16 +52,17 @@ import static org.gjt.sp.jedit.jEdit.getProperty;
  */
 public class PingPongList<E> extends JPanel
 {
-	private final MyListModel<E> leftModel;
-	private final MyListModel<E> rightModel;
-	private JList left;
-	private JList right;
+	private MyListModel<E> leftModel;
+	private MyListModel<E> rightModel;
+	private JList<E> left;
+	private JList<E> right;
 	private JLabel leftLabel;
 	private JLabel rightLabel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
 	private JButton selectAllButton;
 	private JButton selectNoneButton;
+	private Box buttonsBox;
 
 	//{{{ PingPongList constructors
 	public PingPongList(List<E> leftData, List<E> rightData)
@@ -73,9 +75,9 @@ public class PingPongList<E> extends JPanel
 		super(new BorderLayout());
 		JSplitPane splitPane = new JSplitPane(newOrientation);
 		leftModel = new MyListModel<E>(leftData);
-		left = new JList(leftModel);
+		left = new JList<E>(leftModel);
 		rightModel = new MyListModel<E>(rightData);
-		right = new JList(rightModel);
+		right = new JList<E>(rightModel);
 		leftPanel = new JPanel(new BorderLayout());
 		rightPanel = new JPanel(new BorderLayout());
 		JScrollPane leftScroll = new JScrollPane(left);
@@ -93,7 +95,7 @@ public class PingPongList<E> extends JPanel
 		splitPane.setDividerLocation(0.5);
 
 		// Select All/None Buttons
-		Box buttonsBox = createHorizontalBox();
+		buttonsBox = createHorizontalBox();
 		buttonsBox.add(createHorizontalStrut(12));
 
 		ActionListener actionHandler = new ActionHandler();
@@ -116,6 +118,49 @@ public class PingPongList<E> extends JPanel
 		leftModel.addListDataListener(listDataListener);
 		rightModel.addListDataListener(listDataListener);
 	} //}}}
+	
+	public void addButton(JButton button) 
+	{
+		if (button != null) 
+		{
+			buttonsBox.add(createHorizontalStrut(12));
+			buttonsBox.add(button);
+		}
+	}
+	
+	public void setLeftData(List<E> data) 
+	{
+		leftModel = new MyListModel<E>(data);
+		left.setModel(leftModel);
+	}
+	
+	public void setRightData(List<E> data) 
+	{
+		rightModel = new MyListModel<E>(data);
+		right.setModel(rightModel);
+	}
+	
+	public void setLeftSelected(E selected) 
+	{
+		if (selected != null)
+			left.setSelectedValue(selected, true);	
+	}
+	
+	public List<E> getLeftSelectedValues() 
+	{
+		return left.getSelectedValuesList();
+	}
+	
+	public void setRightSelected(E selected) 
+	{
+		if (selected != null) 
+			right.setSelectedValue(selected, true);
+	}
+	
+	public List<E> getRightSelectedValues()
+	{
+		return right.getSelectedValuesList();	
+	}
 
 	//{{{ setLeftTooltip() method
 	public void setLeftTooltip(String leftTooltip)
@@ -218,6 +263,34 @@ public class PingPongList<E> extends JPanel
 		rightModel.addAll(leftModel.data);
 		leftModel.clear();
 	} //}}}
+
+	// {{{ setLeftCellRenderer() method
+	public void setLeftCellRenderer(ListCellRenderer<E> renderer)
+	{
+		if (renderer != null)
+			left.setCellRenderer(renderer);	
+	} //}}}
+
+	// {{{ setRightCellRenderer() method
+	public void setRightCellRenderer(ListCellRenderer<E> renderer)
+	{
+		if (renderer != null)
+			right.setCellRenderer(renderer);	
+	} //}}}
+	
+	// {{{ addLeftListSelectionListener() method
+	public void addLeftListSelectionListener(ListSelectionListener listener) 
+	{
+		if (listener != null)
+			left.addListSelectionListener(listener);
+	} // }}}
+
+	// {{{ addRightListSelectionListener() method
+	public void addRightListSelectionListener(ListSelectionListener listener) 
+	{
+		if (listener != null)
+			right.addListSelectionListener(listener);
+	} // }}}
 
 	//{{{ Inner classes
 

@@ -334,11 +334,12 @@
         <section id="editing-pane">
             <title>The Editing Pane</title>
 
-            <para>The <guibutton>Editing</guibutton> option pane contains
+            <para>The <guibutton>Editing</guibutton> option pane contains 3 tabs where
             settings such as the tab size, syntax highlighting and soft tabs on
-            a global or mode-specific basis. </para>
-
-            <para>Changing options from this optionpane does not change XML mode definition files on disk; it merely writes values to the user properties file which
+            a global or mode-specific basis are made. </para>
+            
+            <para>The <guibutton>Mode Settings</guibutton> tab allows adjusting specific
+            settings per mode. Changing these options does not change XML mode definition files on disk; it merely writes values to the user properties file which
             override those set in mode files. To find out how to edit mode files directly, see <xref linkend="writing-modes-part" />. Some of these options can be further overridden on an individual file basis through the use of buffer-local properties. </para>
 
             <para>The <literal>File name
@@ -351,6 +352,14 @@
             </para>
 
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
+            
+            <para>The <guibutton>Edit Modes</guibutton> tab provides a setting to choose
+            the default edit mode, the edit modes to display in the various 'mode'
+            choosers, and the ability to manually add a new edit mode. Since there are now over 200 modes that jEdit recognizes, having the ability to reduce the number of choices in the 'mode' choosers to those needed by a user is a nice feature.</para>
+            
+            <para>This tab also provides a way to easily add and delete user modes.</para>
+            
+            <para>The <guibutton>Undo Settings</guibutton> tab allows setting the number of undo and whether to reset the undo history on save.</para>
 
 
         </section>

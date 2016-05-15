@@ -1,5 +1,5 @@
 /*
- * EditingOptionPane.java - Mode-specific options panel
+ * UndoPane.java - Mode-specific options panel
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -25,60 +25,50 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 
-import java.awt.BorderLayout;
 import java.awt.event.*;
+import java.nio.file.*;
 
 import org.gjt.sp.jedit.*;
 //}}}
 
 /**
- * Panel to load three option panes into tabs: EditModesPane, ModeSettingsPane,
- * and UndoPane.
+ * Set options for undo here.
  * @author Dale Anson
- * @version $Id$
+ * @version $Id: UndoPane.java 24012 2015-08-12 08:48:07Z kpouer $
  */
-public class EditingOptionPane extends AbstractOptionPane
+public class UndoPane extends AbstractOptionPane
 {
-	//{{{ EditingOptionPane constructor
-	public EditingOptionPane()
+	//{{{ UndoPane constructor
+	public UndoPane()
 	{
-		super("editing");
-		setLayout(new BorderLayout());
+		super("undo");
 	} //}}}
 
 	//{{{ _init() method
 	@Override
 	protected void _init()
 	{
-		JTabbedPane tabs = new JTabbedPane();
-		modeSettings = new ModeSettingsPane();
-		modeSettings._init();
-		editModes = new EditModesPane();
-		editModes._init();
-		undoSettings = new UndoPane();
-		undoSettings._init();
-		tabs.addTab("Mode Settings", modeSettings);
-		tabs.addTab("Edit Modes", editModes);
-		tabs.addTab("Undo Settings", undoSettings);
-		add(tabs);
+
+		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
+		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
+
+		// Reset Undo Manager On Save
+		resetUndoOnSave = new JCheckBox(jEdit.getProperty("options.general.resetUndo"));
+		resetUndoOnSave.setSelected(jEdit.getBooleanProperty("resetUndoOnSave"));
+		addComponent(resetUndoOnSave);
 	} //}}}
 	
-
 	//{{{ _save() method
 	@Override
 	protected void _save()
 	{
-		editModes._save();
-		modeSettings._save();
-		undoSettings._save();
+		jEdit.setProperty("buffer.undoCount",undoCount.getText());
+		jEdit.setBooleanProperty("resetUndoOnSave", resetUndoOnSave.isSelected());
 	} //}}}
 
-	//{{{ Private members
-
 	//{{{ Instance variables
-	EditModesPane editModes;
-	ModeSettingsPane modeSettings;
-	UndoPane undoSettings;
+	private JTextField undoCount;
+	private JCheckBox resetUndoOnSave;
 	//}}}
 
 }

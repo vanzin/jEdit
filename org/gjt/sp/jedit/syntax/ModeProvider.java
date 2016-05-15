@@ -65,13 +65,18 @@ public class ModeProvider
 	//{{{ removeMode() method
 	/**
  	 * Will only remove user modes.	
+ 	 * @return true if the mode was removed, false otherwise.
  	 */
-	public void removeMode(String name) throws IOException
+	public boolean removeMode(String name) throws IOException
 	{
 		Mode mode = modes.get(name);
 		if (mode.isUserMode())
 		{
-			modes.remove(name);
+			// check that this mode is in the map
+			Mode oldMode = modes.remove(name);
+			if (oldMode == null)
+				return false;
+			
 			// delete mode file from disk and remove the entry from the catalog file.
 			// Actually, just rename the mode file by adding "_unused" to the end of the file name
 			// and comment out the line in the catalog file. This way it is possible to undo
@@ -87,35 +92,55 @@ public class ModeProvider
 				File catalogFile = new File(modeFile.getParent(),"catalog");
 				if (catalogFile.exists())
 				{
+					StringBuilder contents = new StringBuilder();
 					try 
 					{
 						// read in the catalog file
 						BufferedReader br = new BufferedReader(new FileReader(catalogFile));
 						String line = null;
-						StringBuilder contents = new StringBuilder();
-						while((line = br.readLine()) != null) {
+						while((line = br.readLine()) != null) 
+						{
 							contents.append(line).append('\n');
 						}
 						br.close();
+					}
+					catch(IOException ioe) 
+					{
+						// unable to read the catalog file
+						modes.put(oldMode.getName(), oldMode);
+						throw ioe;
+					}
+					
+					if (contents.length() == 0)
+					{
+						// empty catalog file, how did that happen?	
+						modes.put(oldMode.getName(), oldMode);
+						return false;
+					}
 						
-						// remove the catalog entry for this mode
-						Pattern p = Pattern.compile("(?m)(^\\s*[<]MODE.*?NAME=\"" + name + "\".*?[>])");
-						Matcher m = p.matcher(contents);
-						String newContents = m.replaceFirst("<!--$1-->");
+					// remove the catalog entry for this mode
+					Pattern p = Pattern.compile("(?m)(^\\s*[<]MODE.*?NAME=\"" + name + "\".*?[>])");
+					Matcher m = p.matcher(contents);
+					String newContents = m.replaceFirst("<!--$1-->");
 						
+					try
+					{
 						// rewrite the catalog file
 						BufferedWriter bw = new BufferedWriter(new FileWriter(catalogFile));
 						bw.write(newContents, 0, newContents.length());
 						bw.flush();
 						bw.close();
 					}
-					catch(Exception e) 
+					catch(IOException ioe) 
 					{
-						// ignored 
+						// unable to write the catalog file
+						modes.put(oldMode.getName(), oldMode);
+						throw ioe;
 					}
 				}
 			}
 		}
+		return true;
 	} //}}}
 
 	//{{{ getMode() method

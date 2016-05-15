@@ -58,6 +58,10 @@ contributing to this release.
 
 - Implemented feature request #493, ask for confirmation before closing all
   buffers. (Dale Anson)
+  
+- Refactor editing option pane into several tabs, allow user editing of modes
+  lists, similar to editing the encoding options lists. This also fixes
+  feature request #515. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
