@@ -50,6 +50,8 @@ contributing to this release.
 
 - Fix plugin bug #1853 XML plugin crashes on JDK9. Don't pre-connect
   the returned URLConnection in jeditresource: protocol handler (Eric Le Lay)
+  
+- Fix bug #3994, ConcurrentModificationException in ProperyManager. (Dale Anson)  
 
 }}}
 {{{ UI Improvements

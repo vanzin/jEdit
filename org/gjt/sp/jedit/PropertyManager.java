@@ -210,7 +210,8 @@ class PropertyManager
 		if(value != null)
 			return value;
 
-		for (Properties plugin : plugins)
+		List<Properties> list = Collections.synchronizedList(plugins);
+		for (Properties plugin : list)
 		{
 			value = plugin.getProperty(name);
 			if (value != null)
