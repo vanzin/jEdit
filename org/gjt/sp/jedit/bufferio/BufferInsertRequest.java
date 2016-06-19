@@ -107,18 +107,7 @@ public class BufferInsertRequest extends BufferIORequest
 		finally
 		{
 			IOUtilities.closeQuietly((Closeable)in);
-			try
-			{
-				vfs._endVFSSession(session,view);
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-				String[] pp = { e.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
+			endSessionQuietly();
 		}
 	} //}}}
 }

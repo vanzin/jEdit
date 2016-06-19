@@ -40,10 +40,12 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.io.Encoding;
 import org.gjt.sp.jedit.io.EncodingServer;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.SegmentBuffer;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -395,6 +397,23 @@ public abstract class BufferIORequest extends IoTask
 				setValue(i / PROGRESS_INTERVAL);
 		}
 		writer.flush();
+	} //}}}
+
+	//{{{ endSessionQuietly() method
+	protected void endSessionQuietly()
+	{
+		try
+		{
+			vfs._endVFSSession(session,view);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+			String[] pp = { e.toString() };
+			VFSManager.error(view,path,"ioerror.read-error",pp);
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+		}
 	} //}}}
 
 	//{{{ Private members
