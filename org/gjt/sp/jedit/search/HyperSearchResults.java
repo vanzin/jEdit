@@ -674,8 +674,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 
 			popupMenu = new JPopupMenu();
 			Object userObj = node.getUserObject();
-			if (userObj instanceof HyperSearchFileNode
-					|| userObj instanceof HyperSearchResult)
+			if (userObj instanceof HyperSearchNode)
 			{
 				popupMenu.add(new GoToNodeAction(
 					"hypersearch-results.open",
@@ -692,25 +691,29 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			}
 			if (!(userObj instanceof HyperSearchFolderNode))
 				popupMenu.add(new RemoveTreeNodeAction());
-			popupMenu.add(new ExpandChildTreeNodesAction());
+			if(!(userObj instanceof HyperSearchResult))
+				popupMenu.add(new ExpandChildTreeNodesAction());
 			if (userObj instanceof HyperSearchFolderNode
 					|| userObj instanceof HyperSearchOperationNode)
 			{
 				popupMenu.add(new CollapseChildTreeNodesAction());
 				if (userObj instanceof HyperSearchFolderNode)
+				{
 					popupMenu.add(new NewSearchAction());
-			}
-			if (userObj instanceof HyperSearchOperationNode)
-			{
-				popupMenu.add(new JPopupMenu.Separator());
-				HyperSearchOperationNode resultNode = (HyperSearchOperationNode)userObj;
-				JCheckBoxMenuItem chkItem =
-					new JCheckBoxMenuItem(jEdit.getProperty("hypersearch-results.tree-view"),
-							resultNode.isTreeViewDisplayed());
-				chkItem.addActionListener(new TreeDisplayAction());
-				popupMenu.add(chkItem);
+				}
+				else
+				{
+					popupMenu.add(new JPopupMenu.Separator());
+					HyperSearchOperationNode resultNode = (HyperSearchOperationNode)userObj;
+					JCheckBoxMenuItem chkItem =
+						new JCheckBoxMenuItem(jEdit.getProperty("hypersearch-results.tree-view"),
+								resultNode.isTreeViewDisplayed());
+					chkItem.addActionListener(new TreeDisplayAction());
+					popupMenu.add(chkItem);
 
-				popupMenu.add(new RedoSearchAction((HyperSearchOperationNode)userObj));
+					popupMenu.add(new RedoSearchAction((HyperSearchOperationNode)userObj));
+				}
+
 			}
 			popupMenu.add(new CopyToClipboardAction());
 
