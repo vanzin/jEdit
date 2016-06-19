@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
-
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 
 public class GutterOptionPane extends AbstractOptionPane
@@ -296,7 +296,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	//{{{ setGutterComponentsEnabledState
 	private void setGutterComponentsEnabledState()
 	{
-		GUIUtilities.setEnabledRecursively(gutterComponents,
+		GenericGUIUtilities.setEnabledRecursively(gutterComponents,
 			gutterEnabled.isSelected());
 	} //}}}
 

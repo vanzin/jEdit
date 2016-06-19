@@ -33,6 +33,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -139,7 +140,7 @@ public class FontSelector extends JButton
 		{
 			Font font;
 
-			JDialog dialog = GUIUtilities.getParentDialog(FontSelector.this);
+			JDialog dialog = GenericGUIUtilities.getParentDialog(FontSelector.this);
 			if(dialog == null)
 			{
 				font = new FontSelectorDialog(

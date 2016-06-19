@@ -31,6 +31,7 @@ import javax.swing.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 
 
@@ -243,7 +244,7 @@ public class FontSelectorDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
 		
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 
 		buttons.add(Box.createGlue());
 		buttons.add(ok);

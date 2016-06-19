@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
@@ -64,14 +64,12 @@ import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -552,7 +550,7 @@ public class GUIUtilities
 				icon = loadIcon(jEdit.getProperty("broken-image.icon"));
 		}
 
-		String toolTip = prettifyMenuLabel(label);
+		String toolTip = GenericGUIUtilities.prettifyMenuLabel(label);
 		String shortcutLabel = getShortcutLabel(name, true);
 		if(shortcutLabel != null)
 		{
@@ -571,16 +569,11 @@ public class GUIUtilities
 	 * property.
 	 * @param label the label
 	 * @return a pretty label
+	 * @deprecated use {@link GenericGUIUtilities#prettifyMenuLabel(String)}
 	 */
 	public static String prettifyMenuLabel(String label)
 	{
-		int index = label.indexOf('$');
-		if(index != -1)
-		{
-			label = label.substring(0,index)
-				.concat(label.substring(index + 1));
-		}
-		return label;
+		return GenericGUIUtilities.prettifyMenuLabel(label);
 	} //}}}
 
 	//{{{ getPlatformShortcutLabel() method
@@ -648,26 +641,11 @@ public class GUIUtilities
 	 * taking the letter after the dollar.
 	 * @param button The button to set the mnemonic for.
 	 * @since jEdit 5.1
+	 * @deprecated use {@link GenericGUIUtilities#setAutoMnemonic(AbstractButton)}
 	 */
 	public static void setAutoMnemonic(AbstractButton button)
 	{
-		String label = button.getText();
-		char mnemonic;
-		int index = label.indexOf('$');
-		if (index != -1 && label.length() - index > 1)
-		{
-			mnemonic = Character.toLowerCase(label.charAt(index + 1));
-			label = label.substring(0, index).concat(label.substring(++index));
-		}
-		else
-		{
-			mnemonic = '\0';
-		}
-		if (mnemonic != '\0')
-		{
-			button.setMnemonic(mnemonic);
-			button.setText(label);
-		}
+		GenericGUIUtilities.setAutoMnemonic(button);
 	} //}}}
 
 	//}}}
@@ -1212,6 +1190,7 @@ public class GUIUtilities
 	 * the <code>java.awt.Color</code> class) or a hex color value
 	 * prefixed with `#', for example `#ff0088'.
 	 * @param name The color name
+	 * @deprecated use {@link SyntaxUtilities#parseColor(String, Color)}
 	 */
 	public static Color parseColor(String name)
 	{
@@ -1226,6 +1205,7 @@ public class GUIUtilities
 	 * @param size Style strings only specify font style, not font family
 	 * @exception IllegalArgumentException if the style is invalid
 	 * @since jEdit 3.2pre6
+	 * @deprecated use {@link SyntaxUtilities#parseStyle(String, String, int, boolean)}
 	 */
 	public static SyntaxStyle parseStyle(String str, String family, int size)
 		throws IllegalArgumentException
@@ -1300,7 +1280,7 @@ public class GUIUtilities
 		try
 		{
 			if(!Debug.DISABLE_MULTIHEAD)
-				adjustForScreenBounds(desired);
+				GenericGUIUtilities.adjustForScreenBounds(desired);
 		}
 		catch(Exception e)
 		{
@@ -1339,36 +1319,11 @@ public class GUIUtilities
 	 * Gives a rectangle the specified bounds, ensuring it is within the
 	 * screen bounds.
 	 * @since jEdit 4.2pre3
+	 * @deprecated use {@link GenericGUIUtilities#adjustForScreenBounds(Rectangle)}
 	 */
 	public static void adjustForScreenBounds(Rectangle desired)
 	{
-		// Make sure the window is displayed in visible region
-		Rectangle osbounds = OperatingSystem.getScreenBounds(desired);
-
-		if (desired.width > osbounds.width)
-		{
-			desired.width = osbounds.width;
-		}
-		if (desired.x < osbounds.x)
-		{
-			desired.x = osbounds.x;
-		}
-		if (desired.x + desired.width > osbounds.x + osbounds.width)
-		{
-			desired.x = osbounds.x + osbounds.width - desired.width;
-		}
-		if (desired.height > osbounds.height)
-		{
-			desired.height = osbounds.height;
-		}
-		if (desired.y < osbounds.y)
-		{
-			desired.y = osbounds.y;
-		}
-		if (desired.y + desired.height > osbounds.y + osbounds.height)
-		{
-			desired.y = osbounds.y + osbounds.height - desired.height;
-		}
+		GenericGUIUtilities.adjustForScreenBounds(desired);
 	} //}}}
 
 	//{{{ UnixWorkaround class
@@ -1591,24 +1546,24 @@ public class GUIUtilities
 	public static JComponent createMultilineLabel(String str)
 	{
 		JPanel panel = new JPanel(new VariableGridLayout(
-			VariableGridLayout.FIXED_NUM_COLUMNS,1,1,1));
-		int lastOffset = 0;
-		while(true)
-		{
-			int index = str.indexOf('\n',lastOffset);
-			if(index == -1)
-				break;
-			else
+				VariableGridLayout.FIXED_NUM_COLUMNS,1,1,1));
+			int lastOffset = 0;
+			while(true)
 			{
-				panel.add(new JLabel(str.substring(lastOffset,index)));
-				lastOffset = index + 1;
+				int index = str.indexOf('\n',lastOffset);
+				if(index == -1)
+					break;
+				else
+				{
+					panel.add(new JLabel(str.substring(lastOffset,index)));
+					lastOffset = index + 1;
+				}
 			}
-		}
 
-		if(lastOffset != str.length())
-			panel.add(new JLabel(str.substring(lastOffset)));
+			if(lastOffset != str.length())
+				panel.add(new JLabel(str.substring(lastOffset)));
 
-		return panel;
+			return panel;
 	} //}}}
 
 	//{{{ requestFocus() method
@@ -1617,25 +1572,11 @@ public class GUIUtilities
 	 * active.
 	 * @param win The window
 	 * @param comp The component
+	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
 	 */
 	public static void requestFocus(final Window win, final Component comp)
 	{
-		win.addWindowFocusListener(new WindowAdapter()
-		{
-			@Override
-			public void windowGainedFocus(WindowEvent evt)
-			{
-				EventQueue.invokeLater(new Runnable()
-				{
-						@Override
-						public void run()
-						{
-							comp.requestFocusInWindow();
-						}
-				});
-				win.removeWindowFocusListener(this);
-			}
-		});
+		GenericGUIUtilities.requestFocus(win, comp);
 	} //}}}
 
 	//{{{ isPopupTrigger() method
@@ -1645,30 +1586,33 @@ public class GUIUtilities
 	 * MouseEvent.isPopupTrigger().
 	 * @param evt The event
 	 * @since jEdit 3.2pre8
+	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return TextAreaMouseHandler.isRightButton(evt.getModifiers());
+		return GenericGUIUtilities.isPopupTrigger(evt);
 	} //}}}
 
 	//{{{ isMiddleButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 4.1pre9
+	 * @deprecated use {@link GenericGUIUtilities#isMiddleButton(int)}
 	 */
 	public static boolean isMiddleButton(int modifiers)
 	{
-		return TextAreaMouseHandler.isMiddleButton(modifiers);
+		return GenericGUIUtilities.isMiddleButton(modifiers);
 	} //}}}
 
 	//{{{ isRightButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 4.1pre9
+	 * @deprecated use {@link GenericGUIUtilities#isRightButton(int)}
 	 */
 	public static boolean isRightButton(int modifiers)
 	{
-		return TextAreaMouseHandler.isRightButton(modifiers);
+		return GenericGUIUtilities.isRightButton(modifiers);
 	} //}}}
 
 	//{{{ getScreenBounds() method
@@ -1676,22 +1620,11 @@ public class GUIUtilities
 	 * Returns the screen bounds, taking into account multi-screen
 	 * environments.
 	 * @since jEdit 4.3pre18
+	 * @deprecated use {@link GenericGUIUtilities#getScreenBounds()}
 	 */
 	public static Rectangle getScreenBounds()
 	{
-		Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
-			getMaximumWindowBounds();
-		GraphicsDevice [] devices = GraphicsEnvironment.
-			getLocalGraphicsEnvironment().getScreenDevices();
-		if (devices.length > 1)
-		{
-			for (GraphicsDevice device: devices)
-			{
-				for (GraphicsConfiguration config: device.getConfigurations())
-					bounds = bounds.union(config.getBounds());
-			}
-		}
-		return bounds;
+		return GenericGUIUtilities.getScreenBounds();
 	} //}}}
 
 	//{{{ showPopupMenu() method
@@ -1706,11 +1639,12 @@ public class GUIUtilities
 	 * @see javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu) setComponentPopupMenu
 	 * which works better and is simpler to use: you don't have to write the code to
 	 * show/hide popups in response to mouse events anymore.
+	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int)}
 	 */
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y)
 	{
-		showPopupMenu(popup,comp,x,y,true);
+		GenericGUIUtilities.showPopupMenu(popup, comp, x, y);
 	} //}}}
 
 	//{{{ showPopupMenu() method
@@ -1726,63 +1660,12 @@ public class GUIUtilities
 	 * positioning in the case where the popup does not fit onscreen.
 	 *
 	 * @since jEdit 4.1pre1
+	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int, boolean)}
 	 */
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y, boolean point)
 	{
-		int offsetX = 0;
-		int offsetY = 0;
-
-		int extraOffset = point ? 1 : 0;
-
-		Component win = comp;
-		while(!(win instanceof Window || win == null))
-		{
-			offsetX += win.getX();
-			offsetY += win.getY();
-			win = win.getParent();
-		}
-
-		if(win != null)
-		{
-			Dimension size = popup.getPreferredSize();
-
-			Rectangle screenSize = getScreenBounds();
-
-			if(x + offsetX + size.width + win.getX() > screenSize.width
-				&& x + offsetX + win.getX() >= size.width)
-			{
-				//System.err.println("x overflow");
-				if(point)
-					x -= size.width + extraOffset;
-				else
-					x = win.getWidth() - size.width - offsetX + extraOffset;
-			}
-			else
-			{
-				x += extraOffset;
-			}
-
-			//System.err.println("y=" + y + ",offsetY=" + offsetY
-			//	+ ",size.height=" + size.height
-			//	+ ",win.height=" + win.getHeight());
-			if(y + offsetY + size.height + win.getY() > screenSize.height
-				&& y + offsetY + win.getY() >= size.height)
-			{
-				if(point)
-					y = win.getHeight() - size.height - offsetY + extraOffset;
-				else
-					y = -size.height - 1;
-			}
-			else
-			{
-				y += extraOffset;
-			}
-
-			popup.show(comp,x,y);
-		}
-		else
-			popup.show(comp,x + extraOffset,y + extraOffset);
+		GenericGUIUtilities.showPopupMenu(popup, comp, x, y, point);
 
 	} //}}}
 
@@ -1794,18 +1677,11 @@ public class GUIUtilities
 	 * @param comp1 The ancestor
 	 * @param comp2 The component to check
 	 * @since jEdit 4.1pre5
+	 * @deprecated use {@link GenericGUIUtilities#isAncestorOf(Component, Component)}
 	 */
 	public static boolean isAncestorOf(Component comp1, Component comp2)
 	{
-		while(comp2 != null)
-		{
-			if(comp1 == comp2)
-				return true;
-			else
-				comp2 = comp2.getParent();
-		}
-
-		return false;
+		return GenericGUIUtilities.isAncestorOf(comp1, comp2);
 	} //}}}
 
 	//{{{ getParentDialog() method
@@ -1813,10 +1689,11 @@ public class GUIUtilities
 	 * Traverses the given component's parent tree looking for an
 	 * instance of JDialog, and return it. If not found, return null.
 	 * @param c The component
+	 * @deprecated use {@link GenericGUIUtilities#getParentDialog(Component)}
 	 */
 	public static JDialog getParentDialog(Component c)
 	{
-		return (JDialog) SwingUtilities.getAncestorOfClass(JDialog.class, c);
+		return GenericGUIUtilities.getParentDialog(c);
 	} //}}}
 
 	//{{{ getComponentParent() method
@@ -1863,17 +1740,11 @@ public class GUIUtilities
 	 * @param c The container
 	 * @param enabled The enabled state to set
 	 * @since jEdit 4.3pre17
+	 * @deprecated use {@link GenericGUIUtilities#setEnabledRecursively(Container, boolean)}
 	 */
 	public static void setEnabledRecursively(Container c, boolean enabled)
 	{
-		for (Component child: c.getComponents())
-		{
-			if (child instanceof Container)
-				setEnabledRecursively((Container)child, enabled);
-			else
-				child.setEnabled(enabled);
-		}
-		c.setEnabled(enabled);
+		GenericGUIUtilities.setEnabledRecursively(c, enabled);
 	} //}}}
 
 	//{{{ getView() method
@@ -1894,13 +1765,11 @@ public class GUIUtilities
 	 * @param button  the button to modify
 	 * @param margin  the new margin
 	 * @since jEdit 5.3
+	 * @deprecated use {@link GenericGUIUtilities#setButtonContentMargin(AbstractButton, Insets)}
 	 */
 	public static void setButtonContentMargin(AbstractButton button, Insets margin)
 	{
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("Button.contentMargins", margin);
-		defaults.put("ToggleButton.contentMargins", margin);
-		button.putClientProperty("Nimbus.Overrides", defaults);
+		GenericGUIUtilities.setButtonContentMargin(button, margin);
 	} //}}}
 	
 	//{{{
@@ -1909,58 +1778,41 @@ public class GUIUtilities
  	 * given components then setting all components to that width and height. This is
  	 * especially useful for making JButtons the same size.
  	 * @param components The components to make the same size.
+ 	 * @deprecated use {@link GenericGUIUtilities#makeSameSize(Component...)}
  	 */
 	public static void makeSameSize(Component... components) 
 	{
-		if (components == null)
-			return;
-		int width = 0;
-		int height = 0;
-		for (Component component : components) 
-		{
-			if (component == null)
-				continue;
-			width = Math.max(width, component.getPreferredSize().width);
-			height = Math.max(height, component.getPreferredSize().height);
-		}
-		Dimension d = new Dimension(width, height);
-		for (Component component : components) 
-		{
-			if (component == null)
-				continue;
-			component.setPreferredSize(d);	
-		}
+		GenericGUIUtilities.makeSameSize(components);
 	} //}}}
 
 	//{{{ defaultTableDimension() method
 	/**
 	 * JTable cell size, based on global defaults.
+	 * @deprecated use {@link GenericGUIUtilities#defaultTableCellSize()}
 	 */
 	public static Dimension defaultTableCellSize()
 	{
-		JLabel label = new JLabel("miniminiminiminiminiminiminiminiminimini");
-		UIDefaults defaults = UIManager.getDefaults();
-		Object font = defaults.get("Table.font");
-		if (font instanceof Font) label.setFont((Font)font);
-		return label.getPreferredSize();
+		return GenericGUIUtilities.defaultTableCellSize();
 	} //}}}
 
 	//{{{ defaultColumnWidth() method
 	/**
 	 * Column width for JTable, based on global defaults.
+	 * @deprecated use {@link GenericGUIUtilities#defaultColumnWidth()}
 	 */
 	public static int defaultColumnWidth()
 	{
-		return defaultTableCellSize().width;
+		return GenericGUIUtilities.defaultColumnWidth();
 	} //}}}
 
 	//{{{ defaultRowHeight() method
 	/**
 	 * Row height for JTable, based on global defaults.
+	 * @deprecated use {@link GenericGUIUtilities#defaultRowHeight()}
 	 */
 	public static int defaultRowHeight()
 	{
-		return defaultTableCellSize().height;
+		return GenericGUIUtilities.defaultRowHeight();
 	} //}}}
 
 	//{{{ addSizeSaver() method

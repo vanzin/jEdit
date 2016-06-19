@@ -71,6 +71,9 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- new org.gjt.sp.utils.GenericGUIUtilities class, containing bits of
+  org.gjt.sp.jedit.GUIUtilities suitable for the standalone TextArea
+  package; all methods kept but deprecated and proxies (Eric Le Lay).
 
 }}}
 {{{ Editing

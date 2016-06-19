@@ -24,14 +24,10 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Collections;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /**
@@ -185,7 +181,7 @@ public class HistoryTextArea extends JTextArea
 		switch(evt.getID())
 		{
 		case MouseEvent.MOUSE_PRESSED:
-			if(GUIUtilities.isPopupTrigger(evt))
+			if(GenericGUIUtilities.isPopupTrigger(evt))
 				controller.showPopupMenu(evt.isShiftDown());
 			else
 				super.processMouseEvent(evt);

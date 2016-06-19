@@ -29,6 +29,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 /** Displayed when editing abbrevs */
 public class EditAbbrevDialog extends JDialog
@@ -101,7 +102,7 @@ public class EditAbbrevDialog extends JDialog
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		box.add(Box.createGlue());
 		box.add(ok);

@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
@@ -31,6 +30,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /**
@@ -181,7 +181,7 @@ public class FilesChangedDialog extends EnhancedDialog
 				changedDirty
 			}));
 
-		GUIUtilities.requestFocus(this,bufferTree);
+		GenericGUIUtilities.requestFocus(this,bufferTree);
 
 		updateEnabled();
 

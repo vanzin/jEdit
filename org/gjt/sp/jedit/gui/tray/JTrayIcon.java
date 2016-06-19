@@ -35,7 +35,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /**
@@ -103,7 +103,7 @@ public class JTrayIcon extends TrayIcon
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
-			if (GUIUtilities.isPopupTrigger(e))
+			if (GenericGUIUtilities.isPopupTrigger(e))
 			{
 				parent.setLocation(e.getX(), e.getY() - menu.getPreferredSize().height);
 				parent.setVisible(true);

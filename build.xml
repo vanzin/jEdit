@@ -385,6 +385,7 @@
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
 				<include name="modes/*"/>
+				<include name="org/gjt/sp/util/GenericGUIUtilities.java"/>
 				<include name="org/gjt/sp/util/Log*.java"/>
 				<include name="org/gjt/sp/util/IntegerArray.java"/>
 				<include name="org/gjt/sp/util/IOUtilities.java"/>

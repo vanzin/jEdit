@@ -73,6 +73,7 @@ import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.AwtRunnableQueue;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.TaskManager;
@@ -2631,7 +2632,7 @@ public class jEdit
 				setBooleanProperty("firstTime",false);
 			}
 			else
-				GUIUtilities.requestFocus(newView,newView.getTextArea());
+				GenericGUIUtilities.requestFocus(newView,newView.getTextArea());
 
 			return newView;
 		}

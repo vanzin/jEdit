@@ -1309,7 +1309,7 @@ check_selected:
 		}
 		else
 		{
-			GUIUtilities.getParentDialog(this).dispose();
+			GenericGUIUtilities.getParentDialog(this).dispose();
 		}
 	}//}}}
 
@@ -1843,7 +1843,7 @@ check_selected:
 		CommandsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
-			GUIUtilities.setAutoMnemonic(this);
+			GenericGUIUtilities.setAutoMnemonic(this);
 			setName("commands");
 			popup = new BrowserCommandsMenu(VFSBrowser.this, null);
 		} //}}}
@@ -1853,7 +1853,7 @@ check_selected:
 		void doPopup()
 		{
 			((BrowserCommandsMenu) popup).update();
-			GUIUtilities.showPopupMenu( popup, this, 0, getHeight(), false);
+			GenericGUIUtilities.showPopupMenu( popup, this, 0, getHeight(), false);
 		}
 	} //}}}
 
@@ -1864,7 +1864,7 @@ check_selected:
 		PluginsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
-			GUIUtilities.setAutoMnemonic(this);
+			GenericGUIUtilities.setAutoMnemonic(this);
 			setName("plugins");
 
 			setMargin(new Insets(1,1,1,1));
@@ -1883,7 +1883,7 @@ check_selected:
 
 		void doPopup() {
 			if (popup == null) createPopupMenu();
-			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
+			GenericGUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}
 
 		//{{{ createPopupMenu() method
@@ -1904,7 +1904,7 @@ check_selected:
 		FavoritesMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
-			GUIUtilities.setAutoMnemonic(this);
+			GenericGUIUtilities.setAutoMnemonic(this);
 			setName("favorites");
 			createPopupMenu();
 
@@ -1913,7 +1913,7 @@ check_selected:
 		void doPopup()
 		{	
 			if (popup==null) createPopupMenu();
-			GUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
+			GenericGUIUtilities.showPopupMenu(popup, this, 0, getHeight(), false);
 		}
 
 

@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.AntiAlias;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.AbstractOptionPane;
@@ -404,7 +405,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		{
 			if (ae.getSource() == add)
 			{
-				JDialog parent = GUIUtilities.getParentDialog(this);
+				JDialog parent = GenericGUIUtilities.getParentDialog(this);
 				Font selected =
 					new FontSelectorDialog(parent, null).getSelectedFont();
 

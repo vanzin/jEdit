@@ -34,6 +34,7 @@ import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -249,7 +250,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 			this.actionName = actionName;
 			this.iconName = iconName;
 			this.icon = icon;
-			this.label = GUIUtilities.prettifyMenuLabel(label);
+			this.label = GenericGUIUtilities.prettifyMenuLabel(label);
 		}
 
 		public String toString()
@@ -437,7 +438,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		DefaultComboBoxModel iconListModel,
 		ToolBarOptionPane.Button current)
 	{
-		super(GUIUtilities.getParentDialog(comp),
+		super(GenericGUIUtilities.getParentDialog(comp),
 			jEdit.getProperty("options.toolbar.edit.title"),
 			true);
 
@@ -536,7 +537,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
 		
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		southPanel.add(Box.createGlue());
 		southPanel.add(ok);
@@ -604,7 +605,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		updateEnabled();
 
 		pack();
-		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
+		setLocationRelativeTo(GenericGUIUtilities.getParentDialog(comp));
 		setVisible(true);
 	} //}}}
 

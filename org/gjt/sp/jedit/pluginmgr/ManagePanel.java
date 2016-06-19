@@ -67,6 +67,7 @@ import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.help.*;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.StandardUtilities;
@@ -109,7 +110,7 @@ public class ManagePanel extends JPanel
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0,0));
-		table.setRowHeight(GUIUtilities.defaultRowHeight() + 2);
+		table.setRowHeight(GenericGUIUtilities.defaultRowHeight() + 2);
 		table.setPreferredScrollableViewportSize(new Dimension(500,300));
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
@@ -1296,7 +1297,7 @@ public class ManagePanel extends JPanel
 			}
 			else
 			{
-				if (GUIUtilities.isPopupTrigger(evt))
+				if (GenericGUIUtilities.isPopupTrigger(evt))
 				{
 					int row = table.rowAtPoint(evt.getPoint());
 					if (row != -1 &&
@@ -1311,7 +1312,7 @@ public class ManagePanel extends JPanel
 						item.addActionListener(new CleanupActionListener());
 						popup.add(item);
 					}
-					GUIUtilities.showPopupMenu(popup, table, evt.getX(), evt.getY());
+					GenericGUIUtilities.showPopupMenu(popup, table, evt.getX(), evt.getY());
 				}
 			}
 		}

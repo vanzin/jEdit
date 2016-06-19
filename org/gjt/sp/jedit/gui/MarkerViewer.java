@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.ViewUpdate;
@@ -44,35 +45,35 @@ public class MarkerViewer extends JPanel implements ActionListener
 		this.view = view;
 		Box toolBar = new Box(BoxLayout.X_AXIS);
 
-		toolBar.add(new JLabel(GUIUtilities.prettifyMenuLabel(
+		toolBar.add(new JLabel(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("markers.label"))));
 
 		toolBar.add(Box.createGlue());
 
 		RolloverButton addMarker = new RolloverButton(
 			GUIUtilities.loadIcon("Plus.png"));
-		addMarker.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		addMarker.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("add-marker.label")));
 		addMarker.addActionListener(this);
 		addMarker.setActionCommand("add-marker");
 		toolBar.add(addMarker);
 
 		previous = new RolloverButton(GUIUtilities.loadIcon("ArrowL.png"));
-		previous.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		previous.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("prev-marker.label")));
 		previous.addActionListener(this);
 		previous.setActionCommand("prev-marker");
 		toolBar.add(previous);
 
 		next = new RolloverButton(GUIUtilities.loadIcon("ArrowR.png"));
-		next.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		next.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("next-marker.label")));
 		next.addActionListener(this);
 		next.setActionCommand("next-marker");
 		toolBar.add(next);
 
 		clear = new RolloverButton(GUIUtilities.loadIcon("Clear.png"));
-		clear.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		clear.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("remove-all-markers.label")));
 		clear.addActionListener(this);
 		clear.setActionCommand("clear");

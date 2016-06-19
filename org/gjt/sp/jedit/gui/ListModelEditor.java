@@ -10,7 +10,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.util.GenericGUIUtilities;
+
 /** A dialog that pops up when you click on "Previously Entered Strings"
   * from a HistoryTextField.
   *
@@ -27,8 +28,8 @@ public class ListModelEditor
 		final DefaultTableModel tableModel = createTableModel(listModel);
 		final JTable table = new JTable(tableModel);
 		table.setToolTipText("Move: PgUp/PgDown; Edit: Double-Click or Insert/Delete");
-		table.setRowHeight(GUIUtilities.defaultRowHeight());
-		table.getColumnModel().getColumn(0).setPreferredWidth(GUIUtilities.defaultColumnWidth());
+		table.setRowHeight(GenericGUIUtilities.defaultRowHeight());
+		table.getColumnModel().getColumn(0).setPreferredWidth(GenericGUIUtilities.defaultColumnWidth());
 
 		table.addKeyListener(new KeyAdapter()
 		{

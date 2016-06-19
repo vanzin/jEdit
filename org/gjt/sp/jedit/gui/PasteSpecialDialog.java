@@ -26,7 +26,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.util.GenericGUIUtilities;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -125,7 +125,7 @@ public class PasteSpecialDialog extends EnhancedDialog
 				});
 				buttons.add(cancel);
 				
-				GUIUtilities.makeSameSize(ok, cancel);
+				GenericGUIUtilities.makeSameSize(ok, cancel);
 				
 				content.add(BorderLayout.SOUTH, buttons);
 

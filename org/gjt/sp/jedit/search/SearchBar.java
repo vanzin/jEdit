@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
 /**
@@ -58,7 +59,7 @@ public class SearchBar extends JToolBar
 		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
 
-		SyntaxStyle style = GUIUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), "Dialog", 12);
+		SyntaxStyle style = SyntaxUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), "Dialog", 12, true);
 		errorBackground = style.getBackgroundColor();
 		errorForeground = style.getForegroundColor();
 		defaultBackground = find.getBackground();

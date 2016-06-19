@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -456,7 +457,7 @@ public class ActionBar extends JToolBar
 
 			getContentPane().add(scroller, BorderLayout.CENTER);
 
-			GUIUtilities.requestFocus(this,list);
+			GenericGUIUtilities.requestFocus(this,list);
 
 			pack();
 			Point p = new Point(0,-getHeight());

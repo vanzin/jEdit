@@ -29,6 +29,7 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 /** Paste previous/paste deleted dialog */
 public class PasteFromListDialog extends EnhancedDialog
@@ -81,7 +82,7 @@ public class PasteFromListDialog extends EnhancedDialog
 		panel.add(Box.createHorizontalStrut(6));
 		panel.add(cancel);
 		
-		GUIUtilities.makeSameSize(insert, cancel);
+		GenericGUIUtilities.makeSameSize(insert, cancel);
 
 		content.add(panel, BorderLayout.SOUTH);
 
@@ -93,7 +94,7 @@ public class PasteFromListDialog extends EnhancedDialog
 		insert.addActionListener(new ActionHandler());
 		cancel.addActionListener(new ActionHandler());
 
-		GUIUtilities.requestFocus(this,clips);
+		GenericGUIUtilities.requestFocus(this,clips);
 
 		pack();
 		setLocationRelativeTo(view);

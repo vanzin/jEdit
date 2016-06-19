@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -48,6 +47,8 @@ import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.util.GenericGUIUtilities;
+import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 //{{{ StyleEditor class
@@ -90,8 +91,8 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		}
 		String typeName = Token.tokenToString(token.id);
 		String property = "view.style." + typeName.toLowerCase();
-		SyntaxStyle currentStyle = GUIUtilities.parseStyle(
-				jEdit.getProperty(property), "Dialog",12);
+		SyntaxStyle currentStyle = SyntaxUtilities.parseStyle(
+				jEdit.getProperty(property), "Dialog",12, true);
 		SyntaxStyle style = new StyleEditor(textArea.getView(),
 				currentStyle, typeName).getStyle();
 		if(style != null)
@@ -171,7 +172,7 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
 		
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		box.add(Box.createGlue());
 		box.add(ok);

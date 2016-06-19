@@ -33,6 +33,7 @@ import javax.swing.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /**
@@ -310,7 +311,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 	{
 		JMenu pluginMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.plugins.label"));
-		GUIUtilities.setAutoMnemonic(pluginMenu);
+		GenericGUIUtilities.setAutoMnemonic(pluginMenu);
 		return (JMenu)browser.createPluginsMenu(pluginMenu,false);
 
 	} //}}}

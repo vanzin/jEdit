@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskListener;
 import org.gjt.sp.util.TaskManager;
@@ -72,7 +73,7 @@ public class TaskMonitor extends JPanel implements TaskListener
 			}
 		});
 		table = new JTable(model);
-		table.setRowHeight(GUIUtilities.defaultRowHeight());
+		table.setRowHeight(GenericGUIUtilities.defaultRowHeight());
 		table.setDefaultRenderer(Object.class, new TaskCellRenderer());
 		table.getTableHeader().setVisible(false);
 		table.setDefaultEditor(Object.class, new TaskTableEditor());

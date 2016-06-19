@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 /** "About jEdit" dialog
@@ -195,7 +196,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			else if ((e.getKeyCode()) == KeyEvent.VK_ESCAPE)
 			{
 				e.consume();
-				JDialog d = GUIUtilities.getParentDialog(this);
+				JDialog d = GenericGUIUtilities.getParentDialog(this);
 				stopThread();
 				d.dispose();
 			}

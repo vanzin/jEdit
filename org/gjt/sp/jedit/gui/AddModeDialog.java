@@ -26,6 +26,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.util.GenericGUIUtilities;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -89,7 +90,7 @@ public class AddModeDialog extends EnhancedDialog
 
 				cancel = new JButton(jEdit.getProperty("common.cancel"));
 				cancel.addActionListener(new ActionHandler());
-				GUIUtilities.makeSameSize(ok, cancel);
+				GenericGUIUtilities.makeSameSize(ok, cancel);
 
 				buttons.add(Box.createGlue());
 				buttons.add(ok);

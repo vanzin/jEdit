@@ -28,8 +28,8 @@ import java.awt.event.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /** A button that, when clicked, shows a color chooser.
@@ -108,7 +108,7 @@ public class ColorWellButton extends JButton
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			JDialog parent = GUIUtilities.getParentDialog(ColorWellButton.this);
+			JDialog parent = GenericGUIUtilities.getParentDialog(ColorWellButton.this);
 			Color c = null;
 			if (parent != null)
 			{

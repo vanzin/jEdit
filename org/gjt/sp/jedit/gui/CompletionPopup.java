@@ -46,7 +46,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
 
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.View;
 //}}}
 
@@ -196,7 +196,7 @@ public class CompletionPopup extends JWindow
 		if (active)
 		{
 			setSelectedIndex(0);
-			GUIUtilities.requestFocus(this,list);
+			GenericGUIUtilities.requestFocus(this,list);
 		}
 		setVisible(true);
 		view.setKeyEventInterceptor(keyHandler);

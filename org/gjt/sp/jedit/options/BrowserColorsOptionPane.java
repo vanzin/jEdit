@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.gjt.sp.jedit.gui.ColorChooserDialog;
 import org.gjt.sp.jedit.gui.RolloverButton;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -60,7 +61,7 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 
 		colorsModel = new BrowserColorsModel();
 		colorsTable = new JTable(colorsModel);
-		colorsTable.setRowHeight(GUIUtilities.defaultRowHeight());
+		colorsTable.setRowHeight(GenericGUIUtilities.defaultRowHeight());
 		colorsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		colorsTable.getTableHeader().setReorderingAllowed(false);
 		colorsTable.addMouseListener(new MouseHandler());

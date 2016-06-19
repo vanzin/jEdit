@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /** Dockable view of register contents */
@@ -53,7 +54,7 @@ public class RegisterViewer extends JPanel
 
 		RolloverButton pasteRegister = new RolloverButton(
 			GUIUtilities.loadIcon("Paste.png"));
-		pasteRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		pasteRegister.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("paste-string-register.label")));
 		pasteRegister.addActionListener(new InsertHandler());
 		pasteRegister.setActionCommand("paste-string-register");
@@ -61,7 +62,7 @@ public class RegisterViewer extends JPanel
 
 		RolloverButton clearRegister = new RolloverButton(
 			GUIUtilities.loadIcon("Clear.png"));
-		clearRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
+		clearRegister.setToolTipText(GenericGUIUtilities.prettifyMenuLabel(
 			jEdit.getProperty("clear-string-register.label")));
 		clearRegister.addActionListener(new ClearHandler());
 		clearRegister.setActionCommand("clear-string-register");
@@ -340,7 +341,7 @@ public class RegisterViewer extends JPanel
 			int i = registerList.locationToIndex(evt.getPoint());
 			if (i != -1)
 				registerList.setSelectedIndex(i);
-			if (GUIUtilities.isPopupTrigger(evt))
+			if (GenericGUIUtilities.isPopupTrigger(evt))
 			{
 				if (popup == null)
 				{
@@ -351,7 +352,7 @@ public class RegisterViewer extends JPanel
 					item.addActionListener(new ClearHandler());
 					popup.add(item);
 				}
-				GUIUtilities.showPopupMenu(popup, registerList, evt.getX(), evt.getY(), false);
+				GenericGUIUtilities.showPopupMenu(popup, registerList, evt.getX(), evt.getY(), false);
 			}
 			else if (evt.getClickCount() % 2 == 0)
 				insertRegister();

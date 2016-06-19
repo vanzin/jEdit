@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.search.SearchMatcher.Match;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.HtmlUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.util.TaskManager;
@@ -664,7 +665,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				return;
 
 			resultTree.setSelectionPath(path1);
-			if (GUIUtilities.isPopupTrigger(evt))
+			if (GenericGUIUtilities.isPopupTrigger(evt))
 				showPopupMenu(evt);
 			else
 			{
@@ -723,7 +724,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			}
 			popupMenu.add(new CopyToClipboardAction());
 
-			GUIUtilities.showPopupMenu(popupMenu,evt.getComponent(),
+			GenericGUIUtilities.showPopupMenu(popupMenu,evt.getComponent(),
 				evt.getX(),evt.getY());
 			evt.consume();
 		} //}}}

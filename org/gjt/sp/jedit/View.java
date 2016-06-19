@@ -91,6 +91,7 @@ import org.gjt.sp.jedit.textarea.ScrollListener;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -805,7 +806,7 @@ public class View extends JFrame implements InputHandlerProvider
 			// of the current edit pane's parent splitter
 			for(EditPane _editPane: getEditPanes())
 			{
-				if(GUIUtilities.isAncestorOf(comp,_editPane)
+				if(GenericGUIUtilities.isAncestorOf(comp,_editPane)
 					&& _editPane != editPane)
 				{
 					if (scope == BufferSet.Scope.editpane)
@@ -2282,7 +2283,7 @@ loop:		while (true)
 	{
 		Rectangle bounds;
 		if (parent == null)
-			bounds = GUIUtilities.getScreenBounds();
+			bounds = GenericGUIUtilities.getScreenBounds();
 		else
 			bounds = parent.getGraphicsConfiguration().getBounds();
 		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");

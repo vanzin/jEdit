@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -208,7 +209,7 @@ public class GrabKeyDialog extends JDialog
 		cancel.addActionListener(new ActionHandler());
 		buttons.add(cancel);
 		
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		content.add(label);
 		content.add(input);

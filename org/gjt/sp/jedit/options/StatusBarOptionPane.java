@@ -31,6 +31,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.*;
 
 //}}}
@@ -419,7 +420,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		//{{{ WidgetSelectionDialog constructors
 		WidgetSelectionDialog(Component comp, String value)
 		{
-			super(GUIUtilities.getParentDialog(comp), jEdit.getProperty("options.status.edit.title"), true);
+			super(GenericGUIUtilities.getParentDialog(comp), jEdit.getProperty("options.status.edit.title"), true);
 			ButtonGroup buttonGroup = new ButtonGroup();
 			labelRadio = new JRadioButton(jEdit.getProperty("options.status.edit.labelRadioButton"));
 			widgetRadio = new JRadioButton(jEdit.getProperty("options.status.edit.widgetRadioButton"));
@@ -512,7 +513,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			getContentPane().add(center, BorderLayout.CENTER);
 			getContentPane().add(southPanel, BorderLayout.SOUTH);
 			pack();
-			setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
+			setLocationRelativeTo(GenericGUIUtilities.getParentDialog(comp));
 			setVisible(true);
 		}
 

@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 //}}}
@@ -97,7 +98,7 @@ public class ColorChooserDialog extends JDialog
                 }
             }
         );
-		GUIUtilities.makeSameSize(ok, cancel, reset);
+        GenericGUIUtilities.makeSameSize(ok, cancel, reset);
 
         buttonPanel.add(Box.createGlue());
         buttonPanel.add(ok);

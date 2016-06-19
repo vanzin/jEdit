@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui;
 import java.io.File;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +33,6 @@ import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
@@ -45,6 +43,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.FileVFS.LocalFile;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -265,7 +264,7 @@ public class FilePropertiesDialog extends EnhancedDialog
 		cancelButton = new JButton(jEdit.getProperty("fileprop.cancelBtn"));
 		cancelButton.addActionListener(actionHandler);
 
-		GUIUtilities.makeSameSize(okButton, cancelButton);
+		GenericGUIUtilities.makeSameSize(okButton, cancelButton);
 
 		panel.add(Box.createGlue());
 		panel.add(okButton);

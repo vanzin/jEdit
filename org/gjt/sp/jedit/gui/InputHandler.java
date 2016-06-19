@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
@@ -349,7 +350,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 				if(label == null)
 					label = action.getName();
 				else
-					label = GUIUtilities.prettifyMenuLabel(label);
+					label = GenericGUIUtilities.prettifyMenuLabel(label);
 
 				Object[] pp = { label, _repeatCount };
 

@@ -28,6 +28,7 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
 /** Dialog for selection of a range of lines */
@@ -60,7 +61,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(this);
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 
 		panel.add(Box.createGlue());
 		panel.add(ok);
@@ -69,7 +70,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 		content.add(panel,BorderLayout.SOUTH);
 
-		GUIUtilities.requestFocus(this, startField);
+		GenericGUIUtilities.requestFocus(this, startField);
 
 		pack();
 		setLocationRelativeTo(view);

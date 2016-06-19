@@ -29,6 +29,7 @@ import java.util.*;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.StandardUtilities;
 
 /**
@@ -229,7 +230,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 		MenuItem(String actionName, String label)
 		{
 			this.actionName = actionName;
-			this.label = GUIUtilities.prettifyMenuLabel(label);
+			this.label = GenericGUIUtilities.prettifyMenuLabel(label);
 		}
 
 		public String toString()

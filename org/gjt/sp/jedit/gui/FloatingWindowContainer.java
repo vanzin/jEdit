@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 /**
@@ -200,7 +201,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 				popup = dockableWindowManager.createPopupMenu(
 					FloatingWindowContainer.this,
 					entry.factory.name,clone);
-				GUIUtilities.showPopupMenu(popup,
+				GenericGUIUtilities.showPopupMenu(popup,
 					menu,menu.getX(),menu.getY() + menu.getHeight(),
 					false);
 			}

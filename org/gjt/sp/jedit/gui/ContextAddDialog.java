@@ -49,6 +49,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.AbstractContextOptionPane.MenuItem;
+import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
 
 
@@ -64,7 +65,7 @@ public class ContextAddDialog extends EnhancedDialog
 	//{{{ ContextAddDialog constructor
 	public ContextAddDialog(Component comp, ActionContext actionContext)
 	{
-		super(GUIUtilities.getParentDialog(comp),
+		super(GenericGUIUtilities.getParentDialog(comp),
 		      jEdit.getProperty("options.context.add.title"),
 		      true);
 
@@ -139,7 +140,7 @@ public class ContextAddDialog extends EnhancedDialog
 		getRootPane().setDefaultButton(ok);
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(actionHandler);
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		southPanel.add(Box.createGlue());
 		southPanel.add(ok);
@@ -151,7 +152,7 @@ public class ContextAddDialog extends EnhancedDialog
 		updateList();
 
 		pack();
-		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
+		setLocationRelativeTo(GenericGUIUtilities.getParentDialog(comp));
 		setVisible(true);
 	} //}}}
 

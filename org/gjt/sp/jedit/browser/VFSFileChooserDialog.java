@@ -368,7 +368,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.setName("cancel");
 		cancel.addActionListener(new ActionHandler());
-		GUIUtilities.makeSameSize(ok, cancel);
+		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		panel.add(Box.createHorizontalStrut(6));
 		panel.add(ok);
@@ -382,7 +382,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
-		GUIUtilities.requestFocus(this,filenameField);
+		GenericGUIUtilities.requestFocus(this,filenameField);
 		if (autoshow)
 			setVisible(true);
 	} //}}}
