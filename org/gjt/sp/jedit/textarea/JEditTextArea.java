@@ -459,19 +459,7 @@ public class JEditTextArea extends TextArea
 			popup.setVisible(false);
 		else
 		{
-			// Rebuild popup menu every time the menu is requested.
-			createPopupMenu(evt);
-
-			int x = evt.getX();
-			int y = evt.getY();
-
-			int dragStart = xyToOffset(x,y,
-				!(painter.isBlockCaretEnabled()
-				|| isOverwriteEnabled()));
-
-			if(getSelectionCount() == 0 || multi)
-				moveCaretPosition(dragStart,false);
-			GUIUtilities.showPopupMenu(popup,painter,x,y);
+			super.handlePopupTrigger(evt);
 		}
 	} //}}}
 

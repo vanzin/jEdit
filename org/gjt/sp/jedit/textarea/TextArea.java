@@ -6319,6 +6319,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * otherwise it will originate from the component itself. This affects
 	 * positioning in the case where the popup does not fit onscreen.
 	 *
+	 * FIXME: move parts of GUIUtilities compatible with standalone TextArea in a separate
+	 * class, to prevent such copies
+	 *
 	 * @since jEdit 4.1pre1
 	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int, boolean)}
 	 */
