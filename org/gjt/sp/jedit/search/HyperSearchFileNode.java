@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 
 /**
- * HyperSearch results window.
+ * A file in the HyperSearch results window.
  * @author Slava Pestov
  * @version $Id$
  */

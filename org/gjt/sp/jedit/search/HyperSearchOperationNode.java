@@ -38,6 +38,8 @@ import javax.swing.tree.TreePath;
 //}}}
 
 /**
+ * Top result node of a HyperSearch request.
+ *
  * @author Slava Pestov
  * @version $Id$
  */

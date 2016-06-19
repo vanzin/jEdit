@@ -1,5 +1,5 @@
 /*
- * HyperSearchNode.java - HyperSearch node
+ * HyperSearchNode.java - Open-able HyperSearch node
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -27,6 +27,9 @@ import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.View;
 
 /**
+ * Open-able node in the HyperSearch results window.
+ *
+ * (file or match in a file)
  * @author Slava Pestov
  */
 public interface HyperSearchNode

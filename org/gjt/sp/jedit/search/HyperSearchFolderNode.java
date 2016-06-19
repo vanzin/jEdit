@@ -23,6 +23,12 @@ package org.gjt.sp.jedit.search;
 
 import java.io.File;
 
+/**
+ * A folder in the HyperSearch results window.
+ *
+ * used when using the expanded view
+ * @author Slava Pestov
+ */
 public class HyperSearchFolderNode 
 {
 	private File nodeFile;
