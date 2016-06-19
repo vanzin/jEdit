@@ -371,20 +371,8 @@ public class HelpTOCPanel extends JPanel
 			    (KeyEvent.VK_ENTER == evt.getKeyCode()))
 			{
 				TreePath path = getSelectionPath();
-				if(path != null)
-				{
-					Object obj = ((DefaultMutableTreeNode)
-						path.getLastPathComponent())
-						.getUserObject();
-					if(!(obj instanceof HelpNode))
-					{
-						this.expandPath(path);
-						return;
-					}
+				expandOrGotoPath(path);
 
-					HelpNode node = (HelpNode)obj;
-					helpViewer.gotoURL(node.href,true,0);
-				}
 				evt.consume();
 			}
 			else
@@ -414,25 +402,9 @@ public class HelpTOCPanel extends JPanel
 				break; */
 			case MouseEvent.MOUSE_CLICKED:
 				TreePath path = getPathForLocation(evt.getX(),evt.getY());
-				if(path != null)
-				{
-					if(!isPathSelected(path))
-						setSelectionPath(path);
-
-					Object obj = ((DefaultMutableTreeNode)
-						path.getLastPathComponent())
-						.getUserObject();
-					if(!(obj instanceof HelpNode))
-					{
-						this.expandPath(path);
-						return;
-					}
-
-					HelpNode node = (HelpNode)obj;
-
-					helpViewer.gotoURL(node.href,true,0);
-				}
-
+				
+				expandOrGotoPath(path);
+				
 				super.processMouseEvent(evt);
 				break;
 			default:
@@ -449,6 +421,30 @@ public class HelpTOCPanel extends JPanel
 				vr.contains(cellRect.x + cellRect.width,
 				cellRect.y + cellRect.height);
 		} //}}}
+		
+		//{{{ expandOrGotoPath() method
+		private void expandOrGotoPath(TreePath path)
+		{
+			if(path != null)
+			{
+				if(!isPathSelected(path)) setSelectionPath(path);
+
+				Object obj = ((DefaultMutableTreeNode)
+					path.getLastPathComponent()).getUserObject();
+
+				if(obj instanceof HelpNode)
+				{
+					HelpNode node = (HelpNode)obj;
+					helpViewer.gotoURL(node.href,true,0);
+				}
+				else
+				{
+					this.expandPath(path);
+				}
+			}
+		} //}}}
+
+
 	} //}}}
 
 	//{{{ TOCCellRenderer class
