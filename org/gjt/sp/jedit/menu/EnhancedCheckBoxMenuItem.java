@@ -24,11 +24,11 @@ package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
+import org.gjt.sp.jedit.gui.statusbar.HoverSetStatusMouseHandler;
 import org.jedit.keymap.Keymap;
 //}}}
 
@@ -84,7 +84,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			setEnabled(true);
 			addActionListener(new EditAction.Wrapper(context,action));
 
-			addMouseListener(new MouseHandler());
+			addMouseListener(new HoverSetStatusMouseHandler(action));
 		}
 		else
 			setEnabled(false);
@@ -170,43 +170,4 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		public void setSelected(boolean b) {}
 	} //}}}
 
-	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
-	{
-		boolean msgSet = false;
-
-		@Override
-		public void mouseReleased(MouseEvent evt)
-		{
-			if(msgSet)
-			{
-				GUIUtilities.getView((Component)evt.getSource())
-					.getStatus().setMessage(null);
-				msgSet = false;
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent evt)
-		{
-			String msg = jEdit.getProperty(action + ".mouse-over");
-			if(msg != null)
-			{
-				GUIUtilities.getView((Component)evt.getSource())
-					.getStatus().setMessage(msg);
-				msgSet = true;
-			}
-		}
-
-		@Override
-		public void mouseExited(MouseEvent evt)
-		{
-			if(msgSet)
-			{
-				GUIUtilities.getView((Component)evt.getSource())
-					.getStatus().setMessage(null);
-				msgSet = false;
-			}
-		}
-	} //}}}
 }
