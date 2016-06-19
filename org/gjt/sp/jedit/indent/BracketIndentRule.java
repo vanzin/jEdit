@@ -90,26 +90,6 @@ public abstract class BracketIndentRule implements IndentRule
 			this.endIndex = end;
 		}
 
-		boolean rejectsToken(byte id)
-		{
-			// Rejects comments and literals.
-			// Accepts all others.
-			switch (id)
-			{
-			case Token.COMMENT1:
-			case Token.COMMENT2:
-			case Token.COMMENT3:
-			case Token.COMMENT4:
-			case Token.LITERAL1:
-			case Token.LITERAL2:
-			case Token.LITERAL3:
-			case Token.LITERAL4:
-				return true;
-			default:
-				return false;
-			}
-		}
-
 		private void scan(Segment seg, int offset, int length)
 		{
 			int index = scannedIndex;
@@ -154,7 +134,9 @@ public abstract class BracketIndentRule implements IndentRule
 			, byte id, int offset, int length
 			, TokenMarker.LineContext context)
 		{
-			if (!rejectsToken(id))
+			// Rejects comments and literals.
+			// Accepts all others.
+			if (!Token.isCommentOrLiteral(id))
 			{
 				scan(seg, offset, length);
 			}

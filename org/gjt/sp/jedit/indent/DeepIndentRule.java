@@ -182,19 +182,8 @@ public class DeepIndentRule implements IndentRule
 				length = searchPos - offset + 1;
 			}
 
-			switch (id)
+			if(!Token.isCommentOrLiteral(id))
 			{
-			case Token.COMMENT1:
-			case Token.COMMENT2:
-			case Token.COMMENT3:
-			case Token.COMMENT4:
-			case Token.LITERAL1:
-			case Token.LITERAL2:
-			case Token.LITERAL3:
-			case Token.LITERAL4:
-				/* Ignore comments and literals. */
-				break;
-			default:
 				for (int i = offset; i < offset + length; i++)
 				{
 					if (seg.array[seg.offset + i] == openChar)
@@ -212,7 +201,6 @@ public class DeepIndentRule implements IndentRule
 							close.push(i);
 					}
 				}
-				break;
 			}
 		}
 
