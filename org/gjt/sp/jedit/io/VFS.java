@@ -205,7 +205,7 @@ public abstract class VFS
 	public static final String EA_MODIFIED = "modified";
 	//}}}
 
-	public static int IOBUFSIZE = 32678;
+	public static final int IOBUFSIZE = 32678;
 
 	//{{{ VFS constructors
 	/**
