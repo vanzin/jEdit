@@ -4,8 +4,8 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel and Dale Anson for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang
+ and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -78,6 +78,7 @@ contributing to this release.
 }}}
 {{{ Editing
 
+- New mode for swift (Patches #587 -  Wayne Zhang)
 
 }}}
 

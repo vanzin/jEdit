@@ -603,6 +603,9 @@
 <MODE NAME="swig"		FILE="swig.xml"
         FILE_NAME_GLOB="*.{i,swg}" />
 
+<MODE NAME="swift" FILE="swift.xml"
+        FILE_NAME_GLOB="*.swift"/>
+
 <MODE NAME="tcl"		FILE="tcl.xml"
         FILE_NAME_GLOB="*.{tcl,tsh}" />
 
