@@ -36,6 +36,7 @@ package org.gjt.sp.jedit.bsh;
 
 import java.util.Vector;
 
+@SuppressWarnings("unchecked")
 class BSHTryStatement extends SimpleNode
 {
 	BSHTryStatement(int id)

@@ -42,6 +42,7 @@ import java.net.*;
 	service. Output is printed to stdout and a numeric return value is scraped
 	from the result.
 */
+@SuppressWarnings("unchecked")
 public class Remote
 {
     public static void main( String args[] )

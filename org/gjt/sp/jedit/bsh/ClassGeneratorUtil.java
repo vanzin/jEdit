@@ -77,6 +77,7 @@ import java.util.List;
 	It would not be hard to eliminate the use of org.objectweb.asm.Type from
 	this class, making the distribution a tiny bit smaller.
 */
+@SuppressWarnings("unchecked")
 public class ClassGeneratorUtil implements Constants 
 {
 	/** The name of the static field holding the reference to the bsh

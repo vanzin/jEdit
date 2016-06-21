@@ -46,6 +46,7 @@ import java.util.Hashtable;
 	BshClassManager, as it may require other optional class files to be 
 	loaded.  
 */
+@SuppressWarnings("unchecked")
 public class Capabilities 
 {
 	private static boolean accessibility = false;

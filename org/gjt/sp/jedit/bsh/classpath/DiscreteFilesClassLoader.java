@@ -43,6 +43,7 @@ import org.gjt.sp.jedit.bsh.classpath.BshClassPath.ClassSource;
 	Because the classes are loaded via a single classloader they change as a
 	group and any versioning cross dependencies can be managed.
 */
+@SuppressWarnings("unchecked")
 public class DiscreteFilesClassLoader extends BshClassLoader 
 {
 	/**

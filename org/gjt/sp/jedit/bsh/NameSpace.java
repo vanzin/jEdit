@@ -62,6 +62,7 @@ import java.lang.reflect.Field;
     Thanks to Slava Pestov (of jEdit fame) for import caching enhancements.
     Note: This class has gotten too big.  It should be broken down a bit.
 */
+@SuppressWarnings("unchecked")
 public class NameSpace
     implements java.io.Serializable, BshClassManager.Listener,
     NameSource

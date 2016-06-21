@@ -92,6 +92,7 @@ import org.gjt.sp.jedit.bsh.UtilEvalError;
 	</pre>
 
 */
+@SuppressWarnings("unchecked")
 public class ClassManagerImpl extends BshClassManager
 {
 	static final String BSH_PACKAGE = "org.gjt.sp.jedit.bsh";

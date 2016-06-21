@@ -9,6 +9,7 @@ import java.util.Hashtable;
 /*
 	Note: which of these things should be checked at parse time vs. run time?
 */
+@SuppressWarnings("unchecked")
 public class Modifiers implements java.io.Serializable
 {
 	public static final int CLASS=0, METHOD=1, FIELD=2;

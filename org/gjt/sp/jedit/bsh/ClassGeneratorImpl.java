@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 	
 	@author Pat Niemeyer (pat@pat.net)
 */
+@SuppressWarnings("unchecked")
 public class ClassGeneratorImpl extends ClassGenerator
 {
 	public Class generateClass( 

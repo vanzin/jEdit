@@ -27,6 +27,7 @@ import java.util.*;
 	setMethod() and provide a friendlier view than vector (currently used) for
 	overloaded forms (perhaps a map by method SignatureKey).
 */
+@SuppressWarnings("unchecked")
 public class ExternalNameSpace extends NameSpace
 {
 	private Map externalMap;

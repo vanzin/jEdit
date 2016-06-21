@@ -77,6 +77,7 @@ import java.lang.reflect.Modifier;
     references in this package.
     <p>
 */
+@SuppressWarnings("unchecked")
 public class BshClassManager
 {
     /** Identifier for no value item.  Use a hashtable as a Set. */

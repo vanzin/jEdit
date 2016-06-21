@@ -57,6 +57,7 @@ import java.util.Hashtable;
     See also JThis with explicit JFC support for compatability.
     @see org.gjt.sp.jedit.bsh.This This
 */
+@SuppressWarnings("unchecked")
 public class XThis extends This
     {
     /**

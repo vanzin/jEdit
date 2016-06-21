@@ -40,6 +40,7 @@ package org.gjt.sp.jedit.bsh;
 
 
 */
+@SuppressWarnings("unchecked")
 class Types 
 {
 	/*

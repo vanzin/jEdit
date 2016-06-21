@@ -2,6 +2,7 @@
 
 package org.gjt.sp.jedit.bsh;
 
+@SuppressWarnings("unchecked")
 class JJTParserState {
   private java.util.Stack nodes;
   private java.util.Stack marks;

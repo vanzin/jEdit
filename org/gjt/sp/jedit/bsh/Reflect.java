@@ -48,6 +48,7 @@ import java.util.Vector;
 	having to catch the exceptions.  Method lookups are now cached at a high 
 	level so they are less important, however the logic is messy.
 */
+@SuppressWarnings("unchecked")
 class Reflect 
 {
     /**

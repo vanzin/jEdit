@@ -35,6 +35,7 @@ package org.gjt.sp.jedit.bsh;
 
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class StringUtil {
 
 	public static String [] split( String s, String delim) {

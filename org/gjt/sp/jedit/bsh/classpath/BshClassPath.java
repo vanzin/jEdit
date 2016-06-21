@@ -64,6 +64,7 @@ import org.gjt.sp.jedit.bsh.NameSource;
 	produce a composite view of some thing relating to the path.  This would
 	be an opportunity for a visitor pattern.
 */
+@SuppressWarnings("unchecked")
 public class BshClassPath 
 	implements ClassPathListener, NameSource
 {

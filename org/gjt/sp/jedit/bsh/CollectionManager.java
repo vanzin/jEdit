@@ -45,6 +45,7 @@ import java.lang.reflect.Array;
     The dynamically loaded CollectionManagerImpl supports additional types when
     it is present.
 */
+@SuppressWarnings("unchecked")
 public class CollectionManager
 {
     private static CollectionManager manager;

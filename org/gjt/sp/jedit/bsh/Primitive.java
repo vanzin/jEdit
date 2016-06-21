@@ -46,6 +46,7 @@ import java.util.Hashtable;
 	Note: this class is final because we may test == Primitive.class in places.
 	If we need to change that search for those tests.
 */
+@SuppressWarnings("unchecked")
 public final class Primitive implements ParserConstants, java.io.Serializable
 {
 	/*
