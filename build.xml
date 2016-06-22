@@ -62,7 +62,7 @@
 	<property name="config.build.deprecation"
 		  value="true"/>
 	<property name="config.build.compilerarg"
-		  value="-Xlint:unchecked"/>
+		  value="-Xlint:unchecked -Xlint:finally -Xlint:fallthrough -Xmaxwarns 1000"/>
 
 	<target name="init"
 		unless="init.done">

@@ -86,7 +86,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			modeAbbrevs.put(name,new AbbrevsModel(_modeAbbrevs.get(name)));
 		}
 
-		setsComboBox = new JComboBox(sets);
+		setsComboBox = new JComboBox<String>(sets);
 		ActionHandler actionHandler = new ActionHandler();
 		setsComboBox.addActionListener(actionHandler);
 		panel2.add(setsComboBox);
@@ -160,7 +160,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JComboBox setsComboBox;
+	private JComboBox<String> setsComboBox;
 	private JCheckBox expandOnInput;
 	private JTable abbrevsTable;
 	private AbbrevsModel globalAbbrevs;
@@ -327,14 +327,14 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			int row,
 			int col)
 		{
-			String valueStr = value.toString();
+			StringBuilder valueStr = new StringBuilder(value.toString());
 
 			// workaround for Swing's annoying processing of
 			// labels starting with <html>, which often breaks
-			if(valueStr.toLowerCase().startsWith("<html>"))
-				valueStr = ' ' + valueStr;
-			return super.getTableCellRendererComponent(table,valueStr,
-				isSelected,cellHasFocus,row,col);
+			if(valueStr.toString().toLowerCase().startsWith("<html>"))
+				valueStr.insert(' ', 0);
+			return super.getTableCellRendererComponent(table, valueStr.toString(),
+				isSelected, cellHasFocus, row, col);
 		}
 	} //}}}
 

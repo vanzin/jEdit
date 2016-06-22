@@ -357,6 +357,7 @@ public class JEditTextArea extends TextArea
 	} //}}}
 
 	//{{{ doWordCount() method
+	@SuppressWarnings("fallthrough")
 	protected static void doWordCount(View view, String text)
 	{
 		char[] chars = text.toCharArray();

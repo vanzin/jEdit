@@ -60,6 +60,7 @@ public class GlobalOptions extends OptionsDialog
 
 	//{{{ createOptionTreeModel() method
 	@Override
+	@SuppressWarnings("deprecation")
 	protected OptionTreeModel createOptionTreeModel()
 	{
 		OptionTreeModel paneTreeModel = new OptionTreeModel();

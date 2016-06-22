@@ -749,7 +749,7 @@ public class Registers
 						This is to debug clipboard problems.
 
 						Apparently, jEdit is unable to copy text from clipbard into the current
-						text buffer if the clipboard was filles using the command
+						text buffer if the clipboard was filled using the command
 							echo test | xselection CLIPBOARD -
 						under Linux. However, it seems that Java does not offer any
 						data flavor for this clipboard content (under J2RE 1.5.0_06-b05)

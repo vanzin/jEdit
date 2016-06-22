@@ -118,7 +118,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		JMenuItem mi = (JMenuItem) ae.getSource();
 		String action = mi.getActionCommand();
 		String encoding = null;
-		Hashtable props = null;
+		Hashtable<String, Object> props = null;
 
 		if (action.startsWith("encoding@"))
 		{
@@ -147,7 +147,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 
 		if (encoding != null)
 		{
-			props = new Hashtable();
+			props = new Hashtable<String, Object>();
 			props.put(JEditBuffer.ENCODING, encoding);
 			// Disable auto-detect because user explicitly
 			// specify an encoding.
@@ -157,7 +157,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 
 		String path = view.getBuffer().getPath();
 		jEdit.closeBuffer(view, view.getBuffer());
-		jEdit.openFile(view,null,path,false,props);
+		jEdit.openFile(view, null, path, false, props);
 	} //}}}
 }
 

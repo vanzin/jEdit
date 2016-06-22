@@ -52,7 +52,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 	protected void _init()
 	{
 		Mode[] modes = reloadModes();
-		mode = new JComboBox(modeNames);
+		mode = new JComboBox<String>(modeNames);
 		mode.addActionListener(new ActionHandler());
 
 		captionBox = new Box(BoxLayout.X_AXIS);
@@ -72,7 +72,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 
 		String[] foldModes = FoldHandler.getFoldModes();
 		addComponent(jEdit.getProperty("options.editing.folding"),
-			folding = new JComboBox(foldModes));
+			folding = new JComboBox<String>(foldModes));
 
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
 			collapseFolds = new JTextField());
@@ -83,10 +83,10 @@ public class ModeSettingsPane extends AbstractOptionPane
 			"hard"
 		};
 		addComponent(jEdit.getProperty("options.editing.wrap"),
-			wrap = new JComboBox(wrapModes));
+			wrap = new JComboBox<String>(wrapModes));
 
 		String[] lineLens = { "0", "72", "76", "80" };
-		maxLineLen = new JComboBox(lineLens);
+		maxLineLen = new JComboBox<String>(lineLens);
 		maxLineLen.setToolTipText(jEdit.getProperty("options.editing.maxLineLen.tooltip"));
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"), maxLineLen);
 		maxLineLen.setEditable(true);
@@ -97,17 +97,17 @@ public class ModeSettingsPane extends AbstractOptionPane
 			"full"
 		};
 		addComponent(jEdit.getProperty("options.editing.autoIndent"),
-			autoIndent = new JComboBox(indentModes));
+			autoIndent = new JComboBox<String>(indentModes));
 
 
 		String[] tabSizes = { "2", "4", "8" };
 		addComponent(jEdit.getProperty("options.editing.tabSize"),
-			tabSize = new JComboBox(tabSizes));
+			tabSize = new JComboBox<String>(tabSizes));
 
 		tabSize.setEditable(true);
 
 		addComponent(jEdit.getProperty("options.editing.indentSize"),
-			indentSize = new JComboBox(tabSizes));
+			indentSize = new JComboBox<String>(tabSizes));
 		indentSize.setEditable(true);
 
 
@@ -173,21 +173,21 @@ public class ModeSettingsPane extends AbstractOptionPane
 	private ModeProperties[] modeProps;
 	private ModeProperties current;
 	private Box captionBox;
-	private JComboBox mode;
+	private JComboBox<String> mode;
 	private JCheckBox useDefaults;
 	private JTextField filenameGlob;
 	private JTextField firstlineGlob;
 	private JTextField noWordSep;
 	private JCheckBox camelCasedWords;
-	private JComboBox folding;
+	private JComboBox<String> folding;
 	private JTextField collapseFolds;
-	private JComboBox wrap;
-	private JComboBox maxLineLen;
-	private JComboBox tabSize;
-	private JComboBox indentSize;
+	private JComboBox<String> wrap;
+	private JComboBox<String> maxLineLen;
+	private JComboBox<String> tabSize;
+	private JComboBox<String> indentSize;
 	private JCheckBox noTabs;
 	private JCheckBox elasticTabstops;
-	private JComboBox autoIndent;
+	private JComboBox<String> autoIndent;
 	private JCheckBox deepIndent;
 	private String[] modeNames;
 	//}}}

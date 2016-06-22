@@ -170,6 +170,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		{
 			if(evt.getSource() == stop)
 			{
+				// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
 				thread.stop();
 				dispose();
 			}
@@ -195,6 +196,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		@Override
 		public void windowClosing(WindowEvent evt)
 		{
+			// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
 			thread.stop();
 			dispose();
 		}
