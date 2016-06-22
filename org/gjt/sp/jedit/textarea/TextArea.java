@@ -109,11 +109,11 @@ public abstract class TextArea extends JPanel
 		// some plugins add stuff in a "right-hand" gutter
 		RequestFocusLayerUI reqFocus = new RequestFocusLayerUI();
 		verticalBox = new Box(BoxLayout.X_AXIS);
-		verticalBox.add(new JLayer(
+		verticalBox.add(new JLayer<JComponent>(
 			vertical = new JScrollBar(Adjustable.VERTICAL), reqFocus));
 		vertical.setRequestFocusEnabled(false);
 		add(ScrollLayout.RIGHT,verticalBox);
-		add(ScrollLayout.BOTTOM, new JLayer(
+		add(ScrollLayout.BOTTOM, new JLayer<JComponent>(
 			horizontal = new JScrollBar(Adjustable.HORIZONTAL), reqFocus));
 		horizontal.setRequestFocusEnabled(false);
 
@@ -236,7 +236,7 @@ public abstract class TextArea extends JPanel
 		builder.append(",screenLastLine=").append(screenLastLine);
 		builder.append(",visibleLines=").append(visibleLines);
 		builder.append(",firstPhysicalLine=").append(getFirstPhysicalLine());
-		builder.append(",physLastLine=").append(physLastLine).append("]");
+		builder.append(",physLastLine=").append(physLastLine).append(']');
 		return builder.toString();
 	} //}}}
 
@@ -5760,8 +5760,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			case '{': case '}':
 			case '[': case ']':
 			case '(': case ')':
-				text = buffer.getLineText(match.startLine - 1)
-					.trim() + ' ' + text;
+				text = buffer.getLineText(match.startLine - 1).trim() + ' ' + text;
 				break;
 			}
 		}

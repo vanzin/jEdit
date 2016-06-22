@@ -190,7 +190,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	 * @since jEdit 4.0pre1
 	 */
 	@Override
-	public void addAction(EditAction action)
+	public void addAction(EditAction action)	// NOPMD
 	{
 		super.addAction(action);
 	} //}}}
@@ -210,7 +210,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	 * @since jEdit 4.0pre1
 	 */
 	@Override
-	public EditAction[] getActions()
+	public EditAction[] getActions()	// NOPMD
 	{
 		return super.getActions();
 	} //}}}
@@ -270,10 +270,8 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	public String[] getCacheableActionNames()
 	{
 		LinkedList<String> retVal = new LinkedList<String>();
-		Enumeration e = actions.elements();
-		while(e.hasMoreElements())
+		for (Object obj : actions.values())
 		{
-			Object obj = e.nextElement();
 			if(obj == placeholder)
 			{
 				// ??? this should only be called with

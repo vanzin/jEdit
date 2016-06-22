@@ -252,7 +252,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			pathAndFilterPanel.add(filterCheckbox);
 		}
 
-		filterField = new JComboBox();
+		filterField = new JComboBox<VFSFileFilter>();
 		filterEditor = new HistoryComboBoxEditor("vfs.browser.filter");
 		filterEditor.setToolTipText(jEdit.getProperty("glob.tooltip"));
 		filterEditor.setInstantPopups(true);
@@ -302,7 +302,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		// filterField.getEditor().setItem(new GlobVFSFileFilter(filter));
 		// filterField.addItem(filterField.getEditor().getItem());
 		filterEditor.setItem(new GlobVFSFileFilter(filter));
-		filterField.addItem(filterEditor.getItem());
+		filterField.addItem((VFSFileFilter)filterEditor.getItem());
 		filterField.addItemListener(actionHandler);
 		filterField.setRenderer(new VFSFileFilterRenderer());
 
@@ -701,7 +701,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		// created anymore. But for compatibility an empty string is used.
 		Object[] args = { "", typeStr };
 
-		JList list = new JList(files);
+		JList<VFSFile> list = new JList<VFSFile>(files);
 		list.setVisibleRowCount(10);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JScrollPane(list));
@@ -985,8 +985,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
-			filter = ext == null || ext.length() == 0
-				? filter : '*' + ext;
+			filter = ext == null || ext.length() == 0 ? filter : '*' + ext;	// NOPMD
 			path = MiscUtilities.getParentOfPath(path);
 		}
 
@@ -1032,13 +1031,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		if(GUIUtilities.getComponentParent(source, BrowserView.ParentDirectoryList.class)
 			!= null)
 		{
-			Object[] selected = getBrowserView()
-				.getParentDirectoryList()
-				.getSelectedValues();
-			VFSFile[] returnValue = new VFSFile[
-				selected.length];
-			System.arraycopy(selected,0,returnValue,0,
-				selected.length);
+			Object[] selected = getBrowserView().getParentDirectoryList().getSelectedValuesList().toArray();
+			VFSFile[] returnValue = new VFSFile[selected.length];
+			System.arraycopy(selected, 0, returnValue, 0, selected.length);
 			return returnValue;
 		}
 		else
@@ -1054,6 +1049,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 * @param file the target, it can be a file, in that case it will be pasted to
 	 * the parent directory, or a directory.
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public void paste(VFSFile file) throws IOException, UnsupportedFlavorException
 	{
 		if (file == null)
@@ -1148,8 +1144,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 				((JPopupMenu)pluginMenu).addSeparator();
 
 		}
-		else
-			/* we're in a modal dialog */;
+		/* else we're in a modal dialog */
 
 		List<JMenuItem> vec = new ArrayList<JMenuItem>();
 
@@ -1260,12 +1255,9 @@ check_selected:
 				if (_buffer != null)
 					buffer = _buffer;
 			}
-			else
-			{
-				// if a file is selected in OPEN_DIALOG or
-				// SAVE_DIALOG mode, just let the listener(s)
-				// handle it
-			}
+			// otherwise if a file is selected in OPEN_DIALOG or
+			// SAVE_DIALOG mode, just let the listener(s)
+			// handle it
 		}
 
 		if(buffer != null)
@@ -1380,10 +1372,6 @@ check_selected:
 
 		List<VFSFile> directoryList = new ArrayList<VFSFile>();
 
-		int directories = 0;
-		int files = 0;
-		int invisible = 0;
-
 		if(list != null)
 		{
 			VFSFileFilter filter = getVFSFileFilter();
@@ -1392,7 +1380,6 @@ check_selected:
 			{
 				if (file.isHidden() && !showHiddenFiles)
 				{
-					invisible++;
 					continue;
 				}
 
@@ -1400,14 +1387,8 @@ check_selected:
 				    (filterEnabled || filter instanceof DirectoriesOnlyFilter)
 				    && !filter.accept(file))
 				{
-					invisible++;
 					continue;
 				}
-
-				if (file.getType() == VFSFile.FILE)
-					files++;
-				else
-					directories++;
 
 				directoryList.add(file);
 			}
@@ -1494,7 +1475,7 @@ check_selected:
 	private JComponent defaultFocusComponent;
 	private JCheckBox filterCheckbox;
 	private HistoryComboBoxEditor filterEditor;
-	private JComboBox filterField;
+	private JComboBox<VFSFileFilter> filterField;
 	private Box toolbarBox;
 	private Box topBox;
 	private FavoritesMenuButton favorites;
@@ -1616,10 +1597,9 @@ check_selected:
 	private void maybeReloadDirectory(String dir)
 	{
 		if(MiscUtilities.isURL(dir)
-			&& MiscUtilities.getProtocolOfURL(dir).equals(
-			FavoritesVFS.PROTOCOL))
+			&& MiscUtilities.getProtocolOfURL(dir).equals(FavoritesVFS.PROTOCOL)
+			&& favorites != null)
 		{
-			if(favorites != null)
 				favorites.popup = null;
 		}
 

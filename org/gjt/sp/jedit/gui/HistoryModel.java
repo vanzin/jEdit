@@ -41,8 +41,8 @@ import java.util.*;
  * @author Eric Le Lay
  * @version $Id$
  */
-public class HistoryModel extends DefaultListModel
-	implements MutableListModel
+public class HistoryModel extends DefaultListModel<String>
+	implements MutableListModel<String>
 {
 	//{{{ HistoryModel constructor
 	/**
@@ -99,7 +99,7 @@ public class HistoryModel extends DefaultListModel
 
 	//{{{ insertElementAt() method
 	@Override
-	public void insertElementAt(Object obj, int index)
+	public void insertElementAt(String obj, int index)
 	{
 		modified = true;
 		super.insertElementAt(obj,index);
@@ -116,7 +116,6 @@ public class HistoryModel extends DefaultListModel
 	} //}}}
 
 	//{{{ removeElement() method
-	@Override
 	public boolean removeElement(Object obj)
 	{
 		modified = true;

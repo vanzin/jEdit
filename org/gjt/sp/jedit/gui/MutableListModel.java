@@ -27,6 +27,6 @@ package org.gjt.sp.jedit.gui;
 */
 public interface MutableListModel<E> extends javax.swing.ListModel<E>
 {
-	public boolean removeElement(E elem);
+	public boolean removeElement(Object elem);
 	public void insertElementAt(E elem, int index);
 }

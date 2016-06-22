@@ -152,7 +152,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 */
 	protected JEditActionSet()
 	{
-		actions = new Hashtable<String, Object>();
+		actions = new HashMap<String, JEditAbstractEditAction>();
 		loaded = true;
 	} //}}}
 	
@@ -181,13 +181,14 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 * @param action The action
 	 * @since jEdit 4.0pre1
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public void addAction(E action)
 	{
-		actions.put(action.getName(),action);
+		actions.put(action.getName(), action);
 		if(context != null)
 		{
 			context.actionNames = null;
-			context.actionHash.put(action.getName(),this);
+			context.actionHash.put(action.getName(), this);
 		}
 	} //}}}
 
@@ -233,9 +234,10 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 * @param name The action name
 	 * @since jEdit 4.0pre1
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public E getAction(String name)
 	{
-		Object obj = actions.get(name);
+		JEditAbstractEditAction obj = actions.get(name);
 		if(obj == placeholder)
 		{
 			load();
@@ -320,13 +322,14 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 *
 	 * @since jEdit 4.0pre1
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public E[] getActions()
 	{
 		load();
 		E[] retVal = getArray(actions.size());
-		Collection<Object> values = actions.values();
+		Collection<JEditAbstractEditAction> values = actions.values();
 		int i = 0;
-		for (Object value : values)
+		for (JEditAbstractEditAction value : values)
 		{
 			retVal[i++] = (E) value;
 		}
@@ -439,8 +442,8 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	{
 		AbstractInputHandler inputHandler = getInputHandler();
 
-		Set<Map.Entry<String, Object>> entries = actions.entrySet();
-		for (Map.Entry<String, Object> entry : entries)
+		Set<Map.Entry<String, JEditAbstractEditAction>> entries = actions.entrySet();
+		for (Map.Entry<String, JEditAbstractEditAction> entry : entries)
 		{
 			String name = entry.getKey();
 
@@ -478,11 +481,13 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	//}}}
 
 	//{{{ Private members
-	protected Hashtable<String,Object> actions;
+	protected HashMap<String, JEditAbstractEditAction> actions;
 	protected URL uri;
 	protected boolean loaded;
 
-	protected static final Object placeholder = new Object();
+	protected static final JEditAbstractEditAction placeholder = new JEditAbstractEditAction("__PLACEHOLDER__"){
+		public void invoke(Object arg) {}
+	};
 
 	//}}}
 }

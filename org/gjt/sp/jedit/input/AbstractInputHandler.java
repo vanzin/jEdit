@@ -103,6 +103,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 	 * @param action The action
 	 * @since jEdit 4.3pre1
 	 */
+	@SuppressWarnings({"unchecked"})
 	public void addKeyBinding(String keyBinding, Object action)
 	{
 		Hashtable current = bindings;
@@ -116,7 +117,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 			if(prefixStr == null)
 				prefixStr = keyCodeStr;
 			else
-				prefixStr = prefixStr + " " + keyCodeStr;
+				prefixStr = new StringBuilder(prefixStr).append(' ').append(keyCodeStr).toString();
 
 			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
 			if(keyStroke == null)
@@ -129,15 +130,15 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 					current = (Hashtable)o;
 				else
 				{
-					Hashtable hash = new Hashtable();
-					hash.put(PREFIX_STR,prefixStr);
+					Hashtable<String, String> hash = new Hashtable<String, String>();
+					hash.put(PREFIX_STR, prefixStr);
 					o = hash;
-					current.put(keyStroke,o);
+					current.put(keyStroke, o);
 					current = (Hashtable)o;
 				}
 			}
 			else
-				current.put(keyStroke,action);
+				current.put(keyStroke, action);
 		}
 	} //}}}
 
@@ -158,6 +159,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
 			if(keyStroke == null)
 				return;
+			
 
 			if(st.hasMoreTokens())
 			{
@@ -418,7 +420,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 	//{{{ Private members
 
 	// Stores prefix name in bindings hashtable
-	public static Object PREFIX_STR = "PREFIX_STR";
+	public static String PREFIX_STR = "PREFIX_STR";
 	protected boolean shortcutOn = false;
 
 

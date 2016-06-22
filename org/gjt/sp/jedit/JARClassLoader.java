@@ -261,13 +261,14 @@ public class JARClassLoader extends ClassLoader
 	/**
 	 * @return zero or one resource, as returned by getResource()
 	 */
-	public Enumeration getResources(String name) throws IOException
+	@Override
+	public Enumeration<URL> getResources(String name) throws IOException
 	{
-		class SingleElementEnumeration implements Enumeration
+		class SingleElementEnumeration implements Enumeration<URL>
 		{
-			private Object element;
+			private URL element;
 
-			SingleElementEnumeration(Object element)
+			SingleElementEnumeration(URL element)
 			{
 				this.element = element;
 			}
@@ -277,11 +278,11 @@ public class JARClassLoader extends ClassLoader
 				return element != null;
 			}
 
-			public Object nextElement()
+			public URL nextElement()
 			{
 				if(element != null)
 				{
-					Object retval = element;
+					URL retval = element;
 					element = null;
 					return retval;
 				}
@@ -348,8 +349,7 @@ public class JARClassLoader extends ClassLoader
 				Object loader = classHash.get(aClass);
 				if (loader == this)
 					classHash.remove(aClass);
-				else
-					/* two plugins provide same class! */;
+				/* else two plugins provide same class! */
 			}
 		}
 
@@ -362,8 +362,7 @@ public class JARClassLoader extends ClassLoader
 			Object loader = resourcesHash.get(resource);
 			if (loader == this)
 				resourcesHash.remove(resource);
-			else
-				/* two plugins provide same resource! */;
+			/* else two plugins provide same resource! */
 		}
 	} //}}}
 
@@ -487,13 +486,13 @@ public class JARClassLoader extends ClassLoader
 		Attributes ma = mf.getMainAttributes();
 
 		URL sealBase = null;
-		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)).booleanValue())
+		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)))
 		{
 			try
 			{
-				sealBase = jar.getFile().toURL();
+				sealBase = jar.getFile().toURI().toURL();
 			}
-			catch (MalformedURLException e) {}
+			catch (MalformedURLException e) {}	// NOPMD
 		}
 
 		definePackage(

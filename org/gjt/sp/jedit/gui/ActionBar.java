@@ -115,7 +115,7 @@ public class ActionBar extends JToolBar
 				action.addCurrentToHistory();
 				String propName = cmd.substring(0,index).trim();
 				String propValue = cmd.substring(index + 1).trim();
-				String code;
+				StringBuilder code = new StringBuilder(128);
 				/* construct a BeanShell snippet instead of
 				 * invoking directly so that user can record
 				 * property changes in macros. */
@@ -123,45 +123,42 @@ public class ActionBar extends JToolBar
 				{
 					if(propName.equals("buffer.mode"))
 					{
-						code = "buffer.setMode(\""
-							+ StandardUtilities.charsToEscapes(
-							propValue) + "\");";
+						code.append("buffer.setMode(\"")
+							.append(StandardUtilities.charsToEscapes(propValue))
+							.append("\");");
 					}
 					else
 					{
-						code = "buffer.setStringProperty(\""
-							+ StandardUtilities.charsToEscapes(
-							propName.substring("buffer.".length())
-							) + "\",\""
-							+ StandardUtilities.charsToEscapes(
-							propValue) + "\");";
+						code.append("buffer.setStringProperty(\"")
+							.append(StandardUtilities.charsToEscapes(propName.substring("buffer.".length())))
+							.append("\",\"")
+							.append(StandardUtilities.charsToEscapes(propValue))
+							.append("\");");
 					}
 
-					code += "\nbuffer.propertiesChanged();";
+					code.append("\nbuffer.propertiesChanged();");
 				}
 				else if(propName.startsWith("!buffer."))
 				{
-					code = "jEdit.setProperty(\""
-						+ StandardUtilities.charsToEscapes(
-						propName.substring(1)) + "\",\""
-						+ StandardUtilities.charsToEscapes(
-						propValue) + "\");\n"
-						+ "jEdit.propertiesChanged();";
+					code.append("jEdit.setProperty(\"")
+						.append(StandardUtilities.charsToEscapes(propName.substring(1))) 
+						.append("\",\"")
+						.append(StandardUtilities.charsToEscapes(propValue)) 
+						.append("\");\njEdit.propertiesChanged();");
 				}
 				else
 				{
-					code = "jEdit.setProperty(\""
-						+ StandardUtilities.charsToEscapes(
-						propName) + "\",\""
-						+ StandardUtilities.charsToEscapes(
-						propValue) + "\");\n"
-						+ "jEdit.propertiesChanged();";
+					code.append("jEdit.setProperty(\"")
+						.append(StandardUtilities.charsToEscapes(propName)) 
+						.append("\",\"")
+						.append(StandardUtilities.charsToEscapes(propValue)) 
+						.append("\");\njEdit.propertiesChanged();");
 				}
 
 				Macros.Recorder recorder = view.getMacroRecorder();
 				if(recorder != null)
-					recorder.record(code);
-				BeanShell.eval(view,namespace,code);
+					recorder.record(code.toString());
+				BeanShell.eval(view, namespace, code.toString());
 				cmd = null;
 			}
 			else if(cmd.length() != 0)
@@ -424,7 +421,7 @@ public class ActionBar extends JToolBar
 	//{{{ CompletionPopup class
 	private class CompletionPopup extends JWindow
 	{
-		CompletionList list;
+		CompletionList<String> list;
 
 		//{{{ CompletionPopup constructor
 		CompletionPopup(String[] actions)
@@ -443,7 +440,7 @@ public class ActionBar extends JToolBar
 				}
 			});
 
-			list = new CompletionList(actions);
+			list = new CompletionList<String>(actions);
 			list.setVisibleRowCount(8);
 			list.addMouseListener(new MouseHandler());
 			list.setSelectedIndex(0);
@@ -488,16 +485,16 @@ public class ActionBar extends JToolBar
 		} //}}}
 
 		//{{{ CompletionList class
-		class CompletionList extends JList
+		class CompletionList<E> extends JList<E>
 		{
-			CompletionList(Object[] data)
+			CompletionList(E[] data)
 			{
 				super(data);
 			}
 
 			// we need this public not protected
 			@Override
-			public void processKeyEvent(KeyEvent evt)
+			public void processKeyEvent(KeyEvent evt)	// NOPMD
 			{
 				super.processKeyEvent(evt);
 			}

@@ -99,6 +99,7 @@ public class JEditBuffer
 		properties = new HashMap<Object, PropValue>();
 	}
 
+	@SuppressWarnings({"unchecked"})
 	public JEditBuffer(Map props)
 	{
 		//{{{ need to convert entries of 'props' to PropValue instances
@@ -976,7 +977,6 @@ public class JEditBuffer
 	public void simpleIndentLine(int lineIndex)
 	{
 		int[] whitespaceChars = new int[1];
-		int currentIndent = getCurrentIndentForLine(lineIndex, whitespaceChars);
 
 		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
 		if (prevLineIndex == -1)
@@ -1383,9 +1383,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			lineMgr.setFirstInvalidLineContext(-1);
 		else if(oldContext != context)
 			lineMgr.setFirstInvalidLineContext(lineIndex + 1);
-		else if(firstInvalidLineContext == -1)
-			/* do nothing */;
-		else
+		else if(firstInvalidLineContext != -1)
 		{
 			lineMgr.setFirstInvalidLineContext(Math.max(
 				firstInvalidLineContext,lineIndex + 1));
@@ -1561,11 +1559,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			PropValue test = properties.get(name);
 			if(test == null)
 				properties.put(name,new PropValue(value,false));
-			else if(test.value.equals(value))
-			{
-				// do nothing
-			}
-			else
+			else if(!test.value.equals(value))
 			{
 				test.value = value;
 				test.defaultValue = false;
@@ -2818,6 +2812,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ parseBufferLocalProperties() method
+	@SuppressWarnings({"fallthrough"})
 	private void parseBufferLocalProperties(CharSequence prop)
 	{
 		StringBuilder buf = new StringBuilder();

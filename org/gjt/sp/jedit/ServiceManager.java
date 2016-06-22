@@ -282,6 +282,7 @@ public class ServiceManager
      * @return the service instance
      * @since jEdit 4.4pre1
      */
+    @SuppressWarnings({"unchecked"}) 
 	public static <E> E getService(Class<E> clazz, String name)
 	{
 		return (E) getService(clazz.getName(), name);

@@ -104,6 +104,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	 * @return all registered action sets.
 	 * @since jEdit 4.3pre13
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public E[] getActionSets()
 	{
 		if (actionSets.isEmpty())
@@ -160,7 +161,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 				new StandardUtilities.StringCompare<String>(true));
 		}
 
-		return actionNames;
+		return Arrays.copyOf(actionNames, actionNames.length);
 	} //}}}
 
 	//{{{ Package-private members
