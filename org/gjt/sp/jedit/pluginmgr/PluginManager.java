@@ -368,10 +368,13 @@ public class PluginManager extends JFrame
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
+	@SuppressWarnings("deprecation")
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
+			// TODO: update this, use CombinedOptins instead of GlobalOptions
+			// and PluginOptions
 			Object source = evt.getSource();
 			if(source == done)
 				ok();

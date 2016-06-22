@@ -23,8 +23,6 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import org.gjt.sp.jedit.ActionSet;
-import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.JEditActionSet;
 import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.Registers;
@@ -208,8 +206,8 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		private final PrintStream printStream;
 		private final JButton removeThisError;
 		private final JButton removeAllErrors;
-		private final Object[] throwables;
-		private final JComboBox combo;
+		private final Throwable[] throwables;
+		private final JComboBox<Throwable> combo;
 
 		//{{{ ErrorDialog constructor
 		private ErrorDialog(Frame view)
@@ -217,7 +215,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			super(view, "Errors", false);
 			byteArrayOutputStream = new ByteArrayOutputStream();
 			printStream = new PrintStream(byteArrayOutputStream);
-			throwables = Log.throwables.toArray();
+			throwables = Log.throwables.toArray(new Throwable[0]);
 			textArea = new JEditEmbeddedTextArea();
 			JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneTextArea.StandaloneActionSet(jEdit.getPropertyManager(),
 																										textArea,
@@ -253,7 +251,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				Throwable throwable = (Throwable) throwables[0];
 				setThrowable(throwable);
 			}
-			combo = new JComboBox(throwables);
+			combo = new JComboBox<Throwable>(throwables);
 			combo.addItemListener(new ItemListener()
 			{
 				@Override

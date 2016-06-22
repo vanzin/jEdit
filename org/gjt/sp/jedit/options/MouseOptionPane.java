@@ -91,7 +91,7 @@ public class MouseOptionPane extends AbstractOptionPane
 
 		for(int i = 0; i < c; i++)
 		{
-			JComboBox cb = new JComboBox(clickActionNames);
+			JComboBox<String> cb = new JComboBox<String>(clickActionNames);
 
 			gutterClickActions[i] = cb;
 

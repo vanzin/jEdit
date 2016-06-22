@@ -162,7 +162,7 @@ public class ViewOptionPane extends AbstractOptionPane
 
 		// Buffer set settings
 		addSeparator();
-		buffersetScope = new JComboBox();
+		buffersetScope = new JComboBox<BufferSet.Scope>();
 		buffersetScope.addItem(BufferSet.Scope.global);
 		buffersetScope.addItem(BufferSet.Scope.view);
 		buffersetScope.addItem(BufferSet.Scope.editpane);
@@ -277,7 +277,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JCheckBox beepOnSearchAutoWrap;
 	private JCheckBox showBufferSwitcher;
 	private JTextField bufferSwitcherMaxRowCount;
-	private JComboBox buffersetScope;
+	private JComboBox<BufferSet.Scope> buffersetScope;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox fullScreenIncludesMenu;

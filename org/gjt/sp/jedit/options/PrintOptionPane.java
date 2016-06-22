@@ -69,7 +69,7 @@ public class PrintOptionPane extends AbstractOptionPane
 
 		/* Tab size */
 		String[] tabSizes = { "2", "4", "8" };
-		tabSize = new JComboBox(tabSizes);
+		tabSize = new JComboBox<String>(tabSizes);
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
 		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
@@ -117,7 +117,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JCheckBox printLineNumbers;
 	private JCheckBox printFolds;
 	private JCheckBox color;
-	private JComboBox tabSize;
+	private JComboBox<String> tabSize;
 	private JCheckBox glyphVector;
 	private JCheckBox force13;
 	//}}}
