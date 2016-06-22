@@ -50,7 +50,7 @@ public class HelpSearchPanel extends JPanel
 
 		add(BorderLayout.NORTH,box);
 
-		results = new JList();
+		results = new JList<Result>();
 		results.addMouseListener(new MouseHandler());
 		results.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		results.setCellRenderer(new ResultRenderer());
@@ -60,7 +60,7 @@ public class HelpSearchPanel extends JPanel
 	//{{{ Private members
 	private HelpViewerInterface helpViewer;
 	private HistoryTextField searchField;
-	private JList results;
+	private JList<Result> results;
 	private HelpIndex index;
 
 	private HelpIndex getHelpIndex()
@@ -168,6 +168,11 @@ public class HelpSearchPanel extends JPanel
 		String title;
 		int rank;
 
+		Result(String title)
+		{
+			this.title = title;	
+		}
+		
 		Result(HelpIndex.HelpFile file, int count)
 		{
 			this.file = file.file;
@@ -197,11 +202,12 @@ public class HelpSearchPanel extends JPanel
 			if(index == null)
 				return;
 
-			results.setListData(new String[] { jEdit.getProperty(
-				"helpviewer.searching") });
+			results.setListData(new Result[] { 
+				new Result(jEdit.getProperty("helpviewer.searching")) 
+			});
 
 			final String text = searchField.getText();
-			final Vector<Result> resultModel = new Vector<Result>();
+			final java.util.List<Result> resultModel = new ArrayList<Result>();
 
 			ThreadUtilities.runInBackground(new Runnable()
 			{
@@ -228,7 +234,7 @@ public class HelpSearchPanel extends JPanel
 							HelpIndex.HelpFile file = index.getFile(occur.file);
 							for(int j = 0; j < resultModel.size(); j++)
 							{
-								Result result = resultModel.elementAt(j);
+								Result result = resultModel.get(j);
 								if(result.file.equals(file.file))
 								{
 									result.rank += occur.count;
@@ -242,7 +248,7 @@ public class HelpSearchPanel extends JPanel
 							if(!ok)
 							{
 								maxRank = Math.max(occur.count,maxRank);
-								resultModel.addElement(new Result(file,occur.count));
+								resultModel.add(new Result(file,occur.count));
 							}
 						}
 					}
@@ -252,7 +258,7 @@ public class HelpSearchPanel extends JPanel
 						// turn the rankings into relative rankings, from 1 to 4
 						for(int i = 0; i < resultModel.size(); i++)
 						{
-							Result result = resultModel.elementAt(i);
+							Result result = resultModel.get(i);
 							result.rank = (int)Math.ceil((double)result.rank * 4 / maxRank);
 						}
 
@@ -265,14 +271,14 @@ public class HelpSearchPanel extends JPanel
 						{
 							if(resultModel.isEmpty())
 							{
-								results.setListData(new String[] {
-									jEdit.getProperty(
-									"helpviewer.no-results") });
+								results.setListData(new Result[] { 
+										new Result(jEdit.getProperty("helpviewer.no-results")) 
+								});								
 
 								javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 							}
 							else
-								results.setListData(resultModel);
+								results.setListData(resultModel.toArray(new Result[resultModel.size()]));
 						}
 					});
 				}

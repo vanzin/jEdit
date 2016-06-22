@@ -35,6 +35,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -75,7 +76,7 @@ public class PingPongList<E> extends JPanel
 		super(new BorderLayout());
 		JSplitPane splitPane = new JSplitPane(newOrientation);
 		leftModel = new MyListModel<E>(leftData);
-		left = new JList<E>(leftModel);
+		left = new JList<>(leftModel);
 		rightModel = new MyListModel<E>(rightData);
 		right = new JList<E>(rightModel);
 		leftPanel = new JPanel(new BorderLayout());
@@ -295,12 +296,13 @@ public class PingPongList<E> extends JPanel
 	//{{{ Inner classes
 
 	//{{{ MyListModel class
-	private static class MyListModel<E> extends AbstractListModel implements Iterable<E>
+	private static class MyListModel<E> extends AbstractListModel<E> implements Iterable<E>
 	{
 		private List<E> data;
 
 		private MyListModel(List<E> data)
 		{
+			super();
 			this.data = data;
 		}
 
@@ -311,7 +313,7 @@ public class PingPongList<E> extends JPanel
 		}
 
 		@Override
-		public Object getElementAt(int index)
+		public E getElementAt(int index)
 		{
 			return data.get(index);
 		}
@@ -357,7 +359,7 @@ public class PingPongList<E> extends JPanel
 	//{{{ MyTransferHandler class
 	private class MyTransferHandler extends TransferHandler
 	{
-		private JList sourceList;
+		private JList<E> sourceList;
 		private int[]indices;
 
 		@Override
@@ -428,14 +430,12 @@ public class PingPongList<E> extends JPanel
 		}
 
 		@Override
+		@SuppressWarnings({"unchecked"})	// for the cast
 		protected Transferable createTransferable(JComponent c)
 		{
-			sourceList = (JList) c;
+			sourceList = (JList<E>) c;
 			indices = sourceList.getSelectedIndices();
-
-			@SuppressWarnings("unchecked")
-			E[] objects = (E[]) sourceList.getSelectedValues();
-			return new MyTransferable<E>(objects);
+			return new MyTransferable<E>(sourceList.getSelectedValuesList());
 		}
 
 		@Override
@@ -450,11 +450,15 @@ public class PingPongList<E> extends JPanel
 	{
 		public static final DataFlavor javaListFlavor = new DataFlavor(Collection.class, "java.util.Collection");
 
-		private final E[] data;
+		private final List<E> data;
 
 		private MyTransferable(E[] data)
 		{
-			this.data = data;
+			this.data = Arrays.asList(data);
+		}
+		
+		private MyTransferable(List<E> data) {
+			this.data = data;	
 		}
 
 		@Override
@@ -503,22 +507,22 @@ public class PingPongList<E> extends JPanel
 		@Override
 		public void intervalAdded(ListDataEvent e)
 		{
-			dataUpdated(e);
+			dataUpdated();
 		}
 
 		@Override
 		public void intervalRemoved(ListDataEvent e)
 		{
-			dataUpdated(e);
+			dataUpdated();
 		}
 
 		@Override
 		public void contentsChanged(ListDataEvent e)
 		{
-			dataUpdated(e);
+			dataUpdated();
 		}
 		
-		private void dataUpdated(ListDataEvent e)
+		private void dataUpdated()
 		{
 			selectAllButton.setEnabled(getLeftSize() != 0);
 			selectNoneButton.setEnabled(getRightSize() != 0);

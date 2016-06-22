@@ -25,8 +25,8 @@ package org.gjt.sp.jedit.gui;
   *
   * Long Description
 */
-public interface MutableListModel extends javax.swing.ListModel
+public interface MutableListModel<E> extends javax.swing.ListModel<E>
 {
-	public boolean removeElement(Object elem);
-	public void insertElementAt(Object elem, int index);
+	public boolean removeElement(E elem);
+	public void insertElementAt(E elem, int index);
 }

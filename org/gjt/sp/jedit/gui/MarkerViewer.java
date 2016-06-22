@@ -28,7 +28,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
-import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.msg.BufferUpdate;
@@ -82,18 +81,20 @@ public class MarkerViewer extends JPanel implements ActionListener
 
 		add(BorderLayout.NORTH, toolBar);
 
-		markerList = new JList();
+		markerList = new JList<Marker>();
 		markerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		markerList.setCellRenderer(new Renderer());
 		markerList.addMouseListener(new MouseHandler());
 		markerList.addKeyListener(new KeyHandler());
+		markerListScroller = new JScrollPane(markerList);
 
-		add(BorderLayout.CENTER,new JScrollPane(markerList));
+		add(BorderLayout.CENTER, markerListScroller);
 
 		refreshList();
 	} //}}}
 
 	//{{{ requestDefaultFocus() method
+	@SuppressWarnings("deprecation")
 	public boolean requestDefaultFocus()
 	{
 		markerList.requestFocus();
@@ -170,7 +171,8 @@ public class MarkerViewer extends JPanel implements ActionListener
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JList markerList;
+	private JList<Marker> markerList;
+	private JScrollPane markerListScroller;
 	private View view;
 	private RolloverButton previous;
 	private RolloverButton next;
@@ -180,9 +182,10 @@ public class MarkerViewer extends JPanel implements ActionListener
 	//{{{ refreshList() method
 	private void refreshList()
 	{
-		java.util.Vector markers = view.getBuffer().getMarkers();
+		java.util.Vector<Marker> markers = view.getBuffer().getMarkers();
 		if (markers.size() > 0)
 		{
+			markerListScroller.setViewportView(markerList);
 			markerList.setListData(markers);
 			markerList.setEnabled(true);
 			next.setEnabled(true);
@@ -191,9 +194,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 		}
 		else
 		{
-			markerList.setListData(new Object[] {
-				jEdit.getProperty("no-markers.label") });
-			markerList.setEnabled(false);
+			markerListScroller.setViewportView(new JLabel(jEdit.getProperty("no-markers.label")));
 			next.setEnabled(false);
 			previous.setEnabled(false);
 			clear.setEnabled(false);
