@@ -240,6 +240,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	} //}}}
 
 	//{{{ show() method
+	@SuppressWarnings({"deprecation"})	// see notes below		
 	public void show(DockableWindowManagerImpl.Entry entry)
 	{
 		if(current == entry)
@@ -253,6 +254,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 				}
 				else
 				{
+					// TODO: requestDefaultFocus is deprecated, fix this
 					entry.win.requestDefaultFocus();
 				}
 			}
@@ -285,6 +287,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			}
 			else
 			{
+				// TODO: requestDefaultFocus is deprecated, fix this
 				entry.win.requestDefaultFocus();
 			}
 		}

@@ -30,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.Log;
+
 import org.gjt.sp.jedit.options.PluginOptions;
 
 /**
@@ -56,13 +57,13 @@ class MirrorListHandler extends DefaultHandler
 	{
 		String tag = peekElement();
 
-		if(tag == "DESCRIPTION")
+		if("DESCRIPTION".equals(tag))
 			description.append(c, off, len);
-		else if(tag == "LOCATION")
+		else if("LOCATION".equals(tag))
 			location.append(c, off, len);
-		else if(tag == "COUNTRY")
+		else if("COUNTRY".equals(tag))
 			country.append(c, off, len);
-		else if(tag == "CONTINENT")
+		else if("CONTINENT".equals(tag))
 			continent.append(c, off, len);
 	} //}}}
 
@@ -122,15 +123,16 @@ class MirrorListHandler extends DefaultHandler
 
 	//{{{ Variables
 	private String id;
-	private final StringBuilder description = new StringBuilder();
-	private final StringBuilder location = new StringBuilder();
-	private final StringBuilder country = new StringBuilder();
-	private final StringBuilder continent = new StringBuilder();
+	private final StringBuilder description = new StringBuilder();		// NOPMD
+	private final StringBuilder location = new StringBuilder();			// NOPMD
+	private final StringBuilder country = new StringBuilder();			// NOPMD
+	private final StringBuilder continent = new StringBuilder();		// NOPMD
 
 	private final MirrorList mirrors;
 	private MirrorList.Mirror mirror;
 
 	private final Stack<String> stateStack = new Stack<String>();
+	// TODO: path is not used, it should be removed.
 	private final String path;
 	//}}}
 

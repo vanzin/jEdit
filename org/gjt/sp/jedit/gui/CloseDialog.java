@@ -202,11 +202,10 @@ public class CloseDialog extends EnhancedDialog
 			}
 			else if(source == discard)
 			{
-				Object[] paths = bufferList.getSelectedValues();
+				java.util.List<String> paths = bufferList.getSelectedValuesList();
 
-				for (Object path1 : paths)
+				for (String path : paths)
 				{
-					String path = (String) path1;
 					Buffer buffer = jEdit.getBuffer(path);
 					jEdit._closeBuffer(view, buffer);
 					bufferModel.removeElement(path);

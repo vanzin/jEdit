@@ -62,8 +62,8 @@ public class EnhancedButton extends RolloverButton
 		setToolTipText(toolTip);
 	} //}}}
 
-	//{{{ isFocusTraversable() method
-	public boolean isFocusTraversable()
+	//{{{ isFocusable() method
+	public boolean isFocusable()
 	{
 		return false;
 	} //}}}

@@ -244,6 +244,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	//}}}
 
 	//{{{ ActionHandler class
+	@SuppressWarnings({"deprecation"})	// see note below
 	private class ActionHandler implements ActionListener
 	{
 		@Override
@@ -262,6 +263,8 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			else if(src == copy)
 			{
 				StringBuilder buf = new StringBuilder();
+				// TODO: list.getSelectedValues is deprecated. Need to finish the
+				// conversion to generics for this class at some point.
 				Object[] selected = list.getSelectedValues();
 				if(selected != null && selected.length != 0)
 				{
