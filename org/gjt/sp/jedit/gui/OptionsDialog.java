@@ -560,11 +560,18 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ OptionTreeModel class
 	/**
 	 * deprecated use {@link OptionTreeModel}
-	 * Undeprecating until the PluginOptions and/or CombinedOptions are fixed.
+	 * Undeprecating until the GlobalOptions, PluginOptions and/or CombinedOptions 
+	 * are fixed.
 	 **/
 	public class OptionTreeModel extends org.jedit.options.OptionTreeModel {
-		public OptionTreeModel() {
+		public OptionTreeModel() 
+		{
 			super();
+		}
+		
+		public OptionTreeModel(OptionGroup root)
+		{
+			super(root);
 		}
 	} //}}}
 }
