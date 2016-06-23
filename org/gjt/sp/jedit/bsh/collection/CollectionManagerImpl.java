@@ -43,6 +43,7 @@ import org.gjt.sp.jedit.bsh.BshIterator;
 	Dynamically loaded extension supporting post 1.1 collections iterator.
  	@author Pat Niemeyer
  */
+@SuppressWarnings({"unchecked"}) 
 public class CollectionManagerImpl extends org.gjt.sp.jedit.bsh.CollectionManager
 {
 	public BshIterator getBshIterator( Object obj ) 

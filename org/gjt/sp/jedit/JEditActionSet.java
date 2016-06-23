@@ -378,7 +378,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		try
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
-			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
+			ActionListHandler ah = new ActionListHandler(uri.toString(), this);
 			InputStream in;
 			try
 			{
@@ -485,6 +485,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	protected URL uri;
 	protected boolean loaded;
 
+	// TODO: to complete the conversion to generics, this really needs to be an E
 	protected static final JEditAbstractEditAction placeholder = new JEditAbstractEditAction("__PLACEHOLDER__"){
 		public void invoke(Object arg) {}
 	};

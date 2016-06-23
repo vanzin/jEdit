@@ -689,7 +689,7 @@ public class GUIUtilities
                                     }
                             });
                         }
-                        catch (Exception e)
+                        catch (Exception e)		// NOPMD
                         {
                             // ignored
                         }
@@ -733,7 +733,7 @@ public class GUIUtilities
                                         }
                                 });
                         }
-                        catch (Exception e)
+                        catch (Exception e)		// NOPMD
                         {
                                 // ignored
                         }
@@ -979,7 +979,7 @@ public class GUIUtilities
 	{
 		if (EventQueue.isDispatchThread())
 		{
-			JList list = new JList(listModel);
+			JList<Object> list = new JList<Object>(listModel);
 			list.setVisibleRowCount(8);
 
 			Object[] message = {
@@ -1029,13 +1029,14 @@ public class GUIUtilities
 	 * @return an integer indicating the option selected by the user
 	 * @since jEdit 4.3pre12
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public static int listConfirm(final Component comp, final String name, final String[] args,
 		final Object[] listModel, final List selectedItems)
 	{
 
 		if (EventQueue.isDispatchThread())
 		{
-			JList list = new JList(listModel);
+			JList<Object> list = new JList<Object>(listModel);
 			list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			list.setVisibleRowCount(8);
 			list.addSelectionInterval(0,listModel.length - 1);
@@ -1050,8 +1051,7 @@ public class GUIUtilities
 								jEdit.getProperty(name + ".title"),
 								JOptionPane.YES_NO_OPTION,
 								JOptionPane.QUESTION_MESSAGE);
-			Object[] selectedValues = list.getSelectedValues();
-			selectedItems.addAll(Arrays.asList(selectedValues));
+			selectedItems.addAll(list.getSelectedValuesList());
 			return ret;
 		}
 		final int [] retValue = new int[1];

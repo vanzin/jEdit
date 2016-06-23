@@ -55,6 +55,7 @@ import org.gjt.sp.jedit.View;
  *
  * @since jEdit 4.3pre11
  */
+@SuppressWarnings({"unchecked"})	// The CandidateListModel needs work 
 public class CompletionPopup extends JWindow
 {
 	//{{{ interface Candidates

@@ -45,6 +45,7 @@ import org.gjt.sp.util.ThreadUtilities;
  * @author Slava Pestov
  * @version $Id$
  */
+@SuppressWarnings({"unchecked"})	// TODO: need to check on ParentDirectoryList and make it generic
 class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor

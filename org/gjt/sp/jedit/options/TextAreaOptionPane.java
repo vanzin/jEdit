@@ -96,7 +96,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(fontSubstSystemFonts, GridBagConstraints.HORIZONTAL);
 
 		/* Anti-aliasing */
-		antiAlias = new JComboBox(AntiAlias.comboChoices);
+		antiAlias = new JComboBox<String>(AntiAlias.comboChoices);
 
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
 		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
@@ -327,8 +327,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
 	private JCheckBox electricBorders;
-	// private JCheckBox antiAlias;
-	private JComboBox antiAlias;
+	private JComboBox<String> antiAlias;
 	private JCheckBox fracFontMetrics;
 	private JCheckBox stripTrailingEOL;
 	private JCheckBox completeFromAllBuffers;
@@ -358,8 +357,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 			/* Substitution font list. */
 			Font f;
-			fontsModel = new DefaultListModel();
-			fonts = new JList(fontsModel);
+			fontsModel = new DefaultListModel<Font>();
+			fonts = new JList<Font>(fontsModel);
 			fonts.setCellRenderer(new FontItemRenderer());
 			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
 			{
@@ -427,9 +426,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 				int idx = fonts.getSelectedIndex();
 				if (idx > 0)
 				{
-					Object o = fontsModel.getElementAt(idx);
+					Font font = fontsModel.getElementAt(idx);
 					fontsModel.removeElementAt(idx);
-					fontsModel.add(idx - 1, o);
+					fontsModel.add(idx - 1, font);
 					fonts.setSelectedIndex(idx - 1);
 				}
 			}
@@ -438,9 +437,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 				int idx = fonts.getSelectedIndex();
 				if (idx != -1 && idx < fontsModel.size() - 1)
 				{
-					Object o = fontsModel.getElementAt(idx);
+					Font font = fontsModel.getElementAt(idx);
 					fontsModel.removeElementAt(idx);
-					fontsModel.add(idx + 1, o);
+					fontsModel.add(idx + 1, font);
 					fonts.setSelectedIndex(idx + 1);
 				}
 			}
@@ -468,8 +467,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			return fontsModel.size();
 		}
 
-		private DefaultListModel fontsModel;
-		private JList fonts;
+		private DefaultListModel<Font> fontsModel;
+		private JList<Font> fonts;
 		private JButton add;
 		private JButton remove;
 		private JButton up;

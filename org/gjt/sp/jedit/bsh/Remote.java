@@ -144,6 +144,7 @@ public class Remote
 		the encoded charset?  I guess we're supposed to add a ";charset" clause
 		to the content type?
 	*/
+	@SuppressWarnings({"deprecation"})
 	static String doHttp( String postURL, String text )
 	{
 		String returnValue = null;

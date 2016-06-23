@@ -141,6 +141,7 @@ public class BufferHistory
 	 * @return the buffer history list
 	 * @since jEdit 4.2pre2
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public static List<Entry> getHistory()
 	{
 		// Returns a snapshot to avoid concurrent access to the
@@ -478,7 +479,7 @@ public class BufferHistory
 		private String selection;
 		private String encoding;
 		private String mode;
-		private final StringBuilder charData = new StringBuilder();
+		private final StringBuilder charData = new StringBuilder();	// NOPMD
 	} //}}}
 
 	//}}}

@@ -27,6 +27,7 @@ public class ListModelEditor
 	{
 		final DefaultTableModel tableModel = createTableModel(listModel);
 		final JTable table = new JTable(tableModel);
+		// TODO: put this string in properties
 		table.setToolTipText("Move: PgUp/PgDown; Edit: Double-Click or Insert/Delete");
 		table.setRowHeight(GenericGUIUtilities.defaultRowHeight());
 		table.getColumnModel().getColumn(0).setPreferredWidth(GenericGUIUtilities.defaultColumnWidth());
@@ -102,6 +103,7 @@ public class ListModelEditor
 		return new DefaultTableModel(tableRowData, new String[] { "" });
 	}
 
+	@SuppressWarnings({"unchecked"})
 	private void updatelistModel(DefaultListModel listModel,
 	    DefaultTableModel tableModel)
 	{

@@ -25,8 +25,6 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -47,6 +45,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	private final ColorizerCellRenderer cellRenderer;
 
 	//{{{ LogViewer constructor
+	@SuppressWarnings({"unchecked"})	// The FilteredListModel needs work
 	public LogViewer()
 	{
 		super(new BorderLayout());
@@ -190,7 +189,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 
 	//{{{ Private members
 	private ListHandler listHandler;
-	private final FilteredListModel<ListModel> listModel;
+	private final FilteredListModel<ListModel<String>> listModel;
 	private final JList list;
 	private final JButton copy;
 	private final JCheckBox tail;
@@ -309,6 +308,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ LogList class
+	@SuppressWarnings({"unchecked"})	// The FilteredListModel needs work
 	private class LogList extends JList
 	{
 		LogList(ListModel model)
@@ -429,9 +429,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ MyFilteredListModel
-	private static class MyFilteredListModel extends FilteredListModel<ListModel>
+	private static class MyFilteredListModel extends FilteredListModel<ListModel<String>>
 	{
-		MyFilteredListModel(ListModel model)
+		MyFilteredListModel(ListModel<String> model)
 		{
 			super(model);
 		}

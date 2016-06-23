@@ -26,7 +26,6 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
 import java.io.*;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -731,7 +730,7 @@ public class Registers
 		public void setValue(String value)
 		{
 			Transferable selection = new StringSelection(value);
-			clipboard.setContents(selection,null);
+			clipboard.setContents(selection, null);
 		}
 
 		/**
@@ -759,9 +758,7 @@ public class Registers
 					debugListDataFlavors(clipboard.getContents(this));
 				}
 
-				String selection = (String)clipboard
-					.getContents(this).getTransferData(
-					DataFlavor.stringFlavor);
+				String selection = (String)clipboard.getContents(this).getTransferData(DataFlavor.stringFlavor);
 
 				return stripEOLChars(selection);
 			}

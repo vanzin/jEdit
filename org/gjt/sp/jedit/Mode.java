@@ -218,6 +218,7 @@ public class Mode
 	 * Should only be called by <code>XModeHandler</code>.
 	 * @since jEdit 4.0pre3
 	 */
+	@SuppressWarnings({"unchecked"}) 
 	public void setProperties(Map props)
 	{
 		if(props == null)

@@ -70,7 +70,7 @@ public class CloseDialog extends EnhancedDialog
 		label.setBorder(new EmptyBorder(0,0,6,0));
 		centerPanel.add(BorderLayout.NORTH,label);
 
-		bufferList = new JList(bufferModel = new DefaultListModel());
+		bufferList = new JList<String>(bufferModel = new DefaultListModel<String>());
 		bufferList.setVisibleRowCount(10);
 		bufferList.addListSelectionListener(new ListHandler());
 
@@ -134,8 +134,8 @@ public class CloseDialog extends EnhancedDialog
 
 	//{{{ Private members
 	private final View view;
-	private final JList bufferList;
-	private final DefaultListModel bufferModel;
+	private final JList<String> bufferList;
+	private final DefaultListModel<String> bufferModel;
 	private final JButton selectAll;
 	private final JButton save;
 	private final JButton discard;
@@ -177,11 +177,10 @@ public class CloseDialog extends EnhancedDialog
 			}
 			else if(source == save)
 			{
-				Object[] paths = bufferList.getSelectedValues();
+				java.util.List<String> paths = bufferList.getSelectedValuesList();
 
-				for (Object path1 : paths)
+				for (String path : paths)
 				{
-					String path = (String) path1;
 					Buffer buffer = jEdit.getBuffer(path);
 					if (!buffer.save(view, null, true, true)) return;
 					TaskManager.instance.waitForIoTasks();

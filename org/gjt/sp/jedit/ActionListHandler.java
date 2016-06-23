@@ -35,7 +35,8 @@ import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
- * This class loads the actions.xml files into a {@link JEditActionSet}. * @author Slava Pestov
+ * This class loads the actions.xml files into a {@link JEditActionSet}. 
+ * @author Slava Pestov
  * @author Mike Dillon
  */
 class ActionListHandler extends DefaultHandler
@@ -63,14 +64,14 @@ class ActionListHandler extends DefaultHandler
 		aname = (aname == null) ? null : aname.intern();
 		value = (value == null) ? null : value.intern();
 
-		if(aname == "NAME")
+		if("NAME".equals(aname))
 			actionName = value;
-		else if(aname == "NO_REPEAT")
-			noRepeat = (value == "TRUE");
-		else if(aname == "NO_RECORD")
-			noRecord = (value == "TRUE");
-		else if(aname == "NO_REMEMBER_LAST")
-			noRememberLast = (value == "TRUE");
+		else if("NO_REPEAT".equals(aname))
+			noRepeat = ("TRUE".equals(value));
+		else if("NO_RECORD".equals(aname))
+			noRecord = ("TRUE".equals(value));
+		else if("NO_REMEMBER_LAST".equals(aname))
+			noRememberLast = ("TRUE".equals(value));
 	} //}}}
 
 	//{{{ characters() method
@@ -108,6 +109,7 @@ class ActionListHandler extends DefaultHandler
 
 	//{{{ endElement() method
 	@Override
+	@SuppressWarnings({"unchecked"})
 	public void endElement(String uri, String localName, String qName)
 	{
 		String tag = peekElement();
@@ -157,12 +159,13 @@ class ActionListHandler extends DefaultHandler
 	//{{{ Private members
 
 	//{{{ Instance variables
+	// TODO: path isn't used, it should be removed.
 	private String path;
 	private JEditActionSet actionSet;
 
 	private String actionName;
-	private final StringBuilder code;
-	private final StringBuilder isSelected;
+	private final StringBuilder code;		// NOPMD
+	private final StringBuilder isSelected;	// NOPMD
 
 	private boolean noRepeat;
 	private boolean noRecord;

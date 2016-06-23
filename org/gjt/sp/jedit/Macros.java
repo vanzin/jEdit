@@ -171,7 +171,7 @@ public class Macros
 					}
 				});
 			}
-			catch (Exception e)
+			catch (Exception e)		// NOPMD
 			{
 				// ignored
 			}
@@ -211,7 +211,7 @@ public class Macros
 					}
 				});
 			}
-			catch (Exception e)
+			catch (Exception e)		// NOPMD
 			{
 				// ignored
 			}
@@ -377,7 +377,7 @@ public class Macros
 		{
 			userMacroPath = MiscUtilities.constructPath(
 				settings,"macros");
-			loadMacros(macroHierarchy,"",new File(userMacroPath));
+			loadMacros(macroHierarchy, "", new File(userMacroPath));
 		}
 
 		if(jEdit.getJEditHome() != null)
@@ -766,6 +766,7 @@ public class Macros
 	} //}}}
 
 	//{{{ loadMacros() method
+	@SuppressWarnings({"unchecked"})	// TODO: figure out what is in 'vector', might be a vector of vectors
 	private static void loadMacros(List vector, String path, File directory)
 	{
 		lastMacro = null;
@@ -779,7 +780,7 @@ public class Macros
 			String fileName = file.getName();
 			if (file.isHidden())
 			{
-				/* do nothing! */
+				return;
 			}
 			else if (file.isDirectory())
 			{
@@ -814,6 +815,7 @@ public class Macros
 	} //}}}
 
 	//{{{ addMacro() method
+	@SuppressWarnings({"unchecked"})
 	private static void addMacro(File file, String path, List vector)
 	{
 		String fileName = file.getName();
@@ -980,9 +982,8 @@ public class Macros
 		@EBHandler
 		public void handleBufferUpdate(BufferUpdate bmsg)
 		{
-			if(bmsg.getWhat() == BufferUpdate.CLOSED)
+			if(bmsg.getWhat() == BufferUpdate.CLOSED && bmsg.getBuffer() == buffer)
 			{
-				if(bmsg.getBuffer() == buffer)
 					stopRecording(view);
 			}
 		} //}}}

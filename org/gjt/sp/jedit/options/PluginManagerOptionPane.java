@@ -80,7 +80,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		appDir.setToolTipText(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"jars"));
 
-		miraList = new JList(miraModel = new MirrorModel());
+		miraList = new JList<String>(miraModel = new MirrorModel());
 		miraList.setSelectionModel(new SingleSelectionModel());
 
 		/* Download mirror */
@@ -195,7 +195,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	private SpinnerNumberModel spinnerModel;
 
 	private MirrorModel miraModel;
-	private JList miraList;
+	private JList<String> miraList;
 	/** The button to update mirror list. */
 	private JButton updateMirrors;
 	/** A label telling if the mirror list is being updated. */
@@ -223,7 +223,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ MirrorModel class
-	static class MirrorModel extends AbstractListModel
+	static class MirrorModel extends AbstractListModel<String>
 	{
 		private List<MirrorList.Mirror> mirrors;
 
@@ -242,7 +242,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			return mirrors.size();
 		}
 
-		public Object getElementAt(int index)
+		public String getElementAt(int index)
 		{
 			MirrorList.Mirror mirror = mirrors.get(index);
 			if(mirror.id.equals(MirrorList.Mirror.NONE))

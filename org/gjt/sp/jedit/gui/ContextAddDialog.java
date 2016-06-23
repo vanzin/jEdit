@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -120,12 +119,12 @@ public class ContextAddDialog extends EnhancedDialog
 			}
 			i++;
 		}
-		combo = new JComboBox(actionSets.toArray());
+		combo = new JComboBox<ActionSet>(actionSets.toArray(new ActionSet[actionSets.size()]));
 		combo.setSelectedIndex(selectionIndex);
 		combo.addActionListener(actionHandler);
 		actionPanel.add(BorderLayout.NORTH,combo);
 
-		list = new JList();
+		list = new JList<MenuItem>();
 		list.setVisibleRowCount(8);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		actionPanel.add(BorderLayout.CENTER,new JScrollPane(list));
@@ -194,8 +193,8 @@ public class ContextAddDialog extends EnhancedDialog
 	private boolean isOK;
 	private final JRadioButton separator;
 	private final JRadioButton action;
-	private final JComboBox combo;
-	private final JList list;
+	private final JComboBox<ActionSet> combo;
+	private final JList<MenuItem> list;
 	private final JButton ok;
 	private final JButton cancel;
 
@@ -206,7 +205,7 @@ public class ContextAddDialog extends EnhancedDialog
 		jEdit.setProperty(CONTEXT_ADD_DIALOG_LAST_SELECTION, actionSet.getLabel());
 
 		EditAction[] actions = actionSet.getActions();
-		Vector<MenuItem> listModel = new Vector<MenuItem>(actions.length);
+		Vector<MenuItem> listModel = new Vector<MenuItem>(actions.length);	// NOPMD
 
 		for (EditAction action : actions)
 		{

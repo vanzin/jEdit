@@ -141,7 +141,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		//{{{ widgets panel
 		String statusbar = jEdit.getProperty("view.status");
 		StringTokenizer st = new StringTokenizer(statusbar);
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<String>();
 		while (st.hasMoreTokens())
 		{
 			String token = st.nextToken();
@@ -149,7 +149,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		}
 
 
-		list = new JList(listModel);
+		list = new JList<String>(listModel);
 		list.setCellRenderer(new WidgetListCellRenderer());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(new ListHandler());
@@ -249,9 +249,9 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private ColorWellButton memBackgroundColor;
 	private JCheckBox showStatusbar;
 	private JCheckBox showStatusbarPlain;
-	private DefaultListModel listModel;
+	private DefaultListModel<String> listModel;
 	private JLabel previewStatusBar;
-	private JList list;
+	private JList<String> list;
 	private RolloverButton add;
 	private RolloverButton remove;
 	private RolloverButton moveUp, moveDown;
@@ -317,7 +317,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				else
 					index++;
 
-				listModel.insertElementAt(value,index);
+				listModel.insertElementAt(value, index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
 				updatePreview();
@@ -341,7 +341,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				int index = list.getSelectedIndex();
 				Object selected = list.getSelectedValue();
 				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected,index-1);
+				listModel.insertElementAt(selected.toString(), index-1);
 				list.setSelectedIndex(index-1);
 				list.ensureIndexIsVisible(index-1);
 				updatePreview();
@@ -351,7 +351,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				int index = list.getSelectedIndex();
 				Object selected = list.getSelectedValue();
 				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected,index+1);
+				listModel.insertElementAt(selected.toString(), index+1);
 				list.setSelectedIndex(index+1);
 				list.ensureIndexIsVisible(index+1);
 				updatePreview();
@@ -412,7 +412,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		private final JTextField labelField;
 		private final JLabel labelLabel;
 		private final JRadioButton labelRadio;
-		private final JComboBox widgetCombo;
+		private final JComboBox<String> widgetCombo;
 		private final JLabel widgetLabel;
 		private final JRadioButton widgetRadio;
 		private String value;
@@ -448,7 +448,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				if (!usedWidget.contains(widget) || (valueIsWidget && widget.equals(value)))
 					widgets.add(widget);
 			}
-			widgetCombo = new JComboBox(widgets);
+			widgetCombo = new JComboBox<String>(widgets);
 			widgetCombo.setRenderer(new WidgetListCellRenderer());
 			ActionHandler actionHandler = new ActionHandler();
 			labelRadio.addActionListener(actionHandler);
