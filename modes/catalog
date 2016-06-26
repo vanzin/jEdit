@@ -275,6 +275,9 @@
 <MODE NAME="java"		FILE="java.xml"
         FILE_NAME_GLOB="*.java" />
 
+<MODE NAME="java module-info"		FILE="java-module-info.xml"
+        FILE_NAME_GLOB="module-info.java" />
+
 <MODE NAME="javafx"		FILE="javafx.xml"
         FILE_NAME_GLOB="*.fx" />
 
@@ -361,7 +364,7 @@
 
 <MODE NAME="modula3"		FILE="modula3.xml"
         FILE_NAME_GLOB="*.[im]3" />
-
+        
 <MODE NAME="moin"		FILE="moin.xml"
         FILE_NAME_GLOB="*.moin" />
 

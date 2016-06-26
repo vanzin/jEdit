@@ -80,6 +80,8 @@ Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang
 
 - New mode for swift (Patches #587 -  Wayne Zhang)
 
+- New mode for Java 9 module-info.java files (Dale Anson)
+
 }}}
 
 }}}
