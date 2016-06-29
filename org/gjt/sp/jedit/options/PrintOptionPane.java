@@ -68,6 +68,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		addComponent(color);
 
 		/* Tab size */
+		// TODO: make sure this can only accept positive numbers
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox<String>(tabSizes);
 		tabSize.setEditable(true);
