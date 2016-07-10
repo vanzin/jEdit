@@ -17,14 +17,15 @@ void keywords2upper(View view)
 	//long t1 = System.currentTimeMillis();
 
 	Selection[] selection = textArea.getSelection();
-	Buffer.TokenList info = null;
+	DefaultTokenHandler tokenHandler;
 	int pos = 0;
 	int lineStart = 0;
 
 	for(int line = 0; line < textArea.getLineCount(); ++line)
 	{
-		info = buffer.markTokens(line);
-		token = info.getFirstToken();
+		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+		buffer.markTokens(line, tokenHandler);
+		token = tokenHandler.getTokens();
 		lineStart = buffer.getLineStartOffset(line);
 		pos = lineStart;
 		while(token != null)

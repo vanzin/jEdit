@@ -10,6 +10,9 @@ Makarius, A Vontobel,  Marc Häfner, Jordan Miner, Alan Ezust, and Dale Anson fo
 
 {{{ Bug Fixes
 
+- Fix bug #3659 - Macro Keywords_to_Upper_Case fails to find class
+  (Patch #582 -  Marc Häfner)
+
 - Fix bug #3949 - Macro Display_Shortcuts show no/wrong results
   (Patch #581 - Marc Häfner)
 
