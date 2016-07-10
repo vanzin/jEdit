@@ -352,6 +352,8 @@
 <MODE NAME="maven"		FILE="maven.xml"
         FILE_NAME_GLOB="pom.xml"/>
 
+<MODE NAME="mavscript"		FILE="mavscript.xml" />
+
 <MODE NAME="metapost"
          FILE="mpost.xml"
          FILE_NAME_GLOB="*.mp"/>
@@ -364,7 +366,7 @@
 
 <MODE NAME="modula3"		FILE="modula3.xml"
         FILE_NAME_GLOB="*.[im]3" />
-        
+
 <MODE NAME="moin"		FILE="moin.xml"
         FILE_NAME_GLOB="*.moin" />
 

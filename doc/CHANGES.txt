@@ -5,11 +5,10 @@ jEdit 5.3 version history
 {{{ Version 5.3.1
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
-Makarius, Alan Ezust, and Dale Anson for contributing to this release.
+Makarius, A Vontobel, Alan Ezust, and Dale Anson for contributing to this
+release.
 
 {{{ Bug Fixes
-
-  Patch #566 Unicode brackets (Makarius)
 
 - Fix bug #3944: Select All checkbox disabled.
 
@@ -58,6 +57,8 @@ Makarius, Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ UI Improvements
 
+- Patch #566 Unicode brackets (Makarius)
+
 - UI clean up, button spacing, borders, etc. (Dale Anson)
 
 - Implemented feature request #493, ask for confirmation before closing all
@@ -79,6 +80,8 @@ Makarius, Alan Ezust, and Dale Anson for contributing to this release.
 
 }}}
 {{{ Editing
+
+- New mode for Mavscript (Patch #574 - A. Vontobel)
 
 - New mode for swift (Patches #587 -  Wayne Zhang)
 
