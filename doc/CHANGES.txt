@@ -5,8 +5,8 @@ jEdit 5.3 version history
 {{{ Version 5.3.1
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
-Makarius, A Vontobel,  Marc Häfner, Alan Ezust, and Dale Anson for contributing
-to this release.
+Makarius, A Vontobel,  Marc Häfner, Jordan Miner, Alan Ezust, and Dale Anson for
+ contributing to this release.
 
 {{{ Bug Fixes
 
@@ -83,6 +83,8 @@ to this release.
 
 }}}
 {{{ Editing
+
+- Rust edit mode raw string fix (Patch #575 -  Jordan Miner)
 
 - New mode for Mavscript (Patch #574 - A. Vontobel)
 

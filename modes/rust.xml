@@ -42,22 +42,28 @@
 
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
-		<SEQ_REGEXP TYPE="LITERAL1">br(#*)".*?"(\1)</SEQ_REGEXP>
+		<SPAN_REGEXP TYPE="LITERAL1" HASH_CHAR="br">
+			<BEGIN>br(#*)"</BEGIN>
+			<END>"$1</END>
+		</SPAN_REGEXP>
 		<SPAN TYPE="LITERAL1" DELEGATE="DOUBLEQUOTE_LITERAL" NO_LINE_BREAK="FALSE">
 			<BEGIN>b"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SEQ_REGEXP TYPE="LITERAL1">r(#*)".*?"(\1)</SEQ_REGEXP>
+		<SPAN_REGEXP TYPE="LITERAL1" HASH_CHAR="r">
+			<BEGIN>r(#*)"</BEGIN>
+			<END>"$1</END>
+		</SPAN_REGEXP>
 		<SPAN TYPE="LITERAL1" DELEGATE="DOUBLEQUOTE_LITERAL" NO_LINE_BREAK="FALSE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SEQ_REGEXP TYPE="LITERAL3">b?'(.|\\([\\'nrt0]|x[a-fA-F\d]{2}|u\{[a-fA-F\d]{1,6}\}))'</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="LITERAL3" HASH_CHARS="b'">b?'(.|\\([\\'nrt0]|x[a-fA-F\d]{2}|u\{[a-fA-F\d]{1,6}\}))'</SEQ_REGEXP>
 
 		<!-- Lifetimes -->
 		<!-- I tried to use MARK_FOLLOWING here, but it breaks the char
 		literal _above_ -->
-		<SEQ_REGEXP TYPE="KEYWORD4">'\w+</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD4" HASH_CHAR="'">'\w+</SEQ_REGEXP>
 
 		<!-- Attributes -->
 		<SPAN TYPE="KEYWORD4" DELEGATE="ATTRIBUTE" NO_LINE_BREAK="FALSE">
