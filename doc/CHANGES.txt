@@ -4,10 +4,12 @@ jEdit 5.3 version history
 
 {{{ Version 5.3.1
 
-Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang
- and Dale Anson for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
+Makarius, Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
+
+  Patch #566 Unicode brackets (Makarius)
 
 - Fix bug #3944: Select All checkbox disabled.
 
@@ -44,14 +46,14 @@ Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang
 
 - Use new version of JarBundler that also sets LSApplicationCategoryType and
   NSHighResolutionCapable. (Björn "Vampire" Kautler)
-  
-- Set default colors for foreground and background in syntax highlighting 
+
+- Set default colors for foreground and background in syntax highlighting
   style editor. (Dale Anson)
 
 - Fix plugin bug #1853 XML plugin crashes on JDK9. Don't pre-connect
   the returned URLConnection in jeditresource: protocol handler (Eric Le Lay)
-  
-- Fix bug #3994, ConcurrentModificationException in ProperyManager. (Dale Anson)  
+
+- Fix bug #3994, ConcurrentModificationException in ProperyManager. (Dale Anson)
 
 }}}
 {{{ UI Improvements
@@ -60,7 +62,7 @@ Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang
 
 - Implemented feature request #493, ask for confirmation before closing all
   buffers. (Dale Anson)
-  
+
 - Refactor editing option pane into several tabs, allow user editing of modes
   lists, similar to editing the encoding options lists. This also fixes
   feature request #515. (Dale Anson)
