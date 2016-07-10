@@ -5,12 +5,15 @@ jEdit 5.3 version history
 {{{ Version 5.3.1
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
-Makarius, A Vontobel, Alan Ezust, and Dale Anson for contributing to this
-release.
+Makarius, A Vontobel,  Marc Häfner, Alan Ezust, and Dale Anson for contributing
+to this release.
 
 {{{ Bug Fixes
 
-- Fix bug #3944: Select All checkbox disabled.
+- Fix bug #3949 - Macro Display_Shortcuts show no/wrong results
+  (Patch #581 - Marc Häfner)
+
+- Fix bug #3944: Select All checkbox initially disabled. (Alan Ezust)
 
 - Fix bug #3983: filename completion prefered longest filename when no
   match with exact length was found. Prefer the first one (Eric Le Lay)
