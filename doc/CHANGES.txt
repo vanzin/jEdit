@@ -89,7 +89,7 @@ Makarius, A Vontobel,  Marc Häfner, Jordan Miner, Alan Ezust, and Dale Anson fo
 
 - Rust edit mode raw string fix (Patch #575 -  Jordan Miner)
 
-- New mode for Mavscript (Patch #574 - A. Vontobel)
+- New mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
 
 - New mode for swift (Patches #587 -  Wayne Zhang)
 
