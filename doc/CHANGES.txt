@@ -87,6 +87,8 @@ and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Updates for objectrexx mode (Patch #585 - Jack J. Woehr)
+
 - Mode for m4 macro processor language (Patch #586 - Jack J. Woehr)
 
 - Drawj2d edit mode (Patch #573 - A. Vontobel)
