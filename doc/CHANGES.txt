@@ -87,6 +87,8 @@ Makarius, A Vontobel,  Marc Häfner, Jordan Miner, Alan Ezust, and Dale Anson fo
 }}}
 {{{ Editing
 
+- Drawj2d edit mode (Patch #573 - A. Vontobel)
+
 - Rust edit mode raw string fix (Patch #575 -  Jordan Miner)
 
 - New mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
