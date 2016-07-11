@@ -5,7 +5,7 @@ jEdit 5.3 version history
 {{{ Version 5.3.1
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
-Makarius, A Vontobel,  Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
+Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
 and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
@@ -63,8 +63,6 @@ and Dale Anson for contributing to this release.
 }}}
 {{{ UI Improvements
 
-- Patch #566 Unicode brackets (Makarius)
-
 - UI clean up, button spacing, borders, etc. (Dale Anson)
 
 - Implemented feature request #493, ask for confirmation before closing all
@@ -87,6 +85,8 @@ and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Unicode brackets (Patch #566 - Makarius)
+
 - Updates for objectrexx mode (Patch #585 - Jack J. Woehr)
 
 - Mode for m4 macro processor language (Patch #586 - Jack J. Woehr)
@@ -95,9 +95,9 @@ and Dale Anson for contributing to this release.
 
 - Rust edit mode raw string fix (Patch #575 -  Jordan Miner)
 
-- New mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
+- Mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
 
-- New mode for swift (Patches #587 -  Wayne Zhang)
+- New mode for swift (Patch #587 -  Wayne Zhang)
 
 - New mode for Java 9 module-info.java files (Dale Anson)
 
