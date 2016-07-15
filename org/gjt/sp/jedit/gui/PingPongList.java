@@ -450,15 +450,16 @@ public class PingPongList<E> extends JPanel
 	{
 		public static final DataFlavor javaListFlavor = new DataFlavor(Collection.class, "java.util.Collection");
 
-		private final List<E> data;
+		private final E[] data;
 
 		private MyTransferable(E[] data)
 		{
-			this.data = Arrays.asList(data);
+			this.data = Arrays.copyOf(data, data.length);
 		}
 		
+		@SuppressWarnings({"unchecked"})	// for the cast
 		private MyTransferable(List<E> data) {
-			this.data = data;	
+			this.data = (E[])data.toArray();	
 		}
 
 		@Override
