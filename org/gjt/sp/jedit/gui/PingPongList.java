@@ -120,6 +120,7 @@ public class PingPongList<E> extends JPanel
 		rightModel.addListDataListener(listDataListener);
 	} //}}}
 	
+	// {{{ addButton method
 	public void addButton(JButton button) 
 	{
 		if (button != null) 
@@ -127,8 +128,9 @@ public class PingPongList<E> extends JPanel
 			buttonsBox.add(createHorizontalStrut(12));
 			buttonsBox.add(button);
 		}
-	}
+	} // }}}
 	
+	// {{ setData methods
 	public void setLeftData(List<E> data) 
 	{
 		leftModel = new MyListModel<E>(data);
@@ -140,7 +142,9 @@ public class PingPongList<E> extends JPanel
 		rightModel = new MyListModel<E>(data);
 		right.setModel(rightModel);
 	}
+	// }}}
 	
+	// {{{ selection methods
 	public void setLeftSelected(E selected) 
 	{
 		if (selected != null)
@@ -162,6 +166,7 @@ public class PingPongList<E> extends JPanel
 	{
 		return right.getSelectedValuesList();	
 	}
+	// }}}
 
 	//{{{ setLeftTooltip() method
 	public void setLeftTooltip(String leftTooltip)
