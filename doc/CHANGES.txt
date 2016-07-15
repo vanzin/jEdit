@@ -6,7 +6,7 @@ jEdit 5.3 version history
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
 Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
-and Dale Anson for contributing to this release.
+Adam S, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -100,6 +100,8 @@ and Dale Anson for contributing to this release.
 - New mode for swift (Patch #587 -  Wayne Zhang)
 
 - New mode for Java 9 module-info.java files (Dale Anson)
+
+- Updated CSS mode provided by AdamS (Ticket #4003 - Dale Anson)
 
 }}}
 
