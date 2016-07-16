@@ -10,6 +10,9 @@ Adam S, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix bug #2732 - syntax highlighting broken if non-visible lines change
+  (Patch #580 - Marc Häfner)
+
 - Fix bug #3659 - Macro Keywords_to_Upper_Case fails to find class
   (Patch #582 -  Marc Häfner)
 
