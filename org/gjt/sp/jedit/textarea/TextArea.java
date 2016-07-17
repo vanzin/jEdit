@@ -1626,7 +1626,7 @@ public abstract class TextArea extends JPanel
 
 		// Scan backwards, trying to find a bracket
 		String openBrackets = "([{«‹⟨⌈⌊⦇⟦⦃";
-		String closeBrackets = ")]}»›⟩⌉⌋⦈⟧⦄'";
+		String closeBrackets = ")]}»›⟩⌉⌋⦈⟧⦄";
 		int count = 1;
 		char openBracket = '\0';
 		char closeBracket = '\0';
