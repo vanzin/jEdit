@@ -190,7 +190,7 @@ public class SearchDialog extends EnhancedDialog
 			{
 				filter.setText(((DirectoryListSet)fileset)
 					.getFileFilter());
-				directory.setText(((DirectoryListSet)fileset)
+				directoryField.setText(((DirectoryListSet)fileset)
 					.getDirectory());
 				searchSubDirectories.setSelected(((DirectoryListSet)fileset)
 					.isRecursive());
@@ -310,7 +310,7 @@ public class SearchDialog extends EnhancedDialog
 		// directory controls
 		focusOrder.add(filter);
 		focusOrder.add(synchronize);
-		focusOrder.add(directory);
+		focusOrder.add(directoryField);
 		focusOrder.add(choose);
 		focusOrder.add(searchSubDirectories);
 		focusOrder.add(skipHidden);
@@ -346,7 +346,7 @@ public class SearchDialog extends EnhancedDialog
 		searchAllBuffers, searchDirectory;
 
 	// multifile settings
-	private HistoryTextField filter, directory;
+	private HistoryTextField filter, directoryField;
 	private JCheckBox searchSubDirectories;
 	private JCheckBox skipBinaryFiles;
 	private JCheckBox skipHidden;
@@ -652,9 +652,9 @@ public class SearchDialog extends EnhancedDialog
 		
 		cons.gridy++;
 
-		directory = new HistoryTextField("search.directory");
-		directory.setColumns(25);
-		directory.addActionListener(actionListener);
+		directoryField = new HistoryTextField("search.directory");
+		directoryField.setColumns(25);
+		directoryField.addActionListener(actionListener);
 		
 		label = new JLabel(jEdit.getProperty("search.directoryField"),
 			SwingConstants.RIGHT);
@@ -662,7 +662,7 @@ public class SearchDialog extends EnhancedDialog
 
 		label.setDisplayedMnemonic(jEdit.getProperty("search.directoryField.mnemonic")
 			.charAt(0));
-		label.setLabelFor(directory);
+		label.setLabelFor(directoryField);
 		cons.insets = new Insets(0,0,3,0);
 		cons.weightx = 0.0;
 		layout.setConstraints(label,cons);
@@ -671,8 +671,8 @@ public class SearchDialog extends EnhancedDialog
 		cons.insets = new Insets(0,0,3,6);
 		cons.weightx = 1.0;
 		cons.gridwidth = 2;
-		layout.setConstraints(directory,cons);
-		multifile.add(directory);
+		layout.setConstraints(directoryField,cons);
+		multifile.add(directoryField);
 
 		choose = new JButton(jEdit.getProperty("search.choose"));
 		choose.setMnemonic(jEdit.getProperty("search.choose.mnemonic")
@@ -777,7 +777,7 @@ public class SearchDialog extends EnhancedDialog
 			|| searchDirectory.isSelected());
 
 		boolean searchDirs = searchDirectory.isSelected();
-		directory.setEnabled(searchDirs);
+		directoryField.setEnabled(searchDirs);
 		choose.setEnabled(searchDirs);
 		searchSubDirectories.setEnabled(searchDirs);
 		skipHidden.setEnabled(searchDirs);
@@ -836,10 +836,11 @@ public class SearchDialog extends EnhancedDialog
 				fileset = new AllBufferSet(filter, view);
 			else if(searchDirectory.isSelected())
 			{
-				String directory = this.directory.getText();
-				this.directory.addCurrentToHistory();
+				String directory = this.directoryField.getText();
+				directory = MiscUtilities.expandVariables(directory);
+				this.directoryField.addCurrentToHistory();
 				directory = MiscUtilities.constructPath(
-					view.getBuffer().getDirectory(),directory);
+					view.getBuffer().getDirectory(), directory);
 
 				if((VFSManager.getVFSForPath(directory).getCapabilities()
 					& VFS.LOW_LATENCY_CAP) == 0)
@@ -964,11 +965,11 @@ public class SearchDialog extends EnhancedDialog
 				.getFileExtension(view.getBuffer()
 				.getName()));
 		}
-		model = directory.getModel();
+		model = directoryField.getModel();
 		if(model.getSize() != 0)
-			directory.setText(model.getItem(0));
+			directoryField.setText(model.getItem(0));
 		else
-			directory.setText(view.getBuffer().getDirectory());
+			directoryField.setText(view.getBuffer().getDirectory());
 
 		searchSubDirectories.setSelected(jEdit.getBooleanProperty(
 			"search.subdirs.toggle"));
@@ -977,7 +978,7 @@ public class SearchDialog extends EnhancedDialog
 		{
 			filter.setText(((DirectoryListSet)fileset)
 				.getFileFilter());
-			directory.setText(((DirectoryListSet)fileset)
+			directoryField.setText(((DirectoryListSet)fileset)
 				.getDirectory());
 			searchSubDirectories.setSelected(((DirectoryListSet)fileset)
 				.isRecursive());
@@ -988,7 +989,7 @@ public class SearchDialog extends EnhancedDialog
 				.getFileFilter());
 		}
 
-		directory.addCurrentToHistory();
+		directoryField.addCurrentToHistory();
 
 		keepDialog.setSelected(jEdit.getBooleanProperty(
 			"search.keepDialog.toggle"));
@@ -1039,11 +1040,11 @@ public class SearchDialog extends EnhancedDialog
 			{
 				String[] dirs = GUIUtilities.showVFSFileDialog(
 					SearchDialog.this,
-					view,directory.getText(),
+					view,directoryField.getText(),
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 					false);
 				if(dirs != null)
-					directory.setText(dirs[0]);
+					directoryField.setText(dirs[0]);
 			}
 			else if(evt.getSource() == synchronize)
 			{
@@ -1064,7 +1065,7 @@ public class SearchDialog extends EnhancedDialog
 			// don't sync search directory when "search all buffers" is active
 			if(searchDirectory.isSelected())
 			{
-				directory.setText(view.getBuffer().getDirectory());
+				directoryField.setText(view.getBuffer().getDirectory());
 			}
 			
 			if (!jEdit.getBooleanProperty("search.dontSyncFilter", false))

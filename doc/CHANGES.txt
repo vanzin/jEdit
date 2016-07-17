@@ -66,6 +66,9 @@ Adam S, and Dale Anson for contributing to this release.
 }}}
 {{{ UI Improvements
 
+- Feature Request #520 Environment variables in Find dialog Directory
+  (Alan Ezust)
+
 - UI clean up, button spacing, borders, etc. (Dale Anson)
 
 - Implemented feature request #493, ask for confirmation before closing all
