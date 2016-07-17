@@ -81,7 +81,7 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 			start = next;
 			token = token.next;
 		}
-		if (token.id == Token.END || token.id == Token.NULL)
+		if (token.id == Token.END || (token.id % Token.ID_COUNT) == Token.NULL)
 		{
 			JOptionPane.showMessageDialog(textArea.getView(),
 				jEdit.getProperty("syntax-style-no-token.message"),
