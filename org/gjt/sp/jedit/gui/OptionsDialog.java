@@ -90,7 +90,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 	{
 		getDefaultGroup().addOptionPane(pane);
 	} //}}}
-	
+
 	//{{{ ok() method
 	@Override
 	public void ok()
@@ -112,7 +112,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 	{
 		if(currentPane != null)
 			jEdit.setProperty(name + ".last",currentPane.getName());
-	
+
 		org.jedit.options.OptionTreeModel m = (org.jedit.options.OptionTreeModel) paneTree
 			.getModel();
 		save(m.getRoot());
@@ -273,7 +273,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 	/**
 	 * Creates the tree model that goes on the left of the option pane,
 	 * loading all the items that are needed.
-	 * @returns OptionTreeModel for binary compatibility of plugins (e.g. SideKick)
+	 * @return OptionTreeModel for binary compatibility of plugins (e.g. SideKick)
 	 */
 	protected abstract OptionTreeModel createOptionTreeModel();
 	// }}}
@@ -298,9 +298,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 		this.name = name;
 		deferredOptionPanes = new HashMap<Object, OptionPane>();
 
-		if (pane == null) 
-			pane = jEdit.getProperty(name + ".last");		
-		
+		if (pane == null)
+			pane = jEdit.getProperty(name + ".last");
+
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -560,15 +560,15 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ OptionTreeModel class
 	/**
 	 * deprecated use {@link OptionTreeModel}
-	 * Undeprecating until the GlobalOptions, PluginOptions and/or CombinedOptions 
+	 * Undeprecating until the GlobalOptions, PluginOptions and/or CombinedOptions
 	 * are fixed.
 	 **/
 	public class OptionTreeModel extends org.jedit.options.OptionTreeModel {
-		public OptionTreeModel() 
+		public OptionTreeModel()
 		{
 			super();
 		}
-		
+
 		public OptionTreeModel(OptionGroup root)
 		{
 			super(root);

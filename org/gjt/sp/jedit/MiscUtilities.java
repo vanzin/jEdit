@@ -40,7 +40,6 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StringList;
 //}}}
@@ -617,7 +616,7 @@ public class MiscUtilities
 
 		If a URI is supplied, use desktop browser.
 
-		@param path: path or URI of thing to open/browse
+		@param path or URI of thing to open/browse
 		@author Alan Ezust
 		@since jEdit 5.0
 	*/
