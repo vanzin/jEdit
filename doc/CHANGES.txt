@@ -118,10 +118,13 @@ Adam S, and Dale Anson for contributing to this release.
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
 Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
-Marcelo Vanzin, Jordan Miner, yaraba, Marc M. Adkins, and Eric Le Lay for
-contributing to this release.
+Marcelo Vanzin, Jordan Miner, yaraba, Marc M. Adkins, Scott McPeak, and
+Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
+
+- EnhancedDialog NPE fix for when there is no close shortcut assigned
+  (Patch # 588 - Scott McPeak)
 
 - JEditBuffer.isFoldEnd() was unable to detect the fold end when it was the
   last line (#3917 - Matthieu Casanova)

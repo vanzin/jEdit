@@ -177,8 +177,9 @@ public abstract class EnhancedDialog extends JDialog
 
 		private boolean isCloseBufferShortcut(KeyEvent evt)
 		{
-			String[] s = GUIUtilities.getShortcutLabel("close-buffer", false).split(" or ");
-
+			String shortcut = GUIUtilities.getShortcutLabel("close-buffer", false);
+			if (shortcut == null) return false;
+			String[] s = shortcut.split(" or ");
 			if(s.length == 1)
 			{ // w/o alternative shortcut
 				if(s[0].contains(" "))  //primary shortcut is a multiple-key shortcut
