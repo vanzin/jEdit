@@ -2077,7 +2077,9 @@ loop:		while (true)
 		final int check = jEdit.getIntegerProperty("checkFileStatus");
 		if ((check == 0) || !jEdit.isStartupDone()) return;
 		// "buffer visit" also includes checking the buffer when you change editpanes.
-		if ((msg.getWhat() == ViewUpdate.EDIT_PANE_CHANGED) &&
+		// "buffer visit" also includes checking the buffer when you activate view, coming from
+		// another program, which could have alterered file on disk.
+		if ((msg.getWhat() == ViewUpdate.EDIT_PANE_CHANGED || msg.getWhat() == ViewUpdate.ACTIVATED) &&
 			((check & GeneralOptionPane.checkFileStatus_focusBuffer) > 0))
 			jEdit.checkBufferStatus(View.this, true);
 		else if ((msg.getWhat() == ViewUpdate.ACTIVATED) &&

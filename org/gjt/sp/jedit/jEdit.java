@@ -2482,7 +2482,20 @@ public class jEdit
 					if(buffer.isDirty())
 						notifyFileChanged = true;
 					else
+					{
 						buffer.load(view,true);
+						// File can be changed into link on disk or vice versa, so update
+						// file-path,buffer key value pair in bufferHash
+						final Buffer b = buffer;
+						Runnable runnable = new Runnable()
+						{
+							public void run()
+							{
+								updateBufferHash(b);
+							}
+						};
+						AwtRunnableQueue.INSTANCE.runAfterIoTasks(runnable);
+					}
 				}
 				else	// no automatic reload even if general setting is true
 					autoReload = false;
@@ -3245,6 +3258,35 @@ public class jEdit
 	public static View getActiveViewInternal()
 	{
 		return activeView;
+	} //}}}
+
+		//{{{ updateBufferHash() method
+	/**
+	 * @since jEdit 5.3pre1
+	 */
+	static void updateBufferHash(Buffer buffer)
+	{
+		// Remove path,buffer key,value pair from bufferHash. We use iterator over values
+		// to find our buffer i.s.o. removing it with bufferHash.remove(oldPath), because
+		// path can be changed (e.g. file changed on disk into link.
+		for (Iterator<Buffer> iterator = bufferHash.values().iterator(); iterator.hasNext();)
+		{
+			Buffer b = (Buffer) iterator.next();
+			// Since values() is a Collection connected to bufferHash, removing buffer from the
+			// values() collection also removes it from bufferHash
+			if(buffer == b)
+				iterator.remove();
+        }		
+		
+		String path = buffer.getSymlinkPath();
+		if((VFSManager.getVFSForPath(path).getCapabilities()
+			& VFS.CASE_INSENSITIVE_CAP) != 0)
+		{
+			path = path.toLowerCase();
+		}
+
+		bufferHash.put(path,buffer);
+
 	} //}}}
 
 	//}}}

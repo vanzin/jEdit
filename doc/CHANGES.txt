@@ -123,6 +123,9 @@ Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
+- Bug 3857 fixed, related to resolving symlinks of buffers and checking for
+  updated buffers (Patch # 589 - Wim West)
+
 - EnhancedDialog NPE fix for when there is no close shortcut assigned
   (Patch # 588 - Scott McPeak)
 
