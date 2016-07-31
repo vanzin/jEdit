@@ -6,9 +6,12 @@ jEdit 5.3 version history
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
 Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
-Adam S, and Dale Anson for contributing to this release.
+Adam S, Wim West, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
+
+- Bug 3857 fixed, related to resolving symlinks of buffers and checking for
+  updated buffers (Patch # 589 - Wim West)
 
 - Fix bug #2732 - syntax highlighting broken if non-visible lines change
   (Patch #580 - Marc Häfner)
@@ -119,12 +122,9 @@ Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
 Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
 Marcelo Vanzin, Jordan Miner, yaraba, Marc M. Adkins, Scott McPeak,
-Wim West, and Eric Le Lay for contributing to this release.
+Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
-
-- Bug 3857 fixed, related to resolving symlinks of buffers and checking for
-  updated buffers (Patch # 589 - Wim West)
 
 - EnhancedDialog NPE fix for when there is no close shortcut assigned
   (Patch # 588 - Scott McPeak)
