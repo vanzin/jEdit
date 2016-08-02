@@ -780,7 +780,7 @@ public class Macros
 			String fileName = file.getName();
 			if (file.isHidden())
 			{
-				return;
+				continue;
 			}
 			else if (file.isDirectory())
 			{
