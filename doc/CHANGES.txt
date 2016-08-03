@@ -66,6 +66,8 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 
 - Fix bug #3994, ConcurrentModificationException in ProperyManager. (Dale Anson)
 
+- Fix bug #4002, too short horizontal scrollbar after view resize. (Dale Anson)
+
 }}}
 {{{ UI Improvements
 
