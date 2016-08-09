@@ -82,6 +82,9 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 - Refactor editing option pane into several tabs, allow user editing of modes
   lists, similar to editing the encoding options lists. This also fixes
   feature request #515. (Dale Anson)
+  
+- Updated NumericTextField to allow decimal numbers and only allow negative sign
+  at the start of a number. (Dale Anson)  
 
 }}}
 {{{ Miscellaneous

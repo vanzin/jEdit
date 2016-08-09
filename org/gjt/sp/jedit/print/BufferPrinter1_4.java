@@ -29,7 +29,6 @@ import javax.print.attribute.standard.*;
 import java.awt.print.*;
 import java.awt.*;
 import java.io.*;
-import javax.print.PrintService;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -108,27 +107,7 @@ public class BufferPrinter1_4
 		BufferPrintable printable = new BufferPrintable(job,format,view,
 			buffer,font,header,footer,lineNumbers,color);
 		job.setPrintable(printable);
-		
-		// TODO: finish this
-		// this is in progress, it works, but isn't quite complete
-		/*
-		PrinterDialog printerDialog = new PrinterDialog(view, format);
-		if (printerDialog.isCanceled())
-			return;
-		PrintService printService = printerDialog.getPrintService();
-		if (printService != null) 
-		{
-			try 
-			{
-				job.setPrintService(printerDialog.getPrintService());
-			}
-			catch(Exception e) {
-				// TODO: show the user a message
-				return;
-			}
-		}
-		*/
-		
+
 		if(!job.printDialog(format))
 			return;
 

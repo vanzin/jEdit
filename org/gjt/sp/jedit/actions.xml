@@ -813,7 +813,7 @@
 
 <ACTION NAME="page-setup">
 	<CODE>
-		BufferPrinter1_4.pageSetup(view);
+		BufferPrinter1_7.pageSetup(view);
 	</CODE>
 </ACTION>
 
@@ -968,10 +968,10 @@
 
 <ACTION NAME="print">
 	<CODE>
-	if(jEdit.getBooleanProperty("print.force13"))
-		BufferPrinter1_3.print(view,buffer,false);
+	if(jEdit.getBooleanProperty("print.useSystemDialog", true))
+		BufferPrinter1_4.print(view, buffer, false);
 	else
-		BufferPrinter1_4.print(view,buffer,false);
+		BufferPrinter1_7.print(view, buffer, false);
 	</CODE>
 </ACTION>
 
@@ -979,7 +979,7 @@
 
 <!-- <ACTION NAME="print-selection">
 	<CODE>
-		BufferPrinter.print(view,buffer,true);
+		BufferPrinter.print(view, buffer, true);
 	</CODE>
 </ACTION> -->
 

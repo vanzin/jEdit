@@ -30,9 +30,9 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
-import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
@@ -45,7 +45,7 @@ import org.gjt.sp.util.*;
 class BufferPrintable implements Printable
 {
 	//{{{ BufferPrintable constructor
-	BufferPrintable(PrinterJob job, PrintRequestAttributeSet format,
+	BufferPrintable(PrinterJob job, Object format,
 		View view, Buffer buffer, Font font, boolean header,
 		boolean footer, boolean lineNumbers, boolean color)
 	{
@@ -92,7 +92,10 @@ class BufferPrintable implements Printable
 				job.print();
 			else
 			{
-				job.print(format);
+				Method method = PrinterJob.class.getMethod(
+					"print",new Class[] { Class.forName(
+					"javax.print.attribute.PrintRequestAttributeSet") });
+				method.invoke(job,new Object[] { format });
 			}
 		}
 		catch(PrinterAbortException ae)
@@ -178,7 +181,7 @@ class BufferPrintable implements Printable
 
 	//{{{ Instance variables
 	private PrinterJob job;
-	private PrintRequestAttributeSet format;
+	private Object format;
 
 	private View view;
 	private Buffer buffer;

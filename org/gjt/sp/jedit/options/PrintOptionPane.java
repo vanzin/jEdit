@@ -95,20 +95,25 @@ public class PrintOptionPane extends AbstractOptionPane
 			"options.print.force13"));
 		force13.setSelected(jEdit.getBooleanProperty("print.force13"));
 		addComponent(force13);
+		
+		useSystemDialog = new JCheckBox(jEdit.getProperty("options.print.useSystemDialog"));
+		useSystemDialog.setSelected(jEdit.getBooleanProperty("print.useSystemDialog", true));
+		addComponent(useSystemDialog);
 	} //}}}
 
 	//{{{ _save() method
 	protected void _save()
 	{
-		jEdit.setFontProperty("print.font",font.getFont());
-		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
-		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
-		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
-		jEdit.setBooleanProperty("print.color",color.isSelected());
-		jEdit.setProperty("print.tabSize",(String)tabSize.getSelectedItem());
-		jEdit.setBooleanProperty("print.glyphVector",glyphVector.isSelected());
-		jEdit.setBooleanProperty("print.force13",force13.isSelected());
-		jEdit.setBooleanProperty("print.folds",printFolds.isSelected());
+		jEdit.setFontProperty("print.font", font.getFont());
+		jEdit.setBooleanProperty("print.header", printHeader.isSelected());
+		jEdit.setBooleanProperty("print.footer", printFooter.isSelected());
+		jEdit.setBooleanProperty("print.lineNumbers", printLineNumbers.isSelected());
+		jEdit.setBooleanProperty("print.color", color.isSelected());
+		jEdit.setProperty("print.tabSize", (String)tabSize.getSelectedItem());
+		jEdit.setBooleanProperty("print.glyphVector", glyphVector.isSelected());
+		jEdit.setBooleanProperty("print.force13", force13.isSelected());
+		jEdit.setBooleanProperty("print.folds", printFolds.isSelected());
+		jEdit.setBooleanProperty("print.useSystemDialog", useSystemDialog.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -121,5 +126,6 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JComboBox<String> tabSize;
 	private JCheckBox glyphVector;
 	private JCheckBox force13;
+	private JCheckBox useSystemDialog;
 	//}}}
 }
