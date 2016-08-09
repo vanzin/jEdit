@@ -87,6 +87,11 @@ class BufferPrintable1_7 implements Printable
 		reverse = b;	
 	}
 	
+	public void setPrintRangeType(int printRangeType)
+	{
+		this.printRangeType = printRangeType;	
+	}
+	
 	//{{{ print() method
 	// this can be called multiple times by the print system for the same page
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
@@ -105,22 +110,38 @@ class BufferPrintable1_7 implements Printable
 			firstCall = false;
 		}
 		
+		if (printRangeType == PrinterDialog.CURRENT_PAGE)
+		{
+			int caretLine = view.getTextArea().getCaretLine();
+			for (Integer i : pages.keySet())
+			{
+				Range range = pages.get(i);
+				if (range.contains(caretLine))
+				{
+					pageIndex = i;
+					break;
+				}
+			}
+		}
+		
 		Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
-		if (reverse)
+		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
 		{
 			pageIndex = pages.size() - 1 - pageIndex;
 			Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
 		}
 		
 		Range range = pages.get(pageIndex);
-		if (range == null || !inRange(pageIndex))
+		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
 		{
+			Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
 			return NO_SUCH_PAGE;	
 		}
 		else {
 			printPage(_gfx, pageFormat, pageIndex, true);
 		}
 
+		Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
 		return PAGE_EXISTS;
 	} //}}}
 
@@ -143,6 +164,7 @@ class BufferPrintable1_7 implements Printable
 	private Buffer buffer;
 	private boolean selection;
 	private boolean reverse;
+	private int printRangeType = PrinterDialog.ALL;
 	private Font font;
 	private SyntaxStyle[] styles;
 	private boolean header;
@@ -231,6 +253,7 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
 			if (!printFolds && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
@@ -248,6 +271,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				++ currentPhysicalLine;
 				startLine = currentPhysicalLine;
@@ -453,6 +477,11 @@ class BufferPrintable1_7 implements Printable
 		public int getEnd()
 		{
 			return end;	
+		}
+		
+		public boolean contains(int i)
+		{
+			return i >= start && i <= end;	
 		}
 		
 		public String toString()
