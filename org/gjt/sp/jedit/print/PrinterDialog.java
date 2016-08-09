@@ -1,3 +1,25 @@
+/*
+ * PrinterDialog.java
+ * :tabSize=4:indentSize=4:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2016 Dale Anson
+ * Portions Copyright 2000-2007 Sun Microsystems, Inc.  
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
 package org.gjt.sp.jedit.print;
 
@@ -26,8 +48,10 @@ import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.GenericGUIUtilities;
+import org.gjt.sp.util.Log;
 
 
+// Technical guide on the Java printing system:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/jps/spec/JPSTOC.fm.html
 public class PrinterDialog extends JDialog implements ListSelectionListener
 {
@@ -94,7 +118,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // for debugging
             for ( Attribute a : attrs )
             {
-                System.out.println( "+++++ before: " + a.getName() + " = " + a );
+                Log.log(Log.DEBUG, this, "+++++ before: " + a.getName() + " = " + a );
             }
             
             initMessages();
@@ -178,7 +202,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                         Attribute[] attrs = PrinterDialog.this.attributes.toArray();
                         for ( Attribute a : attrs )
                         {
-                            System.out.println( "+++++ after: " + a.getName() + " = " + a );
+                            Log.log(Log.DEBUG, this, "+++++ after: " + a.getName() + " = " + a );
                         }
                         
                         PrinterDialog.this.setVisible( false );

@@ -3,8 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2003 Slava Pestov
- * Portions copyright (C) 2002 Thomas Dilts
+ * Copyright (C) 2016 Dale Anson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +30,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import javax.print.attribute.standard.Chromaticity;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PageRanges;
 
@@ -40,24 +40,25 @@ import org.gjt.sp.util.*;
 //}}}
 
 /**
+ * A new buffer printable that does a lot more than the old one, like properly
+ * printing ranges of pages, reverse page printing, printing just a selection,
+ * and so on.
  * @version $Id: BufferPrintable.java 24442 2016-06-29 23:29:25Z daleanson $
  */
 class BufferPrintable1_7 implements Printable
 {
-	//{{{ BufferPrintable1_7 constructor
 	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer)
 	{
 		this.format = format;
 		this.view = view;
 		this.buffer = buffer;
-		firstCall = true;
-		
+		firstCall = true;		// pages and page ranges are calculated only once
 		
 		header = jEdit.getBooleanProperty("print.header");
 		footer = jEdit.getBooleanProperty("print.footer");
 		lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		font = jEdit.getFontProperty("print.font");
-		boolean color = jEdit.getBooleanProperty("print.color");
+		boolean color = format.get(Chromaticity.class).equals(Chromaticity.COLOR);
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
 		styles[Token.NULL] = new SyntaxStyle(textColor, null, font);
@@ -75,25 +76,40 @@ class BufferPrintable1_7 implements Printable
 		lineList = new ArrayList<Chunk>();
 
 		tokenHandler = new DisplayTokenHandler();
-	} //}}}
+	} 
 	
-	public void setSelection(boolean b)
+	/**
+ 	 * Set the line numbers that are selected in the text area.	
+ 	 * @param lines An array of lines that are selected in the text area.	
+ 	 */
+	public void setSelectedLines(int[] lines)
 	{
-		selection = b;	
+		selectedLines = Arrays.copyOf(lines, lines.length);	
+		Arrays.sort(selectedLines);
 	}
 	
+	/**
+ 	 * Set to <code>true</code> to print the pages in reverse order, that is, print
+ 	 * the last page first and the first page last.
+ 	 * @param b Whether to print in reverse or not.
+ 	 */
 	public void setReverse(boolean b)
 	{
 		reverse = b;	
 	}
 	
+	/**
+ 	 * Set the print range type.
+ 	 * @param printRangeType One of PrinterDialog.ALL, RANGE, CURRENT_PAGE, or SELECTION.
+ 	 */
 	public void setPrintRangeType(int printRangeType)
 	{
-		this.printRangeType = printRangeType;	
+		this.printRangeType = printRangeType;
+		selection = PrinterDialog.SELECTION == printRangeType;
 	}
 	
 	//{{{ print() method
-	// this can be called multiple times by the print system for the same page
+	// this can be called multiple times by the print system for the same page!
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
 		if (firstCall)
@@ -110,6 +126,9 @@ class BufferPrintable1_7 implements Printable
 			firstCall = false;
 		}
 		
+		// figure out the current page if that is what is requested. I'm using
+		// the page that contains the caret as the current page.
+		// QUESTION: use the text area first physical line instead?
 		if (printRangeType == PrinterDialog.CURRENT_PAGE)
 		{
 			int caretLine = view.getTextArea().getCaretLine();
@@ -125,12 +144,15 @@ class BufferPrintable1_7 implements Printable
 		}
 		
 		Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
+		
+		// adjust the page index for reverse printing
 		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
 		{
 			pageIndex = pages.size() - 1 - pageIndex;
 			Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
 		}
 		
+		// go ahead and print the page
 		Range range = pages.get(pageIndex);
 		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
 		{
@@ -163,6 +185,7 @@ class BufferPrintable1_7 implements Printable
 	private View view;
 	private Buffer buffer;
 	private boolean selection;
+	private int[] selectedLines;
 	private boolean reverse;
 	private int printRangeType = PrinterDialog.ALL;
 	private Font font;
@@ -182,12 +205,17 @@ class BufferPrintable1_7 implements Printable
 	private DisplayTokenHandler tokenHandler;
 	//}}}
 	
-	// parses the file to determine what lines go on what page
-	private void calculatePages(Graphics _gfx, PageFormat pageFormat) 
+	// parses the file to determine what lines belong to which page
+	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
 	{
 		pages = new HashMap<Integer, Range>();
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
+		if(frc == null)
+		{
+			frc = ((Graphics2D)_gfx).getFontRenderContext();
+			Log.log(Log.DEBUG, this, "Font render context is " + frc);
+		}
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -285,9 +313,12 @@ class BufferPrintable1_7 implements Printable
 			}
 			currentPhysicalLine++;
 		}
+		return pages;
 	}
 
 	//{{{ inRange() method
+	// returns true if the given page number is one of the pages requested to
+	// be printed
 	private boolean inRange(int pageNumber)
 	{
 		PageRanges ranges = (PageRanges)format.get(PageRanges.class);
@@ -305,6 +336,7 @@ class BufferPrintable1_7 implements Printable
 	
 
 	//{{{ printPage() method
+	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
 		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
@@ -316,7 +348,7 @@ class BufferPrintable1_7 implements Printable
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
 
-		Log.log(Log.DEBUG,this,"#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
+		Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
 
 		if(header)
 		{
@@ -363,8 +395,9 @@ class BufferPrintable1_7 implements Printable
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
 
 		lm = font.getLineMetrics("gGyYX", frc);
-		Log.log(Log.DEBUG,this,"Line height is " + lm.getHeight());
+		Log.log(Log.DEBUG, this, "Line height is " + lm.getHeight());
 
+		// print each line
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
@@ -377,7 +410,14 @@ class BufferPrintable1_7 implements Printable
 			}
 			if (!jEdit.getBooleanProperty("print.folds",true) && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				Log.log(Log.DEBUG,this,"Skipping invisible line");
+				Log.log(Log.DEBUG, this, "Skipping invisible line");
+				continue;
+			}
+			
+			// print only selected lines if printing selection
+			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
+			{
+				Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
 				continue;
 			}
 				
@@ -420,8 +460,8 @@ class BufferPrintable1_7 implements Printable
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(headerText,frc);
 
-		Rectangle2D bounds = font.getStringBounds(headerText,frc);
-		Rectangle2D headerBounds = new Rectangle2D.Double(pageX,pageY,pageWidth,bounds.getHeight());
+		Rectangle2D bounds = font.getStringBounds(headerText, frc);
+		Rectangle2D headerBounds = new Rectangle2D.Double(pageX ,pageY, pageWidth, bounds.getHeight());
 
 		if(actuallyPaint)
 		{
@@ -458,40 +498,6 @@ class BufferPrintable1_7 implements Printable
 
 	//}}}
 	
-	class Range
-	{
-		int start = 0;
-		int end = 0;
-		
-		public Range(int start, int end)
-		{
-			this.start = start;
-			this.end = end;
-		}
-		
-		public int getStart()
-		{
-			return start;	
-		}
-		
-		public int getEnd()
-		{
-			return end;	
-		}
-		
-		public boolean contains(int i)
-		{
-			return i >= start && i <= end;	
-		}
-		
-		public String toString()
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.append("Range[").append(start).append(", ").append(end).append(']');
-			return sb.toString();
-		}
-	}
-
 	//{{{ PrintTabExpander class
 	static class PrintTabExpander implements TabExpander
 	{

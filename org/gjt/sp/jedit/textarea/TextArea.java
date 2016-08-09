@@ -2119,7 +2119,8 @@ forward_scan:	do
 	 * method can be passed as a parameter to such methods as
 	 * {@link JEditBuffer#getLineText(int)}.
 	 *
-	 * @return Non-null, non-zero sized array of line indexes.
+	 * @return Non-null, non-zero sized array of line indexes. If no lines are
+	 * actually selected, return the caret line in the array.
 	 * @since jEdit 3.2pre1
 	 */
 	public int[] getSelectedLines()

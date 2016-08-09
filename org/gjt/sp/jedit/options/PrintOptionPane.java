@@ -63,6 +63,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		addComponent(printLineNumbers);
 
 		/* Color */
+		// NOTE: this is ignored when using BufferPrinter1_7 and BufferPrintable1_7.
 		color = new JCheckBox(jEdit.getProperty("options.print"
 			+ ".color"));
 		color.setSelected(jEdit.getBooleanProperty("print.color"));

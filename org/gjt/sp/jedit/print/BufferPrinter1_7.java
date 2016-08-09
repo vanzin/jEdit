@@ -27,8 +27,9 @@ package org.gjt.sp.jedit.print;
 import java.awt.print.*;
 import java.awt.*;
 import java.io.*;
-import javax.print.*;
+import java.util.HashMap;
 
+import javax.print.*;
 import javax.print.attribute.*;
 import javax.print.attribute.standard.*;
 import javax.print.event.*;
@@ -60,18 +61,20 @@ public class BufferPrinter1_7
 	//{{{ print() method
 	public static void print(final View view, final Buffer buffer, boolean selection)
 	{
+		// load any saved printing attributes, these are put into 'format'
 		loadPrintSpec();
 		String jobName = MiscUtilities.abbreviateView(buffer.getPath());
 		format.add(new JobName(jobName, null));
 		
+		// show the print dialog so the user can make their printer settings
 		PrinterDialog printerDialog = new PrinterDialog(view, format, false);
 		if (printerDialog.isCanceled())
 		{
 			return;
 		}
 		
+		// set up the print job
 		PrintService printService = printerDialog.getPrintService();
-		OutputStream outputStream = null;
 		if (printService != null) 
 		{
 			try 
@@ -92,9 +95,61 @@ public class BufferPrinter1_7
 			return;
 		}
 		
+		// set up the printable. Some values need to be set directly from the print
+		// dialog since they don't have attributes, like reverse page printing and printRangeType
 		BufferPrintable1_7 printable = new BufferPrintable1_7(format, view, buffer);
 		printable.setReverse(printerDialog.getReverse());
-		printable.setPrintRangeType(printerDialog.getPrintRangeType());
+		int printRangeType = printerDialog.getPrintRangeType();
+		printable.setPrintRangeType(printRangeType);
+		
+		// check if printing a selection, if so, recalculate the page ranges.
+		// TODO: I'm not taking even/odd page setting into account here, nor am
+		// I considering any page values that may have been set in the page range.
+		// I don't think this is important for printing a selection, which is
+		// generally just a few lines rather than pages. I could be wrong...
+		if (printRangeType == PrinterDialog.SELECTION)
+		{
+			// calculate the actual pages with a selection or bail if there is no selection	
+			int selectionCount = view.getTextArea().getSelectionCount();
+			if (selectionCount == 0)
+			{
+				JOptionPane.showMessageDialog(view, jEdit.getProperty("print-error.message", new String[]{"No text is selected to print."}), jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			// get the page ranges from the printable
+			HashMap<Integer, Range> pageRanges = getPageRanges(view, printable, format);
+			if (pageRanges == null || pageRanges.isEmpty())
+			{
+				JOptionPane.showMessageDialog(view, jEdit.getProperty("print-error.message", new String[]{"Unable to calculate page ranges."}), jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			// find the pages that contain the selection(s) and construct a new
+			// page range for the format
+			int[] selectedLines = view.getTextArea().getSelectedLines();
+			StringBuilder pageRange = new StringBuilder();
+			for (Integer i : pageRanges.keySet())
+			{
+				Range range = pageRanges.get(i);
+				for (int line : selectedLines)
+				{
+					if (range.contains(line))
+					{
+						pageRange.append(i + 1).append(',');
+						break;
+					}
+				}
+			}
+			pageRange.deleteCharAt(pageRange.length() - 1);
+			format.add(new PageRanges(pageRange.toString()));
+			
+			// also tell the printable exactly which lines are selected so it
+			// doesn't have to fetch them itself
+			printable.setSelectedLines(selectedLines);
+		}
+		
+		// ready to print
 		Doc doc = new SimpleDoc(printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		try {
 			job.print(doc, format);
@@ -105,7 +160,46 @@ public class BufferPrinter1_7
 		
 	} //}}}
 
-	//{{{ savePrintSpec() method
+	// have the printable calculate the pages and ranges, the map has the page
+	// number as the key, a range containing the start and end line numbers of 
+	// that page
+	private static HashMap<Integer, Range> getPageRanges(View view, BufferPrintable1_7 printable, PrintRequestAttributeSet attributes)
+	{
+		Graphics graphics = view.getGraphics();
+		PageFormat pageFormat = createPageFormat(attributes);
+		return printable.calculatePages(graphics, pageFormat);
+	}
+
+	// create a page format using the values from the given attribute set
+	private static PageFormat createPageFormat(PrintRequestAttributeSet attributes)
+	{
+		Paper paper = new Paper();
+		MediaPrintableArea mpa = (MediaPrintableArea)attributes.get(MediaPrintableArea.class);
+		int units = MediaPrintableArea.INCH;
+		double dpi = 72.0;
+		double x = (double)mpa.getX(units) * dpi;
+		double y = (double)mpa.getY(units) * dpi;
+		double w = (double)mpa.getWidth(units) * dpi;
+		double h = (double)mpa.getHeight(units) * dpi;
+		paper.setImageableArea(x, y, w, h);
+		
+		int orientation = PageFormat.PORTRAIT;
+		OrientationRequested or = (OrientationRequested)attributes.get(OrientationRequested.class);
+		if (OrientationRequested.LANDSCAPE.equals(or) || OrientationRequested.REVERSE_LANDSCAPE.equals(or))
+		{
+			orientation = PageFormat.LANDSCAPE;
+		}
+
+		PageFormat pageFormat = new PageFormat();
+		pageFormat.setPaper(paper);
+		pageFormat.setOrientation(orientation);
+		
+		return pageFormat;
+	}
+	
+	//{{{ loadPrintSpec() method
+	// this finds a previously saved print attribute set in the settings directory,
+	// or creates a new, empty attribute set if not found. 
 	private static void loadPrintSpec() 
 	{
 		format = new HashPrintRequestAttributeSet();
@@ -113,8 +207,7 @@ public class BufferPrinter1_7
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
 		{
-			String printSpecPath = MiscUtilities.constructPath(
-				settings, "printspec");
+			String printSpecPath = MiscUtilities.constructPath( settings, "printspec" );
 			File filePrintSpec = new File(printSpecPath);
 
 			if (filePrintSpec.exists())
@@ -129,14 +222,14 @@ public class BufferPrinter1_7
 				}
 				catch(Exception e)
 				{
-					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
+					Log.log(Log.ERROR, BufferPrinter1_7.class, e);
 				} finally
 				{
 					try
 					{
 						if (obIn != null)
 							obIn.close();
-					} catch (IOException e) {}
+					} catch (IOException e) {}	// NOPMD
 				}
 			}
 		}
@@ -168,11 +261,13 @@ public class BufferPrinter1_7
 				try
 				{
 					obOut.close();
-				} catch (IOException e) {}
+				} catch (IOException e) {}	// NOPMD
 		}
 	}
 	//}}}
 	
+	// print job listener, does clean up when the print job is complete and shows
+	// the user any errors generated by the printing system
 	static class JobListener extends PrintJobAdapter
 	{
 		
@@ -196,12 +291,12 @@ public class BufferPrinter1_7
 				try {
 					outputStream.flush();
 				}
-				catch(Exception e) {
+				catch(Exception e) { 	// NOPMD
 				}
 				try {
 					outputStream.close();
 				}
-				catch(Exception e) {
+				catch(Exception e) {	// NOPMD
 				}
 			}
 			view.getStatus().setMessageAndClear("Printing complete.");
