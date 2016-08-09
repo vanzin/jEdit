@@ -100,7 +100,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		addComponent(force13);
 		
 		useSystemDialog = new JCheckBox(jEdit.getProperty("options.print.useSystemDialog"));
-		useSystemDialog.setSelected(jEdit.getBooleanProperty("print.useSystemDialog", true));
+		useSystemDialog.setSelected(jEdit.getBooleanProperty("print.useSystemDialog", false));
 		addComponent(useSystemDialog);
 	} //}}}
 
