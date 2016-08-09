@@ -45,12 +45,11 @@ import org.gjt.sp.util.*;
 class BufferPrintable1_7 implements Printable
 {
 	//{{{ BufferPrintable1_7 constructor
-	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer, boolean selection)
+	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer)
 	{
 		this.format = format;
 		this.view = view;
 		this.buffer = buffer;
-		this.selection = selection;
 		firstCall = true;
 		
 		
@@ -78,6 +77,16 @@ class BufferPrintable1_7 implements Printable
 		tokenHandler = new DisplayTokenHandler();
 	} //}}}
 	
+	public void setSelection(boolean b)
+	{
+		selection = b;	
+	}
+	
+	public void setReverse(boolean b)
+	{
+		reverse = b;	
+	}
+	
 	//{{{ print() method
 	// this can be called multiple times by the print system for the same page
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
@@ -96,7 +105,12 @@ class BufferPrintable1_7 implements Printable
 			firstCall = false;
 		}
 		
-		Log.log(Log.DEBUG,this,"Asked to print page " + pageIndex);
+		Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
+		if (reverse)
+		{
+			pageIndex = pages.size() - 1 - pageIndex;
+			Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
+		}
 		
 		Range range = pages.get(pageIndex);
 		if (range == null || !inRange(pageIndex))
@@ -128,6 +142,7 @@ class BufferPrintable1_7 implements Printable
 	private View view;
 	private Buffer buffer;
 	private boolean selection;
+	private boolean reverse;
 	private Font font;
 	private SyntaxStyle[] styles;
 	private boolean header;

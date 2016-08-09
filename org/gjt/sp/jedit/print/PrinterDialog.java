@@ -56,7 +56,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     private int EVEN = 2;
     private int onlyPrintPages = ALL;
     private DocFlavor DOC_FLAVOR = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
-
+    private boolean reversePrinting = false;
 
 
     public PrinterDialog( View owner, PrintRequestAttributeSet attributes, boolean pageSetupOnly )
@@ -246,6 +246,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     public boolean isCanceled()
     {
         return canceled;
+    }
+    
+    public boolean getReverse() {
+        return reversePrinting;   
     }
 
 
@@ -565,6 +569,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         JRadioButton allPages;
         JRadioButton pages;
         JCheckBox collate;
+        JCheckBox reverse;
         JTextField pagesField;
 
 
@@ -641,9 +646,15 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // TODO: reverse page printing is not yet implemented. This requires
             // a significant modification to BufferPrintable. Thee is no standard
             // printer attribute to specify this.
+            reverse = new JCheckBox(jEdit.getProperty( "print.dialog.Reverse", "Reverse" ) );
+            reverse.setSelected( false );
+            reverse.setEnabled( true );
+            
             copiesPanel.add( copiesLabel );
             copiesPanel.add( copies );
             copiesPanel.add( collate );
+            copiesPanel.add( Box.createGlue() );
+            copiesPanel.add( reverse );
 
             JPanel content = new JPanel( new BorderLayout() );
             JPanel top = new JPanel( new BorderLayout() );
@@ -690,6 +701,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
             as.add( new Copies( ( Integer )copies.getValue() ) );
+            
+            reversePrinting = reverse.isSelected();
 
             return as;
         }

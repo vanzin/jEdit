@@ -72,6 +72,7 @@ public class BufferPrinter1_7
 		
 		PrintService printService = printerDialog.getPrintService();
 		OutputStream outputStream = null;
+		boolean reversePrinting = printerDialog.getReverse();
 		if (printService != null) 
 		{
 			try 
@@ -92,7 +93,8 @@ public class BufferPrinter1_7
 			return;
 		}
 		
-		BufferPrintable1_7 printable = new BufferPrintable1_7(format, view, buffer, selection);
+		BufferPrintable1_7 printable = new BufferPrintable1_7(format, view, buffer);
+		printable.setReverse(reversePrinting);
 		Doc doc = new SimpleDoc(printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		try {
 			job.print(doc, format);
