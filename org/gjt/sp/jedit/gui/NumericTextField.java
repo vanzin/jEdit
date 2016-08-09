@@ -23,13 +23,14 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.awt.Component;
 
 /** A TextField that accepts only numeric values.
  * @author Matthieu Casanova
  * @version $Id: KeyEventWorkaround.java 12889 2008-06-23 20:14:00Z kpouer $
  * @since jEdit 4.3pre15
  */
-public class NumericTextField extends JTextField
+public class NumericTextField extends JTextField implements ComboBoxEditor
 {
 	private final boolean positiveOnly;
 	private final boolean integerOnly;
@@ -105,4 +106,24 @@ public class NumericTextField extends JTextField
 		else
 			return Float.valueOf(getText());
 	}
+	
+	//{{{ ComboBoxEditor methods
+	public Component getEditorComponent()
+	{
+		return this;	
+	}
+	
+	public Object getItem()
+	{
+		return getText();	
+	}
+	
+	public void setItem(Object item)
+	{
+		if (item == null)
+			setText("");
+		else
+			setText(item.toString());
+	}
+	//}}}
 }

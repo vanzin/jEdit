@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -68,12 +69,14 @@ public class PrintOptionPane extends AbstractOptionPane
 		addComponent(color);
 
 		/* Tab size */
-		// TODO: make sure this can only accept positive numbers
+		// DONE: make sure this can only accept positive numbers, added
+		// NumericTextField as the combobox editor.
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox<String>(tabSizes);
+		tabSize.setEditor(new NumericTextField("", true, true));
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
-		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
+		addComponent(jEdit.getProperty("options.print.tabSize"), tabSize);
 
 
 		/* Print Folds */
