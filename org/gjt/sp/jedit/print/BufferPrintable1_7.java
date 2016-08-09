@@ -101,11 +101,9 @@ class BufferPrintable1_7 implements Printable
 		Range range = pages.get(pageIndex);
 		if (range == null || !inRange(pageIndex))
 		{
-			System.out.println("+++++ returning no such page for " + pageIndex);
 			return NO_SUCH_PAGE;	
 		}
 		else {
-			System.out.println("+++++ printing page " + pageIndex);
 			printPage(_gfx, pageFormat, pageIndex, true);
 		}
 
@@ -218,7 +216,6 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				System.out.println("+++++ calculatePages, page " + pageCount + " has range: " + range);
 				break;
 			}
 			if (!printFolds && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
@@ -236,7 +233,6 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				System.out.println("+++++ calculatePages, page " + pageCount + " has range: " + range);
 				++ pageCount;
 				++ currentPhysicalLine;
 				startLine = currentPhysicalLine;
@@ -265,7 +261,6 @@ class BufferPrintable1_7 implements Printable
 		{
 			answer = ranges.contains(pageNumber + 1);	
 		}
-		System.out.println("+++++ will print? " + answer + ", pageNumber + 1 = " + (pageNumber + 1) + ", ranges = " + ranges);
 		return answer;
 	} //}}}
 	
@@ -333,7 +328,6 @@ class BufferPrintable1_7 implements Printable
 
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
-		System.out.println("+++++ range for page index " + pageIndex + " = " + range);
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
