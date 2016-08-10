@@ -127,7 +127,7 @@ Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
 Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
 Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
 Marcelo Vanzin, Jordan Miner, yaraba, Marc M. Adkins, Scott McPeak,
-Eric Le Lay for contributing to this release.
+and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 

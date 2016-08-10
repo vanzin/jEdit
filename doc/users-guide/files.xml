@@ -117,7 +117,7 @@
 
             <para>The autosave feature protects your work from computer crashes
             and such. Every 30 seconds, all buffers with unsaved changes are
-            written out to the same directory with their respective file names, 
+            written out to the same directory with their respective file names,
             enclosed in hash (<quote>#</quote>) characters. For example,
             <filename>/home/user/project/program.c</filename> will be autosaved to
             <filename>/home/user/project/#program.c#</filename>.</para>
@@ -622,7 +622,7 @@
 
         <para>To improve responsiveness and perceived performance, jEdit
         executes all buffer input/output tasks asynchronously. Plugins should
-        do the same. 
+        do the same.
         When a task such as this is in progress, the status bar should display the number of running tasks and an icon that spins. If you do not see this, you can add the widget from the <xref linkend="status-bar-pane"/>.  </para>
 
         <para>The
@@ -637,7 +637,7 @@
 
     <section id="printing">
         <title>Printing</title>
-        
+
         <para>jEdit has gone through several iterations in printing. All 3 versions are still available so you can choose which one fits best for your system and printer:
         <itemizedlist>
             <listitem>
@@ -652,7 +652,7 @@
 
             <listitem>
                 <para>Printing using the latest (Java 1.8 at this writing) printing API and provides jEdit it's own printing dialog. This version is preferred and has the most page setup and printer options. It fixes all of the bugs in the previous iteration and provides additional options.</para>
-                <para>To use this option, go to Utilities - Global Options - Printing and uncheck both "Use old printing API" and "Use system print dialog". This will allow you to use jEdit's full featured print dialog to set printing options.
+                <para>To use this option, go to Utilities - Global Options - Printing and uncheck both "Use old printing API" and "Use system print dialog". This will allow you to use jEdit's full featured print dialog to set printing options.</para>
             </listitem>
         </itemizedlist>
         </para>
@@ -707,9 +707,9 @@
                 <para>There are also 3 check boxes for workarounds for older Java bugs. Since the current jEdit versions require at least Java 1.7, all 3 of these boxes should be unchecked.</para>
             </listitem>
         </itemizedlist>
-        
+
         <para>
-          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. This is only an approximation of the breaks on the actual printed pages. They will be close, but jEdit is not a word processor, so there is no way to set margins or insert page breaks. 
+          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. This is only an approximation of the breaks on the actual printed pages. They will be close, but jEdit is not a word processor, so there is no way to set margins or insert page breaks.
         </para>
     </section>
 
@@ -743,7 +743,7 @@
         at once can be selected by clicking on them in the list while holding
         down <keycap>Control</keycap>. After all buffers have been closed, a new
         untitled buffer is opened.</para>
-        
+
         <para><guimenuitem>Close Others</guimenuitem>, <guimenuitem>Close All</guimenuitem>, and <guimenuitem>Close All (Global)</guimenuitem> can ask for confirmation before closing. The confirmation dialog can be shown by checking the '"Close All" asks for confirmation' box in Utilities - Global Options - General.</para>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Exit</guimenuitem>
