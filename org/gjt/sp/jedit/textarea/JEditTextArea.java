@@ -44,6 +44,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.options.GlobalOptions;
+import org.gjt.sp.jedit.print.PageBreakExtension;
 //}}}
 
 /**
@@ -72,6 +73,7 @@ public class JEditTextArea extends TextArea
 		this.view = view;
 		setRightClickPopupEnabled(true);
 		painter.setLineExtraSpacing(jEdit.getIntegerProperty("options.textarea.lineSpacing", 0));
+		new PageBreakExtension(this);
 		EditBus.addToBus(this);
 	} //}}}
 

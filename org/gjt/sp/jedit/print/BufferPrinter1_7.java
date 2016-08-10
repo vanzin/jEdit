@@ -59,7 +59,7 @@ public class BufferPrinter1_7
 	} //}}}
 
 	//{{{ print() method
-	public static void print(final View view, final Buffer buffer, boolean selection)
+	public static void print(final View view, final Buffer buffer)
 	{
 		// load any saved printing attributes, these are put into 'format'
 		loadPrintSpec();
@@ -152,6 +152,7 @@ public class BufferPrinter1_7
 		// ready to print
 		Doc doc = new SimpleDoc(printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null);
 		try {
+			// TODO: put this in a swing worker, it can take some time for a large buffer
 			job.print(doc, format);
 		}
 		catch(PrintException e) {
@@ -159,7 +160,19 @@ public class BufferPrinter1_7
 		}
 		
 	} //}}}
-
+	
+	/**
+ 	 * This is intended for use by classes that need to know the page ranges
+ 	 * of the buffer.
+ 	 */
+	public static HashMap<Integer, Range> getPageRanges(View view, Buffer buffer)
+	{
+		loadPrintSpec();
+		BufferPrintable1_7 printable = new 	BufferPrintable1_7(format, view, buffer);
+		return BufferPrinter1_7.getPageRanges(view, printable, format);
+	}
+	
+	
 	// have the printable calculate the pages and ranges, the map has the page
 	// number as the key, a range containing the start and end line numbers of 
 	// that page

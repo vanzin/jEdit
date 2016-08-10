@@ -191,16 +191,14 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			GridBagConstraints.VERTICAL);
 
 		/* Line highlight */
-		lineHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".lineHighlight"));
+		lineHighlight = new JCheckBox(jEdit.getProperty("options.textarea.lineHighlight"));
 		lineHighlight.setSelected(jEdit.getBooleanProperty("view.lineHighlight"));
 		addComponent(lineHighlight,lineHighlightColor = new ColorWellButton(
 			jEdit.getColorProperty("view.lineHighlightColor")),
 			GridBagConstraints.VERTICAL);
 
 		/* Structure highlight */
-		structureHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".structureHighlight"));
+		structureHighlight = new JCheckBox(jEdit.getProperty("options.textarea.structureHighlight"));
 		structureHighlight.setSelected(jEdit.getBooleanProperty(
 			"view.structureHighlight"));
 		addComponent(structureHighlight,structureHighlightColor = new ColorWellButton(
@@ -208,26 +206,30 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			GridBagConstraints.VERTICAL);
 
 		/* EOL markers */
-		eolMarkers = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".eolMarkers"));
+		eolMarkers = new JCheckBox(jEdit.getProperty("options.textarea.eolMarkers"));
 		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
 		addComponent(eolMarkers,eolMarkerColor =new ColorWellButton(
 			jEdit.getColorProperty("view.eolMarkerColor")),
 			GridBagConstraints.VERTICAL);
 
 		/* Wrap guide */
-		wrapGuide = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".wrapGuide"));
+		wrapGuide = new JCheckBox(jEdit.getProperty("options.textarea.wrapGuide"));
 		wrapGuide.setSelected(jEdit.getBooleanProperty("view.wrapGuide"));
 		addComponent(wrapGuide,wrapGuideColor = new ColorWellButton(
 			jEdit.getColorProperty("view.wrapGuideColor")),
 			GridBagConstraints.VERTICAL);
 
+		/* page breaks */
+		pageBreaks = new JCheckBox(jEdit.getProperty("options.textarea.pageBreaks"));
+		pageBreaks.setSelected(jEdit.getBooleanProperty("view.pageBreaks", false));
+		addComponent(pageBreaks, pageBreakColor = new ColorWellButton(
+			jEdit.getColorProperty("view.pageBreakColor")),
+			GridBagConstraints.VERTICAL);
+
 		addSeparator();
 
 		/* Electric borders */
-		electricBorders = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".electricBorders"));
+		electricBorders = new JCheckBox(jEdit.getProperty("options.textarea.electricBorders"));
 		electricBorders.setSelected(!"0".equals(jEdit.getProperty(
 			"view.electricBorders")));
 		addComponent(electricBorders);
@@ -290,6 +292,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setColorProperty("view.wrapGuideColor",
 			wrapGuideColor.getSelectedColor());
+		jEdit.setBooleanProperty("view.pageBreaks", pageBreaks.isSelected());
+		jEdit.setColorProperty("view.pageBreakColor", pageBreakColor.getSelectedColor());
+		
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
 		AntiAlias nv = new AntiAlias(jEdit.getProperty("view.antiAlias"));
@@ -326,6 +331,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private ColorWellButton eolMarkerColor;
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
+	private JCheckBox pageBreaks;
+	private ColorWellButton pageBreakColor;
 	private JCheckBox electricBorders;
 	private JComboBox<String> antiAlias;
 	private JCheckBox fracFontMetrics;

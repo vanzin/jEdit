@@ -813,6 +813,11 @@
 
 <ACTION NAME="page-setup">
 	<CODE>
+	if(jEdit.getBooleanProperty("print.force13", false))
+		BufferPrinter1_3.pageSetup(view);
+	else if(jEdit.getBooleanProperty("print.useSystemDialog", false))
+		BufferPrinter1_4.pageSetup(view);
+	else
 		BufferPrinter1_7.pageSetup(view);
 	</CODE>
 </ACTION>
@@ -968,20 +973,14 @@
 
 <ACTION NAME="print">
 	<CODE>
-	if(jEdit.getBooleanProperty("print.useSystemDialog", true))
+	if(jEdit.getBooleanProperty("print.force13", false))
+		BufferPrinter1_3.print(view, buffer, false);
+	else if(jEdit.getBooleanProperty("print.useSystemDialog", false))
 		BufferPrinter1_4.print(view, buffer, false);
 	else
-		BufferPrinter1_7.print(view, buffer, false);
+		BufferPrinter1_7.print(view, buffer);
 	</CODE>
 </ACTION>
-
-<!-- not yet implemented -->
-
-<!-- <ACTION NAME="print-selection">
-	<CODE>
-		BufferPrinter.print(view, buffer, true);
-	</CODE>
-</ACTION> -->
 
 <ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<CODE>

@@ -637,6 +637,25 @@
 
     <section id="printing">
         <title>Printing</title>
+        
+        <para>jEdit has gone through several iterations in printing. All 3 versions are still available so you can choose which one fits best for your system and printer:
+        <itemizedlist>
+            <listitem>
+                <para>Printing using the Java 1.3 printing API. This is really clunky but generally works. There are limited options as far as page setup and printer settings.</para>
+                <para>To use this option, go to Utilities - Global Options - Printing and check "Use old printing API" and uncheck "Use system print dialog".</para>
+            </listitem>
+
+            <listitem>
+                <para>Printing using a combination of the Java 1.3 and Java 1.4 printing API. There are a number of bugs in this one.</para>
+                <para>To use this option, go to Utilities - Global Options - Printing and uncheck "Use old printing API" and check "Use system print dialog".</para>
+            </listitem>
+
+            <listitem>
+                <para>Printing using the latest (Java 1.8 at this writing) printing API and provides jEdit it's own printing dialog. This version is preferred and has the most page setup and printer options. It fixes all of the bugs in the previous iteration and provides additional options.</para>
+                <para>To use this option, go to Utilities - Global Options - Printing and uncheck both "Use old printing API" and "Use system print dialog". This will allow you to use jEdit's full featured print dialog to set printing options.
+            </listitem>
+        </itemizedlist>
+        </para>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
         (shortcut: <keycap>C+p</keycap>) prints the current buffer.</para>
@@ -671,7 +690,7 @@
             </listitem>
 
             <listitem>
-                <para>If the output should be color or black and white.</para>
+                <para>If the output should be color or black and white. This option is used only if one of the older printing systems. If you're using the latest jEdit printing system, the color printing choice is on the 'Advanced' tab in the printing dialog. </para>
             </listitem>
 
             <listitem>
@@ -683,7 +702,15 @@
             <listitem>
                 <para>If folded regions should be printed.</para>
             </listitem>
+
+            <listitem>
+                <para>There are also 3 check boxes for workarounds for older Java bugs. Since the current jEdit versions require at least Java 1.7, all 3 of these boxes should be unchecked.</para>
+            </listitem>
         </itemizedlist>
+        
+        <para>
+          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. This is only an approximation of the breaks on the actual printed pages. They will be close, but jEdit is not a word processor, so there is no way to set margins or insert page breaks. 
+        </para>
     </section>
 
     <section id="closing-exiting">

@@ -259,6 +259,10 @@ view.eolMarkerChar=↩
 view.wrapGuide=true
 view.wrapGuideColor=#8080ff
 
+# Wrap guide
+view.pageBreaks=true
+view.pageBreaksColor=#8080ff
+
 # Caret color
 view.caretColor=#ff0000
 

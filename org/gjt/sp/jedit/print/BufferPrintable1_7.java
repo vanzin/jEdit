@@ -37,7 +37,7 @@ import javax.print.attribute.standard.PageRanges;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
-//}}}
+
 
 /**
  * A new buffer printable that does a lot more than the old one, like properly
@@ -47,6 +47,38 @@ import org.gjt.sp.util.*;
  */
 class BufferPrintable1_7 implements Printable
 {
+	private static Color headerColor = Color.lightGray;
+	private static Color headerTextColor = Color.black;
+	private static Color footerColor = Color.lightGray;
+	private static Color footerTextColor = Color.black;
+	private static Color lineNumberColor = Color.gray;
+	private static Color textColor = Color.black;
+
+	private PrintRequestAttributeSet format;
+	private boolean firstCall;
+
+	private View view;
+	private Buffer buffer;
+	private boolean selection;
+	private int[] selectedLines;
+	private boolean reverse;
+	private int printRangeType = PrinterDialog.ALL;
+	private Font font;
+	private SyntaxStyle[] styles;
+	private boolean header;
+	private boolean footer;
+	private boolean lineNumbers;
+
+	private HashMap<Integer, Range> pages;
+	private int currentPhysicalLine;
+
+	private LineMetrics lm;
+	private final List<Chunk> lineList;
+
+	private FontRenderContext frc;
+
+	private DisplayTokenHandler tokenHandler;
+	
 	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer)
 	{
 		this.format = format;
@@ -76,7 +108,15 @@ class BufferPrintable1_7 implements Printable
 		lineList = new ArrayList<Chunk>();
 
 		tokenHandler = new DisplayTokenHandler();
-	} 
+	}
+	
+	public void setFont(Font font)
+	{
+		if (font != null)
+		{
+			this.font = font;
+		}
+	}
 	
 	/**
  	 * Set the line numbers that are selected in the text area.	
@@ -108,20 +148,12 @@ class BufferPrintable1_7 implements Printable
 		selection = PrinterDialog.SELECTION == printRangeType;
 	}
 	
-	//{{{ print() method
-	// this can be called multiple times by the print system for the same page!
+	// this can be called multiple times by the print system for the same page, and
+	// all calls must be handled for the page to print properly. 
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
 		if (firstCall)
 		{
-			// we keep the first non-null frc we get, since sometimes
-			// we get invalid ones on subsequent pages on Windows
-			if(frc == null)
-			{
-				frc = ((Graphics2D)_gfx).getFontRenderContext();
-				Log.log(Log.DEBUG, this, "Font render context is " + frc);
-			}
-
 			calculatePages(_gfx, pageFormat);
 			firstCall = false;
 		}
@@ -165,45 +197,8 @@ class BufferPrintable1_7 implements Printable
 
 		Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
 		return PAGE_EXISTS;
-	} //}}}
+	} 
 
-	//{{{ Private members
-
-	//{{{ Static variables
-	private static Color headerColor = Color.lightGray;
-	private static Color headerTextColor = Color.black;
-	private static Color footerColor = Color.lightGray;
-	private static Color footerTextColor = Color.black;
-	private static Color lineNumberColor = Color.gray;
-	private static Color textColor = Color.black;
-	//}}}
-
-	//{{{ Instance variables
-	private PrintRequestAttributeSet format;
-	private boolean firstCall;
-
-	private View view;
-	private Buffer buffer;
-	private boolean selection;
-	private int[] selectedLines;
-	private boolean reverse;
-	private int printRangeType = PrinterDialog.ALL;
-	private Font font;
-	private SyntaxStyle[] styles;
-	private boolean header;
-	private boolean footer;
-	private boolean lineNumbers;
-
-	private HashMap<Integer, Range> pages;
-	private int currentPhysicalLine;
-
-	private LineMetrics lm;
-	private final List<Chunk> lineList;
-
-	private FontRenderContext frc;
-
-	private DisplayTokenHandler tokenHandler;
-	//}}}
 	
 	// parses the file to determine what lines belong to which page
 	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
@@ -316,7 +311,6 @@ class BufferPrintable1_7 implements Printable
 		return pages;
 	}
 
-	//{{{ inRange() method
 	// returns true if the given page number is one of the pages requested to
 	// be printed
 	private boolean inRange(int pageNumber)
@@ -332,10 +326,9 @@ class BufferPrintable1_7 implements Printable
 			answer = ranges.contains(pageNumber + 1);	
 		}
 		return answer;
-	} //}}}
+	} 
 	
 
-	//{{{ printPage() method
 	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
@@ -451,9 +444,8 @@ class BufferPrintable1_7 implements Printable
 				break;
 			}
 		}
-	} //}}}
+	} 
 
-	//{{{ paintHeader() method
 	private double paintHeader(Graphics2D gfx, double pageX, double pageY, double pageWidth, boolean actuallyPaint)
 	{
 		String headerText = jEdit.getProperty("print.headerText", new String[] { buffer.getName() });
@@ -473,9 +465,8 @@ class BufferPrintable1_7 implements Printable
 
 		return headerBounds.getHeight();
 	}
-	//}}}
+	
 
-	//{{{ paintFooter() method
 	private double paintFooter(Graphics2D gfx, double pageX, double pageY, double pageWidth, double pageHeight, int pageIndex, boolean actuallyPaint)
 	{
 		String footerText = jEdit.getProperty("print.footerText", new Object[] { new Date(), Integer.valueOf(pageIndex + 1)});
@@ -494,26 +485,23 @@ class BufferPrintable1_7 implements Printable
 		}
 
 		return footerBounds.getHeight();
-	} //}}}
+	} 
 
-	//}}}
 	
-	//{{{ PrintTabExpander class
+	
 	static class PrintTabExpander implements TabExpander
 	{
 		private double tabWidth;
 
-		//{{{ PrintTabExpander constructor
 		PrintTabExpander(double tabWidth)
 		{
 			this.tabWidth = tabWidth;
-		} //}}}
+		} 
 
-		//{{{ nextTabStop() method
 		public float nextTabStop(float x, int tabOffset)
 		{
 			int ntabs = (int)((x + 1) / tabWidth);
 			return (float)((ntabs + 1) * tabWidth);
-		} //}}}
-	} //}}}
+		} 
+	} 
 }
