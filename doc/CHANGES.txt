@@ -96,6 +96,10 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
   org.gjt.sp.jedit.GUIUtilities suitable for the standalone TextArea
   package; all methods kept but deprecated and proxies (Eric Le Lay).
 
+- refactor Help table of contents loading code to a separate class
+  (HelpTOCLoader). Make relevant members public, so the help TOC
+  is accessible to other code, e.g. the HelpServer plugin (Eric Le Lay).
+
 }}}
 {{{ Editing
 

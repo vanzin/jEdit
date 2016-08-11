@@ -28,20 +28,13 @@ import javax.swing.border.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import org.gjt.sp.util.ThreadUtilities;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.XMLUtilities;
 
 import static javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION;
 //}}}
@@ -109,8 +102,8 @@ public class HelpTOCPanel extends JPanel
 		{
 			public void run()
 			{
-				createTOC();
-				tocModel.reload(tocRoot);
+				DefaultMutableTreeNode tocRoot = new HelpTOCLoader(nodes, helpViewer.getBaseURL()).createTOC();
+				tocModel = new DefaultTreeModel(tocRoot);
 				toc.setModel(tocModel);
 				toc.setRootVisible(false);
 				for(int i = 0; i <tocRoot.getChildCount(); i++)
@@ -130,201 +123,9 @@ public class HelpTOCPanel extends JPanel
 	//{{{ Private members
 	private HelpViewerInterface helpViewer;
 	private DefaultTreeModel tocModel;
-	private DefaultMutableTreeNode tocRoot;
 	private JTree toc;
 	private Map<String, DefaultMutableTreeNode> nodes;
-
-	//{{{ createNode() method
-	private DefaultMutableTreeNode createNode(String href, String title)
-	{
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-			new HelpNode(href,title),true);
-		nodes.put(href,node);
-		return node;
-	} //}}}
-
-	//{{{ createTOC() method
-	private void createTOC()
-	{
-		EditPlugin[] plugins = jEdit.getPlugins();
-		Arrays.sort(plugins,new PluginCompare());
-		tocRoot = new DefaultMutableTreeNode();
-
-		tocRoot.add(createNode("welcome.html",
-			jEdit.getProperty("helpviewer.toc.welcome")));
-
-		tocRoot.add(createNode("README.txt",
-			jEdit.getProperty("helpviewer.toc.readme")));
-		tocRoot.add(createNode("CHANGES.txt",
-			jEdit.getProperty("helpviewer.toc.changes")));
-		tocRoot.add(createNode("TODO.txt",
-			jEdit.getProperty("helpviewer.toc.todo")));
-		tocRoot.add(createNode("COPYING.txt",
-			jEdit.getProperty("helpviewer.toc.copying")));
-		tocRoot.add(createNode("COPYING.DOC.txt",
-			jEdit.getProperty("helpviewer.toc.copying-doc")));
-		tocRoot.add(createNode("Apache.LICENSE.txt",
-			jEdit.getProperty("helpviewer.toc.copying-apache")));
-		tocRoot.add(createNode("COPYING.PLUGINS.txt",
-			jEdit.getProperty("helpviewer.toc.copying-plugins")));
-
-		loadTOC(tocRoot,"whatsnew/toc.xml");
-		loadTOC(tocRoot,"users-guide/toc.xml");
-		loadTOC(tocRoot,"FAQ/toc.xml");
-
-
-		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
-			jEdit.getProperty("helpviewer.toc.plugins"),true);
-
-		for (EditPlugin plugin : plugins)
-		{
-			String name = plugin.getClassName();
-
-			String docs = jEdit.getProperty("plugin." + name + ".docs");
-			String label = jEdit.getProperty("plugin." + name + ".name");
-			if (label != null && docs != null)
-			{
-				String path = plugin.getPluginJAR().getClassLoader().getResourceAsPath(docs);
-				pluginTree.add(createNode(path, label));
-			}
-		}
-
-		if(pluginTree.getChildCount() != 0)
-			tocRoot.add(pluginTree);
-		else
-		{
-			// so that HelpViewer constructor doesn't try to expand
-			pluginTree = null;
-		}
-		loadTOC(tocRoot,"api/toc.xml");
-		tocModel = new DefaultTreeModel(tocRoot);
-	} //}}}
-
-	//{{{ loadTOC() method
-	private void loadTOC(DefaultMutableTreeNode root, String path)
-	{
-		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
-		try
-		{
-			XMLUtilities.parseXML(
-				new URL(helpViewer.getBaseURL()
-					+ '/' + path).openStream(), h);
-		}
-		catch(FileNotFoundException e)
-		{
-			/* it is acceptable only for the API TOC :
-			   the user can choose not to install them
-			 */
-			if("api/toc.xml".equals(path))
-			{
-				Log.log(Log.NOTICE,this,
-					"The API docs for jEdit will not be available (reinstall jEdit if you want them)");
-				root.add(
-					createNode("http://www.jedit.org/api/overview-summary.html",
-						jEdit.getProperty("helpviewer.toc.online-apidocs")));
-			}
-			else
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-		}
-		catch(IOException e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
-	} //}}}
-
 	//}}}
-
-	//{{{ HelpNode class
-	static class HelpNode
-	{
-		String href, title;
-
-		//{{{ HelpNode constructor
-		HelpNode(String href, String title)
-		{
-			this.href = href;
-			this.title = title;
-		} //}}}
-
-		//{{{ toString() method
-		public String toString()
-		{
-			return title;
-		} //}}}
-	} //}}}
-
-	//{{{ TOCHandler class
-	class TOCHandler extends DefaultHandler
-	{
-		String dir;
-
-		//{{{ TOCHandler constructor
-		TOCHandler(DefaultMutableTreeNode root, String dir)
-		{
-			nodes = new Stack<DefaultMutableTreeNode>();
-			node = root;
-			this.dir = dir;
-		} //}}}
-
-		//{{{ characters() method
-		public void characters(char[] c, int off, int len)
-		{
-			if(tag.equals("TITLE"))
-			{
-				boolean firstNonWhitespace = false;
-				for(int i = 0; i < len; i++)
-				{
-					char ch = c[off + i];
-					if (!firstNonWhitespace && Character.isWhitespace(ch)) continue;
-					firstNonWhitespace = true;
-					title.append(ch);
-				}
-			}
-
-
-		} //}}}
-
-		//{{{ startElement() method
-		public void startElement(String uri, String localName,
-					 String name, Attributes attrs)
-		{
-			tag = name;
-			if (name.equals("ENTRY"))
-				href = attrs.getValue("HREF");
-		} //}}}
-
-		//{{{ endElement() method
-		public void endElement(String uri, String localName, String name)
-		{
-			if(name == null)
-				return;
-
-			if(name.equals("TITLE"))
-			{
-				DefaultMutableTreeNode newNode = createNode(
-					dir + href,title.toString());
-				node.add(newNode);
-				nodes.push(node);
-				node = newNode;
-				title.setLength(0);
-			}
-			else if(name.equals("ENTRY"))
-			{
-				node = nodes.pop();
-				href = null;
-			}
-		} //}}}
-
-		//{{{ Private members
-		private String tag;
-		private StringBuilder title = new StringBuilder();
-		private String href;
-		private DefaultMutableTreeNode node;
-		private Stack<DefaultMutableTreeNode> nodes;
-		//}}}
-	} //}}}
 
 	//{{{ TOCTree class
 	class TOCTree extends JTree
@@ -432,9 +233,9 @@ public class HelpTOCPanel extends JPanel
 				Object obj = ((DefaultMutableTreeNode)
 					path.getLastPathComponent()).getUserObject();
 
-				if(obj instanceof HelpNode)
+				if(obj instanceof HelpTOCLoader.HelpNode)
 				{
-					HelpNode node = (HelpNode)obj;
+					HelpTOCLoader.HelpNode node = (HelpTOCLoader.HelpNode)obj;
 					helpViewer.gotoURL(node.href,true,0);
 				}
 				else
@@ -470,15 +271,4 @@ public class HelpTOCPanel extends JPanel
 		EmptyBorder border = new EmptyBorder(1,0,1,1);
 	} //}}}
 
-	//{{{ PluginCompare class
-	static class PluginCompare implements Comparator<EditPlugin>
-	{
-		public int compare(EditPlugin p1, EditPlugin p2)
-		{
-			return StandardUtilities.compareStrings(
-				jEdit.getProperty("plugin." + p1.getClassName() + ".name"),
-				jEdit.getProperty("plugin." + p2.getClassName() + ".name"),
-				true);
-		}
-	} //}}}
 }
