@@ -90,7 +90,7 @@ class BufferPrintable1_7 implements Printable
 		footer = jEdit.getBooleanProperty("print.footer");
 		lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		font = jEdit.getFontProperty("print.font");
-		boolean color = format.get(Chromaticity.class).equals(Chromaticity.COLOR);
+		boolean color = Chromaticity.COLOR.equals(format.get(Chromaticity.class));
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
 		styles[Token.NULL] = new SyntaxStyle(textColor, null, font);
@@ -175,27 +175,27 @@ class BufferPrintable1_7 implements Printable
 			}
 		}
 		
-		Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
+		//Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
 		
 		// adjust the page index for reverse printing
 		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
 		{
 			pageIndex = pages.size() - 1 - pageIndex;
-			Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
+			//Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
 		}
 		
 		// go ahead and print the page
 		Range range = pages.get(pageIndex);
 		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
 		{
-			Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
+			//Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
 			return NO_SUCH_PAGE;	
 		}
 		else {
 			printPage(_gfx, pageFormat, pageIndex, true);
 		}
 
-		Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
+		//Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
 		return PAGE_EXISTS;
 	} 
 
@@ -203,31 +203,45 @@ class BufferPrintable1_7 implements Printable
 	// parses the file to determine what lines belong to which page
 	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
 	{
+		//Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
 		pages = new HashMap<Integer, Range>();
+		
+		// ensure graphics and font rendering context are valid
+		if (_gfx == null)
+		{
+			// this can happen on startup when the graphics is not yet valid
+			return pages;	
+		}
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 		if(frc == null)
 		{
 			frc = ((Graphics2D)_gfx).getFontRenderContext();
-			Log.log(Log.DEBUG, this, "Font render context is " + frc);
+			//Log.log(Log.DEBUG, this, "Font render context is " + frc);
 		}
 
+		// maximum printable area
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
+		//Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 
+		// calculate header height
 		if(header)
 		{
 			double headerHeight = paintHeader(gfx, pageX, pageY, pageWidth, false);
 			pageY += headerHeight;
 			pageHeight -= headerHeight;
+			//Log.log(Log.DEBUG, this, "calculatePages, w/header imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 		}
 
+		// calculate footer height
 		if(footer)
 		{
 			double footerHeight = paintFooter(gfx, pageX, pageY, pageWidth, pageHeight, 0, false);
 			pageHeight -= footerHeight;
+			//Log.log(Log.DEBUG, this, "calculatePages, w/footer imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 		}
 
 		double lineNumberWidth = 0.0;
@@ -235,40 +249,36 @@ class BufferPrintable1_7 implements Printable
 		// determine line number width
 		if(lineNumbers)
 		{
-			// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits, and so on.
-			int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1) / Math.log(10)) + 1;
-
-			// now that we know how many chars there are, get the width.
-			char[] chars = new char[lineNumberDigits];
-			for(int i = 0; i < chars.length; i++)
+			String lineNumberDigits = String.valueOf(buffer.getLineCount());
+			StringBuilder digits = new StringBuilder();
+			for (int i = 0; i < lineNumberDigits.length(); i++)
 			{
-				chars[i] = ' ';
+				digits.append('0');	
 			}
-			lineNumberWidth = font.getStringBounds(chars, 0, lineNumberDigits, frc).getWidth();
+			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
-		PrintTabExpander tabExpander = new PrintTabExpander(4);
-		try {
-			// calculate tab size
-			int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
-			char[] chars = new char[tabSize];
-			for(int i = 0; i < chars.length; i++)
-			{
-				chars[i] = ' ';
-			}
-			double tabWidth = font.getStringBounds(chars, 0, tabSize, frc).getWidth();
-			tabExpander = new PrintTabExpander(tabWidth);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		lm = font.getLineMetrics("gGyYX", frc);
-		boolean printFolds = jEdit.getBooleanProperty("print.folds", true);
 		
+		// calculate tab size
+		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
+		StringBuilder tabs = new StringBuilder();
+		char[] chars = new char[tabSize];
+		for(int i = 0; i < tabSize; i++)
+		{
+			tabs.append(' ');
+		}
+		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
+		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
+		
+		// prep for calculations
+		lm = font.getLineMetrics("gGyYX", frc);
+		float lineHeight = lm.getHeight();
+		boolean printFolds = jEdit.getBooleanProperty("print.folds", true);
 		currentPhysicalLine = 0;
 		int pageCount = 0;
 		int startLine = 0;
 		double y = 0.0;
+		
+		// measure each line
 		while (currentPhysicalLine <= buffer.getLineCount())
 		{
 			if (currentPhysicalLine == buffer.getLineCount())
@@ -276,25 +286,27 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
+			
+			// skip folded lines
 			if (!printFolds && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				currentPhysicalLine++;
+				++ currentPhysicalLine;
 				continue;
 			}
 				
+			// fill the line list
 			lineList.clear();
-
 			tokenHandler.init(styles, frc, tabExpander, lineList, (float)(pageWidth - lineNumberWidth), -1);
 			buffer.markTokens(currentPhysicalLine, tokenHandler);
 			
-			if(y + (lm.getHeight() * (lineList.isEmpty() ? 1 : lineList.size())) >= pageHeight)
+			if(y + (lineHeight * (lineList.isEmpty() ? 1 : lineList.size())) > pageHeight)
 			{
-				Range range = new Range(startLine, currentPhysicalLine);
+				Range range = new Range(startLine, -- currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				++ currentPhysicalLine;
 				startLine = currentPhysicalLine;
@@ -302,9 +314,9 @@ class BufferPrintable1_7 implements Printable
 				continue;
 			}
 
-			for (int i = 0; i < lineList.size(); i++)
+			for (int i = 0; i < (lineList.isEmpty() ? 1 : lineList.size()); i++)
 			{
-				y += lm.getHeight();
+				y += lineHeight;
 			}
 			currentPhysicalLine++;
 		}
@@ -326,23 +338,23 @@ class BufferPrintable1_7 implements Printable
 			answer = ranges.contains(pageNumber + 1);	
 		}
 		return answer;
-	} 
+	}
 	
-
 	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
-		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
+		//Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 
+		// printable dimensions
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
+		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
 
-		Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
-
+		// print header
 		if(header)
 		{
 			double headerHeight = paintHeader(gfx, pageX, pageY, pageWidth, actuallyPaint);
@@ -350,72 +362,74 @@ class BufferPrintable1_7 implements Printable
 			pageHeight -= headerHeight;
 		}
 
+		// print footer
 		if(footer)
 		{
 			double footerHeight = paintFooter(gfx, pageX, pageY, pageWidth, pageHeight, pageIndex, actuallyPaint);
 			pageHeight -= footerHeight;
 		}
 
+		// spacing workaround
 		boolean glyphVector = jEdit.getBooleanProperty("print.glyphVector");
 		double lineNumberWidth = 0.0;
 
 		// determine line number width
 		if(lineNumbers)
 		{
-			// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
-			// and so on.
-			int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1) / Math.log(10)) + 1;
-
-			// now that we know how many chars there are, get the width.
-			char[] chars = new char[lineNumberDigits];
-			for(int i = 0; i < chars.length; i++)
+			String lineNumberDigits = String.valueOf(buffer.getLineCount());
+			StringBuilder digits = new StringBuilder();
+			for (int i = 0; i < lineNumberDigits.length(); i++)
 			{
-				chars[i] = ' ';
+				digits.append('0');	
 			}
-			lineNumberWidth = font.getStringBounds(chars, 0, lineNumberDigits, frc).getWidth();
+			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 
-		Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
+		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
-		char[] chars = new char[tabSize];
-		for(int i = 0; i < chars.length; i++)
+		StringBuilder tabs = new StringBuilder();
+		for(int i = 0; i < tabSize; i++)
 		{
-			chars[i] = ' ';
+			tabs.append(' ');
 		}
-		double tabWidth = font.getStringBounds(chars, 0, tabSize, frc).getWidth();
+		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
 
+		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
-		Log.log(Log.DEBUG, this, "Line height is " + lm.getHeight());
-
-		// print each line
+		float lineHeight = lm.getHeight();
+		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
+		//Log.log(Log.DEBUG, this, "printing range: " + range);
+		
+		// print each line
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
-				Log.log(Log.DEBUG, this, "Finished buffer");
-				Log.log(Log.DEBUG, this, "The end");
+				//Log.log(Log.DEBUG, this, "Finished buffer");
+				//Log.log(Log.DEBUG, this, "The end");
 				break;
 			}
 			if (!jEdit.getBooleanProperty("print.folds",true) && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				Log.log(Log.DEBUG, this, "Skipping invisible line");
+				//Log.log(Log.DEBUG, this, "Skipping invisible line");
 				continue;
 			}
 			
 			// print only selected lines if printing selection
 			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
 			{
-				Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
+				//Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
 				continue;
 			}
 				
+			
+			// fill the line list
 			lineList.clear();
-
 			tokenHandler.init(styles, frc, tabExpander, lineList, (float)(pageWidth - lineNumberWidth), -1);
 			buffer.markTokens(currentPhysicalLine, tokenHandler);
 
@@ -423,24 +437,31 @@ class BufferPrintable1_7 implements Printable
 			{
 				gfx.setFont(font);
 				gfx.setColor(lineNumberColor);
-				gfx.drawString(String.valueOf(currentPhysicalLine + 1), (float)pageX, (float)(pageY + y + lm.getHeight()));
+				gfx.drawString(String.valueOf(currentPhysicalLine + 1), (float)pageX, (float)(pageY + y + lineHeight));
 			}
 
-			for (Chunk chunk : lineList)
+			if (lineList.isEmpty())
 			{
-				y += lm.getHeight();
-				Chunk chunks = chunk;
-				if (chunks != null && actuallyPaint)
+				// handle blank line
+				y += lineHeight;	
+			}
+			else
+			{
+				for (Chunk chunk : lineList)
 				{
-					// TODO: use lm.getHeight() instead of metrics.getHeight()?
-					FontMetrics metrics = gfx.getFontMetrics();
-					Chunk.paintChunkBackgrounds(chunks, gfx, (float) (pageX + lineNumberWidth), (float) (pageY + y), metrics.getHeight());
-					Chunk.paintChunkList(chunks, gfx, (float) (pageX + lineNumberWidth), (float) (pageY + y), glyphVector);
+					y += lineHeight;
+					Chunk chunks = chunk;
+					if (chunks != null && actuallyPaint)
+					{
+						Chunk.paintChunkBackgrounds(chunks, gfx, (float) (pageX + lineNumberWidth), (float) (pageY + y), lineHeight);
+						Chunk.paintChunkList(chunks, gfx, (float) (pageX + lineNumberWidth), (float) (pageY + y), glyphVector);
+					}
 				}
 			}
+			
 			if (currentPhysicalLine == range.getEnd())
 			{
-				Log.log(Log.DEBUG,this,"Finished page");
+				//Log.log(Log.DEBUG,this,"Finished page");
 				break;
 			}
 		}
@@ -453,7 +474,7 @@ class BufferPrintable1_7 implements Printable
 		lm = font.getLineMetrics(headerText,frc);
 
 		Rectangle2D bounds = font.getStringBounds(headerText, frc);
-		Rectangle2D headerBounds = new Rectangle2D.Double(pageX ,pageY, pageWidth, bounds.getHeight());
+		Rectangle2D headerBounds = new Rectangle2D.Double(pageX, pageY, pageWidth, bounds.getHeight());
 
 		if(actuallyPaint)
 		{

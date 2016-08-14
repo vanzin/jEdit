@@ -31,8 +31,6 @@ import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.buffer.BufferAdapter;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
@@ -134,12 +132,15 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
             {
                 pages = getPageRanges();
             }
-
-
-            for ( Integer page : pages.keySet() )
+            
+           // - 1 so last page break isn't drawn
+            for (int page = 0; page < pages.size() - 1; page++)
             {
                 Range range = pages.get( page );
-                if ( range.getEnd() == physicalLine + 1 )
+                // 2nd part of 'if' handles soft wrap so if the last line of the page
+                // is wrapped, only the last screen line of the wrapped line will get
+                // the page break line drawn on it.
+                if ( range.getEnd() == physicalLine && textArea.getLineEndOffset(physicalLine) == end)
                 {
                     gfx.drawLine( 0, y, textArea.getPainter().getWidth(), y );
                 }

@@ -85,8 +85,7 @@ public class Chunk extends Token
 						chunks.drawGlyphs(gfx, x + _x, y);
 					else if(chunks.str != null)
 					{
-						gfx.drawString(chunks.str,
-							(int)(x + _x),(int)y);
+						gfx.drawString(chunks.str, x + _x, y);
 					}
 				}
 			}
@@ -109,7 +108,7 @@ public class Chunk extends Token
 	 * @since jEdit 4.2pre1
 	 */
 	public static float paintChunkBackgrounds(Chunk chunks,
-		Graphics2D gfx, float x, float y, int lineHeight)
+		Graphics2D gfx, float x, float y, float lineHeight)
 	{
 		Rectangle clipRect = gfx.getClipBounds();
 
@@ -118,7 +117,7 @@ public class Chunk extends Token
 		FontMetrics forBackground = gfx.getFontMetrics();
 
 		int ascent = forBackground.getAscent();
-		int height = lineHeight;
+		float height = lineHeight;
 
 		while(chunks != null)
 		{
@@ -135,7 +134,8 @@ public class Chunk extends Token
 						gfx.setColor(bgColor);
 
 						gfx.fill(new Rectangle2D.Float(
-							x + _x,y - ascent,
+							x + _x,
+							y - ascent,
 							_x + chunks.width - _x,
 							height));
 					} //}}}
