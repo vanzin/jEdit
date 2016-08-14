@@ -68,6 +68,11 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 
 - Fix bug #4002, too short horizontal scrollbar after view resize. (Dale Anson)
 
+- Fix bug #3773, InvocationTargetException with negative printing tab width.
+  (Dale Anson)
+  
+- Fix bug # 2844, printing range bug. (Dale Anson) 
+
 }}}
 {{{ UI Improvements
 
@@ -84,10 +89,13 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
   feature request #515. (Dale Anson)
   
 - Updated NumericTextField to allow decimal numbers and only allow negative sign
-  at the start of a number. (Dale Anson)  
+  at the start of a number. (Dale Anson)    
 
 }}}
 {{{ Miscellaneous
+- Updated printing system with jEdit specific printer dialog, accurate page 
+  range printing, current page printing, printing of selected text only, ability 
+  to show page breaks in the text area. (Dale Anson)  
 
 }}}
 {{{ API Changes

@@ -739,7 +739,7 @@ print.dialog.top=Top
 print.dialog.two-sided-long-edge=Two Sided, Long Edge
 print.dialog.two-sided-short-edge=Two Sided, Short Edge
 
-print.toggle-show-page-breaks.label=Toggle page break visibility
+print.toggle-show-page-breaks.label=Toggle Page Break Marker
 #}}}
 
 #{{{ Various dialog boxes

@@ -709,7 +709,7 @@
         </itemizedlist>
 
         <para>
-          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. This is only an approximation of the breaks on the actual printed pages. They will be close, but jEdit is not a word processor, so there is no way to set margins or insert page breaks.
+          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. There is also an action available in Utilities - Global Options - Shortcuts to toggle the the page break markers on and off.
         </para>
     </section>
 
