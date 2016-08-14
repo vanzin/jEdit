@@ -982,6 +982,13 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="print.toggle-show-page-breaks">
+	<CODE>
+	jEdit.setBooleanProperty("view.pageBreaks", !jEdit.getBooleanProperty("view.pageBreaks"));
+	EditBus.send(new PropertiesChanged(null));
+	</CODE>
+</ACTION>
+
 <ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<CODE>
 		view.quickIncrementalSearch(false);
