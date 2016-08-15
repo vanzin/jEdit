@@ -222,8 +222,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		/* page breaks */
 		pageBreaks = new JCheckBox(jEdit.getProperty("options.textarea.pageBreaks"));
 		pageBreaks.setSelected(jEdit.getBooleanProperty("view.pageBreaks", false));
-		addComponent(pageBreaks, pageBreakColor = new ColorWellButton(
-			jEdit.getColorProperty("view.pageBreakColor")),
+		addComponent(pageBreaks, pageBreaksColor = new ColorWellButton(
+			jEdit.getColorProperty("view.pageBreaksColor")),
 			GridBagConstraints.VERTICAL);
 
 		addSeparator();
@@ -293,7 +293,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setColorProperty("view.wrapGuideColor",
 			wrapGuideColor.getSelectedColor());
 		jEdit.setBooleanProperty("view.pageBreaks", pageBreaks.isSelected());
-		jEdit.setColorProperty("view.pageBreakColor", pageBreakColor.getSelectedColor());
+		jEdit.setColorProperty("view.pageBreaksColor", pageBreaksColor.getSelectedColor());
 		
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
@@ -332,7 +332,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
 	private JCheckBox pageBreaks;
-	private ColorWellButton pageBreakColor;
+	private ColorWellButton pageBreaksColor;
 	private JCheckBox electricBorders;
 	private JComboBox<String> antiAlias;
 	private JCheckBox fracFontMetrics;

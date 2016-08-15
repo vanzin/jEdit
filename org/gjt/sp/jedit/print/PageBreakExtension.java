@@ -58,7 +58,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
         this.textArea = textArea;
         textArea.getPainter().addExtension( TextAreaPainter.WRAP_GUIDE_LAYER, this );
         showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
-        pageBreakColor = jEdit.getColorProperty( "view.pageBreaks.color" );
+        pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
         EditBus.addToBus( this );
     }
 
@@ -76,7 +76,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
         if ( msg instanceof PropertiesChanged )
         {
             showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
-            pageBreakColor = jEdit.getColorProperty( "view.pageBreaks.color" );
+            pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
         }
         else
         if ( msg instanceof EditPaneUpdate )
@@ -128,11 +128,13 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
     {
         if ( isPageBreakEnabled() )
         {
+            gfx.setColor(getPageBreakColor());
+
             if ( pages == null )
             {
                 pages = getPageRanges();
             }
-            
+
            // - 1 so last page break isn't drawn
             for (int page = 0; page < pages.size() - 1; page++)
             {
