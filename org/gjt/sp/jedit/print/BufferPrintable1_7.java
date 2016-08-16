@@ -273,7 +273,7 @@ class BufferPrintable1_7 implements Printable
 		lm = font.getLineMetrics("gGyYX", frc);
 		float lineHeight = lm.getHeight();
 		boolean printFolds = jEdit.getBooleanProperty("print.folds", true);
-		currentPhysicalLine = 1;
+		currentPhysicalLine = 0;
 		int pageCount = 0;
 		int startLine = 0;
 		double y = 0.0;
@@ -284,7 +284,7 @@ class BufferPrintable1_7 implements Printable
 			if (currentPhysicalLine == buffer.getLineCount())
 			{
 				// last page
-				Range range = new Range(startLine, currentPhysicalLine - 1);
+				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
 				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
@@ -304,11 +304,11 @@ class BufferPrintable1_7 implements Printable
 			
 			if(y + (lineHeight * (lineList.isEmpty() ? 1 : lineList.size())) > pageHeight)
 			{
-				Range range = new Range(startLine, currentPhysicalLine - 1);
+				Range range = new Range(startLine, -- currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
 				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
-				//++ currentPhysicalLine;
+				++ currentPhysicalLine;
 				startLine = currentPhysicalLine;
 				y = 0.0;
 				continue;
