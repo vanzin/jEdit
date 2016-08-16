@@ -77,6 +77,10 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
         {
             showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
             pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
+            if (showPageBreak)
+            {
+                pages = getPageRanges();   
+            }
         }
         else
         if ( msg instanceof EditPaneUpdate )

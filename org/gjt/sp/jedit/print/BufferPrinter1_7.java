@@ -36,6 +36,7 @@ import javax.print.event.*;
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ThreadUtilities;
 
@@ -55,6 +56,7 @@ public class BufferPrinter1_7
 		{
 			format = printerDialog.getAttributes();
 			savePrintSpec();
+			EditBus.send(new PropertiesChanged(null));
 		}
 	}	
 
@@ -86,6 +88,7 @@ public class BufferPrinter1_7
 				job.addPrintJobListener( new BufferPrinter1_7.JobListener( view ) );
 				format = printerDialog.getAttributes();
 				savePrintSpec();
+				EditBus.send(new PropertiesChanged(null));
 			}
 			catch ( Exception e )
 			{
@@ -210,7 +213,7 @@ public class BufferPrinter1_7
 		Paper paper = new Paper();
 		MediaPrintableArea mpa = ( MediaPrintableArea )attributes.get( MediaPrintableArea.class );
 		int units = MediaPrintableArea.INCH;
-		double dpi = 72.0;
+		double dpi = 72.0;		// Paper uses 72 dpi
 		double x = ( double )mpa.getX( units ) * dpi;
 		double y = ( double )mpa.getY( units ) * dpi;
 		double w = ( double )mpa.getWidth( units ) * dpi;
@@ -292,12 +295,12 @@ public class BufferPrinter1_7
 		File filePrintSpec = new File( printSpecPath );
 
 		FileOutputStream fileOut;
-		ObjectOutputStream obOut = null;
+		ObjectOutputStream objectOut = null;
 		try
 		{
 			fileOut = new FileOutputStream( filePrintSpec );
-			obOut = new ObjectOutputStream( fileOut );
-			obOut.writeObject( format );
+			objectOut = new ObjectOutputStream( fileOut );
+			objectOut.writeObject( format );
 		}
 		catch ( Exception e )
 		{
@@ -305,12 +308,18 @@ public class BufferPrinter1_7
 		}
 		finally
 		{
-			if ( obOut != null )
+			if ( objectOut != null )
 			{
 				try
-
 				{
-				obOut.close();
+					objectOut.flush();
+				}
+				catch ( IOException e )	// NOPMD
+				{
+				}	
+				try
+				{
+					objectOut.close();
 				}
 				catch ( IOException e )	// NOPMD
 				{

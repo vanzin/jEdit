@@ -148,6 +148,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
                     public void actionPerformed( ActionEvent ae )
                     {
+                        // check margins and so on
+                        if (!pageSetupPanel.recalculate())
+                        {
+                            return;   
+                        }
+
                         // gather all the attributes from the tabs
                         for ( int i = 0; i < tabs.getTabCount(); i++ )
                         {
@@ -168,7 +174,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                         }
 
                         // if printing to a file, get the filename to use
-                        if ( getPrintService() instanceof StreamPrintService )
+                        if ( !pageSetupOnly && getPrintService() instanceof StreamPrintService )
                         {
                             // create default filename
                             String filename = "out";
@@ -179,7 +185,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                             }
 
 
-                            filename += ".ps";
+                            filename = new StringBuilder(filename).append(".ps").toString();
 
                             File initialFile = new File( System.getProperty( "user.home" ), filename );
 
@@ -582,9 +588,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             orientation.setEnabled( true );
             orientation.setSelectedItem( OrientationRequested.PORTRAIT );
         }
-
-
-        pageSetupPanel.recalculate();
     }
 
 
@@ -822,7 +825,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
 
-    private class PageSetupPanel extends PrinterPanel implements ActionListener, FocusListener
+    private class PageSetupPanel extends PrinterPanel implements FocusListener
     {
 
         private JComboBox<String> onlyPrint;
@@ -835,7 +838,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         private float leftMargin = 1.0f;
         private float rightMargin = 1.0f;
         private float bottomMargin = 0.75f;
-        private AttributeSet marginAttributes = new HashAttributeSet();
 
 
         public PageSetupPanel()
@@ -896,28 +898,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             paperSize = new JComboBox<String>();
             paperSize.setEnabled( false );
-            paperSize.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        PageSetupPanel.this.recalculate();
-                    }
-                }
-            );
 
             orientation = new JComboBox<OrientationRequested>();
             orientation.setEnabled( false );
             orientation.setRenderer( new OrientationCellRenderer() );
-            orientation.addActionListener( new ActionListener()
-            {
-
-                    public void actionPerformed( ActionEvent ae )
-                    {
-                        PageSetupPanel.this.recalculate();
-                    }
-                }
-            );
 
             paperPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Paper_source", "Paper source" ) + ':' ) );
             paperPanel.add( paperSource );
@@ -927,64 +911,25 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             paperPanel.add( paperSize );
             paperPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Orientation", "Orientation" ) + ':' ) );
             paperPanel.add( orientation );
-
-            // it turns out margin calculation is a tedious bitch. There is no specific attribute for margins,
-            // instead, they have to be calculated from the selected media (paper size) and the printable area
-            // for that paper, based on printer capabilities. It seems like Sun/Oracle could have done a better
-            // job here. For that matter, they could have made a decent print dialog to start with.
-            Media media = ( Media )attributes.get( Media.class );
-            MediaPrintableArea printableArea = ( MediaPrintableArea )attributes.get( MediaPrintableArea.class );
-            MediaSize mediaSize = null;
-            if ( media == null || !( media instanceof MediaSizeName ) )
-            {
-                media = ( Media )getPrintService().getDefaultAttributeValue( Media.class );
-            }
-
-
-            if ( media != null && ( media instanceof MediaSizeName ) )
-            {
-                MediaSizeName mediaSizeName = ( MediaSizeName )media;
-                mediaSize = MediaSize.getMediaSizeForName( mediaSizeName );
-            }
-
-
-            if ( mediaSize == null )
-            {
-
-                // default to US Letter size
-                mediaSize = new MediaSize( 8.5f, 11f, Size2DSyntax.INCH );
-            }
-
-
-            if ( printableArea == null )
-            {
-                printableArea = ( MediaPrintableArea )getPrintService().getDefaultAttributeValue( MediaPrintableArea.class );
-            }
-
-
+            
             int units = getUnits();
-            if ( printableArea != null )
-            {
-                float[] size = mediaSize.getSize( units );
-                float mediaWidth = size[0];
-                float mediaHeight = size[1];
-                topMargin = printableArea.getY( units );
-                leftMargin = printableArea.getX( units );
-                rightMargin = mediaWidth - leftMargin - printableArea.getWidth( units );
-                bottomMargin = mediaHeight - topMargin - printableArea.getHeight( units );
-            }
-
+            Margins margins = (Margins)attributes.get(Margins.class);
+            float[] marginValues = margins == null ? new float[]{1.0f, 1.0f, 1.0f, 1.0f} : margins.getMargins(units);
+            float topMargin = marginValues[0];
+            float leftMargin = marginValues[1];
+            float rightMargin = marginValues[2];
+            float bottomMargin = marginValues[3];
 
             JPanel marginPanel = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
             marginPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), jEdit.getProperty( "print.dialog.Margins", "Margins" ) ), BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) ) );
             topMarginField = new NumericTextField( Float.toString( topMargin ), true, units == MediaPrintableArea.MM );
-            topMarginField.addActionListener( PageSetupPanel.this );
+            topMarginField.addFocusListener( PageSetupPanel.this );
             leftMarginField = new NumericTextField( Float.toString( leftMargin ), true, units == MediaPrintableArea.MM );
-            leftMarginField.addActionListener( PageSetupPanel.this );
+            leftMarginField.addFocusListener( PageSetupPanel.this );
             rightMarginField = new NumericTextField( Float.toString( rightMargin ), true, units == MediaPrintableArea.MM );
-            rightMarginField.addActionListener( PageSetupPanel.this );
+            rightMarginField.addFocusListener( PageSetupPanel.this );
             bottomMarginField = new NumericTextField( Float.toString( bottomMargin ), true, units == MediaPrintableArea.MM );
-            bottomMarginField.addActionListener( PageSetupPanel.this );
+            bottomMarginField.addFocusListener( PageSetupPanel.this );
 
             String unitsLabel = units == MediaPrintableArea.MM ? " (mm)" : " (in)";
             marginPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Top", "Top" ) + unitsLabel ) );
@@ -1129,430 +1074,85 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 as.add( ( OrientationRequested )orientation.getSelectedItem() );
             }
 
-
-            updateMargins( topMarginField );
-            updateMargins( leftMarginField );
-            updateMargins( rightMarginField );
-            updateMargins( bottomMarginField );
-            as.addAll( marginAttributes );
+            float topMargin = ((Float)topMarginField.getValue()).floatValue();
+            float leftMargin = ((Float)leftMarginField.getValue()).floatValue();
+            float rightMargin = ((Float)rightMarginField.getValue()).floatValue();
+            float bottomMargin = ((Float)bottomMarginField.getValue()).floatValue();
+            Margins margins = new Margins(topMargin, leftMargin, rightMargin, bottomMargin);
+            as.add(margins);
 
             return as;
         }
 
 
-        public void actionPerformed( ActionEvent e )
-        {
-            NumericTextField source = ( NumericTextField )e.getSource();
-            float value = source.getValue().floatValue();
-            if ( source == topMarginField )
-            {
-                topMargin = value;
-            }
-
-
-            if ( source == leftMarginField )
-            {
-                leftMargin = value;
-            }
-
-
-            if ( source == topMarginField )
-            {
-                rightMargin = value;
-            }
-
-
-            if ( source == topMarginField )
-            {
-                bottomMargin = value;
-            }
-
-
-            updateMargins( source );
-        }
-
-
         public void focusLost( FocusEvent e )
         {
-            JTextField source = ( JTextField )e.getSource();
-            updateMargins( source );
+            recalculate();
         }
 
 
         public void focusGained( FocusEvent e )
         {
+            recalculate();
         }
-
-
-        // update the margins based on the value of the user input. All margins
-        // are recalculated based on page orientation and the text field value.
-        private void updateMargins( JTextField textField )
+        
+        
+        // recalculates the media printable area when the printer, paper size,
+        // margin, or orientation changes
+        protected boolean recalculate() 
         {
-            String text = textField.getText();
-            if ( text == null || text.isEmpty() )
+            if (!PrinterDialog.this.isShowing())
             {
-                return;
+                return false;   
             }
-
-
-            // check if no change in margin values
-            Float value = Float.valueOf( text );
-
-            if ( textField == topMarginField && value.equals( topMargin ) )
-            {
-                return;
-            }
-            else
-            if ( textField == leftMarginField && value.equals( leftMargin ) )
-            {
-                return;
-            }
-            else
-            if ( textField == rightMarginField && value.equals( rightMargin ) )
-            {
-                return;
-            }
-            else
-            if ( textField == bottomMarginField && value.equals( bottomMargin ) )
-            {
-                return;
-            }
-
-
-            // determine desired page orientation
-            OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
-
-            if ( orientationRequested == null )
-            {
-                orientationRequested = ( OrientationRequested )getPrintService().getDefaultAttributeValue( OrientationRequested.class );
-            }
-
-
-            // set margins based on page orientation
-            if ( OrientationRequested.REVERSE_PORTRAIT.equals( orientationRequested ) )
-            {
-                float m = leftMargin;
-                leftMargin = rightMargin;
-                rightMargin = m;
-                m = topMargin;
-                topMargin = bottomMargin;
-                bottomMargin = m;
-            }
-            else
-            if ( OrientationRequested.LANDSCAPE.equals( orientationRequested ) )
-            {
-                float m = leftMargin;
-                leftMargin = topMargin;
-                topMargin = rightMargin;
-                rightMargin = bottomMargin;
-                bottomMargin = m;
-            }
-            else
-            if ( OrientationRequested.REVERSE_LANDSCAPE.equals( orientationRequested ) )
-            {
-                float m = leftMargin;
-                leftMargin = bottomMargin;
-                bottomMargin = rightMargin;
-                rightMargin = topMargin;
-                topMargin = m;
-            }
-
-
-            MediaPrintableArea mediaPrintableArea = validateMargins( topMargin, leftMargin, rightMargin, bottomMargin );
-            marginAttributes.add( mediaPrintableArea );
-        }
-
-
-        // Check that the margin values are valid, if they are, return a MediaPrintableArea.
-        // If the margin values are not valid, set the margin values to appropriate values
-        // and return the appropriate MediaPrintableArea. This takes care of possible out of
-        // bounds values, like leftMargin + rightMargin > paper width.
-        private MediaPrintableArea validateMargins( float topMargin, float leftMargin, float rightMargin, float bottomMargin )
-        {
-
-            MediaPrintableArea printableArea = null;
-            MediaSize mediaSize = null;
-
-            Media media = ( Media )getPrintService().getAttributes().get( Media.class );
-            if ( media == null || !( media instanceof MediaSizeName ) )
-            {
-                media = ( Media )getPrintService().getDefaultAttributeValue( Media.class );
-            }
-
-
-            if ( media != null && ( media instanceof MediaSizeName ) )
-            {
-                MediaSizeName mediaSizeName = ( MediaSizeName )media;
-                mediaSize = MediaSize.getMediaSizeForName( mediaSizeName );
-            }
-
-
-            if ( mediaSize == null )
-            {
-
-                // default to US Letter size
-                mediaSize = new MediaSize( 8.5f, 11f, Size2DSyntax.INCH );
-            }
-
-
-            if ( media != null )
-            {
-                PrintRequestAttributeSet tmpAttrSet = new HashPrintRequestAttributeSet( attributes );
-                tmpAttrSet.add( media );
-
-                Object values = getPrintService().getSupportedAttributeValues( MediaPrintableArea.class, null, tmpAttrSet );
-                if ( values instanceof MediaPrintableArea[] && ( ( MediaPrintableArea[] )values ).length > 0 )
-                {
-                    printableArea = ( ( MediaPrintableArea[] )values )[0];
-                }
-            }
-
-
+            
+            // get the printable area for the selected paper size and orientation
+            MediaPrintableArea supportedArea = null;
             int units = getUnits();
-            if ( printableArea == null )
+            HashPrintRequestAttributeSet attrs = new HashPrintRequestAttributeSet();
+            attrs.add( paperSizes.get( paperSize.getSelectedIndex() ) );
+            attrs.add( ( OrientationRequested )orientation.getSelectedItem() );            
+            Object values = getPrintService().getSupportedAttributeValues( MediaPrintableArea.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, attrs );
+            if ( values != null )
             {
-                printableArea = new MediaPrintableArea( 0f, 0f, mediaSize.getX( units ), mediaSize.getY( units ), units );
+                MediaPrintableArea[] mpas = ( MediaPrintableArea[] )values;
+                for (MediaPrintableArea mpa : mpas)
+                {
+                    supportedArea = mpa;
+                    break;
+                }
             }
-
-
-            float x = mediaSize.getX( units );
-            float y = mediaSize.getY( units );
-            float width = x - leftMargin - rightMargin;
-            float height = y - topMargin - bottomMargin;
-
-            // check if values are out of bounds, if so, set them to what is actually possible
-            if ( width <= 0f || height <= 0f || leftMargin < 0f || topMargin < 0f ||
-            leftMargin < printableArea.getX( units ) || width > printableArea.getWidth( units ) ||
-            topMargin < printableArea.getY( units ) || height > printableArea.getHeight( units ) )
+            else 
             {
-                leftMargin = printableArea.getX( units );
-                topMargin = printableArea.getY( units );
-                width = printableArea.getWidth( units );
-                height = printableArea.getHeight( units );
-                rightMargin = x - leftMargin - width;
-                bottomMargin = y - topMargin - height;
-                topMarginField.setText( Float.toString( topMargin ) );
-                leftMarginField.setText( Float.toString( leftMargin ) );
-                rightMarginField.setText( Float.toString( rightMargin ) );
-                bottomMarginField.setText( Float.toString( bottomMargin ) );
+                supportedArea = (MediaPrintableArea)getPrintService().getDefaultAttributeValue(MediaPrintableArea.class);
             }
-
-
-            return new MediaPrintableArea( leftMargin, topMargin, width, height, units );
-        }
-
-
-        // recalculates the margins when the printer, paper size, or orientation changes,
-        // this is the extra tedious part
-        protected void recalculate()
-        {
-            MediaPrintableArea mpa = ( MediaPrintableArea )attributes.get( MediaPrintableArea.class );
-            MediaPrintableArea printableArea = null;
+            
+            Log.log(Log.DEBUG, this, "supportedArea = " + supportedArea.getX(units) + ", " + 
+                supportedArea.getY(units) + ", " +
+                supportedArea.getWidth(units) + ", " +
+                supportedArea.getHeight(units));
+            
+            // get the selected paper size
+            Media media = paperSizes.get( paperSize.getSelectedIndex() );
+            
+            // get paper width and height
             MediaSize mediaSize = null;
-
-            Media media = ( Media )attributes.get( Media.class );
-            if ( media == null || !( media instanceof MediaSizeName ) )
+            if ( media instanceof MediaSizeName )
             {
-                media = ( Media )getPrintService().getDefaultAttributeValue( Media.class );
+                MediaSizeName name = ( MediaSizeName )media;
+                mediaSize = MediaSize.getMediaSizeForName( name );
             }
-
-
-            if ( media != null && ( media instanceof MediaSizeName ) )
-            {
-                MediaSizeName msn = ( MediaSizeName )media;
-                mediaSize = MediaSize.getMediaSizeForName( msn );
-            }
-
-
-            if ( mediaSize == null )
-            {
-                mediaSize = new MediaSize( 8.5f, 11f, Size2DSyntax.INCH );
-            }
-
-
-            if ( media != null )
-            {
-                PrintRequestAttributeSet tmpAttrSet = new HashPrintRequestAttributeSet( attributes );
-                tmpAttrSet.add( media );
-
-                Object values = getPrintService().getSupportedAttributeValues( MediaPrintableArea.class, null, tmpAttrSet );
-                if ( values instanceof MediaPrintableArea[] && ( ( MediaPrintableArea[] )values ).length > 0 )
-                {
-                    printableArea = ( ( MediaPrintableArea[] )values )[0];
-                }
-                else
-                if ( values instanceof MediaPrintableArea )
-                {
-                    printableArea = ( MediaPrintableArea )values;
-                }
-            }
-
-
-            if ( printableArea == null )
-            {
-                int units = getUnits();
-                printableArea = new MediaPrintableArea( 0f, 0f, mediaSize.getX( units ), mediaSize.getY( units ), units );
-            }
-
-
-            float width = mediaSize.getX( MediaPrintableArea.INCH );
-            float height = mediaSize.getY( MediaPrintableArea.INCH );
-            float maxMarginRatio = 5f;
-            float xMargin;
-            float yMargin;
-            if ( width > maxMarginRatio )
-            {
-                xMargin = 1f;
-            }
-            else
-            {
-                xMargin = width / maxMarginRatio;
-            }
-
-
-            if ( height > maxMarginRatio )
-            {
-                yMargin = 1f;
-            }
-            else
-            {
-                yMargin = height / maxMarginRatio;
-            }
-
-
-            if ( mpa == null )
-            {
-                mpa = new MediaPrintableArea( xMargin, yMargin, width - ( 2 * xMargin ), height - ( 2 * yMargin ), MediaPrintableArea.INCH );
-                attributes.add( mpa );
-            }
-
-
-            // 'pa' for printable area, then x, y, w, h
-            int units = getUnits();
-            float pax = mpa.getX( units );
-            float pay = mpa.getY( units );
-            float paw = mpa.getWidth( units );
-            float pah = mpa.getHeight( units );
-            float paxMax = printableArea.getX( units );
-            float payMax = printableArea.getY( units );
-            float pawMax = printableArea.getWidth( units );
-            float pahMax = printableArea.getHeight( units );
-
-            boolean invalid = false;
-
-            // adjust using user provided margin values and current media
-            width = mediaSize.getX( units );
-            height = mediaSize.getY( units );
-            if ( leftMargin >= 0f )
-            {
-                invalid = true;
-
-                if ( leftMargin + rightMargin > width )
-                {
-
-                    // left and right margins are impossible, but attempt to keep a printable area
-                    if ( paw > pawMax )
-                    {
-                        paw = pawMax;
-                    }
-
-
-                    // center the printable area horizontally
-                    pax = ( width - paw ) / 2f;
-                }
-                else
-                {
-                    pax = ( leftMargin >= paxMax ) ? rightMargin : paxMax;
-                    paw = width - pax - rightMargin;
-                }
-
-
-                if ( topMargin + bottomMargin > height )
-                {
-
-                    // top and bottom margins are impossible, but attempt to keep a printable area
-                    if ( pah > pahMax )
-                    {
-                        pah = pahMax;
-                    }
-
-
-                    // center the printable area vertically
-                    pay = ( height - pah ) / 2f;
-                }
-                else
-                {
-                    pay = ( topMargin >= payMax ) ? topMargin : payMax;
-                    pah = height - pay - bottomMargin;
-                }
-            }
-
-
-            if ( pax < paxMax )
-            {
-                invalid = true;
-                pax = paxMax;
-            }
-
-
-            if ( pay < payMax )
-            {
-                invalid = true;
-                pay = payMax;
-            }
-
-
-            if ( paw > pawMax )
-            {
-                invalid = true;
-                paw = pawMax;
-            }
-
-
-            if ( pah > pahMax )
-            {
-                invalid = true;
-                pah = pahMax;
-            }
-
-
-            if ( ( pax + paw > paxMax + pawMax ) || ( paw <= 0f ) )
-            {
-                invalid = true;
-                pax = paxMax;
-                paw = pawMax;
-            }
-
-
-            if ( ( pay + pah > payMax + pahMax ) || ( pah <= 0f ) )
-            {
-                invalid = true;
-                pay = payMax;
-                pah = pahMax;
-            }
-
-
-            if ( invalid )
-            {
-                mpa = new MediaPrintableArea( pax, pay, paw, pah, units );
-                attributes.add( mpa );
-            }
-
-
-            // calculate the actual margins to use for the orientation
-            topMargin = pay;
-            leftMargin = pax;
-            rightMargin = mediaSize.getX( units ) - pax - paw;
-            bottomMargin = mediaSize.getY( units ) - pay - pah;
-
-            OrientationRequested orientationRequested = ( OrientationRequested )attributes.get( OrientationRequested.class );
-
-            if ( orientationRequested == null )
-            {
-                orientationRequested = ( OrientationRequested )getPrintService().getDefaultAttributeValue( OrientationRequested.class );
-            }
-
-
+            float paperWidth = mediaSize.getX(units);
+            float paperHeight = mediaSize.getY(units);
+            
+            // get the user desired margins
+            float topMargin = ((Float)topMarginField.getValue()).floatValue();
+            float leftMargin = ((Float)leftMarginField.getValue()).floatValue();
+            float rightMargin = ((Float)rightMarginField.getValue()).floatValue();
+            float bottomMargin = ((Float)bottomMarginField.getValue()).floatValue();
+            
+            // get the selected orientation and adjust the margins and width/height
+            OrientationRequested orientationRequested = (OrientationRequested)orientation.getSelectedItem();
             if ( OrientationRequested.REVERSE_PORTRAIT.equals( orientationRequested ) )
             {
                 float m = leftMargin;
@@ -1580,16 +1180,41 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 rightMargin = bottomMargin;
                 bottomMargin = m;
             }
+            
+            // calculate new printable area
+            float height = paperHeight - topMargin - bottomMargin;
+            float width = paperWidth - leftMargin - rightMargin;
+            float x = leftMargin;
+            float y = topMargin;
 
-
-            topMarginField.setText( Float.toString( topMargin ) );
-            leftMarginField.setText( Float.toString( leftMargin ) );
-            rightMarginField.setText( Float.toString( rightMargin ) );
-            bottomMarginField.setText( Float.toString( bottomMargin ) );
+            // check that the new printable area fits inside the supported area
+            if (x < supportedArea.getX(units))
+            {
+                JOptionPane.showMessageDialog(view, "Invalid left margin setting.", jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            if (y < supportedArea.getY(units))
+            {
+                JOptionPane.showMessageDialog(view, "Invalid top margin setting.", jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            if (width <= 0 || x + width > supportedArea.getX(units) + supportedArea.getWidth(units))
+            {
+                JOptionPane.showMessageDialog(view, "Invalid left and/or right margin setting.", jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            if (height <= 0 || y + height > supportedArea.getY(units) + supportedArea.getHeight(units))
+            {
+                JOptionPane.showMessageDialog(view, "Invalid top and/or bottom margin setting.", jEdit.getProperty("print-error.title"), JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            Log.log(Log.DEBUG, this, "new printable area: " + x + ", " + y + ", " + width + ", " + height);
+            MediaPrintableArea area = new MediaPrintableArea(x, y, width, height, units);
+            attributes.add(area);
+            return true;
         }
-
-
-        // returns INCHES or MM depending on Locale
+        
+        // returns INCH or MM depending on Locale
         // note that while Canada is mostly metric, Canadian paper sizes
         // are essentially US ANSI sizes rounded to the nearest 5 mm
         private int getUnits()
