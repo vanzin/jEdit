@@ -90,6 +90,7 @@ class BufferPrintable1_7 implements Printable
 		footer = jEdit.getBooleanProperty("print.footer");
 		lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		font = jEdit.getFontProperty("print.font");
+		frc = ((Graphics2D)view.getGraphics()).getFontRenderContext();
 		boolean color = Chromaticity.COLOR.equals(format.get(Chromaticity.class));
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
@@ -150,6 +151,7 @@ class BufferPrintable1_7 implements Printable
 	
 	// this can be called multiple times by the print system for the same page, and
 	// all calls must be handled for the page to print properly. 
+	// pageIndex is zero-based.
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
 		if (firstCall)
@@ -203,7 +205,7 @@ class BufferPrintable1_7 implements Printable
 	// parses the file to determine what lines belong to which page
 	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
 	{
-		//Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
+		Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
 		pages = new HashMap<Integer, Range>();
 		
 		// ensure graphics and font rendering context are valid
@@ -214,18 +216,14 @@ class BufferPrintable1_7 implements Printable
 		}
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
-		if(frc == null)
-		{
-			frc = ((Graphics2D)_gfx).getFontRenderContext();
-			//Log.log(Log.DEBUG, this, "Font render context is " + frc);
-		}
+		Log.log(Log.DEBUG, this, "font is " + font);
 
 		// maximum printable area
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		//Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
+		Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 
 		// calculate header height
 		if(header)
@@ -249,29 +247,19 @@ class BufferPrintable1_7 implements Printable
 		// determine line number width
 		if(lineNumbers)
 		{
-			String lineNumberDigits = String.valueOf(buffer.getLineCount());
-			StringBuilder digits = new StringBuilder();
-			for (int i = 0; i < lineNumberDigits.length(); i++)
-			{
-				digits.append('0');	
-			}
-			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
+			lineNumberWidth = getLineNumberWidth();
 		}
 		
 		// calculate tab size
-		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
-		StringBuilder tabs = new StringBuilder();
-		char[] chars = new char[tabSize];
-		for(int i = 0; i < tabSize; i++)
-		{
-			tabs.append(' ');
-		}
-		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
+		double tabWidth = getTabWidth();
+		Log.log(Log.DEBUG, this, "tabWidth = " + tabWidth);
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
 		
 		// prep for calculations
 		lm = font.getLineMetrics("gGyYX", frc);
-		float lineHeight = lm.getHeight();
+		//float lineHeight = lm.getHeight();
+		float lineHeight = getLineHeight();
+		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		boolean printFolds = jEdit.getBooleanProperty("print.folds", true);
 		currentPhysicalLine = 0;
 		int pageCount = 0;
@@ -340,13 +328,35 @@ class BufferPrintable1_7 implements Printable
 		return answer;
 	}
 	
+	private double getTabWidth() 
+	{
+		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
+		FontMetrics fm = view.getFontMetrics(font);
+		int charWidth = fm.charWidth(' ') * tabSize;
+		return new Integer(charWidth).doubleValue();
+	}
+	
+	private float getLineHeight()
+	{
+		FontMetrics fm = view.getFontMetrics(font);
+		return new Integer(fm.getHeight()).floatValue();
+	}
+	
+	private double getLineNumberWidth()
+	{
+		String lineNumberDigits = String.valueOf(buffer.getLineCount());
+		FontMetrics fm = view.getFontMetrics(font);
+		int charWidth = fm.charWidth(' ') * lineNumberDigits.length();
+		return new Integer(charWidth).doubleValue();
+	}
+	
 	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
 		//Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
-
+		
 		// printable dimensions
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -376,31 +386,21 @@ class BufferPrintable1_7 implements Printable
 		// determine line number width
 		if(lineNumbers)
 		{
-			String lineNumberDigits = String.valueOf(buffer.getLineCount());
-			StringBuilder digits = new StringBuilder();
-			for (int i = 0; i < lineNumberDigits.length(); i++)
-			{
-				digits.append('0');	
-			}
-			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
+			lineNumberWidth = getLineNumberWidth();
 		}
 
 		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
-		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
-		StringBuilder tabs = new StringBuilder();
-		for(int i = 0; i < tabSize; i++)
-		{
-			tabs.append(' ');
-		}
-		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
+		double tabWidth = getTabWidth();
+		Log.log(Log.DEBUG, this, "tabWidth = " + tabWidth);
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
-
+		
 		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
-		float lineHeight = lm.getHeight();
-		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		//float lineHeight = lm.getHeight();
+		float lineHeight = getLineHeight();
+		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
 		//Log.log(Log.DEBUG, this, "printing range: " + range);
@@ -471,10 +471,11 @@ class BufferPrintable1_7 implements Printable
 	{
 		String headerText = jEdit.getProperty("print.headerText", new String[] { buffer.getName() });
 		FontRenderContext frc = gfx.getFontRenderContext();
-		lm = font.getLineMetrics(headerText,frc);
+		lm = font.getLineMetrics(headerText, frc);
 
 		Rectangle2D bounds = font.getStringBounds(headerText, frc);
-		Rectangle2D headerBounds = new Rectangle2D.Double(pageX, pageY, pageWidth, bounds.getHeight());
+		double lineHeight = new Float(getLineHeight()).doubleValue();
+		Rectangle2D headerBounds = new Rectangle2D.Double(pageX, pageY, pageWidth, lineHeight);
 
 		if(actuallyPaint)
 		{
@@ -484,7 +485,7 @@ class BufferPrintable1_7 implements Printable
 			gfx.drawString(headerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + lm.getAscent()));
 		}
 
-		return headerBounds.getHeight();
+		return lineHeight;
 	}
 	
 
@@ -494,18 +495,19 @@ class BufferPrintable1_7 implements Printable
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(footerText, frc);
 
-		Rectangle2D bounds = font.getStringBounds(footerText,frc);
-		Rectangle2D footerBounds = new Rectangle2D.Double(pageX,pageY + pageHeight - bounds.getHeight(), pageWidth,bounds.getHeight());
+		Rectangle2D bounds = font.getStringBounds(footerText, frc);
+		double lineHeight = new Float(getLineHeight()).doubleValue();
+		Rectangle2D footerBounds = new Rectangle2D.Double(pageX, pageY + pageHeight - lineHeight, pageWidth, lineHeight);
 
 		if(actuallyPaint)
 		{
 			gfx.setColor(footerColor);
 			gfx.fill(footerBounds);
 			gfx.setColor(footerTextColor);
-			gfx.drawString(footerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + pageHeight - bounds.getHeight() + lm.getAscent()));
+			gfx.drawString(footerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + pageHeight - lineHeight + lm.getAscent()));
 		}
 
-		return footerBounds.getHeight();
+		return lineHeight;
 	} 
 
 	

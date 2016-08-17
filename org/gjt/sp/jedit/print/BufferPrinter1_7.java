@@ -279,6 +279,13 @@ public class BufferPrinter1_7
 				}
 			}
 		}
+		MediaPrintableArea mpa = ( MediaPrintableArea )format.get( MediaPrintableArea.class );
+		if (mpa == null)
+		{
+			// assume US Letter size - why? Because I live in the US
+			mpa = new MediaPrintableArea(0.5f, 0.5f, 10.0f, 7.5f, MediaPrintableArea.INCH);
+			format.add(mpa);
+		}
 	}
 
 

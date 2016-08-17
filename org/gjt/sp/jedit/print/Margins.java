@@ -21,6 +21,8 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
     private float right;
     private float bottom;
 
+    // need serial version since this is serialized
+    private static final long serialVersionUID = 5343792322705104289L;
 
     /**
      * @param units One of INCH or MM.
@@ -125,6 +127,10 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
         return margin / new Integer( units ).floatValue();
     }
 
+    public String toString()
+    {
+        return toString(INCH);   
+    }
 
     public String toString( int units )
     {
