@@ -73,6 +73,8 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
   
 - Fix bug # 2844, printing range bug. (Dale Anson) 
 
+- Delete a user mode from the catalog even if the mode file is missing
+  (Eric Le Lay)
 }}}
 {{{ UI Improvements
 
