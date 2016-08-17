@@ -148,6 +148,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
                 // the page break line drawn on it.
                 if ( range.getEnd() == physicalLine && textArea.getLineEndOffset(physicalLine) == end)
                 {
+                    y += gfx.getFontMetrics().getHeight();
                     gfx.drawLine( 0, y, textArea.getPainter().getWidth(), y );
                 }
             }

@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.print;
 
 
 import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.io.*;
 import java.util.HashMap;
@@ -201,8 +203,14 @@ public class BufferPrinter1_7
 	// that page
 	private static HashMap<Integer, Range> getPageRanges( View view, BufferPrintable1_7 printable, PrintRequestAttributeSet attributes )
 	{
-		Graphics graphics = view.getGraphics();
+		//Graphics graphics = view.getGraphics();
 		PageFormat pageFormat = createPageFormat( attributes );
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		BufferedImage image = new BufferedImage(new Double(pageFormat.getImageableWidth()).intValue(), new Double(pageFormat.getImageableHeight()).intValue(), BufferedImage.TYPE_INT_RGB);
+		Graphics graphics = ge.createGraphics(image);
+		Paper paper = pageFormat.getPaper();
+		Rectangle2D.Double clipRegion = new Rectangle2D.Double(paper.getImageableX(), paper.getImageableY(), paper.getImageableWidth(), paper.getImageableHeight());
+		graphics.setClip(clipRegion);
 		return printable.calculatePages( graphics, pageFormat );
 	}
 

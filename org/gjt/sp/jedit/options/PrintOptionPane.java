@@ -91,7 +91,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		/* Spacing workaround */
 		glyphVector = new JCheckBox(jEdit.getProperty(
 			"options.print.glyphVector"));
-		glyphVector.setSelected(jEdit.getBooleanProperty("print.glyphVector"));
+		glyphVector.setSelected(jEdit.getBooleanProperty("print.glyphVector", true));
 		addComponent(glyphVector);
 
 		/* Force 1.3 print dialog */

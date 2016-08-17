@@ -28,6 +28,7 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
+import static java.awt.RenderingHints.*;
 import java.util.*;
 import java.util.List;
 import javax.print.attribute.standard.Chromaticity;
@@ -90,7 +91,6 @@ class BufferPrintable1_7 implements Printable
 		footer = jEdit.getBooleanProperty("print.footer");
 		lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		font = jEdit.getFontProperty("print.font");
-		frc = ((Graphics2D)view.getGraphics()).getFontRenderContext();
 		boolean color = Chromaticity.COLOR.equals(format.get(Chromaticity.class));
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
@@ -205,7 +205,8 @@ class BufferPrintable1_7 implements Printable
 	// parses the file to determine what lines belong to which page
 	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
 	{
-		Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
+		//Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
+		//Log.log(Log.DEBUG, this, "graphics.getClip = " + _gfx.getClip());
 		pages = new HashMap<Integer, Range>();
 		
 		// ensure graphics and font rendering context are valid
@@ -214,16 +215,29 @@ class BufferPrintable1_7 implements Printable
 			// this can happen on startup when the graphics is not yet valid
 			return pages;	
 		}
+		
+		// set the rendering hints set in the text area option pane. The affine
+		// transform is basic and seems to work well in all cases. I've found
+		// that it's necessary to turn on the print spacing workaround in the
+		// text area option pane to not get character overlap. I think this
+		// setting should be on by default since it causes graphics.drawGlyphVector
+		// to be used to draw the characters and the javadoc says, "This is the 
+		// fastest way to render a set of characters to the screen."
 		Graphics2D gfx = (Graphics2D)_gfx;
+		gfx.setRenderingHint(KEY_TEXT_ANTIALIASING, view.getTextArea().getPainter().getAntiAlias().renderHint());
+		boolean useFractionalFontMetrics = jEdit.getBooleanProperty("view.fracFontMetrics");
+		gfx.setRenderingHint(KEY_FRACTIONALMETRICS, (useFractionalFontMetrics ? VALUE_FRACTIONALMETRICS_ON : VALUE_FRACTIONALMETRICS_OFF));
 		gfx.setFont(font);
-		Log.log(Log.DEBUG, this, "font is " + font);
+		gfx.setTransform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+		frc = gfx.getFontRenderContext();
+		//Log.log(Log.DEBUG, this, "Font render context is " + frc);
 
 		// maximum printable area
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
+		//Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 
 		// calculate header height
 		if(header)
@@ -247,19 +261,29 @@ class BufferPrintable1_7 implements Printable
 		// determine line number width
 		if(lineNumbers)
 		{
-			lineNumberWidth = getLineNumberWidth();
+			String lineNumberDigits = String.valueOf(buffer.getLineCount());
+			StringBuilder digits = new StringBuilder();
+			for (int i = 0; i < lineNumberDigits.length(); i++)
+			{
+				digits.append('0');	
+			}
+			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 		
 		// calculate tab size
-		double tabWidth = getTabWidth();
-		Log.log(Log.DEBUG, this, "tabWidth = " + tabWidth);
+		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
+		StringBuilder tabs = new StringBuilder();
+		char[] chars = new char[tabSize];
+		for(int i = 0; i < tabSize; i++)
+		{
+			tabs.append(' ');
+		}
+		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
 		
 		// prep for calculations
 		lm = font.getLineMetrics("gGyYX", frc);
-		//float lineHeight = lm.getHeight();
-		float lineHeight = getLineHeight();
-		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		float lineHeight = lm.getHeight();
 		boolean printFolds = jEdit.getBooleanProperty("print.folds", true);
 		currentPhysicalLine = 0;
 		int pageCount = 0;
@@ -328,28 +352,6 @@ class BufferPrintable1_7 implements Printable
 		return answer;
 	}
 	
-	private double getTabWidth() 
-	{
-		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
-		FontMetrics fm = view.getFontMetrics(font);
-		int charWidth = fm.charWidth(' ') * tabSize;
-		return new Integer(charWidth).doubleValue();
-	}
-	
-	private float getLineHeight()
-	{
-		FontMetrics fm = view.getFontMetrics(font);
-		return new Integer(fm.getHeight()).floatValue();
-	}
-	
-	private double getLineNumberWidth()
-	{
-		String lineNumberDigits = String.valueOf(buffer.getLineCount());
-		FontMetrics fm = view.getFontMetrics(font);
-		int charWidth = fm.charWidth(' ') * lineNumberDigits.length();
-		return new Integer(charWidth).doubleValue();
-	}
-	
 	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
@@ -386,21 +388,31 @@ class BufferPrintable1_7 implements Printable
 		// determine line number width
 		if(lineNumbers)
 		{
-			lineNumberWidth = getLineNumberWidth();
+			String lineNumberDigits = String.valueOf(buffer.getLineCount());
+			StringBuilder digits = new StringBuilder();
+			for (int i = 0; i < lineNumberDigits.length(); i++)
+			{
+				digits.append('0');	
+			}
+			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 
 		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
-		double tabWidth = getTabWidth();
-		Log.log(Log.DEBUG, this, "tabWidth = " + tabWidth);
+		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
+		StringBuilder tabs = new StringBuilder();
+		for(int i = 0; i < tabSize; i++)
+		{
+			tabs.append(' ');
+		}
+		double tabWidth = font.getStringBounds(tabs.toString(), frc).getWidth();
 		PrintTabExpander tabExpander = new PrintTabExpander(tabWidth);
 		
 		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
-		//float lineHeight = lm.getHeight();
-		float lineHeight = getLineHeight();
-		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		float lineHeight = lm.getHeight();
+		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
 		//Log.log(Log.DEBUG, this, "printing range: " + range);
@@ -474,8 +486,7 @@ class BufferPrintable1_7 implements Printable
 		lm = font.getLineMetrics(headerText, frc);
 
 		Rectangle2D bounds = font.getStringBounds(headerText, frc);
-		double lineHeight = new Float(getLineHeight()).doubleValue();
-		Rectangle2D headerBounds = new Rectangle2D.Double(pageX, pageY, pageWidth, lineHeight);
+		Rectangle2D headerBounds = new Rectangle2D.Double(pageX, pageY, pageWidth, bounds.getHeight());
 
 		if(actuallyPaint)
 		{
@@ -485,7 +496,7 @@ class BufferPrintable1_7 implements Printable
 			gfx.drawString(headerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + lm.getAscent()));
 		}
 
-		return lineHeight;
+		return headerBounds.getHeight();
 	}
 	
 
@@ -495,19 +506,18 @@ class BufferPrintable1_7 implements Printable
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(footerText, frc);
 
-		Rectangle2D bounds = font.getStringBounds(footerText, frc);
-		double lineHeight = new Float(getLineHeight()).doubleValue();
-		Rectangle2D footerBounds = new Rectangle2D.Double(pageX, pageY + pageHeight - lineHeight, pageWidth, lineHeight);
+		Rectangle2D bounds = font.getStringBounds(footerText,frc);
+		Rectangle2D footerBounds = new Rectangle2D.Double(pageX,pageY + pageHeight - bounds.getHeight(), pageWidth,bounds.getHeight());
 
 		if(actuallyPaint)
 		{
 			gfx.setColor(footerColor);
 			gfx.fill(footerBounds);
 			gfx.setColor(footerTextColor);
-			gfx.drawString(footerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + pageHeight - lineHeight + lm.getAscent()));
+			gfx.drawString(footerText, (float)(pageX + (pageWidth - bounds.getWidth()) / 2), (float)(pageY + pageHeight - bounds.getHeight() + lm.getAscent()));
 		}
 
-		return lineHeight;
+		return footerBounds.getHeight();
 	} 
 
 	
