@@ -51,6 +51,7 @@ import org.gjt.sp.util.Log;
 
 // Technical guide on the Java printing system:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/jps/spec/JPSTOC.fm.html
+@SuppressWarnings("serial")
 public class PrinterDialog extends JDialog implements ListSelectionListener
 {
 
@@ -85,7 +86,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     private boolean reversePrinting = false;
 
 
-    public PrinterDialog( View owner, PrintRequestAttributeSet attributes, boolean pageSetupOnly )
+    public PrinterDialog( View owner, PrintRequestAttributeSet attributes, final boolean pageSetupOnly )
     {
         super( owner, Dialog.ModalityType.APPLICATION_MODAL );
         try
@@ -913,25 +914,28 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             paperPanel.add( orientation );
             
             int units = getUnits();
+            boolean unitIsMM = units == MediaPrintableArea.MM;
             Margins margins = (Margins)attributes.get(Margins.class);
-            float[] marginValues = margins == null ? new float[]{1.0f, 1.0f, 1.0f, 1.0f} : margins.getMargins(units);
-            float topMargin = marginValues[0];
-            float leftMargin = marginValues[1];
-            float rightMargin = marginValues[2];
-            float bottomMargin = marginValues[3];
+            // FIXME: use the value from the printer, otherwise we put invalid values by default,
+            // depending on its print area.
+            int defaultMargin = unitIsMM ? 15 : 1;
+            float[] marginValues = margins == null ? new float[]{defaultMargin, defaultMargin, defaultMargin, defaultMargin} : margins.getMargins(units);
 
             JPanel marginPanel = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
             marginPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), jEdit.getProperty( "print.dialog.Margins", "Margins" ) ), BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) ) );
-            topMarginField = new NumericTextField( Float.toString( topMargin ), true, units == MediaPrintableArea.MM );
-            topMarginField.addFocusListener( PageSetupPanel.this );
-            leftMarginField = new NumericTextField( Float.toString( leftMargin ), true, units == MediaPrintableArea.MM );
-            leftMarginField.addFocusListener( PageSetupPanel.this );
-            rightMarginField = new NumericTextField( Float.toString( rightMargin ), true, units == MediaPrintableArea.MM );
-            rightMarginField.addFocusListener( PageSetupPanel.this );
-            bottomMarginField = new NumericTextField( Float.toString( bottomMargin ), true, units == MediaPrintableArea.MM );
-            bottomMarginField.addFocusListener( PageSetupPanel.this );
 
-            String unitsLabel = units == MediaPrintableArea.MM ? " (mm)" : " (in)";
+            NumericTextField[] marginFields = new NumericTextField[4];
+            for(int i=0;i<4;i++){
+                String marginS = unitIsMM? Integer.toString( (int)marginValues[i] ) : Float.toString( marginValues[i] );
+                marginFields[i] = new NumericTextField(marginS, true, unitIsMM);
+                marginFields[i].addFocusListener( PageSetupPanel.this );
+            }
+            topMarginField = marginFields[0];
+            leftMarginField = marginFields[1];
+            rightMarginField = marginFields[2];
+            bottomMarginField = marginFields[3];
+
+            String unitsLabel = unitIsMM ? " (mm)" : " (in)";
             marginPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Top", "Top" ) + unitsLabel ) );
             marginPanel.add( topMarginField );
             marginPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Left", "Left" ) + unitsLabel ) );
@@ -1074,10 +1078,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 as.add( ( OrientationRequested )orientation.getSelectedItem() );
             }
 
-            float topMargin = ((Float)topMarginField.getValue()).floatValue();
-            float leftMargin = ((Float)leftMarginField.getValue()).floatValue();
-            float rightMargin = ((Float)rightMarginField.getValue()).floatValue();
-            float bottomMargin = ((Float)bottomMarginField.getValue()).floatValue();
+            float topMargin = topMarginField.getValue().floatValue();
+            float leftMargin = leftMarginField.getValue().floatValue();
+            float rightMargin = rightMarginField.getValue().floatValue();
+            float bottomMargin = bottomMarginField.getValue().floatValue();
             Margins margins = new Margins(topMargin, leftMargin, rightMargin, bottomMargin);
             as.add(margins);
 
@@ -1146,10 +1150,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float paperHeight = mediaSize.getY(units);
             
             // get the user desired margins
-            float topMargin = ((Float)topMarginField.getValue()).floatValue();
-            float leftMargin = ((Float)leftMarginField.getValue()).floatValue();
-            float rightMargin = ((Float)rightMarginField.getValue()).floatValue();
-            float bottomMargin = ((Float)bottomMarginField.getValue()).floatValue();
+            float topMargin = topMarginField.getValue().floatValue();
+            float leftMargin = leftMarginField.getValue().floatValue();
+            float rightMargin = rightMarginField.getValue().floatValue();
+            float bottomMargin = bottomMarginField.getValue().floatValue();
             
             // get the selected orientation and adjust the margins and width/height
             OrientationRequested orientationRequested = (OrientationRequested)orientation.getSelectedItem();
