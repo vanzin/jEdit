@@ -175,6 +175,9 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // loads some default values if needed
             valueChanged( null );
             
+            // set margin values, need to do this here after the other values have been set
+            pageSetupPanel.setDefaultMargins();
+    
             pack();
 
             setLocationRelativeTo( jEdit.getActiveView().getTextArea() );
@@ -654,9 +657,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             orientation.setSelectedItem( previousOrientation == null ? OrientationRequested.PORTRAIT : previousOrientation );
         }
         
-        // set margin values, need to do this here after the other values have been set
-        pageSetupPanel.setDefaultMargins();
-
     }
 
 
@@ -1299,35 +1299,17 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float[] marginValues = margins == null ? minMargins : margins.getMargins(units);
             
             // set the margin text area values
-            Float marginValue = new Float(marginValues[0]);
-            Float minMargin = new Float(minMargins[0]);
-            Float maxMargin = new Float(maxMargins[0]);
-            topMarginField.setText(integerOnly ? String.valueOf(marginValue.intValue()) : String.valueOf(marginValue));
-            topMarginField.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
-            topMarginField.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
-            
-            marginValue = new Float(marginValues[1]);
-            minMargin = new Float(minMargins[1]);
-            maxMargin = new Float(maxMargins[1]);
-            leftMarginField.setText(integerOnly ? String.valueOf(marginValue.intValue()) : String.valueOf(marginValue));
-            leftMarginField.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
-            leftMarginField.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
-            
-            marginValue = new Float(marginValues[2]);
-            minMargin = new Float(minMargins[2]);
-            maxMargin = new Float(maxMargins[2]);
-            rightMarginField.setText(integerOnly ? String.valueOf(marginValue.intValue()) : String.valueOf(marginValue));
-            rightMarginField.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
-            rightMarginField.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
-            
-            marginValue = new Float(marginValues[3]);
-            minMargin = new Float(minMargins[3]);
-            maxMargin = new Float(maxMargins[3]);
-            bottomMarginField.setText(integerOnly ? String.valueOf(marginValue.intValue()) : String.valueOf(marginValue));
-            bottomMarginField.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
-            bottomMarginField.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
-            
-            
+            NumericTextField[] numberFields = new NumericTextField[]{topMarginField, leftMarginField, rightMarginField, bottomMarginField};
+            for (int i = 0; i < numberFields.length; i++)
+            {
+                Float value = new Float(marginValues[i]);
+                Float minMargin = new Float(minMargins[i]);
+                Float maxMargin = new Float(maxMargins[i]);
+                NumericTextField field = numberFields[i];
+                field.setText(integerOnly ? String.valueOf(value.intValue()) : String.valueOf(value));
+                field.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
+                field.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
+            }
         }
         
         // the default margins are the margins that allow the maximum supported
@@ -1409,7 +1391,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float bottomMargin = paperHeight - supportedArea.getY(units);
             bottomMargin = integerOnly ? new Double(Math.ceil(bottomMargin)).floatValue() : bottomMargin;
 
-            // adjust the margins for the paper orientation
+            // adjust the margins for the paper orientation 
             OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
             rotateMargins( topMargin, leftMargin, rightMargin, bottomMargin, orientationRequested );
 
@@ -1428,7 +1410,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 return MediaPrintableArea.INCH;
             }
-
             return MediaPrintableArea.MM;
         }
     }

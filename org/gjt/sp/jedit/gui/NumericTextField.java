@@ -22,12 +22,18 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.DocumentFilter.FilterBypass;
+
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.util.SyntaxUtilities;
 
 /** A TextField that accepts only numeric values. The numeric values may be 
  * either integer or float values.
@@ -41,6 +47,9 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 	private final boolean integerOnly;
 	private Number minValue;
 	private Number maxValue;
+	private SyntaxStyle invalidStyle;
+	private Color defaultBackground;
+	private Color defaultForeground;
 	
 	public NumericTextField(String text)
 	{
@@ -55,6 +64,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
 		maxValue = Integer.MAX_VALUE;
 		addFilter();
+		loadInvalidStyle();
 	}
 	
 	public NumericTextField(String text, boolean positiveOnly, boolean integerOnly)
@@ -73,6 +83,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 			maxValue = Float.MAX_VALUE;
 		}
 		addFilter();
+		loadInvalidStyle();
 	}
 	
 	public NumericTextField(String text, int columns, boolean positiveOnly) 
@@ -83,6 +94,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
 		maxValue = Integer.MAX_VALUE;
 		addFilter();
+		loadInvalidStyle();
 	}
 	
 	public NumericTextField(String text, int columns, boolean positiveOnly, boolean integerOnly)
@@ -101,6 +113,17 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 			maxValue = Float.MAX_VALUE;
 		}
 		addFilter();
+		loadInvalidStyle();
+	}
+	
+	private void loadInvalidStyle()
+	{
+		Font font = getFont();
+		String family = font.getFamily();
+		int size = font.getSize();
+		invalidStyle = SyntaxUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), family, size, true);
+		defaultForeground = getForeground();
+		defaultBackground = getBackground();
 	}
 	
 	// set the minimum allowed value for this text field. If this NumericTextField
@@ -188,15 +211,21 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
                 return ;
             }
             String newString = new StringBuilder(getText()).insert(offset, string).toString();
-            if ( isInteger( newString ) && inRange( newString ) ) 
-            {
-                super.insertString( fb, offset, string, attr );
-            }
+            if (!isInteger( newString ))
+			{
+				return;				
+			}
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.insertString( fb, offset, string, attr );
         }
 
         public void remove( FilterBypass fb, int offset, int length )
         throws BadLocationException 
         {
+        	String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
             super.remove( fb, offset, length );
         }
 
@@ -208,14 +237,21 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
                 return ;
             }
             String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
-            if ( isInteger( newString ) && inRange( newString ) ) 
-            {
-                super.replace( fb, offset, length, text, attrs );
-            }
+            if (!isInteger( newString ))
+			{
+				return;				
+			}
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.replace( fb, offset, length, text, attrs );
         }
 
         private boolean isInteger( String string ) 
         {
+        	if (string == null || string.isEmpty())
+        	{
+        		return false;	
+        	}
         	try 
         	{
         		if (!positiveOnly && "-".equals(string))
@@ -233,7 +269,11 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 
         private boolean inRange( String string ) 
         {
-            int value = Integer.parseInt( string.toString() );
+        	if (string == null || string.isEmpty())
+        	{
+        		return false;	
+        	}
+            int value = Integer.parseInt( string );
             return value <= maxValue.intValue() && value >= minValue.intValue();
         }
     }
@@ -247,15 +287,21 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
                 return ;
             }
             String newString = new StringBuilder(getText()).insert(offset, string).toString();
-            if ( isFloat( newString ) && inRange( newString ) ) 
-            {
-                super.insertString( fb, offset, string, attr );
-            }
+            if (!isFloat( newString ))
+			{
+				return;				
+			}
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.insertString( fb, offset, string, attr );
         }
 
         public void remove( FilterBypass fb, int offset, int length )
         throws BadLocationException 
         {
+        	String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
             super.remove( fb, offset, length );
         }
 
@@ -267,14 +313,21 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
                 return ;
             }
             String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
-            if ( isFloat( newString ) && inRange( newString ) ) 
-            {
-                super.replace( fb, offset, length, text, attrs );
-            }
+            if (!isFloat( newString ))
+			{
+				return;				
+			}
+			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.replace( fb, offset, length, text, attrs );
         }
 
         private boolean isFloat( String string ) 
         {
+        	if (string == null || string.isEmpty())
+        	{
+        		return false;	
+        	}
         	try 
         	{
         		if (".".equals(string))
@@ -296,11 +349,15 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 
         private boolean inRange( String string ) 
         {
+        	if (string == null || string.isEmpty())
+        	{
+        		return false;	
+        	}
 			if (".".equals(string))
 			{
 				return true;	
 			}
-            float value = Float.parseFloat( string.toString() );
+            float value = Float.parseFloat( string );
             boolean toReturn = value <= maxValue.floatValue() && value >= minValue.floatValue();
             return toReturn;
         }
