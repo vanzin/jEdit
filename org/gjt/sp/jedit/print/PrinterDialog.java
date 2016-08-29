@@ -969,10 +969,28 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             paperSize = new JComboBox<String>();
             paperSize.setEnabled( false );
+            paperSize.addActionListener( 
+                new ActionListener() 
+                {
+                    public void actionPerformed( ActionEvent ae ) 
+                    {
+                        PageSetupPanel.this.setDefaultMargins();                            
+                    }
+                }
+            );
 
             orientation = new JComboBox<OrientationRequested>();
             orientation.setEnabled( false );
             orientation.setRenderer( new OrientationCellRenderer() );
+            orientation.addActionListener( 
+                new ActionListener() 
+                {
+                    public void actionPerformed( ActionEvent ae ) 
+                    {
+                        PageSetupPanel.this.setDefaultMargins();                            
+                    }
+                }
+            );
 
             paperPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Paper_source", "Paper source" ) + ':' ) );
             paperPanel.add( paperSource );
@@ -1160,6 +1178,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             MediaPrintableArea supportedArea = getSupportedPrintableArea();
+            System.out.println("+++++ supportedArea = " + supportedArea.toString(units, "in"));
             
             //Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
 
@@ -1193,29 +1212,29 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float y = topMargin;
             float width = paperWidth - leftMargin - rightMargin;
             float height = paperHeight - topMargin - bottomMargin;
-
+            
             // check that the new printable area fits inside the supported area
             if ( x < supportedArea.getX( units ) )
             {
-                return "Invalid left margin.";
+                return jEdit.getProperty("print.dialog.error.Invalid_left_margin", "Invalid left margin.");
             }
 
 
             if ( y < supportedArea.getY( units ) )
             {
-                return "Invalid top margin";
+                return jEdit.getProperty("print.dialog.error.Invalid_top_margin", "Invalid top margin.");
             }
 
 
             if ( width <= 0 || x + width > supportedArea.getX( units ) + supportedArea.getWidth( units ) )
             {
-                return "Invalid left and/or right margin.";
+                return jEdit.getProperty("print.dialog.error.Invalid_left_andor_right_margin.", "Invalid left and/or right margin.");
             }
 
 
             if ( height <= 0 || y + height > supportedArea.getY( units ) + supportedArea.getHeight( units ) )
             {
-                return "Invalid top and/or bottom margin.";
+                return jEdit.getProperty("print.dialog.error.Invalid_top_andor_bottom_margin", "Invalid top and/or bottom margin.");
             }
 
 
@@ -1233,7 +1252,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 attrs.add( paperSizes.get( paperSize.getSelectedIndex() ) );
             }
-            attrs.add( ( OrientationRequested )orientation.getSelectedItem() );
+            if (orientation != null && orientation.getSelectedItem() != null)
+            {
+                attrs.add( ( OrientationRequested )orientation.getSelectedItem() );
+            }
             Object values = getPrintService().getSupportedAttributeValues( MediaPrintableArea.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, attrs );
             if ( values != null )
             {
@@ -1279,10 +1301,11 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         }
         
         // set the values in the margin text fields to be either the minimum
-        // supported by the printer or the last used margins, also sets a 
-        // range on the text fields so the user can't enter a value too small
-        // or too large. Note that it is still possible for the user to enter
-        // invalid margin values, e.g. top margin + bottom margin > printable area height.
+        // supported by the printer or the last used margins or the currently
+        // set margins, also sets a range on the text fields so the user can't 
+        // enter a value too small or too large. Note that it is still possible 
+        // for the user to enter invalid margin values, e.g. 
+        // top margin + bottom margin > printable area height.
         void setDefaultMargins()
         {
             int units = getUnits();
@@ -1302,13 +1325,24 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             NumericTextField[] numberFields = new NumericTextField[]{topMarginField, leftMarginField, rightMarginField, bottomMarginField};
             for (int i = 0; i < numberFields.length; i++)
             {
+                NumericTextField field = numberFields[i];
+                Float currentUserMargin = null;
+                String text = field.getText();
+                if (text != null && !text.isEmpty())
+                {
+                    currentUserMargin = new Float(text);   
+                }
                 Float value = new Float(marginValues[i]);
                 Float minMargin = new Float(minMargins[i]);
                 Float maxMargin = new Float(maxMargins[i]);
-                NumericTextField field = numberFields[i];
-                field.setText(integerOnly ? String.valueOf(value.intValue()) : String.valueOf(value));
+                if (currentUserMargin == null || currentUserMargin < minMargin || currentUserMargin > maxMargin)
+                {
+                    // current user margin is invalid
+                    field.setText(integerOnly ? String.valueOf(value.intValue()) : String.valueOf(value));
+                }
                 field.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
                 field.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
+                field.setToolTipText("Min: " + minMargin + ", max: " + maxMargin);
             }
         }
         

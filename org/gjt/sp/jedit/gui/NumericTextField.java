@@ -200,6 +200,14 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
     		( ( AbstractDocument ) this.getDocument() ).setDocumentFilter( new IntegerDocumentFilter() );
     	else
     		( ( AbstractDocument ) this.getDocument() ).setDocumentFilter( new FloatDocumentFilter() );
+    	
+    	// apply the filter to the current value
+    	try 
+    	{
+    		String text = getText();
+    		((AbstractDocument)getDocument()).getDocumentFilter().replace(null, 0, text.length(), text, null); 
+		}
+		catch(Exception e) {}	// NOPMD
     }
 
     class IntegerDocumentFilter extends DocumentFilter {

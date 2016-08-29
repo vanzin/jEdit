@@ -738,6 +738,10 @@ print.dialog.tabloid=Tabloid
 print.dialog.top=Top
 print.dialog.two-sided-long-edge=Two Sided, Long Edge
 print.dialog.two-sided-short-edge=Two Sided, Short Edge
+print.dialog.error.Invalid_left_margin=Invalid left margin.
+print.dialog.error.Invalid_top_margin=Invalid top margin.
+print.dialog.error.Invalid_left_andor_right_margin=Invalid left and/or right margin.
+print.dialog.error.Invalid_top_andor_bottom_margin=Invalid top and/or bottom margin.
 
 print.toggle-show-page-breaks.label=Toggle Page Break Marker
 #}}}
