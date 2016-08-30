@@ -156,7 +156,11 @@ class BufferPrintable1_7 implements Printable
 	{
 		if (firstCall)
 		{
-			calculatePages(_gfx, pageFormat);
+			pages = calculatePages(_gfx, pageFormat);
+			if (pages == null || pages.isEmpty())
+			{
+				throw new PrinterException("Unable to determine page ranges.");		
+			}
 			firstCall = false;
 		}
 		
@@ -203,11 +207,49 @@ class BufferPrintable1_7 implements Printable
 
 	
 	// parses the file to determine what lines belong to which page
-	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) 
+	// TODO: need to take into account the large file settings: 
+	// String largeFileMode = getStringProperty("largefilemode");
+	// int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
+	// and the long line setting: 
+	// int longLineLimit = jEdit.getIntegerProperty("longLineLimit", 4000);
+	// NOTE: the 4000 seems to be arbitrary and there is no option pane that lets
+	// the user set this value.
+	// If any line exceeds the limit or the buffer size exceeds the large buffer
+	// size, don't do the calculation.
+	
+	/**
+ 	 * Parses the file to determine what lines belong to which page.
+ 	 * @param _gfx The graphics context to use for the calculations.
+ 	 * @param pageFormat The page format to use for the calculations.
+ 	 * @param force If true, force the calculation regardless of large file and long
+ 	 * line limits.
+ 	 * @return A hashmap of page number = line range for that page
+ 	 *
+ 	 * NOTE: This handles large files and long lines poorly, if the buffer size
+ 	 * is larger than the "largeBufferSize" property, a printer exception is thrown.
+ 	 * Same for long lines, if any line in the buffer is longer than the 
+ 	 * "longLineLimit" property, a printer exception is thrown. This seems to be
+ 	 * an adequate way to handle the large files, but is probably a poor way to
+ 	 * handle files that aren't particularly large but only have one line.
+ 	 */
+	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) throws PrinterException
 	{
 		//Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
 		//Log.log(Log.DEBUG, this, "graphics.getClip = " + _gfx.getClip());
+
 		pages = new HashMap<Integer, Range>();
+		
+		// check large file settings
+		String largeFileMode = buffer.getStringProperty("largefilemode");
+		if (!"full".equals(largeFileMode))
+		{
+			int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
+			if (buffer.getLength() > largeBufferSize)
+			{
+				throw new PrinterException("Buffer is too large to print.");
+			}
+		}
+		
 		
 		// ensure graphics and font rendering context are valid
 		if (_gfx == null)
@@ -216,7 +258,7 @@ class BufferPrintable1_7 implements Printable
 			return pages;	
 		}
 		
-		// set the rendering hints set in the text area option pane. The affine
+		// use the rendering hints set in the text area option pane. The affine
 		// transform is basic and seems to work well in all cases. I've found
 		// that it's necessary to turn on the print spacing workaround in the
 		// text area option pane to not get character overlap. I think this
@@ -291,9 +333,19 @@ class BufferPrintable1_7 implements Printable
 		double y = 0.0;
 		
 		// measure each line
-		while (currentPhysicalLine <= buffer.getLineCount())
+		int longLineLimit = jEdit.getIntegerProperty("longLineLimit", 4000);
+		int bufferLineCount = buffer.getLineCount();
+		while (currentPhysicalLine <= bufferLineCount)
 		{
-			if (currentPhysicalLine == buffer.getLineCount())
+			// line might be too long. The default long line limit is 4000 characters,
+			// which is about the number of characters that fit on a single letter
+			// size page, roughly 80 characters wide and 50 lines tall.
+			if (currentPhysicalLine < bufferLineCount && buffer.getLineLength(currentPhysicalLine) > longLineLimit)
+			{
+				throw new PrinterException("Line " + (currentPhysicalLine + 1) + " is too long to print.");	
+			}
+			
+			if (currentPhysicalLine == bufferLineCount)
 			{
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
@@ -311,12 +363,13 @@ class BufferPrintable1_7 implements Printable
 				
 			// fill the line list
 			lineList.clear();
-			tokenHandler.init(styles, frc, tabExpander, lineList, (float)(pageWidth - lineNumberWidth), -1);
+			tokenHandler.init(styles, frc, tabExpander, lineList, (float)(pageWidth - lineNumberWidth), 0);
 			buffer.markTokens(currentPhysicalLine, tokenHandler);
 			
+			// check that these lines will fit on the page
 			if(y + (lineHeight * (lineList.isEmpty() ? 1 : lineList.size())) > pageHeight)
 			{
-				Range range = new Range(startLine, -- currentPhysicalLine);
+				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
 				pages.put(new Integer(pageCount), range);
 				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;

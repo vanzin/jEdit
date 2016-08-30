@@ -141,6 +141,10 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
             if ( pages == null )
             {
                 pages = getPageRanges();
+                if (pages == null || pages.isEmpty())
+                {
+                    return;
+                }
             }
 
            // - 1 so last page break isn't drawn

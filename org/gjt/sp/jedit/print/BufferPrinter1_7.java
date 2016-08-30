@@ -129,7 +129,7 @@ public class BufferPrinter1_7
 
 
 			// get the page ranges from the printable
-			HashMap<Integer, Range> pageRanges = getPageRanges( view, printable, format );
+			HashMap<Integer, Range> pageRanges = getPageRanges( printable, format );
 			if ( pageRanges == null || pageRanges.isEmpty() )
 			{
 				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Unable to calculate page ranges."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
@@ -193,16 +193,15 @@ public class BufferPrinter1_7
 	{
 		loadPrintSpec();
 		BufferPrintable1_7 printable = new BufferPrintable1_7( format, view, buffer );
-		return BufferPrinter1_7.getPageRanges( view, printable, format );
+		return BufferPrinter1_7.getPageRanges( printable, format );
 	}
 
 
 	// have the printable calculate the pages and ranges, the map has the page
 	// number as the key, a range containing the start and end line numbers of
 	// that page
-	private static HashMap<Integer, Range> getPageRanges( View view, BufferPrintable1_7 printable, PrintRequestAttributeSet attributes )
+	private static HashMap<Integer, Range> getPageRanges( BufferPrintable1_7 printable, PrintRequestAttributeSet attributes )
 	{
-		//Graphics graphics = view.getGraphics();
 		PageFormat pageFormat = createPageFormat( attributes );
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		BufferedImage image = new BufferedImage(new Double(pageFormat.getImageableWidth()).intValue(), new Double(pageFormat.getImageableHeight()).intValue(), BufferedImage.TYPE_INT_RGB);
@@ -210,7 +209,14 @@ public class BufferPrinter1_7
 		Paper paper = pageFormat.getPaper();
 		Rectangle2D.Double clipRegion = new Rectangle2D.Double(paper.getImageableX(), paper.getImageableY(), paper.getImageableWidth(), paper.getImageableHeight());
 		graphics.setClip(clipRegion);
-		return printable.calculatePages( graphics, pageFormat );
+		try 
+		{
+			return printable.calculatePages( graphics, pageFormat );
+		}
+		catch(Exception e) 
+		{
+			return null;
+		}
 	}
 
 
