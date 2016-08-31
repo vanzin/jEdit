@@ -115,6 +115,8 @@ class PluginDetailPanel extends JPanel
 				
 				pluginJar.uninit(false);
 			}
+			pluginDetail.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+
 			this.entry = entry;
 		}
 	} //}}}
