@@ -82,20 +82,20 @@ class PluginDetailPanel extends JPanel
 				else
 					title.setText("<html><b>"+entry.name+"</b></html>");
 				
-				StringBuilder builder = new StringBuilder();
+				StringBuilder sb = new StringBuilder(256);
 
 				// <br> instead of <br/> because Sun's Java 5 HTML parser can't digest them.
 				// No problem on Sun's Java 6 JVM.
 				if (entry.version != null)
-					builder.append("<b>").append(jEdit.getProperty("install-plugins.info.version", "Version")).append("</b>: ").append(entry.version).append("<br>");
+					sb.append("<b>").append(jEdit.getProperty("install-plugins.info.version", "Version")).append("</b>: ").append(entry.version).append("<br>");
 				if (entry.author != null)
-					builder.append("<b>").append(jEdit.getProperty("install-plugins.info.author", "Author")).append("</b>: ").append(entry.author).append("<br>");
+					sb.append("<b>").append(jEdit.getProperty("install-plugins.info.author", "Author")).append("</b>: ").append(entry.author).append("<br>");
 				if (entry.description != null)
 				{
-					builder.append("<br>").append(entry.description);
+					sb.append("<br>").append(entry.description);
 				}
-				builder.append(getDepends(entry));
-				pluginDetail.setText(builder.toString());
+				sb.append(getDepends(entry));
+				pluginDetail.setText(sb.toString());
 			}
 			else
 			{
@@ -108,8 +108,8 @@ class PluginDetailPanel extends JPanel
 				
 				StringBuilder sb = new StringBuilder(256);
 				sb.append("<b>").append(jEdit.getProperty("install-plugin.info.version", "Version")).append("</b>: ").append(jEdit.getProperty("plugin."+clazz+".version", ""));
-				sb.append("<br><b>").append(jEdit.getProperty("install-plugin.info.author", "Author")).append("</b>: ").append( jEdit.getProperty("plugin."+clazz+".author", ""));
-				sb.append("<br>").append(jEdit.getProperty("plugin."+clazz+".description", ""));
+				sb.append("<br><b>").append(jEdit.getProperty("install-plugin.info.author", "Author")).append("</b>: ").append(jEdit.getProperty("plugin."+clazz+".author", ""));
+				sb.append("<br><br>").append(jEdit.getProperty("plugin."+clazz+".description", ""));
 				sb.append(getDepends(entry));
 				pluginDetail.setText(sb.toString());
 				
