@@ -54,7 +54,8 @@ public class KeymapMigration implements MigrationService
 		for (Map.Entry<Object, Object> entry:entries)
 		{
 		        String key = entry.getKey().toString();
-			if (key.endsWith(".shortcut") || key.endsWith(".shortcut2"))
+			if ((key.endsWith(".shortcut") || key.endsWith(".shortcut2")) &&
+				!key.startsWith("options.shortcuts."))
 			{
 				imported.setShortcut(key, entry.getValue().toString());
 				jEdit.resetProperty(key);

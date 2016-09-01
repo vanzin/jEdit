@@ -185,7 +185,6 @@ next-word-std.shortcut2=A+f
 next-word-std.shortcut=C+RIGHT
 open-file.shortcut=C+o
 open-moin-page.shortcut=C+x C+w
-options.shortcuts.shortcut2=Alternative shortcut
 overwrite.shortcut=INSERT
 paste-string-register.shortcut=C+r C+v
 paste.shortcut2=C+v
