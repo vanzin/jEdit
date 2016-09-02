@@ -1184,7 +1184,7 @@
             window. This window can be docked using the commands in its top-left
             corner popup menu; see <xref linkend="docking" />.</para>
 
-            <para>If the <guibutton>Multiple results</guibutton> check box is
+            <para>If the <guibutton>Multiple results</guibutton> toggle button is
             selected in the results window, past search results are
             retained.</para>
 
