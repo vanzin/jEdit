@@ -22,7 +22,7 @@
 
 package org.gjt.sp.jedit.print;
 
-
+import java.awt.Graphics;
 import java.awt.print.PageFormat;
 import java.util.HashMap;
 
@@ -45,6 +45,7 @@ public class PrintPreviewModel extends PageFormat
     private PrintRequestAttributeSet attributes;
     private HashMap<Integer, Range> pageRanges;
     private int pageNumber = 1;
+    private Graphics gfx;
 
 
     public PrintPreviewModel()
@@ -157,5 +158,15 @@ public class PrintPreviewModel extends PageFormat
     public void setBuffer( Buffer buffer )
     {
         this.buffer = buffer;
+    }
+    
+    public void setGraphics(Graphics g)
+    {
+    	gfx = g;	
+    }
+    
+    public Graphics getGraphics()
+    {
+    	return gfx;	
     }
 }

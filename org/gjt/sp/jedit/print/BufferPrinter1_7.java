@@ -28,6 +28,7 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.print.*;
@@ -189,13 +190,13 @@ public class BufferPrinter1_7
 	/**
  	 * This is intended for use by the PrintPreview dialog.	
  	 */
-	protected static void printPage(View view, Buffer buffer, Graphics gfx, PrintService printService, PrintRequestAttributeSet attributes, int pageNumber, HashMap<Integer, Range> pages)
+	protected static void printPage( PrintPreviewModel model )
 	{
-
-		String jobName = MiscUtilities.abbreviateView( buffer.getPath() );
+		String jobName = MiscUtilities.abbreviateView( model.getBuffer().getPath() );
 		format.add( new JobName( jobName, null ) );
 
 		// set up the print job
+		PrintService printService = model.getPrintService();
 		if (printService == null)
 		{
 			printService = PrintServiceLookup.lookupDefaultPrintService();
@@ -208,25 +209,25 @@ public class BufferPrinter1_7
 			}
 			catch ( Exception e )
 			{
-				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+				JOptionPane.showMessageDialog( model.getView(), jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
 				return;
 			}
 		}
 		else
 		{
-			JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Invalid print service."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+			JOptionPane.showMessageDialog( model.getView(), jEdit.getProperty( "print-error.message", new String[] {"Invalid print service."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
 			return;
 		}
 
 
 		// set up the printable to print just the requested page
-		format.add( new PageRanges( pageNumber ) );
-		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer, true );
-		printable.setPages(pages);
-		PageFormat pageFormat = createPageFormat( attributes );
+		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), model.getBuffer(), true );
+		printable.setPages(model.getPageRanges());
+		PageFormat pageFormat = createPageFormat( model.getAttributes() );
+		int pageNumber = new ArrayList<Integer>(model.getPageRanges().keySet()).get(0);
 		try 
 		{
-			printable.print(gfx, pageFormat, pageNumber);
+			printable.print(model.getGraphics(), pageFormat, pageNumber);
 		}
 		catch(Exception e) 
 		{

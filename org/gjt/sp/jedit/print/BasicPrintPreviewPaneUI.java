@@ -161,6 +161,10 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
     // TODO: not used, remove the change listener stuff?
     public void stateChanged( ChangeEvent event )
     {
+    	if (printPreviewRenderer != null)
+    	{
+    		printPreviewRenderer.repaint();	
+    	}
     }
 
 
@@ -222,7 +226,8 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 
             
             // print the page into this panel
-            BufferPrinter1_7.printPage( model.getView(), model.getBuffer(), gfx, model.getPrintService(), model.getAttributes(), model.getPageNumber(), model.getPageRanges() );
+            model.setGraphics( gfx );
+            BufferPrinter1_7.printPage( model );
 
             scrollPane.revalidate();
             printPreviewPane.revalidate();

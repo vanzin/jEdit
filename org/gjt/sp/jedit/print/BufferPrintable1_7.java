@@ -156,6 +156,7 @@ class BufferPrintable1_7 implements Printable
 		selection = PrinterDialog.SELECTION == printRangeType;
 	}
 	
+	// useful to avoid having to recalculate the page ranges if they are already known
 	public void setPages(HashMap<Integer, Range> pages)
 	{
 		this.pages = pages;	
@@ -166,6 +167,7 @@ class BufferPrintable1_7 implements Printable
 	// pageIndex is zero-based.
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
+		Log.log(Log.DEBUG, this, "print(..., " + pageIndex + ')');
 		if (firstCall && pages == null)
 		{
 			pages = calculatePages(_gfx, pageFormat);
@@ -374,7 +376,6 @@ class BufferPrintable1_7 implements Printable
 				pages.put(new Integer(pageCount), range);
 				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
-				++ currentPhysicalLine;
 				startLine = currentPhysicalLine;
 				y = 0.0;
 				continue;
@@ -407,6 +408,7 @@ class BufferPrintable1_7 implements Printable
 	}
 	
 	// actually print the page to the graphics context
+	// pageIndex is 0-based
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
 		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
@@ -433,7 +435,7 @@ class BufferPrintable1_7 implements Printable
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
+		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
 
 		// print header
 		if(header)
@@ -466,7 +468,7 @@ class BufferPrintable1_7 implements Printable
 			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 
-		Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
+		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
@@ -481,30 +483,30 @@ class BufferPrintable1_7 implements Printable
 		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
 		float lineHeight = lm.getHeight();
-		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
-		Log.log(Log.DEBUG, this, "printing range: " + range);
+		Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
 		
 		// print each line
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
-				Log.log(Log.DEBUG, this, "Finished buffer");
-				Log.log(Log.DEBUG, this, "The end");
+				//Log.log(Log.DEBUG, this, "Finished buffer");
+				//Log.log(Log.DEBUG, this, "The end");
 				break;
 			}
 			if (!jEdit.getBooleanProperty("print.folds",true) && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				Log.log(Log.DEBUG, this, "Skipping invisible line");
+				//Log.log(Log.DEBUG, this, "Skipping invisible line");
 				continue;
 			}
 			
 			// print only selected lines if printing selection
 			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
 			{
-				Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
+				//Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
 				continue;
 			}
 				

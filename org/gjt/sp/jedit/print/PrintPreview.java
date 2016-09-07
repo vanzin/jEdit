@@ -166,11 +166,12 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					Integer pageNumber = ( Integer )pages.getSelectedItem();
+					int selectedIndex = pages.getSelectedIndex();
 					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( pageNumber, pageRanges.get( pageNumber - 1 ) );
+					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
 					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
-					model.setPageNumber( pageNumber );
+					model.setPageNumber( selectedIndex );
+					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -180,13 +181,16 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					Integer pageNumber = ( Integer )pages.getSelectedItem();
-					if ( pageNumber == null || pageNumber - 1 < 0 )
+					int selectedIndex = pages.getSelectedIndex();
+					if (selectedIndex <= 0)
 					{
-						pageNumber = pageRanges.size();
+						selectedIndex = pageRanges.size() - 1;	
 					}
-
-					pages.setSelectedItem( pageNumber - 1 );
+					else
+					{
+						selectedIndex = selectedIndex - 1;	
+					}
+					pages.setSelectedIndex( selectedIndex );
 				}
 			}
 		);
@@ -195,13 +199,16 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					Integer pageNumber = ( Integer )pages.getSelectedItem();
-					if ( pageNumber == null || pageNumber + 1 >= pageRanges.size() )
+					int selectedIndex = pages.getSelectedIndex();
+					if (selectedIndex + 1 == pageRanges.size())
 					{
-						pageNumber = 0;
+						selectedIndex = 0;	
 					}
-
-					pages.setSelectedItem( pageNumber + 1 );
+					else
+					{
+						selectedIndex = selectedIndex + 1;	
+					}
+					pages.setSelectedIndex( selectedIndex );
 				}
 			}
 		);
@@ -219,7 +226,7 @@ public class PrintPreview extends EnhancedDialog
 		pages.setModel( pagesModel );
 
 		HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-		currentPage.put( 1, pageRanges.get( 1 ) );
+		currentPage.put( 0, pageRanges.get( 0 ) );
 		PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
 		printPreviewPane.setModel( model );
 	}
