@@ -111,6 +111,7 @@ save-a-copy-as.label=Save a Cop$y As...
 save-a-copy-as.tooltip=Does not change the current buffer's path
 save-all.label=Save A$ll...
 print.label=$Print...
+print-preview.label=Print Pre$view...
 page-setup.label=Pa$ge Setup...
 # Print selection not yet implemented
 #print-selection.label=Prin$t Selection...
@@ -742,8 +743,17 @@ print.dialog.error.Invalid_left_margin=Invalid left margin.
 print.dialog.error.Invalid_top_margin=Invalid top margin.
 print.dialog.error.Invalid_left_andor_right_margin=Invalid left and/or right margin.
 print.dialog.error.Invalid_top_andor_bottom_margin=Invalid top and/or bottom margin.
+print.dialog.preview=Preview
 
 print.toggle-show-page-breaks.label=Toggle Page Break Marker
+
+printpreview.dialog.title=Print Preview
+printpreview.dialog.nextPage=Next Page
+printpreview.dialog.prevPage=Previous Page
+printpreview.dialog.zoomin=Zoom In
+printpreview.dialog.zoomout=Zoom Out
+
+
 #}}}
 
 #{{{ Various dialog boxes

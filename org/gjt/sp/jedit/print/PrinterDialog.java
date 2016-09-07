@@ -147,14 +147,19 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
             contents.add( tabs, BorderLayout.CENTER );
+            
+            JButton previewButton = new JButton(jEdit.getProperty( "print.dialog.preview", "Preview"));
+            previewButton.addActionListener( getPreviewButtonListener() );
 
             JButton okButton = new JButton( jEdit.getProperty( "common.ok" ) );
             okButton.addActionListener( getOkButtonListener() );
+            
             JButton cancelButton = new JButton( jEdit.getProperty( "common.cancel" ) );
             cancelButton.addActionListener( getCancelButtonListener() );
 
             JPanel buttonPanel = new JPanel( new FlowLayout( FlowLayout.RIGHT, 6, 6 ) );
-            GenericGUIUtilities.makeSameSize( okButton, cancelButton );
+            GenericGUIUtilities.makeSameSize( previewButton, okButton, cancelButton );
+            buttonPanel.add( previewButton );
             buttonPanel.add( okButton );
             buttonPanel.add( cancelButton );
             contents.add( buttonPanel, BorderLayout.SOUTH );
@@ -187,6 +192,50 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         {
             e.printStackTrace();
         }
+    }
+    
+    private ActionListener getPreviewButtonListener()
+    {
+        return new ActionListener()
+        {
+
+            public void actionPerformed( ActionEvent ae )
+            {
+
+                // check margins and so on
+                String checkMarginsMessage = pageSetupPanel.recalculate();
+                if ( checkMarginsMessage != null )
+                {
+                    JOptionPane.showMessageDialog( PrinterDialog.this, checkMarginsMessage, jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+                    return;
+                }
+
+
+                // gather all the attributes from the tabs
+                for ( int i = 0; i < tabs.getTabCount(); i++ )
+                {
+                    PrinterPanel panel = ( PrinterPanel )tabs.getComponentAt( i );
+                    PrinterDialog.this.attributes.addAll( panel.getAttributes() );
+                }
+
+                // adjust the print range to filter based on odd/even pages
+                PageRanges pr = ( PageRanges )PrinterDialog.this.attributes.get( PageRanges.class );
+                try
+
+                {
+                    pr = mergeRanges( pr );
+                    PrinterDialog.this.attributes.add( pr );
+                }
+                catch ( PrintException e )
+                {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog( PrinterDialog.this, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+                    return;
+                }
+                
+                new PrintPreview(view, view.getBuffer(), PrinterDialog.this.getPrintService(), PrinterDialog.this.attributes);
+            }
+        };
     }
 
 

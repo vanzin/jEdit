@@ -93,12 +93,14 @@ public class BufferPrinter1_7
 			}
 			catch ( Exception e )
 			{
+				e.printStackTrace();
 				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
 				return;
 			}
 		}
 		else
 		{
+			System.out.println("+++++ it's here");
 			JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Invalid print service."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
 			return;
 		}
@@ -183,17 +185,70 @@ public class BufferPrinter1_7
 		};
 		ThreadUtilities.runInBackground( runner );
 	}	//}}}
+	
+	/**
+ 	 * This is intended for use by the PrintPreview dialog.	
+ 	 */
+	protected static void printPage(View view, Buffer buffer, Graphics gfx, PrintService printService, PrintRequestAttributeSet attributes, int pageNumber, HashMap<Integer, Range> pages)
+	{
+
+		String jobName = MiscUtilities.abbreviateView( buffer.getPath() );
+		format.add( new JobName( jobName, null ) );
+
+		// set up the print job
+		if (printService == null)
+		{
+			printService = PrintServiceLookup.lookupDefaultPrintService();
+		}
+		if ( printService != null )
+		{
+			try
+			{
+				job = printService.createPrintJob();
+			}
+			catch ( Exception e )
+			{
+				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+				return;
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Invalid print service."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
+			return;
+		}
+
+
+		// set up the printable to print just the requested page
+		format.add( new PageRanges( pageNumber ) );
+		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer, true );
+		printable.setPages(pages);
+		PageFormat pageFormat = createPageFormat( attributes );
+		try 
+		{
+			printable.print(gfx, pageFormat, pageNumber);
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
 
 
 	/**
 	 * This is intended for use by classes that need to know the page ranges
 	 * of the buffer.
 	 */
-	public static HashMap<Integer, Range> getPageRanges( View view, Buffer buffer )
+	public static HashMap<Integer, Range> getPageRanges( View view, Buffer buffer, PrintRequestAttributeSet attributes )
 	{
-		loadPrintSpec();
-		BufferPrintable1_7 printable = new BufferPrintable1_7( format, view, buffer );
-		return BufferPrinter1_7.getPageRanges( printable, format );
+		if (attributes == null)
+		{
+			loadPrintSpec();
+			attributes = format;
+		}
+		
+		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer );
+		return BufferPrinter1_7.getPageRanges( printable, attributes );
 	}
 
 
@@ -217,6 +272,11 @@ public class BufferPrinter1_7
 		{
 			return null;
 		}
+	}
+	
+	public static PageFormat getDefaultPageFormat(PrintRequestAttributeSet attributes)
+	{
+		return BufferPrinter1_7.createPageFormat(attributes);
 	}
 
 

@@ -60,6 +60,7 @@ class BufferPrintable1_7 implements Printable
 
 	private View view;
 	private Buffer buffer;
+	private boolean printPreview;
 	private boolean selection;
 	private int[] selectedLines;
 	private boolean reverse;
@@ -70,7 +71,7 @@ class BufferPrintable1_7 implements Printable
 	private boolean footer;
 	private boolean lineNumbers;
 
-	private HashMap<Integer, Range> pages;
+	private HashMap<Integer, Range> pages = null;
 	private int currentPhysicalLine;
 
 	private LineMetrics lm;
@@ -82,9 +83,15 @@ class BufferPrintable1_7 implements Printable
 	
 	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer)
 	{
+		this(format, view, buffer, false);	
+	}
+	
+	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer, boolean printPreview)
+	{
 		this.format = format;
 		this.view = view;
 		this.buffer = buffer;
+		this.printPreview = printPreview;
 		firstCall = true;		// pages and page ranges are calculated only once
 		
 		header = jEdit.getBooleanProperty("print.header");
@@ -149,12 +156,17 @@ class BufferPrintable1_7 implements Printable
 		selection = PrinterDialog.SELECTION == printRangeType;
 	}
 	
+	public void setPages(HashMap<Integer, Range> pages)
+	{
+		this.pages = pages;	
+	}
+	
 	// this can be called multiple times by the print system for the same page, and
 	// all calls must be handled for the page to print properly. 
 	// pageIndex is zero-based.
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
-		if (firstCall)
+		if (firstCall && pages == null)
 		{
 			pages = calculatePages(_gfx, pageFormat);
 			if (pages == null || pages.isEmpty())
@@ -205,17 +217,6 @@ class BufferPrintable1_7 implements Printable
 		return PAGE_EXISTS;
 	} 
 
-	
-	// parses the file to determine what lines belong to which page
-	// TODO: need to take into account the large file settings: 
-	// String largeFileMode = getStringProperty("largefilemode");
-	// int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
-	// and the long line setting: 
-	// int longLineLimit = jEdit.getIntegerProperty("longLineLimit", 4000);
-	// NOTE: the 4000 seems to be arbitrary and there is no option pane that lets
-	// the user set this value.
-	// If any line exceeds the limit or the buffer size exceeds the large buffer
-	// size, don't do the calculation.
 	
 	/**
  	 * Parses the file to determine what lines belong to which page.
@@ -408,16 +409,31 @@ class BufferPrintable1_7 implements Printable
 	// actually print the page to the graphics context
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
-		//Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
+		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
+		if (frc == null)
+		{
+			frc = gfx.getFontRenderContext();	
+		}
+		
+		// paint background white for print preview
+		if (printPreview)
+		{
+			// TODO: this is done in the BasicPrintPreviewPaneUI, I don't think it needs to be here also
+			Paper paper = pageFormat.getPaper();
+			double width = paper.getWidth();
+			double height = paper.getHeight();
+			gfx.setColor(Color.WHITE);
+			gfx.fillRect(0, 0, new Double(width).intValue(), new Double(height).intValue());
+		}
 		
 		// printable dimensions
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
+		Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
 
 		// print header
 		if(header)
@@ -450,7 +466,7 @@ class BufferPrintable1_7 implements Printable
 			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 
-		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
+		Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
@@ -465,30 +481,30 @@ class BufferPrintable1_7 implements Printable
 		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
 		float lineHeight = lm.getHeight();
-		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
-		//Log.log(Log.DEBUG, this, "printing range: " + range);
+		Log.log(Log.DEBUG, this, "printing range: " + range);
 		
 		// print each line
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
-				//Log.log(Log.DEBUG, this, "Finished buffer");
-				//Log.log(Log.DEBUG, this, "The end");
+				Log.log(Log.DEBUG, this, "Finished buffer");
+				Log.log(Log.DEBUG, this, "The end");
 				break;
 			}
 			if (!jEdit.getBooleanProperty("print.folds",true) && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				//Log.log(Log.DEBUG, this, "Skipping invisible line");
+				Log.log(Log.DEBUG, this, "Skipping invisible line");
 				continue;
 			}
 			
 			// print only selected lines if printing selection
 			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
 			{
-				//Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
+				Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
 				continue;
 			}
 				
@@ -526,7 +542,7 @@ class BufferPrintable1_7 implements Printable
 			
 			if (currentPhysicalLine == range.getEnd())
 			{
-				//Log.log(Log.DEBUG,this,"Finished page");
+				Log.log(Log.DEBUG,this,"Finished page");
 				break;
 			}
 		}

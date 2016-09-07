@@ -67,7 +67,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
     {
         View view = textArea.getView();
         Buffer buffer = ( Buffer )textArea.getBuffer();
-        return BufferPrinter1_7.getPageRanges( view, buffer );
+        return BufferPrinter1_7.getPageRanges( view, buffer, null );
     }
 
 
