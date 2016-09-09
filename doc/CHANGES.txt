@@ -75,6 +75,10 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 
 - Delete a user mode from the catalog even if the mode file is missing
   (Eric Le Lay)
+
+- Plugin Manager: fix missing newline between released and description for
+  plugins without dependencies. Add extra newline for clarity. (Eric Le Lay)
+
 }}}
 {{{ UI Improvements
 
