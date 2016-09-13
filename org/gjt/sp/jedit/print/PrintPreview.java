@@ -58,6 +58,8 @@ public class PrintPreview extends EnhancedDialog
 	private HashMap<Integer, Range> pageRanges;
 	private PrintRequestAttributeSet attributes;
 	private PrintService printService;
+	
+	private float zoomLevel = 1.0f;
 
 
 	public PrintPreview( View view, Buffer buffer, PrintService printService, PrintRequestAttributeSet attributes )
@@ -111,8 +113,10 @@ public class PrintPreview extends EnhancedDialog
 		toolbar.add( nextPage );
 		toolbar.add( zoomIn );
 		toolbar.add( zoomOut );
-		toolbar.add( fullWidth );
-		toolbar.add( fullPage );
+		
+		// TODO: these need to be finished
+		//toolbar.add( fullWidth );
+		//toolbar.add( fullPage );
 
 		// main area to see print preview
 		printPreviewPane = new PrintPreviewPane();
@@ -171,6 +175,7 @@ public class PrintPreview extends EnhancedDialog
 					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
 					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
 					model.setPageNumber( selectedIndex );
+					model.setZoomLevel(zoomLevel);
 					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
 					printPreviewPane.setModel( model );
 				}
@@ -212,6 +217,76 @@ public class PrintPreview extends EnhancedDialog
 				}
 			}
 		);
+		zoomIn.addActionListener( new ActionListener()
+		{
+
+				public void actionPerformed( ActionEvent ae )
+				{
+					zoomLevel += 0.1f;
+					int selectedIndex = pages.getSelectedIndex();
+					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
+					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
+					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					model.setZoomLevel(zoomLevel);
+					model.setPageNumber( selectedIndex );
+					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setZoom(PrintPreviewModel.Zoom.IN);
+					printPreviewPane.setModel( model );
+				}
+			}
+		);
+		zoomOut.addActionListener( new ActionListener()
+		{
+
+				public void actionPerformed( ActionEvent ae )
+				{
+					zoomLevel -= 0.1f;
+					if (zoomLevel <= 0.0f)
+						zoomLevel = 0.1f;
+					int selectedIndex = pages.getSelectedIndex();
+					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
+					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
+					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					model.setZoomLevel(zoomLevel);
+					model.setPageNumber( selectedIndex );
+					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setZoom(PrintPreviewModel.Zoom.OUT);
+					printPreviewPane.setModel( model );
+				}
+			}
+		);
+		fullWidth.addActionListener( new ActionListener()
+		{
+
+				public void actionPerformed( ActionEvent ae )
+				{
+					int selectedIndex = pages.getSelectedIndex();
+					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
+					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
+					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					model.setPageNumber( selectedIndex );
+					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setZoom(PrintPreviewModel.Zoom.WIDTH);
+					printPreviewPane.setModel( model );
+				}
+			}
+		);
+		fullPage.addActionListener( new ActionListener()
+		{
+
+				public void actionPerformed( ActionEvent ae )
+				{
+					int selectedIndex = pages.getSelectedIndex();
+					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
+					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
+					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					model.setPageNumber( selectedIndex );
+					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setZoom(PrintPreviewModel.Zoom.PAGE);
+					printPreviewPane.setModel( model );
+				}
+			}
+		);
 	}
 
 
@@ -226,7 +301,7 @@ public class PrintPreview extends EnhancedDialog
 		pages.setModel( pagesModel );
 
 		HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-		currentPage.put( 0, pageRanges.get( 0 ) );
+		currentPage.put( 1, pageRanges.get( 0 ) );
 		PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
 		printPreviewPane.setModel( model );
 	}

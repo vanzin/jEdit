@@ -60,7 +60,6 @@ class BufferPrintable1_7 implements Printable
 
 	private View view;
 	private Buffer buffer;
-	private boolean printPreview;
 	private boolean selection;
 	private int[] selectedLines;
 	private boolean reverse;
@@ -83,15 +82,9 @@ class BufferPrintable1_7 implements Printable
 	
 	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer)
 	{
-		this(format, view, buffer, false);	
-	}
-	
-	BufferPrintable1_7(PrintRequestAttributeSet format, View view, Buffer buffer, boolean printPreview)
-	{
 		this.format = format;
 		this.view = view;
 		this.buffer = buffer;
-		this.printPreview = printPreview;
 		firstCall = true;		// pages and page ranges are calculated only once
 		
 		header = jEdit.getBooleanProperty("print.header");
@@ -109,7 +102,7 @@ class BufferPrintable1_7 implements Printable
 			SyntaxStyle s = styles[i];
 			if(s.getForegroundColor().equals(Color.WHITE) && s.getBackgroundColor() == null)
 			{
-				styles[i] = new SyntaxStyle(Color.BLACK, styles[i].getBackgroundColor(), styles[i].getFont());
+				styles[i] = new SyntaxStyle(Color.BLACK, s.getBackgroundColor(), s.getFont());
 			}
 		}
 
@@ -167,7 +160,7 @@ class BufferPrintable1_7 implements Printable
 	// pageIndex is zero-based.
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
-		Log.log(Log.DEBUG, this, "print(..., " + pageIndex + ')');
+		//Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
 		if (firstCall && pages == null)
 		{
 			pages = calculatePages(_gfx, pageFormat);
@@ -195,7 +188,6 @@ class BufferPrintable1_7 implements Printable
 			}
 		}
 		
-		//Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
 		
 		// adjust the page index for reverse printing
 		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
@@ -353,7 +345,7 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
 			
@@ -374,7 +366,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				startLine = currentPhysicalLine;
 				y = 0.0;
@@ -411,23 +403,24 @@ class BufferPrintable1_7 implements Printable
 	// pageIndex is 0-based
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
-		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
+		//Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
+		float zoomLevel = 1.0f;
+		if (pageFormat instanceof PrintPreviewModel)
+		{
+			PrintPreviewModel model = (PrintPreviewModel)pageFormat;
+			zoomLevel = model.getZoomLevel();
+			font = font.deriveFont(font.getSize() * zoomLevel);
+			for(int i = 0; i < styles.length; i++)
+			{
+				SyntaxStyle s = styles[i];
+				styles[i] = new SyntaxStyle(s.getForegroundColor(), s.getBackgroundColor(), font);
+			}
+		}
 		gfx.setFont(font);
 		if (frc == null)
 		{
 			frc = gfx.getFontRenderContext();	
-		}
-		
-		// paint background white for print preview
-		if (printPreview)
-		{
-			// TODO: this is done in the BasicPrintPreviewPaneUI, I don't think it needs to be here also
-			Paper paper = pageFormat.getPaper();
-			double width = paper.getWidth();
-			double height = paper.getHeight();
-			gfx.setColor(Color.WHITE);
-			gfx.fillRect(0, 0, new Double(width).intValue(), new Double(height).intValue());
 		}
 		
 		// printable dimensions
@@ -435,7 +428,7 @@ class BufferPrintable1_7 implements Printable
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: " + pageWidth + 'x' + pageHeight);
+		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: (" + pageX + ", " + pageY + ") " + pageWidth + 'x' + pageHeight);
 
 		// print header
 		if(header)
@@ -486,7 +479,7 @@ class BufferPrintable1_7 implements Printable
 		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
-		Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
+		//Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
 		
 		// print each line
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
@@ -544,7 +537,7 @@ class BufferPrintable1_7 implements Printable
 			
 			if (currentPhysicalLine == range.getEnd())
 			{
-				Log.log(Log.DEBUG,this,"Finished page");
+				//Log.log(Log.DEBUG,this,"Finished page");
 				break;
 			}
 		}
@@ -577,9 +570,8 @@ class BufferPrintable1_7 implements Printable
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(footerText, frc);
 
-		Rectangle2D bounds = font.getStringBounds(footerText,frc);
-		Rectangle2D footerBounds = new Rectangle2D.Double(pageX,pageY + pageHeight - bounds.getHeight(), pageWidth,bounds.getHeight());
-
+		Rectangle2D bounds = font.getStringBounds(footerText, frc);
+		Rectangle2D footerBounds = new Rectangle2D.Double(pageX, pageY + pageHeight - bounds.getHeight(), pageWidth, bounds.getHeight());
 		if(actuallyPaint)
 		{
 			gfx.setColor(footerColor);

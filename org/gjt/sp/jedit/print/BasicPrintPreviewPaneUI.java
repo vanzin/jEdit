@@ -28,10 +28,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
-import java.awt.Rectangle;
+import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 
-import javax.swing.BorderFactory;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.*;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,196 +42,311 @@ import javax.swing.plaf.ComponentUI;
 
 import org.gjt.sp.jedit.gui.DropShadowBorder;
 
+
 /**
  * Concrete implementation of a PrintPreviewPaneUI.
  */
 public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements ChangeListener
 {
 
-    private PrintPreviewPane printPreviewPane = null;
-    private JScrollPane scrollPane = null;
-    private PrintPreviewRenderer printPreviewRenderer = null;
+	private PrintPreviewPane printPreviewPane = null;
+	private JScrollPane scrollPane = null;
+	private PrintPreviewRenderer printPreviewRenderer = null;
 
 
-    /**
-     * Required by super class.
-     * @param c not used
-     * @return one of these
-     */
-    public static ComponentUI createUI( JComponent c )
-    {
-        return new BasicPrintPreviewPaneUI();
-    }
+	/**
+	 * Required by super class.
+	 * @param c not used
+	 * @return one of these
+	 */
+	public static ComponentUI createUI( JComponent c )
+	{
+		return new BasicPrintPreviewPaneUI();
+	}
 
 
-    /**
-     * Configures the specified component appropriate for the look and feel.
-     * This method is invoked when the <code>ComponentUI</code> instance is being installed
-     * as the UI delegate on the specified component.  This method should
-     * completely configure the component for the look and feel,
-     * including the following:
-     * <ol>
-     * <li>Install any default property values for color, fonts, borders,
-     *     icons, opacity, etc. on the component.  Whenever possible,
-     *     property values initialized by the client program should <i>not</i>
-     *     be overridden.
-     * </li><li>Install a <code>LayoutManager</code> on the component if necessary.
-     * </li><li>Create/add any required sub-components to the component.
-     * </li><li>Create/install event listeners on the component.
-     * </li><li>Create/install a <code>PropertyChangeListener</code> on the component in order
-     *     to detect and respond to component property changes appropriately.
-     * </li><li>Install keyboard UI (mnemonics, traversal, etc.) on the component.
-     * </li><li>Initialize any appropriate instance data.
-     * </li></ol>
-     * @param c The actual component.
-     */
-    public void installUI( JComponent c )
-    {
-        printPreviewPane = ( PrintPreviewPane )c;
+	/**
+	 * Configures the specified component appropriate for the look and feel.
+	 * This method is invoked when the <code>ComponentUI</code> instance is being installed
+	 * as the UI delegate on the specified component.  This method should
+	 * completely configure the component for the look and feel,
+	 * including the following:
+	 * <ol>
+	 * <li>Install any default property values for color, fonts, borders,
+	 *     icons, opacity, etc. on the component.  Whenever possible,
+	 *     property values initialized by the client program should <i>not</i>
+	 *     be overridden.
+	 * </li><li>Install a <code>LayoutManager</code> on the component if necessary.
+	 * </li><li>Create/add any required sub-components to the component.
+	 * </li><li>Create/install event listeners on the component.
+	 * </li><li>Create/install a <code>PropertyChangeListener</code> on the component in order
+	 *     to detect and respond to component property changes appropriately.
+	 * </li><li>Install keyboard UI (mnemonics, traversal, etc.) on the component.
+	 * </li><li>Initialize any appropriate instance data.
+	 * </li></ol>
+	 * @param c The actual component.
+	 */
+	public void installUI( JComponent c )
+	{
+		printPreviewPane = ( PrintPreviewPane )c;
 
-        installDefaults();
-        installComponents();
-        installListeners();
-    }
-
-
-    /**
-     * Install default values for colors, fonts, borders, etc.
-     */
-    public void installDefaults()
-    {
-        printPreviewPane.setLayout( createLayoutManager() );
-    }
+		installDefaults();
+		installComponents();
+		installListeners();
+	}
 
 
-    /**
-     * Create and install any sub-components.
-     */
-    public void installComponents()
-    {
-        printPreviewRenderer = new PrintPreviewRenderer();
-        scrollPane = new JScrollPane( printPreviewRenderer );
-        printPreviewPane.add( scrollPane, BorderLayout.CENTER );
-        printPreviewPane.repaint();
-    }
+	/**
+	 * Install default values for colors, fonts, borders, etc.
+	 */
+	public void installDefaults()
+	{
+		printPreviewPane.setLayout( createLayoutManager() );
+	}
 
 
-    /**
-     * Install any action listeners, mouse listeners, etc.
-     */
-    public void installListeners()
-    {
-        printPreviewPane.addChangeListener( this );
-    }
+	/**
+	 * Create and install any sub-components.
+	 */
+	public void installComponents()
+	{
+		printPreviewRenderer = new PrintPreviewRenderer();
+		scrollPane = new JScrollPane( printPreviewRenderer );
+		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		printPreviewPane.add( scrollPane, BorderLayout.CENTER );
+	}
 
 
-    /**
-     * Tear down and clean up.
-     */
-    public void uninstallUI( JComponent c )
-    {
-        c.setLayout( null );
-        uninstallListeners();
-        uninstallComponents();
-        uninstallDefaults();
-
-        printPreviewPane = null;
-    }
+	/**
+	 * Install any action listeners, mouse listeners, etc.
+	 */
+	public void installListeners()
+	{
+		printPreviewPane.addChangeListener( this );
+	}
 
 
-    public void uninstallDefaults()
-    {
-    }
+	/**
+	 * Tear down and clean up.
+	 */
+	public void uninstallUI( JComponent c )
+	{
+		c.setLayout( null );
+		uninstallListeners();
+		uninstallComponents();
+		uninstallDefaults();
+
+		printPreviewPane = null;
+	}
 
 
-    /**
-     * Tear down and clean up.
-     */
-    public void uninstallComponents()
-    {
-        printPreviewRenderer = null;
-    }
+	public void uninstallDefaults()
+	{
+	}
 
 
-    public void uninstallListeners()
-    {
-        printPreviewPane.removeChangeListener( this );
-    }
+	/**
+	 * Tear down and clean up.
+	 */
+	public void uninstallComponents()
+	{
+		printPreviewRenderer = null;
+	}
 
 
-    // TODO: not used, remove the change listener stuff?
-    public void stateChanged( ChangeEvent event )
-    {
-    	if (printPreviewRenderer != null)
-    	{
-    		printPreviewRenderer.repaint();	
-    	}
-    }
+	public void uninstallListeners()
+	{
+		printPreviewPane.removeChangeListener( this );
+	}
 
 
-    /**
-     * @return a BorderLayout
-     */
-    protected LayoutManager createLayoutManager()
-    {
-        return new BorderLayout();
-    }
+	// TODO: not used, remove the change listener stuff?
+	public void stateChanged( ChangeEvent event )
+	{
+		if ( printPreviewRenderer != null )
+		{
+			printPreviewRenderer.setSize( printPreviewRenderer.getPreferredSize() );
+			printPreviewRenderer.repaint();
+		}
+	}
+
+
+	/**
+	 * @return a BorderLayout
+	 */
+	protected LayoutManager createLayoutManager()
+	{
+		return new BorderLayout();
+	}
 
 
 
-    /**
-     * Panel to display the print preview.
-     */
-    public class PrintPreviewRenderer extends JPanel
-    {
+	/**
+	 * Panel to display the print preview.
+	 */
+	public class PrintPreviewRenderer extends JPanel
+	{
 
-        public PrintPreviewRenderer()
-        {
-            setBorder( new DropShadowBorder());
-        }
-
-
-        /**
-         * @return current paper size
-         */
-        public Dimension getPreferredSize()
-        {
-            PrintPreviewModel model = printPreviewPane.getModel();
-            Paper paper = model.getPaper();
-            return new Dimension( new Double( paper.getWidth() ).intValue(), new Double( paper.getHeight() ).intValue() );
-        }
+		public PrintPreviewRenderer()
+		{
+			//setBorder( new DropShadowBorder() );
+		}
 
 
-        public Dimension getMinimumSize()
-        {
-            return getPreferredSize();
-        }
+		/**
+		 * @return current paper size
+		 */
+		public Dimension getPaperSize()
+		{
+
+			// get the paper size set by the user
+			PrintPreviewModel model = printPreviewPane.getModel();
+			if ( model != null )
+			{
+				PrintRequestAttributeSet attributes = model.getAttributes();
+				float zoomLevel = model.getZoomLevel();
+
+				Media media = ( Media )attributes.get( Media.class );
+				MediaSize mediaSize = null;
+				if ( media instanceof MediaSizeName )
+				{
+					MediaSizeName name = ( MediaSizeName )media;
+					mediaSize = MediaSize.getMediaSizeForName( name );
+					int units = MediaPrintableArea.INCH;
+					float dpi = 72 * zoomLevel;
+					float paperWidth = mediaSize.getX( units ) * dpi;
+					float paperHeight = mediaSize.getY( units ) * dpi;
+					Dimension newSize = new Dimension();
+					newSize.setSize( paperWidth, paperHeight );
+					OrientationRequested orientationRequested = ( OrientationRequested )attributes.get( OrientationRequested.class );
+					if ( OrientationRequested.LANDSCAPE.equals( orientationRequested ) || OrientationRequested.REVERSE_LANDSCAPE.equals( orientationRequested ) )
+					{
+						if ( paperWidth < paperHeight )
+						{
+							newSize.setSize( newSize.getHeight(), newSize.getWidth() );
+						}
+					}
 
 
-        public void paintComponent( Graphics gfx )
-        {
-            PrintPreviewModel model = printPreviewPane.getModel();
-            if ( model == null )
-            {
-                return;
-            }
+					return newSize;
+				}
 
 
-            // set size to paper size
-            // TODO: adjust for zoom level, add zoom to model
-            Paper paper = model.getPaper();
-            int width = new Double( paper.getWidth() ).intValue();
-            int height = new Double( paper.getHeight() ).intValue();
-            setSize( width, height );
-            super.paintComponent( gfx );
+				// otherwise, use the default paper size
+				Paper paper = model.getPaper();
+				Dimension defaultSize = new Dimension( new Double( paper.getWidth() * zoomLevel ).intValue(), new Double( paper.getHeight() * zoomLevel ).intValue() );
+				return defaultSize;
+			}
 
-            
-            // print the page into this panel
-            model.setGraphics( gfx );
-            BufferPrinter1_7.printPage( model );
 
-            scrollPane.revalidate();
-            printPreviewPane.revalidate();
-        }
-    }
+			return getSize();
+		}
+
+
+		// make the print preview be no larger than the view size
+		@Override
+		public Dimension getPreferredSize()
+		{
+			PrintPreviewModel model = printPreviewPane.getModel();
+			if ( model != null )
+			{
+				Dimension paperSize = getPaperSize();
+				Dimension viewSize = model.getView().getSize();
+				double width = paperSize.getWidth();
+				double height = paperSize.getHeight();
+				if (width > viewSize.getWidth())
+				{
+					width = viewSize.getWidth();	
+				}
+				if (height > viewSize.getHeight())
+				{
+					height = viewSize.getHeight();
+				}
+				paperSize.setSize(width, height);
+				return paperSize;
+			}
+			return getPaperSize();
+		}
+
+
+		@Override
+		public Dimension getMinimumSize()
+		{
+			return getPreferredSize();
+		}
+
+
+		public void paintComponent( Graphics gfx )
+		{
+			PrintPreviewModel model = printPreviewPane.getModel();
+			if ( model == null )
+			{
+				return;
+			}
+
+
+			super.paintComponent( gfx );
+
+			Dimension currentSize = getPaperSize();
+			double width = currentSize.getWidth();
+			double height = currentSize.getHeight();
+
+			// paint background white
+			gfx.setColor( Color.WHITE );
+			gfx.fillRect( 0, 0, new Double( width ).intValue(), new Double( height ).intValue() );
+
+			// print the page into this panel
+			updateModel();
+			model.setGraphics( gfx );
+			BufferPrinter1_7.printPage( model );
+
+			scrollPane.revalidate();
+			printPreviewPane.revalidate();
+		}
+
+
+		private void updateModel()
+		{
+			PrintPreviewModel pageFormat = printPreviewPane.getModel();
+			if ( pageFormat == null )
+			{
+				return;
+			}
+
+
+			// get the printable area from the attributes
+			PrintRequestAttributeSet attributes = pageFormat.getAttributes();
+			float zoomLevel = pageFormat.getZoomLevel();
+			MediaPrintableArea mpa = ( MediaPrintableArea )attributes.get( MediaPrintableArea.class );
+			int units = MediaPrintableArea.INCH;
+			double dpi = 72.0 * zoomLevel;	// Paper uses 72 dpi
+			double x = ( double )mpa.getX( units ) * dpi;
+			double y = ( double )mpa.getY( units ) * dpi;
+			double w = ( double )mpa.getWidth( units ) * dpi;
+			double h = ( double )mpa.getHeight( units ) * dpi;
+
+			// apply the mpa dimensions to the paper and page format
+			Paper paper = new Paper();
+			Dimension paperSize = getPaperSize();
+			paper.setSize( paperSize.getWidth(), paperSize.getHeight() );
+			int orientation = PageFormat.PORTRAIT;
+			OrientationRequested or = ( OrientationRequested )attributes.get( OrientationRequested.class );
+			if ( OrientationRequested.LANDSCAPE.equals( or ) )
+			{
+				paper.setSize( paperSize.getHeight(), paperSize.getWidth() );
+				orientation = PageFormat.LANDSCAPE;
+			}
+			else
+			if ( OrientationRequested.REVERSE_LANDSCAPE.equals( or ) )
+			{
+				paper.setSize( paperSize.getHeight(), paperSize.getWidth() );
+				orientation = PageFormat.REVERSE_LANDSCAPE;
+			}
+
+
+			paper.setImageableArea( x, y, w, h );
+			pageFormat.setPaper( paper );
+			pageFormat.setOrientation( orientation );
+		}
+	}
 }

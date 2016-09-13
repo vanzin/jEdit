@@ -1227,7 +1227,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             MediaPrintableArea supportedArea = getSupportedPrintableArea();
-            System.out.println("+++++ supportedArea = " + supportedArea.toString(units, "in"));
             
             //Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
 

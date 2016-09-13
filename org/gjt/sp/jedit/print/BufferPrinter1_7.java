@@ -101,7 +101,6 @@ public class BufferPrinter1_7
 		}
 		else
 		{
-			System.out.println("+++++ it's here");
 			JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Invalid print service."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
 			return;
 		}
@@ -168,7 +167,7 @@ public class BufferPrinter1_7
 		// ready to print
 		final Doc doc = new SimpleDoc( printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null );
 
-		// TODO: put this in a swing worker, it can take some time for a large buffer
+		// run this in a background thread, it can take some time for a large buffer
 		Runnable runner = new Runnable()
 		{
 
@@ -221,13 +220,12 @@ public class BufferPrinter1_7
 
 
 		// set up the printable to print just the requested page
-		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), model.getBuffer(), true );
+		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), model.getBuffer() );
 		printable.setPages(model.getPageRanges());
-		PageFormat pageFormat = createPageFormat( model.getAttributes() );
-		int pageNumber = new ArrayList<Integer>(model.getPageRanges().keySet()).get(0);
+		int pageNumber = model.getPageNumber(); 
 		try 
 		{
-			printable.print(model.getGraphics(), pageFormat, pageNumber);
+			printable.print(model.getGraphics(), model, pageNumber);
 		}
 		catch(Exception e) 
 		{
