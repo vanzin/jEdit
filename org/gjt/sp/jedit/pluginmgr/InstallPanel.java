@@ -992,6 +992,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 			setText(text);
 			setCaretPosition(0);
+			putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 		}
 	} //}}}
 
