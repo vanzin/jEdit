@@ -638,31 +638,11 @@
     <section id="printing">
         <title>Printing</title>
 
-        <para>jEdit has gone through several iterations in printing. All 3 versions are still available so you can choose which one fits best for your system and printer:
-        <itemizedlist>
-            <listitem>
-                <para>Printing using the Java 1.3 printing API. This is really clunky but generally works. There are limited options as far as page setup and printer settings.</para>
-                <para>To use this option, go to Utilities - Global Options - Printing and check "Use old printing API" and uncheck "Use system print dialog".</para>
-            </listitem>
-
-            <listitem>
-                <para>Printing using a combination of the Java 1.3 and Java 1.4 printing API. There are a number of bugs in this one.</para>
-                <para>To use this option, go to Utilities - Global Options - Printing and uncheck "Use old printing API" and check "Use system print dialog".</para>
-            </listitem>
-
-            <listitem>
-                <para>Printing using the latest (Java 1.8 at this writing) printing API and provides jEdit it's own printing dialog. This version is preferred and has the most page setup and printer options. It fixes all of the bugs in the previous iteration and provides additional options.</para>
-                <para>To use this option, go to Utilities - Global Options - Printing and uncheck both "Use old printing API" and "Use system print dialog". This will allow you to use jEdit's full featured print dialog to set printing options.</para>
-            </listitem>
-        </itemizedlist>
+        <para>jEdit printing is much like you'd expect from any text editor application, you can select the printer, specify specific pages to print, the number of copies, and a number of printer and page options that are supported by the printer such as color printing, duplex printing, and so on. The specific options available are determined by the chosen printer. Print preview is also available.
         </para>
 
-        <para><guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
-        (shortcut: <keycap>C+p</keycap>) prints the current buffer.</para>
-
-        <para><guimenu>File</guimenu>&gt;<guimenuitem>Page Setup</guimenuitem>
-        displays a dialog box for changing your operating system's print
-        settings, such as margins, page size, print quality, and so on.</para>
+        <para>The printer dialog is accessed by <guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
+        (shortcut: <keycap>C+p</keycap>) which prints the current buffer. At this time, there is no option to print multiple buffers at once.</para>
 
         <para>The print output can be customized in the
         <guibutton>Printing</guibutton> pane of the
@@ -690,10 +670,6 @@
             </listitem>
 
             <listitem>
-                <para>If the output should be color or black and white. This option is used only if one of the older printing systems. If you're using the latest jEdit printing system, the color printing choice is on the 'Advanced' tab in the printing dialog. </para>
-            </listitem>
-
-            <listitem>
                 <para>The tab size to use when printing - this will usually be
                 less than the text area tab size, to conserve space in the
                 printed output.</para>
@@ -703,13 +679,13 @@
                 <para>If folded regions should be printed.</para>
             </listitem>
 
-            <listitem>
-                <para>There are also 3 check boxes for workarounds for older Java bugs. Since the current jEdit versions require at least Java 1.7, all 3 of these boxes should be unchecked.</para>
-            </listitem>
         </itemizedlist>
 
         <para>
-          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks. There is also an action available in Utilities - Global Options - Shortcuts to toggle the the page break markers on and off.
+          In the Utilities - Global Options - Text Area settings, there is an option to show page breaks. If selected, horizontal lines will be displayed in the text area to indicate page breaks.</para> 
+          
+        <para>
+          There is also an action available in Utilities - Global Options - Shortcuts to toggle the the page break markers on and off. Page break markers are just what they sound like, they show where page breaks would be for printing. Note that jEdit is not a word processor, so the page breaks are calculated based on printer settings and font size. It is not possible to set a page break at a specific point in a file.
         </para>
     </section>
 

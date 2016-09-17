@@ -58,6 +58,7 @@ public class PrintPreview extends EnhancedDialog
 	private HashMap<Integer, Range> pageRanges;
 	private PrintRequestAttributeSet attributes;
 	private PrintService printService;
+	private PrintPreviewModel model;
 	
 	private float zoomLevel = 1.0f;
 
@@ -170,13 +171,11 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					int selectedIndex = pages.getSelectedIndex();
-					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
-					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
-					model.setPageNumber( selectedIndex );
+					int selectedPage = (Integer)pages.getSelectedItem();
+					model.setPageNumber( selectedPage );
+					model.setPageRanges(pageRanges);
 					model.setZoomLevel(zoomLevel);
-					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -189,7 +188,7 @@ public class PrintPreview extends EnhancedDialog
 					int selectedIndex = pages.getSelectedIndex();
 					if (selectedIndex <= 0)
 					{
-						selectedIndex = pageRanges.size() - 1;	
+						selectedIndex = pages.getItemCount() - 1;	
 					}
 					else
 					{
@@ -205,7 +204,7 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					int selectedIndex = pages.getSelectedIndex();
-					if (selectedIndex + 1 == pageRanges.size())
+					if (selectedIndex + 1 == pages.getItemCount())
 					{
 						selectedIndex = 0;	
 					}
@@ -223,14 +222,12 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					zoomLevel += 0.1f;
-					int selectedIndex = pages.getSelectedIndex();
-					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
-					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					int selectedPage = (Integer)pages.getSelectedItem();
 					model.setZoomLevel(zoomLevel);
-					model.setPageNumber( selectedIndex );
-					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setPageNumber( selectedPage );
+					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.IN);
+					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -243,14 +240,12 @@ public class PrintPreview extends EnhancedDialog
 					zoomLevel -= 0.1f;
 					if (zoomLevel <= 0.0f)
 						zoomLevel = 0.1f;
-					int selectedIndex = pages.getSelectedIndex();
-					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
-					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+					int selectedPage = (Integer)pages.getSelectedItem();
 					model.setZoomLevel(zoomLevel);
-					model.setPageNumber( selectedIndex );
-					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					model.setPageNumber( selectedPage );
+					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.OUT);
+					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -260,13 +255,11 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					int selectedIndex = pages.getSelectedIndex();
-					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
-					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
-					model.setPageNumber( selectedIndex );
-					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					int selectedPage = (Integer)pages.getSelectedItem();
+					model.setPageNumber( selectedPage );
+					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.WIDTH);
+					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -276,13 +269,11 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					int selectedIndex = pages.getSelectedIndex();
-					HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-					currentPage.put( selectedIndex, pageRanges.get( selectedIndex ) );
-					PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
-					model.setPageNumber( selectedIndex );
-					attributes.add( new PageRanges( (Integer)pages.getSelectedItem() ) );
+					int selectedPage = (Integer)pages.getSelectedItem();
+					model.setPageNumber( selectedPage );
+					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.PAGE);
+					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
@@ -296,13 +287,15 @@ public class PrintPreview extends EnhancedDialog
 		DefaultComboBoxModel<Integer> pagesModel = new DefaultComboBoxModel<Integer>();
 		for ( Integer i : pageRanges.keySet() )
 		{
-			pagesModel.addElement( i + 1 );
+			pagesModel.addElement( i );
+			System.out.println("+++++ init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
+		
+		nextPage.setEnabled(pagesModel.getSize() > 1);
+		prevPage.setEnabled(pagesModel.getSize() > 1);
 
-		HashMap<Integer, Range> currentPage = new HashMap<Integer, Range>();
-		currentPage.put( 1, pageRanges.get( 0 ) );
-		PrintPreviewModel model = new PrintPreviewModel( view, buffer, printService, attributes, currentPage );
+		model = new PrintPreviewModel( view, buffer, printService, attributes, pageRanges );
 		printPreviewPane.setModel( model );
 	}
 

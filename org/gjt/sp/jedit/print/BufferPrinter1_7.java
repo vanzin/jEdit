@@ -28,7 +28,6 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.print.*;
@@ -150,7 +149,7 @@ public class BufferPrinter1_7
 				{
 					if ( range.contains( line ) )
 					{
-						pageRange.append( i + 1 ).append( ',' );
+						pageRange.append( i ).append( ',' );
 						break;
 					}
 				}
@@ -192,7 +191,7 @@ public class BufferPrinter1_7
 	protected static void printPage( PrintPreviewModel model )
 	{
 		String jobName = MiscUtilities.abbreviateView( model.getBuffer().getPath() );
-		format.add( new JobName( jobName, null ) );
+		model.getAttributes().add( new JobName( jobName, null ) );
 
 		// set up the print job
 		PrintService printService = model.getPrintService();
@@ -265,7 +264,17 @@ public class BufferPrinter1_7
 		graphics.setClip(clipRegion);
 		try 
 		{
-			return printable.calculatePages( graphics, pageFormat );
+			HashMap<Integer, Range> pageLineRanges = printable.calculatePages( graphics, pageFormat );
+			PageRanges pr = (PageRanges)attributes.get(PageRanges.class);
+			HashMap<Integer, Range> newLineRanges = new HashMap<Integer, Range>();
+			for (Integer i : pageLineRanges.keySet())
+			{
+				if (pr.contains(i))
+				{
+					newLineRanges.put(i, pageLineRanges.get(i));	
+				}
+			}
+			return newLineRanges;
 		}
 		catch(Exception e) 
 		{

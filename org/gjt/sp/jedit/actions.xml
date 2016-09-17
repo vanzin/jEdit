@@ -811,17 +811,6 @@
 	</IS_SELECTED>
 </ACTION>
 
-<ACTION NAME="page-setup">
-	<CODE>
-	if(jEdit.getBooleanProperty("print.force13", false))
-		BufferPrinter1_3.pageSetup(view);
-	else if(jEdit.getBooleanProperty("print.useSystemDialog", false))
-		BufferPrinter1_4.pageSetup(view);
-	else
-		BufferPrinter1_7.pageSetup(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="parent-fold">
 	<CODE>
 		textArea.goToParentFold();
@@ -973,11 +962,6 @@
 
 <ACTION NAME="print">
 	<CODE>
-	if(jEdit.getBooleanProperty("print.force13", false))
-		BufferPrinter1_3.print(view, buffer, false);
-	else if(jEdit.getBooleanProperty("print.useSystemDialog", false))
-		BufferPrinter1_4.print(view, buffer, false);
-	else
 		BufferPrinter1_7.print(view, buffer);
 	</CODE>
 </ACTION>

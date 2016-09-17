@@ -148,7 +148,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
             }
 
            // - 1 so last page break isn't drawn
-            for (int page = 0; page < pages.size() - 1; page++)
+            for (int page = 1; page < pages.size() - 1; page++)
             {
                 Range range = pages.get( page );
                 // 2nd part of 'if' handles soft wrap so if the last line of the page

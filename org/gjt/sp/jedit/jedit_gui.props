@@ -161,7 +161,6 @@ file=new-file \
 	 save-all \
 	 - \
 	 print \
-	 page-setup \
 	 - \
 	 exit
 new-file.icon.small=16x16/actions/document-new.png
