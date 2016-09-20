@@ -40,7 +40,7 @@ void nextChar()
 	script.append( "match = text.indexOf(__char__, 1);"          );
 	script.append( "if(match != -1) {"                           );
 	script.append( "if(__char__ != '\\n') ++match;"              );
-	script.append( "textArea.select(start, start + match - 1);}" );
+	script.append( "textArea.setCaretPosition(start + match - 1);}" );
 
 	view.getInputHandler().readNextChar(EnterCharacterLabel,script.toString());
 }
