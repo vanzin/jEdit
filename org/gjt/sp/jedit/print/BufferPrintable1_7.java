@@ -157,10 +157,10 @@ class BufferPrintable1_7 implements Printable
 	
 	// this can be called multiple times by the print system for the same page, and
 	// all calls must be handled for the page to print properly. 
-	// pageIndex is 1-based.
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex) throws PrinterException
 	{
-		//Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
+		pageIndex += 1;		// pageIndex is 0-based, but pages are 1-based
+		Log.log(Log.DEBUG, this, "Asked to print page " + pageIndex);
 		if (firstCall && pages == null)
 		{
 			pages = calculatePages(_gfx, pageFormat);
@@ -193,21 +193,21 @@ class BufferPrintable1_7 implements Printable
 		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
 		{
 			pageIndex = pages.size() - 1 - pageIndex;
-			//Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
+			Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
 		}
 		
 		// go ahead and print the page
 		Range range = pages.get(pageIndex);
 		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
 		{
-			//Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
+			Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
 			return NO_SUCH_PAGE;	
 		}
 		else {
 			printPage(_gfx, pageFormat, pageIndex, true);
 		}
 
-		//Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
+		Log.log(Log.DEBUG, this, "Returning PAGE_EXISTS for page " + pageIndex);
 		return PAGE_EXISTS;
 	} 
 
@@ -229,8 +229,8 @@ class BufferPrintable1_7 implements Printable
  	 */
 	protected HashMap<Integer, Range> calculatePages(Graphics _gfx, PageFormat pageFormat) throws PrinterException
 	{
-		//Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
-		//Log.log(Log.DEBUG, this, "graphics.getClip = " + _gfx.getClip());
+		Log.log(Log.DEBUG, this, "calculatePages for " + buffer.getName());
+		Log.log(Log.DEBUG, this, "graphics.getClip = " + _gfx.getClip());
 
 		pages = new HashMap<Integer, Range>();
 		
@@ -267,14 +267,14 @@ class BufferPrintable1_7 implements Printable
 		gfx.setFont(font);
 		gfx.setTransform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
 		frc = gfx.getFontRenderContext();
-		//Log.log(Log.DEBUG, this, "Font render context is " + frc);
+		Log.log(Log.DEBUG, this, "Font render context is " + frc);
 
 		// maximum printable area
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		//Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
+		Log.log(Log.DEBUG, this, "calculatePages, total imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 
 		// calculate header height
 		if(header)
@@ -282,7 +282,7 @@ class BufferPrintable1_7 implements Printable
 			double headerHeight = paintHeader(gfx, pageX, pageY, pageWidth, false);
 			pageY += headerHeight;
 			pageHeight -= headerHeight;
-			//Log.log(Log.DEBUG, this, "calculatePages, w/header imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
+			Log.log(Log.DEBUG, this, "calculatePages, w/header imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 		}
 
 		// calculate footer height
@@ -290,7 +290,7 @@ class BufferPrintable1_7 implements Printable
 		{
 			double footerHeight = paintFooter(gfx, pageX, pageY, pageWidth, pageHeight, 0, false);
 			pageHeight -= footerHeight;
-			//Log.log(Log.DEBUG, this, "calculatePages, w/footer imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
+			Log.log(Log.DEBUG, this, "calculatePages, w/footer imageable: x=" + pageX + ", y=" + pageY + ", w=" + pageWidth + ", h=" + pageHeight);
 		}
 
 		double lineNumberWidth = 0.0;
@@ -345,7 +345,7 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
 			
@@ -366,7 +366,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
 				pages.put(new Integer(pageCount), range);
-				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				startLine = currentPhysicalLine;
 				y = 0.0;
@@ -403,7 +403,7 @@ class BufferPrintable1_7 implements Printable
 	// pageIndex is 1-based
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex, boolean actuallyPaint)
 	{
-		//Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
+		Log.log(Log.DEBUG, this, "printPage(" + pageIndex + ", " + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
 		float zoomLevel = 1.0f;
 		if (pageFormat instanceof PrintPreviewModel)
@@ -411,6 +411,10 @@ class BufferPrintable1_7 implements Printable
 			PrintPreviewModel model = (PrintPreviewModel)pageFormat;
 			zoomLevel = model.getZoomLevel();
 			font = font.deriveFont(font.getSize() * zoomLevel);
+			gfx.setRenderingHint(KEY_TEXT_ANTIALIASING, view.getTextArea().getPainter().getAntiAlias().renderHint());
+			boolean useFractionalFontMetrics = jEdit.getBooleanProperty("view.fracFontMetrics");
+			gfx.setRenderingHint(KEY_FRACTIONALMETRICS, (useFractionalFontMetrics ? VALUE_FRACTIONALMETRICS_ON : VALUE_FRACTIONALMETRICS_OFF));
+			gfx.setTransform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
 			for(int i = 0; i < styles.length; i++)
 			{
 				SyntaxStyle s = styles[i];
@@ -428,7 +432,7 @@ class BufferPrintable1_7 implements Printable
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-		//Log.log(Log.DEBUG, this, "#1 - Page dimensions: (" + pageX + ", " + pageY + ") " + pageWidth + 'x' + pageHeight);
+		Log.log(Log.DEBUG, this, "#1 - Page dimensions: (" + pageX + ", " + pageY + ") " + pageWidth + 'x' + pageHeight);
 
 		// print header
 		if(header)
@@ -459,7 +463,7 @@ class BufferPrintable1_7 implements Printable
 			lineNumberWidth = font.getStringBounds(digits.toString(), frc).getWidth();
 		}
 
-		//Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
+		Log.log(Log.DEBUG,this,"#2 - Page dimensions: " + (pageWidth - lineNumberWidth) + 'x' + pageHeight);
 
 		// calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize", 4);
@@ -474,30 +478,30 @@ class BufferPrintable1_7 implements Printable
 		// prep for printing lines
 		lm = font.getLineMetrics("gGyYX", frc);
 		float lineHeight = lm.getHeight();
-		//Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
+		Log.log(Log.DEBUG, this, "Line height is " + lineHeight);
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
-		//Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
+		Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
 		
 		// print each line
 		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
-				//Log.log(Log.DEBUG, this, "Finished buffer");
-				//Log.log(Log.DEBUG, this, "The end");
+				Log.log(Log.DEBUG, this, "Finished buffer");
+				Log.log(Log.DEBUG, this, "The end");
 				break;
 			}
 			if (!jEdit.getBooleanProperty("print.folds",true) && !view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
 			{
-				//Log.log(Log.DEBUG, this, "Skipping invisible line");
+				Log.log(Log.DEBUG, this, "Skipping invisible line");
 				continue;
 			}
 			
 			// print only selected lines if printing selection
 			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
 			{
-				//Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
+				Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
 				continue;
 			}
 				
@@ -535,7 +539,7 @@ class BufferPrintable1_7 implements Printable
 			
 			if (currentPhysicalLine == range.getEnd())
 			{
-				//Log.log(Log.DEBUG,this,"Finished page");
+				Log.log(Log.DEBUG,this,"Finished page");
 				break;
 			}
 		}
@@ -564,7 +568,7 @@ class BufferPrintable1_7 implements Printable
 
 	private double paintFooter(Graphics2D gfx, double pageX, double pageY, double pageWidth, double pageHeight, int pageIndex, boolean actuallyPaint)
 	{
-		String footerText = jEdit.getProperty("print.footerText", new Object[] { new Date(), Integer.valueOf(pageIndex + 1)});
+		String footerText = jEdit.getProperty("print.footerText", new Object[] { new Date(), Integer.valueOf(pageIndex)});
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(footerText, frc);
 

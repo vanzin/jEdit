@@ -39,6 +39,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.jEdit;
 
+import org.gjt.sp.util.Log;
 
 public class PrintPreview extends EnhancedDialog
 {
@@ -53,7 +54,6 @@ public class PrintPreview extends EnhancedDialog
 	private JButton fullWidth;
 	private JButton fullPage;
 	private PrintPreviewPane printPreviewPane;
-	private JButton printButton;
 	private JButton cancelButton;
 	private HashMap<Integer, Range> pageRanges;
 	private PrintRequestAttributeSet attributes;
@@ -112,10 +112,10 @@ public class PrintPreview extends EnhancedDialog
 		toolbar.add( pages );
 		toolbar.add( prevPage );
 		toolbar.add( nextPage );
-		toolbar.add( zoomIn );
-		toolbar.add( zoomOut );
 		
 		// TODO: these need to be finished
+		//toolbar.add( zoomIn );
+		//toolbar.add( zoomOut );
 		//toolbar.add( fullWidth );
 		//toolbar.add( fullPage );
 
@@ -123,13 +123,11 @@ public class PrintPreview extends EnhancedDialog
 		printPreviewPane = new PrintPreviewPane();
 
 		// print/close buttons
-		printButton = new JButton( jEdit.getProperty( "printpreview.dialog.print", "Print" ) );
 		cancelButton = new JButton( jEdit.getProperty( "common.cancel" ) );
 
 		// create bottom panel
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout( new FlowLayout( FlowLayout.RIGHT, 6, 11 ) );
-		bottomPanel.add( printButton );
 		bottomPanel.add( cancelButton );
 
 		// main content holder
@@ -148,15 +146,6 @@ public class PrintPreview extends EnhancedDialog
 
 	private void installListeners()
 	{
-		printButton.addActionListener( new ActionListener()
-		{
-
-				public void actionPerformed( ActionEvent ae )
-				{
-					PrintPreview.this.ok();
-				}
-			} );
-
 		cancelButton.addActionListener( new ActionListener()
 		{
 
@@ -172,7 +161,7 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					int selectedPage = (Integer)pages.getSelectedItem();
-					model.setPageNumber( selectedPage );
+					model.setPageNumber( selectedPage - 1 );
 					model.setPageRanges(pageRanges);
 					model.setZoomLevel(zoomLevel);
 					attributes.add( new PageRanges( selectedPage ) );
@@ -224,7 +213,7 @@ public class PrintPreview extends EnhancedDialog
 					zoomLevel += 0.1f;
 					int selectedPage = (Integer)pages.getSelectedItem();
 					model.setZoomLevel(zoomLevel);
-					model.setPageNumber( selectedPage );
+					model.setPageNumber( selectedPage - 1);
 					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.IN);
 					attributes.add( new PageRanges( selectedPage ) );
@@ -242,7 +231,7 @@ public class PrintPreview extends EnhancedDialog
 						zoomLevel = 0.1f;
 					int selectedPage = (Integer)pages.getSelectedItem();
 					model.setZoomLevel(zoomLevel);
-					model.setPageNumber( selectedPage );
+					model.setPageNumber( selectedPage - 1 );
 					model.setPageRanges(pageRanges);
 					model.setZoom(PrintPreviewModel.Zoom.OUT);
 					attributes.add( new PageRanges( selectedPage ) );
@@ -288,7 +277,7 @@ public class PrintPreview extends EnhancedDialog
 		for ( Integer i : pageRanges.keySet() )
 		{
 			pagesModel.addElement( i );
-			System.out.println("+++++ init, i = " + i + ", range = " + pageRanges.get(i));
+			Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
 		
@@ -296,15 +285,14 @@ public class PrintPreview extends EnhancedDialog
 		prevPage.setEnabled(pagesModel.getSize() > 1);
 
 		model = new PrintPreviewModel( view, buffer, printService, attributes, pageRanges );
+		model.setPageNumber(0);
 		printPreviewPane.setModel( model );
 	}
-
 
 	public void ok()
 	{
 	}
-
-
+	
 	public void cancel()
 	{
 		PrintPreview.this.setVisible( false );

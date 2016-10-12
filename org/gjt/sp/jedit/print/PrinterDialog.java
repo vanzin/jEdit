@@ -815,9 +815,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             collate.setSelected( false );
             collate.setEnabled( false );
 
-            // TODO: reverse page printing is not yet implemented. This requires
-            // a significant modification to BufferPrintable. Thee is no standard
-            // printer attribute to specify this.
             reverse = new JCheckBox( jEdit.getProperty( "print.dialog.Reverse", "Reverse" ) );
             reverse.setSelected( false );
             reverse.setEnabled( true );

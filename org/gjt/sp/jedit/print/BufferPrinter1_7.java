@@ -64,7 +64,8 @@ public class BufferPrinter1_7
 
 	public static void print( final View view, final Buffer buffer )
 	{
-
+		Log.log(Log.DEBUG, BufferPrinter1_7.class, "print buffer " + buffer.getPath());
+		
 		// load any saved printing attributes, these are put into 'format'
 		loadPrintSpec();
 		String jobName = MiscUtilities.abbreviateView( buffer.getPath() );
@@ -74,18 +75,19 @@ public class BufferPrinter1_7
 		PrinterDialog printerDialog = new PrinterDialog( view, format, false );
 		if ( printerDialog.isCanceled() )
 		{
+			Log.log(Log.DEBUG, BufferPrinter1_7.class, "print dialog canceled");
 			return;
 		}
-
-
+		
 		// set up the print job
 		PrintService printService = printerDialog.getPrintService();
 		if ( printService != null )
 		{
+			Log.log(Log.DEBUG, BufferPrinter1_7.class, "using print service: " + printService);
 			try
-
 			{
 				job = printService.createPrintJob();
+				System.out.println("+++++ job is a " + job.getClass().getName());
 				job.addPrintJobListener( new BufferPrinter1_7.JobListener( view ) );
 				format = printerDialog.getAttributes();
 				savePrintSpec();
@@ -162,10 +164,23 @@ public class BufferPrinter1_7
 			printable.setSelectedLines( selectedLines );
 		}
 
+		// copy the doc attributes from the print format attributes
+		Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- print request attributes ---");
+		DocAttributeSet docAttributes = new HashDocAttributeSet();
+		Attribute[] attributes = format.toArray();
+		for (Attribute attribute : attributes)
+		{
+			boolean isDocAttr = attribute instanceof DocAttribute;
+			Log.log(Log.DEBUG, BufferPrinter1_7.class, attribute.getName() + " = " + attribute + ", is doc attr? " + isDocAttr);
+			if (isDocAttr)
+			{
+				docAttributes.add(attribute);	
+			}
+		}
+		Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- end print request attributes ---");
+		final Doc doc = new SimpleDoc( printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, docAttributes );
 
 		// ready to print
-		final Doc doc = new SimpleDoc( printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, null );
-
 		// run this in a background thread, it can take some time for a large buffer
 		Runnable runner = new Runnable()
 		{
@@ -174,7 +189,9 @@ public class BufferPrinter1_7
 			{
 				try
 				{
+					Log.log(Log.DEBUG, this, "sending print job to printer");
 					job.print( doc, format );
+					Log.log(Log.DEBUG, this, "printing complete");
 				}
 				catch ( PrintException e )
 				{

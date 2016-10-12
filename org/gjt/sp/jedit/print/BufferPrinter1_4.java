@@ -34,6 +34,12 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+@Deprecated
+/**
+ * @deprecated
+ * Replaced by BufferPrinter1_7. All the workarounds for java 1.3 and 1.4 don't
+ * matter any more since jEdit requires java 1.7 at minimum.
+ */
 public class BufferPrinter1_4
 {
 	//{{{ getPrintJob() method

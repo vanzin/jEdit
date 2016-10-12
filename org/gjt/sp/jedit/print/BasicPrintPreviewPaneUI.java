@@ -160,7 +160,6 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 	}
 
 
-	// TODO: not used, remove the change listener stuff?
 	public void stateChanged( ChangeEvent event )
 	{
 		if ( printPreviewRenderer != null )
@@ -247,24 +246,6 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 		@Override
 		public Dimension getPreferredSize()
 		{
-			PrintPreviewModel model = printPreviewPane.getModel();
-			if ( model != null )
-			{
-				Dimension paperSize = getPaperSize();
-				Dimension viewSize = model.getView().getSize();
-				double width = paperSize.getWidth();
-				double height = paperSize.getHeight();
-				if (width > viewSize.getWidth())
-				{
-					width = viewSize.getWidth();	
-				}
-				if (height > viewSize.getHeight())
-				{
-					height = viewSize.getHeight();
-				}
-				paperSize.setSize(width, height);
-				return paperSize;
-			}
 			return getPaperSize();
 		}
 
