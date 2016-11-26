@@ -44,8 +44,7 @@ import org.gjt.sp.jedit.textarea.TextAreaPainter;
  * Draws a line across the text area indicating where a printing page break
  * would be.
  */
-public class PageBreakExtension extends TextAreaExtension implements EBComponent
-{
+public class PageBreakExtension extends TextAreaExtension implements EBComponent {
 
     private JEditTextArea textArea;
     private boolean showPageBreak;
@@ -53,8 +52,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
     private HashMap<Integer, Range> pages = null;
 
 
-    public PageBreakExtension( JEditTextArea textArea )
-    {
+    public PageBreakExtension( JEditTextArea textArea ) {
         this.textArea = textArea;
         textArea.getPainter().addExtension( TextAreaPainter.WRAP_GUIDE_LAYER, this );
         showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
@@ -63,99 +61,84 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
     }
 
 
-    private HashMap<Integer, Range> getPageRanges()
-    {
-        View view = textArea.getView();
-        Buffer buffer = ( Buffer )textArea.getBuffer();
-        return BufferPrinter1_7.getPageRanges( view, buffer, null );
+    private HashMap<Integer, Range> getPageRanges() {
+        if ( showPageBreak ) {
+            View view = textArea.getView();
+            Buffer buffer = ( Buffer )textArea.getBuffer();
+            return BufferPrinter1_7.getPageRanges( view, buffer, null );
+        }
+        return null;
     }
 
 
-    public void handleMessage( EBMessage msg )
-    {
-        if ( msg instanceof PropertiesChanged )
-        {
+    public void handleMessage( EBMessage msg ) {
+        if ( msg instanceof PropertiesChanged ) {
             showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
             pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
-            if (showPageBreak)
-            {
-                pages = getPageRanges();   
+            if ( showPageBreak ) {
+                pages = getPageRanges();
             }
         }
-        else
-        if ( msg instanceof EditPaneUpdate )
-        {
+        else if ( msg instanceof EditPaneUpdate ) {
             EditPaneUpdate epu = ( EditPaneUpdate )msg;
-            if ( EditPaneUpdate.BUFFER_CHANGED.equals( epu.getWhat() ) )
-            {
+            if ( EditPaneUpdate.BUFFER_CHANGED.equals( epu.getWhat() ) ) {
+
                 // prevent NPE in Buffer#markToken() when edit mode is not loaded
-                if(epu.getEditPane().getBuffer().isLoaded())
-                {
+                if ( epu.getEditPane().getBuffer().isLoaded() ) {
                     pages = getPageRanges();
                 }
             }
         }
-        else
-        if ( msg instanceof BufferUpdate )
-        {
+        else if ( msg instanceof BufferUpdate ) {
             BufferUpdate bu = ( BufferUpdate )msg;
-            if (BufferUpdate.SAVED.equals(bu.getWhat()) || BufferUpdate.LOADED.equals(bu.getWhat()))
-            {
-                pages = getPageRanges();        
+            if ( BufferUpdate.SAVED.equals( bu.getWhat() ) || BufferUpdate.LOADED.equals( bu.getWhat() ) ) {
+                pages = getPageRanges();
             }
         }
     }
 
 
-    public Color getPageBreakColor()
-    {
+    public Color getPageBreakColor() {
         return pageBreakColor;
     }
 
 
-    public void setPageBreakColor( Color pageBreakColor )
-    {
+    public void setPageBreakColor( Color pageBreakColor ) {
         this.pageBreakColor = pageBreakColor;
     }
 
 
-    public boolean isPageBreakEnabled()
-    {
+    public boolean isPageBreakEnabled() {
         return showPageBreak;
     }
 
 
-    public void setPageBreakEnabled( boolean pageBreak )
-    {
+    public void setPageBreakEnabled( boolean pageBreak ) {
         showPageBreak = pageBreak;
     }
 
 
     @Override
-    public void paintValidLine( Graphics2D gfx, int screenLine, int physicalLine, int start, int end, int y )
-    {
-        if ( isPageBreakEnabled() )
-        {
-            gfx.setColor(getPageBreakColor());
+    public void paintValidLine( Graphics2D gfx, int screenLine, int physicalLine, int start, int end, int y ) {
+        if ( isPageBreakEnabled() ) {
+            gfx.setColor( getPageBreakColor() );
 
-            if ( pages == null )
-            {
+            if ( pages == null ) {
                 pages = getPageRanges();
-                if (pages == null || pages.isEmpty())
-                {
+                if ( pages == null || pages.isEmpty() ) {
                     return;
                 }
             }
 
+
             // - 1 so last page break isn't drawn
-            for (int page = 1; page < pages.size() - 1; page++)
-            {
+            for ( int page = 1; page < pages.size() - 1; page++ ) {
                 Range range = pages.get( page );
+
                 // 2nd part of 'if' handles soft wrap so if the last line of the page
                 // is wrapped, only the last screen line of the wrapped line will get
                 // the page break line drawn on it.
-                if ( range.getEnd() == physicalLine && textArea.getLineEndOffset(physicalLine) == end)
-                {
+                if ( range.getEnd() == physicalLine && textArea.getLineEndOffset( physicalLine ) == end ) {
                     y += gfx.getFontMetrics().getHeight();
                     gfx.drawLine( 0, y, textArea.getPainter().getWidth(), y );
                 }
