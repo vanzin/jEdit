@@ -277,7 +277,7 @@ public class PrintPreview extends EnhancedDialog
 		for ( Integer i : pageRanges.keySet() )
 		{
 			pagesModel.addElement( i );
-			Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
+			//Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
 		

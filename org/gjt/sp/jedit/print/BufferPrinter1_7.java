@@ -64,7 +64,7 @@ public class BufferPrinter1_7
 
 	public static void print( final View view, final Buffer buffer )
 	{
-		Log.log(Log.DEBUG, BufferPrinter1_7.class, "print buffer " + buffer.getPath());
+		//Log.log(Log.DEBUG, BufferPrinter1_7.class, "print buffer " + buffer.getPath());
 		
 		// load any saved printing attributes, these are put into 'format'
 		loadPrintSpec();
@@ -75,7 +75,7 @@ public class BufferPrinter1_7
 		PrinterDialog printerDialog = new PrinterDialog( view, format, false );
 		if ( printerDialog.isCanceled() )
 		{
-			Log.log(Log.DEBUG, BufferPrinter1_7.class, "print dialog canceled");
+			//Log.log(Log.DEBUG, BufferPrinter1_7.class, "print dialog canceled");
 			return;
 		}
 		
@@ -83,11 +83,10 @@ public class BufferPrinter1_7
 		PrintService printService = printerDialog.getPrintService();
 		if ( printService != null )
 		{
-			Log.log(Log.DEBUG, BufferPrinter1_7.class, "using print service: " + printService);
+			//Log.log(Log.DEBUG, BufferPrinter1_7.class, "using print service: " + printService);
 			try
 			{
 				job = printService.createPrintJob();
-				System.out.println("+++++ job is a " + job.getClass().getName());
 				job.addPrintJobListener( new BufferPrinter1_7.JobListener( view ) );
 				format = printerDialog.getAttributes();
 				savePrintSpec();
@@ -165,19 +164,19 @@ public class BufferPrinter1_7
 		}
 
 		// copy the doc attributes from the print format attributes
-		Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- print request attributes ---");
+		//Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- print request attributes ---");
 		DocAttributeSet docAttributes = new HashDocAttributeSet();
 		Attribute[] attributes = format.toArray();
 		for (Attribute attribute : attributes)
 		{
 			boolean isDocAttr = attribute instanceof DocAttribute;
-			Log.log(Log.DEBUG, BufferPrinter1_7.class, attribute.getName() + " = " + attribute + ", is doc attr? " + isDocAttr);
+			//Log.log(Log.DEBUG, BufferPrinter1_7.class, attribute.getName() + " = " + attribute + ", is doc attr? " + isDocAttr);
 			if (isDocAttr)
 			{
 				docAttributes.add(attribute);	
 			}
 		}
-		Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- end print request attributes ---");
+		//Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- end print request attributes ---");
 		final Doc doc = new SimpleDoc( printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, docAttributes );
 
 		// ready to print
@@ -189,9 +188,9 @@ public class BufferPrinter1_7
 			{
 				try
 				{
-					Log.log(Log.DEBUG, this, "sending print job to printer");
+					//Log.log(Log.DEBUG, this, "sending print job to printer");
 					job.print( doc, format );
-					Log.log(Log.DEBUG, this, "printing complete");
+					//Log.log(Log.DEBUG, this, "printing complete");
 				}
 				catch ( PrintException e )
 				{
