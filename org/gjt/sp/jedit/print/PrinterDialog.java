@@ -42,13 +42,14 @@ import javax.swing.event.*;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.GenericGUIUtilities;
-//import org.gjt.sp.util.Log;
 
 
+// import org.gjt.sp.util.Log;
 // Technical guide on the Java printing system:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/jps/spec/JPSTOC.fm.html
 public class PrinterDialog extends JDialog implements ListSelectionListener
@@ -119,12 +120,11 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             // for debugging
             /*
-            for ( Attribute a : attrs )
-            {
-                Log.log( Log.DEBUG, this, "+++++ before: " + a.getName() + " = " + a );
-            }
-            */
-
+             * for ( Attribute a : attrs )
+             * {
+             * Log.log( Log.DEBUG, this, "+++++ before: " + a.getName() + " = " + a );
+             * }
+             */
             initMessages();
 
             JPanel contents = new JPanel( new BorderLayout() );
@@ -136,6 +136,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             tabs.add( jEdit.getProperty( "print.dialog.Page_Setup", "Page Setup" ), pageSetupPanel = new PageSetupPanel() );
             tabs.add( jEdit.getProperty( "print.dialog.Job", "Job" ), new JobPanel() );
             tabs.add( jEdit.getProperty( "print.dialog.Advanced", "Advanced" ), new AdvancedPanel() );
+            tabs.add( jEdit.getProperty( "print.dialog.jEdit", "jEdit" ), new jEditPanel() );
             if ( pageSetupOnly )
             {
                 tabs.setSelectedIndex( 1 );
@@ -143,17 +144,18 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 tabs.setEnabledAt( 1, true );
                 tabs.setEnabledAt( 2, false );
                 tabs.setEnabledAt( 3, false );
+                tabs.setEnabledAt( 4, false );
             }
 
 
             contents.add( tabs, BorderLayout.CENTER );
-            
-            JButton previewButton = new JButton(jEdit.getProperty( "print.dialog.preview", "Preview"));
+
+            JButton previewButton = new JButton( jEdit.getProperty( "print.dialog.preview", "Preview" ) );
             previewButton.addActionListener( getPreviewButtonListener() );
 
             JButton okButton = new JButton( jEdit.getProperty( "common.ok" ) );
             okButton.addActionListener( getOkButtonListener() );
-            
+
             JButton cancelButton = new JButton( jEdit.getProperty( "common.cancel" ) );
             cancelButton.addActionListener( getCancelButtonListener() );
 
@@ -177,12 +179,13 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 printers.setSelectedIndex( 0 );
             }
 
+
             // loads some default values if needed
             valueChanged( null );
-            
+
             // set margin values, need to do this here after the other values have been set
             pageSetupPanel.setDefaultMargins();
-    
+
             pack();
 
             setLocationRelativeTo( jEdit.getActiveView().getTextArea() );
@@ -193,7 +196,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             e.printStackTrace();
         }
     }
-    
+
+
     private ActionListener getPreviewButtonListener()
     {
         return new ActionListener()
@@ -215,12 +219,17 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 for ( int i = 0; i < tabs.getTabCount(); i++ )
                 {
                     PrinterPanel panel = ( PrinterPanel )tabs.getComponentAt( i );
-                    PrinterDialog.this.attributes.addAll( panel.getAttributes() );
+                    AttributeSet panelAttributes = panel.getAttributes();
+                    if (panelAttributes != null)
+                    {
+                        PrinterDialog.this.attributes.addAll( attributes );
+                    }
                 }
 
                 // adjust the print range to filter based on odd/even pages
                 PageRanges pr = ( PageRanges )PrinterDialog.this.attributes.get( PageRanges.class );
                 try
+
 
                 {
                     pr = mergeRanges( pr );
@@ -232,8 +241,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                     JOptionPane.showMessageDialog( PrinterDialog.this, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
                     return;
                 }
-                
-                new PrintPreview(view, view.getBuffer(), PrinterDialog.this.getPrintService(), PrinterDialog.this.attributes);
+
+                new PrintPreview( view, view.getBuffer(), PrinterDialog.this.getPrintService(), PrinterDialog.this.attributes );
             }
         };
     }
@@ -266,6 +275,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 // adjust the print range to filter based on odd/even pages
                 PageRanges pr = ( PageRanges )PrinterDialog.this.attributes.get( PageRanges.class );
                 try
+
 
                 {
                     pr = mergeRanges( pr );
@@ -311,13 +321,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
                 // for debugging
                 /*
-                Attribute[] attrs = PrinterDialog.this.attributes.toArray();
-                for ( Attribute a : attrs )
-                {
-                    Log.log( Log.DEBUG, this, "+++++ after: " + a.getName() + " = " + a );
-                }
-                */
-                
+                 * Attribute[] attrs = PrinterDialog.this.attributes.toArray();
+                 * for ( Attribute a : attrs )
+                 * {
+                 * Log.log( Log.DEBUG, this, "+++++ after: " + a.getName() + " = " + a );
+                 * }
+                 */
                 PrinterDialog.this.setVisible( false );
                 PrinterDialog.this.dispose();
             }
@@ -705,7 +714,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             OrientationRequested previousOrientation = ( OrientationRequested )attributes.get( OrientationRequested.class );
             orientation.setSelectedItem( previousOrientation == null ? OrientationRequested.PORTRAIT : previousOrientation );
         }
-        
     }
 
 
@@ -1015,12 +1023,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             paperSize = new JComboBox<String>();
             paperSize.setEnabled( false );
-            paperSize.addActionListener( 
-                new ActionListener() 
-                {
-                    public void actionPerformed( ActionEvent ae ) 
+            paperSize.addActionListener( new ActionListener()
+            {
+
+                    public void actionPerformed( ActionEvent ae )
                     {
-                        PageSetupPanel.this.setDefaultMargins();                            
+                        PageSetupPanel.this.setDefaultMargins();
                     }
                 }
             );
@@ -1028,12 +1036,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             orientation = new JComboBox<OrientationRequested>();
             orientation.setEnabled( false );
             orientation.setRenderer( new OrientationCellRenderer() );
-            orientation.addActionListener( 
-                new ActionListener() 
-                {
-                    public void actionPerformed( ActionEvent ae ) 
+            orientation.addActionListener( new ActionListener()
+            {
+
+                    public void actionPerformed( ActionEvent ae )
                     {
-                        PageSetupPanel.this.setDefaultMargins();                            
+                        PageSetupPanel.this.setDefaultMargins();
                     }
                 }
             );
@@ -1224,9 +1232,8 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             MediaPrintableArea supportedArea = getSupportedPrintableArea();
-            
-            //Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
 
+            // Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
             // get the selected paper size
             Media media = paperSizes.get( paperSize.getSelectedIndex() );
 
@@ -1257,50 +1264,53 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float y = topMargin;
             float width = paperWidth - leftMargin - rightMargin;
             float height = paperHeight - topMargin - bottomMargin;
-            
+
             // check that the new printable area fits inside the supported area
             if ( x < supportedArea.getX( units ) )
             {
-                return jEdit.getProperty("print.dialog.error.Invalid_left_margin", "Invalid left margin.");
+                return jEdit.getProperty( "print.dialog.error.Invalid_left_margin", "Invalid left margin." );
             }
 
 
             if ( y < supportedArea.getY( units ) )
             {
-                return jEdit.getProperty("print.dialog.error.Invalid_top_margin", "Invalid top margin.");
+                return jEdit.getProperty( "print.dialog.error.Invalid_top_margin", "Invalid top margin." );
             }
 
 
             if ( width <= 0 || x + width > supportedArea.getX( units ) + supportedArea.getWidth( units ) )
             {
-                return jEdit.getProperty("print.dialog.error.Invalid_left_andor_right_margin.", "Invalid left and/or right margin.");
+                return jEdit.getProperty( "print.dialog.error.Invalid_left_andor_right_margin.", "Invalid left and/or right margin." );
             }
 
 
             if ( height <= 0 || y + height > supportedArea.getY( units ) + supportedArea.getHeight( units ) )
             {
-                return jEdit.getProperty("print.dialog.error.Invalid_top_andor_bottom_margin", "Invalid top and/or bottom margin.");
+                return jEdit.getProperty( "print.dialog.error.Invalid_top_andor_bottom_margin", "Invalid top and/or bottom margin." );
             }
 
 
-            //Log.log( Log.DEBUG, this, "new printable area: " + x + ", " + y + ", " + width + ", " + height );
+            // Log.log( Log.DEBUG, this, "new printable area: " + x + ", " + y + ", " + width + ", " + height );
             MediaPrintableArea area = new MediaPrintableArea( x, y, width, height, units );
             attributes.add( area );
             return null;
         }
-        
+
+
         private MediaPrintableArea getSupportedPrintableArea()
         {
             MediaPrintableArea supportedArea = null;
             HashPrintRequestAttributeSet attrs = new HashPrintRequestAttributeSet();
-            if (paperSizes != null)
+            if ( paperSizes != null )
             {
                 attrs.add( paperSizes.get( paperSize.getSelectedIndex() ) );
             }
-            if (orientation != null && orientation.getSelectedItem() != null)
+
+            if ( orientation != null && orientation.getSelectedItem() != null )
             {
                 attrs.add( ( OrientationRequested )orientation.getSelectedItem() );
             }
+
             Object values = getPrintService().getSupportedAttributeValues( MediaPrintableArea.class, DocFlavor.SERVICE_FORMATTED.PRINTABLE, attrs );
             if ( values != null )
             {
@@ -1311,10 +1321,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 supportedArea = ( MediaPrintableArea )getPrintService().getDefaultAttributeValue( MediaPrintableArea.class );
             }
+
             return supportedArea;
         }
-        
-        private void rotateMargins(float topMargin, float leftMargin, float rightMargin, float bottomMargin, OrientationRequested orientationRequested)
+
+
+        private void rotateMargins( float topMargin, float leftMargin, float rightMargin, float bottomMargin, OrientationRequested orientationRequested )
         {
             if ( OrientationRequested.REVERSE_PORTRAIT.equals( orientationRequested ) )
             {
@@ -1344,65 +1356,72 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 bottomMargin = m;
             }
         }
-        
+
+
+
+
         // set the values in the margin text fields to be either the minimum
         // supported by the printer or the last used margins or the currently
-        // set margins, also sets a range on the text fields so the user can't 
-        // enter a value too small or too large. Note that it is still possible 
-        // for the user to enter invalid margin values, e.g. 
+        // set margins, also sets a range on the text fields so the user can't
+        // enter a value too small or too large. Note that it is still possible
+        // for the user to enter invalid margin values, e.g.
         // top margin + bottom margin > printable area height.
         void setDefaultMargins()
         {
             int units = getUnits();
             boolean integerOnly = units == MediaPrintableArea.MM;
-            
+
             // get the last margins the user set
             Margins margins = ( Margins )attributes.get( Margins.class );
-            
+
             // get the minimum and maximum margins supported by the printer
             float[] minMargins = getMinimumMargins();
             float[] maxMargins = getMaximumMargins();
-            
+
             // use the printer margins if there are no last used margins
-            float[] marginValues = margins == null ? minMargins : margins.getMargins(units);
-            
+            float[] marginValues = margins == null ? minMargins : margins.getMargins( units );
+
             // set the margin text area values
-            NumericTextField[] numberFields = new NumericTextField[]{topMarginField, leftMarginField, rightMarginField, bottomMarginField};
-            for (int i = 0; i < numberFields.length; i++)
+            NumericTextField[] numberFields = new NumericTextField[] {topMarginField, leftMarginField, rightMarginField, bottomMarginField};
+            for ( int i = 0; i < numberFields.length; i++ )
             {
                 NumericTextField field = numberFields[i];
                 Float currentUserMargin = null;
                 String text = field.getText();
-                if (text != null && !text.isEmpty())
+                if ( text != null && !text.isEmpty() )
                 {
-                    currentUserMargin = new Float(text);   
+                    currentUserMargin = new Float( text );
                 }
-                Float value = new Float(marginValues[i]);
-                Float minMargin = new Float(minMargins[i]);
-                Float maxMargin = new Float(maxMargins[i]);
-                if (currentUserMargin == null || currentUserMargin < minMargin || currentUserMargin > maxMargin)
+
+                Float value = new Float( marginValues[i] );
+                Float minMargin = new Float( minMargins[i] );
+                Float maxMargin = new Float( maxMargins[i] );
+                if ( currentUserMargin == null || currentUserMargin < minMargin || currentUserMargin > maxMargin )
                 {
+
                     // current user margin is invalid
-                    field.setText(integerOnly ? String.valueOf(value.intValue()) : String.valueOf(value));
+                    field.setText( integerOnly ? String.valueOf( value.intValue() ) : String.valueOf( value ) );
                 }
-                field.setMinValue(integerOnly ? new Integer(minMargin.intValue()) : new Float(minMargin));
-                field.setMaxValue(integerOnly ? new Integer(maxMargin.intValue()) : new Float(maxMargin));
-                field.setToolTipText("Min: " + minMargin + ", max: " + maxMargin);
+
+                field.setMinValue( integerOnly ? new Integer( minMargin.intValue() ) : new Float( minMargin ) );
+                field.setMaxValue( integerOnly ? new Integer( maxMargin.intValue() ) : new Float( maxMargin ) );
+                field.setToolTipText( "Min: " + minMargin + ", max: " + maxMargin );
             }
         }
-        
+
+
         // the default margins are the margins that allow the maximum supported
         // printable area by the currently selected printer, paper, and orientation,
         // returns float[]{topMargin, leftMargin, rightMargin, bottomMargin}
         private float[] getMinimumMargins()
         {
+
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             boolean integerOnly = units == MediaPrintableArea.MM;
             MediaPrintableArea supportedArea = getSupportedPrintableArea();
-            
-            //Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
 
+            // Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
             // get the selected paper size
             Media media = paperSizes.get( paperSize.getSelectedIndex() );
 
@@ -1420,31 +1439,32 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
             // calculate the default margins
             float topMargin = supportedArea.getY( units );
-            topMargin = integerOnly ? new Double(Math.ceil(topMargin)).floatValue() : topMargin;
+            topMargin = integerOnly ? new Double( Math.ceil( topMargin ) ).floatValue() : topMargin;
             float leftMargin = supportedArea.getX( units );
-            leftMargin = integerOnly ? new Double(Math.ceil(leftMargin)).floatValue() : leftMargin;
-            float rightMargin = Math.max(0.0f, paperWidth - leftMargin - supportedArea.getWidth( units ));
-            rightMargin = integerOnly ? new Double(Math.ceil(rightMargin)).floatValue() : rightMargin;
-            float bottomMargin = Math.max(0.0f, paperHeight - topMargin - supportedArea.getHeight( units ));
-            bottomMargin = integerOnly ? new Double(Math.ceil(bottomMargin)).floatValue() : bottomMargin;
+            leftMargin = integerOnly ? new Double( Math.ceil( leftMargin ) ).floatValue() : leftMargin;
+            float rightMargin = Math.max( 0.0f, paperWidth - leftMargin - supportedArea.getWidth( units ) );
+            rightMargin = integerOnly ? new Double( Math.ceil( rightMargin ) ).floatValue() : rightMargin;
+            float bottomMargin = Math.max( 0.0f, paperHeight - topMargin - supportedArea.getHeight( units ) );
+            bottomMargin = integerOnly ? new Double( Math.ceil( bottomMargin ) ).floatValue() : bottomMargin;
 
             // adjust the margins for the paper orientation
             OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
             rotateMargins( topMargin, leftMargin, rightMargin, bottomMargin, orientationRequested );
 
-            //Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
-            return new float[]{topMargin, leftMargin, rightMargin, bottomMargin};
+            // Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
+            return new float[] {topMargin, leftMargin, rightMargin, bottomMargin};
         }
+
 
         private float[] getMaximumMargins()
         {
+
             // get the printable area for the selected paper size and orientation
             int units = getUnits();
             boolean integerOnly = units == MediaPrintableArea.MM;
             MediaPrintableArea supportedArea = getSupportedPrintableArea();
-            
-            //Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
 
+            // Log.log( Log.DEBUG, this, "supportedArea = " + supportedArea.getX( units ) + ", " + supportedArea.getY( units ) + ", " + supportedArea.getWidth( units ) + ", " + supportedArea.getHeight( units ) );
             // get the selected paper size
             Media media = paperSizes.get( paperSize.getSelectedIndex() );
 
@@ -1461,21 +1481,21 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float paperHeight = mediaSize.getY( units );
 
             // calculate the maximum margins
-            float topMargin = supportedArea.getY( units ) + supportedArea.getHeight(units);
-            topMargin = integerOnly ? new Double(Math.ceil(topMargin)).floatValue() : topMargin;
-            float leftMargin = supportedArea.getX( units ) + supportedArea.getWidth(units);
-            leftMargin = integerOnly ? new Double(Math.ceil(leftMargin)).floatValue() : leftMargin;
-            float rightMargin = paperWidth - supportedArea.getX(units);
-            rightMargin = integerOnly ? new Double(Math.ceil(rightMargin)).floatValue() : rightMargin;
-            float bottomMargin = paperHeight - supportedArea.getY(units);
-            bottomMargin = integerOnly ? new Double(Math.ceil(bottomMargin)).floatValue() : bottomMargin;
+            float topMargin = supportedArea.getY( units ) + supportedArea.getHeight( units );
+            topMargin = integerOnly ? new Double( Math.ceil( topMargin ) ).floatValue() : topMargin;
+            float leftMargin = supportedArea.getX( units ) + supportedArea.getWidth( units );
+            leftMargin = integerOnly ? new Double( Math.ceil( leftMargin ) ).floatValue() : leftMargin;
+            float rightMargin = paperWidth - supportedArea.getX( units );
+            rightMargin = integerOnly ? new Double( Math.ceil( rightMargin ) ).floatValue() : rightMargin;
+            float bottomMargin = paperHeight - supportedArea.getY( units );
+            bottomMargin = integerOnly ? new Double( Math.ceil( bottomMargin ) ).floatValue() : bottomMargin;
 
-            // adjust the margins for the paper orientation 
+            // adjust the margins for the paper orientation
             OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
             rotateMargins( topMargin, leftMargin, rightMargin, bottomMargin, orientationRequested );
 
-            //Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
-            return new float[]{topMargin, leftMargin, rightMargin, bottomMargin};
+            // Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
+            return new float[] {topMargin, leftMargin, rightMargin, bottomMargin};
         }
 
 
@@ -1489,6 +1509,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 return MediaPrintableArea.INCH;
             }
+
             return MediaPrintableArea.MM;
         }
     }
@@ -1745,6 +1766,78 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 setText( value == null ? "" : getMessage( value.toString() ) );
                 return this;
             }
+        }
+    }
+
+
+
+    private class jEditPanel extends PrinterPanel
+    {
+
+        private FontSelector font;
+        private JCheckBox printHeader;
+        private JCheckBox printFooter;
+        private JCheckBox printLineNumbers;
+        private JCheckBox printFolds;
+        private JComboBox<String> tabSize;
+
+
+        public jEditPanel()
+        {
+            super();
+            /* Font */
+            font = new FontSelector( jEdit.getFontProperty( "print.font" ) );
+
+            /* Header */
+            printHeader = new JCheckBox( jEdit.getProperty( "options.print.header" ) );
+            printHeader.setSelected( jEdit.getBooleanProperty( "print.header" ) );
+
+            /* Footer */
+            printFooter = new JCheckBox( jEdit.getProperty("options.print.footer" ) );
+            printFooter.setSelected( jEdit.getBooleanProperty( "print.footer" ) );
+
+            /* Line numbering */
+            printLineNumbers = new JCheckBox( jEdit.getProperty( "options.print.lineNumbers" ) );
+            printLineNumbers.setSelected( jEdit.getBooleanProperty( "print.lineNumbers" ) );
+
+
+            /* Tab size */
+            String[] tabSizes = {"2", "4", "8"};
+            tabSize = new JComboBox<String>( tabSizes );
+            tabSize.setEditor( new NumericTextField( "", true, true ) );
+            tabSize.setEditable( true );
+            tabSize.setSelectedItem( jEdit.getProperty( "print.tabSize" ) );
+
+            /* Print Folds */
+            printFolds = new JCheckBox( jEdit.getProperty( "options.print.folds" ) );
+            printFolds.setSelected( jEdit.getBooleanProperty( "print.folds", true ) );
+            
+            JPanel content = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
+            content.add( new JLabel(jEdit.getProperty( "options.print.font" ) ) );
+            content.add( font );
+            content.add( new JLabel(jEdit.getProperty( "options.print.tabSize" ) ) );
+            content.add( tabSize );
+            content.add( printHeader );
+            content.add( Box.createGlue());
+            content.add( printFooter );
+            content.add( Box.createGlue());
+            content.add( printLineNumbers );
+            content.add( Box.createGlue());
+            content.add( printFolds );
+            content.add( Box.createGlue());
+            add( content, BorderLayout.NORTH );
+        }
+
+
+        public AttributeSet getAttributes()
+        {
+            jEdit.setFontProperty( "print.font", font.getFont() );
+            jEdit.setBooleanProperty( "print.header", printHeader.isSelected() );
+            jEdit.setBooleanProperty( "print.footer", printFooter.isSelected() );
+            jEdit.setBooleanProperty( "print.lineNumbers", printLineNumbers.isSelected() );
+            jEdit.setProperty( "print.tabSize", ( String )tabSize.getSelectedItem() );
+            jEdit.setBooleanProperty( "print.folds", printFolds.isSelected() );
+            return null;
         }
     }
 
