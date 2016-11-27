@@ -55,19 +55,21 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
     public PageBreakExtension( JEditTextArea textArea ) {
         this.textArea = textArea;
         textArea.getPainter().addExtension( TextAreaPainter.WRAP_GUIDE_LAYER, this );
-        showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
+        showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks", false );
         pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
         EditBus.addToBus( this );
     }
 
 
-    private HashMap<Integer, Range> getPageRanges() {
+    private void loadPageRanges() {
         if ( showPageBreak ) {
             View view = textArea.getView();
             Buffer buffer = ( Buffer )textArea.getBuffer();
-            return BufferPrinter1_7.getPageRanges( view, buffer, null );
+            pages = BufferPrinter1_7.getPageRanges( view, buffer, null );
         }
-        return null;
+        else {
+            pages = null;
+        }
     }
 
 
@@ -75,9 +77,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
         if ( msg instanceof PropertiesChanged ) {
             showPageBreak = jEdit.getBooleanProperty( "view.pageBreaks" );
             pageBreakColor = jEdit.getColorProperty( "view.pageBreaksColor" );
-            if ( showPageBreak ) {
-                pages = getPageRanges();
-            }
+            loadPageRanges();
         }
         else if ( msg instanceof EditPaneUpdate ) {
             EditPaneUpdate epu = ( EditPaneUpdate )msg;
@@ -85,14 +85,14 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
 
                 // prevent NPE in Buffer#markToken() when edit mode is not loaded
                 if ( epu.getEditPane().getBuffer().isLoaded() ) {
-                    pages = getPageRanges();
+                    loadPageRanges();
                 }
             }
         }
         else if ( msg instanceof BufferUpdate ) {
             BufferUpdate bu = ( BufferUpdate )msg;
             if ( BufferUpdate.SAVED.equals( bu.getWhat() ) || BufferUpdate.LOADED.equals( bu.getWhat() ) ) {
-                pages = getPageRanges();
+                loadPageRanges();
             }
         }
     }
@@ -120,21 +120,21 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
 
     @Override
     public void paintValidLine( Graphics2D gfx, int screenLine, int physicalLine, int start, int end, int y ) {
-        if ( isPageBreakEnabled() ) {
-            gfx.setColor( getPageBreakColor() );
+        if ( showPageBreak ) {
 
-            if ( pages == null ) {
-                pages = getPageRanges();
+            if ( pages == null || pages.isEmpty() ) {
+                loadPageRanges();
                 if ( pages == null || pages.isEmpty() ) {
                     return;
                 }
             }
 
 
-            // - 1 so last page break isn't drawn
-            for ( int page = 1; page < pages.size() - 1; page++ ) {
-                Range range = pages.get( page );
+            gfx.setColor( pageBreakColor );
 
+            // - 1 so last page break isn't drawn
+            for ( int page = 1; page < pages.size(); page++ ) {
+                Range range = pages.get( page );
                 // 2nd part of 'if' handles soft wrap so if the last line of the page
                 // is wrapped, only the last screen line of the wrapped line will get
                 // the page break line drawn on it.

@@ -282,6 +282,9 @@ public class BufferPrinter1_7
 		{
 			HashMap<Integer, Range> pageLineRanges = printable.calculatePages( graphics, pageFormat );
 			PageRanges pr = (PageRanges)attributes.get(PageRanges.class);
+			if (pr == null) {
+				pr = new PageRanges( 1, 1000 );
+			}
 			HashMap<Integer, Range> newLineRanges = new HashMap<Integer, Range>();
 			for (Integer i : pageLineRanges.keySet())
 			{
@@ -290,7 +293,8 @@ public class BufferPrinter1_7
 					newLineRanges.put(i, pageLineRanges.get(i));	
 				}
 			}
-			return newLineRanges;
+			//return newLineRanges;
+			return pageLineRanges;
 		}
 		catch(Exception e) 
 		{

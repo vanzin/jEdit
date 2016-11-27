@@ -345,7 +345,7 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
 			
@@ -366,7 +366,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
 				pages.put(new Integer(pageCount), range);
-				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				startLine = currentPhysicalLine;
 				y = 0.0;
