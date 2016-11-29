@@ -484,10 +484,7 @@
         <section id="printing-pane">
             <title>The Printing Pane</title>
 
-            <para>The <guibutton>Printing</guibutton> option pane contains
-            settings to control the appearance of printed output. Workarounds
-            that might be needed for your Java version to print correctly can
-            also be enabled here. See <xref linkend="printing" />.</para>
+            <para>As of jEdit 5.3, all printing options have been moved to the printer dialog. See <xref linkend="printing" />.</para>
         </section>
 
         <section id="firewall-pane">
