@@ -269,7 +269,11 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 for ( int i = 0; i < tabs.getTabCount(); i++ )
                 {
                     PrinterPanel panel = ( PrinterPanel )tabs.getComponentAt( i );
-                    PrinterDialog.this.attributes.addAll( panel.getAttributes() );
+                    AttributeSet panelAttributes = panel.getAttributes();
+                    if (panelAttributes != null)
+                    {
+                        PrinterDialog.this.attributes.addAll( attributes );
+                    }
                 }
 
                 // adjust the print range to filter based on odd/even pages
