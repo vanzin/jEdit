@@ -229,11 +229,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 // adjust the print range to filter based on odd/even pages
                 PageRanges pr = ( PageRanges )PrinterDialog.this.attributes.get( PageRanges.class );
                 try
-
-
                 {
-                    pr = mergeRanges( pr );
-                    PrinterDialog.this.attributes.add( pr );
+                    PageRanges mergedRanges = mergeRanges( pr );
+                    if (mergedRanges != null) 
+                    {
+                        PrinterDialog.this.attributes.add( mergedRanges );
+                    }
                 }
                 catch ( PrintException e )
                 {
@@ -279,11 +280,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 // adjust the print range to filter based on odd/even pages
                 PageRanges pr = ( PageRanges )PrinterDialog.this.attributes.get( PageRanges.class );
                 try
-
-
                 {
-                    pr = mergeRanges( pr );
-                    PrinterDialog.this.attributes.add( pr );
+                    PageRanges mergedRanges = mergeRanges( pr );
+                    if (mergedRanges != null) 
+                    {
+                        PrinterDialog.this.attributes.add( mergedRanges );
+                    }
                 }
                 catch ( PrintException e )
                 {
@@ -455,7 +457,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     // setting in the Page Setup tab.
     private PageRanges mergeRanges( PageRanges pr ) throws PrintException
     {
-        if ( onlyPrintPages == ALL )
+        if ( pr == null || onlyPrintPages == ALL )
         {
             return pr;
         }
