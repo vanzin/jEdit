@@ -679,10 +679,10 @@
         </itemizedlist>
 
         <para>
-          In the Utilities - Global Options - Text Area settings, there is an option to show page break markers. If selected, horizontal lines will be displayed in the text area to indicate where page breaks will be when printing.</para> 
-          
+          In the Utilities - Global Options - Text Area settings, there is an option to show page break markers. If selected, horizontal lines will be displayed in the text area to indicate where page breaks will be when printing.</para>
+
         <para>
-          There is also an action available in Utilities - Global Options - Shortcuts to toggle the the page break markers on and off. Page break markers are just what they sound like, they show where page breaks would be for printing. Note that jEdit is not a word processor, so the page breaks are calculated based on printer settings and print font size. It is not possible to set a page break at a specific point in a file.
+          There is also an action available in the View menu, to toggle the the page break markers on and off. Page break markers are just what they sound like, they show where page breaks would be for printing. Note that jEdit is not a word processor, so the page breaks are calculated based on printer settings and print font size. It is not possible to set a page break at a specific point in a file.
         </para>
     </section>
 

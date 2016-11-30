@@ -451,7 +451,7 @@
 	</CODE>
 	<IS_SELECTED>
 		return (jEdit.getBufferSetManager().getScope().equals(BufferSet.Scope.view));
-	</IS_SELECTED>	
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="bufferset-toggle-exclusive">
@@ -471,8 +471,8 @@
 	</CODE>
 	<IS_SELECTED>
 		return (jEdit.getBufferSetManager().getScope().equals(BufferSet.Scope.editpane));
-	</IS_SELECTED>	
-	
+	</IS_SELECTED>
+
 </ACTION>
 
 <ACTION NAME="goto-line">
@@ -718,7 +718,7 @@
 
 <ACTION NAME="new-view">
 	<CODE>
-	bsm = jEdit.getBufferSetManager(); 
+	bsm = jEdit.getBufferSetManager();
 	if (bsm.getScope() == BufferSet.Scope.global) {
 		jEdit.newView(view);
 	}
@@ -971,6 +971,9 @@
 	jEdit.setBooleanProperty("view.pageBreaks", !jEdit.getBooleanProperty("view.pageBreaks"));
 	EditBus.send(new PropertiesChanged(null));
 	</CODE>
+	<IS_SELECTED>
+		return jEdit.getBooleanProperty("view.pageBreaks");
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="quick-search" NO_RECORD="TRUE">

@@ -376,6 +376,7 @@ view=new-view \
 	 focus-buffer-switcher \
 	 - \
 	 toggle-line-numbers \
+	 print.toggle-show-page-breaks \
 	 toggle-statusbar \
 	 toggle-gutter \
 	 toggle-buffer-switcher \
