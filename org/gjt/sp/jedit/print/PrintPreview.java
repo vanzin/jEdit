@@ -38,8 +38,8 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.jEdit;
-
 import org.gjt.sp.util.Log;
+
 
 public class PrintPreview extends EnhancedDialog
 {
@@ -59,7 +59,6 @@ public class PrintPreview extends EnhancedDialog
 	private PrintRequestAttributeSet attributes;
 	private PrintService printService;
 	private PrintPreviewModel model;
-	
 	private float zoomLevel = 1.0f;
 
 
@@ -76,6 +75,10 @@ public class PrintPreview extends EnhancedDialog
 		pack();
 		setLocationRelativeTo( jEdit.getActiveView().getTextArea() );
 		setVisible( true );
+		// TODO: this repaint shouldn't be necessary, but sometimes the first
+		// page isn't drawn when the preview is first displayed. This fixes that
+		// problem, but this feels like the wrong way to do it.
+		repaint();
 	}
 
 
@@ -104,7 +107,6 @@ public class PrintPreview extends EnhancedDialog
 		fullPage = new JButton( GUIUtilities.loadIcon( "22x22/actions/resize-vertical.png" ) );
 		fullPage.setToolTipText( jEdit.getProperty( "printpreview.dialog.fullPage", "Show full page" ) );
 
-
 		// create toolbar
 		JPanel toolbar = new JPanel();
 		toolbar.setLayout( new FlowLayout( FlowLayout.LEFT, 6, 6 ) );
@@ -112,13 +114,12 @@ public class PrintPreview extends EnhancedDialog
 		toolbar.add( pages );
 		toolbar.add( prevPage );
 		toolbar.add( nextPage );
-		
-		// TODO: these need to be finished
-		//toolbar.add( zoomIn );
-		//toolbar.add( zoomOut );
-		//toolbar.add( fullWidth );
-		//toolbar.add( fullPage );
 
+		// TODO: these need to be finished
+		// toolbar.add( zoomIn );
+		// toolbar.add( zoomOut );
+		// toolbar.add( fullWidth );
+		// toolbar.add( fullPage );
 		// main area to see print preview
 		printPreviewPane = new PrintPreviewPane();
 
@@ -154,35 +155,108 @@ public class PrintPreview extends EnhancedDialog
 					PrintPreview.this.cancel();
 				}
 			} );
-
-		pages.addActionListener( new ActionListener()
+		
+		// as suggested by Alan, set the keystrokes so that up, down, left, right,
+		// and page up and down go to the next or previous page as appropriate.
+		// First remove the default key map:
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_KP_DOWN, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_KP_UP, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_KP_RIGHT, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_KP_LEFT, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_DOWN, 0, false ), "none" );
+		pages.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_UP, 0, false ), "none" );
+		
+		// then handle the keystrokes:
+		pages.addKeyListener( new KeyAdapter()
 		{
 
-				public void actionPerformed( ActionEvent ae )
+				public void keyPressed( KeyEvent ke )
 				{
-					int selectedPage = (Integer)pages.getSelectedItem();
+
+					int selectedIndex = pages.getSelectedIndex();
+					switch ( ke.getKeyCode() )
+					{
+						case KeyEvent.VK_DOWN:
+						case KeyEvent.VK_KP_DOWN:
+						case KeyEvent.VK_RIGHT:
+						case KeyEvent.VK_KP_RIGHT:
+						case KeyEvent.VK_PAGE_DOWN:
+							selectedIndex += 1;
+							selectedIndex = selectedIndex >= pages.getItemCount() ? 0 : selectedIndex;
+							break;
+						case KeyEvent.VK_UP:
+						case KeyEvent.VK_KP_UP:
+						case KeyEvent.VK_LEFT:
+						case KeyEvent.VK_KP_LEFT:
+						case KeyEvent.VK_PAGE_UP:
+							selectedIndex -= 1;
+							selectedIndex = selectedIndex < 0 ? pages.getItemCount() - 1 : selectedIndex;
+							break;
+						// pressing the 1 thru 9 keys jumps directly to that page
+						case KeyEvent.VK_1:
+							selectedIndex = 0;
+							break;
+						case KeyEvent.VK_2:
+							selectedIndex = 1;
+							break;
+						case KeyEvent.VK_3:
+							selectedIndex = 2;
+							break;
+						case KeyEvent.VK_4:
+							selectedIndex = 3;
+							break;
+						case KeyEvent.VK_5:
+							selectedIndex = 4;
+							break;
+						case KeyEvent.VK_6:
+							selectedIndex = 5;
+							break;
+						case KeyEvent.VK_7:
+							selectedIndex = 6;
+							break;
+						case KeyEvent.VK_8:
+							selectedIndex = 7;
+							break;
+						case KeyEvent.VK_9:
+							selectedIndex = 8;
+							break;
+							
+						default:
+							return;
+					}
+					
+
+					pages.setSelectedIndex( selectedIndex );
+					int selectedPage = ( Integer )pages.getSelectedItem();
 					model.setPageNumber( selectedPage - 1 );
-					model.setPageRanges(pageRanges);
-					model.setZoomLevel(zoomLevel);
+					model.setPageRanges( pageRanges );
+					model.setZoomLevel( zoomLevel );
 					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
 			}
 		);
+
 		prevPage.addActionListener( new ActionListener()
 		{
 
 				public void actionPerformed( ActionEvent ae )
 				{
 					int selectedIndex = pages.getSelectedIndex();
-					if (selectedIndex <= 0)
+					if ( selectedIndex <= 0 )
 					{
-						selectedIndex = pages.getItemCount() - 1;	
+						selectedIndex = pages.getItemCount() - 1;
 					}
 					else
 					{
-						selectedIndex = selectedIndex - 1;	
+						selectedIndex = selectedIndex - 1;
 					}
+
+
 					pages.setSelectedIndex( selectedIndex );
 				}
 			}
@@ -193,14 +267,16 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					int selectedIndex = pages.getSelectedIndex();
-					if (selectedIndex + 1 == pages.getItemCount())
+					if ( selectedIndex + 1 == pages.getItemCount() )
 					{
-						selectedIndex = 0;	
+						selectedIndex = 0;
 					}
 					else
 					{
-						selectedIndex = selectedIndex + 1;	
+						selectedIndex = selectedIndex + 1;
 					}
+
+
 					pages.setSelectedIndex( selectedIndex );
 				}
 			}
@@ -211,11 +287,11 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					zoomLevel += 0.1f;
-					int selectedPage = (Integer)pages.getSelectedItem();
-					model.setZoomLevel(zoomLevel);
-					model.setPageNumber( selectedPage - 1);
-					model.setPageRanges(pageRanges);
-					model.setZoom(PrintPreviewModel.Zoom.IN);
+					int selectedPage = ( Integer )pages.getSelectedItem();
+					model.setZoomLevel( zoomLevel );
+					model.setPageNumber( selectedPage - 1 );
+					model.setPageRanges( pageRanges );
+					model.setZoom( PrintPreviewModel.Zoom.IN );
 					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
@@ -227,13 +303,17 @@ public class PrintPreview extends EnhancedDialog
 				public void actionPerformed( ActionEvent ae )
 				{
 					zoomLevel -= 0.1f;
-					if (zoomLevel <= 0.0f)
+					if ( zoomLevel <= 0.0f )
+					{
 						zoomLevel = 0.1f;
-					int selectedPage = (Integer)pages.getSelectedItem();
-					model.setZoomLevel(zoomLevel);
+					}
+
+
+					int selectedPage = ( Integer )pages.getSelectedItem();
+					model.setZoomLevel( zoomLevel );
 					model.setPageNumber( selectedPage - 1 );
-					model.setPageRanges(pageRanges);
-					model.setZoom(PrintPreviewModel.Zoom.OUT);
+					model.setPageRanges( pageRanges );
+					model.setZoom( PrintPreviewModel.Zoom.OUT );
 					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
@@ -244,10 +324,10 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					int selectedPage = (Integer)pages.getSelectedItem();
+					int selectedPage = ( Integer )pages.getSelectedItem();
 					model.setPageNumber( selectedPage );
-					model.setPageRanges(pageRanges);
-					model.setZoom(PrintPreviewModel.Zoom.WIDTH);
+					model.setPageRanges( pageRanges );
+					model.setZoom( PrintPreviewModel.Zoom.WIDTH );
 					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
@@ -258,10 +338,10 @@ public class PrintPreview extends EnhancedDialog
 
 				public void actionPerformed( ActionEvent ae )
 				{
-					int selectedPage = (Integer)pages.getSelectedItem();
+					int selectedPage = ( Integer )pages.getSelectedItem();
 					model.setPageNumber( selectedPage );
-					model.setPageRanges(pageRanges);
-					model.setZoom(PrintPreviewModel.Zoom.PAGE);
+					model.setPageRanges( pageRanges );
+					model.setZoom( PrintPreviewModel.Zoom.PAGE );
 					attributes.add( new PageRanges( selectedPage ) );
 					printPreviewPane.setModel( model );
 				}
@@ -277,22 +357,24 @@ public class PrintPreview extends EnhancedDialog
 		for ( Integer i : pageRanges.keySet() )
 		{
 			pagesModel.addElement( i );
-			//Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
+			// Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
-		
-		nextPage.setEnabled(pagesModel.getSize() > 1);
-		prevPage.setEnabled(pagesModel.getSize() > 1);
+
+		nextPage.setEnabled( pagesModel.getSize() > 1 );
+		prevPage.setEnabled( pagesModel.getSize() > 1 );
 
 		model = new PrintPreviewModel( view, buffer, printService, attributes, pageRanges );
-		model.setPageNumber(0);
+		model.setPageNumber( 0 );
 		printPreviewPane.setModel( model );
 	}
+
 
 	public void ok()
 	{
 	}
-	
+
+
 	public void cancel()
 	{
 		PrintPreview.this.setVisible( false );
