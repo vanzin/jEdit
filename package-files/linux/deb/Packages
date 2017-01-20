@@ -3,8 +3,8 @@ Version: 5:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Installed-Size: @deb.installed.size@
-Recommends: default-jre | openjdk-6-jre
-Suggests: default-jdk | openjdk-6-jdk, exuberant-ctags, cscope, global, ant 
+Recommends: default-jre | openjdk-8-jre
+Suggests: default-jdk | openjdk-8-jdk, exuberant-ctags, cscope, global, ant
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Filename: @deb.repository.file@
@@ -22,9 +22,9 @@ Description: A plugin-based editor for programmers.
  (such as vertical paste) of Ultraedit, to bring you an open-source
  plugin-based programmer's editor of professional quality.
  .
- It is possible to define complex macros in BeanShell, JavaScript, 
- Jython, or other languages that fit into the BSF. jEdit offers a powerful 
- and user-friendly keyboard mapping system (including 2-keystroke shortcuts), 
+ It is possible to define complex macros in BeanShell, JavaScript,
+ Jython, or other languages that fit into the BSF. jEdit offers a powerful
+ and user-friendly keyboard mapping system (including 2-keystroke shortcuts),
  making it possible to give jEdit a very Emacs-like feel, if you so desire.
  .
  Its functionality is easily extended by the use of 'plugins' which can be

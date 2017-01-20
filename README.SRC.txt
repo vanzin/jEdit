@@ -19,15 +19,15 @@ General jEdit documentation can be found in the 'doc' directory.
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
 
-  - A Java compiler of at least version 1.7, such as Oracle's javac
+  - A Java compiler of at least version 1.8, such as Oracle's javac
     which is included in the JDK. Get it from <http://www.java.com/download> or
-    from your package manager - e. g. openjdk-7-jdk.
+    from your package manager - e. g. openjdk-8-jdk.
 
  For building the API documentation:
 
   - Sun's javadoc tool, which is included in the JDK.
     Get it from <http://www.java.com/download> or from your package
-    manager - e. g. sun-java7-jdk.
+    manager - e. g. openjdk-8-jdk.
 
  For building the windows installer (for the final step):
 
@@ -173,26 +173,26 @@ General jEdit documentation can be found in the 'doc' directory.
 
 * Tips for Eclipse/NetBeans/IDE users:
 
-A file "jsr305.jar" contains definitions of the annotations 
-used in jEdit source code. It is downloaded automatically by ivy 
+A file "jsr305.jar" contains definitions of the annotations
+used in jEdit source code. It is downloaded automatically by ivy
 as part of the ant build process, to your lib/compile subfolder.
 If you add that jar to the
 project properties - java build path - libraries, that will
 get rid of the compiler errors on the annotations.
 
-A file "tools.jar" from the JDK is also needed in your 
-java build path. 
+A file "tools.jar" from the JDK is also needed in your
+java build path.
 
 The ant build process creates a subfolder called "build" for its work.
-Eclipse does the same and may pick the same folder. 
+Eclipse does the same and may pick the same folder.
 It is recommended you check/ensure that a different build
-directory ("Default Ouptut Folder") for Eclipse is used. 
+directory ("Default Ouptut Folder") for Eclipse is used.
 
 Some of the source directories are only needed for building packages on
 certain platforms. If you add jEdit source to an IDE like Eclipse that tries
 to compile every .java file, you'll get some errors from these directories unless
 you have the right libraries, which are automatically downloaded by ivy.
-However, if you tell Eclipse to exclude these directories, 
+However, if you tell Eclipse to exclude these directories,
 you can still build and run/debug jEdit from source. Follow these steps:
 
  - Project properties - Java build path

@@ -36,9 +36,9 @@ public class Install
 		URL mySource = source.getLocation();
 		// In fact the check is more restrictive than required :
 		// a problem occurs only when the ! is at the end of directory
-		return mySource.toString().contains("!");		
+		return mySource.toString().contains("!");
 	}
-	
+
 	private static void errorAndExit(boolean isGUI, String message)
 	{
 		if(isGUI)
@@ -46,7 +46,7 @@ public class Install
 			JTextArea messageCnt = new JTextArea(message);
 			JOptionPane.showMessageDialog(null,
 				messageCnt,
-				"jEdit installer error...", JOptionPane.ERROR_MESSAGE); 
+				"jEdit installer error...", JOptionPane.ERROR_MESSAGE);
 		}
 		else
 		{
@@ -54,18 +54,18 @@ public class Install
 		}
 		System.exit(1);
 	}
-	
+
 	public static void main(String[] args)
 	{
 		boolean isGUI = args.length == 0;
-		
+
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.7") < 0)
+		if(javaVersion.compareTo("1.8") < 0)
 		{
 			errorAndExit(isGUI,
 					  "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
-					+"This installer requires Java 1.7 or later.");
+					+"This installer requires Java 1.8 or later.");
 		}
 
 		if(isRunningFromExclam())

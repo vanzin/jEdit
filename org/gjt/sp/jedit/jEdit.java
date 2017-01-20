@@ -118,13 +118,13 @@ public class jEdit
 	public static void main(String[] args)
 	{
 		StringList slargs = new StringList(args);
-		//{{{ Check for Java 1.7 or later
+		//{{{ Check for Java 1.8 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.7") < 0)
+		if(javaVersion.compareTo("1.8") < 0)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + '.');
-			System.err.println("jEdit requires Java 1.7 or later.");
+			System.err.println("jEdit requires Java 1.8 or later.");
 			System.exit(1);
 		} //}}}
 
@@ -1135,9 +1135,9 @@ public class jEdit
 	{
 		if (name == null)
 		{
-			return null;	
+			return null;
 		}
-		
+
 		EditPlugin[] plugins = getPlugins();
 		EditPlugin plugin = null;
 		for (EditPlugin ep : plugins)
@@ -1148,9 +1148,9 @@ public class jEdit
 				break;
 			}
 		}
-		if (!loadIfNecessary) 
+		if (!loadIfNecessary)
 		{
-			return plugin;	
+			return plugin;
 		}
 		if (plugin instanceof EditPlugin.Deferred)
 		{
@@ -1507,7 +1507,7 @@ public class jEdit
 
 	//{{{ getAllModes() method
 	/**
-	 * Returns an array of all installed edit modes. The modes in this array 
+	 * Returns an array of all installed edit modes. The modes in this array
 	 * will be sorted by mode name.
 	 */
 	public static Mode[] getAllModes()
@@ -3276,8 +3276,8 @@ public class jEdit
 			// values() collection also removes it from bufferHash
 			if(buffer == b)
 				iterator.remove();
-        }		
-		
+        }
+
 		String path = buffer.getSymlinkPath();
 		if((VFSManager.getVFSForPath(path).getCapabilities()
 			& VFS.CASE_INSENSITIVE_CAP) != 0)
@@ -3918,30 +3918,30 @@ public class jEdit
 		// been loaded yet.
 		if (EventQueue.isDispatchThread())
 		{
-			try 
+			try
 			{
 				UIManager.setLookAndFeel(sLf);
 			}
-			catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) 
+			catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
 			{
 				// ignored, there really isn't anything to do and this may be
 				// bogus, the lnf may be from the Look And Feel plugin
 			}
 		}
-		else 
+		else
 		{
 			try
 			{
 				EventQueue.invokeAndWait(
 					new Runnable()
 					{
-						public void run() 
+						public void run()
 						{
 							try
 							{
 								UIManager.setLookAndFeel(sLf);
 							}
-							catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) 
+							catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e)
 							{
 								// same as above, there really isn't anything to do and this may be
 								// bogus, the lnf may be from the Look And Feel plugin
@@ -3950,9 +3950,9 @@ public class jEdit
 					}
 				);
 			}
-			catch (InterruptedException | InvocationTargetException e) 
+			catch (InterruptedException | InvocationTargetException e)
 			{
-				// don't worry about this one either	
+				// don't worry about this one either
 			}
 		}
 
@@ -4013,7 +4013,7 @@ public class jEdit
 
 		defaults.remove("SplitPane.border");
 		defaults.remove("SplitPaneDivider.border");
-		
+
 		defaults.put("Tree.rowHeight", 0);
 
 		JFrame.setDefaultLookAndFeelDecorated(

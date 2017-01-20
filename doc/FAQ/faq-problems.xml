@@ -74,7 +74,7 @@
                     <literal>~/Library/jEdit</literal> on MacOS).
                     You may want to try renaming the offending directory
                     to something else, and restarting jEdit with fresh settings.
-                    You can later copy things from your old settings back 
+                    You can later copy things from your old settings back
                     if you find you are missing things. </para>
                     <para>If at this point you're still stuck, ask for help on
                     the jedit-users mailing list, the jEdit Community
@@ -132,17 +132,17 @@
                     or <filename>javaw.exe</filename>). In place of the
                     <userinput>640</userinput> in the option, use a number
                     of megabytes you think is appropriate for the maximum heap
-                    size. If you already are using the option, try doubling it. 
+                    size. If you already are using the option, try doubling it.
                     </para>
-                    
+
                     <para> For more information about JVM options, see the <ulink url="../users-guide/jvm-options.html">page on JVM options</ulink> in the users guide. </para>
-                    
+
                     <para> On Windows, if you are using the <literal>jedit.exe</literal> launcher, you can add
                     or change the JVM arguments by editing a file called <literal>jEdit.l4j.ini</literal> in the same directory
-                    as the <literal>jedit.exe</literal>. Place one 
+                    as the <literal>jedit.exe</literal>. Place one
                     JVM argument (e.g. <literal>-mx640m</literal>) on each
-                    line by itself. </para> 
-                                       
+                    line by itself. </para>
+
                     <para>If out of memory errors occur while running a build or
                     compilation operation from within jEdit, you can also have
                     the operation run in an external process rather than inside
@@ -161,7 +161,7 @@
                 </question>
                 <answer>
                     <para>Before jEdit 5.0, it happened to me quite a bit too.
-                    I use this macro to help avoid the need to restart jEdit. 
+                    I use this macro to help avoid the need to restart jEdit.
 <programlisting>
 /** Reset_TextArea.bsh */
 view.splitVertically();
@@ -169,7 +169,7 @@ view.unsplitCurrent();
 </programlisting>
 					Run this, and jEdit creates
                     a new TextArea for you, one that is in a valid state. </para>
-                    
+
                     <para>If you can reproduce the steps you took to cause this,
                     please submit a bug report that details what
                     plugins/versions you were using, and how to reproduce it. It
@@ -247,14 +247,14 @@ view.unsplitCurrent();
 					</para>
                 </answer>
             </qandaentry>
-            
+
 			<qandaentry>
                 <question id="locks-up-or-hangs">
                     <para>jEdit locks up or hangs while I'm doing lots of things!  </para>
                     </question>
                     <answer>
                       <para> Sometimes, it can be due to a deadlock, or an
-                      infinite loop, or something else. You need to obtain a 
+                      infinite loop, or something else. You need to obtain a
                       <emphasis role="bold">thread dump</emphasis> from the time
                       of hang, and attach that as a textfile to your bug report,
                       explaining what you were doing at the time.
@@ -263,18 +263,18 @@ view.unsplitCurrent();
                       <para> One way to obtain a thread dump, is to run jEdit
                       with <literal>java -jar jedit.jar</literal> from a command
                       line shell <emphasis role="bold">in the foreground</emphasis>,
-                      wait for the hang or lockup, and type Ctrl+\ 
-                      (or Ctrl+Break on Windows) into the shell window. 
+                      wait for the hang or lockup, and type Ctrl+\
+                      (or Ctrl+Break on Windows) into the shell window.
                       You should see a thread dump printed immediately that will
-                      help diagnose the problem. 
+                      help diagnose the problem.
                       </para>
 
                       <para>
                       Another way to get a thread dump is to run jEdit as you
-                      normally would, then run 
+                      normally would, then run
                       <ulink url="http://visualvm.java.net/">visualvm</ulink>.
                       You can right click on the jEdit process from within
-                      visualvm and choose "thread dump". 
+                      visualvm and choose "thread dump".
                       </para>
 
                     </answer>
@@ -354,9 +354,9 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
 </programlisting>
 				</question>
 				<answer>
-				 <para> Make sure the version of Java you are running is Sun Java 1.7 or higher.
+				 <para> Make sure the version of Java you are running is Oracle Java 1.8 or higher.
 				 In debian/ubuntu,
-				 <literal> apt-get install openjdk-7-jdk </literal>
+				 <literal> apt-get install openjdk-8-jdk </literal>
 				 </para>
 		        </answer>
 				</qandaentry>
