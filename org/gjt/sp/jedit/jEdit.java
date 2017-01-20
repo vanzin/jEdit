@@ -106,7 +106,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = "final").(bug fix)
-		return "05.03.99.01";
+		return "05.04.99.00";
 	} //}}}
 
 	//{{{ main() method

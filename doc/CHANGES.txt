@@ -1,12 +1,12 @@
-jEdit 5.3 version history
-       (changes since jEdit 5.2.0)
+jEdit 5.4 version history
+       (changes since jEdit 5.3.0)
 :encoding=UTF-8:
 
-{{{ Version 5.3.1
+{{{ Version 5.4.0
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
 Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
-Adam S, Wim West, and Dale Anson for contributing to this release.
+Adam S, Wim West and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -17,7 +17,7 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
   (Patch #580 - Marc Häfner)
 
 - Fix bug #3659 - Macro Keywords_to_Upper_Case fails to find class
-  (Patch #582 -  Marc Häfner)
+  (Patch #582 - Marc Häfner)
 
 - Fix bug #3949 - Macro Display_Shortcuts show no/wrong results
   (Patch #581 - Marc Häfner)
@@ -70,16 +70,16 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 
 - Fix bug #3773, InvocationTargetException with negative printing tab width.
   (Dale Anson)
-  
-- Fix bug # 2844, printing range bug. (Dale Anson) 
+
+- Fix bug # 2844, printing range bug. (Dale Anson)
 
 - Delete a user mode from the catalog even if the mode file is missing
   (Eric Le Lay)
 
 - Plugin Manager: fix missing newline between released and description for
   plugins without dependencies. Add extra newline for clarity. (Eric Le Lay)
-  
-- Fix bug # 3998, Next Char macro doesn't work. (Dale Anson)  
+
+- Fix bug # 3998, Next Char macro doesn't work. (Dale Anson)
 
 }}}
 {{{ UI Improvements
@@ -95,15 +95,16 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 - Refactor editing option pane into several tabs, allow user editing of modes
   lists, similar to editing the encoding options lists. This also fixes
   feature request #515. (Dale Anson)
-  
+
 - Updated NumericTextField to allow decimal numbers and only allow negative sign
-  at the start of a number. (Dale Anson)    
+  at the start of a number. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
-- Updated printing system with jEdit specific printer dialog, accurate page 
-  range printing, current page printing, printing of selected text only, ability 
-  to show page breaks in the text area. (Dale Anson)  
+
+- Updated printing system with jEdit specific printer dialog, accurate page
+  range printing, current page printing, printing of selected text only, ability
+  to show page breaks in the text area. (Dale Anson)
 
 }}}
 {{{ API Changes
@@ -127,175 +128,15 @@ Adam S, Wim West, and Dale Anson for contributing to this release.
 
 - Drawj2d edit mode (Patch #573 - A. Vontobel)
 
-- Rust edit mode raw string fix (Patch #575 -  Jordan Miner)
+- Rust edit mode raw string fix (Patch #575 - Jordan Miner)
 
 - Mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
 
-- New mode for swift (Patch #587 -  Wayne Zhang)
+- New mode for swift (Patch #587 - Wayne Zhang)
 
 - New mode for Java 9 module-info.java files (Dale Anson)
 
 - Updated CSS mode provided by AdamS (Ticket #4003 - Dale Anson)
-
-}}}
-
-}}}
-
-{{{ Version 5.3.0
-
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Makarius, Jakub Holý,
-Mark Corbin, Matt Galligan, Kevin Hunter Kesling, Darien Brown,
-Matthieu Casanova, Sergey Mashkov, Dale Anson, Kevin Leblanc,
-Marcelo Vanzin, Jordan Miner, yaraba, Marc M. Adkins, Scott McPeak,
-and Eric Le Lay for contributing to this release.
-
-{{{ Bug Fixes
-
-- EnhancedDialog NPE fix for when there is no close shortcut assigned
-  (Patch # 588 - Scott McPeak)
-
-- JEditBuffer.isFoldEnd() was unable to detect the fold end when it was the
-  last line (#3917 - Matthieu Casanova)
-
-- More accurate wrap margin calculation (Patch#555 - Makarius)
-
-- Fix AWT thread-safety issue in VFSManager.error(). (Marcelo Vanzin)
-
-- Order of unsorted buffers now preserved in View.getBuffers()
-  (Patch # 548 - Kevin Leblanc)
-
-- Support for negative line spacing (Patch #535 - Makarius)
-
-- Fix bug #3671: autodetect text file encoding in HelpViewer
-  (patch #540 - Eric Le Lay)
-
-- Fix bug #3881, non-capturing lookahead in regex search didn't work.
-  (Dale Anson)
-
-- Fix bug #3184: File browser completion dives into wrong directory
-  (Eric Le Lay)
-
-- Fix bug #2833 Plugin jars dependencies not removed (Eric Le Lay)
-
-- Fix bug #3911, text area was scrolling to the left when saving. (Dale Anson)
-
-- Fix bug #3599 Key typing in Install panel. Search Field gets focus on show
-  and when one types '/' or a letter in the list. (Eric Le Lay)
-
-- Fix bug #2877 "Hide installed" checkbox in Install panel. Don't re-install
-  unloaded plugins (Eric Le Lay)
-
-}}}
-{{{ UI Improvements
-
-- Handling of NUMPAD keys cleanup (Patch #567 - Makarius)
-
-- Scalable GUI for tip-of-the-day (Makarius)
-
-- Scalable ColorWell icon according to UI font (Makarius)
-
-- Proper L&F font for syntax style table (Patch #558 - Makarius)
-
-- Proper row height default for JTable, JTree with 4K displays
-  (Patches #557, #559, #562, #563 - Makarius)
-
-- More font size choices for 4K and higher-res displays (Patch# 549 - Makarius)
-
-- EOL marker character is a localizable property (view.eolMarkerChar),
-  and an arrow (↩) instead of period (.) (#3902 - Alan Ezust)
-
-- Proper button margins for Nimbus L&F (Patch #538 - Makarius)
-
-- CompletionPopup should accept TAB for completion selection
-  (Patch # 525 - Jakub Holý)
-
-- Separated sorting of Buffer Sets and Buffer Switcher (Dale Anson)
-
-- Font properties were not applied after change in Appearances settings
-  (Bug #3919 - Dale Anson)
-
-- Allow columns to be rearranged in FSB (Feature request 489, 40, and old
-  tracker 1442812 - Dale Anson)
-
-- Align gutter numbers with lines when using additional vertical line spacing.
-  (Bug #3717 - Dale Anson)
-
-- Added option to hide open files from recent file list (FR #481 - Dale Anson)
-
-- UI adjustment to allow adding new mode files by point and click.
-  (FR # 471 - Dale Anson)
-
-- No error message when PluginManager doesn't find a file to be removed and
-  show files to be removed in alphabetical order (end of Bug #3530 - Eric
-  Le Lay)
-
-- Plugin Manager Manage Panel sortable on all columns and all directions
-  (Eric Le Lay)
-
-- Replaced all Toolkit.beep() calls with
-  javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);, which
-  allows look and feels to provide their own implementation of error signals.
-  (Dale Anson)
-
-}}}
-{{{ Miscellaneous
-
-- New Korean translation file (Patch #551 - yaraba)
-
-- Resize performance improvement (Patch #547 - Sergey Mashkov)
-
-- Properties are sorted when saved (Feature Request #342, Patch #536 - Makarius)
-
-- Configure the JUnit task to fork off the Ant process, with manually adding the
-  needed Ant libraries. This ensures that there are no unwanted classpath
-  entries during test execution (Plugin Bug #1732 - Björn "Vampire" Kautler)
-
-}}}
-{{{ API Changes
-
-- View now sends ViewUpdate message on EditBus when full screen mode is toggled.
-  This is useful to plugins that may need to adjust their appearance when the
-  screen mode is toggled. (Dale Anson)
-
-- close-all sends BufferClosing events on EditBus for each buffer closed.
-  This is useful to plugins that record closed files. (patch #550, Eric Le Lay)
-
-- org.gjt.sp.util.StandardUtilities#compareStrings accepts null Strings
-  (Eric Le Lay)
-
-}}}
-{{{ Editing
-
-- Updates to Clojure mode (Marc M. Adkins, patch #565)
-
-- More conventional color scheme for diffs and changesets
-  (Patch #560 - Makarius)
-
-- Updates to Scala Mode (Patch #554 - Makarius)
-
-- New mode for rust (Patches #553, #556 - Jordan Miner)
-
-- New mode for Kotlin syntax (Patch #552 - Sergey Mashkov)
-
-- Updates to cfscript mode (Patch #531 - Darien Brown)
-
-- New mode for ANS Forth 1994 (Patch #530 - Mark Corbin)
-
-- New mode for mustache templates (Patch #532 - Kevin Hunter Kesling)
-
-- New mode for Antlr 4 (Dale Anson)
-
-- Updates to properties mode (Bug #2640 - Dale Anson)
-
-- Updated Go mode (Feature request 496, ahlearn). This also fixes bug #3921.
-
-- Allow editing, but not saving, of read only files.
-  (Feature request #422 - Dale Anson)
-
-- Added Markdown mode from Peter Lynch (FR 495 - Dale Anson)
-
-- Better mode selection for files that match multiple modes, also fixes/applies
-  patch #571. (Dale Anson)
 
 }}}
 
