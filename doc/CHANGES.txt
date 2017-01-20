@@ -106,6 +106,16 @@ Adam S, Wim West and Dale Anson for contributing to this release.
   range printing, current page printing, printing of selected text only, ability
   to show page breaks in the text area. (Dale Anson)
 
+- The plugin manager now uses a different URL scheme where the mirror is a URL
+  parameter and not part of the hostname anymore and follows URL redirection
+  properly. This way a file can always be downloaded as we get redirected to a
+  mirror that has the requested file available. Now dead mirrors do not cause
+  the download to fail anymore due to unknown hostname and files that are only
+  available on few mirrors (seldom downloaded files are only available on one
+  mirror sometimes) also work properly. The selected mirror is just the
+  preferred one that is used if the file is available there, just as the label
+  always suggested anyway. (Björn "Vampire" Kautler)
+
 }}}
 {{{ API Changes
 

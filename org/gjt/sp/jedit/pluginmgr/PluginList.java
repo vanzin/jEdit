@@ -78,6 +78,7 @@ class PluginList
 			return;
 		gzipURL = jEdit.getProperty("plugin-manager.export-url");
 		gzipURL += "?mirror=" + mirror;
+		gzipURL += "&new_url_scheme";
 		String path = null;
 		if (jEdit.getSettingsDirectory() == null)
 		{
@@ -343,7 +344,7 @@ class PluginList
 							String versionKey = "plugin." + cacheEntry.pluginClass + ".version";
 							installedVersion = cacheEntry.cachedProperties.getProperty(versionKey);
 							Log.log(Log.DEBUG, PluginList.class, "found installed but not loaded "+ jar + " version=" + installedVersion);
-							installedPath = path; 
+							installedPath = path;
 							return installedVersion;
 						}
 					}
@@ -470,13 +471,13 @@ class PluginList
 			for (Dependency dep : deps)
 				dep.satisfy(roster, installDirectory, downloadSource);
 		}
-		
-		public String depsToString() 
+
+		public String depsToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			for (Dependency dep : deps) 
+			for (Dependency dep : deps)
 			{
-				if ("plugin".equals(dep.what) && dep.pluginName != null) 
+				if ("plugin".equals(dep.what) && dep.pluginName != null)
 				{
 					sb.append(dep.pluginName).append('\n');
 				}

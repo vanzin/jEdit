@@ -46,7 +46,6 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 
 		progress = new JProgressBar();
 		progress.setStringPainted(true);
-		progress.setString(jEdit.getProperty("plugin-manager.progress"));
 
 		count = roster.getOperationCount();
 		int maximum = 0;
@@ -97,7 +96,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param value the new max value (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
-	public void setMaximum(long value) 
+	public void setMaximum(long value)
 	{
 	} //}}}
 
@@ -110,7 +109,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 */
 	public void setStatus(String status)
 	{
-		progress.setString(status);
+		SwingUtilities.invokeLater(() -> progress.setString(status));
 	} //}}}
 
 	//{{{ done() method

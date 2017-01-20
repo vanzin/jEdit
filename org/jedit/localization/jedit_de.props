@@ -877,7 +877,7 @@ search.settings=Einstellungen:
 search.keep=Dialog nicht schließen
 search.keep.mnemonic=b
 search.word=Ganzes Wort
-search.word.bar=Ganzes Wort  
+search.word.bar=Ganzes Wort
 search.word.mnemonic=t
 search.case=Groß-/Klein ignorieren
 search.case.mnemonic=i
@@ -1672,7 +1672,7 @@ options.textarea.fracFontMetrics.tooltip=Nicht empfohlen mit Subpixel-Kantenglä
 options.textarea.stripTrailingEOL=Letztes Zeilenende verstecken (falls vorhanden)
 options.textarea.completeFromAllBuffers=Wort-Vervollständigung von allen offenen Dateien (Standard ist \
     die Suche auf alle gerade sichtbaren Dateien zu begrenzen)
-options.textarea.insertCompletionWithDigit=Wort vervollständigen durch Tippen der korrespondierenden Ziffer (ansonsten wird die Ziffer als Teil des Wortes angesehen). 
+options.textarea.insertCompletionWithDigit=Wort vervollständigen durch Tippen der korrespondierenden Ziffer (ansonsten wird die Ziffer als Teil des Wortes angesehen).
 options.textarea.lineSpacing.label=Zusätzlicher vertikaler Zeilenabstand (in Pixel):
 #}}}
 
@@ -2024,7 +2024,7 @@ plugin-manager.status.not-loaded=Nicht geladen
 plugin-manager.status.error=Fehler
 
 plugin-manager.list-download-connect=Verbinde mit plugins.jedit.org
-plugin-manager.list-download=Plugin-Liste wird heruntergeladen von Plugins.jedit.org
+plugin-manager.list-download=Plugin-Liste wird heruntergeladen von plugins.jedit.org
 plugin-manager.list-download.mirror-autoselect-error.title=Fehler bei Auswahl des Update-Servers
 plugin-manager.list-download.mirror-autoselect-error.message=Fehler bei automatischer Auswahl des Update-Servers:\n\
 	{0}\n\
@@ -2076,7 +2076,7 @@ install-plugins.show-updates=Updates anzeigen
 
 update-plugins.title=Aktualisieren
 
-plugin-manager.progress=Gewählte Plugins werden heruntergeladen von Plugins.jedit.org...
+plugin-manager.progress=Lade {0} von Mirror {1} herunter
 plugin-manager.progress.title=Plugins werden installiert
 plugin-manager.progress.stop=Stop
 #}}}

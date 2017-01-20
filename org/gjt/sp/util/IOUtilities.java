@@ -87,6 +87,7 @@ public class IOUtilities
 	 *
 	 * @param bufferSize the size of the buffer
 	 * @param progress the progress observer it could be null
+	 * @param progressPrefix the progress prefix, it could be null
 	 * @param in the input stream
 	 * @param out the output stream
 	 * @param canStop if true, the copy can be stopped by interrupting the thread
@@ -94,7 +95,8 @@ public class IOUtilities
 	 * @throws IOException  IOException If an I/O error occurs
 	 */
 	public static boolean copyStream(int bufferSize, @Nullable ProgressObserver progress,
-					InputStream in, OutputStream out, boolean canStop)
+					 String progressPrefix, InputStream in, OutputStream out,
+					 boolean canStop)
 		throws IOException
 	{
 		byte[] buffer = new byte[bufferSize];
@@ -106,13 +108,36 @@ public class IOUtilities
 			copied += n;
 			if(progress != null)
 			{
-				progress.setStatus(StandardUtilities.formatFileSize(copied));
+				String progressMessage = StandardUtilities.formatFileSize(copied);
+				if (progressPrefix != null)
+				{
+					progressMessage = String.format("%s (%s)", progressPrefix, progressMessage);
+				}
+				progress.setStatus(progressMessage);
 				progress.setValue(copied);
 			}
 			if(canStop && Thread.interrupted())
 				return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Copy an input stream to an output stream.
+	 *
+	 * @param bufferSize the size of the buffer
+	 * @param progress the progress observer it could be null
+	 * @param in the input stream
+	 * @param out the output stream
+	 * @param canStop if true, the copy can be stopped by interrupting the thread
+	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
+	 * @throws IOException  IOException If an I/O error occurs
+	 */
+	public static boolean copyStream(int bufferSize, @Nullable ProgressObserver progress,
+					InputStream in, OutputStream out, boolean canStop)
+		throws IOException
+	{
+		return copyStream(bufferSize, progress, null, in, out, canStop);
 	}
 
 	/**
@@ -129,7 +154,25 @@ public class IOUtilities
 					 InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
-		return copyStream(4096,progress, in, out, canStop);
+		return copyStream(4096, progress, null, in, out, canStop);
+	}
+
+	/**
+	 * Copy an input stream to an output stream with a buffer of 4096 bytes.
+	 *
+	 * @param progress the progress observer it could be null
+	 * @param progressPrefix the progress prefix, it could be null
+	 * @param in the input stream
+	 * @param out the output stream
+	 * @param canStop if true, the copy can be stopped by interrupting the thread
+	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
+	 * @throws IOException  IOException If an I/O error occurs
+	 */
+	public static boolean copyStream(@Nullable ProgressObserver progress, String progressPrefix,
+					 InputStream in, OutputStream out, boolean canStop)
+		throws IOException
+	{
+		return copyStream(4096, progress, progressPrefix, in, out, canStop);
 	} //}}}
 
 	//{{{ fileLength() method

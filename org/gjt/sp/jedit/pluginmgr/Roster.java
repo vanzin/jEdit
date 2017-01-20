@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
 import java.net.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
@@ -42,6 +44,8 @@ import static org.gjt.sp.jedit.io.FileVFS.recursiveDelete;
  */
 class Roster
 {
+	private static final Pattern HOST_REGEX = Pattern.compile("(?<=/)\\w++(?=\\.dl\\.sourceforge\\.net)");
+
 	//{{{ Roster constructor
 	Roster()
 	{
@@ -295,9 +299,7 @@ class Roster
 		//{{{ runInWorkThread() method
 		public void runInWorkThread(PluginManagerProgress progress)
 		{
-			String fileName = MiscUtilities.getFileName(url);
-
-			path = download(progress,fileName,url);
+			path = download(progress,url);
 		} //}}}
 
 		//{{{ runInAWTThread() method
@@ -430,8 +432,7 @@ class Roster
 		private String path;
 
 		//{{{ download() method
-		private String download(PluginManagerProgress progress,
-			String fileName, String url)
+		private String download(PluginManagerProgress progress, String url)
 		{
 			try
 			{
@@ -439,22 +440,36 @@ class Roster
 				if (host == null || host.equals(MirrorList.Mirror.NONE))
 					host = "default";
 
-				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
-				URLConnection conn = new URL(url).openConnection();
-				progress.setStatus(jEdit.getProperty("plugin-manager.progress",new String[] {fileName, host}));
-				InputStream in = null;
-				FileOutputStream out = null;
-				try
+				// follow HTTP redirects
+				boolean finalUrlFound = false;
+				String finalUrl = url;
+				URLConnection conn = null;
+				while (!finalUrlFound)
 				{
-					in = conn.getInputStream();
-					out = new FileOutputStream(path);
-					if(!IOUtilities.copyStream(progress,in,out,true))
-						return null;
+					conn = new URL(finalUrl).openConnection();
+					HttpURLConnection httpConn = (HttpURLConnection) conn;
+					httpConn.setInstanceFollowRedirects(false);
+					httpConn.connect();
+					int responseCode = httpConn.getResponseCode();
+					String locationHeader = httpConn.getHeaderField("Location");
+					if ((responseCode >= 300) && (responseCode < 400) && (locationHeader != null))
+						finalUrl = locationHeader;
+					else
+						finalUrlFound = true;
 				}
-				finally
+
+				String fileName = MiscUtilities.getFileName(finalUrl);
+				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
+				Matcher hostMatcher = HOST_REGEX.matcher(finalUrl);
+				if (hostMatcher.find())
+					host = hostMatcher.group();
+				String progressMessage = jEdit.getProperty("plugin-manager.progress", new String[]{fileName, host});
+				progress.setStatus(progressMessage);
+				try (InputStream in = conn.getInputStream();
+				     FileOutputStream out = new FileOutputStream(path))
 				{
-					IOUtilities.closeQuietly((Closeable)in);
-					IOUtilities.closeQuietly((Closeable)out);
+					if(!IOUtilities.copyStream(progress,progressMessage,in,out,true))
+						return null;
 				}
 
 				return path;
