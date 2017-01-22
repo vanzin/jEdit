@@ -15,6 +15,17 @@
     url="../CHANGES.txt">Detailed Change Log</ulink>.
     </para>
 
+    <para> Some notable new things in this version are: </para>
+    <itemizedlist>
+    <listitem><para> Use of Java 1.8 </para></listitem>
+    <listitem><para> Use of a new XML format for Plugin Manager,
+      and proper following of redirects, resulting in a much improved 
+      plugin install experience.
+      </para></listitem>
+    <listitem><para> New Printing code updated for current versions
+      of Java </para></listitem>
+    </itemizedlist>
+
     <para> With continued support from the community, we will keep releasing a newer
     version each year that can accurately bring together the fruits of everyone's labor.
     Thank you to each and every one of the contributors who helped make 5.4 the best
