@@ -2025,10 +2025,6 @@ plugin-manager.status.error=Fehler
 
 plugin-manager.list-download-connect=Verbinde mit plugins.jedit.org
 plugin-manager.list-download=Plugin-Liste wird heruntergeladen von plugins.jedit.org
-plugin-manager.list-download.mirror-autoselect-error.title=Fehler bei Auswahl des Update-Servers
-plugin-manager.list-download.mirror-autoselect-error.message=Fehler bei automatischer Auswahl des Update-Servers:\n\
-	{0}\n\
-	Es könnte helfen, einen specifischen Server zu wählen.
 plugin-manager.list-download.need-password.title=HTTP-Proxy benötigt ein Password
 plugin-manager.list-download.need-password.message=HTTP-Proxy benötigt ein Password.\n\
         Bitte gültigen Benutzername und gültiges Password in "Download-Optionen" angeben.

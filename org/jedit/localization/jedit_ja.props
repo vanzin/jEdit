@@ -1957,10 +1957,6 @@ plugin-manager.status.error=エラー
 
 plugin-manager.list-download-connect=plugins.jedit.org に接続中
 plugin-manager.list-download=プラグインリストを plugins.jedit.org からダウンロード中
-plugin-manager.list-download.mirror-autoselect-error.title=ミラー選択エラー
-plugin-manager.list-download.mirror-autoselect-error.message=ミラーの自動選択エラー:\n\
-	{0}\n\
-	別のミラーを選ぶと動作するかもしれません。
 plugin-manager.list-download.need-password.title=HTTPプロキシはパスワードが必要です
 plugin-manager.list-download.need-password.message=HTTPプロキシはパスワードが必要です。\n\
   有効なユーザ名とパスワードを "ダウンロード オプション" で設定して下さい。

@@ -446,6 +446,7 @@ class Roster
 				URLConnection conn = null;
 				while (!finalUrlFound)
 				{
+					Log.log(Log.DEBUG, this, String.format("Trying URL '%s'", finalUrl));
 					conn = new URL(finalUrl).openConnection();
 					HttpURLConnection httpConn = (HttpURLConnection) conn;
 					httpConn.setInstanceFollowRedirects(false);
@@ -457,6 +458,7 @@ class Roster
 					else
 						finalUrlFound = true;
 				}
+				Log.log(Log.DEBUG, this, String.format("Final URL '%s' found", finalUrl));
 
 				String fileName = MiscUtilities.getFileName(finalUrl);
 				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);

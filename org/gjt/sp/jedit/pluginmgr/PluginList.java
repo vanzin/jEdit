@@ -612,22 +612,7 @@ class PluginList
 
 	private static String buildMirror(String id)
 	{
-		if (id != null && !id.equals(MirrorList.Mirror.NONE))
-		{
-			return id;
-		}
-		try
-		{
-			return getAutoSelectedMirror();
-		}
-		catch (Exception e)
-		{
-			GUIUtilities.error(jEdit.getActiveView()
-				, "plugin-manager.list-download.mirror-autoselect-error"
-				, new Object[]{e});
-			Log.log(Log.DEBUG, PluginList.class, "Getting auto-selected mirror: error", e);
-		}
-		return null;
+		return ((id != null) && !id.equals(MirrorList.Mirror.NONE)) ? id : "default";
 	}
 
 	private static String getAutoSelectedMirror()

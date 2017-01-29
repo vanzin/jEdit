@@ -1946,10 +1946,6 @@ plugin-manager.status.error=Ошибка
 
 plugin-manager.list-download-connect=Соединение с plugins.jedit.org
 plugin-manager.list-download=Скачивается список модулей с plugins.jedit.org
-plugin-manager.list-download.mirror-autoselect-error.title=Ошибка выбора зеркала
-plugin-manager.list-download.mirror-autoselect-error.message=Ошибка автоматического выбора зеркала:\n\
-	{0}\n\
-	Выберите зеркало вручную.
 plugin-manager.list-download.need-password.title=Прокси HTTP требует пароль
 plugin-manager.list-download.need-password.message=Прокси HTTP требует пароль.\n\
 Пожалуйста введите имя и пароль в "Настройках скачивания".

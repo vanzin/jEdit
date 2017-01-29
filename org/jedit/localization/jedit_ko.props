@@ -1923,10 +1923,6 @@ plugin-manager.status.error=에러
 
 plugin-manager.list-download-connect=plugins.jedit.org에 연결중
 plugin-manager.list-download=plugins.jedit.org에서 플러그인 목록을 다운로드하고 있습니다
-plugin-manager.list-download.mirror-autoselect-error.title=서버 선택 에러
-plugin-manager.list-download.mirror-autoselect-error.message=서버 자동 선택 에러:\n\
-	{0}\n\
-	특정 서버를 선택하면 정상 동작 할 수 있습니다.
 plugin-manager.list-download.need-password.title=HTTP 프록시가 비밀번호를 필요로 합니다
 plugin-manager.list-download.need-password.message=HTTP 프록시가 비밀번호를 필요로 합니다.\n\
 	"다운로드 옵션"에서 적절한 사용자/비밀번호를 설정하세요.

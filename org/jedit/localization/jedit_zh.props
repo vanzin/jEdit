@@ -591,7 +591,7 @@ print-error.message=一个错误发生在打印:\n\
 #{{{ About dialog
 about.title=关于 jEdit
 about.version=jEdit {0} {1} 模式, 使用 {2} Java {3}
-about.mode.standalone=独立	
+about.mode.standalone=独立
 about.mode.server=服务器
 about.mode.server-background=服务器背景
 about.navigate=按箭头键来浏览有关文本
@@ -675,7 +675,7 @@ out-of-memory-error=没有足够的Java堆内存来完成\n\
 	\n\
 	改变堆内存的文档在D\n\
 	 user guide的"jEdit Basics"章的"Buffers" 节里.\n\
-	
+
 #}}}
 
 #{{{ Old I/O error dialog boxes
@@ -788,7 +788,7 @@ saveall.message=你确定要保存已改变的文件吗?
 #}}}
 
 #{{{ Reload all confirm dialog
-reload-all.title=加载所有内容	
+reload-all.title=加载所有内容
 reload-all.message=你确定要从硬盘重新加载所有内容吗?\n\
 	所有打开文件的改变将要丢失!
 #}}}
@@ -1162,7 +1162,7 @@ folding-not-explicit.message=该指令只能在显式折叠模式下使用.
 #{{{ Memory status dialog box
 memory-status.title=Java 堆内存
 memory-status.gc=垃圾内存释放 {0} Kb.
-memory-status.use=消耗{0} Kb , 总共{1} Kb 
+memory-status.use=消耗{0} Kb , 总共{1} Kb
 #}}}
 
 #{{{ Multiple I/O request errors
@@ -1943,10 +1943,6 @@ plugin-manager.status.error=错误
 
 plugin-manager.list-download-connect=连接到 plugins.jedit.org
 plugin-manager.list-download=从m plugins.jedit.org下载插件列表
-plugin-manager.list-download.mirror-autoselect-error.title=镜像选择错误
-plugin-manager.list-download.mirror-autoselect-error.message=镜像自动选择错误:\n\
-	{0}\n\
-	指定一个镜像可能有效.
 plugin-manager.list-download.need-password.title=HTTP 代理需要密码
 plugin-manager.list-download.need-password.message=HTTP 代理需要密码.\n\
 	请在“下载选项”配置有效的用户名/密码.
@@ -1994,7 +1990,7 @@ install-plugins.info=<b>作者</b>: {0}\n\
 
 update-plugins.title=更新
 
-plugin-manager.progress=正在从 {1}下载 {0} 
+plugin-manager.progress=正在从 {1}下载 {0}
 plugin-manager.progress.title=正在安装插件
 plugin-manager.progress.stop=停止
 #}}}
