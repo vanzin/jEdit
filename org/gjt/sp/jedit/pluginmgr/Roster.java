@@ -454,7 +454,7 @@ class Roster
 					int responseCode = httpConn.getResponseCode();
 					String locationHeader = httpConn.getHeaderField("Location");
 					if ((responseCode >= 300) && (responseCode < 400) && (locationHeader != null))
-						finalUrl = locationHeader;
+						finalUrl = locationHeader.replaceFirst("^https:", "http:");
 					else
 						finalUrlFound = true;
 				}
