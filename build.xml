@@ -197,6 +197,8 @@
 		description="clean up lib.dir, build.dir and dist.dir completely">
 		<delete includeemptydirs="true"
 			failonerror="false">
+			<fileset dir="${user.home}/.ivy2/cache"
+                 defaultexcludes="false"/>
 			<fileset dir="${lib.dir}"
 				 defaultexcludes="false"/>
 			<fileset dir="${build.dir}"
