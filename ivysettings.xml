@@ -30,7 +30,7 @@
 
 	<resolvers>
 		<url name="jedit-plugins">
-			<artifact pattern="jar:http://downloads.sourceforge.net/project/jedit-plugins/[artifact]/[revision]/[artifact]-[revision]-bin.zip!/[artifact].jar" />
+			@jedit.plugins.artifact.patterns@
 		</url>
 	</resolvers>
 	<modules>

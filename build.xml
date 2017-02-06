@@ -108,13 +108,40 @@
 	<target name="init-ivy"
 		depends="init,download-ivy"
 		unless="ivy.done">
+		<script language="javascript">
+			<![CDATA[
+				var dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+				var document = dbf.newDocumentBuilder().parse('http://plugins.jedit.org/export/mirror_list.php')
+				var xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath()
+				var mirrors = xpath.evaluate('/MIRRORS/MIRROR/@ID', document, javax.xml.xpath.XPathConstants.NODESET)
+				var artifactPatterns = ''
+				for (i = 0; i < mirrors.getLength(); i++) {
+					artifactPatterns += '<artifact pattern="jar:http://'
+							    + mirrors.item(i).getTextContent()
+							    + '.dl.sourceforge.net/project/jedit-plugins/[artifact]/[revision]/[artifact]-[revision]-bin.zip!/[artifact].jar" />\n'
+				}
+				project.setUserProperty('jedit.plugins.artifact.patterns', artifactPatterns)
+			]]>
+		</script>
+
+		<copy todir="${build.dir}"
+		      encoding="UTF-8"
+		      overwrite="true">
+			<fileset file="ivysettings.xml"/>
+			<filterset>
+				<filter token="jedit.plugins.artifact.patterns"
+					value="${jedit.plugins.artifact.patterns}"/>
+			</filterset>
+		</copy>
+
 		<property name="ivy.retrieve.pattern"
 			  value="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"/>
 		<taskdef resource="org/apache/ivy/ant/antlib.xml"
 			 classpath="${ivy.jar.file}"
 			 loaderref="ivy.loader"
 			 uri="antlib:org.apache.ivy.ant"/>
-		<ivy:settings file="ivysettings.xml"/>
+		<ivy:settings file="${build.dir}/ivysettings.xml"/>
 	</target>
 
 	<target name="retrieve"
