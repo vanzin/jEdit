@@ -236,7 +236,7 @@
 	</target>
 
 	<target name="clean-jenkins"
-		depends="clean-all"
+		depends="init,clean-all"
 		description="clean-all, also clean up ivy cache">
 		<delete includeemptydirs="true"
 			failonerror="false">
