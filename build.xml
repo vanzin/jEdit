@@ -192,13 +192,12 @@
 		</delete>
 	</target>
 
+
 	<target name="clean-all"
 		depends="init"
 		description="clean up lib.dir, build.dir and dist.dir completely">
 		<delete includeemptydirs="true"
 			failonerror="false">
-			<fileset dir="${user.home}/.ivy2/cache"
-                 defaultexcludes="false"/>
 			<fileset dir="${lib.dir}"
 				 defaultexcludes="false"/>
 			<fileset dir="${build.dir}"
@@ -208,6 +207,14 @@
 			<fileset dir="${textAreaPackage}/build"
 				 defaultexcludes="false"/>
 		</delete>
+	</target>
+
+	<target name="clean-jenkins"
+            depends="clean-all"
+	        description="clean-all, also clear ivy cache.">
+		<delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${user.home}/.ivy2/cache" defaultexcludes="false"/>
+        </delete>
 	</target>
 
 	<target name="compile"
