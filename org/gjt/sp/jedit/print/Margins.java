@@ -24,9 +24,6 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
     // need serial version since this is serialized
     private static final long serialVersionUID = 5343792322705104289L;
 
-    /**
-     * @param units One of INCH or MM.
-     */
     public Margins( float top, float left, float right, float bottom )
     {
         if ( top < 0.0 || left < 0.0 || right < 0.0 || bottom < 0.0 )

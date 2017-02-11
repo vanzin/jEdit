@@ -393,7 +393,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
     /**
-     * @returns One of ALL, RANGE, CURRENT, or SELECTION, depending on whether the
+     * @return one of ALL, RANGE, CURRENT, or SELECTION, depending on whether the
      * user has elected to print all pages, a range of pages, just the current page
      * or just the selected text.
      */
