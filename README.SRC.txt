@@ -9,7 +9,7 @@ General jEdit documentation can be found in the 'doc' directory.
  For all tasks:
 
   - Apache Ant. Get it from <http://ant.apache.org>.
-    1.8.2 or newer has to be used.
+    1.9.0 or newer has to be used.
   - The Ant Optional package. This is included in the download from ants website,
     as well as the AntPlugin from the Plugin Manager,
     but not in some default installs on various *nix systems.
@@ -19,9 +19,9 @@ General jEdit documentation can be found in the 'doc' directory.
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
 
-  - A Java compiler of at least version 1.8, such as Oracle's javac
-    which is included in the JDK. Get it from <http://www.java.com/download> or
-    from your package manager - e. g. openjdk-8-jdk.
+  - A Java compiler of version 1.8, such as Oracle's javac which is
+    included in the JDK. Get it from <http://www.java.com/download>
+    or from your package manager - e. g. openjdk-8-jdk.
 
  For building the API documentation:
 
