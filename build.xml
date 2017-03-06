@@ -117,18 +117,22 @@
 		unless="ivy.done">
 		<script language="javascript">
 			<![CDATA[
-				var dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance()
-				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-				var document = dbf.newDocumentBuilder().parse('http://plugins.jedit.org/export/mirror_list.php')
-				var xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath()
-				var mirrors = xpath.evaluate('/MIRRORS/MIRROR/@ID', document, javax.xml.xpath.XPathConstants.NODESET)
-				var artifactPatterns = ''
-				for (i = 0; i < mirrors.getLength(); i++) {
-					artifactPatterns += '<artifact pattern="jar:http://'
-							    + mirrors.item(i).getTextContent()
-							    + '.dl.sourceforge.net/project/jedit-plugins/[artifact]/[revision]/[artifact]-[revision]-bin.zip!/[artifact].jar" />\n'
+				try {
+					var dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+					dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+					var document = dbf.newDocumentBuilder().parse('http://plugins.jedit.org/export/mirror_list.php')
+					var xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath()
+					var mirrors = xpath.evaluate('/MIRRORS/MIRROR/@ID', document, javax.xml.xpath.XPathConstants.NODESET)
+					var artifactPatterns = ''
+					for (i = 0; i < mirrors.getLength(); i++) {
+						artifactPatterns += '<artifact pattern="jar:http://'
+								    + mirrors.item(i).getTextContent()
+								    + '.dl.sourceforge.net/project/jedit-plugins/[artifact]/[revision]/[artifact]-[revision]-bin.zip!/[artifact].jar" />\n'
+					}
+					project.setUserProperty('jedit.plugins.artifact.patterns', artifactPatterns)
+				} catch(e) {
+					self.log('Error while retrieving mirror list, if plugins are not in Ivy cache, they will not be resolvable: ' + e, e, project.MSG_WARN)
 				}
-				project.setUserProperty('jedit.plugins.artifact.patterns', artifactPatterns)
 			]]>
 		</script>
 
