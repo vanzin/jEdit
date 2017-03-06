@@ -10,6 +10,10 @@ Adam S, Wim West and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Add NSSupportsAutomaticGraphicsSwitching to JarBundler so that jEdit does not
+  drain the battery unnecessarily on OS X.
+  (feature request #529 - Björn "Vampire" Kautler)
+
 - Bug 3857 fixed, related to resolving symlinks of buffers and checking for
   updated buffers (Patch # 589 - Wim West)
 

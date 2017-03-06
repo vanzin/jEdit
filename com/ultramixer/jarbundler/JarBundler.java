@@ -443,6 +443,13 @@ public class JarBundler extends MatchingTask {
 		bundleProperties.setNSHighResolutionCapable(b);
 	}
 
+	/**
+	 * Setter for the "NSSupportsAutomaticGraphicsSwitching" attribute (optional) Default "true".
+	 */
+	public void setSupportsAutomaticGraphicsSwitching(boolean b) {
+		bundleProperties.setNSSupportsAutomaticGraphicsSwitching(b);
+	}
+
 	/**  Adrien Quillet, v2.5.0
 	 * Setter for the "NSPreferencesContentSize" attribute (optional).
 	 */

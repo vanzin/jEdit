@@ -128,6 +128,8 @@ public class AppBundleProperties {
 	// HiRes capability, optional
     private boolean mNSHighResolutionCapable;
 
+	private boolean mNSSupportsAutomaticGraphicsSwitching = true;
+
 
     //New since 08/05/2015 Tobias Bley / UltraMixer
 	/**
@@ -322,6 +324,14 @@ public class AppBundleProperties {
 
 	public boolean getNSHighResolutionCapable() {
 		return mNSHighResolutionCapable;
+	}
+
+	public void setNSSupportsAutomaticGraphicsSwitching(boolean b) {
+		mNSSupportsAutomaticGraphicsSwitching = b;
+	}
+
+	public boolean getNSSupportsAutomaticGraphicsSwitching() {
+		return mNSSupportsAutomaticGraphicsSwitching;
 	}
 
 	public void setNSPreferencesContentSize(String s) {
