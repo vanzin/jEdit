@@ -6,7 +6,8 @@ jEdit 5.4 version history
 
 Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
 Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
-Adam S, Wim West and Dale Anson for contributing to this release.
+Adam S, Jean-Francois LARVOIRE, Wim West and Dale Anson for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -135,6 +136,8 @@ Adam S, Wim West and Dale Anson for contributing to this release.
 
 }}}
 {{{ Editing
+
+- Batch mode updates (Patch #594 - Jean-Francois LARVOIRE)
 
 - Unicode brackets (Patch #566 - Makarius)
 
