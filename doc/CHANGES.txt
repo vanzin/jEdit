@@ -7,19 +7,26 @@ jEdit 5.5 version history
 Thanks to AdamS, Egor Abramovich and ... for contributing to this release.
 
 {{{ Bug Fixes
+
+
 }}}
 {{{ UI Improvements
+
+
 }}}
 {{{ Miscellaneous
+
+
 }}}
 {{{ API Changes
+
+
 }}}
 {{{ Editing
 
-  Patch #593 - Various small patches to modes (AdamS)
+- Patch #593 - Various small patches to modes (AdamS)
 
-  Patch #592 - for groovy mode (Egor Abramovich)
-
+- Patch #592 - for groovy mode (Egor Abramovich)
 
 }}}
 
