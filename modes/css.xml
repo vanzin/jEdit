@@ -197,6 +197,7 @@
 			<KEYWORD2>direction</KEYWORD2>
 			<KEYWORD2>display</KEYWORD2>
 			<KEYWORD2>empty-cells</KEYWORD2>
+			<KEYWORD2>fill</KEYWORD2>
 			<KEYWORD2>flex</KEYWORD2>
 			<KEYWORD2>flex-basis</KEYWORD2>
 			<KEYWORD2>flex-direction</KEYWORD2>
@@ -325,7 +326,7 @@
 
 		<!-- Delegate back: -->
 		<SEQ TYPE="OPERATOR" DELEGATE="PROPERTIES">;</SEQ>
-		<SEQ TYPE="INVALID" DELEGATE="MAIN">}</SEQ> <!-- end properties block, but it's invalid -->
+		<SEQ TYPE="OPERATOR" DELEGATE="MAIN">}</SEQ>
 
 		<IMPORT DELEGATE="GLOBAL" />
 

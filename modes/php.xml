@@ -53,8 +53,8 @@ TODO:
 		<!-- Auto indent -->
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
-		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="([" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")]" />
 		<PROPERTY NAME="indentNextLine"
 			VALUE="\s*(((if|while|else\s*(if)?|for(each)?|switch|declare)\s*\(.*\)[^{:;]*)|(do\s*[^\({:;]*))" />
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" /><!-- @deprecated since 4.3pre2 -->

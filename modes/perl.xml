@@ -503,7 +503,9 @@
 
 			<!-- Keywords related to the control flow of your perl program -->
 			<KEYWORD1>caller</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
 			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>croak</KEYWORD1>
 			<KEYWORD1>die</KEYWORD1>
 			<KEYWORD1>do</KEYWORD1>
 			<KEYWORD1>dump</KEYWORD1>
@@ -514,6 +516,7 @@
 			<KEYWORD1>next</KEYWORD1>
 			<KEYWORD1>redo</KEYWORD1>
 			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
 			<KEYWORD1>wantarray</KEYWORD1>
 
 			<!-- Keywords related to switch -->
