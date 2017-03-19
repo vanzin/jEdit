@@ -1,161 +1,22 @@
-jEdit 5.4 version history
-       (changes since jEdit 5.3.0)
+jEdit 5.5 version history
+       (changes since jEdit 5.4.0)
 :encoding=UTF-8:
 
-{{{ Version 5.4.0
+{{{ Version 5.5pre1
 
-Thanks to Björn "Vampire" Kautler, Eric Le Lay, Jesse Pavel, Wayne Zhang,
-Makarius, A Vontobel, Marc Häfner, Jordan Miner, Jack J. Woehr, Alan Ezust,
-Adam S, Jean-Francois Larvoire, Wim West and Dale Anson for contributing to this
-release.
+Thanks to AdamS and ... for contributing to this release.
 
 {{{ Bug Fixes
-
-- Add NSSupportsAutomaticGraphicsSwitching to JarBundler so that jEdit does not
-  drain the battery unnecessarily on OS X.
-  (feature request #529 - Björn "Vampire" Kautler)
-
-- Bug 3857 fixed, related to resolving symlinks of buffers and checking for
-  updated buffers (Patch # 589 - Wim West)
-
-- Fix bug #2732 - syntax highlighting broken if non-visible lines change
-  (Patch #580 - Marc Häfner)
-
-- Fix bug #3659 - Macro Keywords_to_Upper_Case fails to find class
-  (Patch #582 - Marc Häfner)
-
-- Fix bug #3949 - Macro Display_Shortcuts show no/wrong results
-  (Patch #581 - Marc Häfner)
-
-- Fix bug #3944: Select All checkbox initially disabled. (Alan Ezust)
-
-- Fix bug #3983: filename completion prefered longest filename when no
-  match with exact length was found. Prefer the first one (Eric Le Lay)
-
-- Fix bug #3913: beanshell do-while loop bug (Patch #572 Jesse Pavel)
-
-- Fix Java_File_Save macro: accept text after class name (Eric Le Lay)
-
-- Fix bug #3936, better choice for text area corner colors (Dale Anson)
-
-- Fix bug #3717, gutter lines not aligning with text area lines (Dale Anson)
-
-- Fix bug #3937, issue with non-capturing groups in regex search and replace
-  (Dale Anson)
-
-- Fix bug #3924, changes to mode files are not detected when ~/.jedit/modes
-  is a symlink. (Dale Anson)
-
-- Fix bug #3920, cannot change alpha value of a color in the syntax highlighting
-  settings. (Dale Anson)
-
-- Fix bug #3943, issues with move lines up and down macros. (Dale Anson)
-
-- Fix bug #3923, documentation bug about where auto-saved files are saved.
-  (Dale Anson)
-
-- Fix bug #3916, null pointer exception in ChunkCache. (Dale Anson)
-
-- Add missing source and target version to compile-installer task to not
-  accidentally get an installer that needs a newer Java version than jEdit
-  itself does. (Björn "Vampire" Kautler)
-
-- Use new version of JarBundler that also sets LSApplicationCategoryType and
-  NSHighResolutionCapable. (Björn "Vampire" Kautler)
-
-- Set default colors for foreground and background in syntax highlighting
-  style editor. (Dale Anson)
-
-- Fix plugin bug #1853 XML plugin crashes on JDK9. Don't pre-connect
-  the returned URLConnection in jeditresource: protocol handler (Eric Le Lay)
-
-- Fix bug #3994, ConcurrentModificationException in ProperyManager. (Dale Anson)
-
-- Fix bug #4002, too short horizontal scrollbar after view resize. (Dale Anson)
-
-- Fix bug #3773, InvocationTargetException with negative printing tab width.
-  (Dale Anson)
-
-- Fix bug # 2844, printing range bug. (Dale Anson)
-
-- Delete a user mode from the catalog even if the mode file is missing
-  (Eric Le Lay)
-
-- Plugin Manager: fix missing newline between released and description for
-  plugins without dependencies. Add extra newline for clarity. (Eric Le Lay)
-
-- Fix bug # 3998, Next Char macro doesn't work. (Dale Anson)
-
 }}}
 {{{ UI Improvements
-
-- Feature Request #520 Environment variables in Find dialog Directory
-  (Alan Ezust)
-
-- UI clean up, button spacing, borders, etc. (Dale Anson)
-
-- Implemented feature request #493, ask for confirmation before closing all
-  buffers. (Dale Anson)
-
-- Refactor editing option pane into several tabs, allow user editing of modes
-  lists, similar to editing the encoding options lists. This also fixes
-  feature request #515. (Dale Anson)
-
-- Updated NumericTextField to allow decimal numbers and only allow negative sign
-  at the start of a number. (Dale Anson)
-
 }}}
 {{{ Miscellaneous
-
-- Updated printing system with jEdit specific printer dialog, accurate page
-  range printing, current page printing, printing of selected text only, ability
-  to show page breaks in the text area. (Dale Anson)
-
-- The plugin manager now uses a different URL scheme where the mirror is a URL
-  parameter and not part of the hostname anymore and follows URL redirection
-  properly. This way a file can always be downloaded as we get redirected to a
-  mirror that has the requested file available. Now dead mirrors do not cause
-  the download to fail anymore due to unknown hostname and files that are only
-  available on few mirrors (seldom downloaded files are only available on one
-  mirror sometimes) also work properly. The selected mirror is just the
-  preferred one that is used if the file is available there, just as the label
-  always suggested anyway. (Björn "Vampire" Kautler)
-
 }}}
 {{{ API Changes
-
-- jEdit now requires/can make use of Java 1.8 language / libraries.
-
-- new org.gjt.sp.utils.GenericGUIUtilities class, containing bits of
-  org.gjt.sp.jedit.GUIUtilities suitable for the standalone TextArea
-  package; all methods kept but deprecated and proxies (Eric Le Lay).
-
-- refactor Help table of contents loading code to a separate class
-  (HelpTOCLoader). Make relevant members public, so the help TOC
-  is accessible to other code, e.g. the HelpServer plugin (Eric Le Lay).
-
 }}}
 {{{ Editing
 
-- Batch mode updates (Patch #594 - Jean-Francois Larvoire)
-
-- Unicode brackets (Patch #566 - Makarius)
-
-- Updates for objectrexx mode (Patch #585 - Jack J. Woehr)
-
-- Mode for m4 macro processor language (Patch #586 - Jack J. Woehr)
-
-- Drawj2d edit mode (Patch #573 - A. Vontobel)
-
-- Rust edit mode raw string fix (Patch #575 - Jordan Miner)
-
-- Mode for Mavscript 2.0 (Patch #574 - A. Vontobel)
-
-- New mode for swift (Patch #587 - Wayne Zhang)
-
-- New mode for Java 9 module-info.java files (Dale Anson)
-
-- Updated CSS mode provided by AdamS (Ticket #4003 - Dale Anson)
+  Patch #593 - Various small patches to modes (AdamS)
 
 }}}
 
