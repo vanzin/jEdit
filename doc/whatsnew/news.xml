@@ -3,32 +3,23 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
 
-    <title> What's new in jEdit 5.4 </title>
+    <title> What's new in jEdit 5.5 </title>
     <articleinfo>
         <date> 2017 </date>
     </articleinfo>
 
 
     <para> This is a time-based release, scheduled to come out about 1 year after
-    jEdit 5.3, and is a collection of enhancements, bug fixes and patches
+    jEdit 5.4, and is a collection of enhancements, bug fixes and patches
     submitted by the community. Detailed changes can be found in the <ulink
     url="../CHANGES.txt">Detailed Change Log</ulink>.
     </para>
 
     <para> Some notable new things in this version are: </para>
-    <itemizedlist>
-    <listitem><para> Use of Java 1.8 </para></listitem>
-    <listitem><para> Use of a new XML format for Plugin Manager,
-      and proper following of redirects, resulting in a much improved 
-      plugin install experience.
-      </para></listitem>
-    <listitem><para> New Printing code updated for current versions
-      of Java </para></listitem>
-    </itemizedlist>
 
     <para> With continued support from the community, we will keep releasing a newer
     version each year that can accurately bring together the fruits of everyone's labor.
-    Thank you to each and every one of the contributors who helped make 5.4 the best
+    Thank you to each and every one of the contributors who helped make 5.5 the best
     version of jEdit ever.
     </para>
 
