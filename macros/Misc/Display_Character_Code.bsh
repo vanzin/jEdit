@@ -19,9 +19,12 @@ void displayCharacterCode(View view)
 	{
 		char c = buffer.getText(caret,1).charAt(0);
 		StringBuffer buf = new StringBuffer();
-		buf.append(CharacterAtCaretLabel + " ");
-		buf.append("int=").append((int)c).append(", ");
-		buf.append("hex=").append(Integer.toString((int)c,16));
+		buf.append(CharacterAtCaretLabel + "  ");
+		//buf.append("int=").append((int)c).append(", ");
+		buf.append("hex=").append(Integer.toString((int)c,16)).append(",  ");
+		buf.append("dec=").append(Integer.toString((int)c,10)).append(",  ");
+		buf.append("oct=").append(Integer.toString((int)c,8)).append(",  ");
+		buf.append("bin=").append(Integer.toString((int)c,2));
 		view.getStatus().setMessageAndClear(buf.toString());
 	}
 	else
