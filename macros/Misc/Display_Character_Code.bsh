@@ -28,7 +28,7 @@ void displayCharacterCode(View view)
 		view.getStatus().setMessageAndClear(buf.toString());
 	}
 	else
-		Toolkit.getDefaultToolkit().beep();
+	    javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 }
 
 displayCharacterCode(view);
