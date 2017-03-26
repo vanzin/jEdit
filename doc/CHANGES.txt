@@ -4,10 +4,11 @@ jEdit 5.5 version history
 
 {{{ Version 5.5pre1
 
-Thanks to AdamS, Egor Abramovich and ... for contributing to this release.
+Thanks to AdamS, Wim West, Egor Abramovich and ... for contributing to this release.
 
 {{{ Bug Fixes
 
+- command line behavior for +line fixed (Patch #590 - Wim West)
 
 }}}
 {{{ UI Improvements
