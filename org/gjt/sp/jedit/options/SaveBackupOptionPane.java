@@ -49,9 +49,9 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	@Override
 	protected void _init()
 	{
-		
+
 		/* Save-As Uses FSB */
-		
+
 		saveAsUsesFSB = new JCheckBox(jEdit.getProperty(
 			"options.save-back.saveAsUsesFSB"));
 		saveAsUsesFSB.setSelected(jEdit.getBooleanProperty(
@@ -59,14 +59,14 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		saveAsUsesFSB.setToolTipText(jEdit.getProperty(
 			"options.save-back.saveAsUsesFSB.tooltip"));
 		addComponent(saveAsUsesFSB);
-		
+
 		/* Two-stage save */
 		twoStageSave = new JCheckBox(jEdit.getProperty(
 			"options.save-back.twoStageSave"));
 		twoStageSave.setSelected(jEdit.getBooleanProperty(
 			"twoStageSave"));
 		twoStageSave.setToolTipText(jEdit.getProperty(
-			
+
 			"options.save-back.twoStageSave.tooltip"));
 		addComponent(twoStageSave);
 
@@ -84,16 +84,10 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Autosave untitled buffers */
 		autosaveUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
+
 		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
 		addComponent(autosaveUntitled);
-
-		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
-			"options.save-back.suppressNotSavedConfirmUntitled"));
-		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty(
-			"options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
-		suppressNotSavedConfirmUntitled.setSelected(
-			jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
-		addComponent(suppressNotSavedConfirmUntitled);
 
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
@@ -155,8 +149,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		boolean newAutosave = autosaveUntitled.isSelected();
 		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
 		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
-		jEdit.setBooleanProperty("suppressNotSavedConfirmUntitled",
-				suppressNotSavedConfirmUntitled.isSelected());
 		jEdit.setBooleanProperty("useMD5forDirtyCalculation",
 				useMD5forDirtyCalculation.isSelected());
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
@@ -178,7 +170,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
-	private JCheckBox suppressNotSavedConfirmUntitled;
 	private JCheckBox useMD5forDirtyCalculation;
 	private JTextField backups;
 	private JTextField backupDirectory;

@@ -122,6 +122,11 @@
             <filename>/home/user/project/program.c</filename> will be autosaved to
             <filename>/home/user/project/#program.c#</filename>.</para>
 
+            <para>In the case of Untitled buffers, if the Saving and Backup option
+            <emphasis role="bold">Autosave Untitled Buffers</emphasis> is enabled,
+            autosaves of those will be stored in the <literal>autosave</literal> directory
+            under the jEdit user settings directory. </para>
+
             <para>Saving a buffer using one of the commands in the previous
             section automatically deletes the autosave file, so they will only
             ever be visible in the unlikely event of a jEdit (or operating

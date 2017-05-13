@@ -373,12 +373,12 @@ public class Buffer extends JEditBuffer
 	public boolean saveAs(View view, boolean rename)
 	{
 		String fileSavePath = path;
-		if (jEdit.getBooleanProperty("saveAsUsesFSB")) 
+		if (jEdit.getBooleanProperty("saveAsUsesFSB"))
 		{
 			DockableWindowManager dwm = view.getDockableWindowManager();
 			Component comp = dwm.getDockable("vfs.browser");
 			VFSBrowser browser = (VFSBrowser) comp;
-			if (browser != null) 
+			if (browser != null)
 				fileSavePath = browser.getDirectory() + "/";
 		}
 		String[] files = GUIUtilities.showVFSFileDialog(view, fileSavePath, VFSBrowser.SAVE_DIALOG,false);
@@ -444,7 +444,7 @@ public class Buffer extends JEditBuffer
 			GUIUtilities.error(view,"buffer-multiple-io",null);
 			return false;
 		}
-		
+
 		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
 
 		if(path == null && getFlag(NEW_FILE))
@@ -914,8 +914,6 @@ public class Buffer extends JEditBuffer
 	public void setDirty(boolean d)
 	{
 		boolean old_d = isDirty();
-		if (isUntitled() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
-			d = false;
 		if (d && getLength() == initialLength)
 		{
 			// for untitled, do not check if the content existed before
@@ -1061,7 +1059,7 @@ public class Buffer extends JEditBuffer
 		setProperty("wrap",wrap);
 		propertiesChanged();
 	} //}}}
-	
+
 	//{{{ toggleAutoIndent() method
 	/**
 	 * Toggles automatic indentation on and off.
@@ -1078,12 +1076,12 @@ public class Buffer extends JEditBuffer
 		else if (indent.equals("full"))
 			indent = "none";
 		setProperty("autoIndent", indent);
-		
+
 		view.getStatus().setMessageAndClear(
 			jEdit.getProperty("view.status.autoindent-changed",
 				new String[] {indent}));
 	}
-			
+
 
 	//{{{ toggleLineSeparator() method
 	/**
@@ -1153,7 +1151,7 @@ public class Buffer extends JEditBuffer
 	//}}}
 
 	//}}}
-	
+
 	//{{{ Edit modes, syntax highlighting
 
 	//{{{ setMode() method
@@ -1183,12 +1181,12 @@ public class Buffer extends JEditBuffer
 				mode.loadIfNecessary();
 				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
 				String largeFileMode = jEdit.getProperty("largefilemode", "ask");
-				
+
 				if ("ask".equals(largeFileMode))
 				{
 					if (!contextInsensitive)
 					{
-						// the context is not insensitive 
+						// the context is not insensitive
 						JTextPane tp = new JTextPane();
 						tp.setEditable(false);
 						tp.setText(jEdit.getProperty("largeBufferDialog.message"));

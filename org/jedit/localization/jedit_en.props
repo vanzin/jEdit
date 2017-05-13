@@ -1694,6 +1694,7 @@ options.save-back.twoStageSave=Two-stage save (safer but resets file permissions
 options.save-back.twoStageSave.tooltip=Stage 1: Create a temporary file and save to it. Stage 2: Rename the temporary file to the real name.
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
+options.save-back.autosaveUntitled.tooltip=Untitled buffers are saved and restored across jEdit sessions.
 options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers dirty.
 options.save-back.suppressNotSavedConfirmUntitled.tooltip=Checking this means untitled buffers get wiped out whenever a new one is created (it's a feature!)
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
