@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.*;
-import javax.swing.SwingWorker.StateValue;
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -43,7 +42,6 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
-import org.gjt.sp.jedit.bufferio.IoTask;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
@@ -197,7 +195,10 @@ public class Buffer extends JEditBuffer
 
 		final boolean loadAutosave;
 
-		if(reload || !getFlag(NEW_FILE))
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
+		// for untitled: re-read autosave file if enabled
+		if(reload || !getFlag(NEW_FILE) || (isUntitled() && autosaveUntitled))
 		{
 			if(file != null)
 				modTime = file.lastModified();
@@ -643,7 +644,8 @@ public class Buffer extends JEditBuffer
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
 		// - only supported on local file system
-		if(!isPerformingIO() && file != null && !getFlag(NEW_FILE))
+		// - for untitled, do not check
+		if(!isPerformingIO() && file != null && !getFlag(NEW_FILE) && !isUntitled())
 		{
 			boolean newReadOnly = file.exists() && !file.canWrite();
 			if(newReadOnly != isFileReadOnly())
@@ -894,6 +896,16 @@ public class Buffer extends JEditBuffer
 		return getFlag(UNTITLED);
 	} //}}}
 
+	//{{{ setUntitled() method
+	/**
+	 *
+	 * @param untitled untitled value to set
+	 */
+	protected void setUntitled(boolean untitled)
+	{
+		setFlag(UNTITLED, untitled);
+	} //}}}
+
 	//{{{ setDirty() method
 	/**
 	 * Sets the 'dirty' (changed since last save) flag of this buffer.
@@ -906,7 +918,8 @@ public class Buffer extends JEditBuffer
 			d = false;
 		if (d && getLength() == initialLength)
 		{
-			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
+			// for untitled, do not check if the content existed before
+			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation") && !isUntitled())
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
@@ -1643,6 +1656,12 @@ public class Buffer extends JEditBuffer
 	//{{{ Buffer constructor
 	Buffer(String path, boolean newFile, boolean temp, Map props)
 	{
+		this(path, newFile, temp, props, false);
+	}
+
+	//{{{ Buffer constructor
+	Buffer(String path, boolean newFile, boolean temp, Map props, boolean untitled)
+	{
 		super(props);
 		textTokenMarker = jEdit.getMode("text").getTokenMarker();
 		markers = new Vector<Marker>();
@@ -1652,22 +1671,7 @@ public class Buffer extends JEditBuffer
 		// this must be called before any EditBus messages are sent
 		setPath(path);
 
-		/* Magic: UNTITLED is only set if newFile param to
-		 * constructor is set, NEW_FILE is also set if file
-		 * doesn't exist on disk.
-		 *
-		 * This is so that we can tell apart files created
-		 * with jEdit.newFile(), and those that just don't
-		 * exist on disk.
-		 *
-		 * Why do we need to tell the difference between the
-		 * two? jEdit.addBufferToList() checks if the only
-		 * opened buffer is an untitled buffer, and if so,
-		 * replaces it with the buffer to add. We don't want
-		 * this behavior to occur with files that don't
-		 * exist on disk; only untitled ones.
-		 */
-		setFlag(UNTITLED,newFile);
+		setFlag(UNTITLED,untitled);
 		setFlag(NEW_FILE,newFile);
 		setFlag(AUTORELOAD,jEdit.getBooleanProperty("autoReload"));
 		setFlag(AUTORELOAD_DIALOG,jEdit.getBooleanProperty("autoReloadDialog"));
@@ -1686,10 +1690,28 @@ public class Buffer extends JEditBuffer
 	//{{{ close() method
 	void close()
 	{
-		setFlag(CLOSED,true);
+		close(false);
+	}
 
-		if(autosaveFile != null)
+	//{{{ close() method
+	/**
+	 * close the buffer
+	 * @param doNotSave when true, we do not want to keep the autosave even for untitled
+	 *	e.g.: we closed the buffer by hand
+	 */
+	void close(boolean doNotSave)
+	{
+		setFlag(CLOSED,true);
+                boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
+		if(autosaveFile != null && (doNotSave || !(isUntitled() && autosaveUntitled)))
 			autosaveFile.delete();
+
+		// close az untitled buffer, but need to autosavesave
+		// except we close it manually and do not want to save
+		if ( !doNotSave && isUntitled() && autosaveUntitled ) {
+			autosave();
+		}
 
 		// notify clients with -wait
 		if(waitSocket != null)
@@ -1882,6 +1904,13 @@ public class Buffer extends JEditBuffer
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setFileReadOnly(true);
 		name = vfs.getFileName(path);
+		// clean up buffer name
+		// # is for autosave, e.g. reloading autosaved untitled, remove it from the buffer's name
+		if ( name.startsWith("#") )
+			name = name.substring(1, name.length());
+		if ( name.endsWith("#") )
+			name = name.substring(0, name.length()-1);
+
 		directory = vfs.getParentOfPath(path);
 
 		if(vfs instanceof FileVFS)
@@ -1915,9 +1944,22 @@ public class Buffer extends JEditBuffer
 		// this method might get called at startup
 		GUIUtilities.hideSplashScreen();
 
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
 		final Object[] args = { autosaveFile.getPath() };
-		int result = GUIUtilities.confirm(view,"autosave-found",args,
+
+		int result;
+		// if it was an untitled autosave, recover without question
+		if (isUntitled() && autosaveUntitled){
+			boolean untitledOrigi = isUntitled();
+			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath());
+			// preserve isUntitled (not the best solution)
+			setUntitled(untitledOrigi);
+			return true;
+		} else {
+			result = GUIUtilities.confirm(view,"autosave-found",args,
 			JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+		}
 
 		if(result == JOptionPane.YES_OPTION)
 		{

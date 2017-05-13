@@ -668,6 +668,28 @@ public class MiscUtilities
 		}
 	}// }}}
 
+	//{{{ prepareAutosaveDirectory method
+	/**
+	 * Prepares the directory to autosave the specified file.
+	 * If the path does not exists,
+	 * then the current directory is used, but only for local files.
+	 * The directory is created if not exists.
+	 * @param path path to the base dir
+	 * @return Backup directory. <code>null</code> is returned for
+	 * non-local files if no backup directory is specified in properties.
+	 * @since 5.0pre1
+	 */
+	public static File prepareAutosaveDirectory(String path)
+	{
+		String directory = MiscUtilities.constructPath(path, "autosave");
+		File dir = new File(directory);
+
+		if (!dir.exists())
+			dir.mkdirs();
+
+		return dir;
+	}// }}}
+
 	//{{{ prepareBackupDirectory method
 	/**
 	 * Prepares the directory to backup the specified file.
@@ -675,6 +697,7 @@ public class MiscUtilities
 	 * If there is no dedicated backup directory specified by props,
 	 * then the current directory is used, but only for local files.
 	 * The directory is created if not exists.
+	 * @param path path to the base dir
 	 * @return Backup directory. <code>null</code> is returned for
 	 * non-local files if no backup directory is specified in properties.
 	 * @since 5.0pre1

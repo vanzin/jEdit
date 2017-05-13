@@ -349,7 +349,9 @@ public class BufferSetManager
 		}
 		if (parent == null)
 		{
-			parent = System.getProperty("user.home");
+			// autosave files will be in a separated dir
+			String settingsDirectory = jEdit.getSettingsDirectory();
+			parent = MiscUtilities.prepareAutosaveDirectory(settingsDirectory).getPath();
 		}
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
@@ -358,7 +360,7 @@ public class BufferSetManager
 			parent = System.getProperty("user.home");
 		}
 		Buffer newEmptyBuffer = jEdit.openTemporary(view, parent,
-							    "Untitled-" + untitledCount,true, null);
+							    "Untitled-" + untitledCount,true, true);
 		jEdit.commitTemporary(newEmptyBuffer);
 		return newEmptyBuffer;
 	} //}}}

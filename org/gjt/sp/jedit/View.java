@@ -1467,6 +1467,7 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	boolean confirmToCloseDirty()
 	{
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 		Set<Buffer> checkingBuffers = getOpenBuffers();
 		for (View view: jEdit.getViews())
 		{
@@ -1478,7 +1479,7 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		for (Buffer buffer: checkingBuffers)
 		{
-			if (buffer.isDirty())
+			if (buffer.isDirty() && !(buffer.isUntitled() && autosaveUntitled))
 			{
 				return new CloseDialog(this, checkingBuffers).isOK();
 			}
@@ -1675,21 +1676,24 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		else
 		{
+			boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
 			// the component is an editPane
 			EditPane editPane = (EditPane) component;
 			splitConfig.append('"');
+			Buffer editPaneBuffer = editPane.getBuffer();
 			splitConfig.append(StandardUtilities.charsToEscapes(
-				editPane.getBuffer().getPath()));
+				editPaneBuffer.isUntitled()?editPaneBuffer.getAutosaveFile().getPath():editPaneBuffer.getPath()));
 			splitConfig.append("\" buffer");
 			BufferSet bufferSet = editPane.getBufferSet();
 			Buffer[] buffers = bufferSet.getAllBuffers();
 			for (Buffer buffer : buffers)
 			{
-				if (!buffer.isNewFile())
+				if (!buffer.isNewFile() || (buffer.isUntitled() && autosaveUntitled))
 				{
 					splitConfig.append(" \"");
 					splitConfig.append(StandardUtilities.charsToEscapes(
-						buffer.getPath()));
+						buffer.isUntitled()?buffer.getAutosaveFile().getPath():buffer.getPath() ));
 					splitConfig.append("\" buff");
 				}
 			}

@@ -1706,7 +1706,8 @@ public class jEdit
 					return buffer;
 				}
 
-				newBuffer = new Buffer(path,newFile,false,props);
+				// if it is new, then it is untitled
+				newBuffer = new Buffer(path,newFile,false,props,newFile);
 
 				if(!newBuffer.load(view,false))
 					return null;
@@ -1751,7 +1752,35 @@ public class jEdit
 	{
 		return openTemporary(view, parent, path, newFile, null);
 	}
+
+	//{{{ openTemporary() methods
 	/**
+	 * Opens a temporary buffer. A temporary buffer is like a normal
+	 * buffer, except that an event is not fired and the buffer is
+	 * not added to the buffers list.
+	 * <p>If a buffer for the given <code>path</code> was
+	 * already opened in jEdit, then this instance is returned.
+	 * Otherwise jEdit will not store a reference
+	 * to the returned Buffer object.
+	 * <p>This method is thread-safe.
+	 *
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param newFile True if the file should not be loaded from disk
+         * @param untitled is the buffer untitled
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
+	 * @since jEdit 3.2pre10
+	 */
+	public static Buffer openTemporary(View view, String parent,
+		String path, boolean newFile, boolean untitled)
+	{
+		return openTemporary(view, parent, path, newFile, null, untitled);
+	}
+
+        /**
 	 * Opens a temporary buffer.
 	 * Details: {@link #openTemporary(View, String, String, boolean)}
 	 *
@@ -1768,6 +1797,27 @@ public class jEdit
 	public static Buffer openTemporary(View view, String parent,
 		String path, boolean newFile, Hashtable<String, Object> props)
 	{
+            return openTemporary(view, parent, path, newFile, null, false);
+        }
+
+	/**
+	 * Opens a temporary buffer.
+	 * Details: {@link #openTemporary(View, String, String, boolean)}
+	 *
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param newFile True if the file should not be loaded from disk
+	 * @param props Buffer-local properties to set in the buffer
+         * @param untitled is the buffer untitled
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public static Buffer openTemporary(View view, String parent,
+		String path, boolean newFile, Hashtable<String, Object> props, boolean untitled)
+	{
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
 
@@ -1777,7 +1827,12 @@ public class jEdit
 				path = path.substring(5);
 		}
 
+		if ( untitled ) {
+			path = MiscUtilities.constructPath(
+				MiscUtilities.prepareAutosaveDirectory(settingsDirectory).getPath(),path);
+		} else {
 		path = MiscUtilities.constructPath(parent,path);
+		}
 
 		if(props == null)
 			props = new Hashtable<String, Object>();
@@ -1789,7 +1844,7 @@ public class jEdit
 			if(buffer != null)
 				return buffer;
 
-			buffer = new Buffer(path,newFile,true,props);
+			buffer = new Buffer(path,newFile,true,props,untitled);
 			buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT, true);
 			if(!buffer.load(view,false))
 				return null;
@@ -1863,6 +1918,7 @@ public class jEdit
 
 	/**
 	 * Creates a new `untitled' file.
+	 * Default directory is &lt;settings_dir&gt;/autosave
 	 *
 	 * @param editPane The editPane to create the file in
 	 *
@@ -1871,19 +1927,13 @@ public class jEdit
 	 */
 	public static Buffer newFile(EditPane editPane)
 	{
-		String path;
-
-		if(editPane != null && editPane.getBuffer() != null)
-		{
-			path = editPane.getBuffer().getDirectory();
+		File autosaveDir = MiscUtilities.prepareAutosaveDirectory(settingsDirectory);
+		String path = autosaveDir.getPath();
 			VFS vfs = VFSManager.getVFSForPath(path);
 			// don't want 'New File' to create a read only buffer
 			// if current file is on SQL VFS or something
 			if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 				path = System.getProperty("user.home");
-		}
-		else
-			path = null;
 
 		return newFile(editPane,path);
 	}
@@ -1960,6 +2010,7 @@ public class jEdit
 				return false;
 		}
 
+		boolean doNotSave = false;
 		if(buffer.isDirty())
 		{
 			Object[] args = { buffer.getName() };
@@ -1978,11 +2029,19 @@ public class jEdit
 					return false;
 				}
 			}
-			else if(result != JOptionPane.NO_OPTION)
+			else if(result != JOptionPane.NO_OPTION) {
+				// cancel
 				return false;
 		}
+			else if(result == JOptionPane.NO_OPTION) {
+				// when we close an untitled buffer, cos we do not want to save it by answering No,
+				// mark to delete the autosave file
+				doNotSave = true;
+			}
 
-		_closeBuffer(view,buffer);
+		}
+
+		_closeBuffer(view,buffer, doNotSave);
 
 		return true;
 	} //}}}
@@ -2053,6 +2112,22 @@ public class jEdit
 	 */
 	public static void _closeBuffer(View view, Buffer buffer)
 	{
+		_closeBuffer(view, buffer, true);
+	}
+
+	//{{{ _closeBuffer() method
+	/**
+	 * Closes the buffer, even if it has unsaved changes.
+	 * @param view The view, may be null
+	 * @param buffer The buffer
+	 * @param doNotSave we do not want to keep the autosave file
+	 *
+	 * @exception NullPointerException if the buffer is null
+	 *
+	 * @since jEdit 2.2pre1
+	 */
+	public static void _closeBuffer(View view, Buffer buffer, boolean doNotSave)
+	{
 		if(buffer.isClosed())
 		{
 			// can happen if the user presses C+w twice real
@@ -2095,7 +2170,7 @@ public class jEdit
 
 		removeBufferFromList(buffer);
 
-		buffer.close();
+		buffer.close(doNotSave);
 		DisplayManager.bufferClosed(buffer);
 		bufferSetManager.removeBuffer(buffer);
 		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
@@ -2131,10 +2206,12 @@ public class jEdit
 
 		boolean saveRecent = !(isExiting && jEdit.getBooleanProperty("restore"));
 
+                boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
-			if(buffer.isDirty())
+			if(buffer.isDirty() && !( buffer.isUntitled() && autosaveUntitled ) )
 			{
 				dirty = true;
 				break;
@@ -2166,7 +2243,7 @@ public class jEdit
 
 		while(buffer != null)
 		{
-			if(!buffer.isNewFile() && saveRecent)
+			if((!buffer.isNewFile() || (buffer.isUntitled() && autosaveUntitled)) && saveRecent)
 			{
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 				int caret = _caret == null ? 0 : _caret.intValue();
@@ -4631,6 +4708,24 @@ loop:
 			if (!view.confirmToCloseDirty())
 				return false;
 
+			if ( getBufferSetManager().getScope().equals(BufferSet.Scope.editpane)
+				|| getBufferSetManager().getScope().equals(BufferSet.Scope.view) ) {
+				// move the untitled buffers to the next open view's current editpane bufferset (first or last)
+				View targetView;
+				if ( view.equals(viewsFirst) ) {
+					targetView = viewsLast;
+				} else {
+					targetView = viewsFirst;
+				}
+				BufferSet bufferSet = targetView.getEditPane().getBufferSet();
+				for (Buffer buffer : view.getBuffers()) {
+					if ( buffer.isUntitled() ) {
+						bufferSet.addBuffer(buffer);
+					}
+				}
+					
+			}
+			
 			view.close();
 			view.dispose();
 			removeViewFromList(view);

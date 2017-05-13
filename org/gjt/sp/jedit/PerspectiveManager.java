@@ -23,12 +23,9 @@
 package org.gjt.sp.jedit;
 
 import java.io.Closeable;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Stack;
 
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -126,11 +123,12 @@ public class PerspectiveManager
 		if(jEdit.getBufferCount() == 0)
 			return;
 
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 		Buffer[] buffers = jEdit.getBuffers();
 		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
 		for (Buffer buffer: buffers)
 		{
-			if (!buffer.isNewFile())
+			if (!buffer.isNewFile() || (buffer.isUntitled() && autosaveUntitled))
 			{
 				savedBuffers.add(buffer);
 			}
@@ -155,12 +153,23 @@ public class PerspectiveManager
 
 			for (Buffer buffer: savedBuffers)
 			{
+				if ( buffer.isUntitled() && !autosaveUntitled ) {
+					// skip buffer if untitled, and we do not want to save it
+					continue;
+				}
 				out.write("<BUFFER AUTORELOAD=\"");
 				out.write(buffer.getAutoReload() ? "TRUE" : "FALSE");
 				out.write("\" AUTORELOAD_DIALOG=\"");
 				out.write(buffer.getAutoReloadDialog() ? "TRUE" : "FALSE");
+				out.write("\" UNTITLED=\"");
+				out.write(buffer.isUntitled()? "TRUE" : "FALSE");
 				out.write("\">");
-				out.write(XMLUtilities.charsToEntities(buffer.getPath(), false));
+
+				// for untitled, we only have the autosave file
+				out.write(XMLUtilities.charsToEntities(
+					buffer.isUntitled()?buffer.getAutosaveFile().getPath():buffer.getPath(),
+					false));
+
 				out.write("</BUFFER>");
 				out.write(lineSep);
 			}
@@ -263,7 +272,7 @@ public class PerspectiveManager
 		View.ViewConfig config;
 		boolean restoreFiles;
 		boolean restoreSplits;
-		String autoReload, autoReloadDialog;
+		String autoReload, autoReloadDialog, untitled;
 
 		PerspectiveHandler(boolean restoreFiles)
 		{
@@ -311,6 +320,8 @@ public class PerspectiveManager
 				autoReload = value;
 			else if(aname.equals("AUTORELOAD_DIALOG"))
 				autoReloadDialog = value;
+			else if(aname.equals("UNTITLED"))
+				untitled = value;
 		}
 
 		/**
@@ -335,7 +346,12 @@ public class PerspectiveManager
 			{
 				if (restoreFiles && !skipRemote(charData.toString()))
 				{
-					Buffer restored = jEdit.openTemporary(null,null, charData.toString(), false);
+					boolean bufferUntitled = false;
+					if(untitled != null) {
+						bufferUntitled = "TRUE".equals(untitled);
+					}
+
+					Buffer restored = jEdit.openTemporary(null,null, charData.toString(), bufferUntitled, null, bufferUntitled);
 					// if the autoReload attributes are not present, don't set anything
 					// it's sufficient to check whether they are present on the first BUFFER element
 					if (restored != null)
@@ -344,6 +360,8 @@ public class PerspectiveManager
 							restored.setAutoReload("TRUE".equals(autoReload));
 						if(autoReloadDialog != null)
 							restored.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+						if(untitled != null)
+							 restored.setUntitled(bufferUntitled);
 						jEdit.commitTemporary(restored);
 					}
 				}

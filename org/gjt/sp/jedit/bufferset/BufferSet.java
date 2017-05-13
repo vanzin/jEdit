@@ -90,18 +90,8 @@ public class BufferSet
 	{
 		Log.log(Log.DEBUG, this, hashCode() + " addBufferAt("+buffer+','+position+')');
 
-		Buffer untitledBuffer = null;
 		synchronized (buffers)
 		{
-			if (buffers.size() == 1)
-			{
-				Buffer buf = buffers.get(0);
-				if (buf.isUntitled() && !buf.isDirty())
-				{
-					untitledBuffer = buf;
-				}
-			}
-
 			if (sorter != null)
 			{
 				if (buffers.contains(buffer))
@@ -137,11 +127,6 @@ public class BufferSet
 			listener.bufferAdded(buffer, position);
 		}
 
-		// I don't like this reverse control
-		if (untitledBuffer != null)
-		{
-			jEdit.getBufferSetManager().removeBuffer(this, untitledBuffer);
-		}
 	} //}}}
 
 	//{{{ getBuffer() method
