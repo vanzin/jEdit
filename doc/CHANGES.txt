@@ -20,6 +20,8 @@ Hrotkó Gábor, and Alan Ezust for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Removed Saving and Backup option, "Never mark untitled buffers dirty"
+  because it has been replaced by "Autosave untitled buffers". (Alan Ezust)
 
 }}}
 {{{ API Changes
