@@ -89,6 +89,19 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
 		addComponent(autosaveUntitled);
 
+		/* AutoSave directory */
+		autosaveDirectory = new JTextField(jEdit.getProperty(
+			"autosave.directory"));
+		browseAutosaveDirectory = new JButton("...");
+		browseAutosaveDirectory.addActionListener(new MyActionListener());
+		JPanel aspanel = new JPanel(new BorderLayout());
+		aspanel.add(autosaveDirectory);
+		aspanel.add(browseAutosaveDirectory, BorderLayout.EAST);
+		addComponent(jEdit.getProperty("options.save-back.autosave.directory"),
+			aspanel);
+
+
+
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
 		useMD5forDirtyCalculation.setToolTipText(jEdit.getProperty(
@@ -107,7 +120,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Backup directory */
 		backupDirectory = new JTextField(jEdit.getProperty(
 			"backup.directory"));
-		JButton browseBackupDirectory = new JButton("...");
+		browseBackupDirectory = new JButton("...");
 		browseBackupDirectory.addActionListener(new MyActionListener());
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(backupDirectory);
@@ -140,6 +153,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("saveAsUsesFSB", saveAsUsesFSB.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
+		jEdit.setProperty("autosave.directory", autosaveDirectory.getText());
 		jEdit.setProperty("autosave", this.autosave.getText());
 		jEdit.setProperty("backups",backups.getText());
 		jEdit.setProperty("backup.directory",backupDirectory.getText());
@@ -170,9 +184,13 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
+	private JTextField autosaveDirectory;
+
+	private JButton browseAutosaveDirectory;
 	private JCheckBox useMD5forDirtyCalculation;
 	private JTextField backups;
 	private JTextField backupDirectory;
+	private JButton browseBackupDirectory;
 	private JTextField backupPrefix;
 	private JTextField backupSuffix;
 	private JCheckBox backupEverySave;
@@ -182,14 +200,18 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private class MyActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
-		{
+		{			
+			JTextField tf = (e.getSource() == browseBackupDirectory)?
+					backupDirectory : autosaveDirectory;
+			
 			String[] choosenFolder =
 				GUIUtilities.showVFSFileDialog(null,
-				   			       backupDirectory.getText(),
+				   			       tf.getText(),
 				   			       VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 				   			       false);
-			if (choosenFolder != null)
-				backupDirectory.setText(choosenFolder[0]);
+			if (choosenFolder != null) 
+				tf.setText(choosenFolder[0]);
+			
 		}
 	} //}}}
 

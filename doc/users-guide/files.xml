@@ -122,6 +122,12 @@
             <filename>/home/user/project/program.c</filename> will be autosaved to
             <filename>/home/user/project/#program.c#</filename>.</para>
 
+            <para> If you wish autosave files to be stored in an alternate
+            location, you can specify the <literal>Autosave Directory</literal>
+            as a Saving and Backup option. When editing virtual file systems,
+            this can improve performance and reduce unnecessary network
+            traffic. </para>
+
             <para>In the case of Untitled buffers, if the Saving and Backup option
             <emphasis role="bold">Autosave Untitled Buffers</emphasis> is enabled,
             autosaves of those will be stored in the <literal>autosave</literal> directory
