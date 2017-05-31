@@ -671,7 +671,7 @@ public class MiscUtilities
 	//{{{ prepareAutosaveDirectory method
 	/**
 	 * Prepares the directory to autosave the specified file.
-	 * If the backup directory is specified, it is used. Otherwise, 
+	 * If the backup directory is specified, it is used. Otherwise,
 	 * the current directory is used, but only for local files.
 	 * The directory is created if does not exist.
 	 * @param path VFS path to the Buffer
@@ -689,7 +689,7 @@ public class MiscUtilities
 	 * jedit property is used to determine the directory.
 	 * If there is no dedicated backup directory specified by props,
 	 * then the current directory is used, but only for local files.
-	 * The directory is created if it does not exist. 
+	 * The directory is created if it does not exist.
 	 * @param path path to the buffer
 	 * @return Backup directory. <code>null</code> is returned for
 	 * non-local files if no backup directory is specified in properties.
@@ -698,35 +698,37 @@ public class MiscUtilities
 	public static File prepareBackupDirectory(String path)
 	{
 		String backupDirectory = jEdit.getProperty("backup.directory");
+		backupDirectory = MiscUtilities.expandVariables(backupDirectory);
 		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
 		File file;
-		if (isLocal) {
+		if (isLocal)
 			file = new File(path);
-			
-		}
-		else {
+		else
 			file = new File(replaceNonPathChars(path, "_"));
-		}
-		if (!file.isDirectory()) file=file.getParentFile();
+		File dir = file;
+		if (!dir.isDirectory())
+			dir=dir.getParentFile();
+
 		// Check for backup.directory
 		if(backupDirectory == null || backupDirectory.length() == 0)
 		{
 			if (!isLocal)
 				return null;
-			else 				
-				return file;			
 		}
 		else
 		{
+			if (path.startsWith(backupDirectory))
+				return dir;
 			// Perhaps here we would want to guard with
 			// a property for parallel backups or not.
 			backupDirectory = MiscUtilities.concatPath(
-				backupDirectory, file.getAbsolutePath());
-			File dir = new File(backupDirectory);
+				backupDirectory, dir.getAbsolutePath());
+			dir = new File(backupDirectory);
 			if (!dir.exists())
 				dir.mkdirs();
-			return dir;
 		}
+		return dir;
+
 	} //}}}
 
 	//{{{ prepareBackupFile methods

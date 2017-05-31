@@ -1913,7 +1913,7 @@ public class Buffer extends JEditBuffer
 
 		if(vfs instanceof FileVFS)
 		{
-			file = new File(path);			
+			file = new File(path);
 			symlinkPath = MiscUtilities.resolveSymlinks(path);
 			// if we don't do this, the autosave file won't be
 			// deleted after a save as
@@ -1948,7 +1948,7 @@ public class Buffer extends JEditBuffer
 
 		int result;
 		// if it was an untitled autosave, recover without question
-		if (isUntitled() && autosaveUntitled){
+		if (isUntitled() && autosaveUntitled) {
 			boolean untitledOrigi = isUntitled();
 			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath());
 			// preserve isUntitled (not the best solution)
