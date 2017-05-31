@@ -123,7 +123,7 @@
             <filename>/home/user/project/#program.c#</filename>.</para>
 
             <para> If you wish autosave files to be stored in an alternate
-            location, you can specify the <literal>Autosave Directory</literal>
+            location, you can specify the <literal>Backup/Autosave Directory</literal>
             as a Saving and Backup option. When editing virtual file systems,
             this can improve performance and reduce unnecessary network
             traffic. </para>
@@ -177,7 +177,7 @@
                 </listitem>
 
                 <listitem>
-                    <para>If the <guilabel>Backup directory</guilabel> setting
+                    <para>If the <guilabel>Backup/Autosave directory</guilabel> setting
                     is non-empty, backups are saved in that location (with the
                     full path to the original file under it). Otherwise,
                     they are saved in the same directory as the original file.

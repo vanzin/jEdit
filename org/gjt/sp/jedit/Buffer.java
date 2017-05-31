@@ -1921,7 +1921,7 @@ public class Buffer extends JEditBuffer
 			if(autosaveFile != null)
 				autosaveFile.delete();
 			String dirName = file.getParent();
-			String autosaveDir = jEdit.getProperty("autosave.directory");
+			String autosaveDir = jEdit.getProperty("backup.directory");
 			if (autosaveDir != null && !autosaveDir.isEmpty()) {
 				dirName = MiscUtilities.concatPath(autosaveDir, file.getParent());
 				File asDir = new File(dirName);
