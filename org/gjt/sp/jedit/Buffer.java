@@ -1913,22 +1913,14 @@ public class Buffer extends JEditBuffer
 
 		if(vfs instanceof FileVFS)
 		{
-			
+			file = new File(path);			
 			symlinkPath = MiscUtilities.resolveSymlinks(path);
-			file = new File(symlinkPath);
 			// if we don't do this, the autosave file won't be
 			// deleted after a save as
 			if(autosaveFile != null)
 				autosaveFile.delete();
-			String dirName = file.getParent();
-			String autosaveDir = jEdit.getProperty("backup.directory");
-			if (autosaveDir != null && !autosaveDir.isEmpty()) {
-				dirName = MiscUtilities.concatPath(autosaveDir, dirName);
-				File asDir = new File(dirName);
-				if (!asDir.exists())
-					asDir.mkdirs();
-			}
-			autosaveFile = new File(dirName,'#' + name + '#');
+			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(symlinkPath);
+			autosaveFile = new File(autosaveDir,'#' + name + '#');
 		}
 		else
 		{

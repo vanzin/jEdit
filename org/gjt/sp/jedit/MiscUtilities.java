@@ -377,7 +377,7 @@ public class MiscUtilities
 	 */
 	public static String concatPath(String parent, String path)
 	{
-		parent = canonPath(parent);
+		parent = expandVariables(parent);
 		path = canonPath(path);
 
 		// Make all child paths relative.
@@ -671,23 +671,29 @@ public class MiscUtilities
 	//{{{ prepareAutosaveDirectory method
 	/**
 	 * Prepares the directory to autosave the specified file.
-	 * If the path does not exists,
-	 * then the current directory is used, but only for local files.
-	 * The directory is created if not exists.
-	 * @param path path to the base dir
-	 * @return Backup directory. <code>null</code> is returned for
-	 * non-local files if no backup directory is specified in properties.
+	 * If the backup directory is specified, it is used. Otherwise, 
+	 * the current directory is used, but only for local files.
+	 * The directory is created if does not exist.
+	 * @param path VFS path to the Buffer
+	 * @return Autosave directory. 
 	 * @since 5.0pre1
 	 */
 	public static File prepareAutosaveDirectory(String path)
 	{
-		String directory = MiscUtilities.constructPath(path, "autosave");
-		File dir = new File(directory);
-
-		if (!dir.exists())
-			dir.mkdirs();
-
-		return dir;
+		// By default, use the same directory as the buffer
+		File f = new File(path);
+		if (!f.isDirectory()) f = f.getParentFile();
+		
+		// unless the backup, autosave directory is specified:
+		String autosaveDir = jEdit.getProperty("backup.directory");
+		if (autosaveDir != null && !autosaveDir.isEmpty()) {
+			path = MiscUtilities.concatPath(autosaveDir, f.getAbsolutePath());
+			File asDir = new File(path);
+			if (!asDir.exists())
+				asDir.mkdirs();
+			f = asDir;
+		}		
+		return f;
 	}// }}}
 
 	//{{{ prepareBackupDirectory method
