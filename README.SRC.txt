@@ -1,5 +1,4 @@
 SOURCE CODE NOTES
-asdf
 
 This file only contains information about compiling from source.
 Scroll to the bottom if you are trying to use an IDE like Eclipse.

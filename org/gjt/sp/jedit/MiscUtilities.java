@@ -675,25 +675,12 @@ public class MiscUtilities
 	 * the current directory is used, but only for local files.
 	 * The directory is created if does not exist.
 	 * @param path VFS path to the Buffer
-	 * @return Autosave directory. 
+	 * @return Autosave directory, or null if no backup directory is specified and it is a non-local file.
 	 * @since 5.0pre1
 	 */
 	public static File prepareAutosaveDirectory(String path)
 	{
-		// By default, use the same directory as the buffer
-		File f = new File(path);
-		if (!f.isDirectory()) f = f.getParentFile();
-		
-		// unless the backup, autosave directory is specified:
-		String autosaveDir = jEdit.getProperty("backup.directory");
-		if (autosaveDir != null && !autosaveDir.isEmpty()) {
-			path = MiscUtilities.concatPath(autosaveDir, f.getAbsolutePath());
-			File asDir = new File(path);
-			if (!asDir.exists())
-				asDir.mkdirs();
-			f = asDir;
-		}		
-		return f;
+		return prepareBackupDirectory(path);
 	}// }}}
 
 	//{{{ prepareBackupDirectory method
@@ -702,8 +689,8 @@ public class MiscUtilities
 	 * jedit property is used to determine the directory.
 	 * If there is no dedicated backup directory specified by props,
 	 * then the current directory is used, but only for local files.
-	 * The directory is created if not exists.
-	 * @param path path to the base dir
+	 * The directory is created if it does not exist. 
+	 * @param path path to the buffer
 	 * @return Backup directory. <code>null</code> is returned for
 	 * non-local files if no backup directory is specified in properties.
 	 * @since 5.0pre1
@@ -711,42 +698,35 @@ public class MiscUtilities
 	public static File prepareBackupDirectory(String path)
 	{
 		String backupDirectory = jEdit.getProperty("backup.directory");
-		File dir;
 		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
 		File file;
-		if (isLocal)
+		if (isLocal) {
 			file = new File(path);
-		else
+			
+		}
+		else {
 			file = new File(replaceNonPathChars(path, "_"));
-
-		// Check for backup.directory, and create that
-		// directory if it doesn't exist
+		}
+		if (!file.isDirectory()) file=file.getParentFile();
+		// Check for backup.directory
 		if(backupDirectory == null || backupDirectory.length() == 0)
 		{
 			if (!isLocal)
 				return null;
-			else {
-				backupDirectory = file.getParent();
-				dir = new File(backupDirectory);
-			}
+			else 				
+				return file;			
 		}
 		else
 		{
-			backupDirectory = MiscUtilities.constructPath(
-				System.getProperty("user.home"), backupDirectory);
-
 			// Perhaps here we would want to guard with
 			// a property for parallel backups or not.
 			backupDirectory = MiscUtilities.concatPath(
-				backupDirectory,file.getParent());
-
-			dir = new File(backupDirectory);
-
+				backupDirectory, file.getAbsolutePath());
+			File dir = new File(backupDirectory);
 			if (!dir.exists())
 				dir.mkdirs();
+			return dir;
 		}
-
-		return dir;
 	} //}}}
 
 	//{{{ prepareBackupFile methods
