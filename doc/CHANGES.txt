@@ -23,7 +23,7 @@ Hrotkó Gábor, and Alan Ezust for contributing to this release.
 - Removed Saving and Backup option, "Never mark untitled buffers dirty"
   because it has been replaced by "Autosave untitled buffers". (Alan Ezust)
 
-- FR#506: Option to change global autosave directory (not backup) (Alan Ezust)
+- FR#506: Option to change global autosave directory. (Alan Ezust)
 
 }}}
 {{{ API Changes

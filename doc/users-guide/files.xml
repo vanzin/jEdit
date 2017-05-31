@@ -123,10 +123,11 @@
             <filename>/home/user/project/#program.c#</filename>.</para>
 
             <para> If you wish autosave files to be stored in an alternate
-            location, you can specify the <literal>Backup/Autosave Directory</literal>
-            as a Saving and Backup option. When editing virtual file systems,
-            this can improve performance and reduce unnecessary network
-            traffic. </para>
+            location, you can specify the
+            <guilabel>Backup/Autosave Directory</guilabel>
+            as a <guilabel>Saving and Backup</guilabel> option.
+            When editing virtual file systems, this can improve performance
+            and reduce unnecessary network traffic. </para>
 
             <para>In the case of Untitled buffers, if the Saving and Backup option
             <emphasis role="bold">Autosave Untitled Buffers</emphasis> is enabled,
