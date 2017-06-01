@@ -377,7 +377,7 @@ public class MiscUtilities
 	 */
 	public static String concatPath(String parent, String path)
 	{
-		parent = expandVariables(parent);
+		parent = canonPath(parent);
 		path = canonPath(path);
 
 		// Make all child paths relative.
@@ -686,7 +686,7 @@ public class MiscUtilities
 	//{{{ prepareBackupDirectory method
 	/**
 	 * Prepares the directory to backup the specified file.
-	 * jedit property is used to determine the directory.
+	 * A jEdit property is used to determine the directory.
 	 * If there is no dedicated backup directory specified by props,
 	 * then the current directory is used, but only for local files.
 	 * The directory is created if it does not exist.
@@ -697,8 +697,6 @@ public class MiscUtilities
 	 */
 	public static File prepareBackupDirectory(String path)
 	{
-		String backupDirectory = jEdit.getProperty("backup.directory");
-		backupDirectory = MiscUtilities.expandVariables(backupDirectory);
 		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
 		File file;
 		if (isLocal)
@@ -710,6 +708,7 @@ public class MiscUtilities
 			dir=dir.getParentFile();
 
 		// Check for backup.directory
+		String backupDirectory = jEdit.getProperty("backup.directory");
 		if(backupDirectory == null || backupDirectory.length() == 0)
 		{
 			if (!isLocal)
@@ -717,6 +716,7 @@ public class MiscUtilities
 		}
 		else
 		{
+			backupDirectory = MiscUtilities.expandVariables(backupDirectory);
 			if (path.startsWith(backupDirectory))
 				return dir;
 			// Perhaps here we would want to guard with
