@@ -93,6 +93,7 @@ class BufferPrintable1_7 implements Printable
 		font = jEdit.getFontProperty("print.font");
 		boolean color = Chromaticity.COLOR.equals(attributes.get(Chromaticity.class));
 		//Log.log(Log.DEBUG, this, "color is " + color);
+		//Log.log(Log.DEBUG, this, "chromaticity is " + attributes.get(Chromaticity.class));
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
 		styles[Token.NULL] = new SyntaxStyle(textColor, null, font);
