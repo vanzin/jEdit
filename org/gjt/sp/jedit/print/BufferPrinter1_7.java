@@ -280,11 +280,13 @@ public class BufferPrinter1_7
 		graphics.setClip(clipRegion);
 		try 
 		{
+			// calculate which lines belong to each page
 			HashMap<Integer, Range> pageLineRanges = printable.calculatePages( graphics, pageFormat );
 			PageRanges pr = (PageRanges)attributes.get(PageRanges.class);
 			if (pr == null) {
 				pr = new PageRanges( 1, 1000 );
 			}
+			// then keep only the pages the user has selected
 			HashMap<Integer, Range> newLineRanges = new HashMap<Integer, Range>();
 			for (Integer i : pageLineRanges.keySet())
 			{
@@ -293,8 +295,7 @@ public class BufferPrinter1_7
 					newLineRanges.put(i, pageLineRanges.get(i));	
 				}
 			}
-			//return newLineRanges;
-			return pageLineRanges;
+			return newLineRanges;
 		}
 		catch(Exception e) 
 		{
