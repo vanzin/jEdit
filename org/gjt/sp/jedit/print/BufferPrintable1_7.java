@@ -92,6 +92,7 @@ class BufferPrintable1_7 implements Printable
 		lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		font = jEdit.getFontProperty("print.font");
 		boolean color = Chromaticity.COLOR.equals(attributes.get(Chromaticity.class));
+		//Log.log(Log.DEBUG, this, "color is " + color);
 
 		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"), jEdit.getIntegerProperty("print.fontsize", 10), color);
 		styles[Token.NULL] = new SyntaxStyle(textColor, null, font);
@@ -198,6 +199,7 @@ class BufferPrintable1_7 implements Printable
 		
 		// go ahead and print the page
 		Range range = pages.get(pageIndex);
+		//Log.log(Log.DEBUG, this, "range = " + range);
 		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
 		{
 			//Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
@@ -345,7 +347,7 @@ class BufferPrintable1_7 implements Printable
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
 			
@@ -366,7 +368,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
 				pages.put(new Integer(pageCount), range);
-				Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
+				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				startLine = currentPhysicalLine;
 				y = 0.0;
@@ -387,6 +389,7 @@ class BufferPrintable1_7 implements Printable
 	private boolean inRange(int pageNumber)
 	{
 		PageRanges ranges = (PageRanges)attributes.get(PageRanges.class);
+		//Log.log(Log.DEBUG, this, "inRange, ranges = " + ranges);
 		boolean answer = false;
 		if (ranges == null)
 		{
@@ -396,6 +399,7 @@ class BufferPrintable1_7 implements Printable
 		{
 			answer = ranges.contains(pageNumber);	
 		}
+		//Log.log(Log.DEBUG, this, "inRange(" + pageNumber + ") returning " + answer);
 		return answer;
 	}
 	

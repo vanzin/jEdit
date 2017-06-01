@@ -1064,10 +1064,14 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             JPanel marginPanel = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
             marginPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), jEdit.getProperty( "print.dialog.Margins", "Margins" ) ), BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) ) );
             boolean unitIsMM = getUnits() == MediaPrintableArea.MM;
-            topMarginField = new NumericTextField( "", true, unitIsMM );
-            leftMarginField = new NumericTextField( "", true, unitIsMM );
-            rightMarginField = new NumericTextField( "", true, unitIsMM );
-            bottomMarginField = new NumericTextField( "", true, unitIsMM );
+            String topMargin = jEdit.getProperty("print.topMargin", unitIsMM ? "2.5" : "1.0");
+            String leftMargin = jEdit.getProperty("print.leftMargin", unitIsMM ? "2.5" : "1.0");
+            String rightMargin = jEdit.getProperty("print.rightMargin", unitIsMM ? "2.5" : "1.0");
+            String bottomMargin = jEdit.getProperty("print.bottomMargin", unitIsMM ? "2.5" : "1.0");
+            topMarginField = new NumericTextField( topMargin, true, unitIsMM );
+            leftMarginField = new NumericTextField( leftMargin, true, unitIsMM );
+            rightMarginField = new NumericTextField( rightMargin, true, unitIsMM );
+            bottomMarginField = new NumericTextField( bottomMargin, true, unitIsMM );
 
             String unitsLabel = unitIsMM ? " (mm)" : " (in)";
             marginPanel.add( new JLabel( jEdit.getProperty( "print.dialog.Top", "Top" ) + unitsLabel ) );
@@ -1219,6 +1223,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             float bottomMargin = bottomMarginField.getValue().floatValue();
             Margins margins = new Margins( topMargin, leftMargin, rightMargin, bottomMargin );
             as.add( margins );
+            jEdit.setProperty("print.topMargin", String.valueOf(topMargin));
+            jEdit.setProperty("print.leftMargin", String.valueOf(leftMargin));
+            jEdit.setProperty("print.rightMargin", String.valueOf(rightMargin));
+            jEdit.setProperty("print.bottomMargin", String.valueOf(bottomMargin));
 
             return as;
         }

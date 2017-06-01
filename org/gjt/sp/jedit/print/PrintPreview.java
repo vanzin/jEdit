@@ -240,6 +240,22 @@ public class PrintPreview extends EnhancedDialog
 				}
 			}
 		);
+		
+		pages.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent me)
+				{
+					if (model != null) 
+					{
+						int selectedPage = ( Integer )pages.getSelectedItem();
+						model.setPageNumber( selectedPage - 1 );
+						model.setPageRanges( pageRanges );
+						model.setZoomLevel( zoomLevel );
+						attributes.add( new PageRanges( selectedPage ) );
+						printPreviewPane.setModel( model );
+					}
+				}
+			});
 
 		prevPage.addActionListener( new ActionListener()
 		{
@@ -258,6 +274,12 @@ public class PrintPreview extends EnhancedDialog
 
 
 					pages.setSelectedIndex( selectedIndex );
+					int selectedPage = ( Integer )pages.getSelectedItem();
+					model.setPageNumber( selectedPage - 1 );
+					model.setPageRanges( pageRanges );
+					model.setZoomLevel( zoomLevel );
+					attributes.add( new PageRanges( selectedPage ) );
+					printPreviewPane.setModel( model );
 				}
 			}
 		);
@@ -278,6 +300,12 @@ public class PrintPreview extends EnhancedDialog
 
 
 					pages.setSelectedIndex( selectedIndex );
+					int selectedPage = ( Integer )pages.getSelectedItem();
+					model.setPageNumber( selectedPage - 1 );
+					model.setPageRanges( pageRanges );
+					model.setZoomLevel( zoomLevel );
+					attributes.add( new PageRanges( selectedPage ) );
+					printPreviewPane.setModel( model );
 				}
 			}
 		);
@@ -348,7 +376,7 @@ public class PrintPreview extends EnhancedDialog
 			}
 		);
 	}
-
+	
 
 	private void init()
 	{
@@ -360,12 +388,16 @@ public class PrintPreview extends EnhancedDialog
 			// Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
+		pages.setSelectedIndex( 0 );
 
 		nextPage.setEnabled( pagesModel.getSize() > 1 );
 		prevPage.setEnabled( pagesModel.getSize() > 1 );
 
 		model = new PrintPreviewModel( view, buffer, printService, attributes, pageRanges );
 		model.setPageNumber( 0 );
+		model.setPageRanges( pageRanges );
+		model.setZoomLevel( zoomLevel );
+		attributes.add( new PageRanges( 1 ) );
 		printPreviewPane.setModel( model );
 	}
 
