@@ -283,6 +283,7 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 
 			scrollPane.revalidate();
 			printPreviewPane.revalidate();
+			printPreviewPane.repaint();
 		}
 
 

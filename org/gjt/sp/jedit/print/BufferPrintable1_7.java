@@ -419,7 +419,12 @@ class BufferPrintable1_7 implements Printable
 			gfx.setRenderingHint(KEY_TEXT_ANTIALIASING, view.getTextArea().getPainter().getAntiAlias().renderHint());
 			boolean useFractionalFontMetrics = jEdit.getBooleanProperty("view.fracFontMetrics");
 			gfx.setRenderingHint(KEY_FRACTIONALMETRICS, (useFractionalFontMetrics ? VALUE_FRACTIONALMETRICS_ON : VALUE_FRACTIONALMETRICS_OFF));
-			gfx.setTransform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+			
+			// TODO: why did I need this next line? Leaving it in causes the print preview 
+			// to show the page with the wrong top and bottom margins, leaving it out doesn't seem
+			// to cause any problems
+			//gfx.setTransform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
+			
 			for(int i = 0; i < styles.length; i++)
 			{
 				SyntaxStyle s = styles[i];

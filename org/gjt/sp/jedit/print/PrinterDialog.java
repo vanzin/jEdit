@@ -273,7 +273,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                     AttributeSet panelAttributes = panel.getAttributes();
                     if (panelAttributes != null)
                     {
-                        PrinterDialog.this.attributes.addAll( attributes );
+                        PrinterDialog.this.attributes.addAll( panelAttributes );
                     }
                 }
 
