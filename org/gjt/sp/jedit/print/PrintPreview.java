@@ -385,7 +385,7 @@ public class PrintPreview extends EnhancedDialog
 		for ( Integer i : pageRanges.keySet() )
 		{
 			pagesModel.addElement( i );
-			// Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
+			//Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
 		}
 		pages.setModel( pagesModel );
 		pages.setSelectedIndex( 0 );
@@ -394,10 +394,11 @@ public class PrintPreview extends EnhancedDialog
 		prevPage.setEnabled( pagesModel.getSize() > 1 );
 
 		model = new PrintPreviewModel( view, buffer, printService, attributes, pageRanges );
-		model.setPageNumber( 0 );
+		int firstPage = ( Integer )pages.getSelectedItem();
+		model.setPageNumber( firstPage - 1 );
 		model.setPageRanges( pageRanges );
 		model.setZoomLevel( zoomLevel );
-		attributes.add( new PageRanges( 1 ) );
+		attributes.add( new PageRanges( firstPage ) );
 		printPreviewPane.setModel( model );
 	}
 
