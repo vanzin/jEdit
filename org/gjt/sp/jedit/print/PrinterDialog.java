@@ -47,9 +47,8 @@ import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.GenericGUIUtilities;
+import org.gjt.sp.util.Log;
 
-
-// import org.gjt.sp.util.Log;
 // Technical guide on the Java printing system:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/jps/spec/JPSTOC.fm.html
 public class PrinterDialog extends JDialog implements ListSelectionListener
@@ -1064,10 +1063,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             JPanel marginPanel = new JPanel( new VariableGridLayout( VariableGridLayout.FIXED_NUM_COLUMNS, 2, 6, 6 ) );
             marginPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), jEdit.getProperty( "print.dialog.Margins", "Margins" ) ), BorderFactory.createEmptyBorder( 11, 11, 11, 11 ) ) );
             boolean unitIsMM = getUnits() == MediaPrintableArea.MM;
-            String topMargin = jEdit.getProperty("print.topMargin", unitIsMM ? "2.5" : "1.0");
-            String leftMargin = jEdit.getProperty("print.leftMargin", unitIsMM ? "2.5" : "1.0");
-            String rightMargin = jEdit.getProperty("print.rightMargin", unitIsMM ? "2.5" : "1.0");
-            String bottomMargin = jEdit.getProperty("print.bottomMargin", unitIsMM ? "2.5" : "1.0");
+            String topMargin = jEdit.getProperty("print.topMargin", unitIsMM ? "25" : "1.0");
+            String leftMargin = jEdit.getProperty("print.leftMargin", unitIsMM ? "25" : "1.0");
+            String rightMargin = jEdit.getProperty("print.rightMargin", unitIsMM ? "25" : "1.0");
+            String bottomMargin = jEdit.getProperty("print.bottomMargin", unitIsMM ? "25" : "1.0");
             topMarginField = new NumericTextField( topMargin, true, unitIsMM );
             leftMarginField = new NumericTextField( leftMargin, true, unitIsMM );
             rightMarginField = new NumericTextField( rightMargin, true, unitIsMM );
@@ -1465,7 +1464,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
             rotateMargins( topMargin, leftMargin, rightMargin, bottomMargin, orientationRequested );
 
-            // Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
+            Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
             return new float[] {topMargin, leftMargin, rightMargin, bottomMargin};
         }
 
@@ -1508,7 +1507,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             OrientationRequested orientationRequested = ( OrientationRequested )orientation.getSelectedItem();
             rotateMargins( topMargin, leftMargin, rightMargin, bottomMargin, orientationRequested );
 
-            // Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
+            Log.log( Log.DEBUG, this, "getMinimumMargins returning " + topMargin + ", " + leftMargin + ", " + rightMargin + ", " + bottomMargin);
             return new float[] {topMargin, leftMargin, rightMargin, bottomMargin};
         }
 
