@@ -26,9 +26,11 @@ package org.gjt.sp.jedit.print;
 import javax.print.attribute.Attribute;
 
 
-// Custom print attribute indicating the pages should be printed in reverse
-// order. This is just a marker attribute, if present, pages should be printed
-// in reverse order, if not present, then print pages in forward order.
+/**
+ * Custom print attribute indicating the pages should be printed in reverse
+ * order. This is just a marker attribute, if present, pages should be printed
+ * in reverse order, if not present, then print pages in forward order.
+ */
 public class Reverse implements Attribute
 {
 

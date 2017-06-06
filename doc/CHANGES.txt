@@ -5,13 +5,15 @@ jEdit 5.5 version history
 {{{ Version 5.5pre1
 
 Thanks to AdamS, Wim West, M. Cesar R. Lacruz, Egor Abramovich,
-Hrotkó Gábor, and Alan Ezust for contributing to this release.
+Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
 - command line behavior for +line fixed (Patch #590 - Wim West)
 
 - Autosave Untitled Buffers fixed (Patch #596 - Hrotkó Gábor)
+
+- Fixed a number of bugs in the new jEdit printing system (Dale Anson)
 
 }}}
 {{{ UI Improvements
