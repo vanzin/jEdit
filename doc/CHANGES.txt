@@ -41,6 +41,8 @@ Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
 
 - Patch #595 - New Assembly-arm32 edit mode (M. Cesar R. Lacruz)
 
+- Updated java-module-info mode (Dale Anson)
+
 }}}
 
 }}}

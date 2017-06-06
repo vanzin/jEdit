@@ -8,11 +8,12 @@
  * are considered identifiers.
  *
  * This mode file is the same as the java.xml mode file with the addition of the
- * new keywords that are specific to modules. From the spec:
- * "module, requires, exports, to, uses, provides, and with are restricted keywords 
- * (i.e. they are keywords solely where they appear as terminals in ModuleDeclaration, 
- * and are identifiers everywhere else)."
- * Reference: http://cr.openjdk.java.net/~mr/jigsaw/spec/lang-vm.html
+ * new keywords that are specific to modules, so this is way overkill for just a
+ * module-info.java file. From the spec:
+ * "open, module, requires, transitive, exports, opens, to, uses, provides, and 
+ * with are restricted keywords (i.e. they are keywords solely where they appear 
+ * as terminals in ModuleDeclaration, and are identifiers everywhere else)."
+ * Reference: http://download.oracle.com/otndocs/jcp/java_platform_module_system-0_1-edr-spec/index.html
 -->
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
@@ -127,9 +128,12 @@
 			<!--}}}-->
 
 			<!-- modules -->
-			<KEYWORD2>module</KEYWORD2>
+			<KEYWORD2>open</KEYWORD2>
+			<KEYWORD3>module</KEYWORD3>
 			<KEYWORD2>requires</KEYWORD2>
+			<KEYWORD2>transitive</KEYWORD2>
 			<KEYWORD2>exports</KEYWORD2>
+			<KEYWORD2>opens</KEYWORD2>
 			<KEYWORD2>to</KEYWORD2>
 			<KEYWORD2>uses</KEYWORD2>
 			<KEYWORD2>provides</KEYWORD2>
