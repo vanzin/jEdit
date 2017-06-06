@@ -74,24 +74,14 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     private boolean canceled = false;
     private Map<String, String> messageMap;
     private PageSetupPanel pageSetupPanel;
-    public static int ALL = 0;
-    public static int ODD = 1;
-    public static int EVEN = 2;
-    public static int RANGE = 3;
-    public static int CURRENT_PAGE = 4;
-    public static int SELECTION = 5;
-    public static int onlyPrintPages = ALL;
-    private int printRangeType = ALL;
+    public static int onlyPrintPages = PrintRangeType.ALL.getValue();
     private DocFlavor DOC_FLAVOR = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
-    private boolean reversePrinting = false;
 
 
     public PrinterDialog( View owner, PrintRequestAttributeSet attributes, boolean pageSetupOnly )
     {
         super( owner, Dialog.ModalityType.APPLICATION_MODAL );
         try
-
-
         {
             view = owner;
             this.pageSetupOnly = pageSetupOnly;
@@ -115,10 +105,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
             this.attributes.remove( Destination.class );
-            Attribute[] attrs = attributes.toArray();
+            
 
             // for debugging
-            /*
+            /* Attribute[] attrs = attributes.toArray();
              * for ( Attribute a : attrs )
              * {
              * Log.log( Log.DEBUG, this, "+++++ before: " + a.getName() + " = " + a );
@@ -381,27 +371,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     }
 
 
-    /**
-     * @return <code>true</code> if the pages should be printed in reverse order,
-     * that is, the last page is printed first and the first page is printed last.
-     */
-    public boolean getReverse()
-    {
-        return reversePrinting;
-    }
-
-
-    /**
-     * @return one of ALL, RANGE, CURRENT, or SELECTION, depending on whether the
-     * user has elected to print all pages, a range of pages, just the current page
-     * or just the selected text.
-     */
-    public int getPrintRangeType()
-    {
-        return printRangeType;
-    }
-
-
     private PrintService[] getPrintServices()
     {
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices( DOC_FLAVOR, null );
@@ -456,7 +425,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
     // setting in the Page Setup tab.
     private PageRanges mergeRanges( PageRanges pr ) throws PrintException
     {
-        if ( pr == null || onlyPrintPages == ALL )
+        if ( pr == null || onlyPrintPages == PrintRangeType.ALL.getValue() )
         {
             return pr;
         }
@@ -476,12 +445,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             int end = range.length == 1 ? range[0] : Math.min( range[0] + 500, range[1] );
             for ( int pageIndex = start; pageIndex <= end; pageIndex++ )
             {
-                if ( pageIndex % 2 == 0 && onlyPrintPages == EVEN )
+                if ( pageIndex % 2 == 0 && onlyPrintPages == PrintRangeType.EVEN.getValue() )
                 {
                     pages.add( pageIndex );
                 }
                 else
-                if ( pageIndex % 2 == 1 && onlyPrintPages == ODD )
+                if ( pageIndex % 2 == 1 && onlyPrintPages == PrintRangeType.ODD.getValue() )
                 {
                     pages.add( pageIndex );
                 }
@@ -858,7 +827,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             if ( allPages.isSelected() )
             {
                 as.add( new PageRanges( 1, 1000 ) );
-                printRangeType = ALL;
+                as.add( PrintRangeType.ALL );
             }
             else
             if ( pages.isSelected() )
@@ -867,8 +836,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 if ( pageRange != null )
                 {
                     try
-
-
                     {
                         as.add( new PageRanges( pageRange ) );
                     }
@@ -877,21 +844,27 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                         e.printStackTrace();
                     }
                 }
-
-
-                printRangeType = RANGE;
+                as.add( PrintRangeType.RANGE );
             }
             else
             if ( currentPage.isSelected() )
             {
-                as.add( new PageRanges( 1 ) );
-                printRangeType = CURRENT_PAGE;
+                PrinterDialog.this.attributes.add(new PageRanges( 1, 1000 ) );
+                HashMap<Integer, Range> currentPageRange = BufferPrinter1_7.getCurrentPageRange(view, view.getBuffer(), PrinterDialog.this.attributes);
+                int page = 1;
+                if (currentPageRange != null && !currentPageRange.isEmpty())
+                {
+                    page = currentPageRange.keySet().iterator().next();
+                }
+                
+                as.add( new PageRanges( page ) );
+                as.add( PrintRangeType.CURRENT_PAGE );
             }
             else
             if ( selection.isSelected() )
             {
-                as.add( new PageRanges( 1, 1000 ) );
-                printRangeType = SELECTION;
+                PrinterDialog.this.attributes.add(new PageRanges( 1, 1000 ) );
+                as.add( PrintRangeType.SELECTION );
             }
 
 
@@ -902,8 +875,11 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
 
             as.add( new Copies( ( Integer )copies.getValue() ) );
-
-            reversePrinting = reverse.isSelected();
+            
+            if (reverse.isSelected())
+            {
+                as.add(new Reverse());   
+            }
 
             return as;
         }

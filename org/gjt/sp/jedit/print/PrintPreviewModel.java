@@ -47,7 +47,7 @@ public class PrintPreviewModel extends PageFormat
 	private PrintRequestAttributeSet attributes;
 	private HashMap<Integer, Range> pageRanges;
 	private int pageNumber = 1;
-	private int printRangeType = PrinterDialog.ALL;
+	private PrintRangeType printRangeType = PrintRangeType.ALL;
 	private Graphics gfx;
 	public static enum Zoom { NONE,  IN,  OUT,  WIDTH,  PAGE };
 	private Zoom zoom = Zoom.NONE;
@@ -110,12 +110,12 @@ public class PrintPreviewModel extends PageFormat
 		this.pageRanges = pageRanges;
 	}
 	
-	public void setPrintRangeType(int type)
+	public void setPrintRangeType(PrintRangeType type)
 	{
 		printRangeType = type;
 	}
 	
-	public int getPrintRangeType()
+	public PrintRangeType getPrintRangeType()
 	{
 		return printRangeType;	
 	}

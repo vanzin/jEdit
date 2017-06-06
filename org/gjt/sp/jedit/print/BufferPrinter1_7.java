@@ -61,10 +61,10 @@ public class BufferPrinter1_7
 		}
 	}	
 
-
+	// print to a printer
 	public static void print( final View view, final Buffer buffer )
 	{
-		//Log.log(Log.DEBUG, BufferPrinter1_7.class, "print buffer " + buffer.getPath());
+		Log.log(Log.DEBUG, BufferPrinter1_7.class, "print buffer " + buffer.getPath());
 		
 		// load any saved printing attributes, these are put into 'format'
 		loadPrintSpec();
@@ -75,7 +75,7 @@ public class BufferPrinter1_7
 		PrinterDialog printerDialog = new PrinterDialog( view, format, false );
 		if ( printerDialog.isCanceled() )
 		{
-			//Log.log(Log.DEBUG, BufferPrinter1_7.class, "print dialog canceled");
+			Log.log(Log.DEBUG, BufferPrinter1_7.class, "print dialog canceled");
 			return;
 		}
 		
@@ -106,61 +106,17 @@ public class BufferPrinter1_7
 		}
 
 
-		// set up the printable. Some values need to be set directly from the print
-		// dialog since they don't have attributes, like reverse page printing and printRangeType
-		BufferPrintable1_7 printable = new BufferPrintable1_7( format, view, buffer );
-		printable.setReverse( printerDialog.getReverse() );
-		int printRangeType = printerDialog.getPrintRangeType();
-		printable.setPrintRangeType( printRangeType );
-
-		// check if printing a selection, if so, recalculate the page ranges.
+		// check if printing a selection, if so, create a new temporary buffer
+		// containing just the selection
 		// TODO: I'm not taking even/odd page setting into account here, nor am
 		// I considering any page values that may have been set in the page range.
 		// I don't think this is important for printing a selection, which is
 		// generally just a few lines rather than pages. I could be wrong...
-		if ( printRangeType == PrinterDialog.SELECTION )
+		Buffer tempBuffer = buffer;
+		PrintRangeType printRangeType = (PrintRangeType)format.get(PrintRangeType.class);
+		if ( PrintRangeType.SELECTION.equals(printRangeType) )
 		{
-
-			// calculate the actual pages with a selection or bail if there is no selection
-			int selectionCount = view.getTextArea().getSelectionCount();
-			if ( selectionCount == 0 )
-			{
-				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"No text is selected to print."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
-				return;
-			}
-
-
-			// get the page ranges from the printable
-			HashMap<Integer, Range> pageRanges = getPageRanges( printable, format );
-			if ( pageRanges == null || pageRanges.isEmpty() )
-			{
-				JOptionPane.showMessageDialog( view, jEdit.getProperty( "print-error.message", new String[] {"Unable to calculate page ranges."} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
-				return;
-			}
-
-
-			// find the pages that contain the selection(s) and construct a new
-			// page range for the format
-			int[] selectedLines = view.getTextArea().getSelectedLines();
-			StringBuilder pageRange = new StringBuilder();
-			for ( Integer i : pageRanges.keySet() )
-			{
-				Range range = pageRanges.get( i );
-				for ( int line : selectedLines )
-				{
-					if ( range.contains( line ) )
-					{
-						pageRange.append( i ).append( ',' );
-						break;
-					}
-				}
-			}
-			pageRange.deleteCharAt( pageRange.length() - 1 );
-			format.add( new PageRanges( pageRange.toString() ) );
-
-			// also tell the printable exactly which lines are selected so it
-			// doesn't have to fetch them itself
-			printable.setSelectedLines( selectedLines );
+			tempBuffer = getSelectionBuffer(view, buffer);
 		}
 
 		// copy the doc attributes from the print format attributes
@@ -177,6 +133,10 @@ public class BufferPrinter1_7
 			}
 		}
 		//Log.log(Log.DEBUG, BufferPrinter1_7.class, "--- end print request attributes ---");
+
+		// set up the printable
+		BufferPrintable1_7 printable = new BufferPrintable1_7( format, view, tempBuffer );
+
 		final Doc doc = new SimpleDoc( printable, DocFlavor.SERVICE_FORMATTED.PRINTABLE, docAttributes );
 
 		// ready to print
@@ -200,6 +160,22 @@ public class BufferPrinter1_7
 		};
 		ThreadUtilities.runInBackground( runner );
 	}	//}}}
+	
+	// returns a temporary buffer containing only the lines in the current selection
+	private static Buffer getSelectionBuffer(View view, Buffer buffer)
+	{
+		int[] selectedLines = view.getTextArea().getSelectedLines();
+		String path = buffer.getPath();
+		String parent = path.substring(0, path.lastIndexOf(System.getProperty("file.separator")));
+		Buffer temp = jEdit.openTemporary(view, parent, path + ".prn", true);
+		temp.setMode(buffer.getMode());
+		for (int i : selectedLines)
+		{
+			String line = buffer.getLineText(i) + '\n';
+			temp.insert(temp.getLength(), line);
+		}
+		return temp;
+	}
 	
 	/**
  	 * This is intended for use by the PrintPreview dialog.	
@@ -234,8 +210,14 @@ public class BufferPrinter1_7
 		}
 
 
-		// set up the printable to print just the requested page
-		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), model.getBuffer() );
+		// set up the printable to print just the requested pages
+		Buffer buffer = model.getBuffer();
+		PrintRangeType printRangeType = (PrintRangeType)model.getAttributes().get(PrintRangeType.class);
+		if ( PrintRangeType.SELECTION.equals(printRangeType) )
+		{
+			buffer = getSelectionBuffer(model.getView(), buffer);
+		}
+		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), buffer );
 		printable.setPages(model.getPageRanges());
 		int pageNumber = model.getPageNumber(); 
 		try 
@@ -255,14 +237,10 @@ public class BufferPrinter1_7
 	 */
 	public static HashMap<Integer, Range> getPageRanges( View view, Buffer buffer, PrintRequestAttributeSet attributes )
 	{
-		if (attributes == null)
-		{
-			loadPrintSpec();
-			attributes = format;
-		}
-		
-		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer );
-		return BufferPrinter1_7.getPageRanges( printable, attributes );
+		loadPrintSpec();
+		format.addAll(attributes);
+		BufferPrintable1_7 printable = new BufferPrintable1_7( format, view, buffer );
+		return BufferPrinter1_7.getPageRanges( printable, format );
 	}
 
 
@@ -299,8 +277,60 @@ public class BufferPrinter1_7
 		}
 		catch(Exception e) 
 		{
+			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static HashMap<Integer, Range> getCurrentPageRange( View view, Buffer buffer, PrintRequestAttributeSet attributes )
+	{
+		if (attributes == null)
+		{
+			loadPrintSpec();
+			attributes = format;
+		}
+		
+		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer );
+		HashMap<Integer, Range> pages = BufferPrinter1_7.getPageRanges( printable, attributes );
+		HashMap<Integer, Range> answer = new HashMap<Integer, Range>();		
+		int caretLine = view.getTextArea().getCaretLine();
+		for (Integer i : pages.keySet())
+		{
+			Range range = pages.get(i);
+			if (range.contains(caretLine))
+			{
+				answer.put(i, range);
+				break;
+			}
+		}
+		return answer;
+	}
+	
+	public static HashMap<Integer, Range> getSelectionPageRange( View view, Buffer buffer, PrintRequestAttributeSet attributes )
+	{
+		if (attributes == null)
+		{
+			loadPrintSpec();
+			attributes = format;
+		}
+		
+		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer );
+		HashMap<Integer, Range> pages = BufferPrinter1_7.getPageRanges( printable, attributes );
+		HashMap<Integer, Range> answer = new HashMap<Integer, Range>();
+		int[] selectedLines = view.getTextArea().getSelectedLines();
+		for ( int line : selectedLines )
+		{
+			for ( Integer page : pages.keySet() )
+			{
+				Range range = pages.get(page);
+				if ( range.contains( line ) )
+				{
+					answer.put(page, range);
+					continue;
+				}
+			}
+		}
+		return answer;
 	}
 	
 	public static PageFormat getDefaultPageFormat(PrintRequestAttributeSet attributes)

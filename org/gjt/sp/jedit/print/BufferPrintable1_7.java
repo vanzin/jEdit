@@ -60,10 +60,8 @@ class BufferPrintable1_7 implements Printable
 
 	private View view;
 	private Buffer buffer;
-	private boolean selection;
-	private int[] selectedLines;
 	private boolean reverse;
-	private int printRangeType = PrinterDialog.ALL;
+	private PrintRangeType printRangeType = PrintRangeType.ALL;
 	private Font font;
 	private SyntaxStyle[] styles;
 	private boolean header;
@@ -86,6 +84,11 @@ class BufferPrintable1_7 implements Printable
 		this.view = view;
 		this.buffer = buffer;
 		firstCall = true;		// pages and page ranges are calculated only once
+		reverse = attributes.containsKey(Reverse.class);
+		if (attributes.containsKey(PrintRangeType.class))
+		{
+			printRangeType = (PrintRangeType)attributes.get(PrintRangeType.class);	
+		}
 		
 		header = jEdit.getBooleanProperty("print.header");
 		footer = jEdit.getBooleanProperty("print.footer");
@@ -121,36 +124,6 @@ class BufferPrintable1_7 implements Printable
 		}
 	}
 	
-	/**
- 	 * Set the line numbers that are selected in the text area.	
- 	 * @param lines An array of lines that are selected in the text area.	
- 	 */
-	public void setSelectedLines(int[] lines)
-	{
-		selectedLines = Arrays.copyOf(lines, lines.length);	
-		Arrays.sort(selectedLines);
-	}
-	
-	/**
- 	 * Set to <code>true</code> to print the pages in reverse order, that is, print
- 	 * the last page first and the first page last.
- 	 * @param b Whether to print in reverse or not.
- 	 */
-	public void setReverse(boolean b)
-	{
-		reverse = b;	
-	}
-	
-	/**
- 	 * Set the print range type.
- 	 * @param printRangeType One of PrinterDialog.ALL, RANGE, CURRENT_PAGE, or SELECTION.
- 	 */
-	public void setPrintRangeType(int printRangeType)
-	{
-		this.printRangeType = printRangeType;
-		selection = PrinterDialog.SELECTION == printRangeType;
-	}
-	
 	// useful to avoid having to recalculate the page ranges if they are already known
 	public void setPages(HashMap<Integer, Range> pages)
 	{
@@ -173,26 +146,8 @@ class BufferPrintable1_7 implements Printable
 			firstCall = false;
 		}
 		
-		// figure out the current page if that is what is requested. I'm using
-		// the page that contains the caret as the current page.
-		// QUESTION: use the text area first physical line instead?
-		if (printRangeType == PrinterDialog.CURRENT_PAGE)
-		{
-			int caretLine = view.getTextArea().getCaretLine();
-			for (Integer i : pages.keySet())
-			{
-				Range range = pages.get(i);
-				if (range.contains(caretLine))
-				{
-					pageIndex = i;
-					break;
-				}
-			}
-		}
-		
-		
 		// adjust the page index for reverse printing
-		if (reverse && printRangeType != PrinterDialog.CURRENT_PAGE)
+		if (reverse && !PrintRangeType.CURRENT_PAGE.equals(printRangeType))
 		{
 			pageIndex = pages.size() - 1 - pageIndex;
 			//Log.log(Log.DEBUG, this, "Reverse is on, changing page index to " + pageIndex);
@@ -201,7 +156,7 @@ class BufferPrintable1_7 implements Printable
 		// go ahead and print the page
 		Range range = pages.get(pageIndex);
 		//Log.log(Log.DEBUG, this, "range = " + range);
-		if ( (range == null || !inRange(pageIndex)) && printRangeType != PrinterDialog.CURRENT_PAGE  )
+		if ( (range == null || !inRange(pageIndex)) && !PrintRangeType.CURRENT_PAGE.equals(printRangeType)  )
 		{
 			//Log.log(Log.DEBUG, this, "Returning NO_SUCH_PAGE for page " + pageIndex);
 			return NO_SUCH_PAGE;	
@@ -507,14 +462,6 @@ class BufferPrintable1_7 implements Printable
 				//Log.log(Log.DEBUG, this, "Skipping invisible line");
 				continue;
 			}
-			
-			// print only selected lines if printing selection
-			if (selection && Arrays.binarySearch(selectedLines, currentPhysicalLine) < 0)
-			{
-				//Log.log(Log.DEBUG, this, "Skipping non-selected line: " + currentPhysicalLine); 
-				continue;
-			}
-				
 			
 			// fill the line list
 			lineList.clear();

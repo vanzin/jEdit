@@ -26,6 +26,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.standard.PageRanges;
+
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
@@ -69,7 +73,9 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
         {
             View view = textArea.getView();
             Buffer buffer = ( Buffer )textArea.getBuffer();
-            pages = BufferPrinter1_7.getPageRanges( view, buffer, null );
+            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+            attributes.add(new PageRanges("1-1000"));
+            pages = BufferPrinter1_7.getPageRanges( view, buffer, attributes );
         }
         else
         {
@@ -162,7 +168,7 @@ public class PageBreakExtension extends TextAreaExtension implements EBComponent
                 // 2nd part of 'if' handles soft wrap so if the last line of the page
                 // is wrapped, only the last screen line of the wrapped line will get
                 // the page break line drawn on it.
-                if ( range.getEnd() == physicalLine && textArea.getLineEndOffset( physicalLine ) == end )
+                if ( range != null && range.getEnd() == physicalLine && textArea.getLineEndOffset( physicalLine ) == end )
                 {
                     y += gfx.getFontMetrics().getHeight();
                     gfx.drawLine( 0, y, textArea.getPainter().getWidth(), y );
