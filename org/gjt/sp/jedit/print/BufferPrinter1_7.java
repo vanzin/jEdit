@@ -161,7 +161,9 @@ public class BufferPrinter1_7
 		ThreadUtilities.runInBackground( runner );
 	}	//}}}
 	
-	// returns a temporary buffer containing only the lines in the current selection
+	// returns a temporary buffer containing only the lines in the current selection.
+	// This also stores the line numbers of the selected lines as a buffer property
+	// so they can be used for printing and print preview.
 	private static Buffer getSelectionBuffer(View view, Buffer buffer)
 	{
 		int[] selectedLines = view.getTextArea().getSelectedLines();
@@ -174,6 +176,9 @@ public class BufferPrinter1_7
 			String line = buffer.getLineText(i) + '\n';
 			temp.insert(temp.getLength(), line);
 		}
+		// save the line numbers of the selected lines so they can be used for 
+		// printing and print preview
+		temp.setProperty("printingLineNumbers", selectedLines);
 		return temp;
 	}
 	
@@ -301,33 +306,6 @@ public class BufferPrinter1_7
 			{
 				answer.put(i, range);
 				break;
-			}
-		}
-		return answer;
-	}
-	
-	public static HashMap<Integer, Range> getSelectionPageRange( View view, Buffer buffer, PrintRequestAttributeSet attributes )
-	{
-		if (attributes == null)
-		{
-			loadPrintSpec();
-			attributes = format;
-		}
-		
-		BufferPrintable1_7 printable = new BufferPrintable1_7( attributes, view, buffer );
-		HashMap<Integer, Range> pages = BufferPrinter1_7.getPageRanges( printable, attributes );
-		HashMap<Integer, Range> answer = new HashMap<Integer, Range>();
-		int[] selectedLines = view.getTextArea().getSelectedLines();
-		for ( int line : selectedLines )
-		{
-			for ( Integer page : pages.keySet() )
-			{
-				Range range = pages.get(page);
-				if ( range.contains( line ) )
-				{
-					answer.put(page, range);
-					continue;
-				}
 			}
 		}
 		return answer;

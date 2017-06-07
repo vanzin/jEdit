@@ -70,6 +70,7 @@ class BufferPrintable1_7 implements Printable
 
 	private HashMap<Integer, Range> pages = null;
 	private int currentPhysicalLine;
+	private int[] printingLineNumbers = null;
 
 	private LineMetrics lm;
 	private final List<Chunk> lineList;
@@ -89,6 +90,11 @@ class BufferPrintable1_7 implements Printable
 		{
 			printRangeType = (PrintRangeType)attributes.get(PrintRangeType.class);	
 		}
+		
+		// the buffer might have a buffer property for the line numbers, if so, then
+		// the buffer is a temporary buffer representing selected text and the line
+		// numbers correspond with the selected lines.
+		printingLineNumbers = (int[])buffer.getProperty("printingLineNumbers");
 		
 		header = jEdit.getBooleanProperty("print.header");
 		footer = jEdit.getBooleanProperty("print.footer");
@@ -447,9 +453,11 @@ class BufferPrintable1_7 implements Printable
 		double y = 0.0;
 		Range range = pages.get(pageIndex);
 		//Log.log(Log.DEBUG, this, "printing range for page " + pageIndex + ": " + range);
+		int start = printingLineNumbers == null ? range.getStart() : 0;
+		int end = printingLineNumbers == null ? range.getEnd() : printingLineNumbers.length - 1;
 		
 		// print each line
-		for (currentPhysicalLine = range.getStart(); currentPhysicalLine <= range.getEnd(); currentPhysicalLine++)
+		for (currentPhysicalLine = start; currentPhysicalLine <= end; currentPhysicalLine++)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
@@ -472,7 +480,12 @@ class BufferPrintable1_7 implements Printable
 			{
 				gfx.setFont(font);
 				gfx.setColor(lineNumberColor);
-				gfx.drawString(String.valueOf(currentPhysicalLine + 1), (float)pageX, (float)(pageY + y + lineHeight));
+				int lineNo = currentPhysicalLine + 1;
+				if (printingLineNumbers != null && currentPhysicalLine < printingLineNumbers.length) 
+				{
+					lineNo = printingLineNumbers[currentPhysicalLine] + 1;	
+				}
+				gfx.drawString(String.valueOf(lineNo), (float)pageX, (float)(pageY + y + lineHeight));
 			}
 
 			if (lineList.isEmpty())
@@ -494,7 +507,7 @@ class BufferPrintable1_7 implements Printable
 				}
 			}
 			
-			if (currentPhysicalLine == range.getEnd())
+			if (currentPhysicalLine == end)
 			{
 				//Log.log(Log.DEBUG,this,"Finished page");
 				break;
