@@ -880,6 +880,10 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 as.add(new Reverse());   
             }
+            else
+            {
+                attributes.remove(Reverse.class);   
+            }
 
             return as;
         }

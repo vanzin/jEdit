@@ -382,11 +382,16 @@ public class PrintPreview extends EnhancedDialog
 	{
 		pageRanges = BufferPrinter1_7.getPageRanges( view, buffer, attributes );
 		DefaultComboBoxModel<Integer> pagesModel = new DefaultComboBoxModel<Integer>();
+		boolean reverse = attributes.containsKey(Reverse.class);
+		StringBuilder pr = new StringBuilder();
 		for ( Integer i : pageRanges.keySet() )
 		{
-			pagesModel.addElement( i );
+			Integer pageNo = reverse ? pageRanges.size() - i  + 1: i;
+			pagesModel.addElement( pageNo );
 			//Log.log(Log.DEBUG, this, "init, i = " + i + ", range = " + pageRanges.get(i));
+			pr.append(i).append(',');
 		}
+		pr.deleteCharAt(pr.length() - 1);
 		pages.setModel( pagesModel );
 		pages.setSelectedIndex( 0 );
 

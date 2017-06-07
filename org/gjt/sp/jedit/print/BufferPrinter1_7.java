@@ -188,7 +188,13 @@ public class BufferPrinter1_7
 	protected static void printPage( PrintPreviewModel model )
 	{
 		String jobName = MiscUtilities.abbreviateView( model.getBuffer().getPath() );
-		model.getAttributes().add( new JobName( jobName, null ) );
+		PrintRequestAttributeSet attrs = model.getAttributes();
+		attrs.add( new JobName( jobName, null ) );
+		Reverse reverse = (Reverse)attrs.get(Reverse.class);
+		if (reverse != null)
+		{
+			attrs.remove(Reverse.class);	
+		}
 
 		// set up the print job
 		PrintService printService = model.getPrintService();
@@ -217,12 +223,12 @@ public class BufferPrinter1_7
 
 		// set up the printable to print just the requested pages
 		Buffer buffer = model.getBuffer();
-		PrintRangeType printRangeType = (PrintRangeType)model.getAttributes().get(PrintRangeType.class);
+		PrintRangeType printRangeType = (PrintRangeType)attrs.get(PrintRangeType.class);
 		if ( PrintRangeType.SELECTION.equals(printRangeType) )
 		{
 			buffer = getSelectionBuffer(model.getView(), buffer);
 		}
-		BufferPrintable1_7 printable = new BufferPrintable1_7( model.getAttributes(), model.getView(), buffer );
+		BufferPrintable1_7 printable = new BufferPrintable1_7( attrs, model.getView(), buffer );
 		printable.setPages(model.getPageRanges());
 		int pageNumber = model.getPageNumber(); 
 		try 
@@ -232,6 +238,10 @@ public class BufferPrinter1_7
 		catch(Exception e) 
 		{
 			e.printStackTrace();
+		}
+		if (reverse != null)
+		{
+			attrs.add(reverse);	
 		}
 	}
 
@@ -396,6 +406,7 @@ public class BufferPrinter1_7
 			mpa = new MediaPrintableArea(0.5f, 0.5f, 10.0f, 7.5f, MediaPrintableArea.INCH);
 			format.add(mpa);
 		}
+		format.remove(Reverse.class);
 	}
 
 

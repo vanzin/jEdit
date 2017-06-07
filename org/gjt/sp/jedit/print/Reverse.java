@@ -24,6 +24,9 @@ package org.gjt.sp.jedit.print;
 
 
 import javax.print.attribute.Attribute;
+import javax.print.attribute.DocAttribute;
+import javax.print.attribute.PrintJobAttribute;
+import javax.print.attribute.PrintRequestAttribute;
 
 
 /**
@@ -31,7 +34,7 @@ import javax.print.attribute.Attribute;
  * order. This is just a marker attribute, if present, pages should be printed
  * in reverse order, if not present, then print pages in forward order.
  */
-public class Reverse implements Attribute
+public class Reverse implements DocAttribute, PrintRequestAttribute, PrintJobAttribute
 {
 
     private static final long serialVersionUID = -2823970704630722439L;
