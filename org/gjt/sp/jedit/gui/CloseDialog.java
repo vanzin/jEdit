@@ -74,9 +74,11 @@ public class CloseDialog extends EnhancedDialog
 		bufferList.setVisibleRowCount(10);
 		bufferList.addListSelectionListener(new ListHandler());
 
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+		
 		for(Buffer buffer: buffers)
 		{
-			if(buffer.isDirty())
+			if(buffer.isDirty() && !( buffer.isUntitled() && autosaveUntitled ) )
 				bufferModel.addElement(buffer.getPath());
 		}
 
