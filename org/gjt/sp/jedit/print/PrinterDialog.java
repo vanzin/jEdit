@@ -1196,16 +1196,18 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             }
 
 
-            float topMargin = topMarginField.getValue().floatValue();
-            float leftMargin = leftMarginField.getValue().floatValue();
-            float rightMargin = rightMarginField.getValue().floatValue();
-            float bottomMargin = bottomMarginField.getValue().floatValue();
-            Margins margins = new Margins( topMargin, leftMargin, rightMargin, bottomMargin );
+            Number topMargin = topMarginField.getValue();
+            Number leftMargin = leftMarginField.getValue();
+            Number rightMargin = rightMarginField.getValue();
+            Number bottomMargin = bottomMarginField.getValue();
+            
+            Margins margins = new Margins( topMargin.floatValue(), leftMargin.floatValue(), rightMargin.floatValue(), bottomMargin.floatValue() );
             as.add( margins );
-            jEdit.setProperty("print.topMargin", String.valueOf(topMargin));
-            jEdit.setProperty("print.leftMargin", String.valueOf(leftMargin));
-            jEdit.setProperty("print.rightMargin", String.valueOf(rightMargin));
-            jEdit.setProperty("print.bottomMargin", String.valueOf(bottomMargin));
+            
+            jEdit.setProperty("print.topMargin", topMargin.toString());
+            jEdit.setProperty("print.leftMargin", leftMargin.toString());
+            jEdit.setProperty("print.rightMargin", rightMargin.toString());
+            jEdit.setProperty("print.bottomMargin", bottomMargin.toString());
 
             return as;
         }
@@ -1498,6 +1500,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
         private int getUnits()
         {
             String country = Locale.getDefault().getCountry();
+            //String country = "Latvia";    // for testing metric
             if ( "".equals( country ) || Locale.US.getCountry().equals( country ) || Locale.CANADA.getCountry().equals( country ) )
             {
                 return MediaPrintableArea.INCH;
