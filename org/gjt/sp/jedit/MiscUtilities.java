@@ -675,6 +675,22 @@ public class MiscUtilities
 	 * the current directory is used, but only for local files.
 	 * The directory is created if does not exist.
 	 * @param path VFS path to the Buffer
+	 * @param untitled do we need the path for untitled buffer
+	 * @return Autosave directory, or null if no backup directory is specified and it is a non-local file.
+	 * @since 5.0pre1
+	 */
+	public static File prepareAutosaveDirectory(String path, boolean untitled)
+	{
+		return prepareBackupDirectory(path, untitled);
+	}// }}}
+
+	//{{{ prepareAutosaveDirectory method
+	/**
+	 * Prepares the directory to autosave the specified file.
+	 * If the backup directory is specified, it is used. Otherwise,
+	 * the current directory is used, but only for local files.
+	 * The directory is created if does not exist.
+	 * @param path VFS path to the Buffer
 	 * @return Autosave directory, or null if no backup directory is specified and it is a non-local file.
 	 * @since 5.0pre1
 	 */
@@ -697,6 +713,24 @@ public class MiscUtilities
 	 */
 	public static File prepareBackupDirectory(String path)
 	{
+		return prepareBackupDirectory(path, false);
+	}
+	
+	//{{{ prepareBackupDirectory method
+	/**
+	 * Prepares the directory to backup the specified file.
+	 * A jEdit property is used to determine the directory.
+	 * If there is no dedicated backup directory specified by props,
+	 * then the current directory is used, but only for local files.
+	 * The directory is created if it does not exist.
+	 * @param path path to the buffer
+	 * @param untitled do we need the path for untitled buffer
+	 * @return Backup directory. <code>null</code> is returned for
+	 * non-local files if no backup directory is specified in properties.
+	 * @since 5.0pre1
+	 */
+	public static File prepareBackupDirectory(String path, boolean untitled)
+	{
 		boolean isLocal = VFSManager.getVFSForPath(path) instanceof FileVFS;
 		File file;
 		if (isLocal)
@@ -717,6 +751,12 @@ public class MiscUtilities
 		else
 		{
 			backupDirectory = MiscUtilities.expandVariables(backupDirectory);
+			
+			boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+			if ( untitled && autosaveUntitled ) {
+				return new File(backupDirectory);
+			}
+			
 			if (path.startsWith(backupDirectory))
 				return dir;
 			// Perhaps here we would want to guard with

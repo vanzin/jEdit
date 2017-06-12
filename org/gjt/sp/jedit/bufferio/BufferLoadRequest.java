@@ -44,6 +44,8 @@ import org.gjt.sp.util.*;
  */
 public class BufferLoadRequest extends BufferIORequest
 {
+	private boolean untitled;
+	
 	//{{{ BufferLoadRequest constructor
 	/**
 	 * Creates a new buffer I/O request.
@@ -52,11 +54,13 @@ public class BufferLoadRequest extends BufferIORequest
 	 * @param session The VFS session
 	 * @param vfs The VFS
 	 * @param path The path
+	 * @param untitled is the buffer untitled
 	 */
 	public BufferLoadRequest(View view, Buffer buffer,
-		Object session, VFS vfs, String path)
+		Object session, VFS vfs, String path, boolean untitled)
 	{
 		super(view,buffer,session,vfs,path);
+		this.untitled = untitled;
 	} //}}}
 
 	//{{{ run() method
@@ -75,7 +79,7 @@ public class BufferLoadRequest extends BufferIORequest
 			path = vfs._canonPath(session,path,view);
 
 			readContents();
-			buffer.setNewFile(false);
+			buffer.setNewFile(untitled);
 
 			if (jEdit.getBooleanProperty("persistentMarkers") &&
 			    (vfs.isMarkersFileSupported()))

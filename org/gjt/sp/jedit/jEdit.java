@@ -1558,7 +1558,7 @@ public class jEdit
 			{
 				view.setBuffer(retVal);
 				// Although gotoMarker code is set to execute its code in a runAfterIoTasks runnable,
-				// the view.setBuffer command might end up being executed after the gotoMarker code,  
+				// the view.setBuffer command might end up being executed after the gotoMarker code,
 				// if so the caret might not be visible when the buffer is changed, so we scroll to
 				// caret overhere.
 				if(!view.getTextArea().isCaretVisible())
@@ -1829,7 +1829,7 @@ public class jEdit
 
 		if ( untitled ) {
 			path = MiscUtilities.constructPath(
-				MiscUtilities.prepareAutosaveDirectory(settingsDirectory).getPath(),path);
+				MiscUtilities.prepareAutosaveDirectory(settingsDirectory, untitled).getPath(),path);
 		} else {
 		path = MiscUtilities.constructPath(parent,path);
 		}
@@ -1927,13 +1927,20 @@ public class jEdit
 	 */
 	public static Buffer newFile(EditPane editPane)
 	{
-		File autosaveDir = MiscUtilities.prepareAutosaveDirectory(settingsDirectory);
-		String path = autosaveDir.getPath();
+		String path;
+
+		if(editPane != null && editPane.getBuffer() != null)
+		{
+			path = editPane.getBuffer().getDirectory();
+		} else {
+			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(settingsDirectory, true);
+			path = autosaveDir.getPath();
 			VFS vfs = VFSManager.getVFSForPath(path);
 			// don't want 'New File' to create a read only buffer
 			// if current file is on SQL VFS or something
 			if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 				path = System.getProperty("user.home");
+		}
 
 		return newFile(editPane,path);
 	}
@@ -4351,9 +4358,9 @@ public class jEdit
 						String[] newArgs = new String[additionalFiles.size() + args.length];
 						additionalFiles.copyInto(newArgs);
 						System.arraycopy(args, 0, newArgs, additionalFiles.size(), args.length);
-						// We need to pass view to openFiles, because when a file is openened via 
+						// We need to pass view to openFiles, because when a file is openened via
 						// the command line and is not the current buffer (because other buffers are
-						// already openened) and '+line' command line argument is given, a view is 
+						// already openened) and '+line' command line argument is given, a view is
 						// needed to scroll to the given line.
 						buffer = openFiles(view,userDir,newArgs);
 					}
@@ -4723,9 +4730,9 @@ loop:
 						bufferSet.addBuffer(buffer);
 					}
 				}
-					
+
 			}
-			
+
 			view.close();
 			view.dispose();
 			removeViewFromList(view);

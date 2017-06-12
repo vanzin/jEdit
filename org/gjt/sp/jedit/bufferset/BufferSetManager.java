@@ -351,7 +351,7 @@ public class BufferSetManager
 		{
 			// autosave files will be in a separated dir
 			String settingsDirectory = jEdit.getSettingsDirectory();
-			parent = MiscUtilities.prepareAutosaveDirectory(settingsDirectory).getPath();
+			parent = MiscUtilities.prepareAutosaveDirectory(settingsDirectory, true).getPath();
 		}
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)

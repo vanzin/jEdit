@@ -227,7 +227,7 @@ public class Buffer extends JEditBuffer
 				// NEW_FILE flag
 				if(reload || !getFlag(NEW_FILE))
 				{
-					if(!vfs.load(view,this,path))
+					if(!vfs.load(view,this,path, isUntitled()))
 					{
 						setLoading(false);
 						return false;
@@ -1665,11 +1665,11 @@ public class Buffer extends JEditBuffer
 		markers = new Vector<Marker>();
 
 		setFlag(TEMPORARY,temp);
+		setFlag(UNTITLED,untitled);
 
 		// this must be called before any EditBus messages are sent
 		setPath(path);
 
-		setFlag(UNTITLED,untitled);
 		setFlag(NEW_FILE,newFile);
 		setFlag(AUTORELOAD,jEdit.getBooleanProperty("autoReload"));
 		setFlag(AUTORELOAD_DIALOG,jEdit.getBooleanProperty("autoReloadDialog"));
@@ -1902,6 +1902,10 @@ public class Buffer extends JEditBuffer
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setFileReadOnly(true);
 		name = vfs.getFileName(path);
+		
+		// reloading an untitled, so retain the path
+		boolean reloadingUntitled = name.startsWith("#") && name.endsWith("#");
+		
 		// clean up buffer name
 		// # is for autosave, e.g. reloading autosaved untitled, remove it from the buffer's name
 		if ( name.startsWith("#") )
@@ -1919,8 +1923,13 @@ public class Buffer extends JEditBuffer
 			// deleted after a save as
 			if(autosaveFile != null)
 				autosaveFile.delete();
-			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(symlinkPath);
+			
+			if ( reloadingUntitled ) {
+				autosaveFile = file;
+			} else {
+				File autosaveDir = MiscUtilities.prepareAutosaveDirectory(symlinkPath, isUntitled());
 			autosaveFile = new File(autosaveDir,'#' + name + '#');
+		}
 		}
 		else
 		{
@@ -1949,10 +1958,7 @@ public class Buffer extends JEditBuffer
 		int result;
 		// if it was an untitled autosave, recover without question
 		if (isUntitled() && autosaveUntitled) {
-			boolean untitledOrigi = isUntitled();
-			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath());
-			// preserve isUntitled (not the best solution)
-			setUntitled(untitledOrigi);
+			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath(), isUntitled());
 			return true;
 		} else {
 			result = GUIUtilities.confirm(view,"autosave-found",args,
@@ -1961,7 +1967,7 @@ public class Buffer extends JEditBuffer
 
 		if(result == JOptionPane.YES_OPTION)
 		{
-			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath());
+			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath(), isUntitled());
 
 			// show this message when all I/O requests are
 			// complete
