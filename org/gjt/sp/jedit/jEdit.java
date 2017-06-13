@@ -4720,7 +4720,8 @@ loop:
 				return false;
 
 			// move the dirty untitled buffers to the next open view's current editpane bufferset (first or last)
-			if (!jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") && !getBufferSetManager().getScope().equals(BufferSet.Scope.global)) {
+			boolean moveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+			if (moveUntitled && !getBufferSetManager().getScope().equals(BufferSet.Scope.global)) {
 				View targetView;
 				if ( view.equals(viewsFirst) ) {
 					targetView = viewsLast;

@@ -94,6 +94,20 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		addComponent(useMD5forDirtyCalculation);
 
 
+		/* Autosave, Backup directory */
+		backupDirectory = new JTextField(jEdit.getProperty(
+			"backup.directory"));
+		backupDirectory.setToolTipText(
+			jEdit.getProperty("options.save-back.backupDirectory.tooltip"));
+
+		JButton browseBackupDirectory = new JButton("...");
+		browseBackupDirectory.addActionListener(new MyActionListener());
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(backupDirectory);
+		panel.add(browseBackupDirectory, BorderLayout.EAST);
+		addComponent(jEdit.getProperty("options.save-back.backupDirectory"),
+			panel);
+
 		/* Autosave untitled buffers */
 		autosaveUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.autosaveUntitled"));
@@ -112,19 +126,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		backups.setToolTipText(jEdit.getProperty("options.save-back.backups.tooltip"));
 		addComponent(jEdit.getProperty("options.save-back.backups"),backups);
 
-		/* Backup directory */
-		backupDirectory = new JTextField(jEdit.getProperty(
-			"backup.directory"));
-		backupDirectory.setToolTipText(
-			jEdit.getProperty("options.save-back.backupDirectory.tooltip"));
-
-		JButton browseBackupDirectory = new JButton("...");
-		browseBackupDirectory.addActionListener(new MyActionListener());
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(backupDirectory);
-		panel.add(browseBackupDirectory, BorderLayout.EAST);
-		addComponent(jEdit.getProperty("options.save-back.backupDirectory"),
-			panel);
 
 		/* Backup filename prefix */
 		backupPrefix = new JTextField(jEdit.getProperty("backup.prefix"));
