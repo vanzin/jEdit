@@ -2218,7 +2218,7 @@ public class jEdit
 
 		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 
-		boolean suppressNotSavedConfirmUntitled = jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled");
+		boolean suppressNotSavedConfirmUntitled = jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") || autosaveUntitled;
 
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
