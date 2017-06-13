@@ -77,10 +77,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			"confirmSaveAll"));
 		addComponent(confirmSaveAll);
 
-		/* Autosave interval */
-		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
-		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
-
 		/* Close Dirty Untitled Buffers without confirm */
 		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.suppressNotSavedConfirmUntitled"));
@@ -88,16 +84,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty("options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
 		suppressNotSavedConfirmUntitled.setSelected(jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
 		addComponent(suppressNotSavedConfirmUntitled);
-
-
-		/* Autosave untitled buffers */
-		autosaveUntitled = new JCheckBox(jEdit.getProperty(
-			"options.save-back.autosaveUntitled"));
-		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
-
-		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
-		addComponent(autosaveUntitled);
-
 
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
@@ -108,15 +94,30 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		addComponent(useMD5forDirtyCalculation);
 
 
+		/* Autosave untitled buffers */
+		autosaveUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
 
+		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
+		addComponent(autosaveUntitled);
+
+		/* Autosave interval */
+		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
+		autosave.setToolTipText(jEdit.getProperty("options.save-back.autosave.tooltip"));
+		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
 
 		/* Backup count */
 		backups = new NumericTextField(jEdit.getProperty("backups"), true);
+		backups.setToolTipText(jEdit.getProperty("options.save-back.backups.tooltip"));
 		addComponent(jEdit.getProperty("options.save-back.backups"),backups);
 
 		/* Backup directory */
 		backupDirectory = new JTextField(jEdit.getProperty(
 			"backup.directory"));
+		backupDirectory.setToolTipText(
+			jEdit.getProperty("options.save-back.backupDirectory.tooltip"));
+
 		JButton browseBackupDirectory = new JButton("...");
 		browseBackupDirectory.addActionListener(new MyActionListener());
 		JPanel panel = new JPanel(new BorderLayout());
