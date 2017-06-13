@@ -778,7 +778,7 @@ public class View extends JFrame implements InputHandlerProvider
 			editPane.focusOnTextArea();
 		}
 		else
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 	} //}}}
 
 	//{{{ unsplitCurrent() method
@@ -839,7 +839,7 @@ public class View extends JFrame implements InputHandlerProvider
 			editPane.focusOnTextArea();
 		}
 		else
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 	} //}}}
 
 	//{{{ resplit() method
@@ -851,7 +851,7 @@ public class View extends JFrame implements InputHandlerProvider
 	public void resplit()
 	{
 		if(lastSplitConfig == null)
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 		else
 			setSplitConfig(null,lastSplitConfig);
 	} //}}}
@@ -1468,6 +1468,7 @@ public class View extends JFrame implements InputHandlerProvider
 	boolean confirmToCloseDirty()
 	{
 		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+		boolean suppressNotSavedConfirmUntitled = jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") || autosaveUntitled;
 		Set<Buffer> checkingBuffers = getOpenBuffers();
 		for (View view: jEdit.getViews())
 		{
@@ -1479,7 +1480,7 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		for (Buffer buffer: checkingBuffers)
 		{
-			if (buffer.isDirty() && !(buffer.isUntitled() && autosaveUntitled))
+			if (buffer.isDirty() && !(buffer.isUntitled() && suppressNotSavedConfirmUntitled))
 			{
 				return new CloseDialog(this, checkingBuffers).isOK();
 			}

@@ -4716,11 +4716,7 @@ loop:
 		}
 		else
 		{
-			if (!view.confirmToCloseDirty())
-				return false;
-
-			if ( getBufferSetManager().getScope().equals(BufferSet.Scope.editpane)
-				|| getBufferSetManager().getScope().equals(BufferSet.Scope.view) ) {
+			if (!jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") && !getBufferSetManager().getScope().equals(BufferSet.Scope.global)) {
 				// move the untitled buffers to the next open view's current editpane bufferset (first or last)
 				View targetView;
 				if ( view.equals(viewsFirst) ) {
@@ -4736,6 +4732,8 @@ loop:
 				}
 
 			}
+			if (!view.confirmToCloseDirty())
+				return false;
 
 			view.close();
 			view.dispose();
