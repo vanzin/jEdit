@@ -22,8 +22,11 @@ Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- FR#506, FR#536, FR#175: Autosaves are now saved to the Backup directory.
+- FR#506, FR#536: Autosaves are now saved to the Backup directory.
   (Alan Ezust, Hrotkó Gábor)
+
+- FR#175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
+  to "Close Dirty Untitled buffers without confirmation. (Alan Ezust)
 
 }}}
 {{{ API Changes
