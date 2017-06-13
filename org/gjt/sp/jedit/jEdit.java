@@ -1933,7 +1933,7 @@ public class jEdit
 		{
 			path = editPane.getBuffer().getDirectory();
 		} else {
-			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(settingsDirectory, true);
+			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(System.getProperty("user.home"), true);
 			path = autosaveDir.getPath();
 		}
 		VFS vfs = VFSManager.getVFSForPath(path);
@@ -2018,8 +2018,11 @@ public class jEdit
 		}
 
 		boolean doNotSave = false;
-		if(buffer.isDirty())
-		{
+		if(buffer.isDirty()) {
+			if (buffer.isUntitled() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) {
+				_closeBuffer(view, buffer, true);
+				return true;
+			}
 			Object[] args = { buffer.getName() };
 			int result = GUIUtilities.confirm(view,"notsaved",args,
 				JOptionPane.YES_NO_CANCEL_OPTION,
@@ -2213,12 +2216,14 @@ public class jEdit
 
 		boolean saveRecent = !(isExiting && jEdit.getBooleanProperty("restore"));
 
-                boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
+
+		boolean suppressNotSavedConfirmUntitled = jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled");
 
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
-			if(buffer.isDirty() && !( buffer.isUntitled() && autosaveUntitled ) )
+			if(buffer.isDirty() && !( buffer.isUntitled() && suppressNotSavedConfirmUntitled ) )
 			{
 				dirty = true;
 				break;
@@ -2226,8 +2231,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		if(dirty)
-		{
+		if(dirty) {
 			boolean ok = new CloseDialog(view).isOK();
 			if(!ok)
 				return false;

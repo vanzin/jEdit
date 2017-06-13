@@ -22,11 +22,8 @@ Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- Removed Saving and Backup option, "Never mark untitled buffers dirty"
-  because it has been replaced by "Autosave untitled buffers" which also
-  allows you to exit jEdit with dirty untitled buffers. (Alan Ezust)
-
-- FR#506: Autosaves are now saved to the Backup directory. (Alan Ezust)
+- FR#506, FR#536, FR#175: Autosaves are now saved to the Backup directory.
+  (Alan Ezust, Hrotkó Gábor)
 
 }}}
 {{{ API Changes

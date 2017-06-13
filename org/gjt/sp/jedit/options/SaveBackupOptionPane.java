@@ -81,6 +81,15 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
 		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
 
+		/* Close Dirty Untitled Buffers without confirm */
+		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.suppressNotSavedConfirmUntitled"));
+
+		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty("options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
+		suppressNotSavedConfirmUntitled.setSelected(jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
+		addComponent(suppressNotSavedConfirmUntitled);
+
+
 		/* Autosave untitled buffers */
 		autosaveUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.autosaveUntitled"));
@@ -150,6 +159,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		boolean newAutosave = autosaveUntitled.isSelected();
 		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
 		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
+		jEdit.setBooleanProperty("suppressNotSavedConfirmUntitled", suppressNotSavedConfirmUntitled.isSelected());
+
 		jEdit.setBooleanProperty("useMD5forDirtyCalculation",
 				useMD5forDirtyCalculation.isSelected());
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
@@ -171,6 +182,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
+	private JCheckBox suppressNotSavedConfirmUntitled;
 
 	private JCheckBox useMD5forDirtyCalculation;
 	private JTextField backups;
@@ -184,13 +196,13 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private class MyActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
-		{			
+		{
 			String[] choosenFolder =
 				GUIUtilities.showVFSFileDialog(null, backupDirectory.getText(),
 	   			       	VFSBrowser.CHOOSE_DIRECTORY_DIALOG, false);
-			if (choosenFolder != null) 
+			if (choosenFolder != null)
 				backupDirectory.setText(choosenFolder[0]);
-			
+
 		}
 	} //}}}
 
