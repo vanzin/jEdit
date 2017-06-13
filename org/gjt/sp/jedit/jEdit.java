@@ -4719,8 +4719,8 @@ loop:
 			if (!view.confirmToCloseDirty())
 				return false;
 
+			// move the dirty untitled buffers to the next open view's current editpane bufferset (first or last)
 			if (!jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") && !getBufferSetManager().getScope().equals(BufferSet.Scope.global)) {
-				// move the untitled buffers to the next open view's current editpane bufferset (first or last)
 				View targetView;
 				if ( view.equals(viewsFirst) ) {
 					targetView = viewsLast;
@@ -4729,11 +4729,10 @@ loop:
 				}
 				BufferSet bufferSet = targetView.getEditPane().getBufferSet();
 				for (Buffer buffer : view.getBuffers()) {
-					if ( buffer.isUntitled() ) {
+					if ( buffer.isUntitled() && buffer.isDirty()) {
 						bufferSet.addBuffer(buffer);
 					}
 				}
-
 			}
 
 			view.close();
