@@ -1488,7 +1488,6 @@ options.save-back.twoStageSave.tooltip=Fáze 1: Vytvoří dočasný soubor a ulo
 options.save-back.confirmSaveAll="Uložit všechny buffery" žádá o potvrzení
 options.save-back.autosaveUntitled=Autosave nepojmenovaných bufferů
 options.save-back.suppressNotSavedConfirmUntitled=Nikdy neoznačovat nepojmenované buffery jako změněné.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=Zaškrnete-li tuto možnost, znamená to, že nepojmenované buffery budou vymazány, kdykoliv je vytvořen nový.(je to feature!)
 options.save-back.useMD5forDirtyCalculation=Nikdy neoznačovat buffery jako změněné, pokud je obsah nezměněn.
 options.save-back.useMD5forDirtyCalculation.tooltip=Porovnáním délky a MD5 hashe bufferu v čase načtení se rozhodne, zda je upravený buffer stále změněný.
 options.save-back.saveAsUsesFSB=Prohlížeč souborového systému využívá jako výchozí uložení "Uložit jako"

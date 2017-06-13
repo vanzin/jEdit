@@ -1467,7 +1467,6 @@ options.save-back.twoStageSave.tooltip=第1阶段：创建一个临时文件，�
 options.save-back.confirmSaveAll=“保存全部内容“要求进行确认
 options.save-back.autosaveUntitled=自动保存未命名的内容
 options.save-back.suppressNotSavedConfirmUntitled=不给未命名内容标记未混乱文件.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=检查这意味着每当创建一个新的内容，未命名的内容就被删除（它是一个功能！）
 options.save-back.useMD5forDirtyCalculation=如果内容未改变，不标注内容紊乱.
 options.save-back.useMD5forDirtyCalculation.tooltip=在加载时比较内容长度以及MD5哈希值, 以判断已编辑的内容是否仍然混乱.
 options.save-back.saveAsUsesFSB=“另存为”默认到文件系统浏览器目录

@@ -1474,7 +1474,6 @@ options.save-back.twoStageSave.tooltip=Стадия 1: Сиздать време
 options.save-back.confirmSaveAll=Запрашивать подтверждение при исполнении "Сохранить всех буферы"
 options.save-back.autosaveUntitled=Автосохранение неназванных буверов
 options.save-back.suppressNotSavedConfirmUntitled=Не помечать неназванные буферы как изменённые.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=Неназванные буферы будут стёрты при создании новых (так задумано, это не ошибка)
 options.save-back.useMD5forDirtyCalculation=Не помечать неназванный буфер как изменённый, если содержимое не изменено.
 options.save-back.useMD5forDirtyCalculation.tooltip=Сравнивать с длиной и суммой MD5 буфера при загрузке, чтобы определит, был ли буфер изменён.
 options.save-back.saveAsUsesFSB="Сохранить как" начинает в директории Обозревателя файловой системы

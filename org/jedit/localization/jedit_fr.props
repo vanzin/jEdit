@@ -1482,7 +1482,6 @@ options.save-back.twoStageSave.tooltip=Niveau 1 : Renomme l'ancien fichier. Nive
 options.save-back.confirmSaveAll=Demander confirmation pour « Enregistrer tous les tampons »
 options.save-back.autosaveUntitled=Enregistrer automatiquement les tampons sans titre
 options.save-back.suppressNotSavedConfirmUntitled=Ne jamais marquer les tampons sans titre comme étant modifiés mais non enregistrés.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=Si ceci est coché, cela signifie que les tampons sans titres seront supprimés quand un autre est créé (c'est une fonctionnalité !)
 options.save-back.useMD5forDirtyCalculation=Ne jamais marquer les tampons comme étant modifiés mais pas enregistrés si le contenu n'a pas changé.
 options.save-back.useMD5forDirtyCalculation.tooltip=Comparer la longueur et le MD5 hash du tampon à l'horaire de chargement pour décider si un tampon édité est modifié mais pas encore enregistré.
 options.save-back.saveAsUsesFSB="Enregistrer sous" par défaut vers le dossier de l'explorateur de fichiers
