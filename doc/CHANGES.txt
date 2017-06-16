@@ -26,7 +26,7 @@ Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
   (Alan Ezust, Hrotkó Gábor)
 
 - FR#175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
-  to "Close Dirty Untitled buffers without confirmation. (Alan Ezust)
+  to "Close Dirty Untitled buffers without confirmation" (Alan Ezust)
 
 }}}
 {{{ API Changes
