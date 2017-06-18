@@ -898,9 +898,6 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
-		<copy file="${basedir}/doc/stylesheet.css"
-		      todir="${jar.location}/doc/api"
-		      overwrite="true"/>
 	</target>
 
 	<target name="generate-pdf-users-guide"

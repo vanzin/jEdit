@@ -11,7 +11,7 @@ Hrotkó Gábor, Alan Ezust, and Dale Anson for contributing to this release.
 
 - command line behavior for +line fixed (Patch #590 - Wim West)
 
-- Autosave Untitled Buffers fixed (Patch #596 - Hrotkó Gábor)
+- Autosave Untitled Buffers fixed (FR# 501, Patch #596 - Hrotkó Gábor)
 
 - Fixed a number of bugs in the new jEdit printing system (Dale Anson)
 
