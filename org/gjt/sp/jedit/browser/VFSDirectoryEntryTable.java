@@ -610,7 +610,7 @@ public class VFSDirectoryEntryTable extends JTable
 	class MouseHandler extends MouseInputAdapter
 	{
 		@Override
-		public void mousePressed(MouseEvent evt)
+		public void mouseClicked(MouseEvent evt)
 		{
 			// double click on columns header
 			if (evt.getSource() == header && evt.getClickCount() == 2)
