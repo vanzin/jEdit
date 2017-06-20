@@ -1907,11 +1907,12 @@ public class Buffer extends JEditBuffer
 		boolean reloadingUntitled = name.startsWith("#") && name.endsWith("#");
 		
 		// clean up buffer name
-		// # is for autosave, e.g. reloading autosaved untitled, remove it from the buffer's name
-		if ( name.startsWith("#") )
+		// #filename# is for autosave, e.g. reloading autosaved file, remove #'s from the buffer's name
+		if ( name.startsWith("#") && name.endsWith("#"))
+		{
 			name = name.substring(1, name.length());
-		if ( name.endsWith("#") )
-			name = name.substring(0, name.length()-1);
+			name = name.substring(0, name.length() - 1);
+		}
 
 		directory = vfs.getParentOfPath(path);
 

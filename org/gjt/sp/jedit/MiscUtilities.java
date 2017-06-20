@@ -1009,9 +1009,35 @@ public class MiscUtilities
 	 */
 	public static boolean isBackup(String filename)
 	{
-		if (filename.startsWith("#")) return true;
-		if (filename.endsWith("~")) return true;
-		if (filename.endsWith(".bak")) return true;
+		if (filename == null)
+		{
+			return false;	
+		}
+		
+		// check for #Untitled=X# and #filename#save#
+		if (filename.matches("[#]Untitled-\\d+[#]") || filename.matches("[#].*?[#]save[#]"))
+		{
+			return true;	
+		}
+		
+		// check for user supplied prefix and suffix
+		String backupPrefix = jEdit.getProperty("backup.prefix");
+		String backupSuffix = jEdit.getProperty("backup.suffix");
+		if (backupPrefix != null && backupSuffix != null)
+		{
+			return filename.startsWith(backupPrefix) && filename.endsWith(backupSuffix);	
+		}
+		
+		if (backupPrefix != null && filename.startsWith(backupPrefix))
+		{
+			return true;	
+		}
+		
+		if (backupSuffix != null && filename.startsWith(backupSuffix))
+		{
+			return true;	
+		}
+		
 		return false;
 	} //}}}
 
