@@ -92,7 +92,7 @@ backupEverySave=false
 backups=1
 
 # Backup directory
-backup.directory=
+backup.directory=$JEDIT_SETTINGS/backups
 
 # Backup filename prefix and suffix
 backup.prefix=

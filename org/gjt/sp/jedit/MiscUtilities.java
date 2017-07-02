@@ -175,15 +175,19 @@ public class MiscUtilities
 		}
 		String varName = m.group(2);
 		String expansion = System.getenv(varName);
-		if (expansion == null)
-		{ // try everything uppercase?
-			varName = varName.toUpperCase();
-			String uparg = arg.toUpperCase();
-			m = p.matcher(uparg);
-			expansion = System.getenv(varName);
+		if (expansion == null) {
+			if (varName.equalsIgnoreCase("jedit_settings")) {
+				expansion = jEdit.getSettingsDirectory();
+			}
+			else {
+				// try everything uppercase?
+				varName = varName.toUpperCase();
+				String uparg = arg.toUpperCase();
+				m = p.matcher(uparg);
+				expansion = System.getenv(varName);
+			}
 		}
-		if (expansion != null)
-		{
+		if (expansion != null) {
 			expansion = expansion.replace("\\", "\\\\");
 			return m.replaceFirst(expansion);
 		}
@@ -1623,6 +1627,7 @@ loop:		for(;;)
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix())
 				prefixMap.put(System.getProperty("user.home"), "~");
+			prefixMap.put(jEdit.getSettingsDirectory(), "JEDIT_SETTINGS");
 			for (Map.Entry<String, String> entry: env.entrySet())
 			{
 				String k = entry.getKey();
@@ -1652,6 +1657,7 @@ loop:		for(;;)
 				}
 				prefixMap.put(v, k);
 			}
+
 		} //}}}
 
 		//{{{ compress() method
