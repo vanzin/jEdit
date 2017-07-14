@@ -166,9 +166,7 @@ public class PerspectiveManager
 				out.write("\">");
 
 				// for untitled, we only have the autosave file
-				out.write(XMLUtilities.charsToEntities(
-					buffer.isUntitled()?buffer.getAutosaveFile().getPath():buffer.getPath(),
-					false));
+				out.write(XMLUtilities.charsToEntities(buffer.getPath(), false));
 
 				out.write("</BUFFER>");
 				out.write(lineSep);

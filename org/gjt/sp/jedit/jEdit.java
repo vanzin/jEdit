@@ -1772,7 +1772,7 @@ public class jEdit
 	 *
 	 * @return the buffer, or null if jEdit was unable to load it
 	 *
-	 * @since jEdit 3.2pre10
+	 * @since jEdit 5.5pre1
 	 */
 	public static Buffer openTemporary(View view, String parent,
 		String path, boolean newFile, boolean untitled)
@@ -1827,12 +1827,7 @@ public class jEdit
 				path = path.substring(5);
 		}
 
-		if ( untitled ) {
-			path = MiscUtilities.constructPath(
-				MiscUtilities.prepareAutosaveDirectory(settingsDirectory, untitled).getPath(),path);
-		} else {
 		path = MiscUtilities.constructPath(parent,path);
-		}
 
 		if(props == null)
 			props = new Hashtable<String, Object>();
@@ -1918,7 +1913,6 @@ public class jEdit
 
 	/**
 	 * Creates a new `untitled' file.
-	 * Default directory is &lt;settings_dir&gt;/autosave
 	 *
 	 * @param editPane The editPane to create the file in
 	 *
@@ -1933,8 +1927,8 @@ public class jEdit
 		{
 			path = editPane.getBuffer().getDirectory();
 		} else {
-			File autosaveDir = MiscUtilities.prepareAutosaveDirectory(System.getProperty("user.home"), true);
-			path = autosaveDir.getPath();
+			File backupDir = MiscUtilities.prepareBackupDirectory(System.getProperty("user.home"));
+			path = backupDir.getPath();
 		}
 		VFS vfs = VFSManager.getVFSForPath(path);
 		// don't want 'New File' to create a read only buffer

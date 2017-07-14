@@ -349,12 +349,13 @@ public class BufferSetManager
 		}
 		if (parent == null)
 		{
-			// autosave files will be in a separated dir
-			String settingsDirectory = jEdit.getSettingsDirectory();
-			parent = MiscUtilities.prepareAutosaveDirectory(settingsDirectory, true).getPath();
+			parent = MiscUtilities.getBackupDirectory();
 		}
-		VFS vfs = VFSManager.getVFSForPath(parent);
-		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
+		VFS vfs = null;
+		if (parent != null) {
+			vfs = VFSManager.getVFSForPath(parent);
+		}
+		if (vfs != null && (vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 		{
 			// cannot write on that VFS, creating untitled buffer in home directory
 			parent = System.getProperty("user.home");

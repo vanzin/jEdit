@@ -71,8 +71,13 @@ public class BufferAutosaveRequest extends BufferIORequest
 				buffer.readLock();
 				if(buffer.isDirty())
 					out = vfs._createOutputStream(session,path,view);
-				if(out != null)
+				if(out != null) {
+					Log.log(Log.DEBUG,MiscUtilities.class,
+						"Saving autosave of file \"" +
+						buffer.getPath() + "\" to \"" +
+						path + '"');
 					write(buffer,out);
+			}
 			}
 			catch (FileNotFoundException e)
 			{

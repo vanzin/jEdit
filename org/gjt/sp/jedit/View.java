@@ -1683,8 +1683,7 @@ public class View extends JFrame implements InputHandlerProvider
 			EditPane editPane = (EditPane) component;
 			splitConfig.append('"');
 			Buffer editPaneBuffer = editPane.getBuffer();
-			splitConfig.append(StandardUtilities.charsToEscapes(
-				editPaneBuffer.isUntitled()?editPaneBuffer.getAutosaveFile().getPath():editPaneBuffer.getPath()));
+			splitConfig.append(StandardUtilities.charsToEscapes(editPaneBuffer.getPath()));
 			splitConfig.append("\" buffer");
 			BufferSet bufferSet = editPane.getBufferSet();
 			Buffer[] buffers = bufferSet.getAllBuffers();
@@ -1693,8 +1692,7 @@ public class View extends JFrame implements InputHandlerProvider
 				if (!buffer.isNewFile() || (buffer.isUntitled() && autosaveUntitled))
 				{
 					splitConfig.append(" \"");
-					splitConfig.append(StandardUtilities.charsToEscapes(
-						buffer.isUntitled()?buffer.getAutosaveFile().getPath():buffer.getPath() ));
+					splitConfig.append(StandardUtilities.charsToEscapes(buffer.getPath() ));
 					splitConfig.append("\" buff");
 				}
 			}

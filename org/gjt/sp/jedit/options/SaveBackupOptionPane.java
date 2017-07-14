@@ -154,6 +154,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
 		jEdit.setProperty("autosave", this.autosave.getText());
 		jEdit.setProperty("backups",backups.getText());
+		String backupDirectoryOriginal = jEdit.getProperty("backup.directory");
 		jEdit.setProperty("backup.directory",backupDirectory.getText());
 		jEdit.setProperty("backup.prefix",backupPrefix.getText());
 		jEdit.setProperty("backup.suffix",backupSuffix.getText());
@@ -176,6 +177,20 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 				}
 			}
 		}
+		
+		// if backup dir changed, we should issue to perform an autosave for all dirty and all untitled buffers
+		// to have the autosaves at the new location
+		if (!backupDirectoryOriginal.equals(backupDirectory.getText())) {
+			Buffer[] buffers = jEdit.getBuffers();
+			for (Buffer buffer : buffers) {
+				// save dirty
+				if ( buffer.isDirty() ) {
+					buffer.autosave(true);
+				}
+				
+			}
+		}
+		
 	} //}}}
 
 	//{{{ Private members
