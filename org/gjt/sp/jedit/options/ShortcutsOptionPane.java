@@ -102,6 +102,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		keymapBox.add(duplicateKeymap);
 		keymapBox.add(resetKeymap);
 		keymapBox.add(deleteKeymap);
+		keymaps.setToolTipText(jEdit.getProperty("options.shortcuts.keymap.tooltip"));
+		keymapBox.setToolTipText(jEdit.getProperty("options.shortcuts.keymap.tooltip"));
 
 		// combobox to choose action set
 		selectModel = new JComboBox<>(models);

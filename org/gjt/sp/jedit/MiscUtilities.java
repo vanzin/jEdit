@@ -682,7 +682,7 @@ public class MiscUtilities
 	{
 		String backupDirectory = jEdit.getProperty("backup.directory");
 		if(backupDirectory == null || backupDirectory.length() == 0)
-	{
+		{
 			return null;
 		} else {
 			return MiscUtilities.expandVariables(backupDirectory);
@@ -976,33 +976,33 @@ public class MiscUtilities
 	{
 		if (filename == null)
 		{
-			return false;	
+			return false;
 		}
-		
+
 		// check for #Untitled=X# and #filename#save#
 		if (filename.matches("[#]Untitled-\\d+[#]") || filename.matches("[#].*?[#]save[#]"))
 		{
-			return true;	
+			return true;
 		}
-		
+
 		// check for user supplied prefix and suffix
 		String backupPrefix = jEdit.getProperty("backup.prefix");
 		String backupSuffix = jEdit.getProperty("backup.suffix");
 		if (backupPrefix != null && backupSuffix != null)
 		{
-			return filename.startsWith(backupPrefix) && filename.endsWith(backupSuffix);	
+			return filename.startsWith(backupPrefix) && filename.endsWith(backupSuffix);
 		}
-		
+
 		if (backupPrefix != null && filename.startsWith(backupPrefix))
 		{
-			return true;	
+			return true;
 		}
-		
+
 		if (backupSuffix != null && filename.startsWith(backupSuffix))
 		{
-			return true;	
+			return true;
 		}
-		
+
 		return false;
 	} //}}}
 

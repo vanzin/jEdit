@@ -15,7 +15,13 @@
     url="../CHANGES.txt">Detailed Change Log</ulink>.
     </para>
 
-    <para> Some notable new things in this version are: </para>
+    <para> One notable new thing in this version is autosaves of untitled buffers.
+    This allows jEdit to save and restore untitled buffers across sessions.
+    Totally rewritten is most of the autosave code - it now uses the backup directory
+    to store its files. In addition, the option for never marking untitled buffers
+    dirty has been replaced by an option that achieves a similar goal (allowing you to
+    close or quit untitled buffers without a dialog confirmation), but allows for
+    multiple dirty untitled buffers. </para>
 
     <para> With continued support from the community, we will keep releasing a newer
     version each year that can accurately bring together the fruits of everyone's labor.
