@@ -49,12 +49,17 @@ public class LargeFilesOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		//{{{ Large file mode
-		addSeparator(jEdit.getProperty("options.editing.largefilemode.title"));
+
+		addSeparator("options.editing.largefilemode.title");
 
 		String labelText = jEdit.getProperty("options.editing.largefilemode",
 			new Object[] {jEdit.getIntegerProperty("largeBufferSize"),
 						  jEdit.getIntegerProperty("longLineLimit")});
-		addComponent(new JLabel(labelText));
+		JLabel titleLabel = new JLabel(labelText);
+		titleLabel.setToolTipText(jEdit.getProperty("options.editing.largefilemode.tooltip"));
+		addComponent(titleLabel);
+
+
 		addComponent(askLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.ask")));
 		addComponent(fullSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.full")));
 		addComponent(limitedSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.limited")));
