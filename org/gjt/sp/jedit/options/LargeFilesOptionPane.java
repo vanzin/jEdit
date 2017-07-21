@@ -1,9 +1,9 @@
 /*
- * EditingOptionPane.java - Mode-specific options panel
+ * LargeFilesOptionPane.java - Options for handling large files
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2002 Slava Pestov
+ * Copyright (C) 2013 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,10 @@ import org.gjt.sp.jedit.*;
 //}}}
 
 /**
- * The EditingOptionPane has been split up so the large files option pane is 
- * now a separate pane.
- * @author Slava Pestov
- * @version $Id: EditingOptionPane.java 23381 2013-12-09 12:43:14Z kpouer $
+ * The options pane for handling large files.
+ *
+ * @author kpouer
+ * now a separate pane split off from $Id: EditingOptionPane.java 23381 2013-12-09 12:43:14Z kpouer $
  */
 public class LargeFilesOptionPane extends AbstractOptionPane
 {
@@ -51,7 +51,10 @@ public class LargeFilesOptionPane extends AbstractOptionPane
 		//{{{ Large file mode
 		addSeparator(jEdit.getProperty("options.editing.largefilemode.title"));
 
-		addComponent(new JLabel(jEdit.getProperty("options.editing.largefilemode")));
+		String labelText = jEdit.getProperty("options.editing.largefilemode",
+			new Object[] {jEdit.getIntegerProperty("largeBufferSize"),
+						  jEdit.getIntegerProperty("longLineLimit")});
+		addComponent(new JLabel(labelText));
 		addComponent(askLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.ask")));
 		addComponent(fullSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.full")));
 		addComponent(limitedSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.limited")));

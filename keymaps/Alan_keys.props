@@ -276,5 +276,4 @@ white-space.toggle-remove-trailing-white-space.shortcut=C+w C+r
 xfind-prev.shortcut=C+q p
 xfind-replace-dialog.shortcut=C+r C+f
 xml-chars-to-entities.shortcut=C+x C+e
-xml-match-tag.shortcut2=CS+m
 xml-match-tag.shortcut=CS+M

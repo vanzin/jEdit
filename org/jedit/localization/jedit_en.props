@@ -1605,7 +1605,7 @@ options.gutter.foldStyleNames.Circle=Circle
 #{{{ Large files pane
 options.large-files.label=Large files
 options.editing.largefilemode.title=Large file mode
-options.editing.largefilemode=What should I do about very big files:
+options.editing.largefilemode=What should I do about very big files (> {0} chars, or with lines > {1} chars):
 options.editing.largefilemode.option.ask=<html><b>Ask</b> what to do when opening a large file</html>
 options.editing.largefilemode.option.full=<html><b>Keep Full syntax</b> : jEdit's syntax highlight will work as usual, jEdit \
                                                	may become<br/><b>very slow, this is not recommended</b></html>

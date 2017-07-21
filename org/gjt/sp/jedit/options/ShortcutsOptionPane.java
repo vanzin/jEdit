@@ -540,7 +540,6 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			// The only place this gets used is in JTable's own display code, so
 			// we translate the shortcut to platform-specific form for display here.
 			KeyBinding bindingAt = getBindingAt(row, 0);
-			setToolTipText(bindingAt.label);
 			switch(col)
 			{
 			case 0:
