@@ -31,7 +31,7 @@
                 linkend="opening" />)</para>
             </listitem>
 
-            <listitem><para> Whether to show a dialog or auto-reload when 
+            <listitem><para> Whether to show a dialog or auto-reload when
             this buffer's file is changed on disk. </para></listitem>
 
             <listitem>
@@ -235,26 +235,26 @@
             <para>The <guibutton>General</guibutton> pane contains various
             settings, such as
             the number of recent files to remember, when to check for changed files,
-            if the recent file list should be sorted, what current locale to use, 
-            if caret positions or markers in buffers should be saved, 
-            if previously open files or split configurations should be restored on startup, 
+            if the recent file list should be sorted, what current locale to use,
+            if caret positions or markers in buffers should be saved,
+            if previously open files or split configurations should be restored on startup,
             and so on.</para>
 
             <formalpara><title> If Open Buffers Are Changed On Disk... </title>
             <para> If <guilabel>Do Nothing</guilabel> is selected, then modifications from
             jEdit will silently clobber changes made from other processes during saves.
             Don't use this option unless you know what you are doing! Also, changing this
-            option here only affects newly opened buffers, not the ones that are currently 
-            open. You can also change this setting for individual buffers from 
+            option here only affects newly opened buffers, not the ones that are currently
+            open. You can also change this setting for individual buffers from
             Buffer Options. <xref linkend="buffer-opts"/> </para>
             </formalpara>
 
             <formalpara><title> Check for changed buffers upon... </title>
             <para> This option allows you choose additional times that jEdit checks for
             changed files on disk. For slow or remote file systems, removing unnecessary
-            file status checks might improve performance. 
+            file status checks might improve performance.
             Regardless of the choice here, files are still checked before
-            save, unless <guilabel>Do Nothing</guilabel> is also selected 
+            save, unless <guilabel>Do Nothing</guilabel> is also selected
             for the previous option. </para>
             </formalpara>
 
@@ -297,7 +297,7 @@
 
             <para>The <guibutton>Appearance</guibutton> pane can be used to
             change the appearance of user interface controls such as buttons,
-            labels and menus. It can also be used to change the icon set, or 
+            labels and menus. It can also be used to change the icon set, or
             look and feel, enable/disable the splash screen or
             system tray, and other appearance tweaks. You can also set the number of items
             retained in history text fields, see <xref linkend="history" />.</para>
@@ -324,9 +324,9 @@
             <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current buffer through the checkboxes in this pane. See <xref linkend="docking" />.
             </para>
 
-            <para> jEdit also supports alternate docking frameworks. If 
+            <para> jEdit also supports alternate docking frameworks. If
             the appropriate plugins are installed (Currently only MyDoggy
-            is available), you can change docking frameworks from here. 
+            is available), you can change docking frameworks from here.
             </para>
 
         </section>
@@ -337,7 +337,7 @@
             <para>The <guibutton>Editing</guibutton> option pane contains 3 tabs where
             settings such as the tab size, syntax highlighting and soft tabs on
             a global or mode-specific basis are made. </para>
-            
+
             <para>The <guibutton>Mode Settings</guibutton> tab allows adjusting specific
             settings per mode. Changing these options does not change XML mode definition files on disk; it merely writes values to the user properties file which
             override those set in mode files. To find out how to edit mode files directly, see <xref linkend="writing-modes-part" />. Some of these options can be further overridden on an individual file basis through the use of buffer-local properties. </para>
@@ -352,13 +352,13 @@
             </para>
 
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
-            
+
             <para>The <guibutton>Edit Modes</guibutton> tab provides a setting to choose
             the default edit mode, the edit modes to display in the various 'mode'
             choosers, and the ability to manually add a new edit mode. Since there are now over 200 modes that jEdit recognizes, having the ability to reduce the number of choices in the 'mode' choosers to those needed by a user is a nice feature.</para>
-            
+
             <para>This tab also provides a way to easily add and delete user modes.</para>
-            
+
             <para>The <guibutton>Undo Settings</guibutton> tab allows setting the number of undo and whether to reset the undo history on save.</para>
 
 
@@ -440,7 +440,7 @@
 
             <para>The <guibutton>Gutter</guibutton> option pane contains
             settings to customize the appearance of the gutter. You can
-            customize values such as 
+            customize values such as
             "minimal number of digits to reserve for line numbers",
             and "fold style".  See <xref linkend="overview" />.</para>
         </section>
@@ -463,24 +463,24 @@
             chooser for the desired download mirror, as well as various settings
             such as the directory where plugins are to be installed. In addition, you can set the time in minutes that the pluginlist can be cached from jedit.org, helping to reduce the server load. See <xref
             linkend="using-plugins" />.</para>
-            
+
             <para> If the option <guimenuitem>Disable Obsolete Plugins</guimenuitem> is checked, then plugins
             that were released on Plugin Manager will be checked against the plugins you have
-            installed, for those with a maximum jEdit version that is lower than the one you are 
+            installed, for those with a maximum jEdit version that is lower than the one you are
             running. Plugins are marked with a maximum jEdit version when they are found to be broken or somehow
-            incompatible with a given jEdit release. 
+            incompatible with a given jEdit release.
             Until an update is made available for such a plugin
             on Plugin Manager, these plugins are automatically unloaded and marked unsupported. This should improve the stability of jEdit.  </para>
-            
+
             <para> If you re-enable a plugin that was disabled this way, it will remain loaded until the
             next time the plugin list is checked - whenever the user
             selects the <guibutton>Update</guibutton> or <guibutton>Install</guibutton> tab from Plugin Manager. If you un-check this option,
             then plugins will not be automatically disabled in this way. </para>
-            
-            
+
+
         </section>
 
-        
+
         <section id="printing-pane">
             <title>The Printing Pane</title>
 
@@ -499,8 +499,9 @@
             <title>The Saving and Backup Pane</title>
 
             <para>The <guibutton>Saving and Backup</guibutton> option pane contains
-            settings for the autosave and backup features. See <xref
-            linkend="autosave" /> and <xref linkend="backups" />.</para>
+            settings for dirty and/or untitled buffers, confirmation dialog option after <guilabel>Close All</guilabel>, autosave, and backup features. See <xref
+            linkend="autosave" /> and <xref linkend="backups" /> for information
+            about those features.</para>
 
         </section>
 
@@ -516,36 +517,39 @@
             a named set of keyboard shortcut mappings.
             Default keymaps are found in jEdit's <literal>keymaps</literal> folder,
             and user customized keymaps are are stored in the
-            user settings' <literal>keymaps</literal> folder. </para>
+            user settings' <literal>keymaps</literal> folder. The can user switch between
+            keymaps with the first combobox on this pane. </para>
 
-            <para> The top combobox allows you to <guilabel>Choose a Keymap</guilabel>,
-            or a set of shortcuts.
-            The "imported" keymap is automatically created and selected when jEdit needs
-            to initially create a "keymaps" user settings folder.
+            <para> The <literal>imported</literal> keymap is automatically created and
+            selected when jEdit needs
+            to initially create a <filename>keymaps</filename> user settings folder.
             At this point, jEdit imports the existing shortcuts and places them into
             "imported". This makes it easy to bring in shortcuts
             from properties files that were customized with jEdit 4.5 or earlier. </para>
 
-            <para> If a keymap of the same name exists in the defaults and the user settings
-            directory, the user version is the one that is used in favor of the default.
-            To take an existing keymap and customize it, select it, click
+            <para> If a keymap of the same name exists in the defaults and the user
+            settings directory, the user version is the one that is used in favor of the
+            default. To take an existing keymap and customize it, select it, click
             <guibutton>duplicate</guibutton> and you will be asked for the name of the new
-            keymap. A copy of that keymap will be
-            saved in the user settings <literal>keymaps</literal> directory. At this point,
-            this keymap will be selected and will determine where new shortcut properties are
-            stored. To remove all customizations and restore a default keymap,
-            click <guibutton>reset</guibutton>. </para>
+            keymap. A copy of that keymap will be saved in the user settings
+            <literal>keymaps</literal> directory. At this point, this keymap will be
+            selected and will determine where new shortcut properties are stored. To
+            remove all customizations and restore a default keymap, click
+            <guibutton>reset</guibutton>. </para>
 
-            <para>The combo box below the keymap selector selects the
-            command set to edit. Command sets exist for the set of all built-in
-            commands, the commands of each plugin, and the set of macros.</para>
-
-            <para>To change a shortcut, click the appropriate table entry and
-            press the keys you want associated with that command in the
-            resulting dialog box. The dialog box will warn you if the shortcut
-            is already assigned. The properties will be saved in the currently selected
-            keymap.
+            <para>The combo box below the keymap selector selects the <guilabel>Action
+            Set</guilabel> to edit. Action Sets exist for the set of all built-in
+            commands, the commands of each plugin, and the set of macros. Some plugins
+            (ProjectViewer, Console and SideKick) offer additional action sets of
+            dynamically-generated actions. Here, you can also select
+            <guilabel>All</guilabel> to see all actions, and an additional 4th column
+            appears in the table, indicating the Action Set each action comes from.
             </para>
+
+            <para>To change a shortcut, click the appropriate table entry and press the
+            keys you want associated with that command in the resulting dialog box. The
+            dialog box will warn you if the shortcut is already assigned. The properties
+            will be saved in the currently selected keymap. </para>
 
         </section>
 
@@ -582,23 +586,23 @@
 
             <para>The <guibutton>Text Area</guibutton> pane contains settings to
             customize the appearance of the text area. </para>
-            
+
             <para>You can configure the <guibutton>Text Font</guibutton>,
-            antialias settings, colors, cursor style, highlight matching, and 
+            antialias settings, colors, cursor style, highlight matching, and
             word-completion settings from here. </para>
-            
+
             <para><guibutton>Fractional Font Metrics</guibutton> is an old option
             that helps with certain versions of Java, but usually not in combination
             with subpixel antialiasing. </para>
-            
+
             <para><guibutton>Additional Fonts with font substitution</guibutton> if checked,
             shows a list of <guibutton>Preferred fonts</guibutton>, as well as the following option.
-            Fonts added to this list will determine the order jEdit searches 
-            for glyphs that may be missing from your chosen 
+            Fonts added to this list will determine the order jEdit searches
+            for glyphs that may be missing from your chosen
             <guibutton>Text Font</guibutton>. </para>
-            <para> If the 
-            <guibutton>Font Substitution: Search all system fonts</guibutton> option is checked, <emphasis>all of the installed fonts</emphasis> 
-            are searched for glyphs, after the preferred list is searched. If this option is checked, no fonts need to be added to preferred fonts list. 
+            <para> If the
+            <guibutton>Font Substitution: Search all system fonts</guibutton> option is checked, <emphasis>all of the installed fonts</emphasis>
+            are searched for glyphs, after the preferred list is searched. If this option is checked, no fonts need to be added to preferred fonts list.
             You probably don't want to un-check either of these options unless you want to test a system with limited fonts. </para>
 
         </section>
@@ -620,9 +624,9 @@
             and buffer switcher are visible, and whether menu, toolbar, and
             statusbar are visible in full-screen mode. See <xref
             linkend="views" />.</para>
-            
+
             <para> You can choose the default bufferset scope here, as well as whether/how you want buffersets to be sorted in buffer switchers. See <xref linkend="buffersets"/> for more details. </para>
-            
+
             <para> If <guimenuitem>Abbreviate paths with environment variables when
             possible</guimenuitem> is checked, you will notice that jEdit displays
             abbreviated versions of file paths when it can, using
@@ -658,9 +662,9 @@
         example when you want to copy jEdit settings between computers.</para>
 
         <para>The location of the settings directory is system-specific
-        <footnote><para> On Linux, it is <literal>~/.jedit</literal>. 
-           On Windows, you will find it in <literal>%APPDATA%\jEdit</literal>. 
-           On the Mac, it is <literal>~/Library/jEdit</literal>. 
+        <footnote><para> On Linux, it is <literal>~/.jedit</literal>.
+           On Windows, you will find it in <literal>%APPDATA%\jEdit</literal>.
+           On the Mac, it is <literal>~/Library/jEdit</literal>.
         </para></footnote>.
         It is printed to the activity log
         (<guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity
@@ -707,7 +711,7 @@
                 which contains the full activity log. See <xref
                 linkend="activity-log" />.</para>
             </listitem>
-            
+
             <listitem>
                 <para><filename>history</filename> - a plain text file which
                 stores history lists, used by history text fields and the
@@ -733,8 +737,8 @@
               contains collections of named keyboard shortcuts
               which can be defined from the Shortcuts Option Pane (see <xref linkend="shortcuts-pane"/>).  </para>
             </listitem>
-              
-            
+
+
             <listitem>
                 <para><filename>killring.xml</filename> - stores recently
                 deleted text. See <xref linkend="text-transfer" />.</para>
@@ -820,27 +824,27 @@
             integer or boolean) by plugins at runtime.</para>
 
             <para>Do not edit this file while jEdit is running. If you do, it
-            is possible that your changes (either your edits, or jEdit settings 
+            is possible that your changes (either your edits, or jEdit settings
             changes) may get lost. </para>
-            
+
         </section>
 
         <section id="sitepropertiesfiles">
             <title>Site Properties</title>
-            
-            
+
+
             <para>
-                You may also put properties files in the <filename>properties</filename> directory under 
+                You may also put properties files in the <filename>properties</filename> directory under
                 the jEdit home directory (NOT the jedit settings directory). You
                 can locate the jEdit home directory by going to the Utilities menu
                 directory, then the <guimenuitem>jEdit Home Directory</guimenuitem> menu item, and the first
                 item in the pullout menu will be the location of the jEdit home
-                directory. This is intended for site-wide settings. This lets you keep 
+                directory. This is intended for site-wide settings. This lets you keep
                 custom user properties separate from the jEdit site-wide properties, so they are easier to find, edit, and move between machines. Note that your
                 custom properties files must have ".props" as the file name extension.
             </para>
-            <para> 
-              Prior to jEdit 5.0, this was also where site-wide keyboard shortcuts were placed, but now you can define custom sets of shortcuts as keymap files. These files can be cloned and edited from the Shortcuts Option Pane, or edited by hand. To place them in a system-wide location, copy them into the <filename>keymaps</filename> folder under the jedit home directory. 
+            <para>
+              Prior to jEdit 5.0, this was also where site-wide keyboard shortcuts were placed, but now you can define custom sets of shortcuts as keymap files. These files can be cloned and edited from the Shortcuts Option Pane, or edited by hand. To place them in a system-wide location, copy them into the <filename>keymaps</filename> folder under the jedit home directory.
             </para>
             <para>
                 Site properties files are read in alphabetically by file name. This means
@@ -851,7 +855,7 @@
             <para>
                 You can edit these files inside jEdit - changes made to these files will not be re-read until the next time jEdit is started.
             </para>
-            
+
         </section>
     </section>
 </chapter>

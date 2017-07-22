@@ -117,22 +117,16 @@
 
             <para>The autosave feature protects your work from computer crashes
             and such. Every 30 seconds, all buffers with unsaved changes are
-            written out to the same directory with their respective file names,
+            written out, with their respective file names,
             enclosed in hash (<quote>#</quote>) characters. For example,
             <filename>/home/user/project/program.c</filename> will be autosaved to
-            <filename>/home/user/project/#program.c#</filename>.</para>
+            <filename>home/user/project/#program.c#</filename> under
+            your backup/autosave directory, or next to the original file,
+            if no backup/autosave directory is specified.</para>
 
             <para> If you wish autosave files to be stored in an alternate
-            location, you can specify the
-            <guilabel>Backup, Autosave Directory</guilabel>
-            as a <guilabel>Saving and Backup</guilabel> option.
-            When editing virtual file systems, this can improve performance
-            and reduce unnecessary network traffic. </para>
-
-            <para>In the case of Untitled buffers, if the Saving and Backup option
-            <emphasis role="bold">Autosave Untitled Buffers</emphasis> is enabled,
-            autosaves of those will be stored in the <literal>autosave</literal> directory
-            under the jEdit user settings directory. </para>
+            location, you can specify the <guilabel>Backup, Autosave Directory</guilabel>
+            as a <guilabel>Saving and Backup</guilabel> option. </para>
 
             <para>Saving a buffer using one of the commands in the previous
             section automatically deletes the autosave file, so they will only
@@ -141,6 +135,10 @@
 
             <para>If an autosave file is found while a buffer is being loaded,
             jEdit will offer to recover the autosaved data.</para>
+
+            <para>If <guilabel>Autosave of Untitled Buffers</guilabel> is enabled,
+            then jEdit will allow you to exit without asking you to save dirty untitled
+            buffers, and will silently restore them for you on next jEdit startup. </para>
 
             <para>The autosave interval can be changed in the
             <guibutton>Autosave and Backup</guibutton> pane of the
@@ -181,8 +179,7 @@
                     <para>If the <guilabel>Backup, Autosave directory</guilabel> setting
                     is non-empty, backups are saved in that location (with the
                     full path to the original file under it). Otherwise,
-                    they are saved in the same directory as the original file.
-                    The latter is the default behavior.</para>
+                    they are saved in the same directory as the original file.</para>
                 </listitem>
 
                 <listitem>
@@ -195,12 +192,6 @@
                     <para>The <guilabel>Backup filename suffix</guilabel>
                     setting is the suffix that is added to the backed-up file
                     name. This is <quote>~</quote> by default.</para>
-                </listitem>
-
-                <listitem>
-                    <para>Backups can optionally be saved in a specified backup
-                    directory, instead of the directory of the original file.
-                    This can reduce clutter.</para>
                 </listitem>
 
                 <listitem>
