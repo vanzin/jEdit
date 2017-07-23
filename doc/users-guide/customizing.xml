@@ -513,37 +513,37 @@
             shortcuts associated with it, and each shortcut can be a single
             or multiple key sequence. </para>
 
-            <para>jEdit 5 introduces a new feature known as "keymaps". Each keymap is
-            a named set of keyboard shortcut mappings.
-            Default keymaps are found in jEdit's <literal>keymaps</literal> folder,
-            and user customized keymaps are are stored in the
-            user settings' <literal>keymaps</literal> folder. The can user switch between
-            keymaps with the first combobox on this pane. </para>
+            <para>jEdit 5 organizes shortcuts into <guilabel>Keymaps</guilabel>. Each
+            <firstterm>keymap</firstterm> is a named set of keyboard shortcut mappings.
+            Default keymaps are found in jEdit's <filename>keymaps</filename> folder, and
+            user customized keymaps are are stored in the user settings'
+            <filename>keymaps</filename> folder. The can user switch between keymaps with
+            the first combobox on this pane. </para>
 
-            <para> The <literal>imported</literal> keymap is automatically created and
-            selected when jEdit needs
-            to initially create a <filename>keymaps</filename> user settings folder.
-            At this point, jEdit imports the existing shortcuts and places them into
-            "imported". This makes it easy to bring in shortcuts
-            from properties files that were customized with jEdit 4.5 or earlier. </para>
+            <para> The <filename>imported.props</filename> keymap is automatically created
+            and selected when jEdit needs to initially create a
+            <filename>keymaps</filename> user settings folder. At this point, jEdit
+            imports the existing shortcuts and places them into
+            <literal>imported</literal>. This makes it easy to bring in shortcuts from
+            properties files that were customized with jEdit 4.5 or earlier. </para>
 
             <para> If a keymap of the same name exists in the defaults and the user
             settings directory, the user version is the one that is used in favor of the
             default. To take an existing keymap and customize it, select it, click
             <guibutton>duplicate</guibutton> and you will be asked for the name of the new
             keymap. A copy of that keymap will be saved in the user settings
-            <literal>keymaps</literal> directory. At this point, this keymap will be
+            <filename>keymaps</filename> directory. At this point, this keymap will be
             selected and will determine where new shortcut properties are stored. To
             remove all customizations and restore a default keymap, click
             <guibutton>reset</guibutton>. </para>
 
-            <para>The combo box below the keymap selector selects the <guilabel>Action
-            Set</guilabel> to edit. Action Sets exist for the set of all built-in
-            commands, the commands of each plugin, and the set of macros. Some plugins
-            (ProjectViewer, Console and SideKick) offer additional action sets of
-            dynamically-generated actions. Here, you can also select
-            <guilabel>All</guilabel> to see all actions, and an additional 4th column
-            appears in the table, indicating the Action Set each action comes from.
+            <para>The combo box below the <guilabel>keymap</guilabel> selector selects the
+            <guilabel>Action Set</guilabel> to edit. <firstterm>Action Sets</firstterm>
+            exist for the set of all built-in commands, the commands of each plugin, and
+            the set of macros. Some plugins (ProjectViewer, Console and SideKick) offer
+            additional action sets of dynamically-generated actions. Here, you can also
+            select <guilabel>All</guilabel> to see all actions, and an additional 4th
+            column appears in the table, indicating the Action Set each action comes from.
             </para>
 
             <para>To change a shortcut, click the appropriate table entry and press the
@@ -595,15 +595,18 @@
             that helps with certain versions of Java, but usually not in combination
             with subpixel antialiasing. </para>
 
-            <para><guibutton>Additional Fonts with font substitution</guibutton> if checked,
-            shows a list of <guibutton>Preferred fonts</guibutton>, as well as the following option.
-            Fonts added to this list will determine the order jEdit searches
-            for glyphs that may be missing from your chosen
+            <para><guibutton>Additional Fonts with font substitution</guibutton> if
+            checked, shows a list of <guibutton>Preferred fonts</guibutton>, as well as
+            the following option. Fonts added to this list will determine the order jEdit
+            searches for glyphs that may be missing from your chosen
             <guibutton>Text Font</guibutton>. </para>
-            <para> If the
-            <guibutton>Font Substitution: Search all system fonts</guibutton> option is checked, <emphasis>all of the installed fonts</emphasis>
-            are searched for glyphs, after the preferred list is searched. If this option is checked, no fonts need to be added to preferred fonts list.
-            You probably don't want to un-check either of these options unless you want to test a system with limited fonts. </para>
+
+            <para> If the <guibutton>Font Substitution: Search all system
+            fonts</guibutton> option is checked, <emphasis>all of the installed
+            fonts</emphasis> are searched for glyphs, after the preferred list is
+            searched. If this option is checked, no fonts need to be added to preferred
+            fonts list. You probably don't want to un-check either of these options unless
+            you want to test a system with limited fonts. </para>
 
         </section>
 
@@ -625,7 +628,7 @@
             statusbar are visible in full-screen mode. See <xref
             linkend="views" />.</para>
 
-            <para> You can choose the default bufferset scope here, as well as whether/how you want buffersets to be sorted in buffer switchers. See <xref linkend="buffersets"/> for more details. </para>
+            <para> You can choose the default <firstterm>bufferset scope</firstterm> here, as well as whether/how you want buffersets to be sorted in buffer switchers. See <xref linkend="buffersets"/> for more details. </para>
 
             <para> If <guimenuitem>Abbreviate paths with environment variables when
             possible</guimenuitem> is checked, you will notice that jEdit displays
@@ -634,7 +637,7 @@
             <literal>%VARIABLE%\name.ext</literal> syntax, depending on your platform.
             Abbreviating is used in the File System Browser, as well as in the window
             title, and in plugins, to save horizontal space. Reverse-expansions also work
-            as you would expect them to, with both syntaxes recognized on both platforms.
+            as you would expect them to, with both syntaxes recognized on all platforms.
             </para>
 
         </section>
@@ -675,6 +678,10 @@
         <para>Another way to find the location of your settings directory is to
         use the "Utilities" menu, then the "Settings Directory" menu item. The
         first item in the pullout menu is the location of your settings directory.
+        </para>
+
+        <para>From Console or the File System Browser, you can use an environment
+        variable, <literal>$JEDIT_SETTINGS</literal>, to refer to that location.
         </para>
 
         <para>Specifying the <userinput>-settings</userinput> switch on the
