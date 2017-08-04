@@ -77,14 +77,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			"confirmSaveAll"));
 		addComponent(confirmSaveAll);
 
-		/* Close Dirty Untitled Buffers without confirm */
-		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
-			"options.save-back.suppressNotSavedConfirmUntitled"));
-
-		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty("options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
-		suppressNotSavedConfirmUntitled.setSelected(jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
-		addComponent(suppressNotSavedConfirmUntitled);
-
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
 		useMD5forDirtyCalculation.setToolTipText(jEdit.getProperty(
@@ -93,6 +85,22 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			jEdit.getBooleanProperty("useMD5forDirtyCalculation"));
 		addComponent(useMD5forDirtyCalculation);
 
+
+		/* Close Dirty Untitled Buffers without confirm */
+		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.suppressNotSavedConfirmUntitled"));
+
+		suppressNotSavedConfirmUntitled.setToolTipText(jEdit.getProperty("options.save-back.suppressNotSavedConfirmUntitled.tooltip"));
+		suppressNotSavedConfirmUntitled.setSelected(jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
+		addComponent(suppressNotSavedConfirmUntitled);
+
+		/* Autosave untitled buffers */
+		autosaveUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
+
+		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
+		addComponent(autosaveUntitled);
 
 		/* Autosave, Backup directory */
 		backupDirectory = new JTextField(jEdit.getProperty(
@@ -107,14 +115,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		panel.add(browseBackupDirectory, BorderLayout.EAST);
 		addComponent(jEdit.getProperty("options.save-back.backupDirectory"),
 			panel);
-
-		/* Autosave untitled buffers */
-		autosaveUntitled = new JCheckBox(jEdit.getProperty(
-			"options.save-back.autosaveUntitled"));
-		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
-
-		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
-		addComponent(autosaveUntitled);
 
 		/* Autosave interval */
 		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
@@ -177,7 +177,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 				}
 			}
 		}
-		
+
 		// if backup dir changed, we should issue to perform an autosave for all dirty and all untitled buffers
 		// to have the autosaves at the new location
 		if (!backupDirectoryOriginal.equals(backupDirectory.getText())) {
@@ -187,10 +187,10 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 				if ( buffer.isDirty() ) {
 					buffer.autosave(true);
 				}
-				
+
 			}
 		}
-		
+
 	} //}}}
 
 	//{{{ Private members
