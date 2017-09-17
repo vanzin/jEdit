@@ -29,7 +29,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.util.Hashtable;
+import java.util.TreeMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.Box;
@@ -57,7 +57,7 @@ BufferLocalPropertiesDialog(View view){
 	mode = buffer.getMode().name;
 
 // removed non-valid BLPs and added missing ones
-	props = new Hashtable();
+	props = new TreeMap();
 	props.put("mode","");
 	props.put("indentSize","int");
 	props.put("tabSize","int");
@@ -88,9 +88,7 @@ BufferLocalPropertiesDialog(View view){
 	content.add(new JLabel(PropertiesLabel), BorderLayout.NORTH);
 
 	_entries = new Vector();
-	names = props.keys();
-	while(names.hasMoreElements()){
-		name = names.nextElement();
+	for(name: props.keySet()){
 		checked = checkedProps.get(name);
 		entry = new JCheckBoxList.Entry(checked != null,name);
 		_entries.addElement(entry);
