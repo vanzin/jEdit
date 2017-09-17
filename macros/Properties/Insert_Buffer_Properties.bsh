@@ -63,6 +63,8 @@ BufferLocalPropertiesDialog(View view){
 	props.put("tabSize","int");
 	props.put("noTabs","bool");
 	props.put("wrap","str");
+	props.put("indentSize", "int");
+	props.put("autoIndent", "str");
 	props.put("maxLineLen","int");
 	props.put("folding","str");
 	props.put("collapseFolds","int");
@@ -204,7 +206,7 @@ BufferLocalPropertiesDialog(View view){
 
 	dialog.pack();
 // cosmetic size-correction
-	dialog.setSize(250,290);
+	dialog.setSize(250,350);
 	dialog.setLocationRelativeTo(view);
 	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	dialog.setVisible(true);
