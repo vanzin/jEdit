@@ -18,6 +18,9 @@ release.
 
 - Add missing local properties to Insert_Buffer_Properties macro
   (Patch #599 - Jesse Pavel)
+  
+- Fixed an issue with the activity log viewer so that setting the number of
+  lines in the log actually works. (Dale Anson)  
 }}}
 {{{ UI Improvements
 
