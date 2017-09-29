@@ -12,7 +12,8 @@ release.
 
 - command line behavior for +line fixed (Patch #590 - Wim West)
 
-- Autosave Untitled Buffers fixed (FR# 501, Patch #596 - Hrotkó Gábor)
+- Autosave Untitled Buffers is now persistent across sessions
+  (Feature Request# 501, Patch #596 - Hrotkó Gábor)
 
 - Fixed a number of bugs in the new jEdit printing system (Dale Anson)
 
@@ -28,11 +29,12 @@ release.
 }}}
 {{{ Miscellaneous
 
-- FR#506, FR#536: Autosaves are now saved to the Backup directory.
+- FR #506, FR #536: Autosaves are now saved to the Backup directory.
   (Alan Ezust, Hrotkó Gábor)
 
-- FR#175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
-  to "Close Dirty Untitled buffers without confirmation" (Alan Ezust)
+- FR #175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
+  name and behavior to "Close Dirty Untitled buffers without confirmation"
+  (Alan Ezust)
 
 }}}
 {{{ API Changes
