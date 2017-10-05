@@ -22,6 +22,9 @@ release.
   
 - Fixed an issue with the activity log viewer so that setting the number of
   lines in the log actually works. (Dale Anson)  
+  
+- Fix for bug #3971, exception trying to set WM_CLASS. (Dale Anson)
+  
 }}}
 {{{ UI Improvements
 

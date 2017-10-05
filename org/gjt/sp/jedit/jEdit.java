@@ -151,8 +151,9 @@ public class jEdit
 		// are closed
 		background = OperatingSystem.isMacOS();
 
-		// Fix X11 windows class
-		if (OperatingSystem.isX11())
+		// Fix X11 windows class for Java 8. For Java 9, this is done in the
+		// jar manifest file.
+		if (OperatingSystem.isX11() && javaVersion.startsWith("1.8"))
 		{
 			try
 			{
@@ -2406,10 +2407,11 @@ public class jEdit
 			path = path.toLowerCase();
 		}
 
-		synchronized(bufferListLock)
-		{
+		/// danson, this causes ProjectViewer to block, not sure why yet
+		///synchronized(bufferListLock)
+		///{
 			return bufferHash.get(path);
-		}
+		///}
 	} //}}}
 
 	//{{{ getBuffer() method

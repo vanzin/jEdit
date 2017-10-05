@@ -1,1 +1,2 @@
 Main-Class: org.gjt.sp.jedit.jEdit
+Add-Opens: java.desktop/sun.awt
