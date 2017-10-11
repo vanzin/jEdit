@@ -21,11 +21,11 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.event.*;
-import javax.swing.plaf.ComboBoxUI;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import java.lang.reflect.Field;
+import javax.accessibility.Accessible;
 
 import javax.swing.*;
+import javax.swing.plaf.*;
+import javax.swing.plaf.basic.*;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -41,7 +41,6 @@ import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.ThreadUtilities;
-
 //}}}
 
 /** BufferSwitcher class
@@ -165,35 +164,14 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		ComboBoxUI ui = getUI();
 		if (ui instanceof BasicComboBoxUI)
 		{
-			try
+			Accessible acc = ui.getAccessibleChild(null, 0);
+			if (acc instanceof BasicComboPopup) 
 			{
-				Field listBoxField = getField(ui.getClass(), "listBox");
-				listBoxField.setAccessible(true);
-				JList list = (JList)listBoxField.get(ui);
+				JList list = ((BasicComboPopup)acc).getList();
 				list.setDragEnabled(true);
 				list.setDropMode(DropMode.INSERT);
 				list.setTransferHandler(new BufferSwitcherTransferHandler());
 			}
-			catch (Exception ignored) // NOPMD
-			{
-				// don't do anything if the above fails, it just means dnd won't work.
-			}
-		}
-	}
-	
-	/**
-	 * Return the named field from the given class.
-	 */
-	private Field getField( Class aClass, String fieldName ) throws NoSuchFieldException {
-		if ( aClass == null )
-			throw new NoSuchFieldException( "Invalid field : " + fieldName );
-		try 
-		{
-			return aClass.getDeclaredField( fieldName );
-		}
-		catch ( NoSuchFieldException e ) 
-		{
-			return getField( aClass.getSuperclass(), fieldName );
 		}
 	}
 	

@@ -24,6 +24,9 @@ release.
   lines in the log actually works. (Dale Anson)  
   
 - Fix for bug #3971, exception trying to set WM_CLASS. (Dale Anson)
+
+- Fix for bug #4047, illegal reflective access operation with Java 9.
+  (Dale Anson)
   
 }}}
 {{{ UI Improvements
