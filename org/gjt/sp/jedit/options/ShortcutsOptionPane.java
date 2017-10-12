@@ -573,7 +573,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			KeyBinding bindingAt = getBindingAt(row, 0);
 
-			return bindingAt.tooltip != null ? bindingAt.tooltip : bindingAt.label;
+			return bindingAt.tooltip;
 		}
 
 		@Override
