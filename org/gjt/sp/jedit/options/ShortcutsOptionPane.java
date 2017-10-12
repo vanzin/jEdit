@@ -154,7 +154,20 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		filterPanel.add(filterTF);
 		filterPanel.add(clearButton);
 
-		keyTable = new JTable(filteredModel);
+		keyTable = new JTable(filteredModel)
+		{
+			public String getToolTipText(MouseEvent e)
+			{
+				java.awt.Point p = e.getPoint();
+				int rowIndex = rowAtPoint(p);
+				int colIndex = columnAtPoint(p);
+				int modelColIndex = convertColumnIndexToModel(colIndex);
+
+				ShortcutsModel model = (ShortcutsModel) ((FilteredTableModel)getModel()).getDelegated();
+
+				return modelColIndex == 0 ? model.getToolTip(rowIndex) : null;
+			}
+		};
 		filteredModel.setTable(keyTable);
 		keyTable.setRowHeight(GenericGUIUtilities.defaultRowHeight());
 		keyTable.getTableHeader().setReorderingAllowed(false);
@@ -309,32 +322,33 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				continue;
 
 			label = GenericGUIUtilities.prettifyMenuLabel(label);
-			addBindings(actionSet, name, label, bindings);
+			String tooltip = ea.getToolTip();
+			addBindings(actionSet, name, label, tooltip, bindings);
 		}
 
 		return new ShortcutsModel(modelLabel,bindings);
 	} //}}}
 
 	//{{{ addBindings() method
-	private void addBindings(String actionSet, String name, String label, Collection<KeyBinding[]> bindings)
+	private void addBindings(String actionSet, String name, String label, String tooltip, Collection<KeyBinding[]> bindings)
 	{
 		KeyBinding[] b = new KeyBinding[2];
 
-		b[0] = createBinding(actionSet, name,label,
+		b[0] = createBinding(actionSet, name,label, tooltip,
 			selectedKeymap.getShortcut(name + ".shortcut"));
-		b[1] = createBinding(actionSet, name,label,
+		b[1] = createBinding(actionSet, name,label, tooltip,
 			selectedKeymap.getShortcut(name + ".shortcut2"));
 
 		bindings.add(b);
 	} //}}}
 
 	//{{{ createBinding() method
-	private KeyBinding createBinding(String actionSet, String name, String label, String shortcut)
+	private KeyBinding createBinding(String actionSet, String name, String label, String tooltip, String shortcut)
 	{
 		if(shortcut != null && shortcut.isEmpty())
 			shortcut = null;
 
-		KeyBinding binding = new KeyBinding(name,label,shortcut,false);
+		KeyBinding binding = new KeyBinding(name,label,tooltip,shortcut,false);
 
 		binding.actionSet = actionSet;
 		allBindings.add(binding);
@@ -553,6 +567,13 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			default:
 				return null;
 			}
+		}
+
+		public String getToolTip(int row)
+		{
+			KeyBinding bindingAt = getBindingAt(row, 0);
+
+			return bindingAt.tooltip != null ? bindingAt.tooltip : bindingAt.label;
 		}
 
 		@Override

@@ -307,7 +307,7 @@ public class GrabKeyDialog extends JDialog
 			{
 				// create a temporary (synthetic) prefix
 				// KeyBinding, that won't be saved
-				return new KeyBinding(kb.name, kb.label,
+				return new KeyBinding(kb.name, kb.label, kb.tooltip,
 						      shortcut, true);
 			}
 		}
@@ -324,11 +324,12 @@ public class GrabKeyDialog extends JDialog
 	 */
 	public static class KeyBinding
 	{
-		public KeyBinding(String name, String label,
+		public KeyBinding(String name, String label, String tooltip,
 			String shortcut, boolean isPrefix)
 		{
 			this.name = name;
 			this.label = label;
+			this.tooltip = tooltip;
 			this.shortcut = shortcut;
 			this.isPrefix = isPrefix;
 		}
@@ -336,6 +337,7 @@ public class GrabKeyDialog extends JDialog
 		public String actionSet;
 		public String name;
 		public String label;
+		public String tooltip;
 		public String shortcut;
 		public boolean isPrefix;
 

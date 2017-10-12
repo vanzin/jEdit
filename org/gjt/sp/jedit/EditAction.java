@@ -83,6 +83,17 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 		return jEdit.getProperty(name + ".mouse-over");
 	} //}}}
 
+	//{{{ getToolTip() method
+	/**
+	 * @return the action's tooltip text. This returns the
+	 * value of the property named by {@link #getName()} suffixed
+	 * with <code>.tooltip</code>.
+	 */
+	public String getToolTip()
+	{
+		return jEdit.getProperty(name + ".tooltip");
+	} //}}}
+
 	//{{{ invoke() method
 	/**
 	 * Invokes the action. This is an implementation of the Command pattern,
