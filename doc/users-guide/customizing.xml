@@ -446,11 +446,18 @@
         </section>
 
         <section id="large-files-pane">
-            <title> Large Files pane </title>
+            <title> The Large Files Pane </title>
 
             <para> This option pane allows the user to customize how jEdit should handle
-            large files. There is a radio-button with 3 choices, allowing you to lower the level of syntax highlighting and disable soft-wrap to speed things things up
+            large files. There is a radio-button with 4 choices, allowing you to
+            pop up a dialog asking the user each time, or automatically lower the level of
+            syntax highlighting and disable soft-wrap to speed things things up
             (or use less battery). </para>
+
+            <para> The jEdit properties <property>longLineLimit</property> and
+            <property>largeBufferSize</property> can be customized to change
+            which buffers jEdit considers 'large'. </para>
+
         </section>
 
         <section id="mouse-pane">
