@@ -208,6 +208,9 @@
 <MODE NAME="gettext"		FILE="gettext.xml"
         FILE_NAME_GLOB="*.{po,pot}" />
 
+<MODE NAME="gherkin"		FILE="gherkin.xml"
+        FILE_NAME_GLOB="*.{feature}" />
+
 <MODE NAME="gnuplot"		FILE="gnuplot.xml"
         FILE_NAME_GLOB="*.{dem,plt}" />
 

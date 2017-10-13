@@ -50,6 +50,8 @@ for contributing to this release.
 }}}
 {{{ Editing
 
+- Add Gherkin mode (english) to support Cucumber feature files (Matthieu Casanova)
+
 - Patch #593 - Various small patches to modes (AdamS)
 
 - Patch #592 - for groovy mode (Egor Abramovich)
