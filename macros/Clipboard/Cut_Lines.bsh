@@ -19,6 +19,9 @@ cutLines(){
 	}
 	start = textArea.getLineStartOffset(selections[0]);
 	stop = textArea.getLineEndOffset(selections[selections.length-1]);
+
+	if (stop > textArea.getBufferLength()) stop = textArea.getBufferLength();
+
 	textArea.setSelection(new Selection.Range(start,stop));
 	Registers.cut(textArea,'$');
 }

@@ -22,12 +22,15 @@ for contributing to this release.
 
 - Fixed an issue with the activity log viewer so that setting the number of
   lines in the log actually works. (Dale Anson)
-  
+
 - Fix for bug #3971, exception trying to set WM_CLASS. (Dale Anson)
 
 - Fix for bug #4047, illegal reflective access operation with Java 9.
   (Dale Anson)
-  
+
+- Fix Bug #4011, The Cut Lines macro gives exception if the cursor is beyond
+   text area (Patch #600, Roman Tsourick)
+
 }}}
 {{{ UI Improvements
 
