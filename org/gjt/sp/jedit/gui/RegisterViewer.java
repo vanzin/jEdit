@@ -302,8 +302,8 @@ public class RegisterViewer extends JPanel
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
-			Object value = registerList.getSelectedValue();
-			if(!(value instanceof Character))
+			String value = registerList.getSelectedValue();
+			if (value == null || value.length() < 1)
 			{
 				if (!editing)
 				{
@@ -313,7 +313,7 @@ public class RegisterViewer extends JPanel
 				return;
 			}
 
-			char name = ((Character)value).charValue();
+			char name = value.charAt(0);
 
 			Registers.Register reg = Registers.getRegister(name);
 			if(reg == null)
@@ -325,7 +325,6 @@ public class RegisterViewer extends JPanel
 				}
 				return;
 			}
-
 
 			if (!editing)
 			{
@@ -396,10 +395,10 @@ public class RegisterViewer extends JPanel
 
 		private void updateRegister()
 		{
-			Object value = registerList.getSelectedValue();
-			if(!(value instanceof Character))
+			String value = registerList.getSelectedValue();
+			if(value == null || value.length() < 1)
 				return;
-			char name = ((Character)value).charValue();
+			char name = value.charAt(0);
 			Registers.setRegister(name,contentTextArea.getText());
 		}
 	} //}}}

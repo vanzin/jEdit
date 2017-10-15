@@ -10,6 +10,8 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- RegisterViewer editable contentPane fixed (Patch #598, Jesse Pavel)
+
 - command line behavior for +line fixed (Patch #590 - Wim West)
 
 - Autosave Untitled Buffers is now persistent across sessions
