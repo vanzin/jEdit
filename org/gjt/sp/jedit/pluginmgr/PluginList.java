@@ -533,8 +533,9 @@ class PluginList
 			}
 			else if(what.equals("jdk"))
 			{
-				String javaVersion = System.getProperty("java.version").substring(0,3);
-
+				String javaVersion = System.getProperty("java.version");
+				// openjdk 9 returns just "9", not 1.X.X like previous versions
+				javaVersion = javaVersion.length() >= 3 ? javaVersion.substring(0, 3) : javaVersion;
 				if((from == null || StandardUtilities.compareStrings(
 					javaVersion,from,false) >= 0)
 					&&
@@ -615,6 +616,7 @@ class PluginList
 		return ((id != null) && !id.equals(MirrorList.Mirror.NONE)) ? id : "default";
 	}
 
+	// TODO: this isn't used, should it be?
 	private static String getAutoSelectedMirror()
 		throws java.io.IOException
 	{
