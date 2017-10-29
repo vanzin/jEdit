@@ -38,6 +38,8 @@ for contributing to this release.
 
 - Show tooltips in ShortcutOptionPane table (FR# 538, Roman Tsourick)
 
+- FSB: Disable first column dragging (Patch # 603, Roman Tsourick)
+
 }}}
 {{{ Miscellaneous
 

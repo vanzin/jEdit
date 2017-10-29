@@ -80,6 +80,32 @@ public class VFSDirectoryEntryTable extends JTable
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
+	@Override
+	protected JTableHeader createDefaultTableHeader()
+	{
+		/**
+		 * Set up column hook in a way that it survives switching of LAF
+		 * */
+		JTableHeader header = new JTableHeader(getColumnModel())
+		{
+			ColumnDragHook hook;
+
+			@Override
+			public void updateUI()
+			{
+				if (hook != null)
+				{
+					hook.uninstallHook();
+					hook = null;
+				}
+				super.updateUI();
+				hook = new ColumnDragHook(this);
+			}
+
+		};
+		return header;
+	}
+
 	//{{{ selectFile() method
 	public boolean selectFile(String path)
 	{
@@ -663,4 +689,173 @@ public class VFSDirectoryEntryTable extends JTable
 
 	//}}}
 
+
+	/**
+	 * Original code:
+	 *   https://stackoverflow.com/questions/1155137/how-to-keep-a-single-column-from-being-reordered-in-a-jtable/14480948
+	 *
+	 * A delegating MouseInputListener to be installed instead of
+	 * the one registered by the ui-delegate.
+	 *
+	 * It's implemented to prevent dragging the first column or any other
+	 * column over the first.
+	 *
+	 */
+	public static class ColumnDragHook implements MouseInputListener {
+
+		private JTableHeader header;
+		private MouseListener mouseDelegate;
+		private MouseMotionListener mouseMotionDelegate;
+		private int minMouseX;
+
+		public ColumnDragHook(JTableHeader header) {
+			this.header = header;
+			installHook();
+		}
+
+		/**
+		 * Implemented to do some tweaks/bookkeeping before/after
+		 * passing the event to the original
+		 *
+		 * - temporarily disallow reordering if hit on first column
+		 * - calculate the max mouseX that's allowable in dragging to the left
+		 *
+		 */
+		@Override
+		public void mousePressed(MouseEvent e) {
+			int index = header.columnAtPoint(e.getPoint());
+
+			boolean reorderingAllowed = header.getReorderingAllowed();
+
+			if (index == 0) {
+				// temporarily disable re-ordering
+				header.setReorderingAllowed(false);
+			}
+			mouseDelegate.mousePressed(e);
+			if (index == 0) {
+				// re-enable re-ordering
+				header.setReorderingAllowed(reorderingAllowed);
+			}
+
+			// Calculate minimum X for a column (all except the first one) when dragging
+			if (header.getDraggedColumn() != null) {
+				int draggedColumnX = header.getHeaderRect(index).x;
+				int firstColumnWidth = header.getColumnModel().getColumn(0).getWidth();
+				minMouseX = firstColumnWidth + (e.getX() - draggedColumnX)- 1;
+			}
+		}
+
+		/**
+		 * Implemented to pass the event to the original only if the
+		 * mouseX doesn't lead to dragging the column over the first.
+		 */
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			TableColumn dragged = header.getDraggedColumn();
+
+			if (dragged != null)
+			{
+				int index = header.getTable().convertColumnIndexToView(dragged.getModelIndex());
+
+				if (index == 1) { // dragged column is at second position...
+					if (e.getX() < minMouseX) return; // allow only drags to the right
+				}
+			}
+			mouseMotionDelegate.mouseDragged(e);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			mouseDelegate.mouseReleased(e);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			mouseDelegate.mouseClicked(e);
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			mouseDelegate.mouseEntered(e);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			mouseDelegate.mouseExited(e);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			mouseMotionDelegate.mouseMoved(e);
+		}
+
+
+		protected void installHook() {
+			installMouseHook();
+			installMouseMotionHook();
+		}
+
+		protected void installMouseMotionHook() {
+			MouseMotionListener[] listeners = header.getMouseMotionListeners();
+			for (int i = 0; i < listeners.length; i++) {
+				MouseMotionListener l = listeners[i];
+				if (l.getClass().getName().contains("TableHeaderUI")) {
+					this.mouseMotionDelegate = l;
+					listeners[i] = this;
+				}
+				header.removeMouseMotionListener(l);
+			}
+			for (MouseMotionListener l : listeners) {
+				header.addMouseMotionListener(l);
+			}
+		}
+
+		protected void installMouseHook() {
+			MouseListener[] listeners = header.getMouseListeners();
+			for (int i = 0; i < listeners.length; i++) {
+				MouseListener l = listeners[i];
+				if (l.getClass().getName().contains("TableHeaderUI")) {
+					this.mouseDelegate = l;
+					listeners[i] = this;
+				}
+				header.removeMouseListener(l);
+			}
+			for (MouseListener l : listeners) {
+				header.addMouseListener(l);
+			}
+		}
+
+		public void uninstallHook() {
+			uninstallMouseHook();
+			uninstallMouseMotionHook();
+		}
+
+		protected void uninstallMouseMotionHook() {
+			MouseMotionListener[] listeners = header.getMouseMotionListeners();
+			for (int i = 0; i < listeners.length; i++) {
+				MouseMotionListener l = listeners[i];
+				if (l == this) {
+					listeners[i] = mouseMotionDelegate;
+				}
+				header.removeMouseMotionListener(l);
+			}
+			for (MouseMotionListener l : listeners) {
+				header.addMouseMotionListener(l);
+			}
+		}
+
+		protected void uninstallMouseHook() {
+			MouseListener[] listeners = header.getMouseListeners();
+			for (int i = 0; i < listeners.length; i++) {
+				MouseListener l = listeners[i];
+				if (l == this) {
+					listeners[i] = mouseDelegate;
+				}
+				header.removeMouseListener(l);
+			}
+			for (MouseListener l : listeners) {
+				header.addMouseListener(l);
+			}
+		}
+	}
 }
