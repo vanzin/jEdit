@@ -12,7 +12,7 @@ for contributing to this release.
 
 - RegisterViewer editable contentPane fixed (Patch #598, Jesse Pavel)
 
-- command line behavior for +line fixed (Patch #590 - Wim West)
+- Command line behavior for +line fixed (Patch #590 - Wim West)
 
 - Autosave Untitled Buffers is now persistent across sessions
   (Feature Request# 501, Patch #596 - Hrotkó Gábor)
@@ -42,6 +42,7 @@ for contributing to this release.
 {{{ Miscellaneous
 
 - FR #506, FR #536: Autosaves are now saved to the Backup directory.
+  Default Backup/Autosave Directory is now $JEDIT_SETTINGS/backups.
   (Alan Ezust, Hrotkó Gábor)
 
 - FR #175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
