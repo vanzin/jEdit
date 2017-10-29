@@ -582,7 +582,7 @@ public class VFSDirectoryEntryTable extends JTable
 		TableColumnModel columns = getColumnModel();
 
 		for(int i = 1; i < model.getColumnCount(); i++)
-			model.setColumnWidth(i,columns.getColumn(i).getWidth());
+			model.saveColumnWidth(i,columns.getColumn(i).getWidth());
 	} //}}}
 
 	//}}}
@@ -602,7 +602,7 @@ public class VFSDirectoryEntryTable extends JTable
 		public void columnAdded(TableColumnModelEvent e) {}
 		public void columnRemoved(TableColumnModelEvent e) {}
 		public void columnMoved(TableColumnModelEvent e) {
-			((VFSDirectoryEntryTableModel)getModel()).columnMoved(e.getFromIndex(), e.getToIndex());
+			((VFSDirectoryEntryTableModel)getModel()).columnMoved(e.getFromIndex(), e.getToIndex()); // view indexes
 		}
 		public void columnSelectionChanged(ListSelectionEvent e) {}
 
@@ -643,14 +643,23 @@ public class VFSDirectoryEntryTable extends JTable
 			{
 				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel) header.getTable().getModel();
 				TableColumnModel columnModel = header.getColumnModel();
-				int viewColumn = columnModel.getColumnIndexAtX(evt.getX());
-				int column = columnModel.getColumn(viewColumn).getModelIndex();
+				int viewColumnIndex = columnModel.getColumnIndexAtX(evt.getX());
+
+				// View index must be used here instead of model index because model order is rearranged by custom code
+				// on column move according to view order so that both are equal, but no "structurechanged" is triggered,
+				// so view order is the same as model order (maintained by custom code, while JTable's automatic
+				// indexing is wrong here) before sortByColumn call finishes, where sortColumnIndex is saved
+				// and structureChanged is triggered.
+				//
+				// If use modelIndex, the bug will arise (sort by column, move that column, sort again, result: sorting
+				// mark is at wrong column)
+				int modelColumnIndex = viewColumnIndex;
 				saveWidths();
-				if(model.sortByColumn(column))
+				if(model.sortByColumn(modelColumnIndex))
 				{
 					resizeColumns();
 					Log.log(Log.DEBUG,this,"VFSDirectoryEntryTable sorted by "
-					+ model.getColumnName(column)
+					+ model.getColumnName(modelColumnIndex)
 					+ (model.getAscending() ? " ascending" : " descending") );
 				}
 			}
@@ -673,7 +682,7 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 			VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
-			Icon icon = column == model.getSortColumn()
+			Icon icon = column == model.getSortColumnIndex()
 				? model.getAscending() ? ASC_ICON : DESC_ICON
 				: null;
 			l.setIcon(icon);

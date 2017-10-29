@@ -38,7 +38,10 @@ for contributing to this release.
 
 - Show tooltips in ShortcutOptionPane table (FR# 538, Roman Tsourick)
 
-- FSB: Disable first column dragging (Patch # 603, Roman Tsourick)
+- FSB: Disable first column dragging (Patch# 603, Roman Tsourick)
+
+- FSB: Sorting icon not following header when moving
+     (Bug# 4049, Patch# 604, Roman Tsourick)
 
 }}}
 {{{ Miscellaneous

@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import javax.swing.table.*;
 import java.util.*;
-import org.gjt.sp.jedit.io.FileVFS;
+
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -45,7 +45,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	public VFSDirectoryEntryTableModel()
 	{
 		extAttrs = new ArrayList<ExtendedAttribute>();
-		sortColumn = 0;
+		sortColumnIndex = 0;
 		ascending = true;
 	} //}}}
 
@@ -67,7 +67,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		/* if(files.length != 0)
 			fireTableRowsInserted(0,files.length - 1); */
 
-		Arrays.sort(files, new EntryCompare(getSortAttribute(sortColumn), ascending));
+		Arrays.sort(files, new EntryCompare(getSortAttribute(sortColumnIndex), ascending));
 		fireTableStructureChanged();
 	} //}}}
 
@@ -100,7 +100,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 			// sort expanded entries according to current sort params
 			Arrays.sort(subdirFiles, new EntryCompare(
-				getSortAttribute(sortColumn), ascending));
+				getSortAttribute(sortColumnIndex), ascending));
 			
 			// make room after expanded entry for subdir files
 			int nextIndex = startIndex + 1;
@@ -208,10 +208,10 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		return ascending;
 	} //}}}
 
-	//{{{ getSortColumn() method
-	public int getSortColumn()
+	//{{{ getSortColumnIndex() method
+	public int getSortColumnIndex()
 	{
-		return sortColumn;
+		return sortColumnIndex;
 	} //}}}
 
 	//{{{ getSortAttribute() method
@@ -221,20 +221,20 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ sortByColumn() method
-	public boolean sortByColumn(int column)
+	public boolean sortByColumn(int columnIndex)
 	{
 		// toggle ascending/descending if column was clicked again
-		ascending = sortColumn != column || !ascending;
+		ascending = sortColumnIndex != columnIndex || !ascending;
 
 		// we don't sort by some attributes
-		String sortBy = getSortAttribute(column);
+		String sortBy = getSortAttribute(columnIndex);
 		if(sortBy == VFS.EA_STATUS)
 			return false;
 
 		Arrays.sort(files, new EntryCompare(sortBy, ascending));
 
 		// remember column
-		sortColumn = column;
+		sortColumnIndex = columnIndex;
 		fireTableStructureChanged();
 
 		return true;
@@ -248,40 +248,46 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 	//{{{ getColumnWidth() method
 	/**
-	 * @param i The column index
+	 * @param index The column index
 	 * @return A saved column width
 	 * @since jEdit 4.3pre2
 	 */
-	public int getColumnWidth(int i)
+	public int getColumnWidth(int index)
 	{
-		String extAttr = getExtendedAttribute(i);
+		String extAttr = getExtendedAttribute(index);
 		return jEdit.getIntegerProperty("vfs.browser."
 			+ extAttr + ".width",100);
 	} //}}}
 	
-	//{{{ setColumnWidth() method
+	//{{{ saveColumnWidth() method
 	/**
-	 * @param i The column index
+	 * @param index The column index
 	 * @param w The column width
 	 * @since jEdit 4.3pre2
 	 */
-	public void setColumnWidth(int i, int w)
+	public void saveColumnWidth(int index, int w)
 	{
-		String extAttr = getExtendedAttribute(i);
+		String extAttr = getExtendedAttribute(index);
 		jEdit.setIntegerProperty("vfs.browser."
 			+ extAttr + ".width",w);
 	} //}}}
 	
 	//{{{ columnMoved() method
-	protected void columnMoved(int from, int to) {
-		if (from == to)
+	protected void columnMoved(int fromIndex, int toIndex) {
+		if (fromIndex == toIndex)
 			return;
-		if (from < 1 || from > getColumnCount())
+		if (fromIndex < 1 || fromIndex > getColumnCount())
 			return;
-		if (to < 1 || to > getColumnCount())
+		if (toIndex < 1 || toIndex > getColumnCount())
 			return;
-		ExtendedAttribute ea = extAttrs.remove(from - 1);
-		extAttrs.add(to - 1, ea);
+		ExtendedAttribute ea = extAttrs.remove(fromIndex - 1);
+		extAttrs.add(toIndex - 1, ea);
+
+
+		// Also adjust sort column index if touched
+
+		if (sortColumnIndex == fromIndex) sortColumnIndex = toIndex;
+		else if (sortColumnIndex == toIndex) sortColumnIndex = fromIndex;
 	} //}}}
 	
 	//{{{ getFiles() method
@@ -299,7 +305,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 	//{{{ Private members
 	private List<ExtendedAttribute> extAttrs;
-	private int sortColumn;
+	private int sortColumnIndex;
 	private boolean ascending;
 
 	//{{{ addExtendedAttributes() method
