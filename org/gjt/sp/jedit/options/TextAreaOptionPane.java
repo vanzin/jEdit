@@ -417,7 +417,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 				if (selected != null)
 				{
-					selected = selected.deriveFont(Font.PLAIN, 12);
 					fontsModel.addElement(selected);
 					fonts.setSelectedIndex(fontsModel.size() - 1);
 				}
@@ -497,7 +496,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 								   index,
 								   isSelected,
 								   cellHasFocus);
-				setText(f.getFamily());
+				setText(f.getFamily() + " " + f.getSize());
 				return this;
 			}
 

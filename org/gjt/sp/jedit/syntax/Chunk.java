@@ -34,6 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.lang.ref.SoftReference;
 
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
 //}}}
@@ -241,9 +242,9 @@ public class Chunk extends Token
 				 * doesn't match any installed fonts. The following
 				 * check skips fonts that don't exist.
 				 */
-				Font f = new Font(family, Font.PLAIN, 12);
-				if (!"dialog".equalsIgnoreCase(f.getFamily()) ||
-					"dialog".equalsIgnoreCase(family))
+				Font f = jEdit.getFontProperty("view.fontSubstList." + i);
+				if (f != null && (!"dialog".equalsIgnoreCase(f.getFamily()) ||
+									"dialog".equalsIgnoreCase(family)))
 					userFonts.add(f);
 				i++;
 			}
@@ -255,6 +256,69 @@ public class Chunk extends Token
 		// might become unused after properties changed.
 		glyphCache = null;
 	} //}}}
+
+	//{{{ getSubstFont() method
+	/**
+	 * Returns the first font which can display a character from
+	 * configured substitution candidates, or null if there is no
+	 * such font.
+	 */
+	public static Font getSubstFont(int codepoint)
+	{
+		// Workaround for a problem reported in SF.net patch #3480246
+		// > If font substitution with system fonts is enabled,
+		// > I get for inserted control characters strange mathematical
+		// > symbols from a non-unicode font in my system.
+		if (Character.isISOControl(codepoint))
+			return null;
+
+		for (Font candidate: getFontSubstList())
+		{
+			if (candidate.canDisplay(codepoint))
+			{
+				return candidate;
+			}
+		}
+		return null;
+	} //}}}
+
+	//{{{ deriveSubstFont() method
+	/**
+	 * Derives a font to match the main font for purposes of
+	 * font substitution.
+	 * Preserves any transformations from main font.
+	 * For system-fallback fonts, derives size and style from main font.
+	 *
+	 * @param mainFont Font to derive from
+	 * @param candidateFont Font to transform
+	 */
+	public static Font deriveSubstFont(Font mainFont, Font candidateFont)
+	{
+		// adopt subst font family and size, but preserve any transformations
+		// i.e. if font is squashed/sheared, subst font glyphs should be squashed
+		Font substFont = candidateFont.deriveFont(mainFont.getTransform());
+
+		// scale up system fonts (point size 1) to size of main font
+		if (substFont.getSize() == 1)
+			substFont = substFont.deriveFont(mainFont.getStyle(),
+				mainFont.getSize());
+
+		return substFont;
+	} //}}}
+
+	//{{{ usedFontSubstitution() method
+	/**
+	 * Returns true if font substitution was used in the layout of this chunk.
+	 * If substitution was not used, the chunk may be assumed to be composed
+	 * of one glyph using a single font.
+	 */
+	public boolean usedFontSubstitution()
+	{
+		return (fontSubstEnabled && glyphs != null &&
+				(glyphs.length > 1 ||
+				(glyphs.length == 1 && glyphs[0].getFont() != style.getFont())));
+	}
+	//}}}
 
 	//{{{ Package private members
 
@@ -514,6 +578,14 @@ public class Chunk extends Token
 	//}}}
 
 	//{{{ getFontSubstList() method
+	/**
+	 * Obtain a list of preferred fallback fonts as specified by the user
+	 * (see Text Area in Global Options), as well as a list of all fonts
+	 * specified in the system.
+	 * Note that preferred fonts are returned with sizes as specified by the
+	 * user, but system fonts all have a point size of 1. These should be
+	 * scaled up once the main font is known (see layoutGlyphs()).
+	 */
 	private static Font[] getFontSubstList()
 	{
 		if (fontSubstList == null)
@@ -541,31 +613,6 @@ public class Chunk extends Token
 			}
 		}
 		return fontSubstList;
-	} //}}}
-
-	//{{{ getSubstFont() method
-	/**
-	 * Returns the first font which can display a character from
-	 * configured substitution candidates, or null if there is no
-	 * such font.
-	 */
-	private static Font getSubstFont(int codepoint)
-	{
-		// Workaround for a problem reported in SF.net patch #3480246
-		// > If font substitution with system fonts is enabled,
-		// > I get for inserted control characters strange mathematical
-		// > symbols from a non-unicode font in my system.
-		if (Character.isISOControl(codepoint))
-			return null;
-
-		for (Font candidate: getFontSubstList())
-		{
-			if (candidate.canDisplay(codepoint))
-			{
-				return candidate;
-			}
-		}
-		return null;
 	} //}}}
 
 	//{{{ drawGlyphs() method
@@ -663,8 +710,10 @@ public class Chunk extends Token
 			int charCount = Character.charCount(nextChar);
 			assert !mainFont.canDisplay(nextChar);
 			Font substFont = getSubstFont(nextChar);
+
 			if (substFont != null)
 			{
+				substFont = deriveSubstFont(mainFont, substFont);
 				subst.addRange(substFont, charCount);
 			}
 			else
@@ -758,10 +807,9 @@ public class Chunk extends Token
 			{
 				return;
 			}
-			Font font = (rangeFont == null) ?
-				mainFont :
-				rangeFont.deriveFont(mainFont.getStyle(),
-					mainFont.getSize());
+
+			Font font = (rangeFont == null) ? mainFont : rangeFont;
+
 			GlyphVector gv = layoutGlyphVector(font, frc,
 				text, rangeStart, rangeStart + rangeLength);
 			glyphs.add(gv);
