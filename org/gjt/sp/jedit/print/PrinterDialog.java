@@ -154,7 +154,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             buttonPanel.add( okButton );
             buttonPanel.add( cancelButton );
             contents.add( buttonPanel, BorderLayout.SOUTH );
-
+            
             setContentPane( contents );
 
             // auto-select the default printer
@@ -178,6 +178,12 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             pageSetupPanel.setDefaultMargins();
 
             pack();
+
+            // ESC key closes dialog
+            getRootPane().registerKeyboardAction(e -> {
+                PrinterDialog.this.setVisible(false);
+                PrinterDialog.this.dispose();
+            }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
             setLocationRelativeTo( jEdit.getActiveView().getTextArea() );
             setVisible( true );
