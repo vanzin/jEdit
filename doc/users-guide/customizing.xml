@@ -532,7 +532,7 @@
             <firstterm>keymap</firstterm> is a named set of keyboard shortcut mappings.
             Default keymaps are found in jEdit's <filename>keymaps</filename> folder, and
             user customized keymaps are are stored in the user settings'
-            <filename>keymaps</filename> folder. The can user switch between keymaps with
+            <filename>keymaps</filename> folder. The user can switch between keymaps with
             the first combobox on this pane. </para>
 
             <para> The <filename>imported.props</filename> keymap is automatically created
@@ -552,7 +552,7 @@
             remove all customizations and restore a default keymap, click
             <guibutton>reset</guibutton>. </para>
 
-            <para>The combo box below the <guilabel>keymap</guilabel> selector selects the
+            <para>The combo box below the <guilabel>Keymap</guilabel> selector selects the
             <guilabel>Action Set</guilabel> to edit. <firstterm>Action Sets</firstterm>
             exist for the set of all built-in commands, the commands of each plugin, and
             the set of macros. Some plugins (ProjectViewer, Console and SideKick) offer
