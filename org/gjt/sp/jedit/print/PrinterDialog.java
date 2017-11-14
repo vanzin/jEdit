@@ -183,6 +183,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             getRootPane().registerKeyboardAction(e -> {
                 PrinterDialog.this.setVisible(false);
                 PrinterDialog.this.dispose();
+                canceled = true;
             }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
             setLocationRelativeTo( jEdit.getActiveView().getTextArea() );
