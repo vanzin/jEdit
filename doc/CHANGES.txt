@@ -32,6 +32,8 @@ and Jesse Pavel for contributing to this release.
 
 - Fix Bug #4011, The Cut Lines macro gives exception if the cursor is beyond
    text area (Patch #600, Roman Tsourick)
+   
+- Fix for bug #541, let ESC key close the dialog. (Dale Anson)   
 
 }}}
 {{{ UI Improvements
