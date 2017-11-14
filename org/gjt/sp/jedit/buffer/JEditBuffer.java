@@ -196,7 +196,18 @@ public class JEditBuffer
 	 */
 	public boolean isEditable()
 	{
-		return !(isPerformingIO());
+		return !(isPerformingIO()) && editable;
+	} //}}}
+	
+	//{{{ setEditable() method
+	/**
+	 * @param true to set the buffer editable, false otherwise. Default is true.
+	 * This does not change the read only flag on the file, just makes the buffer
+	 * editable or not.
+	 */
+	public void setEditable(boolean editable)
+	{
+		this.editable = editable;	
 	} //}}}
 
 	//{{{ isReadOnly() method
@@ -2757,6 +2768,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean dirty;
 	private boolean readOnly;
 	private boolean readOnlyOverride;
+	private boolean editable = true;
 	private boolean transaction;
 	private boolean loading;
 	private boolean io;
