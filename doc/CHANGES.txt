@@ -65,6 +65,8 @@ Uwe Stöhr, A. Vontobel, and Jesse Pavel for contributing to this release.
 }}}
 {{{ Editing
 
+- C and C++ mode updates (Roman Tsourick - Patch #607)
+
 - nsis2 mode updates (Uwe Stöhr - Patch #606)
 
 - Draw2d mode updates (A.Vontobel - Patch #605)
