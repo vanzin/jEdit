@@ -6,7 +6,7 @@ jEdit 5.5 version history
 
 Thanks to AdamS, Wim West, M. Cesar R. Lacruz, Egor Abramovich,
 Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick, Rafal Kolanski,
-Uwe, A. Vontobel, and Jesse Pavel for contributing to this release.
+Uwe Stöhr, A. Vontobel, and Jesse Pavel for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -65,7 +65,7 @@ Uwe, A. Vontobel, and Jesse Pavel for contributing to this release.
 }}}
 {{{ Editing
 
-- nsis2 mode updates (Uwe - Patch #606)
+- nsis2 mode updates (Uwe Stöhr - Patch #606)
 
 - Draw2d mode updates (A.Vontobel - Patch #605)
 
