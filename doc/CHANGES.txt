@@ -6,7 +6,7 @@ jEdit 5.5 version history
 
 Thanks to AdamS, Wim West, M. Cesar R. Lacruz, Egor Abramovich,
 Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick, Rafal Kolanski,
-and Jesse Pavel for contributing to this release.
+A. Vontobel, and Jesse Pavel for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -32,8 +32,8 @@ and Jesse Pavel for contributing to this release.
 
 - Fix Bug #4011, The Cut Lines macro gives exception if the cursor is beyond
    text area (Patch #600, Roman Tsourick)
-   
-- Fix for bug #541, let ESC key close the dialog. (Dale Anson)   
+
+- Fix for bug #541, let ESC key close the dialog. (Dale Anson)
 
 }}}
 {{{ UI Improvements
@@ -64,6 +64,8 @@ and Jesse Pavel for contributing to this release.
 
 }}}
 {{{ Editing
+
+- Draw2d mode updates (A.Vontobel - Patch #605)
 
 - Add Gherkin mode (english) to support Cucumber feature files (Matthieu Casanova)
 

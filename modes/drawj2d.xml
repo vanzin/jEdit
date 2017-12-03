@@ -95,100 +95,130 @@
     <SEQ TYPE="OPERATOR">~</SEQ>
 
     <KEYWORDS>
-      <!-- Tcl keywords-->
+      <!-- Tcl keywords, common with Hecl -->
+      <KEYWORD1>after</KEYWORD1>
       <KEYWORD1>append</KEYWORD1>
-      <KEYWORD1>array</KEYWORD1>
-      <KEYWORD1>concat</KEYWORD1>
-      <KEYWORD1>console</KEYWORD1>
+      <KEYWORD1>break</KEYWORD1>
+      <KEYWORD1>catch</KEYWORD1>
+      <KEYWORD1>close</KEYWORD1>
+      <KEYWORD1>continue</KEYWORD1>
+      <KEYWORD1>else</KEYWORD1>
+      <KEYWORD1>elseif</KEYWORD1>
       <KEYWORD1>eval</KEYWORD1>
-      <KEYWORD1>expr</KEYWORD1>
-      <KEYWORD1>format</KEYWORD1>
+      <KEYWORD1>exit</KEYWORD1>
+      <KEYWORD1>for</KEYWORD1>
+      <KEYWORD1>foreach</KEYWORD1>
       <KEYWORD1>global</KEYWORD1>
-      <KEYWORD1>set</KEYWORD1>
-      <KEYWORD1>trace</KEYWORD1>
-      <KEYWORD1>unset</KEYWORD1>
-      <KEYWORD1>upvar</KEYWORD1>
+      <KEYWORD1>if</KEYWORD1>
+      <KEYWORD1>incr</KEYWORD1>
       <KEYWORD1>join</KEYWORD1>
       <KEYWORD1>lappend</KEYWORD1>
       <KEYWORD1>lindex</KEYWORD1>
-      <KEYWORD1>linsert</KEYWORD1>
       <KEYWORD1>list</KEYWORD1>
       <KEYWORD1>llength</KEYWORD1>
       <KEYWORD1>lrange</KEYWORD1>
-      <KEYWORD1>lreplace</KEYWORD1>
-      <KEYWORD1>lsearch</KEYWORD1>
-      <KEYWORD1>lsort</KEYWORD1>
-      <KEYWORD1>split</KEYWORD1>
-      <KEYWORD1>scan</KEYWORD1>
-      <KEYWORD1>string</KEYWORD1>
-      <KEYWORD1>regexp</KEYWORD1>
-      <KEYWORD1>regsub</KEYWORD1>
-      <KEYWORD1>if</KEYWORD1>
-      <KEYWORD1>else</KEYWORD1>
-      <KEYWORD1>elseif</KEYWORD1>
-      <KEYWORD1>switch</KEYWORD1>
-      <KEYWORD1>for</KEYWORD1>
-      <KEYWORD1>foreach</KEYWORD1>
-      <KEYWORD1>while</KEYWORD1>
-      <KEYWORD1>break</KEYWORD1>
-      <KEYWORD1>continue</KEYWORD1>
-      <KEYWORD1>proc</KEYWORD1>
-      <KEYWORD1>return</KEYWORD1>
-      <KEYWORD1>source</KEYWORD1>
-      <KEYWORD1>unknown</KEYWORD1>
-      <KEYWORD1>uplevel</KEYWORD1>
-      <KEYWORD1>cd</KEYWORD1>
-      <KEYWORD1>close</KEYWORD1>
-      <KEYWORD1>eof</KEYWORD1>
-      <KEYWORD1>file</KEYWORD1>
-      <KEYWORD1>flush</KEYWORD1>
-      <KEYWORD1>gets</KEYWORD1>
-      <KEYWORD1>glob</KEYWORD1>
+      <KEYWORD1>lset</KEYWORD1>
       <KEYWORD1>open</KEYWORD1>
-      <KEYWORD1>read</KEYWORD1>
+      <KEYWORD1>proc</KEYWORD1>
       <KEYWORD1>puts</KEYWORD1>
-      <KEYWORD1>pwd</KEYWORD1>
-      <KEYWORD1>seek</KEYWORD1>
-      <KEYWORD1>tell</KEYWORD1>
-      <KEYWORD1>catch</KEYWORD1>
-      <KEYWORD1>error</KEYWORD1>
-      <KEYWORD1>exec</KEYWORD1>
-      <KEYWORD1>pid</KEYWORD1>
-      <KEYWORD1>after</KEYWORD1>
-      <KEYWORD1>time</KEYWORD1>
-      <KEYWORD1>exit</KEYWORD1>
-      <KEYWORD1>history</KEYWORD1>
+      <KEYWORD1>read</KEYWORD1>
       <KEYWORD1>rename</KEYWORD1>
-      <KEYWORD1>info</KEYWORD1>
-      <!-- expr keywords-->
-      <KEYWORD1>ceil</KEYWORD1>
-      <KEYWORD1>floor</KEYWORD1>
-      <KEYWORD1>round</KEYWORD1>
-      <KEYWORD1>incr</KEYWORD1>
+      <KEYWORD1>return</KEYWORD1>
+      <KEYWORD1>set</KEYWORD1>
+      <KEYWORD1>source</KEYWORD1>
+      <KEYWORD1>split</KEYWORD1>
+      <KEYWORD1>time</KEYWORD1>
+      <KEYWORD1>unset</KEYWORD1>
+      <KEYWORD1>while</KEYWORD1>
+      <!-- Hecl keywords-->
+      <KEYWORD1>alias</KEYWORD1>
+      <KEYWORD1>and</KEYWORD1>
+      <KEYWORD1>bgerror</KEYWORD1>
+      <KEYWORD1>classof</KEYWORD1>
+      <KEYWORD1>clock</KEYWORD1>
+      <KEYWORD1>copy</KEYWORD1>
+      <KEYWORD1>eq</KEYWORD1>
+      <KEYWORD1>false</KEYWORD1>
+      <KEYWORD1>file.readable</KEYWORD1>
+      <KEYWORD1>filter</KEYWORD1>
+      <KEYWORD1>hasclass</KEYWORD1>
+      <KEYWORD1>hasnext</KEYWORD1>
+      <KEYWORD1>hash</KEYWORD1>
+      <KEYWORD1>hclear</KEYWORD1>
+      <KEYWORD1>hcontains</KEYWORD1>
+      <KEYWORD1>hget</KEYWORD1>
+      <KEYWORD1>hkeys</KEYWORD1>
+      <KEYWORD1>hremove</KEYWORD1>
+      <KEYWORD1>hset</KEYWORD1>
+      <KEYWORD1>intro</KEYWORD1>
+      <KEYWORD1>linsert</KEYWORD1>
+      <KEYWORD1>llen</KEYWORD1>
+      <KEYWORD1>max</KEYWORD1>
+      <KEYWORD1>min</KEYWORD1>
+      <KEYWORD1>ne</KEYWORD1>
+      <KEYWORD1>not</KEYWORD1>
+      <KEYWORD1>or</KEYWORD1>
+      <KEYWORD1>readln</KEYWORD1>
+      <KEYWORD1>runtime.freememory</KEYWORD1>
+      <KEYWORD1>runtime.totalmemory</KEYWORD1>
+      <KEYWORD1>search</KEYWORD1>
+      <KEYWORD1>sort</KEYWORD1>
+      <KEYWORD1>strbytelen</KEYWORD1>
+      <KEYWORD1>strcmp</KEYWORD1>
+      <KEYWORD1>strfind</KEYWORD1>
+      <KEYWORD1>strindex</KEYWORD1>
+      <KEYWORD1>strlast</KEYWORD1>
+      <KEYWORD1>strlen</KEYWORD1>
+      <KEYWORD1>strlower</KEYWORD1>
+      <KEYWORD1>strrange</KEYWORD1>
+      <KEYWORD1>strrep</KEYWORD1>
+      <KEYWORD1>strreplace</KEYWORD1>
+      <KEYWORD1>strtrim</KEYWORD1>
+      <KEYWORD1>strtriml</KEYWORD1>
+      <KEYWORD1>strtrimr</KEYWORD1>
+      <KEYWORD1>strupper</KEYWORD1>
+      <KEYWORD1>system.gc</KEYWORD1>
+      <KEYWORD1>system.getproperty</KEYWORD1>
+      <KEYWORD1>system.hasproperty</KEYWORD1>
+      <KEYWORD1>thisinterp</KEYWORD1>
+      <KEYWORD1>throw</KEYWORD1>
+      <KEYWORD1>tnotify</KEYWORD1>
+      <KEYWORD1>true</KEYWORD1>
+      <KEYWORD1>twait</KEYWORD1>
+      <KEYWORD1>upeval</KEYWORD1>
+      
+      <!-- Hecl math keywords-->
       <KEYWORD1>abs</KEYWORD1>
       <KEYWORD1>acos</KEYWORD1>
-      <KEYWORD1>cos</KEYWORD1>
-      <KEYWORD1>cosh</KEYWORD1>
       <KEYWORD1>asin</KEYWORD1>
-      <KEYWORD1>sin</KEYWORD1>
-      <KEYWORD1>sinh</KEYWORD1>
       <KEYWORD1>atan</KEYWORD1>
       <KEYWORD1>atan2</KEYWORD1>
-      <KEYWORD1>tan</KEYWORD1>
-      <KEYWORD1>tanh</KEYWORD1>
+      <KEYWORD1>cbrt</KEYWORD1>
+      <KEYWORD1>ceil</KEYWORD1>
+      <KEYWORD1>cos</KEYWORD1>
+      <KEYWORD1>cosh</KEYWORD1>
+      <KEYWORD1>double</KEYWORD1>
+      <KEYWORD1>exp</KEYWORD1>
+      <KEYWORD1>expm1</KEYWORD1>
+      <KEYWORD1>float</KEYWORD1>
+      <KEYWORD1>floor</KEYWORD1>
+      <KEYWORD1>hypot</KEYWORD1>
+      <KEYWORD1>int</KEYWORD1>
       <KEYWORD1>log</KEYWORD1>
       <KEYWORD1>log10</KEYWORD1>
-      <KEYWORD1>fmod</KEYWORD1>
+      <KEYWORD1>log1p</KEYWORD1>
+      <KEYWORD1>long</KEYWORD1>
       <KEYWORD1>pow</KEYWORD1>
-      <KEYWORD1>hypot</KEYWORD1>
+      <KEYWORD1>random</KEYWORD1>
+      <KEYWORD1>round</KEYWORD1>
+      <KEYWORD1>signum</KEYWORD1>
+      <KEYWORD1>sin</KEYWORD1>
+      <KEYWORD1>sinh</KEYWORD1>
       <KEYWORD1>sqrt</KEYWORD1>
-      <KEYWORD1>double</KEYWORD1>
-      <KEYWORD1>int</KEYWORD1>
-      <!-- New Tcl keywords up to tcl 8.4.14 -->
-      <KEYWORD1>load</KEYWORD1>
-      <KEYWORD1>lset</KEYWORD1>
-      <KEYWORD1>subst</KEYWORD1>
-      <KEYWORD1>update</KEYWORD1>
+      <KEYWORD1>tan</KEYWORD1>
+      <KEYWORD1>tanh</KEYWORD1>
+      <KEYWORD1>toDegrees</KEYWORD1>
+      <KEYWORD1>toRadians</KEYWORD1>
       
       <!-- Drawj2d keywords -->
       <KEYWORD2>unitlength</KEYWORD2>
@@ -208,10 +238,12 @@
       
       <KEYWORD2>pen</KEYWORD2>
       <KEYWORD2>font</KEYWORD2>
-      <KEYWORD2>nf</KEYWORD2>
-      <KEYWORD2>expr</KEYWORD2>
-      <KEYWORD2>exprinput</KEYWORD2>
-      <KEYWORD2>assert</KEYWORD2>
+      <KEYWORD2>opacity</KEYWORD2>
+      <KEYWORD2>today</KEYWORD2>
+      <KEYWORD1>nf</KEYWORD1>
+      <KEYWORD1>expr</KEYWORD1>
+      <KEYWORD1>exprinput</KEYWORD1>
+      <KEYWORD1>assert</KEYWORD1>
       
       <KEYWORD2>moveto</KEYWORD2>
       <KEYWORD2>m</KEYWORD2>
@@ -262,6 +294,8 @@
       <KEYWORD2>fillsegment</KEYWORD2>
       <KEYWORD2>sector</KEYWORD2>
       <KEYWORD2>fillsector</KEYWORD2>
+      <KEYWORD2>image</KEYWORD2>
+      <KEYWORD2>dxf</KEYWORD2>
       
       <KEYWORD2>label</KEYWORD2>
       <KEYWORD2>lb</KEYWORD2>
@@ -287,12 +321,21 @@
       <KEYWORD2>dimangle</KEYWORD2>
       <KEYWORD2>texdimangle</KEYWORD2>
       
+      <KEYWORD2>endblock</KEYWORD2>
+      <KEYWORD2>block.rotate</KEYWORD2>
+      <KEYWORD2>block.flip</KEYWORD2>
+      <KEYWORD2>block.scale</KEYWORD2>
+      <KEYWORD2>block</KEYWORD2>
+      
       <KEYWORD2>geom.vector</KEYWORD2>
       <KEYWORD2>geom.v</KEYWORD2>
+      <KEYWORD2>geom.azimuth</KEYWORD2>
+      <KEYWORD2>geom.azi</KEYWORD2>
       <KEYWORD2>geom.add</KEYWORD2>
       <KEYWORD2>geom.subtract</KEYWORD2>
       <KEYWORD2>geom.multiply</KEYWORD2>
       <KEYWORD2>geom.divide</KEYWORD2>
+      <KEYWORD2>geom.half</KEYWORD2>
       <KEYWORD2>geom.tox</KEYWORD2>
       <KEYWORD2>tx</KEYWORD2>
       <KEYWORD2>geom.toy</KEYWORD2>
@@ -301,6 +344,7 @@
       <KEYWORD2>geom.area</KEYWORD2>
       <KEYWORD2>geom.centroid</KEYWORD2>
       <KEYWORD2>geom.intersectlinepath</KEYWORD2>
+      <KEYWORD2>geom.intersectcircles</KEYWORD2>
       <KEYWORD2>geom.online</KEYWORD2>
       <KEYWORD2>geom.angle</KEYWORD2>
       <KEYWORD2>geom.anglerad</KEYWORD2>
@@ -309,7 +353,6 @@
       <KEYWORD2>geom.rotate</KEYWORD2>
       <KEYWORD2>geom.polar</KEYWORD2>
       <KEYWORD2>geom.length</KEYWORD2>
-      <KEYWORD2>geom.hypot</KEYWORD2>
       <KEYWORD2>geom.abs</KEYWORD2>
       <KEYWORD2>geom.norm</KEYWORD2>
       <KEYWORD2>geom.parallel</KEYWORD2>
@@ -340,6 +383,7 @@
       <KEYWORD3>brown</KEYWORD3>
       <KEYWORD3>cyan</KEYWORD3>
       <KEYWORD3>darkgray</KEYWORD3>
+      <KEYWORD3>darkgreen</KEYWORD3>
       <KEYWORD3>darkorange</KEYWORD3>
       <KEYWORD3>gray</KEYWORD3>
       <KEYWORD3>green</KEYWORD3>
@@ -347,7 +391,9 @@
       <KEYWORD3>magenta</KEYWORD3>
       <KEYWORD3>orange</KEYWORD3>
       <KEYWORD3>pink</KEYWORD3>
+      <KEYWORD3>purple</KEYWORD3>
       <KEYWORD3>red</KEYWORD3>
+      <KEYWORD3>violet</KEYWORD3>
       <KEYWORD3>white</KEYWORD3>
       <KEYWORD3>yellow</KEYWORD3>
       <KEYWORD3>dashed</KEYWORD3>
@@ -363,7 +409,6 @@
       <KEYWORD3>italic</KEYWORD3>
       <KEYWORD3>left</KEYWORD3>
       <KEYWORD3>justify</KEYWORD3>
-      <KEYWORD3>block</KEYWORD3>
       <KEYWORD3>NE</KEYWORD3>
       <KEYWORD3>E</KEYWORD3>
       <KEYWORD3>SE</KEYWORD3>
@@ -373,7 +418,10 @@
       <KEYWORD3>NW</KEYWORD3>
       <KEYWORD3>N</KEYWORD3>
       <KEYWORD3>C</KEYWORD3>
+      <KEYWORD3>BW</KEYWORD3>
+      <KEYWORD3>BC</KEYWORD3>
       <KEYWORD3>BL</KEYWORD3>
+      <KEYWORD3>BLC</KEYWORD3>
     </KEYWORDS>
   </RULES>
 
