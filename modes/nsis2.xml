@@ -278,6 +278,7 @@ $Id$
 			<KEYWORD2>!cd</KEYWORD2>
 			<KEYWORD2>!echo</KEYWORD2>
 			<KEYWORD2>!error</KEYWORD2>
+			<KEYWORD2>!getdllversion</KEYWORD2>
 			<KEYWORD2>!insertmacro</KEYWORD2>
 			<KEYWORD2>!packhdr</KEYWORD2>
 			<KEYWORD2>!system</KEYWORD2>
@@ -308,6 +309,7 @@ $Id$
 			<KEYWORD2>allowrootdirinstall</KEYWORD2>
 			<KEYWORD2>allowskipfiles</KEYWORD2>
 			<KEYWORD2>autoclosewindow</KEYWORD2>
+			<KEYWORD2>bgfont</KEYWORD2>
 			<KEYWORD2>bggradient</KEYWORD2>
 			<KEYWORD2>brandingtext</KEYWORD2>
 			<KEYWORD2>bringtofront</KEYWORD2>
@@ -387,6 +389,8 @@ $Id$
 			<KEYWORD2>loadlanguagefile</KEYWORD2>
 			<KEYWORD2>logset</KEYWORD2>
 			<KEYWORD2>logtext</KEYWORD2>
+			<KEYWORD2>manifestdpiaware</KEYWORD2>
+			<KEYWORD2>manifestsupportedos</KEYWORD2>
 			<KEYWORD2>miscbuttontext</KEYWORD2>
 			<KEYWORD2>name</KEYWORD2>
 			<KEYWORD2>nop</KEYWORD2>
@@ -446,6 +450,7 @@ $Id$
 			<KEYWORD2>strcpy</KEYWORD2>
 			<KEYWORD2>strlen</KEYWORD2>
 			<KEYWORD2>subcaption</KEYWORD2>
+			<KEYWORD2>unicode</KEYWORD2>
 			<KEYWORD2>uninstallbuttontext</KEYWORD2>
 			<KEYWORD2>uninstallcaption</KEYWORD2>
 			<KEYWORD2>uninstallicon</KEYWORD2>
@@ -458,6 +463,7 @@ $Id$
 			<KEYWORD2>videscription</KEYWORD2>
 			<KEYWORD2>vicompanyname</KEYWORD2>
 			<KEYWORD2>vicomments</KEYWORD2>
+			<KEYWORD2>vifileversion</KEYWORD2>
 			<KEYWORD2>vilegalcopyrights</KEYWORD2>
 			<KEYWORD2>vilegaltrademarks</KEYWORD2>
 			<KEYWORD2>viproductname</KEYWORD2>
