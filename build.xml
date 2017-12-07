@@ -80,6 +80,7 @@
                 <not>
                     <or>
                         <equals arg1="1.8" arg2="${ant.java.version}"/>
+                        <equals arg1="1.9" arg2="${ant.java.version}"/>
                         <equals arg1="9" arg2="${ant.java.version}"/>
                     </or>
                 </not>
