@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 1999-2013 Slava Pestov, Richard S. Hall, Dirk Moebius,
+ * Copyright \<copyright> 1999-2013 Slava Pestov, Richard S. Hall, Dirk Moebius,
  *    jgellene, ezust, vanza, kpouer, Vampire0, Jarekczek, k_satoda, voituk,
  *    Thomas Meyer, Martin Raspe
  *   And possibly other members of the All Volunteer Developer Team (tm)
@@ -1560,8 +1560,13 @@ loop:		for(;;)
 		Properties sorted = new Properties() {
 			@Override
 			public synchronized Enumeration<Object> keys() {
-				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+				return Collections.enumeration(new TreeSet<Object>(props.keySet()));
 			}
+			@Override
+			public synchronized Set<Map.Entry<Object,Object>> entrySet() {
+				return (new TreeMap<Object,Object>(props)).entrySet();
+			}
+
 		};
 		sorted.putAll(props);
 		sorted.store(out, comments);
