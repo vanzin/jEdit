@@ -417,6 +417,10 @@ public class EditPane extends JPanel implements BufferSetListener
 			for(int i = 0; i < selection.length; i++)
 			{
 				Selection s = selection[i];
+				// it happens sometimes when a buffer has an invalid selection and is loaded in two caret panes during
+				// startup
+				if (s == null)
+					continue;
 				int max = buffer.getLength();
 				if(s.getStart() > max || s.getEnd() > max)
 					selection[i] = null;
