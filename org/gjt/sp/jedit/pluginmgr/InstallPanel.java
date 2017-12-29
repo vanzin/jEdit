@@ -545,7 +545,7 @@ class InstallPanel extends JPanel implements EBComponent
 					case 2:
 						return entry.set;
 					case 3:
-						if (entry.installedVersion != null)
+						if ((entry.installedVersion != null) && !entry.installedVersion.equals(entry.version))
 							return entry.installedVersion + "->" + entry.version;
 						return entry.version;
 					case 4:
