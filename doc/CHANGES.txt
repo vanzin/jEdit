@@ -19,7 +19,7 @@ contributing to this release.
 - Command line behavior for +line fixed (Patch #590 - Wim West)
 
 - Autosave Untitled Buffers is now persistent across sessions
-  (Feature Request# 501, Patch #596 - Hrotkó Gábor)
+  (Feature Request# 501, Patch #596, Patch #614 - Hrotkó Gábor)
 
 - Fixed a number of bugs in the new jEdit printing system (Dale Anson)
 
