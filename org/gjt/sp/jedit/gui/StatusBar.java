@@ -93,6 +93,7 @@ public class StatusBar extends JPanel
 		rectSelectWidget = _getWidget("rectSelect");
 		overwriteWidget = _getWidget("overwrite");
 		lineSepWidget = _getWidget("lineSep");
+		lockedWidget = _getWidget("locked");
 
 		taskHandler = new TaskHandler();
 	} //}}}
@@ -432,6 +433,7 @@ public class StatusBar extends JPanel
 		modeWidget.update();
 		foldWidget.update();
 		encodingWidget.update();
+		lockedWidget.update();
 	} //}}}
 
 	//{{{ updateMiscStatus() method
@@ -460,6 +462,7 @@ public class StatusBar extends JPanel
 	private final Widget rectSelectWidget;
 	private final Widget overwriteWidget;
 	private final Widget lineSepWidget;
+	private final Widget lockedWidget;
 	/* package-private for speed */ StringBuilder buf = new StringBuilder();
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
@@ -492,6 +495,8 @@ public class StatusBar extends JPanel
 			return overwriteWidget;
 		if ("lineSep".equals(name))
 			return lineSepWidget;
+		if ("locked".equals(name))
+			return lockedWidget;
 
 		return _getWidget(name);
 	} //}}}

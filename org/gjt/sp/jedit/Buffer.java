@@ -978,6 +978,49 @@ public class Buffer extends JEditBuffer
 		return getFlag(TEMPORARY);
 	} //}}}
 
+	public boolean isEditable()
+	{
+		return super.isEditable() && !isLocked(); // respects "locked" property
+	}
+
+	//{{{ isLocked() method
+	/**
+	 * @return if this buffer is locked for editing
+	 */
+	public boolean isLocked()
+	{
+		return getBooleanProperty("locked", false);
+	}
+	//}}}
+
+	//{{{ setLocked() method
+	/**
+	 * Changes locked state of the buffer.
+	 * @param locked true to lock, false to unlock
+	 */
+	public void setLocked(boolean locked)
+	{
+		setBooleanProperty("locked", locked);
+		propertiesChanged();
+	}
+	//}}}
+
+	//{{{ toggleLocked() method
+	/**
+	 * Toggles locked state of the buffer.
+	 * @param view We show a message in the view's status bar
+	 */
+	public void toggleLocked(View view)
+	{
+		setLocked(!isLocked());
+
+		view.getStatus().setMessageAndClear(
+				jEdit.getProperty("view.status.locked-changed",
+						new Integer[] { isLocked() ? 1 : 0 }));
+
+	}
+	//}}}
+
 	//{{{ getIcon() method
 	/**
 	 * @return this buffer's icon.

@@ -568,6 +568,8 @@ view.status.wrap-tooltip=<html>Word wrap mode is {0} (click to change)</html>
 view.status.indent-tooltip=Automatic indentation indicator (click to change)
 view.status.autoindent-changed=Automatic indentation status is now "{0}"
 view.status.bufferset-tooltip=BufferSet scope is {0}
+view.status.locked-changed=Buffer is {0,choice,0#unlocked|1#locked}
+view.status.locked-tooltip=Buffer is {0,choice,0#unlocked|1#locked} (click to change)
 wrap.none=disabled
 wrap.hard=hard
 wrap.soft=soft
@@ -1392,6 +1394,7 @@ buffer-options.encoding=Character encoding:
 buffer-options.gzipped=GZIP (compress) file on disk
 buffer-options.editing=Editing
 buffer-options.mode=Edit mode:
+buffer-options.locked=Locked
 #}}}
 
 #{{{ Global options dialog

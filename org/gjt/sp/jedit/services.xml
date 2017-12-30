@@ -122,6 +122,11 @@
 		new LineSepWidgetFactory();
 	</SERVICE>
 
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="locked">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new LockedWidgetFactory();
+	</SERVICE>
+
 
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="memory-status">
 		import org.gjt.sp.jedit.gui.statusbar.*;

@@ -58,6 +58,7 @@ public class BufferOptionPane extends AbstractOptionPane
 	private Buffer buffer;
 	private JCheckBox elasticTabstops;
 	private JComboBox<String> autoIndent;
+	private JCheckBox locked;
 
 	public BufferOptionPane()
 	{
@@ -223,6 +224,12 @@ public class BufferOptionPane extends AbstractOptionPane
 		elasticTabstops.setSelected(buffer.getBooleanProperty("elasticTabstops"));
 		addComponent(elasticTabstops);
 		//}}}
+
+		//{{{ Locked setting
+		locked = new JCheckBox(jEdit.getProperty("buffer-options.locked"));
+		locked.setSelected(buffer.getBooleanProperty("locked"));
+		addComponent(locked);
+		//}}}
 	} //}}}
 
 	//{{{ _save() method
@@ -304,8 +311,10 @@ public class BufferOptionPane extends AbstractOptionPane
 		buffer.setBooleanProperty("elasticTabstops",elasticTabstops.isSelected());
 		buffer.setStringProperty("autoIndent", (String)autoIndent.getSelectedItem());
 
+		buffer.setBooleanProperty("locked", locked.isSelected()); // requires propertiesChanged() call afterwards
+
 		index = mode.getSelectedIndex();
-		buffer.setMode(modes[index]);
+		buffer.setMode(modes[index]); // NOTE: setMode() makes implicit call of propertiesChanged()
 		switch(checkModStatus.getSelectedIndex())
 		{
 		case 0:
