@@ -460,6 +460,7 @@ TODO:
 			<END>*/</END>
 		</SPAN>
 		<!-- line comments: -->
+		<SEQ_REGEXP HASH_CHAR="//" TYPE="COMMENT2" DELEGATE="MAIN"><![CDATA[//.*?\?>]]></SEQ_REGEXP> <!-- fallback to MAIN on closing ?> inside line comment -->
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT4">#</EOL_SPAN>
 
