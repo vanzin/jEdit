@@ -62,6 +62,8 @@ contributing to this release.
   name and behavior to "Close Dirty Untitled buffers without confirmation"
   (Alan Ezust)
 
+- Patch #612, fr #518: buffer lock (Roman Tsourick)
+
 }}}
 {{{ API Changes
 
@@ -69,7 +71,17 @@ contributing to this release.
 }}}
 {{{ Editing
 
-- C and C++ mode updates (Roman Tsourick - Patch #607)
+- Patch #607: C and C++ mode updates (Roman Tsourick)
+
+- Patch #613: javascript mode update (up to ES 2017) (Roman Tsourick)
+
+- Patch #608, bug #2106: PHP mode "//" comment syntax highlighting is incorrect (Roman Tsourick)
+
+- Patch #609, bug #2194: ASP Syntax highlight bug w/comment (Roman Tsourick)
+
+- Patch #610, bug #4054: hash comment highlighting in mysql mode (Roman Tsourick)
+
+- Patch #611, bug #3249: assembler-x86 comment directive (Roman Tsourick)
 
 - nsis2 mode updates (Uwe Stöhr - Patch #606)
 
