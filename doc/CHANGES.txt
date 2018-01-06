@@ -64,6 +64,8 @@ contributing to this release.
 
 - Patch #612, fr #518: buffer lock (Roman Tsourick)
 
+- Enhancements of russian localization (Roman Tsourick)
+
 }}}
 {{{ API Changes
 
