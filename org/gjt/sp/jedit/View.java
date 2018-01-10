@@ -1790,7 +1790,7 @@ loop:		while (true)
 						if (buffer == null)
 						{
 							buffer = jEdit.openTemporary(jEdit.getActiveView(), null,
-												path, true, null);
+												path, true, null, true);
 							jEdit.commitTemporary(buffer);
 						}
 					}
