@@ -34,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.lang.ref.SoftReference;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
 //}}}
@@ -242,7 +241,7 @@ public class Chunk extends Token
 				 * doesn't match any installed fonts. The following
 				 * check skips fonts that don't exist.
 				 */
-				Font f = jEdit.getFontProperty("view.fontSubstList." + i);
+				Font f = Font.decode(props.getProperty("view.fontSubstList." + i));
 				if (f != null && (!"dialog".equalsIgnoreCase(f.getFamily()) ||
 									"dialog".equalsIgnoreCase(family)))
 					userFonts.add(f);
