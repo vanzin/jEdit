@@ -50,6 +50,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
 import org.gjt.sp.jedit.syntax.TokenHandler;
@@ -978,6 +979,16 @@ public class Buffer extends JEditBuffer
 		return getFlag(TEMPORARY);
 	} //}}}
 
+	//{{{ isBackup() method
+	/**
+	 * @return if this buffer most probably contains backup file
+	 */
+	public boolean isBackup()
+	{
+		return MiscUtilities.isBackup(getPath());
+	} //}}}
+
+
 	public boolean isEditable()
 	{
 		return super.isEditable() && !isLocked(); // respects "locked" property
@@ -1017,6 +1028,7 @@ public class Buffer extends JEditBuffer
 		view.getStatus().setMessageAndClear(
 				jEdit.getProperty("view.status.locked-changed",
 						new Integer[] { isLocked() ? 1 : 0 }));
+		EditBus.send(new PropertiesChanged(Buffer.this));
 
 	}
 	//}}}
@@ -1030,7 +1042,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(isDirty())
 			return GUIUtilities.loadIcon("dirty.gif");
-		else if(isReadOnly())
+		else if(isReadOnly() || isLocked())
 			return GUIUtilities.loadIcon("readonly.gif");
 		else if(getFlag(NEW_FILE))
 			return GUIUtilities.loadIcon("new.gif");
@@ -1087,7 +1099,7 @@ public class Buffer extends JEditBuffer
 		// Try returning it as an integer first
 		try
 		{
-			retVal = new Integer(value);
+			retVal = Integer.valueOf(value);
 		}
 		catch(NumberFormatException nf)
 		{

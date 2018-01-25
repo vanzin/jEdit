@@ -182,7 +182,7 @@ public class EditPane extends JPanel implements BufferSetListener
 			{
 				if(bufferSwitcher.getSelectedItem() != buffer)
 					bufferSwitcher.setSelectedItem(buffer);
-				bufferSwitcher.setToolTipText(buffer.getPath());
+				bufferSwitcher.updateStyle(buffer);
 			}
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate

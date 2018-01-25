@@ -31,6 +31,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -54,6 +56,11 @@ public class BufferSwitcher extends JComboBox<Buffer>
 	// item that was selected before popup menu was opened
 	private Object itemSelectedBefore;
 	public static final DataFlavor BufferDataFlavor = new DataFlavor(BufferTransferableData.class, DataFlavor.javaJVMLocalObjectMimeType);
+
+	// actual colors will be set in constructor, here are just fallback values
+	static Color defaultColor   = Color.BLACK;
+	static Color defaultBGColor = Color.LIGHT_GRAY;
+
 
 	public BufferSwitcher(final EditPane editPane)
 	{
@@ -92,7 +99,64 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			}
 		});
 		EditBus.addToBus(this);
+
+
+		addItemListener(new ItemListener() 
+		{
+			@Override
+			public void itemStateChanged(ItemEvent evt) 
+			{
+				if (evt.getStateChange() == ItemEvent.SELECTED) 
+				{
+					Buffer buffer = (Buffer) evt.getItem();
+					updateStyle(buffer);
+				}
+			}
+		});
+
+		defaultColor   = getForeground();
+		defaultBGColor = getBackground();
+
+		updateStyle(editPane.getBuffer());
 	}
+
+	static void updateStyle(JComponent target, boolean isBackup, String path)
+	{
+		String styleName = isBackup ? "backup" : "normal";
+
+		switch (styleName)
+		{
+			case "backup":
+				target.setForeground(new Color(230,207,93));
+				break;
+
+			case "normal":
+			default:
+				target.setForeground(defaultColor);
+				break;
+		}
+
+		target.setToolTipText(path != null ? makeToolTipText(path, isBackup) : null);
+	}
+
+	static String makeToolTipText(String path, Boolean isBackup)
+	{
+		String text = path;
+
+		if (isBackup) text = String.format("(backup file?) %s", text);
+
+		return text;
+	}
+
+
+	public void updateStyle(Buffer buffer)
+	{
+		String path = buffer.getPath();
+		Boolean isBackup = buffer.isBackup();
+
+		updateStyle(this, isBackup, path);
+	}
+
 
 	public void updateBufferList()
 	{
@@ -110,20 +174,27 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				updating = true;
 				setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
 				Buffer[] buffers = bufferSet.getAllBuffers();
-				if (jEdit.getBooleanProperty("bufferswitcher.sortBuffers", true)) {
-					Arrays.sort(buffers, new Comparator<Buffer>(){
-							public int compare(Buffer a, Buffer b) {
-								if (jEdit.getBooleanProperty("bufferswitcher.sortByName", true)) {
-									return a.getName().toLowerCase().compareTo(b.getName().toLowerCase());		
-								} else {
-									return a.getPath().toLowerCase().compareTo(b.getPath().toLowerCase());	
-								}
-							}
+				if (jEdit.getBooleanProperty("bufferswitcher.sortBuffers", true)) 
+				{
+					Arrays.sort(buffers, new Comparator<Buffer>()
+					{
+						public int compare(Buffer a, Buffer b) 
+						{
+							if (jEdit.getBooleanProperty("bufferswitcher.sortByName", true)) 
+								return a.getName().toLowerCase().compareTo(b.getName().toLowerCase());		
+							else
+								return a.getPath().toLowerCase().compareTo(b.getPath().toLowerCase());	
+						}
 					});
 				}
 				setModel(new DefaultComboBoxModel<Buffer>(buffers));
+				// FIXME: editPane.getBuffer() returns wrong buffer (old buffer) after last non-untitled buffer close.
+				// When the only non-untitled (last) buffer is closed a new untitled buffer is added to BufferSet
+				// directly from BufferSetManager (@see BufferSetManager.bufferRemoved() and BufferSetManager.addBuffer())
+				// This triggers EditPane.bufferAdded() -> bufferSwitcher.updateBufferList() bypassing setting EditPane's
+				// buffer object reference to a new created untitled buffer.
+				// This is why here editPane.getBuffer() returns wrong previous already closed buffer in that case.
 				setSelectedItem(editPane.getBuffer());
-				setToolTipText(editPane.getBuffer().getPath(true));
 				addDnD();
 				updating = false;
 			}
@@ -149,11 +220,14 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			Buffer buffer = (Buffer)value;
 			
 			if(buffer == null)
+			{
 				setIcon(null);
+				updateStyle(this, false, null);
+			}
 			else
 			{
 				setIcon(buffer.getIcon());
-				setToolTipText(buffer.getPath());
+				updateStyle(this, buffer.isBackup(), buffer.getPath());
 			}
 			return this;
 		}

@@ -1710,6 +1710,23 @@ public class jEdit
 				// if it is new, then it is untitled
 				newBuffer = new Buffer(path,newFile,false,props,newFile);
 
+
+				if (newBuffer.isBackup()) {
+					Object[] args = {newBuffer.getName()};
+					int result = GUIUtilities.option(view, "file-is-backup",
+							args, JOptionPane.WARNING_MESSAGE,
+							new String[]{
+									jEdit.getProperty("file-is-backup.open"),
+									jEdit.getProperty("file-is-backup.open-locked"),
+									jEdit.getProperty("common.cancel")
+							}, jEdit.getProperty("common.cancel"));
+					if (result == 2)
+						return null;
+					if (result == 1)
+						newBuffer.setLocked(true);
+				}
+
+
 				if(!newBuffer.load(view,false))
 					return null;
 				addBufferToList(newBuffer);

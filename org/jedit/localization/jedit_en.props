@@ -969,6 +969,13 @@ reload-all.message=Are you sure you want to reload all buffers from disk?\n\
 	Unsaved changes in any open buffers WILL BE LOST!
 #}}}
 
+#{{{ File is backup alert
+file-is-backup.title=Opening Backup File
+file-is-backup.message=The file {0} is likely a jEdit backup file.
+file-is-backup.open=Open
+file-is-backup.open-locked=Open locked
+#}}}
+
 #{{{ Encoding prompt
 encoding-prompt.title=Open With Other Encoding
 encoding-prompt.message=Character encoding to use:
