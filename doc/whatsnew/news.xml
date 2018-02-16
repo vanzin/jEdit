@@ -23,6 +23,10 @@
     close or quit untitled buffers without a dialog confirmation), but allows for
     multiple dirty untitled buffers. </para>
 
+    <para> jEdit's launcher and core have both been tested with Java 9.
+    Some of the plugins (e.g. Lucene) may not yet be compatible,
+    but at least the core works fine on it now. </para>
+
     <para> With continued support from the community, we will keep releasing a newer
     version each year that can accurately bring together the fruits of everyone's labor.
     Thank you to each and every one of the contributors who helped make 5.5 the best
