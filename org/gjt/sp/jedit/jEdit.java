@@ -2424,11 +2424,11 @@ public class jEdit
 			path = path.toLowerCase();
 		}
 
-		/// danson, this causes ProjectViewer to block, not sure why yet
-		///synchronized(bufferListLock)
-		///{
+		// TODO: danson, this causes ProjectViewer to block, not sure why yet
+		synchronized(bufferListLock)
+		{
 			return bufferHash.get(path);
-		///}
+		}
 	} //}}}
 
 	//{{{ getBuffer() method
