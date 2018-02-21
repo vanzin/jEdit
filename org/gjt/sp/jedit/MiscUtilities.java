@@ -176,7 +176,7 @@ public class MiscUtilities
 		String varName = m.group(2);
 		String expansion = System.getenv(varName);
 		if (expansion == null) {
-			if (varName.equalsIgnoreCase("jedit_settings")) {
+			if (varName.equalsIgnoreCase("jedit_settings") && jEdit.getSettingsDirectory() != null) {
 				expansion = jEdit.getSettingsDirectory();
 			}
 			else {
@@ -1593,7 +1593,8 @@ loop:		for(;;)
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix())
 				prefixMap.put(System.getProperty("user.home"), "~");
-			prefixMap.put(jEdit.getSettingsDirectory(), "JEDIT_SETTINGS");
+			if (jEdit.getSettingsDirectory() != null)
+				prefixMap.put(jEdit.getSettingsDirectory(), "JEDIT_SETTINGS");
 			for (Map.Entry<String, String> entry: env.entrySet())
 			{
 				String k = entry.getKey();

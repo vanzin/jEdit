@@ -91,8 +91,8 @@ backupEverySave=false
 # Number of backups to make, 0=no backups
 backups=1
 
-# Backup directory
-backup.directory=$JEDIT_SETTINGS/backups
+# Backup directory suggestion: $JEDIT_SETTINGS/backups
+backup.directory=
 
 # Backup filename prefix and suffix
 backup.prefix=

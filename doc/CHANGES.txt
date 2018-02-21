@@ -54,8 +54,7 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- FR #506, FR #536: Autosaves are now saved to the Backup directory.
-  Default Backup/Autosave Directory is now $JEDIT_SETTINGS/backups.
+- FR #506, FR #536: Autosaves are now also saved to the Backup directory.
   (Alan Ezust, Hrotkó Gábor)
 
 - FR #175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
