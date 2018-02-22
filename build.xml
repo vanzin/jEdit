@@ -585,10 +585,17 @@
 			</contrib:then>
 		</contrib:if>
 		<contrib:if>
-			<os family="unix"/>
+			<os family="unix" arch="amd64"/>
 			<contrib:then>
 				<property name="osfamily"
-					  value="unix"/>
+					  value="unix-x64"/>
+			</contrib:then>
+		</contrib:if>
+		<contrib:if>
+			<os family="unix" arch="x86"/>
+			<contrib:then>
+				<property name="osfamily"
+					  value="unix-x32"/>
 			</contrib:then>
 		</contrib:if>
 		<contrib:switch value="${osfamily}">
@@ -596,14 +603,24 @@
 				<unjar src="${lib.dir}/launch4j/launch4j-workdir-win32.jar"
 				       dest="${build.dir}/launch4j"/>
 				<copy todir="${lib.dir}/launch4j">
-					<fileset dir="${build.dir}/launch4j/launch4j-3.5.0-workdir-win32/"/>
+					<fileset dir="${build.dir}/launch4j/launch4j-3.11-workdir-win32/"/>
 				</copy>
+			</contrib:case>
+			<contrib:case value="unix-x64">
+				<unjar src="${lib.dir}/launch4j/launch4j-workdir-linux64.jar"
+				       dest="${build.dir}/launch4j/"/>
+				<copy todir="${lib.dir}/launch4j">
+					<fileset dir="${build.dir}/launch4j/launch4j-3.11-workdir-linux64/"/>
+				</copy>
+				<chmod dir="${lib.dir}/launch4j/bin"
+				       perm="+x"
+				       includes="**"/>
 			</contrib:case>
 			<contrib:case value="unix">
 				<unjar src="${lib.dir}/launch4j/launch4j-workdir-linux.jar"
 				       dest="${build.dir}/launch4j/"/>
 				<copy todir="${lib.dir}/launch4j">
-					<fileset dir="${build.dir}/launch4j/launch4j-3.5.0-workdir-linux/"/>
+					<fileset dir="${build.dir}/launch4j/launch4j-3.11-workdir-linux/"/>
 				</copy>
 				<chmod dir="${lib.dir}/launch4j/bin"
 				       perm="+x"

@@ -70,11 +70,12 @@
 
 		<dependency org="org.apache.xmlgraphics" name="fop" rev="1.0" conf="fop"/>
 
-		<dependency org="net.sf.launch4j" name="launch4j" rev="3.5.0" conf="launch4j">
+		<dependency org="net.sf.launch4j" name="launch4j" rev="3.11" conf="launch4j">
 			<artifact name="launch4j" e:classifier="core"/>
 			<artifact name="launch4j" e:classifier="workdir-win32"/>
 			<artifact name="launch4j" e:classifier="workdir-mac"/>
 			<artifact name="launch4j" e:classifier="workdir-linux"/>
+			<artifact name="launch4j" e:classifier="workdir-linux64"/>
 			<!--
 				we do not need the UI and thus abeille, which uses
 				<repository> sections in their POM which Ivy cannot handle

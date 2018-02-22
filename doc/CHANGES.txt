@@ -11,6 +11,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Support Java 9 and newer in the Windows EXE launcher
+  (Bug #4064 - Björn "Vampire" Kautler)
+
 - Fix splash screen progress call count not being equal in all code branches /
   parameter combinations (Björn "Vampire" Kautler)
 
