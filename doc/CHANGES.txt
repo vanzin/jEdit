@@ -74,6 +74,10 @@ contributing to this release.
 }}}
 {{{ Editing
 
+- Shipped JavaDocs are now working properly if viewed with a browser as
+  JavaScript parts are no longer stripped off, just the noscript tags that
+  inform about disabled JavaScript are removed. ((Björn "Vampire" Kautler)
+
 - Patch #607: C and C++ mode updates (Roman Tsourick)
 
 - Patch #613: javascript mode update (up to ES 2017) (Roman Tsourick)

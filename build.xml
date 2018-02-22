@@ -84,7 +84,7 @@
                         <equals arg1="9" arg2="${ant.java.version}"/>
                     </or>
                 </not>
-				
+
 			</condition>
 		</fail>
 		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
@@ -893,12 +893,8 @@
 				 includes="api/**/*.html"/>
 			<filterchain>
 				<tokenfilter>
-					<replacestring from="&lt;TD BGCOLOR=&quot;#FFFFFF&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"
-						       to="&lt;TD BGCOLOR=&quot;#00008B&quot; CLASS=&quot;NavBarCell1Rev&quot;&gt;"/>
-				</tokenfilter>
-				<tokenfilter>
 					<filetokenizer/>
-					<replaceregex pattern="(&lt;SCRIPT type=&quot;text/javascript&quot;&gt;.*?&lt;/SCRIPT&gt;|onload=&quot;.*?&quot;)"
+					<replaceregex pattern="&lt;noscript&gt;.*?JavaScript is disabled on your browser\..*?&lt;/noscript&gt;"
 						      flags="gs"/>
 				</tokenfilter>
 			</filterchain>
