@@ -4,9 +4,9 @@ jEdit 5.5 version history
 
 {{{ Version 5.5pre1
 
-Thanks to AdamS, Wim West, M. Cesar R. Lacruz, Egor Abramovich,
-Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick, Rafal Kolanski,
-Uwe Stöhr, Matthieu Casanova, A. Vontobel, and Jesse Pavel for
+Thanks to Björn "Vampire" Kautler, AdamS, Wim West, M. Cesar R. Lacruz,
+Egor Abramovich, Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick,
+Rafal Kolanski, Uwe Stöhr, Matthieu Casanova, A. Vontobel and Jesse Pavel for
 contributing to this release.
 
 {{{ Bug Fixes
@@ -19,7 +19,7 @@ contributing to this release.
 - Command line behavior for +line fixed (Patch #590 - Wim West)
 
 - Autosave Untitled Buffers is now persistent across sessions
-  (Feature Request# 501, Patch #596, Patch #614, Fix Bug #4059 - Hrotkó Gábor)
+  (Feature Request #501, Patch #596, Patch #614, Fix Bug #4059 - Hrotkó Gábor)
 
 - Fixed a number of bugs in the new jEdit printing system (Dale Anson)
 
@@ -35,7 +35,7 @@ contributing to this release.
   (Dale Anson)
 
 - Fix Bug #4011, The Cut Lines macro gives exception if the cursor is beyond
-   text area (Patch #600, Roman Tsourick)
+  text area (Patch #600, Roman Tsourick)
 
 - Fix for bug #541, let ESC key close the print dialog. (Dale Anson)
 
@@ -49,7 +49,7 @@ contributing to this release.
 - FSB: Disable first column dragging (Patch# 603, Roman Tsourick)
 
 - FSB: Sorting icon not following header when moving
-     (Bug# 4049, Patch# 604, Roman Tsourick)
+  (Bug# 4049, Patch# 604, Roman Tsourick)
 
 }}}
 {{{ Miscellaneous
@@ -66,20 +66,19 @@ contributing to this release.
 - Enhancements of russian localization (Roman Tsourick)
 
 }}}
-{{{ API Changes
-
-}}}
 {{{ Editing
 
 - Patch #607: C and C++ mode updates (Roman Tsourick)
 
 - Patch #613: javascript mode update (up to ES 2017) (Roman Tsourick)
 
-- Patch #608, bug #2106: PHP mode "//" comment syntax highlighting is incorrect (Roman Tsourick)
+- Patch #608, bug #2106: PHP mode "//" comment syntax highlighting is incorrect
+  (Roman Tsourick)
 
 - Patch #609, bug #2194: ASP Syntax highlight bug w/comment (Roman Tsourick)
 
-- Patch #610, bug #4054: hash comment highlighting in mysql mode (Roman Tsourick)
+- Patch #610, bug #4054: hash comment highlighting in mysql mode
+  (Roman Tsourick)
 
 - Patch #611, bug #3249: assembler-x86 comment directive (Roman Tsourick)
 
@@ -87,7 +86,8 @@ contributing to this release.
 
 - Draw2d mode updates (A.Vontobel - Patch #605)
 
-- Add Gherkin mode (english) to support Cucumber feature files (Matthieu Casanova)
+- Add Gherkin mode (english) to support Cucumber feature files
+  (Matthieu Casanova)
 
 - Patch #593 - Various small patches to modes (AdamS)
 
