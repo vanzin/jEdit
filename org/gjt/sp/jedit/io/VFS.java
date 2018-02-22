@@ -88,7 +88,7 @@ import org.gjt.sp.util.ThreadUtilities;
  * <li>{@link #createVFSSession(String,Component)} - unless
  *     <code>NON_AWT_SESSION_CAP</code> capability is set</li>
  * <li>{@link #insert(View,Buffer,String)}</li>
- * <li>{@link #load(View,Buffer,String)}</li>
+ * <li>{@link #load(View,Buffer,String,boolean)}</li>
  * <li>{@link #save(View,Buffer,String)}</li>
  * </ul>
  *
