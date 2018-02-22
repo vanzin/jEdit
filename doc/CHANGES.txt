@@ -11,6 +11,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix splash screen progress call count not being equal in all code branches /
+  parameter combinations (Björn "Vampire" Kautler)
+
 - Fix splash screen progress count, so that the progress bar finally reaches
   the right end (Björn "Vampire" Kautler)
 

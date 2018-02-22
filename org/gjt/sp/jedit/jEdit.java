@@ -506,6 +506,8 @@ public class jEdit
 			MigrationService keymapMigration = ServiceManager.getService(MigrationService.class, "keymap");
 			keymapMigration.migrate();
 		}
+		else
+			GUIUtilities.advanceSplashProgress();
 
 		SearchAndReplace.load();
 
@@ -569,13 +571,14 @@ public class jEdit
 			File file = new File(path);
 			if(file.exists())
 			{
+				GUIUtilities.advanceSplashProgress("run startup scripts");
 				runStartupScripts(file);
 			}
 			else
 				GUIUtilities.advanceSplashProgress();
 		}
 		else
-			GUIUtilities.advanceSplashProgress("run startup scripts");
+			GUIUtilities.advanceSplashProgress();
 
 		if(runStartupScripts && settingsDirectory != null)
 		{
