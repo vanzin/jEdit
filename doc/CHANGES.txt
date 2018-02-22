@@ -11,6 +11,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix splash screen progress count, so that the progress bar finally reaches
+  the right end (Björn "Vampire" Kautler)
+
 - Fix a bug preventing jEdit from loading when a buffer has an invalid
   selection and is loaded in two edit panes (Matthieu Casanova)
 

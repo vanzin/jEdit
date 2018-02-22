@@ -263,7 +263,7 @@ public class SplashScreen extends JComponent
 	private final Image image;
 	private int progress;
 	private static final int PROGRESS_HEIGHT = 20;
-	private static final int PROGRESS_COUNT = 28;
+	private static final int PROGRESS_COUNT = 23;
 	private String label;
 	private String lastLabel;
 	private long firstAdvanceTime = System.currentTimeMillis();
