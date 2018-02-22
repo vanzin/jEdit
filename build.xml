@@ -75,16 +75,11 @@
 				</not>
 			</condition>
 		</fail>
-		<fail message="Java 1.8 or 9 is needed for jEdit to build, please install it and rerun (found Java version: '${ant.java.version}')">
+		<fail message="Java 1.8 is needed for jEdit to build, please install it and rerun (found Java version: '${ant.java.version}')">
 			<condition>
-                <not>
-                    <or>
-                        <equals arg1="1.8" arg2="${ant.java.version}"/>
-                        <equals arg1="1.9" arg2="${ant.java.version}"/>
-                        <equals arg1="9" arg2="${ant.java.version}"/>
-                    </or>
-                </not>
-
+				<not>
+					<equals arg1="1.8" arg2="${ant.java.version}"/>
+				</not>
 			</condition>
 		</fail>
 		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
