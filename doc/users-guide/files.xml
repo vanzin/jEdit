@@ -120,12 +120,10 @@
             written out, with their respective file names,
             enclosed in hash (<quote>#</quote>) characters. For example,
             <filename>/home/user/project/program.c</filename> will be autosaved to
-            <filename>home/user/project/#program.c#</filename> under
-            your backup/autosave directory, or next to the original file,
-            if no backup/autosave directory is specified.</para>
+            <filename>home/user/project/#program.c#</filename>. </para>
 
             <para> If you wish autosave files to be stored in an alternate
-            location, you can specify the <guilabel>Backup, Autosave Directory</guilabel>
+            location, you can specify the <guilabel>Autosave Directory</guilabel>
             as a <guilabel>Saving and Backup</guilabel> option. </para>
 
             <para>Saving a buffer using one of the commands in the previous
@@ -156,10 +154,9 @@
             <quote>backed up</quote> under a different file name.</para>
 
             <para>The behavior of the backup feature is specified in the
-            <guibutton>Autosave and Backup</guibutton> pane of the
-            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Options</guimenuitem>
-            dialog box; see <xref
-            linkend="saving-backup-pane" />.</para>
+            <guibutton>Saving and Backup</guibutton> pane of the
+            <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+            see <xref linkend="saving-backup-pane" />.</para>
 
             <para>The default behavior is to back up the original contents to
             the buffer's file name suffixed with a tilde (<quote>~</quote>). For
@@ -176,7 +173,14 @@
                 </listitem>
 
                 <listitem>
-                    <para>If the <guilabel>Backup, Autosave directory</guilabel> setting
+                    <para>If the <guilabel>Autosave directory</guilabel> setting
+                    is non-empty, autosaves are saved in that location (with the
+                    full path to the original file under it). Otherwise,
+                    they are saved in the same directory as the original file.</para>
+                </listitem>
+
+                <listitem>
+                    <para>If the <guilabel>Backup directory</guilabel> setting
                     is non-empty, backups are saved in that location (with the
                     full path to the original file under it). Otherwise,
                     they are saved in the same directory as the original file.</para>

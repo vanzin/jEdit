@@ -352,17 +352,17 @@ public class Buffer extends JEditBuffer
 	{
 		autosave(false);
 	} //}}}
-	
+
 	//{{{ autosave() method
 	/**
 	 * Autosaves this buffer.
-	 * 
+	 *
 	 * @param force save even if AUTOSAVE_DIRTY not set
 	 * @since jEdit 5.5pre1
 	 */
 	public void autosave(boolean force)
 	{
-		
+
 		if(autosaveFile == null || (!getFlag(AUTOSAVE_DIRTY) && !force)
 			|| !isDirty() || isPerformingIO() ||
 			!autosaveFile.getParentFile().exists())
@@ -371,12 +371,12 @@ public class Buffer extends JEditBuffer
 		// re-set autosave file path, based on the path at the settings
 		File autosaveFileOriginal = autosaveFile;
 		setAutosaveFile();
-		
+
 		// if autosave path settings changed, delete the old file
 		if(autosaveFile != null && !autosaveFileOriginal.toString().equals(autosaveFile.toString())) {
 			autosaveFileOriginal.delete();
 		}
-	
+
 		setFlag(AUTOSAVE_DIRTY,false);
 
 		ThreadUtilities.runInBackground(new BufferAutosaveRequest(
@@ -1980,7 +1980,7 @@ public class Buffer extends JEditBuffer
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setFileReadOnly(true);
 		name = vfs.getFileName(path);
-		
+
 		// clean up buffer name
 		// #filename# is for autosave, e.g. reloading autosaved file, remove #'s from the buffer's name
 		if ( name.startsWith("#") && name.endsWith("#"))
@@ -1999,7 +1999,7 @@ public class Buffer extends JEditBuffer
 			// deleted after a save as
 			if(autosaveFile != null)
 				autosaveFile.delete();
-			
+
 			setAutosaveFile();
 		}
 		else
@@ -2019,7 +2019,7 @@ public class Buffer extends JEditBuffer
 	 */
 	private void setAutosaveFile()
 	{
-		File autosaveDir = MiscUtilities.prepareBackupDirectory(symlinkPath);
+		File autosaveDir = MiscUtilities.prepareAutosaveDirectory(symlinkPath);
 		autosaveFile = new File(autosaveDir,'#' + name + '#');
 	} //}}}
 

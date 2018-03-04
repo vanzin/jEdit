@@ -63,8 +63,8 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- FR #506, FR #536: Autosaves are now also saved to the Backup directory.
-  (Alan Ezust, Hrotkó Gábor)
+- FR #506, FR #536: Autosaves are now saved to the Autosave directory, if
+  specified. (Alan Ezust, Hrotkó Gábor)
 
 - FR #175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
   name and behavior to "Close Dirty Untitled buffers without confirmation"

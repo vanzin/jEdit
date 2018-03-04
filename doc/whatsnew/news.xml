@@ -17,7 +17,7 @@
 
     <para> One notable new thing in this version is autosaves of untitled buffers.
     This allows jEdit to save and restore untitled buffers across sessions.
-    Totally rewritten is most of the autosave code - it now uses the backup directory
+    Totally rewritten is most of the autosave code - it can use an autosave directory
     to store its files. In addition, the option for never marking untitled buffers
     dirty has been replaced by an option that achieves a similar goal (allowing you to
     close or quit untitled buffers without a dialog confirmation), but allows for
