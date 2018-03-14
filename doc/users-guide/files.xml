@@ -173,13 +173,6 @@
                 </listitem>
 
                 <listitem>
-                    <para>If the <guilabel>Autosave directory</guilabel> setting
-                    is non-empty, autosaves are saved in that location (with the
-                    full path to the original file under it). Otherwise,
-                    they are saved in the same directory as the original file.</para>
-                </listitem>
-
-                <listitem>
                     <para>If the <guilabel>Backup directory</guilabel> setting
                     is non-empty, backups are saved in that location (with the
                     full path to the original file under it). Otherwise,
