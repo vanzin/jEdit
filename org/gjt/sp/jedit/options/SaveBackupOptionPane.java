@@ -94,13 +94,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		suppressNotSavedConfirmUntitled.setSelected(jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
 		addComponent(suppressNotSavedConfirmUntitled);
 
-		/* Autosave untitled buffers */
-		autosaveUntitled = new JCheckBox(jEdit.getProperty(
-			"options.save-back.autosaveUntitled"));
-		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
-
-		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
-		addComponent(autosaveUntitled);
+		addSeparator("options.autosave");
 
 		/* Autosave Directory */
 
@@ -117,6 +111,22 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.save-back.autosaveDirectory"),
 			panel);
 
+
+		/* Autosave untitled buffers */
+		autosaveUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setToolTipText(jEdit.getProperty("options.save-back.autosaveUntitled.tooltip"));
+
+		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
+		addComponent(autosaveUntitled);
+
+		/* Autosave interval */
+		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
+		autosave.setToolTipText(jEdit.getProperty("options.save-back.autosave.tooltip"));
+		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
+
+		addSeparator("options.backup");
+
 		/* Backup directory */
 		backupDirectory = new JTextField(jEdit.getProperty(
 			"backup.directory"));
@@ -131,10 +141,6 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.save-back.backupDirectory"),
 			panel);
 
-		/* Autosave interval */
-		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
-		autosave.setToolTipText(jEdit.getProperty("options.save-back.autosave.tooltip"));
-		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
 
 		/* Backup count */
 		backups = new NumericTextField(jEdit.getProperty("backups"), true);

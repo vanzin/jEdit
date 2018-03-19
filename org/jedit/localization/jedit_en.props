@@ -1694,8 +1694,10 @@ options.firewall.socks.port=SOCKS proxy port:
 
 #{{{ Save & Backup pane
 options.save-back.label=Saving & Backup
+options.autosave=Autosave Options
 options.save-back.autosave=Autosave frequency (secs):
 options.save-back.autosave.tooltip=to disable, set to 0
+options.backup=Backup Options
 options.save-back.backups=Max number of backups:
 options.save-back.backups.tooltip=to disable, set to 0
 options.save-back.autosaveDirectory=Autosave directory:
