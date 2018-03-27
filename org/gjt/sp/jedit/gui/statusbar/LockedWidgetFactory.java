@@ -57,7 +57,6 @@ public class LockedWidgetFactory implements StatusWidgetFactory
         {
             cmp = new ToolTipLabel();
             cmp.setHorizontalAlignment(SwingConstants.CENTER);
-            cmp.setText("L");
 
             this.view = view;
             cmp.addMouseListener(new MouseAdapter()
@@ -80,6 +79,7 @@ public class LockedWidgetFactory implements StatusWidgetFactory
             Buffer buffer = view.getBuffer();
             Boolean locked = buffer.isLocked();
 
+            cmp.setText(locked ? "L" : "l");
             cmp.setEnabled(locked);
 
             cmp.setToolTipText(jEdit.getProperty("view.status.locked-tooltip",

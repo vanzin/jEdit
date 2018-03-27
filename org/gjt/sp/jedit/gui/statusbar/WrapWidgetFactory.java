@@ -90,7 +90,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 			if("none".equals(wrap))
 			{
 				this.wrap.setEnabled(false);
-				this.wrap.setText("N");
+				this.wrap.setText("n");
 			}
 			else
 			{

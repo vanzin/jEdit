@@ -54,6 +54,9 @@ contributing to this release.
 }}}
 {{{ UI Improvements
 
+- Consistently use lowercase status bar indicators for disabled settings
+  (Björn "Vampire" Kautler)
+
 - Allow specification of fallback font sizes (Patch #569, Rafal Kolanski)
 
 - Show tooltips in ShortcutOptionPane table (FR# 538, Roman Tsourick)
