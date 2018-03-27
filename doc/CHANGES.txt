@@ -11,6 +11,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Do not manipulate filename when opening a probably backup file but let the
+  user choose what to do as intended (Björn "Vampire" Kautler)
+
 - Fix jEdit backup filename recognition (Björn "Vampire" Kautler)
 
 - Do not use translated strings to match log lines within activity.log in

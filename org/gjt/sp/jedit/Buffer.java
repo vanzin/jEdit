@@ -1981,14 +1981,6 @@ public class Buffer extends JEditBuffer
 			setFileReadOnly(true);
 		name = vfs.getFileName(path);
 
-		// clean up buffer name
-		// #filename# is for autosave, e.g. reloading autosaved file, remove #'s from the buffer's name
-		if ( name.startsWith("#") && name.endsWith("#"))
-		{
-			name = name.substring(1, name.length());
-			name = name.substring(0, name.length() - 1);
-		}
-
 		directory = vfs.getParentOfPath(path);
 
 		if(vfs instanceof FileVFS)
