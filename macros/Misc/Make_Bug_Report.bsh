@@ -29,12 +29,7 @@
 // Localization
 final static String OpeningActivityLogError = jEdit.getProperty("macro.rs.MakeBugReport.OpeningActivityLog.error", "Error opening Activity Log.");
 final static String UsefulEntriesForReportLabel = jEdit.getProperty("macro.rs.MakeBugReport.UsefulEntriesForReport.label", "Activity log entries that might be useful in a bug report:\n\n.");
-final static String MessagejEditLabel = jEdit.getProperty("macro.rs.MakeBugReport.MessagejEdit.label", "[message] jEdit:");
-final static String NoticejEditLabel = jEdit.getProperty("macro.rs.MakeBugReport.NoticejEdit.label", "[notice] jEdit:");
-final static String NoticeJarClassLoaderLabel = jEdit.getProperty("macro.rs.MakeBugReport.NoticeJarClassLoader.label", "[notice] JARClassLoader:");
-final static String MessagejEditStartupCompleteLabel = jEdit.getProperty("macro.rs.MakeBugReport.MessagejEditStartupComplete.label", "[message] jEdit: Startup complete");
-final static String ErrorLabel = jEdit.getProperty("macro.rs.MakeBugReport.Error.label", "[error]");
-final static String ReadingActivityLogError = jEdit.getProperty("macro.rs.MakeBugReport.ReadingActivityLog.error", "Error reading Activity Log");
+final static String ReadingActivityLogError = jEdit.getProperty("macro.rs.MakeBugReport.ReadingActivityLog.error", "Error reading Activity Log.");
 
 // Process
 makeBugReport()
@@ -69,17 +64,17 @@ makeBugReport()
 		while((line = reader.readLine()) != null)
 		{
 			if(!startupDone &&
-				(line.startsWith(MessagejEditLabel)
-					|| line.startsWith(NoticejEditLabel)
-					|| line.startsWith(NoticeJarClassLoaderLabel)))
+				(line.startsWith("[message] jEdit:")
+					|| line.startsWith("[notice] jEdit:")
+					|| line.startsWith("[notice] JARClassLoader:")))
 			{
 				report.append(line).append('\n');
-				if(line.equals(MessagejEditStartupCompleteLabel))
+				if(line.equals("[message] jEdit: Startup complete"))
 				{
 					startupDone = true;
 				}
 			}
-			else if(line.startsWith(ErrorLabel))
+			else if(line.startsWith("[error]"))
 			{
 				if(!insideError)
 				{
