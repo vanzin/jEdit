@@ -11,6 +11,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Do not use translated strings to match log lines within activity.log in
+  Make_Bug_Report.bsh (Björn "Vampire" Kautler)
+
 - Support Java 9 and newer in the Windows EXE launcher
   (Bug #4064 - Björn "Vampire" Kautler)
 
