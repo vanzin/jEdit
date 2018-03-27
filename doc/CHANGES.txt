@@ -11,6 +11,8 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Make the Display_Shortcuts.bsh macro work properly (Björn "Vampire" Kautler)
+
 - Do not manipulate filename when opening a probably backup file but let the
   user choose what to do as intended (Björn "Vampire" Kautler)
 
