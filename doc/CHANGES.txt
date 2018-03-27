@@ -11,6 +11,8 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix jEdit backup filename recognition (Björn "Vampire" Kautler)
+
 - Do not use translated strings to match log lines within activity.log in
   Make_Bug_Report.bsh (Björn "Vampire" Kautler)
 

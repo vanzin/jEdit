@@ -985,7 +985,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public boolean isBackup()
 	{
-		return MiscUtilities.isBackup(getPath());
+		return MiscUtilities.isBackup(MiscUtilities.getFileName(getPath()));
 	} //}}}
 
 
