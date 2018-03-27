@@ -33,7 +33,7 @@ import org.gjt.sp.util.Log;
 
 /**
  * A set of actions, either loaded from an XML file, or constructed at runtime
- * by a plugin. 
+ * by a plugin.
  *
  * <h3>Action sets loaded from XML files</h3>
  *
@@ -153,7 +153,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	{
 		label = "<no label set; plugin bug>";
 	} //}}}
-	
+
 	//{{{ ActionSet constructor
 	/**
 	 * Creates a new action set.
@@ -181,7 +181,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 		}
 		loaded = false;
 	} //}}}
-	
+
 	//{{{ addAction() method
 	/**
 	 * Adds an action to the action set.
@@ -194,13 +194,13 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	{
 		super.addAction(action);
 	} //}}}
-	
+
 	//{{{ getArray() method
 	protected EditAction[] getArray(int size)
 	{
 		return new EditAction[size];
 	} //}}}
-	
+
 	//{{{ getActions() method
 	/**
 	 * Returns an array of all actions in this action set.<p>
@@ -284,14 +284,14 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 		}
 		return retVal.toArray(new String[retVal.size()]);
 	} //}}}
-	
+
 	//{{{ getProperty() method
-	protected String getProperty(String name)
+	public String getProperty(String name)
 	{
 		Keymap keymap = jEdit.getKeymapManager().getKeymap();
 		return keymap.getShortcut(name);
 	} //}}}
-	
+
 	//{{{ getInputHandler() method
 	public AbstractInputHandler getInputHandler()
 	{
@@ -310,7 +310,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	{
 		return label;
 	} //}}}
-	
+
 	//{{{ createBeanShellAction() method
 	/**
 	 * Creates a BeanShellAction.
