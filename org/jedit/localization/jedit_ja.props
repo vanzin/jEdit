@@ -52,7 +52,6 @@ action-set.macros=マクロ
 action-set.plugin=プラグイン: {0}
 
 macro-handler.beanshell.label=BeanShell スクリプト
-macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=ドッキングレイアウトの保存に失敗しました。
 load-layout.title=ドッキングレイアウトの読み込み
@@ -879,7 +878,7 @@ search.directoryField=ディレクトリ(Y):
 search.directoryField.mnemonic=Y
 search.filterField=フィルタ(F):
 search.filterField.mnemonic=F
-search.filterField.tooltip={*.c,*.h} で拡張子複数対応
+glob.tooltip={*.c,*.h} で拡張子複数対応
 search.subdirs=サブディレクトリの検索(U)
 search.subdirs.mnemonic=U
 search.choose=選択(E)...
@@ -956,7 +955,7 @@ searcherror-bsh.message=この操作を実行中にエラーが発生しまし�
 
 #{{{ Empty fileset error dialog
 empty-fileset.title=空のファイルセット
-empty-fileset.message=指定された検索ファイルセットはファイルを含んでいません。
+empty-fileset.message=指定された検索ファイルセットはファイルを含んでいません。\n\
 	ファイル名フィルタと検索対象ディレクトリ(適用可能なら)を\n\
 	正しく設定してください。
 #}}}
@@ -1205,7 +1204,7 @@ view.title.select=このビューのタイトルを入力してください:
 #{{{ Buffer options dialog
 buffer-options.title=バッファ オプション
 buffer-options.caption=このダイアログボックスは現在のバッファのみ設定を変更します。\n\
-	編集モードのデフォルト設定を変更するには、\n\n
+	編集モードのデフォルト設定を変更するには、\n\
 	ユーティリティ->グローバル オプション->編集 ダイアログを参照してください。
 buffer-options.loading-saving=読み込み/保存
 buffer-options.lineSeparator=改行文字:
@@ -1524,7 +1523,7 @@ grab-key.remove-ask.message=\
 
 grab-key.duplicate-alt-shortcut.title=重複ショートカット
 grab-key.duplicate-alt-shortcut.message=\
-	選択されたショートカットはこの項目の別のショートカットと\n\n
+	選択されたショートカットはこの項目の別のショートカットと\n\
 	重複します。他のものを選択してください。
 
 grab-key.duplicate-shortcut.title=重複ショートカット
@@ -1576,8 +1575,8 @@ options.syntax.foldLine.0=閉じたフォールド行 レベル > 3
 options.textarea.label=テキストエリア
 options.textarea.font=テキストフォント:
 options.textarea.fontSubst=フォント置換用の追加フォント
-options.textarea.fontsubst.tooltip=選ばれた文字を表示できない場合、自動的に適切なフォントを選択します。
-options.textarea.fontsubstlist=フォント置換: 推奨フォント:
+options.textarea.fontSubst.tooltip=選ばれた文字を表示できない場合、自動的に適切なフォントを選択します。
+options.textarea.fontSubstList=フォント置換: 推奨フォント:
 options.textarea.fontSubstSystemFonts=Font substitution: Search all system fonts
 options.textarea.fontSubstWarning.label=Font substitution
 options.textarea.fontSubstWarning=Without system fonts you will need preferred fonts.
@@ -1991,15 +1990,13 @@ install-plugins.info.size=サイズ
 install-plugins.info.releaseDate=リリース日
 install-plugins.info.version=バージョン
 install-plugins.info.category=カテゴリ
+install-plugins.info.author=作者
+install-plugins.info.released=リリース日
 
 install-plugins.totalSize=プラグイン数 {0} / 合計サイズ: {1}
 install-plugins.select-all=すべて選択
 install-plugins.install=インストール
 install-plugins.show-updates=アップデートの表示
-
-install-plugins.info=<b>作者</b>: {0}\n\
-	<b>リリース日</b>: {1}\n\
-	{2}
 
 update-plugins.title=アップデート
 
@@ -2271,8 +2268,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=ショートカット - 2
 macro.rs.DisplayShortcuts.Close.label=閉じる
 macro.rs.DisplayShortcuts.WriteToBuffer.label=バッファに書き出し
 macro.rs.DisplayShortcuts.ShortcutList.label=キーボードショートカット リスト
-macro.rs.DisplayShortcuts.Center.label=Center
-macro.rs.DisplayShortcuts.South.label=South
 #}}}
 
 #{{{ Hex Convert
@@ -2285,11 +2280,6 @@ macro.rs.HexConvert.ByteToString.label=文字列化するバイト値:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=アクティビティログを開くときエラーが発生しました。
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
-macro.rs.MakeBugReport.Error.label=[error]
 macro.rs.MakeBugReport.ReadingActivityLog.error=アクティビティログ読み取りエラー
 #}}}
 
@@ -2414,9 +2404,6 @@ macros.folder.Editing.label=編集
 
 Editing/Duplicate_Lines_Above.label=上の行を複製
 Editing/Duplicate_Lines_Below.label=下の行を複製
-Editing/Emacs_Ctrl-K.label=Emacs の Ctrl-K
-Editing/Emacs_Next_Line.label=Emacs の次行
-Editing/Emacs_Previous_Line.label=Emacs の前行
 Editing/Go_to_Column.label=列に移動
 Editing/Greedy_Backspace.label=貪欲なバックスペース
 Editing/Greedy_Delete.label=貪欲なデリート
@@ -2437,7 +2424,6 @@ macros.folder.Files.label=ファイル
 Files/Browse_Buffer_Directory.label=バッファのディレクトリをブラウズ
 Files/Browse_Directory.label=ディレクトリをブラウズ
 Files/Buffer_Switcher.label=バッファスイッチャ
-Files/Close_All_Except_Active.label=アクティブ以外をすべて閉じる
 Files/Copy_Name_to_Clipboard.label=クリップボードに名前をコピー
 Files/Copy_Path_to_Clipboard.label=クリップボードにパスをコピー
 Files/Delete_Current.label=現在のファイルを削除
@@ -2449,6 +2435,14 @@ Files/Open_Path.label=パスを開く
 Files/Open_Selection.label=選択を開く
 Files/Send_Buffer_To_Next_Split.label=バッファを次のスプリットに送る
 Files/Toggle_ReadOnly.label=読み込み専用の切り替え
+#}}}
+
+#{{{ Emacs
+macros.folder.Emacs.label=Emacs
+
+Emacs/Emacs_Ctrl-K.label=Emacs の Ctrl-K
+Emacs/Emacs_Next_Line.label=Emacs の次行
+Emacs/Emacs_Previous_Line.label=Emacs の前行
 #}}}
 
 #{{{ Interface

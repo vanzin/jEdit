@@ -53,7 +53,6 @@ action-set.macros=매크로
 action-set.plugin=플러그인: {0}
 
 macro-handler.beanshell.label=BeanShell 스크립트
-macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=도킹 레이아웃 저장 실패.
 load-layout.title=도킹 레이아웃 로드
@@ -1892,7 +1891,7 @@ plugin-manager.remove-confirm.title=플러그인 삭제
 plugin-manager.remove-confirm.message=다음의 플러그인을 삭제하시겠습니까?
 
 plugin-manager.dependency.title=플러그인 의존성
-lugin-manager.dependency.message={0}를 다음과 같은 플러그인에서 필요로 합니다.\n\
+plugin-manager.dependency.message={0}를 다음과 같은 플러그인에서 필요로 합니다.\n\
 	{0}를 해제하시면 아래의 플러그인도 해제합니다:
 
 plugin-manager.remove-dependencies.title=플러그인 의존성
@@ -1961,7 +1960,6 @@ install-plugins.info.category=분류
 install-plugins.info.author=저자
 install-plugins.info.released=릴리즈 일자
 install-plugins.info.depends=의존성
-install-plugins.info.optionalDepends=옵션 의존성
 
 install-plugins.totalSize={0} 플러그인, 총크기: {1}
 install-plugins.select-all=모두 선택
@@ -2240,8 +2238,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=단축키 - 2
 macro.rs.DisplayShortcuts.Close.label=닫기
 macro.rs.DisplayShortcuts.WriteToBuffer.label=버퍼로 내보내기
 macro.rs.DisplayShortcuts.ShortcutList.label=키보드 단축키 목록
-macro.rs.DisplayShortcuts.Center.label=가운데
-macro.rs.DisplayShortcuts.South.label=아래
 #}}}
 
 #{{{ Hex Convert
@@ -2254,11 +2250,6 @@ macro.rs.HexConvert.ByteToString.label=스트링으로 변환할 바이트:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=작업 로그 열기 오류.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=버그 리포트에 유용한 작업 로그 항목:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[메시지] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[주의] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[주의] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[메시지] jEdit: 시작 완료
-macro.rs.MakeBugReport.Error.label=[에러]
 macro.rs.MakeBugReport.ReadingActivityLog.error=작업 로그 읽기 오류
 #}}}
 
@@ -2417,7 +2408,7 @@ Emacs/Emacs_Next_Line.label=Emacs Next Line
 Emacs/Emacs_Open_Line.label=Emacs Open Line
 Emacs/Emacs_Previous_Line.label=Emacs Previous Line
 Emacs/Emacs_Set_Mark.label=Emacs Set Mark
-Emacs/Emacs_Set_Wrap=Emacs Set Wrap
+Emacs/Emacs_Set_Wrap.label=Emacs Set Wrap
 Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
 Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
 Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
@@ -2429,7 +2420,6 @@ macros.folder.Files.label=파일
 Files/Browse_Buffer_Directory.label=버퍼 디렉토리 보기
 Files/Browse_Directory.label=디렉토리 보기
 Files/Buffer_Switcher.label=버퍼 전환기
-Files/Close_All_Except_Active.label=작업중인것 제외하고 모두 닫기
 Files/Copy_Name_to_Clipboard.label=이름을 클립보드에 복사
 Files/Copy_Path_to_Clipboard.label=경로를 클립보드에 복사
 Files/Delete_Current.label=현재 파일 삭제

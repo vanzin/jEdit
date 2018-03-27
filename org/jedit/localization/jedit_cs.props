@@ -51,8 +51,7 @@ action-set.browser=Prohlížeč souborového systému
 action-set.macros=Makra
 action-set.plugin=Plugin: {0}
 
-macro-handler.beanshell.lahbel=BeanShell skript
-macro-handler.beanshell.glob=*.bsh
+macro-handler.beanshell.label=BeanShell skript
 
 save-layout-failed.message=Nepovedlo se uložit dokovací rozmístění.
 load-layout.title=Načíst dokovací rozmístění
@@ -712,7 +711,7 @@ encoding-error.message=Soubor {0}\n\
 	({2})\n\
 	\n\
 	Pro využití jiného kódování, zkuste příkazy v menu \n\
-        Soubor->Otevřít v kódování
+        Soubor->Otevřít v kódování\n\
 	\n\
         Pokud jste opravdu zaseklí a nevíte kudy kam, zkuste \n\
         kódování "ASCII" nebo "8859_1".
@@ -1245,9 +1244,8 @@ options.general.checkModStatus.reload=Automaticky znovunačíst a upozornit uži
 options.general.checkModStatus.silentReload=Automaticky znovunačíst bez upozornění
 options.general.checkModStatusUpon=Kontrolovat změnu souboru pokud:
 options.general.checkModStatusUpon.focus=Aplikace má focus
-options.general.checkModStatusUpon.all=Aplikace má focus, buffer má focus nebo probíhá ukládání jakéhokoliv bufferu
-options.general.checkModStatusUpon.operations=buffer má focus nebo probíhá ukládání jakéholiv bufferu
-options.general.checkModStatusUpon.focusBuffer=buffer je právě navštíven nebo probíhá ukládání
+options.general.checkModStatusUpon.all=Aplikace má focus, buffer je právě navštíven nebo probíhá ukládání jakéhokoliv bufferu
+options.general.checkModStatusUpon.visitBuffer=buffer je právě navštíven
 options.general.checkModStatusUpon.none=ukládání bufferu
 options.general.recentFiles=Nedávné soubory k zapamatování:
 options.general.hypersearch.maxWarningResults=Maximální počet výsledků hyperhledání:
@@ -1998,15 +1996,13 @@ install-plugins.info.size=Velikost
 install-plugins.info.releaseDate=Datum vydání
 install-plugins.info.version=Verze
 install-plugins.info.category=Kategorie
+install-plugins.info.author=Autor
+install-plugins.info.released=Vydáno
 
 install-plugins.totalSize={0} plugin(ů), celková velikost: {1}
 install-plugins.select-all=Vybrat vše
 install-plugins.install=Instalovat
 install-plugins.show-updates=Zobrazit updaty
-
-install-plugins.info=<b>Autor</b>: {0}\n\
-	<b>Vydáno</b>: {1}\n\
-	{2}
 
 update-plugins.title=Update
 
@@ -2276,8 +2272,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=Zkratka - 2
 macro.rs.DisplayShortcuts.Close.label=Zavřít
 macro.rs.DisplayShortcuts.WriteToBuffer.label=Zapsat do bufferu
 macro.rs.DisplayShortcuts.ShortcutList.label=Seznam klávesových zkratek
-macro.rs.DisplayShortcuts.Center.label=Střed
-macro.rs.DisplayShortcuts.South.label=Jih
 #}}}
 
 #{{{ Hex Convert
@@ -2290,12 +2284,7 @@ macro.rs.HexConvert.ByteToString.label=Byte na String:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=Chyba při otevírání logu aktivit.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Záznamy logu aktivit mohou být užitečné při nahlašování bugů:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[zpráva] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[upozornění] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[upozornění] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[zpráva] jEdit: Spuštění hotovo
-macro.rs.MakeBugReport.Error.label=[chyba]
-macro.rs.MakeBugReport.ReadingActivityLog.error=Chyba při čtení logu aktivit
+macro.rs.MakeBugReport.ReadingActivityLog.error=Chyba při čtení logu aktivit.
 #}}}
 
 #{{{ Run Script
@@ -2419,9 +2408,6 @@ macros.folder.Editing.label=Úpravy
 
 Editing/Duplicate_Lines_Above.label=Duplikovat řádky nad
 Editing/Duplicate_Lines_Below.label=Duplikovat řádky pod
-Editing/Emacs_Ctrl-K.label=Emacs Ctrl-K
-Editing/Emacs_Next_Line.label=Emacs další řádek
-Editing/Emacs_Previous_Line.label=Emacs předchozí řádek
 Editing/Go_to_Column.label=Jdi na sloupec
 Editing/Greedy_Backspace.label=Greedy Backspace
 Editing/Greedy_Delete.label=Greedy Delete
@@ -2442,7 +2428,6 @@ macros.folder.Files.label=Soubory
 Files/Browse_Buffer_Directory.label=Prohlížet adresář bufferu
 Files/Browse_Directory.label=Prohlížet adresář
 Files/Buffer_Switcher.label=Přepínač bufferu
-Files/Close_All_Except_Active.label=Zavřít vše kromě aktivního
 Files/Copy_Name_to_Clipboard.label=Kopírovat název do schránky
 Files/Copy_Path_to_Clipboard.label=Kopírovat cestu do schránky
 Files/Delete_Current.label=Smazat aktuální
@@ -2454,6 +2439,14 @@ Files/Open_Path.label=Otevřít cestu
 Files/Open_Selection.label=Otevřít výběr
 Files/Send_Buffer_To_Next_Split.label=Odeslat buffer to dalšáho rozdělení
 Files/Toggle_ReadOnly.label=Přepnout ReadOnly (pouze pro čtení)
+#}}}
+
+#{{{ Emacs
+macros.folder.Emacs.label=Emacs
+
+Emacs/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Emacs/Emacs_Next_Line.label=Emacs další řádek
+Emacs/Emacs_Previous_Line.label=Emacs předchozí řádek
 #}}}
 
 #{{{ Interface

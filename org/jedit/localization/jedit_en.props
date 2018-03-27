@@ -54,7 +54,6 @@ action-set.macros=Macros
 action-set.plugin=Plugin: {0}
 
 macro-handler.beanshell.label=BeanShell script
-macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=Failed to save the docking layout.
 load-layout.title=Load Docking Layout
@@ -603,7 +602,7 @@ print.dialog.Color=Color
 print.dialog.Copies=Copies
 print.dialog.Current_page=Current page
 print.dialog.Draft=Draft
-print.dialog.Event_sheets=Even shoets
+print.dialog.Even_sheets=Even sheets
 print.dialog.Finishing=Finishing
 print.dialog.Form-Source=Form Source
 print.dialog.General=General
@@ -718,8 +717,8 @@ print.dialog.na-7x9-envelope=6x7 Envelope
 print.dialog.na-8x10=8\" x 10\" Paper
 print.dialog.na-9x11-envelope=9x11 Envelope
 print.dialog.na-9x12-envelope=9x12 Envelope
-print.dialog.na-10x13-envelope=10x15 Envelope
-print.dialog.na-10x14-envelope=10x15 Envelope
+print.dialog.na-10x13-envelope=10x13 Envelope
+print.dialog.na-10x14-envelope=10x14 Envelope
 print.dialog.na-10x15-envelope=10x15 Envelope
 print.dialog.na-legal=Legal
 print.dialog.na-letter=Letter
@@ -1693,11 +1692,11 @@ options.firewall.socks.port=SOCKS proxy port:
 #}}}
 
 #{{{ Save & Backup pane
-options.save-back.label=Saving & Backup
 options.autosave=Autosave Options
+options.backup=Backup Options
+options.save-back.label=Saving & Backup
 options.save-back.autosave=Autosave frequency (secs):
 options.save-back.autosave.tooltip=to disable, set to 0
-options.backup=Backup Options
 options.save-back.backups=Max number of backups:
 options.save-back.backups.tooltip=to disable, set to 0
 options.save-back.autosaveDirectory=Autosave directory:
@@ -1712,7 +1711,7 @@ options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.autosaveUntitled.tooltip=Untitled buffers are saved and restored across jEdit sessions.
 options.save-back.suppressNotSavedConfirmUntitled=Close dirty Untitled buffers without confirmation
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=Untitled dirty buffers are closed without confirmation
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged
 options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
 options.save-back.saveAsUsesFSB="Save As" defaults to File System Browser directory
@@ -2232,7 +2231,6 @@ install-plugins.info.category=Category
 install-plugins.info.author=Author
 install-plugins.info.released=Released
 install-plugins.info.depends=Depends on
-install-plugins.info.optionalDepends=Optionally depends on
 
 install-plugins.totalSize={0} plugin(s), total size: {1}
 install-plugins.select-all=Select All
@@ -2512,8 +2510,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
 macro.rs.DisplayShortcuts.Close.label=Close
 macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
 macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
-macro.rs.DisplayShortcuts.Center.label=Center
-macro.rs.DisplayShortcuts.South.label=South
 #}}}
 
 #{{{ Hex Convert
@@ -2526,12 +2522,7 @@ macro.rs.HexConvert.ByteToString.label=Byte to String:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
-macro.rs.MakeBugReport.Error.label=[error]
-macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
+macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log.
 #}}}
 
 #{{{ Run Script
@@ -2656,6 +2647,7 @@ macros.folder.Editing.label=Editing
 Editing/Duplicate_Lines_Above.label=Duplicate Lines Above
 Editing/Duplicate_Lines_Below.label=Duplicate Lines Below
 Editing/Go_to_Column.label=Go To Column
+Editing/Go_to_Offset.label=Go to Offset
 Editing/Greedy_Backspace.label=Greedy Backspace
 Editing/Greedy_Delete.label=Greedy Delete
 Editing/Greedy_Left.label=Greedy Left
@@ -2671,6 +2663,7 @@ Editing/Toggle_Fold.label=Toggle Fold
 
 #{{{ Emacs
 macros.folder.Emacs.label=Emacs
+
 Emacs/Emacs_Align_Decls.label=Emacs Align Decls
 Emacs/Emacs_Backward_Sentence.label=Emacs Backward Sentence
 Emacs/Emacs_Capitalize_Word.label=Emacs Capitalize Word
@@ -2689,10 +2682,11 @@ Emacs/Emacs_Next_Line.label=Emacs Next Line
 Emacs/Emacs_Open_Line.label=Emacs Open Line
 Emacs/Emacs_Previous_Line.label=Emacs Previous Line
 Emacs/Emacs_Set_Mark.label=Emacs Set Mark
-Emacs/Emacs_Set_Wrap=Emacs Set Wrap
+Emacs/Emacs_Set_Wrap.label=Emacs Set Wrap
 Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
 Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
 Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
+Emacs/EmacsUtil.label=EmacsUtil
 #}}}
 
 #{{{ Files
@@ -2701,7 +2695,6 @@ macros.folder.Files.label=Files
 Files/Browse_Buffer_Directory.label=Browse Buffer Directory
 Files/Browse_Directory.label=Browse Directory
 Files/Buffer_Switcher.label=Buffer Switcher
-Files/Close_All_Except_Active.label=Close All Except Active
 Files/Copy_Name_to_Clipboard.label=Copy Name to Clipboard
 Files/Copy_Path_to_Clipboard.label=Copy Path to Clipboard
 Files/Delete_Current.label=Delete Current
@@ -2711,6 +2704,7 @@ Files/Insert_Selection.label=Insert Selection
 Files/Next_Dirty_Buffer.label=Next Dirty Buffer
 Files/Open_Path.label=Open Path
 Files/Open_Selection.label=Open Selection
+Files/Open_Selection_In_Desktop.label=Open Selection In Desktop
 Files/Send_Buffer_To_Next_Split.label=Send Buffer To Next Split
 Files/Toggle_ReadOnly.label=Toggle ReadOnly
 #}}}
@@ -2750,8 +2744,11 @@ Misc/Display_Actions.label=Display Actions
 Misc/Display_Character_Code.label=Display Character Code
 Misc/Display_Shortcuts.label=Display Shortcuts
 Misc/Evaluate_Buffer_in_BeanShell.label=Evaluate Buffer in BeanShell
+Misc/Generate_Encodings_List.label=Generate Encodings List
+Misc/Generate_Modes_List.label=Generate Modes List
 Misc/Hex_Convert.label=Hex Convert
 Misc/HyperSearch_Results_to_Buffer.label=HyperSearch Results to Buffer
+Misc/Insert_Plugins_List.label=Insert Plugins List
 Misc/Make_Bug_Report.label=Make Bug Report
 Misc/Run_Script.label=Run Script
 Misc/Show_Threads.label=Show Threads
@@ -2779,6 +2776,7 @@ Text/Insert_Tag.label=Insert Tag
 Text/Line_Filter.label=Line Filter
 Text/Next_Char.label=Next Char
 Text/Reverse_Lines.label=Reverse Lines
+Text/Reverse_Selection.label=Reverse Selection
 Text/Single_Space_Buffer.label=Single Space Buffer
 #}}}
 

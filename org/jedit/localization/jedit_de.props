@@ -58,7 +58,7 @@ defaultCatalog=<?xml version="1.0"?>\n\
 
 #{{{ Common strings
 common.ok=OK
-common.cancel=Abbruch
+common.cancel=Abbrechen
 common.close=Schließen
 common.error=Fehler
 common.apply=Anwenden
@@ -75,9 +75,9 @@ common.selectNone=Nichts wählen
 common.loading=Lade...
 common.reset=Zurücksetzen
 
-#lineSep.unix=Unix (\\n).
-#lineSep.windows=DOS/Windows (\\r\\n).
-#lineSep.mac=MacOS (\\r).
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
 #}}}
 
 #{{{ Miscellaneous
@@ -89,7 +89,6 @@ action-set.macros=Makros
 action-set.plugin=Plugin: {0}
 
 macro-handler.beanshell.label=BeanShell-Skript
-#macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=Dock-Layout konnte nicht gespeichert werden.
 load-layout.title=Dock-Layout laden
@@ -575,32 +574,34 @@ view.status.io-1=I/O: 1 Operation in Arbeit
 view.status.io.done=Ein-/Ausgabeoperation vollständig
 view.status.io=I/O: {0} Operationen in Arbeit
 view.status.linesep-changed=Zeilenende-Zeichen gesetzt auf "{0}"
-view.status.linesep-tooltip=Zeilenende-Zeichen (zum ändern klicken)
+view.status.linesep-tooltip=Zeilenende-Zeichen (zum Ändern klicken)
 view.status.memory-tooltip=Java Heap-Speicher: {0}Kb/{1}Kb
 view.status.mode-tooltip=Bearbeitungsmodus, Faltmodus,  Zeichenkodierung
 view.status.multi-changed=Mehrfachauswahl-Modus ist "{0,choice,0#Aus|1#Ein}"
-view.status.multi-tooltip=Mehrfachauswahl-Modus (zum ändern klicken)
+view.status.multi-tooltip=Mehrfachauswahl-Modus (zum Ändern klicken)
 view.status.narrow=Menüpunkt "Alle Zeilen anzeigen" wählen, um den gesamten Text wieder sichtbar zu machen
 view.status.no-markers=keine Lesezeichen gesetzt
 view.status.no-registers=keine Register definiert
 view.status.overwrite-changed=Überschreib-Modus ist "{0,choice,0#Aus|1#Ein}"
-view.status.overwrite-tooltip=Überschreib-Modus (zum ändern klicken)
+view.status.overwrite-tooltip=Überschreib-Modus (zum Ändern klicken)
 view.status.paste-string-register=Einfügen aus Register? [{0}]
 view.status.print=Seite {0} wird gedruckt
 view.status.quick-copy=Schnellkopier-Modus - markierter Text ersetzt Auswahl
 view.status.recording=Makro wird aufgenommen
 view.status.rect-select-changed=Spaltenauswahl ist "{0,choice,0#Aus|1#Ein}"
-view.status.rect-tooltip=Spaltenauswahl-Modus (zum ändern klicken)
+view.status.rect-tooltip=Spaltenauswahl-Modus (zum Ändern klicken)
 view.status.replace-all={0} Fundstelle(n) in {1} Datei(en) ersetzt
 view.status.search-not-found=Suchtext nicht gefunden!
 view.status.select-marker=Auswählen bis Lesezeichen mit Kürzel? [{0}]
 view.status.swap-marker=Cursor-Position tauschen mit Lesezeichen: Kürzel? [{0}]
 view.status.vertical-paste-string-register=Vertikal einfügen aus Register ? [{0}]
 view.status.wrap-changed=Wortumbruch-Modus ist jetzt "{0}"
-view.status.wrap-tooltip=<html>Wortumbruch-Modus ist {0} (zum ändern klicken)</html>
-view.status.indent-tooltip=Indikator für Automatische Einrückung (zum ändern klicken)
+view.status.wrap-tooltip=<html>Wortumbruch-Modus ist {0} (zum Ändern klicken)</html>
+view.status.indent-tooltip=Indikator für Automatische Einrückung (zum Ändern klicken)
 view.status.autoindent-changed=Automatische Einrückung ist jetzt "{0}"
 view.status.bufferset-tooltip=Dateisatz-Modus ist {0}
+view.status.locked-changed=Datei ist {0,choice,0#entsperrt|1#gesperrt}
+view.status.locked-tooltip=Datei ist {0,choice,0#entsperrt|1#gesperrt} (zum Ändern klicken)
 wrap.none=ausgeschaltet
 wrap.hard=hart
 wrap.soft=weich
@@ -749,8 +750,8 @@ print.dialog.na-7x9-envelope=6x7 Umschlag
 print.dialog.na-8x10=8\" x 10\" Paper
 print.dialog.na-9x11-envelope=9x11 Umschlag
 print.dialog.na-9x12-envelope=9x12 Umschlag
-print.dialog.na-10x13-envelope=10x15 Umschlag
-print.dialog.na-10x14-envelope=10x15 Umschlag
+print.dialog.na-10x13-envelope=10x13 Umschlag
+print.dialog.na-10x14-envelope=10x14 Umschlag
 print.dialog.na-10x15-envelope=10x15 Umschlag
 print.dialog.na-legal=Legal
 print.dialog.na-letter=Letter
@@ -995,6 +996,13 @@ saveall.message=Alle geänderten Dateien speichern?
 reload-all.title=Alle Dateien erneut laden
 reload-all.message=Alle Dateien erneut von der Festplatte laden?\n\
   Ungespeicherte Änderungen in allen Dateien WERDEN VERLOREN GEHEN!
+#}}}
+
+#{{{ File is backup alert
+file-is-backup.title=Backupdatei öffnen
+file-is-backup.message=Die Datei {0} ist wahrscheinlich eine jEdit Backupdatei.
+file-is-backup.open=Öffnen
+file-is-backup.open-locked=Gesperrt Öffnen
 #}}}
 
 #{{{ Encoding prompt
@@ -1419,6 +1427,7 @@ buffer-options.encoding=Zeichenkodierung:
 buffer-options.gzipped=GZIP - Datei auf der Festplatte komprimieren
 buffer-options.editing=Bearbeiten
 buffer-options.mode=Bearbeitungsmodus:
+buffer-options.locked=Gesperrt
 #}}}
 
 #{{{ Global options dialog
@@ -1704,9 +1713,10 @@ options.firewall.socks.port=SOCKS Proxy Port:
 #}}}
 
 #{{{ Save & Backup pane
+options.autosave=Autosave Optionen
+options.backup=Backup Optionen
 options.save-back.label=Speichern & Backup
-
-options.save-back.autosave=Auto-Speichern Intervall (Sekunden):
+options.save-back.autosave=Autosave Intervall (Sekunden):
 options.save-back.autosave.tooltip=Zum Deaktivieren auf 0 setzen
 options.save-back.backups=Max. Anzahl von Backups:
 options.save-back.backups.tooltip=Zum Deaktivieren auf 0 setzen
@@ -1722,7 +1732,7 @@ options.save-back.confirmSaveAll=Bestätigung für "Alle Dateien speichern"
 options.save-back.autosaveUntitled=Unbenannte Dateien automatisch speichern
 options.save-back.autosaveUntitled.tooltip=Unbenannte Dateien werden über jEdit-Sitzungen hinweg gespeichert und wiederhergestellt
 options.save-back.suppressNotSavedConfirmUntitled=Unbenannte Dateien ohne Bestätigung schließen
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=Unbenannte Dateien werden ohne Bestätigung geschlossen
 options.save-back.useMD5forDirtyCalculation=Dateien mit unverändertem Inhalt niemals als bearbeitet markieren
 options.save-back.useMD5forDirtyCalculation.tooltip=Länge und MD5-Summe der Datei im Editor und der entsprechenden Datei auf der Festplatte werden dafür verglichen.
 options.save-back.saveAsUsesFSB="Speichern unter" startet im aktuellen Verzeichnis des Dateisystem-Browsers
@@ -2016,7 +2026,7 @@ view-markers.title=Lesezeichen
 io-progress-monitor.title=I/O-Threads
 io-progress-monitor.caption={0} anstehende Anforderung(en).
 io-progress-monitor.idle=Thread im Leerlauf
-io-progress-monitor.abort=Abbruch
+io-progress-monitor.abort=Abbrechen
 
 #{{{ I/O abort dialog box
 abort.title=Abort I/O
@@ -2239,7 +2249,6 @@ install-plugins.info.category=Kategorie
 install-plugins.info.author=Autor
 install-plugins.info.released=Freigegeben
 install-plugins.info.depends=Abhängig von
-install-plugins.info.optionalDepends=Optional abhängig von
 
 install-plugins.totalSize={0} Plugin(s), Gesamtgröße: {1}
 install-plugins.select-all=Alle wählen
@@ -2271,7 +2280,7 @@ fileprop.readable=Lesen
 fileprop.writeable=Schreiben
 fileprop.attribute=Attribut
 fileprop.okBtn=OK
-fileprop.cancelBtn=Abbruch
+fileprop.cancelBtn=Abbrechen
 fileprop.selectedFiles=Gewählte Dateien
 fileprop.selectedDirectories=Gewählte Verzeichnisse
 #}}}
@@ -2300,31 +2309,31 @@ taskmanager.remainingtasks.label={0} verbleibende Aufgabe(n)
 # the sample is an example of what the widget will show, for the
 # preview in the options
 statusbar.mode.label=Datei Bearbeitungsmodus (z.B.: java)
-#statusbar.mode.sample=java
+statusbar.mode.sample=java
 statusbar.fold.label=Datei Faltmodus (z.B.: explicit)
-#statusbar.fold.sample=explicit
+statusbar.fold.sample=explicit
 statusbar.encoding.label=Datei Zeichenkodierung (z.B.: UTF-8)
-#statusbar.encoding.sample=UTF-8
+statusbar.encoding.sample=UTF-8
 statusbar.wrap.label=Datei Wortumbruch-Modus (z.B.: N)
-#statusbar.wrap.sample=N
+statusbar.wrap.sample=N
 statusbar.indent.label=Automatische Einrückung (z.B.: F)
-#statusbar.indent.sample=F
+statusbar.indent.sample=F
 statusbar.multiSelect.label=Datei Mehrfachauswahl-Modus (z.B.: m)
-#statusbar.multiSelect.sample=m
+statusbar.multiSelect.sample=m
 statusbar.rectSelect.label=Datei Spaltenauswahl-Modus (z.B.: r)
-#statusbar.rectSelect.sample=r
+statusbar.rectSelect.sample=r
 statusbar.overwrite.label=Datei Überschreib-Modus (z.B.: o)
-#statusbar.overwrite.sample=o
+statusbar.overwrite.sample=o
 statusbar.lineSep.label=Datei Zeilenendezeichen (z.B.: U)
-#statusbar.lineSep.sample=U
+statusbar.lineSep.sample=U
 statusbar.memory-status.label=Speicherstatus (z.B.: 9/24Mb)
-#statusbar.memory-status.sample=9/24Mb
+statusbar.memory-status.sample=9/24Mb
 statusbar.clock.label=Uhrzeit (z.B.: 16:45)
-#statusbar.clock.sample=16:45
+statusbar.clock.sample=16:45
 statusbar.buffersets.label=Dateisatz-Modus (z.B.: G)
-#statusbar.buffersets.sample=G
+statusbar.buffersets.sample=G
 statusbar.selection-length.label=Zeichenanzahl in Auswahl (z.B.: 192)
-#statusbar.selection-length.sample=192
+statusbar.selection-length.sample=192
 statusbar.last-modified.label=Datum der letzen Änderung auf Festplatte (z.B.: 12.03.11 16:43)
 statusbar.last-modified.sample=12.03.11 16:43
 statusbar.task-monitor.label=Task-Monitor (z.B.:  7 Aufgabe(n))
@@ -2479,12 +2488,12 @@ macro.rs.HyperSearchResults.NotMatch.error=Keine Ergebnisse der HyperSuche
 #}}}
 
 #{{{ Debug BufferSets
-#macro.rs.DebugBuffersets.BuffersetDebugging.label=BUFFERSET DEBUGGING
-#macro.rs.DebugBuffersets.BufferCount.label=BufferCount:
-#macro.rs.DebugBuffersets.BufferList.label=BUFFER LIST
-#macro.rs.DebugBuffersets.EndBufferList.label=END BUFFER LIST
-#macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LIST
-#macro.rs.DebugBuffersets.EndEditpaneList.label=END EDITPANE LIST
+macro.rs.DebugBuffersets.BuffersetDebugging.label=DATEISEST DEBUGGING
+macro.rs.DebugBuffersets.BufferCount.label=Bufferanzahl:
+macro.rs.DebugBuffersets.BufferList.label=DATEI LISTE
+macro.rs.DebugBuffersets.EndBufferList.label=ENDE DATEI LISTE
+macro.rs.DebugBuffersets.EditpaneList.label=EDITPANE LISTE
+macro.rs.DebugBuffersets.EndEditpaneList.label=ENDE EDITPANE LISTE
 #}}}
 
 #{{{ Display Abbreviations
@@ -2520,8 +2529,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=Tastenkürzel - 2
 macro.rs.DisplayShortcuts.Close.label=Schließen
 macro.rs.DisplayShortcuts.WriteToBuffer.label=Schreibe in Datei
 macro.rs.DisplayShortcuts.ShortcutList.label=Liste der Tastenkürzel
-#macro.rs.DisplayShortcuts.Center.label=Center
-#macro.rs.DisplayShortcuts.South.label=South
 #}}}
 
 #{{{ Hex Convert
@@ -2534,11 +2541,6 @@ macro.rs.HexConvert.ByteToString.label=Byte in Zeichenkette:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=Fehler beim Öffnen des Activity Log.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Einträge des Activity log, die für die Fehlermeldung nützlich sein könnten:\n\n.
-#macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
-#macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
-#macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
-#macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
-#macro.rs.MakeBugReport.Error.label=[error]
 macro.rs.MakeBugReport.ReadingActivityLog.error=Fehler beim Lesen des Activity Log.
 #}}}
 
@@ -2680,6 +2682,7 @@ Editing/Toggle_Fold.label=Falte ein-/ausklappen
 
 #{{{ Emacs
 macros.folder.Emacs.label=Emacs
+
 Emacs/Emacs_Align_Decls.label=Emacs Dezimalzahlen ausrichten
 Emacs/Emacs_Backward_Sentence.label=Emacs Satz rückwärts
 Emacs/Emacs_Capitalize_Word.label=Emacs Wort zu Kapitälchen
@@ -2698,10 +2701,11 @@ Emacs/Emacs_Next_Line.label=Emacs Nächste Zeile
 Emacs/Emacs_Open_Line.label=Emacs Neue Zeile
 Emacs/Emacs_Previous_Line.label=Emacs Vorige Zeile
 Emacs/Emacs_Set_Mark.label=Emacs Marke setzen
-Emacs/Emacs_Set_Wrap=Emacs Umbruch setzen
+Emacs/Emacs_Set_Wrap.label=Emacs Umbruch setzen
 Emacs/Emacs_Transpose_Chars.label=Emacs Zeichen vertauschen
 Emacs/Emacs_Transpose_Lines.label=Emacs Zeilen vertauschen
 Emacs/Emacs_Upcase_Word.label=Emacs Wort zu Großbuchstaben
+Emacs/EmacsUtil.label=EmacsUtil
 #}}}
 
 #{{{ Files
@@ -2710,7 +2714,6 @@ macros.folder.Files.label=Dateien
 Files/Browse_Buffer_Directory.label=Dateisystem-Browser im Verzeichnis der aktiven Datei
 Files/Browse_Directory.label=Dateisystem-Browser mit Verzeichnisabfrage
 Files/Buffer_Switcher.label=Datei wechseln
-Files/Close_All_Except_Active.label=Schließe alle anderen
 Files/Copy_Name_to_Clipboard.label=Kopiere Dateiname
 Files/Copy_Path_to_Clipboard.label=Kopiere Dateipfad
 Files/Delete_Current.label=Lösche aktive Datei

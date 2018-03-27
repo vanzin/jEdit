@@ -52,7 +52,6 @@ action-set.macros=宏
 action-set.plugin=插件: {0}
 
 macro-handler.beanshell.label=BeanShell 脚本
-macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=无法保存对接布局.
 load-layout.title=加载对接布局
@@ -964,8 +963,8 @@ remote-dir-search.message=你选择了非本地目录进行搜索.\n\
 
 #{{{ "Search in selection" active but nothing selected in text area
 search-no-selection.title=没有选择任何内容
-search-no-selection.message=选择一些文字或停用
-"在选择范围内搜索"选项.
+search-no-selection.message=选择一些文字或停用\n\
+	"在选择范围内搜索"选项.
 #}}}
 
 #{{{ Paste previous and paste deleted dialogs
@@ -1976,16 +1975,14 @@ install-plugins.info.name=名称
 install-plugins.info.size=大小
 install-plugins.info.releaseDate=发布日期
 install-plugins.info.version=版本
-install-plugins.info.category类别
+install-plugins.info.category=类别
+install-plugins.info.author=作者
+install-plugins.info.released=发布了
 
 install-plugins.totalSize={0} 个插件), 总大小: {1}
 install-plugins.select-all=全选
 install-plugins.install=安装
 install-plugins.show-updates=显示更新
-
-install-plugins.info=<b>作者</b>: {0}\n\
-	<b>发布了</b>: {1}\n\
-	{2}
 
 update-plugins.title=更新
 
@@ -2257,8 +2254,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=快捷键 - 2
 macro.rs.DisplayShortcuts.Close.label=关闭
 macro.rs.DisplayShortcuts.WriteToBuffer.label=写入到内容
 macro.rs.DisplayShortcuts.ShortcutList.label=键盘快捷键列表
-macro.rs.DisplayShortcuts.Center.label=中心
-macro.rs.DisplayShortcuts.South.label=南部
 #}}}
 
 #{{{ Hex Convert
@@ -2271,12 +2266,7 @@ macro.rs.HexConvert.ByteToString.label=字节转化为字符串:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=打开活动日志错误.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=活动日志条目在bug报告里可能是有用的:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: 完成启动
-macro.rs.MakeBugReport.Error.label=[error]
-macro.rs.MakeBugReport.ReadingActivityLog.error=阅读活动日志错误
+macro.rs.MakeBugReport.ReadingActivityLog.error=阅读活动日志错误.
 #}}}
 
 #{{{ Run Script
@@ -2434,7 +2424,7 @@ Emacs/Emacs_Next_Line.label=Emacs 下一行
 Emacs/Emacs_Open_Line.label=Emacs 打开行
 Emacs/Emacs_Previous_Line.label=Emacs 前一行
 Emacs/Emacs_Set_Mark.label=Emacs 设置标记
-Emacs/Emacs_Set_Wrap=Emacs 设置自动换行
+Emacs/Emacs_Set_Wrap.label=Emacs 设置自动换行
 Emacs/Emacs_Transpose_Chars.label=Emacs 转置字符
 Emacs/Emacs_Transpose_Lines.label=Emacs 转置行
 Emacs/Emacs_Upcase_Word.label=Emacs 单词大写
@@ -2446,7 +2436,6 @@ macros.folder.Files.label=文件
 Files/Browse_Buffer_Directory.label=浏览内容目录
 Files/Browse_Directory.label=浏览目录
 Files/Buffer_Switcher.label=内容开关
-Files/Close_All_Except_Active.label=关闭除活动区外所有内容
 Files/Copy_Name_to_Clipboard.label=复制内容到粘贴板
 Files/Copy_Path_to_Clipboard.label=复制路径到粘贴板
 Files/Delete_Current.label=删除当前

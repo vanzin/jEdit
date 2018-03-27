@@ -11,6 +11,8 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix and cleanup various localization properties (Björn "Vampire" Kautler)
+
 - Make the Display_Shortcuts.bsh macro work properly (Björn "Vampire" Kautler)
 
 - Do not manipulate filename when opening a probably backup file but let the

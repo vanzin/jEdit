@@ -54,7 +54,6 @@ action-set.macros=Макросы
 action-set.plugin=Плагин: {0}
 
 macro-handler.beanshell.label=Программа BeanShell
-macro-handler.beanshell.glob=*.bsh
 
 save-layout-failed.message=Не удалось сохранить раскладку дока.
 load-layout.title=Загрузить Раскладку Дока
@@ -604,7 +603,7 @@ print.dialog.Color=Color
 print.dialog.Copies=Copies
 print.dialog.Current_page=Current page
 print.dialog.Draft=Draft
-print.dialog.Event_sheets=Even shoets
+print.dialog.Even_sheets=Even sheets
 print.dialog.Finishing=Finishing
 print.dialog.Form-Source=Form Source
 print.dialog.General=General
@@ -719,8 +718,8 @@ print.dialog.na-7x9-envelope=6x7 Envelope
 print.dialog.na-8x10=8\" x 10\" Paper
 print.dialog.na-9x11-envelope=9x11 Envelope
 print.dialog.na-9x12-envelope=9x12 Envelope
-print.dialog.na-10x13-envelope=10x15 Envelope
-print.dialog.na-10x14-envelope=10x15 Envelope
+print.dialog.na-10x13-envelope=10x13 Envelope
+print.dialog.na-10x14-envelope=10x14 Envelope
 print.dialog.na-10x15-envelope=10x15 Envelope
 print.dialog.na-legal=Legal
 print.dialog.na-letter=Letter
@@ -1700,7 +1699,6 @@ options.save-back.twoStageSave.tooltip=Стадия 1: Создать време
 options.save-back.confirmSaveAll="Сохранить все буферы" требует подтверждения
 options.save-back.autosaveUntitled=Авто-сохранение безымянных
 options.save-back.suppressNotSavedConfirmUntitled=Закрывать безымянные буферы с изменениями без подтверждения.
-options.save-back.suppressNotSavedConfirmUntitled.tooltip=
 options.save-back.useMD5forDirtyCalculation=Не помечать буфер как изменённый, если содержимое не изменено.
 options.save-back.useMD5forDirtyCalculation.tooltip=Сравнивать с длиной и хешем MD5 буфера при загрузке, чтобы определить, что буфер всё-ещё изменён.
 options.save-back.saveAsUsesFSB="Сохранить как" открывается в каталоге Обозревателя файловой системы
@@ -2217,7 +2215,6 @@ install-plugins.info.category=Категория
 install-plugins.info.author=Автор
 install-plugins.info.released=Выпущен
 install-plugins.info.depends=Зависит от
-install-plugins.info.optionalDepends=Может зависеть от
 
 install-plugins.totalSize=Всего плагинов: {0}, размер: {1}
 install-plugins.select-all=Выбрать все
@@ -2495,8 +2492,6 @@ macro.rs.DisplayShortcuts.Shortcut2.label=Shortcut - 2
 macro.rs.DisplayShortcuts.Close.label=Close
 macro.rs.DisplayShortcuts.WriteToBuffer.label=Write to buffer
 macro.rs.DisplayShortcuts.ShortcutList.label=Keyboard shortcut list
-macro.rs.DisplayShortcuts.Center.label=Center
-macro.rs.DisplayShortcuts.South.label=South
 #}}}
 
 #{{{ Hex Convert
@@ -2509,11 +2504,6 @@ macro.rs.HexConvert.ByteToString.label=Byte to String:
 #{{{ Make Bug Report
 macro.rs.MakeBugReport.OpeningActivityLog.error=Error opening Activity Log.
 macro.rs.MakeBugReport.UsefulEntriesForReport.label=Activity log entries that might be useful in a bug report:\n\n.
-macro.rs.MakeBugReport.MessagejEdit.label=[message] jEdit:
-macro.rs.MakeBugReport.NoticejEdit.label=[notice] jEdit:
-macro.rs.MakeBugReport.NoticeJarClassLoader.label=[notice] JARClassLoader:
-macro.rs.MakeBugReport.MessagejEditStartupComplete.label=[message] jEdit: Startup complete
-macro.rs.MakeBugReport.Error.label=[error]
 macro.rs.MakeBugReport.ReadingActivityLog.error=Error reading Activity Log
 #}}}
 
@@ -2672,7 +2662,7 @@ Emacs/Emacs_Next_Line.label=Emacs Next Line
 Emacs/Emacs_Open_Line.label=Emacs Open Line
 Emacs/Emacs_Previous_Line.label=Emacs Previous Line
 Emacs/Emacs_Set_Mark.label=Emacs Set Mark
-Emacs/Emacs_Set_Wrap=Emacs Set Wrap
+Emacs/Emacs_Set_Wrap.label=Emacs Set Wrap
 Emacs/Emacs_Transpose_Chars.label=Emacs Transpose Chars
 Emacs/Emacs_Transpose_Lines.label=Emacs Transpose Lines
 Emacs/Emacs_Upcase_Word.label=Emacs Upcase Word
@@ -2684,7 +2674,6 @@ macros.folder.Files.label=Файлы
 Files/Browse_Buffer_Directory.label=Показать каталог буфера
 Files/Browse_Directory.label=Показать Каталог
 Files/Buffer_Switcher.label=Переключатель буфера
-Files/Close_All_Except_Active.label=Закрыть все кроме активного
 Files/Copy_Name_to_Clipboard.label=Копировать имя в буфер обмена
 Files/Copy_Path_to_Clipboard.label=Копировать путь в буфер обмена
 Files/Delete_Current.label=Удалить текущий
