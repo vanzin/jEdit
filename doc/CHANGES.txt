@@ -2,7 +2,7 @@ jEdit 5.5 version history
        (changes since jEdit 5.4.0)
 :encoding=UTF-8:
 
-{{{ Version 5.5pre1
+{{{ Version 5.5.0
 
 Thanks to Björn "Vampire" Kautler, AdamS, Wim West, M. Cesar R. Lacruz,
 Egor Abramovich, Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick,
