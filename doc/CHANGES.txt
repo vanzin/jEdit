@@ -1,129 +1,25 @@
-jEdit 5.5 version history
-       (changes since jEdit 5.4.0)
+jEdit 5.6 version history
+       (changes since jEdit 5.5.0)
 :encoding=UTF-8:
 
-{{{ Version 5.5.0
+{{{ Version 5.6pre1
 
-Thanks to Björn "Vampire" Kautler, AdamS, Wim West, M. Cesar R. Lacruz,
-Egor Abramovich, Hrotkó Gábor, Alan Ezust, Dale Anson, Roman Tsourick,
-Rafal Kolanski, Uwe Stöhr, Matthieu Casanova, A. Vontobel and Jesse Pavel for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix and cleanup various localization properties (Björn "Vampire" Kautler)
-
-- Make the Display_Shortcuts.bsh macro work properly (Björn "Vampire" Kautler)
-
-- Do not manipulate filename when opening a probably backup file but let the
-  user choose what to do as intended (Björn "Vampire" Kautler)
-
-- Fix jEdit backup filename recognition (Björn "Vampire" Kautler)
-
-- Do not use translated strings to match log lines within activity.log in
-  Make_Bug_Report.bsh (Björn "Vampire" Kautler)
-
-- Support Java 9 and newer in the Windows EXE launcher
-  (Bug #4064 - Björn "Vampire" Kautler)
-
-- Fix splash screen progress call count not being equal in all code branches /
-  parameter combinations (Björn "Vampire" Kautler)
-
-- Fix splash screen progress count, so that the progress bar finally reaches
-  the right end (Björn "Vampire" Kautler)
-
-- Fix a bug preventing jEdit from loading when a buffer has an invalid
-  selection and is loaded in two edit panes (Matthieu Casanova)
-
-- RegisterViewer editable contentPane fixed (Patch #598, Jesse Pavel)
-
-- Command line behavior for +line fixed (Patch #590 - Wim West)
-
-- Autosave Untitled Buffers is now persistent across sessions
-  (Feature Request #501, Patch #596, Patch #614, Fix Bug #4059 - Hrotkó Gábor)
-
-- Fixed a number of bugs in the new jEdit printing system (Dale Anson)
-
-- Add missing local properties to Insert_Buffer_Properties macro
-  (Patch #599 - Jesse Pavel)
-
-- Fixed an issue with the activity log viewer so that setting the number of
-  lines in the log actually works. (Dale Anson)
-
-- Fix for bug #3971, exception trying to set WM_CLASS. (Dale Anson)
-
-- Fix for bug #4047, illegal reflective access operation with Java 9.
-  (Dale Anson)
-
-- Fix Bug #4011, The Cut Lines macro gives exception if the cursor is beyond
-  text area (Patch #600, Roman Tsourick)
-
-- Fix for bug #541, let ESC key close the print dialog. (Dale Anson)
-
-}}}
-{{{ UI Improvements
-
-- Consistently use lowercase status bar indicators for disabled settings
-  (Björn "Vampire" Kautler)
-
-- Allow specification of fallback font sizes (Patch #569, Rafal Kolanski)
-
-- Show tooltips in ShortcutOptionPane table (FR# 538, Roman Tsourick)
-
-- FSB: Disable first column dragging (Patch# 603, Roman Tsourick)
-
-- FSB: Sorting icon not following header when moving
-  (Bug# 4049, Patch# 604, Roman Tsourick)
 
 }}}
 {{{ Miscellaneous
 
-- FR #506, FR #536: Autosaves are now saved to the Autosave directory, if
-  specified. (Alan Ezust, Hrotkó Gábor)
 
-- FR #175: Saving and backup option, "Never Mark Untitled Buffers Dirty" changed
-  name and behavior to "Close Dirty Untitled buffers without confirmation"
-  (Alan Ezust)
+}}}
+{{{ API Changes
 
-- Patch #612, fr #518: buffer lock (Roman Tsourick)
-
-- Enhancements of russian localization (Roman Tsourick)
 
 }}}
 {{{ Editing
 
-- Shipped JavaDocs are now working properly if viewed with a browser as
-  JavaScript parts are no longer stripped off, just the noscript tags that
-  inform about disabled JavaScript are removed. ((Björn "Vampire" Kautler)
-
-- Patch #607: C and C++ mode updates (Roman Tsourick)
-
-- Patch #613: javascript mode update (up to ES 2017) (Roman Tsourick)
-
-- Patch #608, bug #2106: PHP mode "//" comment syntax highlighting is incorrect
-  (Roman Tsourick)
-
-- Patch #609, bug #2194: ASP Syntax highlight bug w/comment (Roman Tsourick)
-
-- Patch #610, bug #4054: hash comment highlighting in mysql mode
-  (Roman Tsourick)
-
-- Patch #611, bug #3249: assembler-x86 comment directive (Roman Tsourick)
-
-- nsis2 mode updates (Uwe Stöhr - Patch #606)
-
-- Draw2d mode updates (A.Vontobel - Patch #605)
-
-- Add Gherkin mode (english) to support Cucumber feature files
-  (Matthieu Casanova)
-
-- Patch #593 - Various small patches to modes (AdamS)
-
-- Patch #592 - for groovy mode (Egor Abramovich)
-
-- Patch #595 - New Assembly-arm32 edit mode (M. Cesar R. Lacruz)
-
-- Updated java-module-info mode (Dale Anson)
 
 }}}
 
