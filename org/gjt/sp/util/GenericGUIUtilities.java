@@ -179,7 +179,7 @@ public class GenericGUIUtilities {
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return TextAreaMouseHandler.isRightButton(evt.getModifiers());
+		return TextAreaMouseHandler.isRightButton(evt.getModifiersEx());
 	} //}}}
 
 	//{{{ isMiddleButton() method

@@ -24,10 +24,11 @@ package org.gjt.sp.jedit.textarea;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.jedit.Registers;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.InputEvent;
+import static java.awt.event.InputEvent.*;
 import java.awt.*;
 
 /** Standalone TextArea MouseHandler.
@@ -49,17 +50,25 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	{
 		showCursor();
 
+		int btn = evt.getButton();
+		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
+		{
+			// Suppress presses with unknown button, to avoid
+			// problems due to horizontal scrolling.
+			return;
+		}
+
 		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
 			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
-		ctrlForRectangularSelection = true;
+		ctrlForRectangularSelection = textArea.isCtrlForRectangularSelection();
 
 		// so that Home <mouse click> Home is not the same
 		// as pressing Home twice in a row
 		textArea.getInputHandler().resetLastActionCount();
 
 		quickCopyDrag = (textArea.isQuickCopyEnabled() &&
-			isMiddleButton(evt.getModifiers()));
+			isMiddleButton(evt.getModifiersEx()));
 
 		if(!quickCopyDrag)
 		{
@@ -80,10 +89,12 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		dragStartOffset = dragStart - textArea.getLineStartOffset(
 			dragStartLine);
 
-		if(isPopupTrigger(evt) && textArea.isRightClickPopupEnabled())
+		if(isPopupTrigger(evt)
+			&& textArea.getRightClickPopup() != null)
 		{
+			if(textArea.isRightClickPopupEnabled())
 				textArea.handlePopupTrigger(evt);
-				return;
+			return;
 		}
 
 		dragged = false;
@@ -509,13 +520,40 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
-		if(!dragged && textArea.isQuickCopyEnabled() &&
-			isMiddleButton(evt.getModifiers()))
+		int btn = evt.getButton();
+		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
+		{
+			// Suppress releases with unknown button, to avoid
+			// problems due to horizontal scrolling.
+			return;
+		}
+
+		// middle mouse button drag inserts selection
+		// at caret position
+		Selection sel = textArea.getSelectionAtOffset(dragStart);
+		if(dragged && sel != null)
+		{
+			Registers.setRegister('%',textArea.getSelectedText(sel));
+			if(quickCopyDrag)
+			{
+				textArea.removeFromSelection(sel);
+				Registers.paste(TextArea.focusedComponent,
+					'%',sel instanceof Selection.Rect);
+
+				TextArea.focusedComponent.requestFocus();
+			}
+		}
+		else if(!dragged && textArea.isQuickCopyEnabled() &&
+			isMiddleButton(evt.getModifiersEx()))
 		{
 			textArea.requestFocus();
 			TextArea.focusedComponent = textArea;
 
 			textArea.setCaretPosition(dragStart,false);
+			if(!textArea.isEditable())
+				textArea.getToolkit().beep();
+			else
+				Registers.paste(textArea,'%',control);
 		}
 		else if(maybeDragAndDrop
 			&& !textArea.isMultipleSelectionEnabled())
@@ -523,7 +561,12 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			textArea.selectNone();
 		}
 
+		maybeDragAndDrop = false;
 		dragged = false;
+		if(!(textArea.isRectangularSelectionEnabled()
+			|| (control && ctrlForRectangularSelection)))
+			// avoid scrolling away from rectangular selection
+			textArea.scrollToCaret(false);
 	} //}}}
 
 	//{{{ isPopupTrigger() method
@@ -536,7 +579,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return isRightButton(evt.getModifiers());
+		return isRightButton(evt.getModifiersEx());
 	} //}}}
 
 	//{{{ isMiddleButton() method
@@ -549,13 +592,13 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & InputEvent.BUTTON1_MASK) != 0)
-				return (modifiers & InputEvent.ALT_MASK) != 0;
+			if((modifiers & BUTTON1_DOWN_MASK) == BUTTON1_DOWN_MASK)
+				return (modifiers & ALT_DOWN_MASK) == ALT_DOWN_MASK;
 			else
-				return (modifiers & InputEvent.BUTTON2_MASK) != 0;
+				return (modifiers & BUTTON2_DOWN_MASK) == BUTTON2_DOWN_MASK;
 		}
 		else
-			return (modifiers & InputEvent.BUTTON2_MASK) != 0;
+			return (modifiers & BUTTON2_DOWN_MASK) == BUTTON2_DOWN_MASK;
 	} //}}}
 
 	//{{{ isRightButton() method
@@ -568,13 +611,13 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & InputEvent.BUTTON1_MASK) != 0)
-				return (modifiers & InputEvent.CTRL_MASK) != 0;
+			if((modifiers & BUTTON1_DOWN_MASK) == BUTTON1_DOWN_MASK)
+				return (modifiers & CTRL_DOWN_MASK) == CTRL_DOWN_MASK;
 			else
-				return (modifiers & InputEvent.BUTTON3_MASK) != 0;
+				return (modifiers & BUTTON3_DOWN_MASK) == BUTTON3_DOWN_MASK;
 		}
 		else
-			return (modifiers & InputEvent.BUTTON3_MASK) != 0;
+			return (modifiers & BUTTON3_DOWN_MASK) == BUTTON3_DOWN_MASK;
 	} //}}}
 
 	//{{{ Private methods

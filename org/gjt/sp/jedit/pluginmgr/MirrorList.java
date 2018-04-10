@@ -29,7 +29,8 @@ import java.util.*;
 
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
-import org.xml.sax.helpers.XMLReaderFactory;
+import javax.xml.parsers.SAXParserFactory;
+
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.IOUtilities;
@@ -71,7 +72,7 @@ public class MirrorList
 
 		InputSource isrc = new InputSource(in);
 		isrc.setSystemId("jedit.jar");
-		XMLReader parser = XMLReaderFactory.createXMLReader();
+		XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 		parser.setContentHandler(handler);
 		parser.setDTDHandler(handler);
 		parser.setEntityResolver(handler);

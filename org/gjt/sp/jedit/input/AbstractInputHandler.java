@@ -375,7 +375,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 		b.append(id);
 		b.append(",keyCode=0x").append(Integer.toString(evt.getKeyCode(), 16));
 		b.append(",keyChar=0x").append(Integer.toString(evt.getKeyChar(), 16));
-		b.append(",modifiers=0x").append(Integer.toString(evt.getModifiers(), 16));
+		b.append(",modifiers=0x").append(Integer.toString(evt.getModifiersEx(), 16));
 
 		b.append(",consumed=");
 		b.append(evt.isConsumed()?'1':'0');

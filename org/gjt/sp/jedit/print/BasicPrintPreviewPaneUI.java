@@ -233,7 +233,7 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 
 				// otherwise, use the default paper size
 				Paper paper = model.getPaper();
-				Dimension defaultSize = new Dimension( new Double( paper.getWidth() * zoomLevel ).intValue(), new Double( paper.getHeight() * zoomLevel ).intValue() );
+				Dimension defaultSize = new Dimension( Double.valueOf( paper.getWidth() * zoomLevel ).intValue(), Double.valueOf( paper.getHeight() * zoomLevel ).intValue() );
 				return defaultSize;
 			}
 
@@ -274,7 +274,7 @@ public class BasicPrintPreviewPaneUI extends PrintPreviewPaneUI implements Chang
 
 			// paint background white
 			gfx.setColor( Color.WHITE );
-			gfx.fillRect( 0, 0, new Double( width ).intValue(), new Double( height ).intValue() );
+			gfx.fillRect( 0, 0, Double.valueOf( width ).intValue(), Double.valueOf( height ).intValue() );
 
 			// print the page into this panel
 			updateModel();

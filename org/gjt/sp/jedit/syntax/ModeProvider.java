@@ -28,7 +28,8 @@ import org.gjt.sp.util.Log;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -40,7 +41,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.regex.*;
-import javax.swing.JOptionPane;
 //}}}
 
 /**
@@ -345,7 +345,7 @@ public class ModeProvider
 				bw.flush();
 				bw.close();
 			}
-			catch(Exception e)
+			catch(Exception e)	// NOPMD
 			{
 				// ignored
 			}
@@ -366,8 +366,8 @@ public class ModeProvider
 		XMLReader parser;
 		try
 		{
-			parser = XMLReaderFactory.createXMLReader();
-		} catch (SAXException saxe)
+			parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+		} catch (SAXException | ParserConfigurationException saxe)
 		{
 			Log.log(Log.ERROR, this, saxe);
 			return;
@@ -401,7 +401,7 @@ public class ModeProvider
 
 			mode.setProperties(xmh.getModeProperties());
 		}
-		catch (Throwable e)
+		catch (Throwable e)	// NOPMD
 		{
 			error(fileName, e);
 		}

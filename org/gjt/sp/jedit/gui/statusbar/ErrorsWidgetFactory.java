@@ -184,7 +184,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			{
 				if (Log.throwables.isEmpty())
 					return;
-				if (GenericGUIUtilities.isRightButton(e.getModifiers()))
+				if (GenericGUIUtilities.isRightButton(e.getModifiersEx()))
 				{
 					JPopupMenu menu = GUIUtilities.loadPopupMenu("errorwidget.popupmenu");
 					GenericGUIUtilities.showPopupMenu(menu, ErrorHighlight.this, e.getX(), e.getY());

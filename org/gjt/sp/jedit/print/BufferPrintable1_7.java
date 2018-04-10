@@ -308,7 +308,7 @@ class BufferPrintable1_7 implements Printable
 			{
 				// last page
 				Range range = new Range(startLine, currentPhysicalLine);
-				pages.put(new Integer(pageCount), range);
+				pages.put(Integer.valueOf(pageCount), range);
 				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				break;
 			}
@@ -329,7 +329,7 @@ class BufferPrintable1_7 implements Printable
 			if(y + (lineHeight * (lineList.isEmpty() ? 1 : lineList.size())) > pageHeight)
 			{
 				Range range = new Range(startLine, Math.max(0, currentPhysicalLine - 1));
-				pages.put(new Integer(pageCount), range);
+				pages.put(Integer.valueOf(pageCount), range);
 				//Log.log(Log.DEBUG, this, "calculatePages, page " + pageCount + " has " + range);
 				++ pageCount;
 				startLine = currentPhysicalLine;

@@ -32,7 +32,9 @@ import java.util.zip.GZIPInputStream;
 import org.gjt.sp.util.*;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
-import org.xml.sax.helpers.XMLReaderFactory;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -123,7 +125,7 @@ class PluginList
 			if (cachedURL != gzipURL)
 				Log.log(Log.MESSAGE, this, "Using cached pluginlist");
 			inputStream = new URL(cachedURL).openStream();
-			XMLReader parser = XMLReaderFactory.createXMLReader();
+			XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 			PluginListHandler handler = new PluginListHandler(this, cachedURL);
 			in = new BufferedInputStream(inputStream);
 			if(in.markSupported())

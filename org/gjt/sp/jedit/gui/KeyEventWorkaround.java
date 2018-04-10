@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.event.*;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.util.Log;
 //}}}
@@ -193,7 +192,7 @@ public class KeyEventWorkaround
 	{
 		int keyCode = evt.getKeyCode();
 		char ch = evt.getKeyChar();
-		int modifiers = evt.getModifiers();
+		int modifiers = evt.getModifiersEx();
 
 		switch(evt.getID())
 		{
@@ -227,7 +226,7 @@ public class KeyEventWorkaround
 				{
 					/* we don't handle key pressed A+ */
 					/* they're too troublesome */
-					if((modifiers & InputEvent.ALT_MASK) != 0)
+					if((modifiers & InputEvent.ALT_DOWN_MASK) != 0)
 						return null;
 				}
 
@@ -253,12 +252,12 @@ public class KeyEventWorkaround
 					+ AbstractInputHandler.toString(evt)+": last="+last+".");
 			}
 
-			if((modifiers & InputEvent.CTRL_MASK) != 0
-				&& (modifiers & InputEvent.ALT_MASK) == 0
-				|| (modifiers & InputEvent.CTRL_MASK) == 0
-				&& (modifiers & InputEvent.ALT_MASK) != 0
+			if((modifiers & InputEvent.CTRL_DOWN_MASK) != 0
+				&& (modifiers & InputEvent.ALT_DOWN_MASK) == 0
+				|| (modifiers & InputEvent.CTRL_DOWN_MASK) == 0
+				&& (modifiers & InputEvent.ALT_DOWN_MASK) != 0
 				&& !Debug.ALT_KEY_PRESSED_DISABLED
-				|| (modifiers & InputEvent.META_MASK) != 0)
+				|| (modifiers & InputEvent.META_DOWN_MASK) != 0)
 			{
 				return null;
 			}
@@ -311,7 +310,7 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_HOME:
 				/* workaround for A+keys producing
 				 * garbage on Windows */
-				if(modifiers == InputEvent.ALT_MASK)
+				if(modifiers == InputEvent.ALT_DOWN_MASK)
 					last = LAST_ALT;
 				break;
 			}

@@ -50,7 +50,7 @@ public class HistoryTextArea extends JTextArea
 			KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
 			Collections.singleton(
 				KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
-					InputEvent.SHIFT_MASK)));
+					InputEvent.SHIFT_DOWN_MASK)));
 	} //}}}
 
 	//{{{ getModel() method

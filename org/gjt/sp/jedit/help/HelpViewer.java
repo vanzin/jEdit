@@ -654,7 +654,9 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 
 		private void handlePopupTrigger(MouseEvent me)
 		{
-            int caret = viewer.getUI().viewToModel(viewer, me.getPoint());
+			int caret = viewer.getUI().viewToModel(viewer, me.getPoint());
+			// TODO: viewToModel is deprecated as of Java 9, use next line when jEdit requires Java 9
+            //int caret = viewer.getUI().viewToModel2D(viewer, me.getPoint(), null);
             if (caret >= 0 && viewer.getDocument() instanceof HTMLDocument)
             {
                 HTMLDocument hdoc = (HTMLDocument) viewer.getDocument();

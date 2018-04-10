@@ -35,7 +35,6 @@ package org.gjt.sp.jedit.bsh;
 
 import java.net.*;
 import java.util.*;
-import java.io.IOException;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -137,7 +136,7 @@ public class BshClassManager
                 // Try to load the module
                 // don't refer to it directly here or we're dependent upon it
                 Class clas = Class.forName( "org.gjt.sp.jedit.bsh.classpath.ClassManagerImpl" );
-                manager = (BshClassManager)clas.newInstance();
+                manager = (BshClassManager)clas.getDeclaredConstructor().newInstance();
             } catch ( Exception e ) {
                 throw new InterpreterError("Error loading classmanager: "+e);
             }
@@ -486,7 +485,7 @@ public class BshClassManager
     */
     protected void definingClass( String className ) {
         String baseName = Name.suffix(className,1);
-        int i = baseName.indexOf("$");
+        int i = baseName.indexOf('$');
         if ( i != -1 )
             baseName = baseName.substring(i+1);
         String cur = (String)definingClassesBaseNames.get( baseName );

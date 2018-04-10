@@ -7,6 +7,7 @@ public abstract class ClassGenerator
 {
 	private static ClassGenerator cg;
 
+	@SuppressWarnings("unchecked")
 	public static ClassGenerator getClassGenerator() 
 		throws UtilEvalError
 	{
@@ -14,7 +15,7 @@ public abstract class ClassGenerator
 		{
 			try {
 				Class clas = Class.forName( "org.gjt.sp.jedit.bsh.ClassGeneratorImpl" );
-				cg = (ClassGenerator)clas.newInstance();
+				cg = (ClassGenerator)clas.getDeclaredConstructor().newInstance();
 			} catch ( Exception e ) {
 				throw new Unavailable("ClassGenerator unavailable: "+e);
 			}

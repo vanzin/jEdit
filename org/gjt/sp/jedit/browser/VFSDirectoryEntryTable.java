@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.browser;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
+import static java.awt.event.InputEvent.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.*;
@@ -315,7 +316,7 @@ public class VFSDirectoryEntryTable extends JTable
 			{
 			case KeyEvent.VK_LEFT:
 				evt.consume();
-				if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
+				if ((evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK)
 				{
 					browser.previousDirectory();
 				}
@@ -348,7 +349,7 @@ public class VFSDirectoryEntryTable extends JTable
 				break;
 			case KeyEvent.VK_TAB:
 				evt.consume();
-				if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0)
+				if ((evt.getModifiersEx() & SHIFT_DOWN_MASK) == SHIFT_DOWN_MASK)
 				{
 					browserView.getParentDirectoryList().requestFocus();
 				}
@@ -362,7 +363,7 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, browserUp);
 				break;
 			case KeyEvent.VK_UP:
-				if ((evt.getModifiers() & InputEvent.ALT_MASK) >0)
+				if ((evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK)
 				{
 					evt.consume();
 					ac.invokeAction(evt, browserUp);
@@ -374,7 +375,7 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, deleteAct);
 				break;
 			case KeyEvent.VK_N:
-				if ((evt.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)
+				if ((evt.getModifiersEx() & CTRL_DOWN_MASK) == CTRL_DOWN_MASK)
 				{
 					evt.consume();
 					EditAction ea = ac.getAction("vfs.browser.new-file");
@@ -403,7 +404,7 @@ public class VFSDirectoryEntryTable extends JTable
 			case KeyEvent.VK_F6:
 			case KeyEvent.VK_RIGHT:
 				evt.consume();
-				if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
+				if ((evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK)
 				{
 					browser.nextDirectory();
 				}

@@ -95,7 +95,7 @@ public class RegisterViewer extends JPanel
 			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
 			WHEN_FOCUSED);
 		contentTextArea.registerKeyboardAction(new TabHandler(),
-			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK),
+			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK),
 			WHEN_FOCUSED);
 		int orientation = JSplitPane.HORIZONTAL_SPLIT;
 		if (position.equals(DockableWindowManager.LEFT) ||

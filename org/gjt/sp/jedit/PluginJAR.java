@@ -896,6 +896,7 @@ public class PluginJAR
 	 *
 	 * @since jEdit 4.2pre1
 	 */
+	@SuppressWarnings("unchecked")
 	public void activatePlugin()
 	{
 		synchronized (this)
@@ -930,7 +931,7 @@ public class PluginJAR
 				return;
 			}
 
-			plugin = (EditPlugin)clazz.newInstance();
+			plugin = (EditPlugin)clazz.getDeclaredConstructor().newInstance();
 			plugin.jar = this;
 		}
 		catch (Throwable t)

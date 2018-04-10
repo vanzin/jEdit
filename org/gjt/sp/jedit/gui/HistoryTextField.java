@@ -244,7 +244,7 @@ public class HistoryTextField extends JTextField
 				if(enterAddsToHistory)
 					addCurrentToHistory();
 
-				if(evt.getModifiers() == 0)
+				if(evt.getModifiersEx() == 0)
 				{
 					fireActionPerformed();
 					evt.consume();

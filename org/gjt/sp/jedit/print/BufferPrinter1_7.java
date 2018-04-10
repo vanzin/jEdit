@@ -266,7 +266,7 @@ public class BufferPrinter1_7
 	{
 		PageFormat pageFormat = createPageFormat( attributes );
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		BufferedImage image = new BufferedImage(new Double(pageFormat.getImageableWidth()).intValue(), new Double(pageFormat.getImageableHeight()).intValue(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(Double.valueOf(pageFormat.getImageableWidth()).intValue(), Double.valueOf(pageFormat.getImageableHeight()).intValue(), BufferedImage.TYPE_INT_RGB);
 		Graphics graphics = ge.createGraphics(image);
 		Paper paper = pageFormat.getPaper();
 		Rectangle2D.Double clipRegion = new Rectangle2D.Double(paper.getImageableX(), paper.getImageableY(), paper.getImageableWidth(), paper.getImageableHeight());

@@ -190,8 +190,8 @@ public class SearchDialog extends EnhancedDialog
 			{
 				filter.setText(((DirectoryListSet)fileset)
 					.getFileFilter());
-				directoryField.setText(((DirectoryListSet)fileset)
-					.getDirectory());
+				///directoryField.setText(((DirectoryListSet)fileset)
+				///	.getDirectory());
 				searchSubDirectories.setSelected(((DirectoryListSet)fileset)
 					.isRecursive());
 			}

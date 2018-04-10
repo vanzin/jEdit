@@ -90,7 +90,7 @@ class JEditMode extends Mode
 				Object value;
 				try
 				{
-					value = new Integer(property);
+					value = Integer.valueOf(property);
 				}
 				catch(NumberFormatException nf)
 				{
@@ -109,7 +109,7 @@ class JEditMode extends Mode
 		{
 			try
 			{
-				return new Integer(global);
+				return Integer.valueOf(global);
 			}
 			catch(NumberFormatException nf)
 			{

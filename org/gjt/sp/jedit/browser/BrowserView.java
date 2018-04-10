@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;
 
+import static java.awt.event.InputEvent.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.IOException;
@@ -478,7 +479,7 @@ class BrowserView extends JPanel
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(evt.getClickCount() % 2 != 0 &&
-				!GenericGUIUtilities.isMiddleButton(evt.getModifiers()))
+				!GenericGUIUtilities.isMiddleButton(evt.getModifiersEx()))
 				return;
 
 			int row = parentDirectories.locationToIndex(evt.getPoint());
@@ -555,14 +556,14 @@ class BrowserView extends JPanel
 				}
 			}
 
-			if((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0
+			if((evt.getModifiersEx() & BUTTON1_DOWN_MASK) == 0
 				&& evt.getClickCount() % 2 == 0)
 			{
 				browser.filesActivated(evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
 					: VFSBrowser.M_OPEN,true);
 			}
-			else if(GenericGUIUtilities.isMiddleButton(evt.getModifiers()))
+			else if(GenericGUIUtilities.isMiddleButton(evt.getModifiersEx()))
 			{
 				if(evt.isShiftDown())
 					table.getSelectionModel().addSelectionInterval(row,row);
@@ -600,7 +601,7 @@ class BrowserView extends JPanel
 				}
 			}
 
-			if(GenericGUIUtilities.isMiddleButton(evt.getModifiers()))
+			if(GenericGUIUtilities.isMiddleButton(evt.getModifiersEx()))
 			{
 				if(row == -1)
 					return;
@@ -668,7 +669,7 @@ class BrowserView extends JPanel
 						parentDirectories.setSelectedIndex(++row);
 					break;
 				case KeyEvent.VK_LEFT:
-					if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
+					if ((evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK)
 					{
 						evt.consume();
 						browser.previousDirectory();
@@ -676,7 +677,7 @@ class BrowserView extends JPanel
 					else super.processEvent(evt);
 					break;
 				case KeyEvent.VK_RIGHT:
-					if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
+					if ((evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK)
 					{
 						evt.consume();
 						browser.nextDirectory();
@@ -685,7 +686,7 @@ class BrowserView extends JPanel
 					break;
 				case KeyEvent.VK_TAB:
 					evt.consume();
-					if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0)
+					if ((evt.getModifiersEx() & SHIFT_DOWN_MASK) == SHIFT_DOWN_MASK)
 						browser.focusOnDefaultComponent();
 					else
 						table.requestFocus();

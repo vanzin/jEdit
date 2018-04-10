@@ -282,7 +282,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		try
 		{
-			buffer.setProperty("maxLineLen",new Integer(
+			buffer.setProperty("maxLineLen",Integer.valueOf(
 				maxLineLen.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)
@@ -291,7 +291,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		try
 		{
-			buffer.setProperty("tabSize",new Integer(
+			buffer.setProperty("tabSize",Integer.valueOf(
 				tabSize.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)
@@ -300,7 +300,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		try
 		{
-			buffer.setProperty("indentSize",new Integer(
+			buffer.setProperty("indentSize",Integer.valueOf(
 				indentSize.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)

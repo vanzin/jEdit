@@ -35,7 +35,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 //}}}
 
 /**
@@ -129,7 +131,7 @@ public class XMLUtilities
 	{
 		try
 		{
-			XMLReader parser = XMLReaderFactory.createXMLReader();
+			XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 			InputSource isrc = new InputSource(
 				new BufferedInputStream(in));
 			isrc.setSystemId("jedit.jar");
@@ -146,7 +148,7 @@ public class XMLUtilities
 				"while parsing from " + in + ": SAXParseException: line " + line + ": " , se);
 			return true;
 		}
-		catch(SAXException e)
+		catch(SAXException | ParserConfigurationException e)
 		{
 			Log.log(Log.ERROR,XMLUtilities.class,e);
 			return true;

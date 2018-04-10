@@ -4,14 +4,15 @@ jEdit 5.6 version history
 
 {{{ Version 5.6pre1
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
 
 }}}
 {{{ Miscellaneous
-
+- Fixed all deprecation warnings produced when compiling with Java 9 (Dale
+ Anson)
 
 }}}
 {{{ API Changes

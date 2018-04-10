@@ -423,14 +423,14 @@ public class CompletionPopup extends JWindow
 					e.consume();
 					break;
 				case KeyEvent.VK_P:
-					if (e.getModifiersEx() == InputEvent.CTRL_DOWN_MASK)
+					if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)
 					{
 						moveRelative(-1);
 						e.consume();
 					}
 					break;
 				case KeyEvent.VK_N:
-					if (e.getModifiersEx() == InputEvent.CTRL_DOWN_MASK)
+					if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)
 					{
 						moveRelative(1);
 						e.consume();

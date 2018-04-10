@@ -2220,7 +2220,7 @@ void VariableDeclaratorId() #VariableDeclaratorId :
 
         // This really should be Long.decode, but there isn't one. As a result,
         // hex and octal literals ending in 'l' or 'L' don't work.
-        jjtn000.value = new Primitive( new Long( literal ).longValue() );
+        jjtn000.value = new Primitive( Long.valueOf( literal ).longValue() );
     }
     else
                 try {
@@ -2241,14 +2241,14 @@ void VariableDeclaratorId() #VariableDeclaratorId :
     if(ch == 'f' || ch == 'F')
     {
         literal = literal.substring(0,literal.length()-1);
-        jjtn000.value = new Primitive( new Float( literal ).floatValue() );
+        jjtn000.value = new Primitive( Float.valueOf( literal ).floatValue() );
     }
     else
     {
         if(ch == 'd' || ch == 'D')
             literal = literal.substring(0,literal.length()-1);
 
-        jjtn000.value = new Primitive( new Double( literal ).doubleValue() );
+        jjtn000.value = new Primitive( Double.valueOf( literal ).doubleValue() );
     }
         break;
       case CHARACTER_LITERAL:

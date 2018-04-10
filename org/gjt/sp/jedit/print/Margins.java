@@ -55,7 +55,7 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
             throw new IllegalArgumentException( "Invalid margin." );
         }
 
-        float u = new Integer( getUnits() ).floatValue();
+        float u = Integer.valueOf( getUnits() ).floatValue();
         this.top = top * u;
         this.left = left * u;
         this.right = right * u;
@@ -142,7 +142,7 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
 
     private float convertFromMicrometers( float margin, int units )
     {
-        return margin / new Integer( units ).floatValue();
+        return margin / Integer.valueOf( units ).floatValue();
     }
 
     public String toString()
@@ -194,6 +194,6 @@ public class Margins implements DocAttribute, PrintRequestAttribute, PrintJobAtt
 
     public int hashCode()
     {
-        return new Float(top).intValue() + 37 * new Float(left).intValue() + 43 * new Float(right).intValue() + 47 * new Float(bottom).intValue();
+        return Float.valueOf(top).intValue() + 37 * Float.valueOf(left).intValue() + 43 * Float.valueOf(right).intValue() + 47 * Float.valueOf(bottom).intValue();
     }
 }

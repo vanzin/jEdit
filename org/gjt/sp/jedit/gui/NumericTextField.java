@@ -61,7 +61,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		super(text);
 		this.positiveOnly = positiveOnly;
 		integerOnly = true;
-		minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
+		minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
 		maxValue = Integer.MAX_VALUE;
 		addFilter();
 		loadInvalidStyle();
@@ -74,12 +74,12 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		this.integerOnly = integerOnly;
 		if (integerOnly)
 		{
-			minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
+			minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
 			maxValue = Integer.MAX_VALUE;
 		}
 		else 
 		{
-			minValue = positiveOnly ? new Float(0.0) : Float.MIN_VALUE;
+			minValue = positiveOnly ? Float.valueOf(0.0f) : Float.MIN_VALUE;
 			maxValue = Float.MAX_VALUE;
 		}
 		addFilter();
@@ -91,7 +91,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		super(text, columns);
 		this.positiveOnly = positiveOnly;
 		integerOnly = true;
-		minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
+		minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
 		maxValue = Integer.MAX_VALUE;
 		addFilter();
 		loadInvalidStyle();
@@ -104,12 +104,12 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		this.integerOnly = integerOnly;
 		if (integerOnly)
 		{
-			minValue = positiveOnly ? new Integer(0) : Integer.MIN_VALUE;
+			minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
 			maxValue = Integer.MAX_VALUE;
 		}
 		else 
 		{
-			minValue = positiveOnly ? new Float(0.0) : Float.MIN_VALUE;
+			minValue = positiveOnly ? Float.valueOf(0.0f) : Float.MIN_VALUE;
 			maxValue = Float.MAX_VALUE;
 		}
 		addFilter();

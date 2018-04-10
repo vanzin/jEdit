@@ -48,8 +48,9 @@ public abstract class ReflectManager
 
 	/**
 		Return the singleton bsh ReflectManager.
-		@throws Unavailable
+		@throws Unavailable    // weirdness with mode file, leave in the tab preceding this comment
 	*/
+	@SuppressWarnings("unchecked")
 	public static ReflectManager getReflectManager() 
 		throws Unavailable
 	{
@@ -58,7 +59,7 @@ public abstract class ReflectManager
 			Class clas;
 			try {
 				clas = Class.forName( "org.gjt.sp.jedit.bsh.reflect.ReflectManagerImpl" );
-				rfm = (ReflectManager)clas.newInstance();
+				rfm = (ReflectManager)clas.getDeclaredConstructor().newInstance();
 			} catch ( Exception e ) {
 				throw new Unavailable("Reflect Manager unavailable: "+e);
 			}
@@ -70,7 +71,7 @@ public abstract class ReflectManager
 	/**
 		Reflect Manager Set Accessible.
 		Convenience method to invoke the reflect manager.
-		@throws Unavailable
+		@throws Unavailable    // weirdness with mode file, leave in the tab preceding this comment
 	*/
 	public static boolean RMSetAccessible( Object obj ) 
 		throws Unavailable

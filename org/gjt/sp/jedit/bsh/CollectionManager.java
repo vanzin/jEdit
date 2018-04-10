@@ -58,7 +58,7 @@ public class CollectionManager
             Class clas;
             try {
                 clas = Class.forName( "org.gjt.sp.jedit.bsh.collection.CollectionManagerImpl" );
-                manager = (CollectionManager)clas.newInstance();
+                manager = (CollectionManager)clas.getDeclaredConstructor().newInstance();
             } catch ( Exception e ) {
                 Interpreter.debug("unable to load CollectionManagerImpl: "+e);
             }
