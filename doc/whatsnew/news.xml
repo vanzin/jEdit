@@ -3,29 +3,17 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation='https://www.docbook.org/xsd/4.4/docbook.xsd'>
 
-    <title> What's new in jEdit 5.5 </title>
+    <title> What's new in jEdit 5.6 </title>
     <articleinfo>
         <date> 2018 </date>
     </articleinfo>
 
 
     <para> This is a time-based release, scheduled to come out about 1 year after
-    jEdit 5.4, and is a collection of enhancements, bug fixes and patches
+    jEdit 5.5, and is a collection of enhancements, bug fixes and patches
     submitted by the community. Detailed changes can be found in the <ulink
     url="../CHANGES.txt">Detailed Change Log</ulink>.
     </para>
-
-    <para> One notable new thing in this version is autosaves of untitled buffers.
-    This allows jEdit to save and restore untitled buffers across sessions.
-    Totally rewritten is most of the autosave code - it can use an autosave directory
-    to store its files. In addition, the option for never marking untitled buffers
-    dirty has been replaced by an option that achieves a similar goal (allowing you to
-    close or quit untitled buffers without a dialog confirmation), but allows for
-    multiple dirty untitled buffers. </para>
-
-    <para> jEdit's launcher and core have both been tested with Java 9.
-    Some of the plugins (e.g. Lucene) may not yet be compatible,
-    but at least the core works fine on it now. </para>
 
     <para> With continued support from the community, we will keep releasing a newer
     version each year that can accurately bring together the fruits of everyone's labor.
