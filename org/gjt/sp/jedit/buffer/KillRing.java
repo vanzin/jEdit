@@ -91,13 +91,13 @@ public class KillRing implements MutableListModel<String>
 	 * @param source the loaded killring.
 	 * @since jEdit 4.3pre12
 	 */
-	protected void reset(Collection<?> source)
+	protected void reset(Collection<String> source)
 	{
 		String[] newRing = new String[source.size()];
 		int i = 0;
-		for(Object x: source)
+		for(String x: source)
 		{
-			newRing[i++] = (String)x;
+			newRing[i++] = x;
 		}
 		ring = newRing;
 		count = 0;

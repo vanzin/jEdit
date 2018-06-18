@@ -161,7 +161,7 @@ class JEditKillRing extends KillRing
 	//{{{ KillRingHandler class
 	private static class KillRingHandler extends DefaultHandler
 	{
-		public List<String> list = new LinkedList<String>();
+		public List<String> list = new LinkedList<>();
 
 		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
