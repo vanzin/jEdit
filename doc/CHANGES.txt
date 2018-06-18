@@ -4,7 +4,8 @@ jEdit 5.6 version history
 
 {{{ Version 5.6pre1
 
-Thanks to Björn "Vampire" Kautler and Dale Anson for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Dale Anson for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -16,7 +17,7 @@ Thanks to Björn "Vampire" Kautler and Dale Anson for contributing to this relea
 
 }}}
 {{{ API Changes
-
+- New method IntegerArray.isEmpty() (Matthieu Casanova)
 
 }}}
 {{{ Editing
