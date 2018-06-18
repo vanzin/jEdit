@@ -135,8 +135,7 @@ class JEditKillRing extends KillRing
 			for(int i = size - 1; i >=0; i--)
 			{
 				out.write("<ENTRY>");
-				out.write(XMLUtilities.charsToEntities(
-					getElementAt(i).toString(),true));
+				out.write(XMLUtilities.charsToEntities(getElementAt(i),true));
 				out.write("</ENTRY>");
 				out.write(lineSep);
 			}

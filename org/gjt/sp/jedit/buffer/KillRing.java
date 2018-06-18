@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.gui.MutableListModel;
  * kill ring is used for all of jEdit. Nothing prevents plugins from making their
  * own kill rings for whatever reason, though.
  */
-public class KillRing implements MutableListModel
+public class KillRing implements MutableListModel<String>
 {
 	//{{{ getInstance() method
 	public static KillRing getInstance()
@@ -58,7 +58,7 @@ public class KillRing implements MutableListModel
 			int newCount = Math.min(getSize(),newSize);
 			for(int i = 0; i < newCount; i++)
 			{
-				newRing[i] = (String)getElementAt(i);
+				newRing[i] = getElementAt(i);
 			}
 			ring = newRing;
 			count = newCount;
@@ -113,7 +113,7 @@ public class KillRing implements MutableListModel
 
 	//{{{ getElementAt() method
 	@Override
-	public Object getElementAt(int index)
+	public String getElementAt(int index)
 	{
 		return ring[virtualToPhysicalIndex(index)];
 	} //}}}
@@ -145,13 +145,13 @@ public class KillRing implements MutableListModel
 
 	//{{{ insertElementAt() method
 	@Override
-	public void insertElementAt(Object value, int index)
+	public void insertElementAt(String value, int index)
 	{
 		/* This is not terribly efficient, but this method is only
 		called by the 'Paste Deleted' dialog where the performance
 		is not exactly vital */
 		remove(index);
-		add((String)value);
+		add(value);
 	} //}}}
 
 	//}}}
