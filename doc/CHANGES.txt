@@ -8,12 +8,13 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and Dale Anson for
 contributing to this release.
 
 {{{ Bug Fixes
-
+- Fix for bug #4069, handle case where user has not set either a backup prefix
+or suffix (Dale Anson)
 
 }}}
 {{{ Miscellaneous
 - Fixed all deprecation warnings produced when compiling with Java 9 (Dale
- Anson)
+ Anson) 
 
 }}}
 {{{ API Changes

@@ -1036,19 +1036,25 @@ public class MiscUtilities
 		// check for user supplied prefix and suffix
 		String backupPrefix = jEdit.getProperty("backup.prefix");
 		String backupSuffix = jEdit.getProperty("backup.suffix");
-		if (backupPrefix != null && backupSuffix != null)
+		if (backupPrefix != null && !backupPrefix.isEmpty() && backupSuffix != null && !backupSuffix.isEmpty())
 		{
 			return filename.startsWith(backupPrefix) && filename.endsWith(backupSuffix);
 		}
 
-		if (backupPrefix != null && filename.startsWith(backupPrefix))
+		if (backupPrefix != null && !backupPrefix.isEmpty() && filename.startsWith(backupPrefix))
 		{
 			return true;
 		}
 
-		if (backupSuffix != null && filename.startsWith(backupSuffix))
+		if (backupSuffix != null && !backupSuffix.isEmpty() && filename.endsWith(backupSuffix))
 		{
 			return true;
+		}
+		
+		// if the user sets an empty prefix and suffix, then check if the filename ends with a number
+		if ((backupPrefix == null || backupPrefix.isEmpty() || backupSuffix == null || backupSuffix.isEmpty()) && filename.matches(".*?\\d+"))
+		{
+			return true;		
 		}
 
 		return false;
