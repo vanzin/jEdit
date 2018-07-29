@@ -1026,8 +1026,14 @@ public class MiscUtilities
 		{
 			return false;
 		}
+		
+		// check for Untitled-XX
+		if (filename.matches("Untitled-\\d+"))
+		{
+			return false;
+		}
 
-		// check for #Untitled=X# and #filename#save#
+		// check for #Untitled-X# and #filename#save#
 		if (filename.matches("[#]Untitled-\\d+[#]") || filename.matches("[#].*?[#]save[#]"))
 		{
 			return true;
