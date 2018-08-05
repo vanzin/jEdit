@@ -11,6 +11,8 @@ contributing to this release.
 - Fix for bug #4069, handle case where user has not set either a backup prefix
 or suffix (Dale Anson)
 
+- Fix for bug # 4055, odd default colors for style editor (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 - Fixed all deprecation warnings produced when compiling with Java 9 (Dale

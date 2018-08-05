@@ -138,7 +138,8 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		Color fg = style.getForegroundColor();
 		if (fg == null) 
 		{
-			fg = jEdit.getActiveView().getForeground();	
+			fg = jEdit.getActiveView().getEditPane().getTextArea().getPainter().getForeground();	
+			
 		}
 		fgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.fgColor"));
 		fgColorCheckBox.setSelected(fg != null);
@@ -152,7 +153,7 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		Color bg = style.getBackgroundColor();
 		if (bg == null) 
 		{
-			bg = jEdit.getActiveView().getBackground();	
+			bg = jEdit.getActiveView().getEditPane().getTextArea().getPainter().getBackground();	
 		}
 		bgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.bgColor"));
 		bgColorCheckBox.setSelected(bg != null);
