@@ -2533,7 +2533,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextPage(boolean select)
 	{
-		scrollToCaret(false);
+		scrollToCaret(electricScroll > 0);
 		int magic = getMagicCaretPosition();
 		if(caretLine < displayManager.getFirstVisibleLine())
 		{
@@ -2830,7 +2830,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevPage(boolean select)
 	{
-		scrollToCaret(false);
+		scrollToCaret(electricScroll > 0);
 		int magic = getMagicCaretPosition();
 
 		if(caretLine < displayManager.getFirstVisibleLine())

@@ -15,7 +15,9 @@ or suffix (Dale Anson)
 
 - Fix for bug # 2412, Preview Javadoc macro NPE (Dale Anson)
 
-- Fix for but # 2626, dockable buttons don't wrap correctly (Dale Anson)
+- Fix for bug # 2626, dockable buttons don't wrap correctly (Dale Anson)
+
+- Fix for bug # 2719, electric scroll not working with page up/down (Dale Anson)
 
 }}}
 {{{ Miscellaneous
