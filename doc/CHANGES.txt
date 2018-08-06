@@ -13,6 +13,8 @@ or suffix (Dale Anson)
 
 - Fix for bug # 4055, odd default colors for style editor (Dale Anson)
 
+- Fix for bug # 2412, Preview Javadoc macro NPE (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 - Fixed all deprecation warnings produced when compiling with Java 9 (Dale

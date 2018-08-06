@@ -171,7 +171,7 @@ void _infoView(View view, String urlStr)
   {
     // API change with version 1.0 of the InfoViewer
     if (version1)
-      jEdit.getPlugin("infoviewer.InfoViewerPlugin").
+      ((infoviewer.InfoViewerPlugin)jEdit.getPlugin("infoviewer.InfoViewerPlugin")).
         openURL(view, urlStr);// version 1.0
     else
       jEdit.getPlugin("InfoViewerPlugin").
@@ -346,9 +346,9 @@ else
     /* Header Text */
     boolean addHeader = true;
     StringBuffer header = new StringBuffer("-header \"");
-    header.append("<B><A href=\"");
+    header.append("<B><A href=&quot;");
     header.append(yourProductUrlStr);
-    header.append("\">");
+    header.append("&quot;>");
     header.append(yourProductNameStr);
     header.append("</A></B>");
     header.append("<BR>Version xx.xx.xx");
@@ -364,12 +364,11 @@ else
     /* Footer Text */
     boolean addFooter = true;
     StringBuffer footer = new StringBuffer("-footer \"");
-    footer.append("Produced Using the <A href=\"http://www.jedit.org\">");
+    footer.append("Produced Using the <A href=&quot;http://www.jedit.org&quot;>");
     footer.append("jEdit</A><BR>Preview Javadoc Beanshell Macro.<BR>");
     footer.append("Copyright &copy; 2001-2003, ");
-    footer.append("<A href=\"http://www.webarts.bc.ca>\"");
-    footer.append("Tom B. Gutwin</A>");
-    footer.append("\" ");
+    footer.append("<A href=&quot;http://www.webarts.bc.ca&quot;>");
+    footer.append("Tom B. Gutwin</A>\" ");
 
     /* Bottom Text */
     boolean addBottom = true;
