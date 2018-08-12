@@ -2279,14 +2279,16 @@ public class jEdit
 					buffer.getMode().getName());
 			}
 
-			if(!isExiting)
+			// do not delete untitled buffer when started with background
+			if(!isExiting && !(buffer.isUntitled() && autosaveUntitled))
 			{
 				EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSING));
 			}
 
 			buffer.close();
 			DisplayManager.bufferClosed(buffer);
-			if(!isExiting)
+			// do not delete untitled buffer when started with background
+			if(!isExiting && !(buffer.isUntitled() && autosaveUntitled))
 			{
 				bufferSetManager.removeBuffer(buffer);
 				EditBus.send(new BufferUpdate(buffer,view,
