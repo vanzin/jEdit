@@ -813,7 +813,7 @@ options.abbrevs.remove.icon=22x22/actions/list-remove.png
 options.appearance.code=new AppearanceOptionPane();
 
 # List of available languages:
-available.lang=en de fr ja cs ru zh ko
+available.lang=en de fr ja cs ru zh ko zh-tw
 
 # It is encouraged to set the following labels in their own language
 # here (not in localized .props) to catch eyes of non-English users more
@@ -829,6 +829,8 @@ options.appearance.lang.cs=Česky
 options.appearance.lang.ru=Русский
 #Chinese
 options.appearance.lang.zh=中文
+#Taiwan Chinese
+options.appearance.lang.zh-tw=台灣中文
 #}}}
 
 #{{{ Context Menu pane
