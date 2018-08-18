@@ -1,0 +1,2708 @@
+###
+### jEdit user interface definitions,
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+### :encoding=UTF-8:
+###
+### Copyright (C) 1998, 2005 Slava Pestov
+###
+
+#{{{ jEdit core (jedit_gui.props)
+
+#{{{ Default user catalog file
+defaultCatalog=<?xml version="1.0"?>\n\
+	<!DOCTYPE MODES SYSTEM "catalog.dtd">\n\
+	\n\
+	<MODES>\n\
+	\n\
+	<!-- Add lines like the following, one for each edit mode you add: -->\n\
+	<!-- <MODE NAME="foo" FILE="foo.xml" FILE_NAME_GLOB="*.foo" /> -->\n\
+	\n\
+	</MODES>
+#}}}
+
+#{{{ Common strings
+common.ok=確定
+common.cancel=取消
+common.close=關閉
+common.error=錯誤
+common.apply=套用
+common.more=更多
+common.insert=插入
+common.add=新增
+common.remove=移除
+common.removeCurrent=移除目前項目
+common.moveUp=向上移動
+common.moveDown=向下移動
+common.clearAll=全部清除
+common.selectAll=全部選取
+common.selectNone=全部清除
+
+lineSep.unix=Unix (\\n)
+lineSep.windows=DOS/Windows (\\r\\n)
+lineSep.mac=MacOS (\\r)
+#}}}
+
+#{{{ Miscellaneous
+history.caption=輸入字元紀錄:
+
+action-set.jEdit=內建指令
+action-set.browser=檔案瀏覽器
+action-set.macros=巨集
+action-set.plugin=外掛: {0}
+
+macro-handler.beanshell.label=BeanShell 腳本
+
+save-layout-failed.message=無法儲存對接佈局.
+load-layout.title=載入對接佈局
+load-layout.message=選擇對接佈局:
+save-layout.title=儲存對接佈局
+save-layout.message=選擇儲存的對接佈局:
+#}}}
+
+#{{{ Tool bar
+view.search.find=搜尋:
+view.search.close-tooltip=隱藏搜尋條 (ESCAPE)
+
+view.action.prompt=操作:
+view.action.no-completions=沒有配對的操作
+view.action.close-tooltip=隱藏操作工具條 (ESCAPE)
+#}}}
+
+#{{{ Context menu
+view.context.customize=個人化選單...
+#}}}
+
+#{{{ System tray menu
+tray.newView.label=新視窗
+tray.newPlainView.label=新的空白視窗
+tray.exit.label=退出
+#}}}
+
+#{{{ Menu bar
+
+#{{{ File menu
+file.label=檔案(F)
+new-file.label=新建(N)
+new-file-in-mode.label=新建模式(M)
+new-file-in-mode.dialog.title=新檔案
+new-file-in-mode.dialog.message=編輯模式:
+open-file.label=開啟(O)...
+reload.label=重新載入(R)
+reload-all.label=重新載入所有(D)
+close-buffer.label=關閉(C)
+close-buffer.tooltip=關閉編輯面板
+global-close-buffer.label=關閉 (整個程式)
+global-close-buffer.tooltip=關閉所有視窗
+closeall-except-active.tooltip=關閉其他編輯面板
+closeall-except-active.label=關閉其他(O)
+closeall-bufferset.label=關閉所有(E)
+closeall-bufferset.tooltip=清除編輯面板
+bufferset-toggle-exclusive.label=切換內容(X)
+bufferset-toggle-exclusive.tooltip=一個緩存內容被訪問時，在其他非交叉區關閉它
+close-all.label=關閉所有
+close-all.tooltip=關閉所有視窗中的所有內容
+save.label=儲存(S)
+save-as.label=另存為(A)...
+save-a-copy-as.label=儲存一個副本(Y)...
+save-a-copy-as.tooltip=不改變當前內容路徑
+save-all.label=儲存全部(L)...
+print.label=列印(P)...
+print-preview.label=顯示列印預覽(V)...
+page-setup.label=頁面配置(G)...
+# Print selection not yet implemented
+#print-selection.label=列印選取區(T)...
+exit.label=退出(X)
+
+#{{{ Recent Files menu
+recent-files.label=最近檔案(F)
+recent-files.textfield.tooltip=在此輸入首碼過濾或者全部模式
+no-recent-files.label=沒有最近檔案
+clear-recent-files.label=清除最近檔案
+#}}}
+
+reload-encoding.label=重新載入編碼
+reload-encoding.error={0} 不是一個有效的編碼
+
+#}}}
+
+#{{{ Edit menu
+
+edit.label=編輯(E)
+undo.label=復原(U)
+redo.label=取消復原(R)
+cut.label=剪取(C)
+copy.label=複製(O)
+paste.label=貼上(P)
+select-all.label=全部選取(A)
+word-count.label=字數統計(W)...
+complete-word.label=字元自動填寫(M)
+expand-abbrev.label=擴展簡寫(X)
+goto-line.label=前往行(G)...
+
+#{{{ More Clipboard menu
+clipboard.label=更多的剪貼簿(B)
+cut-append.label=新增剪取(C)
+copy-append.label=新增複製(O)
+vertical-paste.label=垂直貼上(V)
+paste-previous.label=貼上之前內容(U)...
+paste-deleted.label=貼上刪除內容(D)...
+paste-special.label=貼上特殊...
+cut-string-register.label=剪取到寄存器(T)
+copy-string-register.label=複製到寄存器(P)
+paste-string-register.label=貼上寄存器(R)
+clear-string-register.label=清除寄存器
+cut-append-string-register.label=剪取追加到寄存器(N)
+copy-append-string-register.label=複製追加到寄存器(A)
+vertical-paste-string-register.label=垂直複製寄存器(S)
+view-registers.label=查看寄存器(W)
+#}}}
+
+#{{{ More Selection menu
+selection.label=更多選擇(S)
+select-none.label=不選(N)
+select-word.label=選擇單詞(W)
+select-line.label=選擇行(L)
+select-paragraph.label=選擇段落(P)
+invert-selection.label=置換選擇(I)
+toggle-multi-select.label=多項選擇(M)
+toggle-rect-select.label=矩形選擇(R)
+select-line-range.label=選擇行範圍(C)...
+#}}}
+
+#{{{ Text menu
+text.label=文字(T)
+delete-line.label=刪除行(D)
+delete-start-line.label=刪除行首(S)
+delete-end-line.label=刪除行尾(E)
+join-lines.label=連接行(J)
+delete-paragraph.label=刪除段落(P)
+format-paragraph.label=格式化段落(F)
+to-lower.label=轉換為小寫(L)
+to-upper.label=轉化為大寫(U)
+#}}}
+
+#{{{ Indent menu
+indent.label=縮排(I)
+indent-lines.label=行縮排(I)
+shift-left.label=左縮排(L)
+shift-right.label=右縮排(R)
+remove-trailing-ws.label=刪除尾隨空白(W)
+spaces-to-tabs.label=空白轉間隔(S)
+tabs-to-spaces.label=間隔轉空白(T)
+#}}}
+
+#{{{ Source menu
+source.label=原始碼(E)
+range-comment.label=範圍註解(R)
+line-comment.label=行註解(L)
+select-block.label=選擇程式碼塊(S)
+match-bracket.label=前往配對的括弧(M)
+prev-bracket.label=前往先前的括弧(P)
+next-bracket.label=前往下一個括弧(N)
+#}}}
+
+#}}}
+
+#{{{ Search menu
+search.label=搜尋(S)
+find.label=尋找(F)
+find-next.label=尋找前個(N)
+find-prev.label=尋找下個(V)
+search-in-open-buffers.label=尋找目前內容(B)...
+search-in-directory.label=尋找資料夾(D)...
+replace-in-selection.label=取代選擇(R)
+replace-and-find-next.label=取代並且尋找下一個(P)
+replace-all.label=取代全部(A)
+quick-search.label=增量搜尋欄(I)
+hypersearch.label=超級搜尋欄(H)
+quick-search-word.label=增量搜尋單詞(N)
+hypersearch-word.label=超級單純搜尋(Y)
+whole-word.label=完整單詞(W)
+ignore-case.label=忽略大小寫(C)
+regexp.label=正規表達式(X)
+hypersearch-results.label=超級搜尋結果
+#}}}
+
+#{{{ Markers menu
+markers.label=標記(M)
+add-marker.label=新增/刪除 標記(A)
+add-marker-shortcut.label=使用快捷鍵新增標記(W)
+remove-all-markers.label=移除所有標記(M)
+goto-marker.label=前往標記(G)
+select-marker.label=選擇到標籤(S)
+swap-marker.label=交換符號和標記(P)
+prev-marker.label=前往前個標記(P)
+next-marker.label=前往下個標記(N)
+no-markers.label=無標記
+markers.blank-line=[空行]
+#}}}
+
+#{{{ Folding menu
+folds.label=摺疊(O)
+collapse-fold.label=收起摺疊(C)
+expand-one-level.label=展開第一層摺疊(E)
+expand-fold.label=完全展開摺疊(F)
+collapse-all-folds.label=收起所有摺疊(A)
+expand-folds.label=展開層級摺疊(L)
+expand-all-folds.label=展開所有摺疊(X)
+select-fold.label=選擇摺疊(S)
+add-explicit-fold.label=新增明顯摺疊(D)
+narrow-to-fold.label=收縮到摺疊(R)
+narrow-to-selection.label=收縮到選擇區(W)
+parent-fold.label=前往父節點(G)
+prev-fold.label=跳轉至前個節點(P)
+next-fold.label=跳轉至下個節點(N)
+#}}}
+
+#{{{ View menu
+view.label=檢視(V)
+new-view.label=新建視窗(V)
+new-view.tooltip=新建有側邊工具的主視窗
+new-plain-view.label=新建空白視窗(W)
+new-plain-view.tooltip=新建少工具條和無側邊工具的主視窗
+close-view.label=關閉視窗(C)
+close-view.tooltip=關閉主視窗，如果這是唯一視窗，退出jEdit
+prev-buffer.label=前往上個內容(P)
+next-buffer.label=前往下個內容(N)
+recent-buffer.label=前往最近內容(R)
+toggle-buffer-switcher.label=切換內容(B)
+focus-buffer-switcher.label=聚焦內容切換(W)
+toggle-line-numbers.label=切換行號(L)
+toggle-statusbar.label=切換狀態欄(T)
+toggle-gutter.label=切換裝訂線(G)
+show-context-menu.label=顯示脈絡選單
+set-view-title.label=設定視窗標題...
+set-view-title.tooltip=設定主視窗標題以方便識別
+toggle-full-screen.label=切換全螢幕模式
+
+#{{{ Scrolling menu
+scrolling.label=滾動(G)
+scroll-to-current-line.label=滾動到當前行(T)
+scroll-and-center.label=滾動到插入符中心(S)
+center-caret.label=調整插入符到螢幕中心(C)
+scroll-up-line.label=向上滾動行(U)
+scroll-down-line.label=向下滾動行(D)
+scroll-up-page.label=向上滾動頁(P)
+scroll-down-page.label=向下滾動頁(o)
+#}}}
+
+#{{{ Splitting menu
+splitting.label=分割(S)
+split-horizontal.label=水平分割(H)
+split-vertical.label=垂直分割(V)
+unsplit-current.label=取消當前分割(U)
+unsplit.label=取消所有分割(A)
+resplit.label=恢復分割(R)
+prev-textarea.label=前往先前編輯區域(P)
+next-textarea.label=前往下一個編輯區域(N)
+buffersets.label=內容集(B)
+global-bufferset.label=全域內容集(G)
+global-bufferset.tooltip=全域編輯面板共享內容集
+view-bufferset.label=查看範圍內內容集(V)
+view-bufferset.tooltip=同一個視窗下的編輯面板共享內容集
+editpane-bufferset.label=編輯面板範圍內內容集(E)
+editpane-bufferset.tooltip=編輯面板擁有獨立內容集
+#}}}
+
+#{{{ Docking menu
+docking.label=側邊工具(D)
+docking.menu.label=側邊工具選單
+toggle-dock-areas.label=切換側邊工具區域(A)
+left-docking-area.label=前往左邊側邊工具區域(L)
+top-docking-area.label=前往頂部側邊工具區域(T)
+right-docking-area.label=前往右邊側邊工具區域(R)
+bottom-docking-area.label=前往底部側邊工具區域(B)
+focus-textarea.label=前往編輯區域
+close-docking-area.label=關閉當前側邊工具區域(C)
+layout-load.label=載入側邊工具佈局(L)...
+layout-save.label=儲存側邊工具佈局(S)...
+layout-load-current-mode.label=載入當前模式下側邊工具佈局
+layout-save-current-mode.label=儲存當前模式下側邊工具佈局
+#}}}
+
+#}}}
+
+#{{{ Utilities menu
+
+utils.label=工具集(U)
+vfs.browser.label=檔案瀏覽器(F)
+action-bar.label=動作欄(A)
+last-action.label=重複前個動作(P)
+buffer-options.label=內容選項(B)...
+global-options.label=全域設定(G)...
+combined-options.label=設定集(O)...
+
+#{{{ Recent Directories menu
+recent-directories.label=最近目錄(R)
+no-recent-dirs.label=無最近目錄
+#}}}
+
+#{{{ Favorites menu
+favorites.label=喜好(V)
+add-buffer-to-favorites.label=新增內容至喜好
+add-dir-to-favorites.label=新增目錄至喜好
+edit-favorites.label=編輯喜好
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=當前目錄(C)
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=jEdit 根目錄(J)
+#}}}
+
+#{{{ Settings Directory menu
+settings-directory.label=設定目錄(S)
+#}}}
+
+#{{{ BeanShell menu
+beanshell.label=BeanShell(E)
+eval.label=計算BeanShell表達式(E)...
+eval-for-selected-lines.label=計算選擇行(F)...
+eval-selection.label=計算所選擇區域(S)
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting.label=故障排除(T)
+log-viewer.label=活動紀錄(A)
+update-log.label=更新磁碟上的活動紀錄(U)
+io-progress-monitor.label=I/O程序(I)
+task-monitor.label=任務監視器(T)
+keyboard-tester.label=鍵盤測試...(K)
+memory-status.label=記憶體狀態...(M)
+reload-modes.label=重新載入編輯模式(R)
+#}}}
+
+#{{{ Quick options menu
+quick-options.label=快速設定(Q)
+edit-syntax-style.label=在插入符下編輯語法風格
+#}}}
+
+#}}}
+
+#{{{ Macros menu
+macros.label=巨集(C)
+new-macro.label=新建巨集
+record-macro.label=記錄巨集(R)...
+stop-recording.label=停止記錄(S)
+last-macro.label=重複前個巨集
+record-temp-macro.label=記錄暫時巨集(T)
+run-temp-macro.label=執行暫時巨集(P)
+run-other-macro.label=執行其它巨集(O)...
+rescan-macros.label=重新掃描巨集(N)
+no-macros.label=無巨集
+#}}}
+
+#{{{ Plugins menu
+plugins.label=外掛(P)
+plugin-manager.label=外掛管理員(M)...
+plugin-options.label=外掛選項(O)...
+no-plugins.label=無安裝外掛
+#}}}
+
+#{{{ Help menu
+help-menu.label=幫助(H)
+about.label=關於jEdit(A)...
+help.label=jEdit幫助(H)
+tip-of-the-day.label=每日小提示(T)
+userFeedback.label=提出建議...
+#}}}
+
+#}}}
+
+#{{{ Macro strings
+
+macro.temp.header=// This is a temporary macro. First, check over the\n\
+		  // commands to make sure this is what you intended.\n\
+		  // Then, to run this macro, switch to the buffer\n\
+		  // where you would like to execute it and press C+m C+p.
+
+macro.header=// This is a recorded macro. First, check over the\n\
+	     // commands to make sure this is what you intended. Then,\n\
+	     // save this buffer, and the macro should appear in the\n\
+	     // Macros menu.
+
+#}}}
+
+#{{{ Commands that don't appear in menus
+backspace-word.label=刪除前個單詞
+backspace-word-std.label=刪除前個單詞(刪除空白符)
+backspace-word-std-after.label=刪除前個單詞(刪除單詞後空白符)
+backspace.label=刪除前個字元
+delete-word.label=刪除下個單詞
+delete-word-std.label=刪除下個單詞(刪除空白符)
+delete.label=刪除下個字元
+document-end.label=前往結尾
+document-home.label=前往開頭
+end.label=結尾
+home.label=開頭
+smart-end.label=智慧結尾
+smart-home.label=智慧開頭
+insert-literal.label=逐字插入下個字元
+insert-newline.label=插入換行符
+insert-newline-indent.label=插入換行符和縮排
+insert-tab.label=插入標籤
+insert-tab-indent.label=插入標籤和縮排
+line-end.label=前往行尾
+line-home.label=前往行首
+next-char.label=前往下個字元
+next-line.label=前往下行
+next-page.label=前往下頁
+next-paragraph.label=前往下個段落
+next-word.label=前往下個單詞
+next-word-std.label=前往下個單詞(刪除空白符)
+overwrite.label=複寫模式
+prev-char.label=前往前個字元
+prev-line.label=前往前行
+prev-page.label=前往前頁
+prev-paragraph.label=前往前一段
+prev-word.label=前往前個單詞
+prev-word-std.label=前往前個單詞(刪除空白符)
+prev-word-std-after.label=前往前個單詞(刪除單詞後空白符)
+select-document-end.label=選擇至結尾
+select-document-home.label=選擇至開頭
+select-end.label=選擇智慧結尾位置
+select-home.label=選擇智慧開頭位置
+select-line-end.label=選擇行尾
+select-line-home.label=選擇行首
+select-next-char.label=選擇下個字元
+select-next-line.label=選擇下行
+select-next-page.label=選擇下頁
+select-next-paragraph.label=選擇下一段
+select-next-word.label=選擇下個單詞
+select-next-word-std.label=選擇下個單詞(刪除空白字元)
+select-prev-char.label=選擇前個字元
+select-prev-line.label=選擇前行
+select-prev-page.label=選擇前頁
+select-prev-paragraph.label=選擇前一段
+select-prev-word.label=選擇前個單詞
+select-prev-word-std.label=選擇前個單詞(刪除空白符)
+select-prev-word-std-after.label=選擇前個單詞(刪除單詞後空白符)
+select-visible-end.label=選擇最後一個可視行
+select-visible-home.label=選擇第一個可視行
+select-whitespace-end.label=選擇空白符尾
+select-whitespace-home.label=選擇空白符首
+toggle-line-separator.label=切換行分隔符
+toggle-word-wrap.label=切換自動換行
+visible-end.label=前往最後一個可視行
+visible-home.label=前往第一個可視行
+whitespace-end.label=前往空白符尾
+whitespace-home.label=前往空白符首
+#}}}
+
+#{{{ View stuff
+
+# Title
+view.title=jEdit -\u0020
+view.title.dirty=\ (modified)
+
+view.docking.close-tooltip=隱藏目前的側邊工具
+view.docking.menu-tooltip=側邊工具選項
+view.docking.menu-floating=浮動
+view.docking.menu-top=停靠在頂部
+view.docking.menu-left=停靠在左邊
+view.docking.menu-bottom=停靠在底部
+view.docking.menu-right=停靠在右邊
+view.docking.menu-clone=新的浮動視窗
+view.docking.menu-close=關閉
+view.docking.menu-undock=取消停靠
+
+view.docking.toggle.label={0} (切換)
+view.docking.float.label={0} (新的浮動視窗)
+
+directory.not-local=遠端檔案系統上無法列出目錄
+directory.no-files=沒有檔案
+
+#{{{ Gutter highlight
+view.gutter.marker.no-name=標記
+view.gutter.marker=標記: {0}
+#}}}
+
+#{{{ Status messages
+view.status.add-marker=為新標記創建快捷鍵? [{0}]
+view.status.auto-wrap=沒有找到搜尋的字元;在附近搜尋!
+view.status.bracket=配對行 {0}: {1}
+view.status.caret-tooltip=line, column[-virtual] (offset/length)
+view.status.copy-append-string-register=追加複製寄存器名? [{0}]
+view.status.copy-string-register=要複製的寄存器? [{0}]
+view.status.cut-append-string-register=追加剪取寄存器? [{0}]
+view.status.cut-string-register=要剪取的寄存器? [{0}]
+view.status.expand-folds=摺疊層次? [1-9]
+view.status.goto-marker=輸入標記快捷鍵以前往? [{0}]
+view.status.incomplete-abbrev=指定參數:{0}, 但是需要 {1}!
+view.status.insert-literal=逐字插入鍵?
+view.status.io-1=I/O: 一個操作在運行中
+view.status.io.done=輸入/輸出完成
+view.status.io=I/O: {0} 操作在進行中
+view.status.linesep-changed=行分隔符設定為 {0}
+view.status.linesep-tooltip=行分隔符 (點擊以改變)
+view.status.memory-tooltip=Java 堆內存: {0}Kb/{1}Kb
+view.status.mode-tooltip=當前編輯模式，摺疊模式，以及編碼
+view.status.multi-changed=多項選擇模式 {0,choice,0#off|1#on}
+view.status.multi-tooltip=多項選擇模式 (點擊以改變)
+view.status.narrow=調用"展開所有摺疊"已使所有編輯可見
+view.status.no-markers=沒有標記組
+view.status.no-registers=沒有定義寄存器
+view.status.overwrite-changed=重載模式是 {0,choice,0#off|1#on}
+view.status.overwrite-tooltip=複寫/插入模式指示器（點擊更改）
+view.status.paste-string-register=從寄存器貼上? [{0}]
+view.status.print=列印頁面 {0}
+view.status.quick-copy=快速複製模式-標記的編輯將取代選擇內容
+view.status.recording=正在記錄巨集
+view.status.rect-select-changed=矩形選擇內容是 {0,choice,0#off|1#on}
+view.status.rect-tooltip=矩形選擇模式 (點擊更換)
+view.status.replace-all=在{1}檔案中取代了{0}次出現
+view.status.search-not-found=所搜尋字元串沒有找到!
+view.status.select-marker=所選標記的快捷鍵? [{0}]
+view.status.swap-marker=切換光標到標記的快捷鍵? \
+	[{0}]
+view.status.vertical-paste-string-register=垂直貼上的寄存器 \
+	from? [{0}]
+view.status.wrap-changed=自動換行模式現在是 "{0}"
+view.status.wrap-tooltip=<html>自動換行模式 {0} (點擊以改變)</html>
+view.status.indent-tooltip=自動縮排指示（點擊更換）
+view.status.autoindent-changed=自動縮排狀態是"{0}"
+view.status.bufferset-tooltip=內容範圍是 {0}
+view.status.locked-changed=內容已 {0,choice,0#unlocked|1#locked}
+view.status.locked-tooltip=內容已 {0,choice,0#unlocked|1#locked} (點擊更改)
+wrap.none=禁用
+wrap.hard=硬
+wrap.soft=軟
+#}}}
+
+#{{{ Status bar component visibility
+
+#}}}
+
+#}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: 頁 {1}
+
+print-error.title=列印錯誤
+print-error.message=列印時發生錯誤:\n{0}
+print.dialog.title=列印
+print.dialog.pageSetupTitle=頁面設定
+print.dialog.Advanced=進階
+print.dialog.All_pages=所有頁面
+print.dialog.All_sheets=所有紙張
+print.dialog.At=在
+print.dialog.Automatic-Feeder=自動送料器
+print.dialog.Bottom=底部
+print.dialog.Cassette=紙匣
+print.dialog.Collate=校對
+print.dialog.Color=顏色
+print.dialog.Copies=副本
+print.dialog.Current_page=目前頁面
+print.dialog.Draft=草稿
+print.dialog.Even_sheets=偶數頁面
+print.dialog.Finishing=完成中
+print.dialog.Form-Source=自來源
+print.dialog.General=一般
+print.dialog.High=高等
+print.dialog.Ink=墨水
+print.dialog.Job=工作
+print.dialog.Job_Details=工作資訊
+print.dialog.Large-Format=大格式
+print.dialog.Layout=排版
+print.dialog.Left=左
+print.dialog.Low=低等
+print.dialog.Manual-Envelope=手動信封
+print.dialog.Margins=留白
+print.dialog.Medium=中等
+print.dialog.Monochrome=黑白
+print.dialog.Normal=普通
+print.dialog.Now=現在
+print.dialog.Odd_sheets=奇數頁面
+print.dialog.On_Hold=等候接收
+print.dialog.Only_print=只要列印
+print.dialog.Orientation=旋轉
+print.dialog.Output_tray=輸出文盤
+print.dialog.Page_Setup=頁面設定
+print.dialog.Page_ordering=頁面順序
+print.dialog.Pages=頁面
+print.dialog.Pages_per_side=每面的頁數
+print.dialog.Paper=紙張
+print.dialog.Paper_size=紙張大小
+print.dialog.Paper_source=紙張來源
+print.dialog.Print_Document=列印文件
+print.dialog.Priority=優先性
+print.dialog.Quality=品質
+print.dialog.Range=範圍
+print.dialog.Reverse=倒轉
+print.dialog.Right=右
+print.dialog.Selection=選擇
+print.dialog.Small-Format=小格式
+print.dialog.Top=上
+print.dialog.Tractor-Feeder=拖拉機送料器
+print.dialog.Two-sided=雙面
+print.dialog.Urgent=緊急
+print.dialog.a=工程 A
+print.dialog.accepting-jobs=接受工作中
+print.dialog.auto-select=自動選擇
+print.dialog.b=工程 B
+print.dialog.c=工程 C
+print.dialog.d=工程 D
+print.dialog.e=工程 E
+print.dialog.envelope=信封
+print.dialog.executive=執行性
+print.dialog.folio=對折
+print.dialog.invite-envelope=邀請函
+print.dialog.invoice=收入
+print.dialog.iso-designated-long=ISO 定義長度
+print.dialog.italian-envelope=義式信封
+print.dialog.italy-envelope=義式信封
+print.dialog.japanese-postcard=明信片 (JIS)
+print.dialog.landscape=景觀
+print.dialog.main=主要
+print.dialog.manual=手動
+print.dialog.middle=中間
+print.dialog.monarch-envelope=Monarch 信封
+print.dialog.na-5x7=5\" x 7\" 紙張
+print.dialog.na-6x9-envelope=6x9 信封
+print.dialog.na-7x9-envelope=6x7 信封
+print.dialog.na-8x10=8\" x 10\" 紙張
+print.dialog.na-9x11-envelope=9x11 信封
+print.dialog.na-9x12-envelope=9x12 信封
+print.dialog.na-10x13-envelope=10x13 信封
+print.dialog.na-10x14-envelope=10x14 信封
+print.dialog.na-10x15-envelope=10x15 信封
+print.dialog.na-legal=合法
+print.dialog.na-letter=信件
+print.dialog.na-number-9-envelope=9 號信封
+print.dialog.na-number-10-envelope=10 號信封
+print.dialog.na-number-11-envelope=11 號信封
+print.dialog.na-number-12-envelope=12 號信封
+print.dialog.na-number-14-envelope=14 號信封
+print.dialog.not-accepting-jobs=沒在接收工作
+print.dialog.one-sided=單面
+print.dialog.oufuko-postcard=雙面明信片 (JIS)
+print.dialog.personal-envelope=個人信封
+print.dialog.portrait=肖像
+print.dialog.quarto=四開
+print.dialog.reverse-landscape=倒轉景觀
+print.dialog.reverse-portrait=倒轉肖像
+print.dialog.side=面
+print.dialog.tabloid=小報
+print.dialog.top=上
+print.dialog.two-sided-long-edge=雙面,長邊
+print.dialog.two-sided-short-edge=雙面,短邊
+print.dialog.error.Invalid_left_margin=無效的左留白
+print.dialog.error.Invalid_top_margin=無效的上留白
+print.dialog.error.Invalid_left_andor_right_margin=無效的左或是右留白
+print.dialog.error.Invalid_top_andor_bottom_margin=無效的上或是下留白
+print.dialog.preview=預覽
+
+print.toggle-show-page-breaks.label=切換分頁標記
+
+printpreview.dialog.title=列印預覽
+printpreview.dialog.nextPage=下一頁
+printpreview.dialog.prevPage=前一頁
+printpreview.dialog.zoomin=放大
+printpreview.dialog.zoomout=縮小
+#}}}
+
+#{{{ Various dialog boxes
+
+#{{{ About dialog
+about.title=關於 jEdit
+about.version=jEdit {0} {1} 模式, 使用 {2} Java {3}
+about.mode.standalone=獨立
+about.mode.server=伺服器
+about.mode.server-background=伺服器背景
+about.navigate=按箭頭鍵來瀏覽有關編輯
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text.prefix=jEdit 開發人員是
+about.text.suffix=我也非常感謝使用者的評價，回饋以及BUG 報告.
+#}}}
+
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=外掛管理器
+#}}}
+
+#{{{
+largeBufferDialog.title=大量資料內容 {0}
+largeBufferDialog.message=由於內容太大，jEdit可能未支援\n\
+	由於語法突顯. 您應該考慮以下選項\n\
+	-保留所有突顯:jEdit的語法突顯將要正常工作, jEdit \n\
+	可能變得非常慢，這個選項不推薦.\n\
+	-脈落不敏感的語法突顯. 在這種情況下, jEdit 將要\n\
+	做快速突顯, 但是結果可能不完美. \n\
+	內容講在不檢查上下文的情況下被突顯\n\
+	語法可能不準確\n\
+	如果您在多行上有標記 (多行註釋, xml 標籤 ...)\n\
+	-使用jEdit的'編輯'模式 (無語法突顯)
+largeBufferDialog.fullSyntax=保留所有突顯
+largeBufferDialog.contextInsensitive=脈落不敏感的語法突顯
+largeBufferDialog.defaultMode=編輯編輯模式
+#}}}
+
+#{{{ I/O error dialog box
+ioerror.title=I/O 錯誤
+ioerror.caption=以下 {0} I/O 操作不能完成:
+ioerror.caption-1=以下 I/O 操作不能完成:
+
+ioerror={0}
+ioerror.directory-error=無法列出目錄: {0}
+ioerror.directory-error-nomsg=無法列出目錄.
+ioerror.encoding-error=檔案在編碼 "{0}"下無法\n\正確載入(一下資料可能丟失了) \n\
+	({1})\n\
+	嘗試選擇不同的編碼.\n\
+	您可以從目錄->重新載入編碼 下選擇.\n\
+	如果您想要系統自動完成， 將候選編碼加入\n\
+	"後備編碼列表" (在全部選項的編碼面板下).
+ioerror.write-encoding-error=無法對\n\
+	{3} 在列 {2} 行 {1} 的字元使用編碼 "{0}"進行編碼.
+ioerror.read-error=無法載入: {0}
+ioerror.write-error=無法儲存: {0}
+ioerror.unsupported-encoding-error={0} 字符集不支援您的JVM
+ioerror.open-directory=無法以內容形式開啟目錄.
+ioerror.save-directory=無法將內容儲存為目錄.
+ioerror.no-read=沒有足夠的權限載入檔案.
+ioerror.no-write=沒有足夠的權限儲存檔案.
+ioerror.write-error-readonly=無法儲存，檔案唯讀.
+ioerror.save-readonly-twostagefail=無法儲存，檔案唯讀並且無法進行兩階段儲存.
+ioerror.badurl=異常 URL: {0}
+ioerror.delete-error=無法刪除檔案.
+ioerror.rename-exists=無法複寫已存檔案 {0}.
+ioerror.rename-error=無法重命名為 {0}.
+ioerror.mkdir-error=無法創建目錄.
+ioerror.backup-failed=備份失敗,選擇"儲存與備份"選項.
+ioerror.backup-same-name=備份名與原檔案一致.
+ioerror.copy-self=破壞性操作，自我複製檔案，遭到拒絶: {0}
+
+vfs.not-supported.list="{0}"檔案系統下目錄無法瀏覽.
+vfs.not-supported.load="{0}"檔案系統下檔案無法開啟.
+vfs.not-supported.save="{0}"檔案系統下檔案無法儲存.
+
+vfs.overwrite-readonly.title=該檔案只讀
+vfs.overwrite-readonly.message=檔案 {0} 只讀.\n\
+	您是否仍然要儲存，重設只讀標籤\n\
+	將使用二階段儲存(在UNIX下重設檔案擁有者)
+
+vfs.twostageimpossible.title=二階段儲存不能使用
+vfs.twostageimpossible.message=二階段儲存不能使用,您仍然要儲存?\n\
+
+out-of-memory-error=沒有足夠的Java堆內存來完成\n\
+	該請求. 嘗試增加堆內存.\n\
+	\n\
+	改變堆內存的文檔在D\n\
+	 user guide的"jEdit Basics"章的"Buffers" 節裡.\n\
+
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=一個 I/O 錯誤發生d ({0})
+
+read-error.title=讀錯誤
+# {0} - the path name {1} - the error message
+read-error.message=檔案 {0}\n\
+	由於一個 I/O 錯誤無法載入.\n\
+	({1})
+
+write-error.title=寫錯誤
+# {0} - the path name {1} - the error message
+write-error.message=檔案 {0}\n\
+	由於一個 I/O 錯誤無法儲存.\n\
+	({1})
+
+directory-error.title=目錄錯誤
+# {0} - the path name {1} - the error message
+directory-error.message=目錄 {0}\n\
+	由於一個 I/O 錯誤無法列出.\n\
+	({1})
+
+directory-error-nomsg.title=目錄錯誤
+# {0} - the path name
+directory-error-nomsg.message=目錄 {0}\n\
+	c由於一個 I/O 錯誤無法列出.
+
+encoding-error.title=不兼容的編碼
+encoding-error.message=檔案 {0}\n\
+	無線在 "{1}" 編碼下載入.\n\
+	({2})\n\
+	\n\
+	要使用不同的編碼, 嘗試在\n\
+	檔案->開啟編碼選單 下的指令.\n\
+	\n\
+	如果您真的不知道要使用什麼編碼\n\
+	, 嘗試使用 "ASCII" 或者 "8859_1".
+
+open-directory.title=無法使用目錄
+open-directory.message={0} 是一個目錄.\n\
+	目錄無法開啟編輯.
+
+save-directory.title=無法刪除目錄
+save-directory.message={0} 是一個目錄.\n\
+	編輯內容無法儲存為其它目錄上.
+
+no-read.title=無法開啟檔案
+no-read.message=無法從 {0}讀取.\n\
+	這可能是由於您沒有足夠的權限.
+
+no-write.title=無法儲存檔案
+no-write.message=無法儲存到 {0}.\n\
+	這可能是由於您沒有足夠的權限.
+
+badurl.title=無效的URL
+# {0} - the URL
+# {1} - the error
+badurl.message=以下 URL 是無效的: {0}\n\
+	({1})
+#}}}
+
+#{{{ Go to line dialog
+goto-line.title=前往行
+goto-line.message=前往行({0} - {1}):
+#}}}
+
+#{{{ Word count dialog
+wordcount.title=字數統計
+# {0} - characters
+# {1} - words
+# {2} - lines
+wordcount.message=字元: {0}\n單詞: {1}\n行: {2}
+#}}}
+
+#{{{ Set marker dialog
+setmarker.title=設定標記
+setmarker.message=標記名稱:
+#}}}
+
+#{{{ File not saved dialog
+notsaved.title=檔案未儲存
+# {0} - file name
+notsaved.message=儲存改變到 {0}?
+#}}}
+
+#{{{ File changed, still reload dialog
+changedreload.title=檔案以更新
+changedreload.message=檔案 {0}\n\
+	在上次儲存時已改變; 如果您重新載入,\n\
+	改變將丟失. 繼續?
+#}}}
+
+#{{{ Autosave file exists dialog
+autosave-found.title=找到自動儲存檔案
+# {0} - autosave file name
+autosave-found.message=發現自動儲存檔案 {0}\n\! 這可能是由於jEdit在未儲存前崩潰了.\n\
+	您想要開啟自動儲存檔案嗎?
+
+autosave-loaded.title=已載入自動儲存檔案
+autosave-loaded.message=自動儲存檔案 {0}\n\
+	已載入. 您現在應該檢查它是否包含您未儲存的資料\n\
+	. 如果您想要儲存自動儲存檔案的改名，請儲存檔案\n\
+	否則, 選擇 檔案->重新載入.
+#}}}
+
+#{{{ Save all confirm dialog
+saveall.title=儲存所有內容
+saveall.message=您確定要儲存已改變的檔案嗎?
+#}}}
+
+#{{{ Reload all confirm dialog
+reload-all.title=載入所有內容
+reload-all.message=您確定要從硬盤重新載入所有內容嗎?\n\
+	所有開啟檔案的改變將要丟失!
+#}}}
+
+#{{{ Encoding prompt
+encoding-prompt.title=使用其它編碼開啟
+encoding-prompt.message=字元編碼使用:
+#}}}
+
+#{{{ Macro recording already in progress dialog
+already-recording.title=已經在記錄中
+already-recording.message=一個巨集記錄已經在進行中.
+#}}}
+
+#{{{ No temporary macro dialog
+no-temp-macro.title=沒有暫時巨集
+no-temp-macro.message=沒有記錄的暫時巨集.
+#}}}
+
+#{{{ Record macro dialog
+record.title=記錄巨集
+record.message=巨集名稱:
+#}}}
+
+#{{{ Some features don't work with -nosettings dialog
+no-settings.title=特色未啟用
+no-settings.message=jEdit初始化時使用了-無設定 開關.\n\
+	要使用這些特色，您必須在關閉這個開關的情況下啟動jEdit.
+#}}}
+
+#{{{ Some features don't work with the web start version
+no-webstart.title=特色未啟用
+no-webstart.message=該特色無法在WebStart版本中使用\n\
+#}}}
+
+#{{{ Search and replace dialog
+search.title=搜尋和取代
+
+search.find=搜尋:
+search.find.tooltip=PgUp/PgDown 或者右鍵單擊恢復以前查詢
+search.find.mnemonic=s
+search.replace=取代內容:
+search.replace.mnemonic=w
+search.string-replace-btn=編輯
+search.beanshell-replace-btn=返回一個BeanShell片段值
+
+search.settings=設定:
+search.keep=保留對話框
+search.keep.mnemonic=k
+search.word=全部單詞 (q)
+search.word.bar=全部單詞
+search.word.mnemonic=q
+search.case=忽略大小寫
+search.case.mnemonic=i
+search.regexp=正規表達式
+search.regexp.mnemonic=x
+search.hypersearch=超級搜尋
+search.hypersearch.mnemonic=h
+search.wrap=自動換行
+search.wrap.mnemonic=t
+
+search.direction=方向:
+search.back=後退
+search.back.mnemonic=b
+search.forward=前進
+search.forward.mnemonic=o
+
+search.fileset=搜尋範圍:
+search.selection=選擇
+search.selection.mnemonic=n
+search.current=當前內容
+search.current.mnemonic=c
+search.all=所有內容
+search.all.mnemonic=l
+search.directory=目錄:
+search.directory.mnemonic=d
+search.skipHidden=跳過隱藏檔案/備份檔案
+search.skipBinary=跳過二進制檔案
+search.skipHidden.mnemonic=h
+search.skipBinary.mnemonic=b
+
+search.directoryField=目錄:
+search.directoryField.mnemonic=y
+search.filterField=過濾器:
+search.filterField.mnemonic=f
+glob.tooltip={*.c,*.h} 是多個擴展
+search.subdirs=搜尋子目錄
+search.subdirs.mnemonic=u
+search.choose=選擇...
+search.choose.mnemonic=e
+search.synchronize=同步
+search.synchronize.mnemonic=z
+search.synchronize.tooltip=為當前內容的擴展/位置設定過濾器和目錄.
+search.findBtn=尋找
+search.findBtn.mnemonic=f
+search.replaceBtn=取代
+search.replaceBtn.mnemonic=p
+search.replaceAndFindBtn=取代尋找
+search.replaceAndFindBtn.mnemonic=r
+search.replaceAllBtn=取代所有
+search.replaceAllBtn.mnemonic=a
+
+# Beep when searching automatically wraps?
+
+#}}}
+
+#{{{ Keep searching dialog
+keepsearching.title=沒有更多配對結果
+keepsearching.message=沒有更多配對結果.\n\
+	從{0,choice,0#beginning|1#end}繼續搜尋?
+#}}}
+
+#{{{ HyperSearch results dialog
+hypersearch-results.title=超級搜尋結果
+hypersearch-results.result-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} 出現在 '{2,choice,1#1 file|1<{2,number,integer} 檔案中}'})
+hypersearch-results.open=開啟
+hypersearch-results.open-view=在新視窗中開啟
+hypersearch-results.open-plain-view=在新的空白視窗中開啟
+hypersearch-results.open-split=在新的個別視窗中開啟
+hypersearch-results.remove-node=移除節點
+hypersearch-results.new-search=從這裡開始新的搜尋
+hypersearch-results.expand-child-nodes=展開子節點
+hypersearch-results.collapse-child-nodes=摺疊子節點
+hypersearch-results.copy-to-clipboard=複製到剪貼簿
+hypersearch-results.redo=取消復原超級搜尋
+hypersearch-results.tree-view=切換樹視窗
+hypersearch-results.clear.label=移除所有節點
+hypersearch-results.stop.label=停止超級搜尋並返回當前結果
+hypersearch-results.multi.label=切換多個結果
+hypersearch-results.highlight.label=設定配對突顯樣式
+hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} 出現在'{2,choice,1#1 line|1<{2,number,integer} 行}'})
+hypersearch-results.searching=搜尋 "{0}"...
+hypersearch-results.no-results=沒有配對結果 "{0}".
+hypersearch-results.done= "{0}"的搜尋結果:
+
+hypersearch-status=Searching
+#}}}
+
+#{{{ HyperSearch too many results
+hypersearch.tooManyResults.label=過多結果
+hypersearch.tooManyResults.title=過多結果
+hypersearch.tooManyResults.message=您的搜尋返回 {0} \
+	個結果，並且沒有結束. 您是否想要停止搜尋 ?
+#}}}
+
+
+#{{{ Search and replace error dialog
+searcherror.title=搜尋取代錯誤
+# {0} - error message
+searcherror.message=進行該操作時出現一個錯誤.
+#}}}
+
+#{{{ Search and replace error dialog
+searcherror-bsh.title=搜尋取代錯誤
+# {0} - error message
+searcherror-bsh.message=進行該操作時出現一個錯誤.\n\
+	\n\
+	如果您不是要使用BeanShell表達式來取代字元串，確保將取代模式設定成“編輯”
+#}}}
+
+#{{{ Empty fileset error dialog
+empty-fileset.title=空檔案集
+empty-fileset.message=指定的檔案集沒有任何檔案.\n\
+	請確保檔案名過濾器和搜尋目錄(如果有的話)已正確設定.
+#}}}
+
+#{{{ Can only search local directories dialog
+remote-dir-search.title=未選擇本機目錄
+remote-dir-search.message=您選擇了非本機目錄進行搜尋.\n\
+	由於網絡延遲，這可能會非常慢.\n\
+	您確定要繼續嗎?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=沒有選擇任何內容
+search-no-selection.message=選擇一些文字或停用\n\
+	"在選擇範圍內搜尋"選項.
+#}}}
+
+#{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<whitespace>
+paste-previous.title=貼上之前內容
+paste-previous.caption=最近複製和貼上的編輯:
+paste-deleted.title=貼上已刪除內容
+paste-deleted.caption=最近刪除的編輯:
+#}}}
+
+#{{{ File changed on disk dialog
+filechanged-save.title=磁碟上檔案已改變
+filechanged-save.message=檔案{0}\n\
+	在磁碟上已經被其他程序改變. \n\
+	您確定要繼續儲存它?
+#}}}
+
+#{{{ File exists dialog
+fileexists.title=檔案已存在
+fileexists.message=檔案 {0} 已經存在. 您確定要\n\
+	複寫它?
+#}}}
+
+#{{{ Select line range dialog
+selectlinerange.title=選擇行範圍
+selectlinerange.caption=選擇行範圍:
+selectlinerange.start=開始行:
+selectlinerange.end=結束行:
+#}}}
+
+#{{{ View registers dialog
+view-registers.title=寄存器
+view-registers.caption=寄存器:
+view-registers.clipboard=$ (clipboard)
+view-registers.selection=% (selection)
+view-registers.none=未定義寄存器
+view-registers.register=寄存器:
+view-registers.contents=內容:
+view-registers.undefined=__UNDEFINED__
+#}}}
+
+#{{{ Close all buffers dialog
+close.title=未儲存的改變
+close.caption=以下內容存在未儲存的改變:
+close.selectAll=全部選取
+close.selectAll.mnemonic=a
+close.save=儲存選擇的內容
+close.save.mnemonic=s
+close.discard=拋棄選擇的內容
+close.discard.mnemonic=d
+#}}}
+
+#{{{ Close all confirm dialog
+closeothers.title=關閉其他內容
+closeothers.message=你確定要關閉所有其他的內容嗎?
+closeall.title=關閉所有內容
+closeall.message=你確定要關閉所有的內容嗎?
+#}}}
+
+
+#{{{ Files changed on disk dialog
+files-changed.title=磁碟上檔案已改變
+files-changed.caption=以下檔案在磁碟上被其他程式改變:
+files-changed.deleted=在磁碟上已刪除，儲存已重建:
+files-changed.changed-auto=自動重新載入:
+files-changed.changed=磁碟上檔案已改變:
+files-changed.changed-dirty-auto=內容雜亂，未重新載入:
+files-changed.changed-dirty=內容雜亂，磁碟上檔案已改變:
+files-changed.select-all=全部選取
+files-changed.select-all.mnemonic=a
+files-changed.reload=重新載入
+files-changed.reload.mnemonic=r
+files-changed.ignore=忽略
+files-changed.ignore.mnemonic=i
+#}}}
+
+#{{{ Abbrev dialogs
+add-abbrev.title=新增縮寫
+add-abbrev.mode=新增特定模式
+add-abbrev.global=新增全域化縮寫
+
+edit-abbrev.title=編輯縮寫
+
+edit-abbrev.duplicate.title=重複縮寫
+edit-abbrev.duplicate.message=\
+	該縮寫已存在\n\
+	\n\
+	您想要複寫當前縮寫?
+
+abbrev-editor.abbrev=縮寫:
+abbrev-editor.before=插入符前要插入的編輯:
+abbrev-editor.after=插入符後要插入的編輯:
+#}}}
+
+#{{{ XMode errors
+xmode-error.title=XML 解析錯誤
+# {2} is the column number, but it's not too useful so we don't show it
+xmode-error.message=在解析 {0}的時候發生錯誤, 行 {1}:\n\
+	{3}
+xmode-error.dtd=DTD 無法載入\n({0})
+xmode-error.termchar-invalid= AT_CHAR 屬性值無效 ({0})
+xmode-error.doctype-invalid=預期的模式的文檔類型, 發現 {0}
+xmode-error.empty-tag={0} 標籤不能為空
+xmode-error.token-invalid=token 類型 {0} 無效
+xmode-error.empty-keyword=關鍵詞編輯不能為空
+xmode-error.regexp=無效的正規表達式\n({0})
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR 和 HASH_CHARS 可能都未指定
+xmode-error.delegate-invalid=無效的代理: {0}
+#}}}
+
+#{{{ JARClassLoader errors
+plugin-error.title=外掛錯誤
+plugin-error.caption=以下外掛無法載入:
+plugin-error.caption-1=以下外掛無法載入:
+
+plugin-error.load-error=無法載入: {0}\n\
+	最可能的原因是 JAR 檔案已損壞; \n\
+	請嘗試重新安裝. 請參閱工具集->故障排除 - >活動紀錄\n\
+	以查看一個完整的堆疊跟蹤.
+plugin-error.start-error=無法開啟: {0}\n\
+	請嘗試安裝更新的版本.
+plugin-error.already-loaded=安裝了兩個相同外掛\n\
+	請嘗試移除其中一個
+plugin-error.dep-jdk=需要 Java {0} 或者更新版本, 但您只有版本 {1}.
+plugin-error.dep-jedit=需要 jEdit {0} 或者更新版本, 但您只有版本 {1}.\n\
+	從<http://www.jedit.org>下載jEdit最新版本.
+plugin-error.dep-plugin.no-version=需要版本 {0} \
+	或者 {1}的最新版本,\n\
+	但是 {1} 沒有安裝.
+plugin-error.dep-plugin.broken=需要 {0}, 但是 {0}\n\
+	無法.
+plugin-error.dep-plugin=需要版本 {0} 或者 {1}的最新版本, \
+	但您只有 {1} 的版本 {2}.
+plugin-error.dep-class=需要類 {0}.\n\
+	請嘗試安裝合適的外掛或者類庫.
+plugin-error.missing-jar=需要 JAR 檔案 {0}.\n\
+	該JAR檔案是該外掛的一部分，但是無法找到.\n\
+	請嘗試重新安裝該外掛.
+plugin-error.not-42=該外掛不支援動態載入.\n\
+	在刪除或者安裝該外掛後，您必須重啟jEdit.
+
+plugin-error-download.title=外掛錯誤
+plugin-error-download.message=下載外掛時出現錯誤,請嘗試其它鏡像\n{0}
+#}}}
+
+#{{{ Macro dialogs
+macro-input.title=巨集輸入
+macro-error.title=巨集錯誤
+macro-message.title=巨集消息
+macro-confirm.title=巨集確認
+#}}}
+
+#{{{ BeanShell stuff
+beanshell-error.title=BeanShell 錯誤
+beanshell-error.message=發生了一個 BeanShell 錯誤.
+
+beanshell-eval-input.title=測試BeanShell的表達式
+beanshell-eval-input.message=BeanShell 表達式:\n\
+	\n\
+	變數:\n\
+	view - 當前視窗實例\n\
+	editPane - 目前編輯窗格實例\n\
+	textArea - 目前的編輯區域實例\n\
+	buffer - 當前內容
+
+beanshell-eval.title=BeanShell 評估
+beanshell-eval.message={0}
+
+beanshell-eval-line.title=測試 BeanShell 表達式
+beanshell-eval-line.message=使用BeanShell 表達式對每個所選行 \
+	進行評估:\n\
+	\n\
+	變數:\n\
+	line - 行的索引，從該內容起始開始\n\
+	index - 行的索引，從選擇內容起始開始\n\
+	text - 行編輯\n\
+	view - 當前視窗實例\n\
+	editPane - 目前編輯窗格實例\n\
+	textArea - 目前的編輯區域實例\n\
+	buffer - 當前內容
+#}}}
+
+#{{{ Macro not recording dialog
+macro-not-recording.title=沒有記錄
+macro-not-recording.message=巨集當前沒有被記錄.
+#}}}
+
+#{{{ Large repeat count warning
+large-repeat-count.title=過多重複調用
+large-repeat-count.message=您確定要調用 "{0}" {1} 次?
+
+large-repeat-count.user-input.title=過多重複調用
+large-repeat-count.user-input.message=您確定要插入 "{0}" \
+	{1} 次?
+#}}}
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=錯誤摺疊模式
+folding-not-explicit.message=該指令只能在顯式摺疊模式下使用.
+#}}}
+
+#{{{ Memory status dialog box
+memory-status.title=Java 內存推疊
+memory-status.gc=垃圾內存釋放 {0} Kb.
+memory-status.use=消耗{0} Kb , 總共{1} Kb
+#}}}
+
+#{{{ Multiple I/O request errors
+buffer-multiple-io.title=I/O 錯誤
+buffer-multiple-io.message=每個內容在同一時間只能執行一個 input/output操作\n\
+	. 在啟動一個新的操作前,請等待當前操作結束\n\
+	(或者在I/O 進程監視器退出).\n\
+
+browser-multiple-io.title=I/O 錯誤
+browser-multiple-io.message=每個檔案瀏覽器在同一時間只能執行一個 input/output操作\n\
+	. 在啟動一個新的操作前,請等待當前操作結束\n\
+	(或者在I/O 進程監視器退出).\n\
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=自動行邊距
+format-maxlinelen.message=要使此命令工作，請將自動行邊距設定0
+#}}}
+
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=語法格式設定
+syntax-style-no-token.message=T沒有關聯的下的編輯插入符\
+語法風格配置。
+#}}}
+
+#{{{ View title dialog
+view.title.select=請為該視窗輸入標題:
+#}}}
+#}}}
+
+#{{{ Buffer options dialog
+buffer-options.title=內容操作
+buffer-options.caption=此對話框只為當前內容更改設定\n \
+。要改變編輯模式的預設設定，請參閱\n \
+全球“選項” - >“編輯窗格。
+buffer-options.loading-saving=正在載入和儲存
+buffer-options.lineSeparator=行分隔符:
+buffer-options.encoding=字元編碼:
+buffer-options.gzipped=GZIP(壓縮)磁碟上的檔案
+buffer-options.editing=編輯中
+buffer-options.mode=編輯模式:
+#}}}
+
+#{{{ Global options dialog
+options.title=選項
+options.title-template={0}: {1}
+options.jedit.label=jEdit
+
+# Option pane to show by default
+options.last=編輯中
+
+#{{{ Options groups
+
+#}}}
+
+#{{{ General pane
+options.general.label=一般選項
+options.general.lineSeparator=預設行分隔符:
+options.general.encoding=預設字元編碼:
+options.general.encodingAutodetect=可能時自動偵測檔案編碼
+options.general.checkModStatus=開啟的檔案在磁碟上是否更改:
+options.general.checkModStatus.nothing=什麼都不做
+options.general.checkModStatus.prompt=提示
+options.general.checkModStatus.reload=自動重新載入，並通知使用者
+options.general.checkModStatus.silentReload=自動重載，不通知使用者
+options.general.checkModStatusUpon=檢查檔案變化:
+options.general.checkModStatusUpon.focus=查看焦點 (檢查所有內容)
+options.general.checkModStatusUpon.all=查看焦點或者訪問內容
+options.general.checkModStatusUpon.visitBuffer=訪問內容
+options.general.checkModStatusUpon.none=沒有
+options.general.recentFiles=最近記憶的檔案:
+options.general.hypersearch.maxWarningResults=最大超級搜尋結果:
+options.general.sortRecent=對最近檔案列表排序
+options.general.hideOpen=在最近開啟中隱藏已開啟的檔案
+options.general.closeAllConfirm=確認要關閉全部
+options.general.saveCaret=在最近檔案列表儲存插入符號的位置
+options.general.persistentMarkers=儲存標記位置
+options.general.resetUndo=儲存時重新設定復原的歷史
+options.general.restore=啟動時恢復以前開啟的檔案
+options.general.restore.splits=恢復分欄設定
+options.general.restore.remote=... 新增遠程VFS檔案
+options.general.restore.cli=... 新增命令行指定的檔案名
+options.general.encodingDetectors=編碼自動探測器列表:
+options.general.fallbackEncodings=後備編碼列表:
+options.general.fallbackEncodings.tooltip=處理載入時編碼錯誤的編碼列表(空白符隔開)
+options.general.systrayicon=顯示系統托盤圖標
+#}}}
+
+#{{{ Abbreviations pane
+options.abbrevs.label=縮略語
+options.abbrevs.set=縮寫集:
+options.abbrevs.expandOnInput=空格鍵擴展縮略
+options.abbrevs.abbrev=縮略語
+options.abbrevs.expand=擴展
+options.abbrevs.add=新增...
+options.abbrevs.edit=編輯...
+options.abbrevs.remove=刪除
+#}}}
+
+#{{{ Appearance pane
+options.appearance.label=外觀
+options.appearance.iconTheme=圖標主題:
+options.appearance.fonts.antialias=消除鋸齒非編輯區域的字體
+options.appearance.lf=Swing 外觀:
+options.appearance.primaryFont=按鈕，選單和標籤字體:
+options.appearance.secondaryFont=列表和編輯欄位字體:
+options.appearance.helpViewerFont=查看幫助/瀏覽器編輯字體:
+options.appearance.history=記住歷史編輯欄位項:
+options.appearance.menuSpillover=選單移除前的項目數:
+options.appearance.startup.label=啟動選項
+options.appearance.showSplash=啟動時顯示啟動畫面
+options.appearance.showTips=啟動時啟動小提示
+options.appearance.experimental.label=實驗性選項
+options.appearance.experimental.caption=以下三個選項可能在 \
+	某些Java版本下無法正常工作.\n\
+	如果您遇到了問題，請關閉它們.
+
+options.appearance.textColors=在所有編輯組件中使用jEdit編輯區域顏色
+options.appearance.decorateFrames=使用Swing的外觀繪製視窗邊框
+options.appearance.decorateDialogs=使用Swing外觀繪製對話框邊框
+
+options.appearance.localization.section.label=語言設定
+options.appearance.usedefaultlocale.label=使用預設語言設定
+options.appearance.lang.label=語言 (重啟後有效)
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=右鍵選單
+options.context.caption=編輯區域中的右鍵選單項目:
+options.context.add=新增...
+options.context.remove=刪除
+options.context.moveUp=上移
+options.context.moveDown=下移
+options.context.reset=設定到預設
+options.context.add.title=新增到右鍵選單
+options.context.add.caption=新增到右鍵選單:
+options.context.add.separator=分隔符號
+options.context.add.action=指令或者巨集:
+options.context.includeOptionsLink.label=包含 "個人化選單..." 連結
+
+options.context.reset.dialog.title=設定到預設
+options.context.reset.dialog.message= 確定要將右鍵選單設定到預設?
+#}}}
+
+#{{{ Docking pane
+options.docking.label=側邊工具
+options.docking.title=視窗
+options.docking.dockPosition=停靠位置
+options.docking.selectFramework.label=停靠框架:
+options.docking.autoSaveModeLayout.label=自動儲存特定模式的側邊工具佈局
+options.docking.autoLoadModeLayout.label=自動載入特定模式的側邊工具佈局
+options.docking.selectSet.label=側邊工具設定t:
+options.docking.system-change.note=（實驗性）重新啟動jEdit更改生效
+#}}}
+
+#{{{ Editing pane
+options.editing.label=編輯中
+options.editing.defaultMode=預設編輯模式:
+options.editing.undoCount=撤消次數:
+options.editing.caption-0=\
+	要自定義模式特定的設定，從下面的選單選擇編輯模式。\n \
+	最初顯示全部預設值。
+options.editing.caption-1=\
+	取消選中“使用預設設定”以自定義特定模式設定.\n \
+	否則將使用"全部預設值"設定\n \
+options.editing.mode=更改設定模式:
+options.editing.global=<global defaults>
+options.editing.useDefaults=使用預設設定
+options.editing.filenameGlob=全部檔案名:
+options.editing.firstlineGlob=全部首行:
+options.editing.folding=摺疊模式:
+options.editing.collapseFolds=最初摺疊層次:
+options.editing.wrap=自動換行:
+options.editing.maxLineLen=自動邊距:
+options.editing.maxLineLen.tooltip=設定 0 為編輯區域寬度 (只有在軟換行下)
+options.editing.tabSize=間隔寬度:
+options.editing.indentSize=縮排寬度:
+options.editing.noWordSep=額外單詞字元:
+options.editing.camelCasedWords=分離“駝峰”格式單詞
+options.editing.noTabs=軟（用空格模擬）標籤
+options.editing.elasticTabstops=使用彈性製表位縮排
+options.editing.elasticTabstops.tooltip=單元格上下行中的列對齊製表符，製表符可以根據單元格寬頻增大或者縮小.
+options.editing.deepIndent=深縮排
+options.editing.autoIndent=自動縮排:
+options.editing.deleteMode=刪除此模式
+options.editing.addMode=新增模式
+options.editing.addMode.dialog.title=新增模式
+options.editing.addMode.dialog.browse=瀏覽
+options.editing.addMode.dialog.modeName=模式名稱:
+options.editing.addMode.dialog.modeFile=選擇模式檔案:
+options.editing.addMode.dialog.filenameGlob=全域檔名:
+options.editing.addMode.dialog.firstLineGlob=全域第一行:
+options.editing.addMode.dialog.warning.title=確認模式取代:
+options.editing.addMode.dialog.warning.message=此模式已存在,請問您想要取代它嘛?
+options.editing.addMode.dialog.warning.message1=無法複製模式檔案
+options.editing.addMode.dialog.Mode_name_may_not_be_empty.=模式名稱不能為空
+options.editing.addMode.dialog.Mode_file_may_not_be_empty.=模式檔案不能為空
+options.editing.addMode.dialog.Either_file_name_glob_or_first_line_glob_or_both_must_be_filled_in.=全域檔名或是全域第一行至少要有一個被填寫
+options.editing.addMode.dialog.errorTitle=錯誤
+options.editing.deleteMode.dialog.title=確認刪除模式
+options.editing.deleteMode.dialog.message=您確定要刪除此模式嗎? 此舉動無法復原.
+options.editing.deleteMode.dialog.message1=無法刪除模式檔案
+options.editing.deleteMode.dialog.message2=為了模式
+options.editing.modes.selectModes=選擇應該被顯示在模式詢問中的模式:
+options.editing.modes.available=可用的模式
+options.editing.modes.selected=選擇的模式
+options.editing.modes.available.tooltip=<html>在此欄的模式 <b>不會</b> 被顯示在選擇名單中,移到右邊以顯示 </html>
+options.editing.modes.selected.tooltip=<html>在此欄的模式會被顯示在jEdit's GUI的選擇名單中，移到左邊以隱藏</html>
+options.editing.modes.deleteSelected=刪除所選
+options.editing.modes.Delete_these_modes?=刪除這些模式?
+#}}}
+
+#{{{ Encodings pane
+options.encodings.label=編碼
+options.encodings.selectEncodings=選擇應顯示編碼對話框的編碼:
+options.encodings.available=可用的編碼
+options.encodings.selected=選定的編碼
+options.encodings.available.tooltip=<html>在此列的編碼會 <b>not</b> 顯示為編碼組合框的選項. 拖到右列來顯示它們. </html>
+options.encodings.selected.tooltip=<html>在此列的編碼會顯示為 jEdit的 GUI的編碼組合框的選項. 拖到左列來隱藏它們.</html>
+#}}}
+
+#{{{ Gutter pane
+options.gutter.label=裝訂線
+options.gutter.enabled=顯示裝訂線
+options.gutter.optionalComponents=可選的裝訂線組件
+options.gutter.lineNumbers=行號
+options.gutter.minLineNumberDigits=儲備行號最小的位數:
+options.gutter.selectionAreaEnabled=當行號未顯示時行選擇區域
+options.gutter.selectionAreaBgColor=選擇區域背景色:
+options.gutter.selectionAreaWidth=選擇區域的寬度（以像素為單位）:
+options.gutter.font=裝訂線字體:
+options.gutter.foreground=行號顏色:
+options.gutter.background=背景色:
+options.gutter.borderWidth=裝訂線邊框寬度:
+options.gutter.numberAlignment=行號對齊:
+options.gutter.interval-1=每\u0020 突顯
+options.gutter.interval-2=行:
+options.gutter.currentLineHighlight=突顯當前行:
+options.gutter.structureHighlight=現實結構範圍:
+options.gutter.markerHighlight=現實標記位置:
+options.gutter.foldColor=摺疊標記:
+options.gutter.focusBorderColor=聚焦裝訂線邊界:
+options.gutter.noFocusBorderColor=未聚焦的裝訂線邊界:
+options.gutter.foldStyle.label=摺疊樣式:
+options.gutter.foldStyleNames.Triangle=三角
+options.gutter.foldStyleNames.Square=矩形
+options.gutter.foldStyleNames.Circle=原型
+#}}}
+
+#{{{ Large files pane
+options.large-files.label=大型檔案
+options.editing.largefilemode.title=大型檔案模式
+options.editing.largefilemode=對於大型的檔案我該做什麼 (> {0} 個字元,或是行數 > {1}):
+options.editing.largefilemode.tooltip=<html>值可以被jEdit properties改變: <tt>largeBufferSize</tt> 與 <tt>longLineLimit</tt></html>
+options.editing.largefilemode.option.ask=<html><b>詢問</b> 當開啟大型檔案時該做什麼</html>
+options.editing.largefilemode.option.full=<html><b>保持完整的語法突顯</b> : jEdit's syntax highlight will work as usual, jEdit \
+                                               	may become<br/><b>very slow, this is not recommended</b></html>
+options.editing.largefilemode.option.limited=<html><b>Context insensitive syntax highlight</b>: In this case jEdit will \
+		do fast highlighting, but the<br/>result may not be perfect. The \
+		buffer is highlighted line by line without taking care of the<br/>context \
+		of the previous line. It is possible that the syntax is not accurate \
+		if you have<br/>tokens on multiple lines (multiline comments, xml tags ...) \
+		Soft wrap is also deactivated<br/><b>(best choice)</b></html>
+options.editing.largefilemode.option.nohighlight=不要語法突顯, 不要軟換行
+#}}}
+
+
+#{{{ Mouse pane
+options.mouse.label=滑鼠
+options.mouse.dragAndDrop=在編輯區域拖放
+options.mouse.joinNonWordChars=雙擊拖動加入非字母數字字元
+options.mouse.middleMousePaste=使用滑鼠中鍵快速複製
+options.mouse.ctrlForRectangularSelection=按下Ctrl鍵切換到矩形選擇
+options.mouse.singleClickToOpen=單次點擊開啟檔案或是目錄
+options.mouse.gutter.foldClick=點擊裝訂線:
+options.mouse.gutter.SfoldClick=按住Shift鍵單擊裝訂線:
+options.mouse.gutter.toggle-fold=摺疊/展開
+options.mouse.gutter.toggle-fold-fully=完全摺疊/展開
+#}}}
+
+#{{{ Plugin Manager pane
+options.plugin-manager.label=外掛管理器
+options.plugin-manager.updateMirrors=更新鏡像列表
+options.plugin-manager.workthread=更新鏡像列表 ...
+options.plugin-manager.downloadSource=下載外掛原始碼
+options.plugin-manager.deleteDownloads=安裝後從下載目錄刪除安裝檔案
+options.plugin-manager.mirror=首選下載鏡像:
+options.plugin-manager.location=外掛安裝在:
+options.plugin-manager.settings-dir=jEdit 配置目錄
+options.plugin-manager.app-dir=jEdit 程序目錄
+options.plugin-manager.none=預設外掛中心
+options.plugin-manager.disable-obsolete=禁用過時外掛
+options.plugin-manager.list-cache.minutes=為外掛列表快取: (minutes)
+options.plugin-manager.no-plugin-available=無可用的外掛
+options.plugin-manager.no-plugin-uptodate=所有的外掛已是最新
+#}}}
+
+#{{{ Printing pane
+options.print.label=列印
+options.print.font=列印字體:
+options.print.fontstyle=列印字體樣式:
+options.print.fontsize=列印字體大小:
+options.print.header=列印帶檔案名的頁眉
+options.print.footer=列印帶日期，時間和頁碼的頁腳
+options.print.lineNumbers=列印行號
+options.print.color=彩色列印
+options.print.tabSize=列印時標籤寬度:
+options.print.workarounds=Java錯誤的解決方法
+options.print.glyphVector=列印間距的解決方法（增加後台列印檔案大小）
+options.print.force13=使用舊的列印API（如果jEdit列印時掛載\
+啟用此）
+options.print.folds=列印摺疊區域
+options.print.useSystemDialog=使用系統列印詢問
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=代理伺服器
+options.firewall.http.enabled=使用HTTP代理伺服器
+options.firewall.http.host=HTTP代理主機:
+options.firewall.http.port=HTTP代理伺服器連接埠:
+options.firewall.http.user=使用者名:
+options.firewall.http.password=密碼:
+options.firewall.http.nonProxy=直接連接到:
+options.firewall.socks.enabled=使用SOCKS代理伺服器
+options.firewall.socks.host=SOCKS代理主機:
+options.firewall.socks.port=SOCKS代理伺服器的連接埠:
+#}}}
+
+#{{{ Save & Backup pane
+options.autosave=自動儲存選項
+options.backup=備份選項
+options.save-back.label=儲存和備份
+options.save-back.autosave=自動儲存頻率（秒）:
+options.save-back.autosave.tooltip=若要停用,設為0
+options.save-back.backups=最大備份數量:
+options.save-back.backups.tooltip=若要停用,設為0
+options.save-back.autosaveDirectory=自動儲存目錄:
+options.save-back.backupDirectory=備份目錄:
+options.save-back.backupDirectory.tooltip=若為空,使用內容目錄, $VARIABLE/prefixes allowed.
+options.save-back.backupPrefix=備份檔案名首碼:
+options.save-back.backupSuffix=備份檔案名尾碼:
+options.save-back.backupEverySave=每次儲存進行備份
+options.save-back.twoStageSave=兩個階段的儲存（更安全，但複位檔案需要某些檔案系統上的所有者權限）
+options.save-back.twoStageSave.tooltip=第1階段：創建一個臨時檔案，並儲存它。第2階段：重命名臨時檔案的真實檔案名。
+options.save-back.confirmSaveAll=“儲存全部內容“要求進行確認
+options.save-back.autosaveUntitled=自動儲存未命名的內容
+options.save-back.autosaveUntitled.tooltip=未命名的內容會被儲存與回覆在不同的jEdit執行期
+options.save-back.suppressNotSavedConfirmUntitled=不給未命名內容標記未混亂檔案.
+options.save-back.suppressNotSavedConfirmUntitled.tooltip=未命名的骯髒內容會被無預警關掉
+options.save-back.useMD5forDirtyCalculation=如果內容未改變，不標註內容紊亂.
+options.save-back.useMD5forDirtyCalculation.tooltip=在載入時比較內容長度以及MD5雜湊值, 以判斷已編輯的內容是否仍然混亂.
+options.save-back.saveAsUsesFSB=“另存為”預設到檔案瀏覽器目錄
+#}}}
+
+#{{{ Shortcuts pane
+options.shortcuts.deletekeymap.label=刪除
+options.shortcuts.deletekeymap.dialog.label=刪除鍵盤設置
+options.shortcuts.deletekeymap.dialog.title=刪除
+options.shortcuts.duplicatekeymap.label=重複
+options.shortcuts.duplicatekeymap.dialog.label=選擇新的鍵盤設置名稱
+options.shortcuts.duplicatekeymap.keymapalreadyexists.label=這個名字已經存在，請另外選擇
+options.shortcuts.duplicatekeymap.dialog.title=鍵盤設置名稱
+options.shortcuts.resetkeymap.label=複位
+options.shortcuts.resetkeymap.dialog.label=重置鍵盤設置
+options.shortcuts.resetkeymap.dialog.title=重置鍵盤設置
+options.shortcuts.keymap.label=鍵盤設置:
+options.shortcuts.keymap.tooltip=一群命名的自定義鍵盤快捷鍵
+options.shortcuts.label=快捷鍵
+options.shortcuts.select.label=編輯快捷鍵:
+options.shortcuts.select.tooltip=您可以選擇全部，巨集或外掛快捷方式
+options.shortcuts.name=指令
+options.shortcuts.actionset=動作集
+options.shortcuts.shortcut1=主快捷鍵
+options.shortcuts.shortcut2=備選快捷鍵
+options.shortcuts.filter.label=濾波器:
+options.shortcuts.filter.tooltip=只顯示包含該段文字的動作
+options.shortcuts.clear.label=清除
+
+grab-key.title=指定快捷鍵
+grab-key.caption=按 "{0}"所想要的快捷鍵, 然後按確定.
+grab-key.keyboard-test=輸入導致問題的按鍵
+grab-key.assigned-to=目前分配給: {0}
+grab-key.assigned-to.none=<none>
+grab-key.assigned-to.prefix={0} 前皺
+grab-key.clear=清楚
+grab-key.remove=刪除目前
+
+grab-key.remove-ask.title=刪除快捷鍵?
+grab-key.remove-ask.message=\
+	您未指定一個新的快捷鍵.\n\
+	您是否想要移除目前的快捷鍵?
+
+grab-key.duplicate-alt-shortcut.title=快捷鍵重複
+grab-key.duplicate-alt-shortcut.message=\
+	選擇的快捷鍵其他快捷鍵重複\n\
+	請選擇另一個。
+
+grab-key.duplicate-shortcut.title=快捷鍵重複
+grab-key.duplicate-shortcut.message=\
+	該快捷鍵已經分配給\n\
+	"{0}".\n\
+	\n\
+	您想要複寫它嗎?
+
+grab-key.prefix-shortcut.title=無效的快捷鍵
+grab-key.prefix-shortcut.message=\
+	您無法使用該快捷鍵, \n\
+	因為它是其他快捷鍵的前皺.\n\
+	請選擇另外一個.
+#}}}
+
+#{{{ Status bar pane
+options.status.label=狀態欄
+options.status.visible=顯示狀態欄
+options.status.plainview.visible=在外掛視窗顯示狀態欄
+options.status.foreground=狀態欄編輯:
+options.status.background=狀態欄背景:
+options.status.memory.foreground=內存指示器前景色:
+options.status.memory.background=內存指示器背景:
+options.status.edit.title=編輯狀態欄條目
+options.status.edit.labelRadioButton=標籤
+options.status.edit.widgetRadioButton=小部件
+options.status.edit.labelLabel=鍵入一個標籤:
+options.status.edit.widgetLabel=選擇一個部件:
+options.status.caret.linenumber=顯示插入線號
+options.status.caret.dot=顯示從行首開始的插入符偏離
+options.status.caret.virtual=顯示從行首開始的插入符虛擬偏離
+options.status.caret.offset=顯示從檔案首開始的插入符偏離
+options.status.caret.bufferlength=顯示檔案長度
+options.status.caret.title=光標位置顯示選項:
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=語法突顯
+options.syntax.object=語彙基元類型
+options.syntax.style=編輯樣式
+options.syntax.foldLine.1=摺疊的摺疊線，1級
+options.syntax.foldLine.2=摺疊的摺疊線，2級
+options.syntax.foldLine.3=摺疊的摺疊線，3級
+options.syntax.foldLine.0=摺疊的摺疊線，>3級
+#}}}
+
+#{{{ Text Area pane
+options.textarea.label=編輯區域
+options.textarea.font=編輯字體:
+options.textarea.fontSubst=可取代的其他字體
+options.textarea.fontSubst.tooltip=搜尋可能從已選字體丟失的字形的其它字體（而不是顯示矩形）
+options.textarea.fontSubstList=字體取代: 首選字體:
+options.textarea.fontSubstSystemFonts=字體取代：搜尋所有的系統字體
+options.textarea.fontSubstWarning.label=字體取代
+options.textarea.fontSubstWarning=沒有系統字體，您將需要首選字體.
+options.textarea.foreground=編輯顏色:
+options.textarea.background=背景顏色:
+options.textarea.caret=插入符:
+options.textarea.blinkCaret=閃爍
+options.textarea.blockCaret=塊
+options.textarea.thickCaret=粗
+options.textarea.selection=單項選擇:
+options.textarea.multipleSelection=多重選擇:
+options.textarea.selectionFg=選擇前景色:
+options.textarea.lineHighlight=突顯當前行
+options.textarea.structureHighlight=突顯配對元素:
+options.textarea.eolMarkers=行標記結束:
+options.textarea.wrapGuide=換行指南:
+options.textarea.pageBreaks=換頁:
+options.textarea.electricBorders=電動（自動滾動）邊界
+options.textarea.stdNextPrevWord=前往下一個/前一個單詞命令，刪除空白符
+options.textarea.antiAlias=消除鋸齒平滑編輯
+options.textarea.antiAlias.tooltip=在某些系統上減慢顯示
+options.textarea.fracFontMetrics=小數字體度量
+options.textarea.fracFontMetrics.tooltip=不推薦使用亞像素抗鋸齒
+options.textarea.stripTrailingEOL=隱藏最終的行（如果有的話）
+options.textarea.completeFromAllBuffers=所有開啟內容的完整單詞(預設是 \
+    在當前可見內容中限制搜尋)
+options.textarea.lineSpacing.label=	額外的垂直行間距（以像素為單位）:
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=工具欄
+options.toolbar.showToolbar=顯示工具欄
+options.toolbar.caption=工具欄顯示的按鈕:
+options.toolbar.add=新增...
+options.toolbar.edit=編輯...
+options.toolbar.remove=刪除
+options.toolbar.moveUp=向上移動
+options.toolbar.moveDown=向下移動
+options.toolbar.reset=重置到預設
+options.toolbar.edit.title=編輯工具欄條目
+options.toolbar.edit.caption=類型:
+options.toolbar.edit.separator=分隔符
+options.toolbar.edit.action=命令或巨集:
+options.toolbar.edit.builtin=使用內置的圖標:
+options.toolbar.edit.file=從檔案載入圖標:
+options.toolbar.edit.choose=選擇
+options.toolbar.edit.no-icon=沒有選擇圖標
+
+options.toolbar.reset.dialog.title=重置為預設值
+options.toolbar.reset.dialog.message=您確定要重置工具欄到安裝預設?
+#}}}
+
+#{{{ View pane
+options.view.label=視窗
+options.view.viewLayout=查看佈局
+options.view.floatableToolbars=流通工具欄
+options.view.alternateDockingLayout=備用停靠視窗位置
+options.view.alternateToolBarLayout=備用工具欄的位置
+options.view.abbreviatePaths=可能時，使用環境變數縮寫路徑
+options.view.showFullPath=在標題欄中顯示內容的完整路徑
+options.view.showSearchbar=總是顯示搜尋欄
+options.view.beepOnSearchAutoWrap=搜尋自動換行時蜂鳴
+options.view.showBufferSwitcher=顯示內容切換器
+options.view.bufferswitcher.sortBuffers=排序內容切換器
+options.view.bufferswitcher.sortByName=以檔名排序內容切換器
+options.view.bufferSwitcherMaxRowsCount=可見行內容切換:
+options.view.sortBuffers=排序內容集
+options.view.sortByName=按檔案名排序內容集, 而不是路徑名
+options.view.fullScreenIncludesMenu=在全螢幕模式下顯示選單欄
+options.view.fullScreenIncludesToolbar=在全螢幕模式下顯示工具欄
+options.view.fullScreenIncludesStatus=在全螢幕模式下顯示狀態欄
+options.bufferset.scope=內容範圍:
+#}}}
+
+
+
+#{{{ File System Browser panes
+options.browser.label=檔案瀏覽器
+
+options.browser.colors.label=顏色
+options.browser.colors.glob=全部檔案名
+options.browser.colors.color=顏色
+options.browser.colors.add=新增
+options.browser.colors.remove=刪除
+
+options.browser.general.label=一般
+options.browser.general.defaultPath=預設路徑:
+options.browser.general.defaultPath.favorites=喜歡
+options.browser.general.defaultPath.home=主目錄
+options.browser.general.defaultPath.last=最近訪問目錄
+options.browser.general.defaultPath.buffer=當前內容父目錄
+options.browser.general.defaultPath.working=jEdit進程的工作目錄
+options.browser.general.showMenubar=顯示選單欄
+options.browser.general.showToolbar=顯示工具欄
+options.browser.general.showIcons=顯示圖標
+options.browser.general.showHiddenFiles=顯示隱藏檔案
+options.browser.general.sortIgnoreCase=排序時忽略大小寫
+options.browser.general.sortMixFilesAndDirs=混合檔案和目錄
+options.browser.general.doubleClickClose=Double-點擊開啟的檔案關閉
+options.browser.general.currentBufferFilter=檔案對話框中篩選\
+當前內容擴展
+options.browser.general.useDefaultIcons=使用預設圖標
+#}}}
+
+#{{{ Browser Context Menu
+options.browser.custom.context.label=右鍵選單
+options.browser.custom.context.caption=自定義瀏覽器中的右鍵選單項目:
+#}}}
+
+#{{{ Font selector
+font-selector.title=字體選擇
+font-selector.family=字體集合:
+font-selector.size=字體大小:
+font-selector.style=字體樣式:
+font-selector.plain=平白
+font-selector.bold=加粗
+font-selector.italic=斜體
+font-selector.bolditalic=加粗傾斜
+font-selector.preview=預覽
+font-selector.long-text=The quick brown fox jumps over the lazy dog.
+#}}}
+
+#{{{ Color chooser, used by options.syntaxs
+colorChooser.title=選擇顏色
+#}}}
+
+#{{{ Style editor, used by options.syntaxs
+style-editor.title=樣式編輯器
+style-editor.tokenType=語彙基元類型:
+style-editor.italics=斜體
+style-editor.bold=加粗
+style-editor.fgColor=編輯顏色:
+style-editor.bgColor=背景顏色:
+#}}}
+
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=選項
+options.plugins.label=外掛
+options.no-plugins.label=沒有外掛選項
+#}}}
+
+#{{{ Help viewer
+helpviewer.title=jEdit幫助
+helpviewer.loading=載入...
+helpviewer.back.label=返回
+helpviewer.forward.label=前進
+helpviewer.copy-link.label=複製連結至剪貼簿
+
+helpviewer.toc.loading=載入...
+helpviewer.toc.label=目錄
+helpviewer.toc.welcome=歡迎來到 jEdit
+helpviewer.toc.readme=讀我檔案
+helpviewer.toc.changes=詳細更改紀錄
+helpviewer.toc.todo=待辦事項清單和已知錯誤
+helpviewer.toc.copying=GNU通用公共許可證
+helpviewer.toc.copying-doc=GNU自由文檔許可證
+helpviewer.toc.copying-apache=Apache許可證
+helpviewer.toc.copying-plugins=插件許可修正案
+helpviewer.toc.plugins=外掛
+helpviewer.toc.online-apidocs=jEdit的API參考（在線）
+helpviewer.search.label=搜尋
+helpviewer.search.caption=搜尋:
+helpviewer.searching=搜尋中...
+helpviewer.no-results=沒有結果
+#}}}
+
+#{{{ Tip of the day window
+tip.title=每日提示
+tip.caption=您知道嗎...
+tip.show-next-time=啟動時顯示提示
+tip.next-tip=下一個提示
+
+tip.not-found=檔案/提示 目錄沒有找到
+#}}}
+
+#{{{ Activity log
+log-viewer.title=活動紀錄
+log-viewer.caption=全文紀錄存儲在 {0}.
+log-viewer.copy=複製
+log-viewer.tail.label=文檔結尾
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=查看標記
+view-markers.title=標記
+#}}}
+
+#{{{ I/O progress monitor
+io-progress-monitor.title=I/O 進程監視器
+io-progress-monitor.caption={0} 掛載的請求.
+io-progress-monitor.idle=線程空閒
+io-progress-monitor.abort=退出
+
+#{{{ I/O abort dialog box
+abort.title=退出 I/O
+abort.message=您確定要中止當前正在執行的\n\
+輸入/輸出請求？如果中止儲存檔案，這可能\n\
+導致資料丟失。
+#}}}
+
+#}}}
+
+#{{{ Task  monitor
+task-monitor.title=任務監視器
+#}}}
+
+#{{{ VFS browser
+vfs.browser.title=檔案瀏覽器
+vfs.browser.longtitle=檔案瀏覽器
+vfs.browser.title.open=檔案瀏覽器 - 開啟
+vfs.browser.title.save=檔案瀏覽器 - 儲存
+vfs.browser.title.dialog=檔案瀏覽器 - 開啟
+vfs.browser.path=路徑:
+vfs.browser.path.mnemonic=p
+vfs.browser.filter=過濾器:
+vfs.browser.tree.loading=載入...
+
+vfs.browser.name=名稱
+vfs.browser.type=類型
+vfs.browser.type.file=檔案
+vfs.browser.type.directory=目錄
+vfs.browser.type.filesystem=檔案系統
+vfs.browser.status=狀態
+vfs.browser.status.no=沒有權限
+vfs.browser.status.ro=只讀
+vfs.browser.status.append=僅追加
+vfs.browser.status.rw=讀/寫
+vfs.browser.size=大小
+vfs.browser.modified=最後編輯
+
+vfs.browser.file_filter.glob=全部檔案過濾
+vfs.browser.file_filter.dir_only=僅目錄
+
+#{{{ Actions
+vfs.browser.browse-window.label=在新視窗中瀏覽
+vfs.browser.browse.label=瀏覽
+vfs.browser.close.label=關閉
+vfs.browser.copy-path.label=複製
+vfs.browser.delete.label=刪除...
+vfs.browser.home.label=主目錄
+vfs.browser.properties.label=屬性
+vfs.browser.properties.title=檔案/目錄 屬性
+vfs.browser.insert.label=插入
+vfs.browser.new-directory.label=新建目錄...
+vfs.browser.new-file.label=新建檔案
+vfs.browser.open.label=開啟
+vfs.browser.open-desktop.label=在桌面開啟
+vfs.browser.other-encoding-2.label=其它 ({0})...
+vfs.browser.other-encoding.label=其它...
+vfs.browser.reload.label=重新載入目錄
+vfs.browser.rename.label=重命名...
+vfs.browser.roots.label=根目錄
+vfs.browser.search-directory.label=在目錄中搜尋...
+vfs.browser.show-hidden-files.label=顯示隱藏檔案
+vfs.browser.synchronize.label=當前內容目錄
+vfs.browser.up.label=父目錄
+vfs.browser.paste.label=貼上
+vfs.browser.previous.label=前一個目錄
+vfs.browser.next.label=下一個目錄
+#}}}
+
+#{{{ Tool bar
+
+#}}}
+
+#{{{ Commands menu
+vfs.browser.commands.label=指令
+vfs.browser.commands.encoding.label=編碼
+vfs.browser.commands.encoding.auto-detect=自動檢測
+
+vfs.browser.open-in.label=開啟在
+vfs.browser.open-view.label=新建視窗
+vfs.browser.open-plain-view.label=新建空白視窗
+vfs.browser.open-split.label=新建分割
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=外掛
+vfs.browser.plugins.plugin-manager.label=外掛管理器...
+vfs.browser.plugins.plugin-options.label=外掛選項...
+vfs.browser.plugins.no-plugins.label=沒有外掛
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=喜好
+vfs.browser.favorites.add-to-favorites.label=新增到喜好
+vfs.browser.favorites.edit-favorites.label=編輯喜好
+vfs.browser.favorites.no-favorites.label=沒有喜好
+#}}}
+
+vfs.browser.dialog.open=開啟
+vfs.browser.dialog.save=儲存
+vfs.browser.dialog.choose-dir=選擇
+vfs.browser.dialog.filename=檔案名:
+vfs.browser.dialog.filename.mnemonic=f
+
+#{{{ Dialogs
+vfs.browser.bad-filter.title=無效過濾器
+vfs.browser.bad-filter.message=過濾器 {0} 無效 ({1})
+
+vfs.browser.recurse-favorites.title=不能新增喜好給自己
+vfs.browser.recurse-favorites.message=喜好列表無法新增給自己.
+
+vfs.browser.delete-confirm.title=刪除檔案確認
+vfs.browser.delete-confirm.message=您確定要刪除以下 {1}?
+
+vfs.browser.delete-favorites.title=從喜好刪除
+vfs.browser.delete-favorites.message=您確定要從喜好\
+	刪除以下檔案?
+
+vfs.browser.rename.title=重命名檔案
+vfs.browser.rename.message=為 {0}鍵入一個新名稱:
+
+vfs.browser.mkdir.title=新目錄
+vfs.browser.mkdir.message=新目錄名稱（或路徑）:
+#}}}
+
+#}}}
+
+#{{{ I/O status messages
+vfs.status.load=正在載入 {0}
+vfs.status.load-markers=正在載入 {0}的標記
+vfs.status.save=正在儲存 {0}
+vfs.status.save-markers=正在儲存 {0}的標記
+vfs.status.autosave=正在自動儲存 {0}
+vfs.status.listing-directory=正在列出 {0}
+vfs.status.deleting=正在刪除 {0}
+vfs.status.renaming=正在重命名 {0} 到 {1}
+#}}}
+
+#{{{ Plugin manager
+
+plugin-manager.title=外掛管理器
+
+plugin-manager.hide-libraries=隱藏套件庫
+
+plugin-manager.mgr-options=下載選項...
+plugin-manager.plugin-options=外掛選項...
+plugin-manager.done=關閉
+
+plugin-manager.remove-confirm.title=移除外掛
+plugin-manager.remove-confirm.message=您確定要刪除以下\
+	外掛嗎?
+
+plugin-manager.dependency.title=外掛依賴項
+plugin-manager.dependency.message=以下外掛需要{0}.\n\
+	取消 {0} 將要使下列外掛取消:
+
+plugin-manager.remove-dependencies.title=外掛依賴項
+plugin-manager.remove-dependencies.message=刪除外掛的需要以下外掛.\n\
+	刪除它們也將取消下面的外掛:
+
+plugin-manager.cleanup.label=清除
+plugin-manager.cleanup.title=清除外掛資料
+plugin-manager.cleanup.message=清除以下外掛的資料:
+
+plugin-manager.noOrphan.label=尋找獨立的
+plugin-manager.noOrphan.title=無獨立的jar檔案發現
+plugin-manager.noOrphan.message=jEdit的安裝有沒有獨立的jar檔案
+
+plugin-manager.findOrphan.label=尋找獨立的
+plugin-manager.findOrphan.title=發現獨立的 jars檔案
+plugin-manager.findOrphan.message=下列jar檔案不屬於任何外掛\n \
+刪除它們嗎？\n（警告，他們可能在一下外掛中動態聲明\n\
+  如JDBC驅動外掛）：
+
+install-plugins.depend.title=需要依賴項
+install-plugins.depend.message=一個或多個的外掛安裝\n\
+需要額外的外掛。如果您繼續他們將被自動\n \
+安裝。
+
+plugin-manager.status.loaded=已載入
+plugin-manager.status.disabled=不支援
+plugin-manager.status.not-loaded=沒有載入
+plugin-manager.status.error=錯誤
+
+plugin-manager.list-download-connect=連接到 plugins.jedit.org
+plugin-manager.list-download=從m plugins.jedit.org下載外掛列表
+plugin-manager.list-download.need-password.title=HTTP 代理需要密碼
+plugin-manager.list-download.need-password.message=HTTP 代理需要密碼.\n\
+	請在“下載選項”配置有效的使用者名/密碼.
+plugin-manager.list-download.disconnected.title=下載外掛列表錯誤
+plugin-manager.list-download.disconnected.message=外掛列表無法下載:\n\
+伺服器 {0} 無效. 請檢查您的網路連接...
+plugin-manager.list-download.generic-error.title=下載外掛列表錯誤
+plugin-manager.list-download.generic-error.message=下載外掛列表錯誤:\n\
+錯誤是 {0} - {1}
+plugin-manager.filterField=只顯示其名稱中包含這段文字的外掛
+
+#{{{ Plugin management
+manage-plugins.title=管理
+
+manage-plugins.info.name=名稱
+manage-plugins.info.version=版本
+manage-plugins.info.status=狀態
+manage-plugins.info.data=資料
+
+manage-plugins.data-size.unknown=<unknown>
+
+manage-plugins.remove=移除...
+manage-plugins.help=幫助...
+plugin-load-error.message=無法載入外掛
+plugin-load-error.title=外掛載入錯誤
+#}}}
+
+#{{{ Plugin installation
+install-plugins.title=安裝
+
+install-plugins.info.name=名稱
+install-plugins.info.size=大小
+install-plugins.info.releaseDate=發佈日期
+install-plugins.info.version=版本
+install-plugins.info.category=類別
+install-plugins.info.author=作者
+install-plugins.info.released=發佈了
+
+install-plugins.totalSize={0} 個外掛), 總大小: {1}
+install-plugins.select-all=全部選取
+install-plugins.install=安裝
+install-plugins.show-updates=顯示更新
+
+update-plugins.title=更新
+
+plugin-manager.progress=正在從 {1}下載 {0}
+plugin-manager.progress.title=正在安裝外掛
+plugin-manager.progress.stop=停止
+#}}}
+
+#{{{ Plugin remove error
+plugin-manager.remove-failed.title=移除失敗項
+plugin-manager.remove-failed.message=外掛 {0}\n\
+	無法被移除.
+#}}}
+
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=名稱
+fileprop.path=路徑
+fileprop.lastmod=最後編輯
+fileprop.size=大小
+fileprop.properties=屬性
+fileprop.readable=可讀
+fileprop.writeable=可寫
+fileprop.attribute=屬性
+fileprop.okBtn=確定
+fileprop.cancelBtn=取消
+fileprop.selectedFiles=已選檔案
+fileprop.selectedDirectories=已選目錄
+#}}}
+
+#{{{ Activity log viewer
+log-viewer.dialog.title=活動紀錄設定
+log-viewer.settings.label=設定
+log-viewer.message.label=消息顯示:
+log-viewer.message.debug.label=調試
+log-viewer.message.message.label=消息
+log-viewer.message.notice.label=注意
+log-viewer.message.warning.label=警告
+log-viewer.message.error.label=錯誤
+# This one should be actually placed in Debugging options, but
+# we don't have such a pane yet
+debug.beepOnOutput.label=輸出時蜂鳴
+#}}}
+
+logs-remove-all-errors.label=刪除所有錯誤
+
+taskmanager.remainingtasks.label={0} 個剩餘任務
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=內容編輯模式 (ex:java)
+statusbar.mode.sample=java
+statusbar.fold.label=內容摺疊處理程序 (ex:explicit)
+statusbar.fold.sample=顯式
+statusbar.encoding.label=內容編碼 (ex:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=內容換行模式 (ex:N)
+statusbar.wrap.sample=N
+statusbar.indent.label=自動縮排 (ex:F)
+statusbar.indent.sample=F
+statusbar.multiSelect.label=內容多重選擇模式 (ex:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=內容矩形選擇模式 (ex:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=Buffer overwrite (ex:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=內容行分割器 (ex:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=內存狀態 (ex:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=時鐘 (ex:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=內容集範圍 (ex:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=選擇範圍長度 (ex:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=磁碟上的最後修改日期 (ex:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+statusbar.task-monitor.label=任務監視器 (ex: 7 task(s))
+statusbar.task-monitor.tooltip=點擊查看正在運行的可停靠任務
+statusbar.task-monitor.sample=7 個任務
+statusbar.task-monitor.template={0} 個任務
+#}}}
+
+killring.load-memoryerror.message=<html>無法載入之前刪除的編輯. 請增加內存堆空間.<br>\
+  點擊 <b>開始</b> 以啟動jEdit,或者 <br><b>結束</b> 已結束並且改變您的設定. <br>您並且可以 <b>刪除這些歷史檔案</b> 再啟動 jEdit</html>
+killring.load-memoryerror.title=內存錯誤
+killring.start=開始
+killring.stop=停止
+killring.delete=刪除killring，並開始
+
+#}}}
+
+#{{{ Macros
+
+#{{{ Properties used by macros
+
+#{{{ common
+macro.rs.general.ErrorNotEditableDialog.title=寫權限
+macro.rs.general.ErrorNotEditableDialog.message=內容無法編輯!
+#}}}
+
+#{{{ Clipboard
+
+#{{{ Copy Lines Containing
+macro.rs.CopyLinesContaining.CopyLinesContaining.label=複製包含以下內容的行:
+macro.rs.CopyLinesContaining.LinesCopied.message=行已複製
+#}}}
+
+#{{{ Cut Lines Containing
+macro.rs.CutLinesContaining.CutLinesContaining.label=剪取包含以下內容的行:
+macro.rs.CutLinesContaining.LinesCut.message=行以剪取
+#}}}
+
+#}}}
+
+#{{{ Editing
+
+#{{{ Go to column
+macro.rs.GoToColumn.label=列 (在 1 和 {0}):
+#}}}
+
+# Go To Offset
+macro.rs.GoToOffset.label=分支 (0與{0}之間):
+
+#{{{ Key Words to Uppercase
+macro.rs.KeywordsToUpperCase.ConvertedKeywords.message=轉換關鍵詞為大寫
+#}}}
+
+#{{{ Mode Switcher
+macro.rs.BufferModeSwitcher.MainDialog.title=內容模式開關
+macro.rs.BufferModeSwitcher.EnterBufferMode.label=鍵入內容模式:
+macro.rs.BufferModeSwitcher.ChangingBufferMode.label=正在改變內容模式
+macro.rs.BufferModeSwitcher.To.label=到
+macro.rs.BufferModeSwitcher.Mode.label=模式
+macro.rs.BufferModeSwitcher.NotFound.label=未發現
+#}}}
+
+#{{{ Moves Lines Down - Move Lines Up
+macro.rs.MoveLines.NoMultipleSelection.error=行移動無法在多重選擇下執行.
+#}}}
+
+#}}}
+
+#{{{ Files
+
+#{{{ Browse Directory
+macro.rs.BrowseDirectory.DirectoryBrowse.label=要流量的目錄:
+#}}}
+
+#{{{ Buffer Switcher
+macro.rs.BufferSwitcher.OpenBuffers.label=開啟內容
+macro.rs.BufferSwitcher.QuickHelp.label=[ENTER] 轉換到; [SPACE] 轉換到, 保留對話框; [DEL] 關閉內容
+macro.rs.BufferSwitcher.Help1.label=內容切換巨集幫助:
+macro.rs.BufferSwitcher.Help2.label=DELETE 關閉選擇內容.
+macro.rs.BufferSwitcher.Help3.label=ENTER 切換到選定的內容，關閉對話框.
+macro.rs.BufferSwitcher.Help4.label=ESCAPE 關閉對話框.
+macro.rs.BufferSwitcher.Help5.label=SPACE 切換到選定的內容，不會關閉對話.
+macro.rs.BufferSwitcher.Help6.label=注意: 這個對話框只顯示一次
+#}}}
+
+#{{{ Delete Current
+macro.rs.DeleteCurrent.NotOnDisk.error=內容不存在於磁碟上.
+macro.rs.DeleteCurrent.DeleteNotSupport.error=不支援刪除.
+macro.rs.DeleteCurrent.Deleted.message=已刪除:
+#}}}
+
+#{{{ Glob Close
+macro.rs.GlobClose.GlobPattern.label=全部模式 (e.g. *.txt or /usr/include/*):
+macro.rs.GlobClose.ErrorGlobPattern.error=全部模式錯誤:
+#}}}
+
+#{{{ Next Dirty Buffer
+macro.rs.NextDirtyBuffer.NoOtherBufferDirty.message=沒有其它內容混亂
+macro.rs.NextDirtyBuffer.NoBufferDirty.message=無混亂內容
+#}}}
+
+#{{{ open Path
+macro.rs.OpenPath.PathName.label=路徑名:
+#}}}
+
+#{{{Toggle ReadOnly
+macro.rs.ToggleReadOnly.OnlyLocalFiles.error=這個巨集僅適用於本機檔案.
+macro.rs.ToggleReadOnly.OnlyWindowsUnixMacos.error=這個巨集僅適用於 Windows, Unix, 以及 MacOS X.
+#}}}
+
+#}}}
+
+#{{{ Interface
+
+#{{{ Decrease Font Size - Increase Font Size
+macro.rs.ChangeFontSize.FontSize.message=當前字體大小:
+#}}}
+
+#}}}
+
+#{{{ Java
+
+#{{{ Create Constructor
+macro.rs.CreateConstructor.UnevenNumber.message=奇數類型名稱和變數.
+#}}}
+
+#{{{ Get Package Name
+macro.rs.GetPackageName.NotWorking1.error=這個巨集在Java編譯時不工作
+macro.rs.GetPackageName.NotWorking2.error=使用'-jar' 命令行選項載入jEdit.
+macro.rs.GetPackageName.NotFind.error=找不到包名.
+#}}}
+
+#{{{ Java File Save
+macro.rs.JavaFileSave.InfiniteLoop.error=無限循環:
+#}}}
+
+#{{{Make Get and Set Methods
+macro.rs.MakeGetAndSetMethods.GenerateCode.label=生成代碼
+macro.rs.MakeGetAndSetMethods.CreateGetMethods.label=創建Get方法
+macro.rs.MakeGetAndSetMethods.CreateSetMethods.label=創建Set方法
+macro.rs.MakeGetAndSetMethods.CreateGetandSetMethods.label=創建Get以及Set方法
+#}}}
+
+#}}}
+
+#{{{ Misc
+
+#{{{ Buffer to HyperSearch Results - HyperSearch Results to Buffer
+macro.rs.HyperSearchResults.WindowNotOpen.error='超級搜尋結果“視窗未開啟.
+macro.rs.HyperSearchResults.NotMatch.error=沒有配對的超級搜尋.
+#}}}
+
+#{{{ Debug BufferSets
+macro.rs.DebugBuffersets.BuffersetDebugging.label=內容集調試中
+macro.rs.DebugBuffersets.BufferCount.label=內容數:
+macro.rs.DebugBuffersets.BufferList.label=內容列表
+macro.rs.DebugBuffersets.EndBufferList.label=內容列表結束
+macro.rs.DebugBuffersets.EditpaneList.label=編輯面板列表
+macro.rs.DebugBuffersets.EndEditpaneList.label=編輯面板列表結束
+#}}}
+
+#{{{ Display Abbreviations
+macro.rs.DisplayAbbreviations.Abbreviation.label=縮寫
+macro.rs.DisplayAbbreviations.Expansion.label=擴展
+macro.rs.DisplayAbbreviations.Close.label=關閉
+macro.rs.DisplayAbbreviations.WriteSet.label=寫設定
+macro.rs.DisplayAbbreviations.WriteAll.label=全寫
+macro.rs.DisplayAbbreviations.AbbreviationList.label=縮寫詞列表
+macro.rs.DisplayAbbreviations.CallingWTTNB.label=調用將表單寫入新內容
+macro.rs.DisplayAbbreviations.SizeVector.label=向量大小:
+macro.rs.DisplayAbbreviations.jEditAbbreviationTable.label=jEdit 縮寫表
+macro.rs.DisplayAbbreviations.AbbreviationSet.label=縮寫集:
+macro.rs.DisplayAbbreviations.AbbreviationExpansion.label=縮寫擴展
+macro.rs.DisplayAbbreviations.NoAbbreviations.label=<< 沒有縮略語 >>
+#}}}
+
+#{{{ Display Actions
+macro.rs.DisplayActions.jEditActionBar1.label=jEdit的動作欄可以通過“工具”選單中開啟而且通常
+macro.rs.DisplayActions.jEditActionBar2.label=分配給 C+ENTER 的鍵盤快捷鍵.
+macro.rs.DisplayActions.NoLabel.label=<沒有標籤>
+#}}}
+
+#{{{ Display Character Code
+macro.rs.DisplayCharacterCode.CharacterAtCaret.label=插入符號字元:
+#}}}
+
+#{{{ Display Shorcuts
+macro.rs.DisplayShortcuts.jEditShortcutTable.label=jEdit的鍵盤快捷鍵表
+macro.rs.DisplayShortcuts.Name.label=名稱
+macro.rs.DisplayShortcuts.Shortcut1.label=快捷鍵 - 1
+macro.rs.DisplayShortcuts.Shortcut2.label=快捷鍵 - 2
+macro.rs.DisplayShortcuts.Close.label=關閉
+macro.rs.DisplayShortcuts.WriteToBuffer.label=寫入到內容
+macro.rs.DisplayShortcuts.ShortcutList.label=鍵盤快捷鍵列表
+#}}}
+
+#{{{ Hex Convert
+macro.rs.HexConvert.Before.label=之前:
+macro.rs.HexConvert.After.label=之後:
+macro.rs.HexConvert.NotValidHex.label=不是有效的十六進制字元串.
+macro.rs.HexConvert.ByteToString.label=位元組轉化為字元串:
+#}}}
+
+#{{{ Make Bug Report
+macro.rs.MakeBugReport.OpeningActivityLog.error=開啟活動紀錄錯誤.
+macro.rs.MakeBugReport.UsefulEntriesForReport.label=活動紀錄條目在bug報告裡可能是有用的:\n\n.
+macro.rs.MakeBugReport.ReadingActivityLog.error=閲讀活動紀錄錯誤.
+#}}}
+
+#{{{ Run Script
+macro.rs.RunScript.SpecifyParametersForRunning.label=指定運行腳本下的參數
+macro.rs.RunScript.ScriptExecutionCancelled.message=腳本執行被取消.
+macro.rs.RunScript.FileNotScript.error=當前檔案可能不是是一個腳本.
+#}}}
+
+#{{{ Show Threads
+macro.rs.ShowThreads.Daemon.label=daemon
+macro.rs.ShowThreads.Priority.label=prio
+macro.rs.ShowThreads.NotStarted.label=未啟動
+macro.rs.ShowThreads.Interrupted.label=中斷
+macro.rs.ShowThreads.CloseUpdate.label=[Esc] 關閉      [U] 更新
+macro.rs.ShowThreads.CurrentThreads.label=當前進程
+#}}}
+
+#}}}
+
+#{{{ Properties
+
+#{{{ Insert Buffer Properties
+macro.rs.InsertBufferProperties.InsertLocalProperties.label=插入本機屬性至內容
+macro.rs.InsertBufferProperties.Properties.label=屬性:
+macro.rs.InsertBufferProperties.Insert.label=插入
+macro.rs.InsertBufferProperties.MustBeIn10Lines.message=註：內容局部屬性必須在內容的第一個或最後10行以被jEdit認可.
+#}}}
+
+#{{{ Look and Feel Properties
+macro.rs.LookAndFeelProperties.Listing.label=--列出的外觀屬性名稱--
+#}}}
+
+#{{{ System Properties
+macro.rs.SystemProperties.SystemProperties.label=系統屬性
+#}}}
+
+#}}}
+
+#{{{ Text
+
+#{{{ Add Prefix And Suffix
+macro.rs.AddPrefixAndSuffix.MainDialog.title=新增首碼和尾碼到選擇行
+macro.rs.AddPrefixAndSuffix.PrefixToAdd.label=要新增的首碼:
+macro.rs.AddPrefixAndSuffix.SuffixToAdd.label=要新增的尾碼:
+#}}}
+
+#{{{ Color Picker
+macro.rs.ColorPicker.ColorPicker.label=顏色選擇器
+#}}}
+
+#{{{ Insert Date
+macro.rs.InsertDate.InternetTime.label=網路時間
+#}}}
+
+#{{{ Insert Tag
+macro.rs.InsertTag.EnterNameTag.label=輸入標籤名稱:
+#}}}
+
+#{{{ Line_Filter
+macro.rs.LineFilter.MainDialog.title=行過濾器
+macro.rs.LineFilter.ignoreCaseCheckBox.label=忽略大小寫
+macro.rs.LineFilter.regexpPanelBorder.title=模式比較（正規表達式）
+macro.rs.LineFilter.processModeRadioButtonMatching.label=正在配對
+macro.rs.LineFilter.processModeRadioButtonNotMatching.label=沒有配對
+macro.rs.LineFilter.processModeOptionPanelBorder.title=行
+macro.rs.LineFilter.actionModeRadioButtonWrite.label=寫到新內容
+macro.rs.LineFilter.actionModeRadioButtonDelete.label=刪除
+macro.rs.LineFilter.actionModeOptionPanelBorder.title=動作
+
+macro.rs.LineFilter.DeleteActionDisabled.message=刪除不可用
+macro.rs.LineFilter.MultipleSelection.message=不支援多重選擇
+macro.rs.LineFilter.BlockSelection.message=不支援矩形選擇
+
+macro.rs.LineFilter.SummaryDeleted.label=行已刪除!
+macro.rs.LineFilter.SummaryWritten.label=行寫入新內容.
+
+macro.rs.LineFilter.ErrorRegexpDialog.title=無效的正規表達式
+macro.rs.LineFilter.ErrorRegexpDialog.message=正規表達式無效!
+#}}}
+
+#{{{ Next Char
+macro.rs.InsertTag.EnterCharacter.label=輸入一個字元
+#}}}
+
+#{{{ Reverse Lines
+macro.rs.ReverseLines.NotWorkingRectangularSelection.error=對不起，這個巨集在矩形選擇下不起作用.
+#}}}
+
+#{{{ Single Space Buffer
+macro.rs.SingleSpaceBuffer.NotDoubleSpaced.message=似乎沒有雙倍行距:
+macro.rs.SingleSpaceBuffer.Line.message=行
+macro.rs.SingleSpaceBuffer.NotBlank.message=不是空白.
+#}}}
+
+#}}}
+
+#}}}
+
+#{{{ Macro Names for Macros Menu (only original macros in original folders!)
+
+#{{{ C
+macros.folder.C.label=C
+
+C/Include_Guard.label=Include Guard
+C/Toggle_Header_Source.label=切換 Header Source
+#}}}
+
+#{{{ Clipboard
+macros.folder.Clipboard.label=剪貼簿
+
+Clipboard/Copy_Lines.label=複製行
+Clipboard/Copy_Lines_Containing.label=複製行包含
+Clipboard/Copy_Visible_Lines.label=複製可見行
+Clipboard/Cut_Lines.label=剪取行
+Clipboard/Cut_Lines_Containing.label=剪取行包含
+Clipboard/Paste_Indent.label=複製縮排
+#}}}
+
+#{{{ Editing
+macros.folder.Editing.label=正在編輯
+
+Editing/Duplicate_Lines_Above.label=複製以上行
+Editing/Duplicate_Lines_Below.label=複製以下行
+Editing/Go_to_Column.label=前往列
+Editing/Go_to_Offset.label=前往分支
+Editing/Greedy_Backspace.label=貪婪退格鍵
+Editing/Greedy_Delete.label=貪婪刪除
+Editing/Greedy_Left.label=貪婪左鍵
+Editing/Greedy_Right.label=貪婪右鍵
+Editing/Keywords_to_Upper_Case.label=關鍵字轉化為大寫
+Editing/Mode_Switcher.label=模式開關
+Editing/Move_Lines_Down.label=行下移
+Editing/Move_Lines_Up.label=行上移
+Editing/Open_Line_Above.label=開啟上行
+Editing/Open_Line_Below.label=開啟下行
+Editing/Toggle_Fold.label=切換摺疊
+#}}}
+
+#{{{ Emacs
+macros.folder.Emacs.label=Emacs
+Emacs/Emacs_Align_Decls.label=Emacs 聲明對齊
+Emacs/Emacs_Backward_Sentence.label=Emacs 向後句
+Emacs/Emacs_Capitalize_Word.label=Emacs 大寫單詞
+Emacs/Emacs_Center_Line.label=Emacs 中心線
+Emacs/Emacs_Ctrl-K.label=Emacs Ctrl-K
+Emacs/Emacs_Downcase_Word.label=Emacs 小寫單詞
+Emacs/Emacs_Exchange_Point_and_Mark.label=Emacs 交換點和標記
+Emacs/Emacs_Fixup_Whitespace.label=Emacs 修正空白
+Emacs/Emacs_Forward_Sentence.label=Emacs 正向句
+Emacs/Emacs_Insert_File.label=Emacs 插入檔案
+Emacs/Emacs_Kill_Line.label=Emacs 刪除行
+Emacs/Emacs_Kill_Region.label=Emacs 刪除區域
+Emacs/Emacs_Kill_Ring_Save.label=Emacs 刪除 Ring 儲存
+Emacs/Emacs_Kill_Sentence.label=Emacs 刪除句
+Emacs/Emacs_Next_Line.label=Emacs 下一行
+Emacs/Emacs_Open_Line.label=Emacs 開啟行
+Emacs/Emacs_Previous_Line.label=Emacs 前一行
+Emacs/Emacs_Set_Mark.label=Emacs 設定標記
+Emacs/Emacs_Set_Wrap.label=Emacs 設定自動換行
+Emacs/Emacs_Transpose_Chars.label=Emacs 轉置字元
+Emacs/Emacs_Transpose_Lines.label=Emacs 轉置行
+Emacs/Emacs_Upcase_Word.label=Emacs 單詞大寫
+Emacs/EmacsUtil.label=EmacsUtil
+#}}}
+
+#{{{ Files
+macros.folder.Files.label=檔案
+
+Files/Browse_Buffer_Directory.label=瀏覽內容目錄
+Files/Browse_Directory.label=瀏覽目錄
+Files/Buffer_Switcher.label=內容開關
+Files/Copy_Name_to_Clipboard.label=複製內容到剪貼簿
+Files/Copy_Path_to_Clipboard.label=複製路徑到剪貼簿
+Files/Delete_Current.label=刪除當前
+Files/Duplicate_Buffer.label=複製內容
+Files/Glob_Close.label=全部關閉
+Files/Insert_Selection.label=插入選擇
+Files/Next_Dirty_Buffer.label=下一個混亂內容
+Files/Open_Path.label=開啟路徑
+Files/Open_Selection.label=開啟選擇內容
+Files/Open_Selection_In_Desktop.label=在桌面開啟所選
+Files/Send_Buffer_To_Next_Split.label=內容移入下一個分割
+Files/Toggle_ReadOnly.label=切換隻讀
+#}}}
+
+#{{{ Interface
+macros.folder.Interface.label=接口
+
+Interface/Decrease_Font_Size.label=減小字體
+Interface/Increase_Font_Size.label=增大字體
+Interface/Open_Context_Menu.label=開啟右鍵選單
+Interface/Reset_TextArea.label=複製編輯區域
+Interface/Splitpane_Grow.label=分割窗格增長
+Interface/Toggle_Bottom_Docking_Area.label=切換底部停靠區域
+Interface/Toggle_Left_Docking_Area.label=切換左停靠區
+Interface/Toggle_Right_Docking_Area.label=切換右停靠區
+Interface/Toggle_Top_Docking_Area.label=切換頂部停靠區
+#}}}
+
+#{{{ Java
+macros.folder.Java.label=Java
+
+Java/Create_Constructor.label=創建建構式
+Java/Get_Class_Name.label=取得類別名稱
+Java/Get_Package_Name.label=取得套件名稱
+Java/Java_File_Save.label=Java存檔
+Java/Make_Get_and_Set_Methods.label=創見Get與Set方法
+Java/Preview_JavaDoc_Of_Current_Buffer.label=預覽目前內容的JavaDoc
+#}}}
+
+#{{{ Misc
+macros.folder.Misc.label=雜項
+
+Misc/Buffer_to_HyperSearch_Results.label=內容轉化為超級搜尋結果
+Misc/Debug_BufferSets.label=調試內容集
+Misc/Display_Abbreviations.label=顯示縮寫
+Misc/Display_Actions.label=顯示動作
+Misc/Display_Character_Code.label=顯示字元代碼
+Misc/Display_Shortcuts.label=顯示快捷鍵
+Misc/Evaluate_Buffer_in_BeanShell.label=在 BeanShell測試內容
+Misc/Generate_Encodings_List.label=產生編碼列表
+Misc/Generate_Modes_List.label=產生模式列表
+Misc/Hex_Convert.label=十六進制轉換
+Misc/HyperSearch_Results_to_Buffer.label=超級搜尋結果轉換為內容
+Misc/Make_Bug_Report.label=錯誤報告
+Misc/Run_Script.label=執行腳本
+Misc/Show_Threads.label=顯示線程
+#}}}
+
+#{{{ Properties
+macros.folder.Properties.label=屬性
+
+Properties/Create_Plugin_Announcement.label=創建外掛聲明
+Properties/Insert_Buffer_Properties.label=插入內容屬性
+Properties/jEdit_Properties.label=jEdit 屬性
+Properties/Look_and_Feel_Properties.label=外觀屬性
+Properties/System_Properties.label=系統屬性
+#}}}
+
+#{{{ Text
+macros.folder.Text.label=檔案
+
+Text/Add_Prefix_and_Suffix.label=新增首碼和尾碼
+Text/Color_Picker.label=顏色選擇器
+Text/Compose_Tag.label=構圖標籤
+Text/Duplicate_Line.label=重複行
+Text/Insert_Date.label=插入時間
+Text/Insert_Tag.label=插入標籤
+Text/Line_Filter.label=行過濾器
+Text/Next_Char.label=下一個字元
+Text/Reverse_Lines.label=反轉行
+Text/Reverse_Selection.label=反轉所選
+Text/Single_Space_Buffer.label=單空間內容
+#}}}
+
+#}}}
+
+#}}}
