@@ -29,6 +29,9 @@ or suffix (Dale Anson)
 {{{ Miscellaneous
 - Fixed all deprecation warnings produced when compiling with Java 9 (Dale
  Anson)
+ 
+- Adjusted Appearance option pane to allow setting "primary" and "secondary"
+fonts for all look and feels (Dale Anson) 
 
 }}}
 {{{ API Changes
