@@ -40,6 +40,7 @@ fonts for all look and feels (Dale Anson)
 }}}
 {{{ Editing
 
+- Update Java mode to support Java 10 "var" type. (Dale Anson)
 
 }}}
 

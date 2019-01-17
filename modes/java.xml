@@ -146,6 +146,8 @@
 			<KEYWORD3>interface</KEYWORD3>
 			<KEYWORD3>long</KEYWORD3>
 			<KEYWORD3>short</KEYWORD3>
+			<!-- added for Java 10. While 'var' is not technically a keyword, it is a type. -->
+			<KEYWORD3>var</KEYWORD3>
 			<!--}}}-->
 
 			<!--{{{ literals -->
@@ -260,7 +262,7 @@
 			<LABEL>@serialData</LABEL>
 		<!--<LABEL>@serialField</LABEL>-->
 			<LABEL>@since</LABEL>
-		<!--<LABEL>@throws</LABEL>-->
+			<LABEL>@throws</LABEL>
 			<LABEL>{@value}</LABEL>
 			<LABEL>@version</LABEL>
 
