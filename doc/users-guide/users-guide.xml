@@ -39,8 +39,8 @@
                </revision>
 
             <revision>
-              <revnumber>4.3 - 5.5</revnumber>
-              <date>2005-2017</date>
+              <revnumber>4.3 - 5.6</revnumber>
+              <date>2005-2019</date>
               <author><firstname>Alan</firstname><surname>Ezust</surname></author>
               <revremark> Maintainer. </revremark>
             </revision>

@@ -23,15 +23,16 @@ or suffix (Dale Anson)
 
 - Fix for bug # 2719, electric scroll not working with page up/down (Dale Anson)
 
-- Applied patch # 620, Chinese Taiwan localization from David Day (Dale Anson)
-
 }}}
 {{{ Miscellaneous
+
+- Applied patch # 620, Chinese Taiwan localization from David Day (Dale Anson)
+
 - Fixed all deprecation warnings produced when compiling with Java 9 (Dale
  Anson)
- 
+
 - Adjusted Appearance option pane to allow setting "primary" and "secondary"
-fonts for all look and feels (Dale Anson) 
+fonts for all look and feels (Dale Anson)
 
 }}}
 {{{ API Changes
