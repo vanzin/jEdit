@@ -1027,6 +1027,9 @@ public class MiscUtilities
 			return false;
 		}
 		
+		// drop the path for the remaining checks
+		filename = getFileName(filename);
+		
 		// check for Untitled-XX
 		if (filename.matches("Untitled-\\d+"))
 		{
@@ -1057,12 +1060,23 @@ public class MiscUtilities
 			return true;
 		}
 		
-		// if the user sets an empty prefix and suffix, then check if the filename ends with a number
-		if ((backupPrefix == null || backupPrefix.isEmpty() || backupSuffix == null || backupSuffix.isEmpty()) && filename.matches(".*?\\d+"))
+		// if the user sets an empty prefix and suffix, then check if the filename 
+		// ends with a number, but isn't a known mode suffix
+		if ((backupPrefix == null || backupPrefix.isEmpty() || backupSuffix == null || backupSuffix.isEmpty()))
 		{
-			return true;		
+			if (filename.matches(".*?\\d+")) 
+			{
+				Mode[] modes = org.gjt.sp.jedit.syntax.ModeProvider.instance.getModes();
+				for (Mode mode : modes) 
+				{
+					if (mode.acceptFile(null, filename)) 
+					{
+						return false;	
+					}
+				}
+				return true;
+			}
 		}
-
 		return false;
 	} //}}}
 
