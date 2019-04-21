@@ -1027,6 +1027,11 @@ public class MiscUtilities
 			return false;
 		}
 		
+		if (jEdit.getIntegerProperty("backups") <= 0)
+		{
+				return false;
+		}
+
 		// drop the path for the remaining checks
 		filename = getFileName(filename);
 		
