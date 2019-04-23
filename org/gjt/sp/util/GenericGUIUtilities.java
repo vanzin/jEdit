@@ -302,9 +302,9 @@ public class GenericGUIUtilities {
 				&& y + offsetY + win.getY() >= size.height)
 			{
 				if(point)
-					y = win.getHeight() - size.height - offsetY + extraOffset;
+					y -= size.height + extraOffset;
 				else
-					y = -size.height - 1;
+					y = win.getHeight() - size.height - offsetY + extraOffset;
 			}
 			else
 			{

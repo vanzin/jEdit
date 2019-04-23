@@ -23,6 +23,8 @@ or suffix (Dale Anson)
 
 - Fix for bug # 2719, electric scroll not working with page up/down (Dale Anson)
 
+- Fix for bug # 4073, corrected location of context menu popup (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
