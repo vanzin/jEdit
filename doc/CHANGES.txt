@@ -25,6 +25,8 @@ or suffix (Dale Anson)
 
 - Fix for bug # 4073, corrected location of context menu popup (Dale Anson)
 
+- Fix for bug # 4081, file browser splitter buttons not working (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
