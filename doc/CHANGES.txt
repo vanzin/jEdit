@@ -49,6 +49,8 @@ fonts for all look and feels (Dale Anson)
 
 - Added PlantUML mode, submitted by Andreas Studer. (Dale Anson)
 
+- Added HL7 mode, submitted by Thiemo Kellner. (Dale Anson)
+
 }}}
 
 }}}

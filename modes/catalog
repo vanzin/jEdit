@@ -226,6 +226,7 @@
 <MODE NAME="gsp"			FILE="jsp.xml"
         FILE_NAME_GLOB="*.{gsp}" />
 
+
 <MODE NAME="haskell"		FILE="haskell.xml"
         FILE_NAME_GLOB="*.hs" />
 
@@ -237,6 +238,9 @@
 
 <!-- Used by Andre Kaplan's Hex plugin -->
 <MODE NAME="hex"		FILE="hex.xml" />
+
+<MODE NAME="hl7v2" FILE="hl7v2.xml" 
+        FILE_NAME_GLOB="*.{hl7,hl7v2,hl7-2}" FIRST_LINE_GLOB="MSH*"/>
 
 <MODE NAME="hlsl"		FILE="hlsl.xml"
         FILE_NAME_GLOB="*.fx" />
@@ -439,7 +443,8 @@
 
 <MODE NAME="plaintex"		FILE="plaintex.xml" />
 
-<MODE NAME="plantuml" FILE="plantuml.xml" FILE_NAME_GLOB="*.{plant,plantuml,pu}"/>
+<MODE NAME="plantuml" FILE="plantuml.xml" 
+        FILE_NAME_GLOB="*.{plant,plantuml,pu}"/>
 
 <MODE NAME="PostgreSQL" FILE="pg-sql.xml"
               FILE_NAME_GLOB="*.{pg_sql,pg-sql}" />
