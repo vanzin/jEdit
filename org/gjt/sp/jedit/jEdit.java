@@ -118,13 +118,13 @@ public class jEdit
 	public static void main(String[] args)
 	{
 		StringList slargs = new StringList(args);
-		//{{{ Check for Java 1.8 or later
+		//{{{ Check for Java 11 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.8") < 0)
+		if(javaVersion.compareTo("11") < 0)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + '.');
-			System.err.println("jEdit requires Java 1.8 or later.");
+			System.err.println("jEdit requires Java 11 or later.");
 			System.exit(1);
 		} //}}}
 

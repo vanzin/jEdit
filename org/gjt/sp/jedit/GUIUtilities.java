@@ -571,6 +571,7 @@ public class GUIUtilities
 	 * @return a pretty label
 	 * @deprecated use {@link GenericGUIUtilities#prettifyMenuLabel(String)}
 	 */
+	@Deprecated
 	public static String prettifyMenuLabel(String label)
 	{
 		return GenericGUIUtilities.prettifyMenuLabel(label);
@@ -643,6 +644,7 @@ public class GUIUtilities
 	 * @since jEdit 5.1
 	 * @deprecated use {@link GenericGUIUtilities#setAutoMnemonic(AbstractButton)}
 	 */
+	@Deprecated
 	public static void setAutoMnemonic(AbstractButton button)
 	{
 		GenericGUIUtilities.setAutoMnemonic(button);
@@ -1192,6 +1194,7 @@ public class GUIUtilities
 	 * @param name The color name
 	 * @deprecated use {@link SyntaxUtilities#parseColor(String, Color)}
 	 */
+	@Deprecated
 	public static Color parseColor(String name)
 	{
 		return SyntaxUtilities.parseColor(name, Color.black);
@@ -1207,6 +1210,7 @@ public class GUIUtilities
 	 * @since jEdit 3.2pre6
 	 * @deprecated use {@link SyntaxUtilities#parseStyle(String, String, int, boolean)}
 	 */
+	@Deprecated
 	public static SyntaxStyle parseStyle(String str, String family, int size)
 		throws IllegalArgumentException
 	{
@@ -1321,6 +1325,7 @@ public class GUIUtilities
 	 * @since jEdit 4.2pre3
 	 * @deprecated use {@link GenericGUIUtilities#adjustForScreenBounds(Rectangle)}
 	 */
+	@Deprecated
 	public static void adjustForScreenBounds(Rectangle desired)
 	{
 		GenericGUIUtilities.adjustForScreenBounds(desired);
@@ -1574,6 +1579,7 @@ public class GUIUtilities
 	 * @param comp The component
 	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
 	 */
+	@Deprecated
 	public static void requestFocus(final Window win, final Component comp)
 	{
 		GenericGUIUtilities.requestFocus(win, comp);
@@ -1588,6 +1594,7 @@ public class GUIUtilities
 	 * @since jEdit 3.2pre8
 	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
 	 */
+	@Deprecated
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
 		return GenericGUIUtilities.isPopupTrigger(evt);
@@ -1599,6 +1606,7 @@ public class GUIUtilities
 	 * @since jEdit 4.1pre9
 	 * @deprecated use {@link GenericGUIUtilities#isMiddleButton(int)}
 	 */
+	@Deprecated
 	public static boolean isMiddleButton(int modifiers)
 	{
 		return GenericGUIUtilities.isMiddleButton(modifiers);
@@ -1610,6 +1618,7 @@ public class GUIUtilities
 	 * @since jEdit 4.1pre9
 	 * @deprecated use {@link GenericGUIUtilities#isRightButton(int)}
 	 */
+	@Deprecated
 	public static boolean isRightButton(int modifiers)
 	{
 		return GenericGUIUtilities.isRightButton(modifiers);
@@ -1622,6 +1631,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre18
 	 * @deprecated use {@link GenericGUIUtilities#getScreenBounds()}
 	 */
+	@Deprecated
 	public static Rectangle getScreenBounds()
 	{
 		return GenericGUIUtilities.getScreenBounds();
@@ -1641,6 +1651,7 @@ public class GUIUtilities
 	 * show/hide popups in response to mouse events anymore.
 	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int)}
 	 */
+	@Deprecated
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y)
 	{
@@ -1662,6 +1673,7 @@ public class GUIUtilities
 	 * @since jEdit 4.1pre1
 	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int, boolean)}
 	 */
+	@Deprecated
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y, boolean point)
 	{
@@ -1679,6 +1691,7 @@ public class GUIUtilities
 	 * @since jEdit 4.1pre5
 	 * @deprecated use {@link GenericGUIUtilities#isAncestorOf(Component, Component)}
 	 */
+	@Deprecated
 	public static boolean isAncestorOf(Component comp1, Component comp2)
 	{
 		return GenericGUIUtilities.isAncestorOf(comp1, comp2);
@@ -1691,6 +1704,7 @@ public class GUIUtilities
 	 * @param c The component
 	 * @deprecated use {@link GenericGUIUtilities#getParentDialog(Component)}
 	 */
+	@Deprecated
 	public static JDialog getParentDialog(Component c)
 	{
 		return GenericGUIUtilities.getParentDialog(c);
@@ -1742,6 +1756,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre17
 	 * @deprecated use {@link GenericGUIUtilities#setEnabledRecursively(Container, boolean)}
 	 */
+	@Deprecated
 	public static void setEnabledRecursively(Container c, boolean enabled)
 	{
 		GenericGUIUtilities.setEnabledRecursively(c, enabled);
@@ -1767,6 +1782,7 @@ public class GUIUtilities
 	 * @since jEdit 5.3
 	 * @deprecated use {@link GenericGUIUtilities#setButtonContentMargin(AbstractButton, Insets)}
 	 */
+	@Deprecated
 	public static void setButtonContentMargin(AbstractButton button, Insets margin)
 	{
 		GenericGUIUtilities.setButtonContentMargin(button, margin);
@@ -1780,6 +1796,7 @@ public class GUIUtilities
  	 * @param components The components to make the same size.
  	 * @deprecated use {@link GenericGUIUtilities#makeSameSize(Component...)}
  	 */
+ 	@Deprecated
 	public static void makeSameSize(Component... components) 
 	{
 		GenericGUIUtilities.makeSameSize(components);
@@ -1790,6 +1807,7 @@ public class GUIUtilities
 	 * JTable cell size, based on global defaults.
 	 * @deprecated use {@link GenericGUIUtilities#defaultTableCellSize()}
 	 */
+	@Deprecated
 	public static Dimension defaultTableCellSize()
 	{
 		return GenericGUIUtilities.defaultTableCellSize();
@@ -1800,6 +1818,7 @@ public class GUIUtilities
 	 * Column width for JTable, based on global defaults.
 	 * @deprecated use {@link GenericGUIUtilities#defaultColumnWidth()}
 	 */
+	@Deprecated
 	public static int defaultColumnWidth()
 	{
 		return GenericGUIUtilities.defaultColumnWidth();
@@ -1810,6 +1829,7 @@ public class GUIUtilities
 	 * Row height for JTable, based on global defaults.
 	 * @deprecated use {@link GenericGUIUtilities#defaultRowHeight()}
 	 */
+	@Deprecated
 	public static int defaultRowHeight()
 	{
 		return GenericGUIUtilities.defaultRowHeight();
