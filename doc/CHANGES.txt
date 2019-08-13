@@ -9,37 +9,37 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
-- Patch #617 - Fixed Untitled Issue with -background command line option
-  (Hrotkó Gábor)
+- Fix Untitled Issue with -background command line option
+  (Patch #617 - Hrotkó Gábor)
 
-- Fix for bug #4069, handle case where user has not set either a backup prefix
-or suffix (Dale Anson)
+- Handle case where user has not set either a backup prefix or suffix
+  (#4069 - Dale Anson)
 
-- Fix for bug # 4055, odd default colors for style editor (Dale Anson)
+- Fix odd default colors for style editor (#4055 - Dale Anson)
 
-- Fix for bug # 2412, Preview Javadoc macro NPE (Dale Anson)
+- Fix NullPointerException in Preview Javadoc macro (#2412 - Dale Anson)
 
-- Fix for bug # 2626, dockable buttons don't wrap correctly (Dale Anson)
+- Fix dockable buttons not wrapping correctly (#2626 - Dale Anson)
 
-- Fix for bug # 2719, electric scroll not working with page up/down (Dale Anson)
+- Fix electric scroll not working with page up/down (#2719 - Dale Anson)
 
-- Fix for bug # 4073, corrected location of context menu popup (Dale Anson)
+- Correct location of context menu popup (#4073 - Dale Anson)
 
-- Fix for bug # 4081, file browser splitter buttons not working (Dale Anson)
+- Fix file browser splitter buttons not working (#4081 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
 
-- Applied patch # 620, Chinese Taiwan localization from David Day (Dale Anson)
+- Chinese Taiwan localization from David Day (Patch #620 - Dale Anson)
 
-- Fixed all deprecation warnings produced when compiling with Java 9 (Dale
- Anson)
+- Fix all deprecation warnings produced when compiling with Java 9 (Dale Anson)
 
-- Adjusted Appearance option pane to allow setting "primary" and "secondary"
-fonts for all look and feels (Dale Anson)
+- Adjust Appearance option pane to allow setting "primary" and "secondary" fonts
+  for all look and feels (Dale Anson)
 
 }}}
 {{{ API Changes
+
 - New method IntegerArray.isEmpty() (Matthieu Casanova)
 
 }}}
@@ -47,9 +47,9 @@ fonts for all look and feels (Dale Anson)
 
 - Update Java mode to support Java 10 "var" type. (Dale Anson)
 
-- Added PlantUML mode, submitted by Andreas Studer. (Dale Anson)
+- Add PlantUML mode (Andreas Studer / Dale Anson)
 
-- Added HL7 mode, submitted by Thiemo Kellner. (Dale Anson)
+- Add HL7 mode (Thiemo Kellner / Dale Anson)
 
 }}}
 
