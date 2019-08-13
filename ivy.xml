@@ -51,6 +51,7 @@
 		<conf name="launch4j" description="Dependencies for Launch4j" visibility="private"/>
 		<conf name="scripting" description="Dependencies for Scripting" visibility="private"/>
 		<conf name="default-plugins" description="Shipped default plugins" visibility="private"/>
+		<conf name="appbundler" description="Dependencies for Appbundler" visibility="private"/>
 	</configurations>
 
 	<publications defaultconf="master"/>
@@ -91,5 +92,7 @@
 		<dependency org="org.bouncycastle" name="bcpg-jdk16" rev="1.46" conf="scripting"/>
 
 		<dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.0"/>
+
+		<dependency org="com.evolvedbinary.appbundler" name="appbundler" rev="1.0.4" conf="appbundler"/>
 	</dependencies>
 </ivy-module>

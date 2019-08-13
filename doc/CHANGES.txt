@@ -9,6 +9,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Upgrade OS X launcher stub to be compatible with newer Java versions
+  (#4077 - Björn "Vampire" Kautler)
+
 - Fix Untitled Issue with -background command line option
   (Patch #617 - Hrotkó Gábor)
 
