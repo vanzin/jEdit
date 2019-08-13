@@ -66,10 +66,10 @@
 		unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
 		      level="info"/>
-		<fail message="Ant 1.9.0 or newer is needed for jEdit to build, please install it and rerun (found Ant version: '${ant.version}')">
+		<fail message="Ant 1.9.8 or newer is needed for jEdit to build, please install it and rerun (found Ant version: '${ant.version}')">
 			<condition>
 				<not>
-					<antversion atleast="1.9.0"/>
+					<antversion atleast="1.9.8"/>
 				</not>
 			</condition>
 		</fail>
@@ -263,8 +263,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -294,8 +293,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -452,8 +450,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -842,8 +839,7 @@
 				       debuglevel="${config.build.debuglevel}"
 				       nowarn="${config.build.nowarn}"
 				       deprecation="${config.build.deprecation}"
-				       source="${target.java.version}"
-				       target="${target.java.version}"
+				       release="${target.java.version}"
 				       compiler="modern"
 				       encoding="UTF-8"
 				       includeAntRuntime="true">
@@ -1013,8 +1009,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
@@ -1564,8 +1559,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
@@ -1590,8 +1584,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
@@ -1616,8 +1609,7 @@
 		       debuglevel="${config.build.debuglevel}"
 		       nowarn="${config.build.nowarn}"
 		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
+		       release="${target.java.version}"
 		       compiler="modern"
 		       encoding="UTF-8"
 		       includeAntRuntime="true">
