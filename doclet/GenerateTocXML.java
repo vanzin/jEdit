@@ -19,46 +19,53 @@
 
 package doclet;
 
-import com.sun.javadoc.*;
-import com.sun.tools.doclets.standard.Standard;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.stream.Stream;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Name;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
 
-import java.io.*;
-import java.util.Arrays;
+import jdk.javadoc.doclet.DocletEnvironment;
+import jdk.javadoc.doclet.StandardDoclet;
 
-public class GenerateTocXML
+import static javax.tools.DocumentationTool.Location.DOCUMENTATION_OUTPUT;
+
+public class GenerateTocXML extends StandardDoclet
 {
 	public static final String OUT = "toc.xml";
 	public static final String HEADER = "<?xml version='1.0'?>\n<TOC>\n"
 		+ "<ENTRY HREF='overview-summary.html'><TITLE>jEdit API Reference</TITLE>";
 	public static final String FOOTER = "</ENTRY></TOC>\n";
 
-	public static boolean start(RootDoc root)
+	@Override
+	public String getName()
 	{
-		if (!Standard.start(root))
+		return super.getName() + " with jEdit ToC XML";
+	}
+
+	@Override
+	public boolean run(DocletEnvironment docEnv)
+	{
+		if (!super.run(docEnv))
 		{
 			return false;
 		}
-		try
+		try (Writer out = docEnv.getJavaFileManager()
+				.getFileForOutput(DOCUMENTATION_OUTPUT, "", OUT, null)
+				.openWriter())
 		{
-			String destDirName = null;
-			for (String[] option : root.options()) {
-				if ("-d".equals(option[0].toLowerCase())) {
-					destDirName = option[1];
-					break;
-				}
-			}
-			FileWriter out = new FileWriter(new File(destDirName, OUT));
 			out.write(HEADER);
-
-			PackageDoc[] packages = root.specifiedPackages();
-			for(int i = 0; i < packages.length; ++i)
-			{
-				processPackage(out,packages[i]);
-			}
-
+			docEnv.getIncludedElements().stream()
+					.filter(PackageElement.class::isInstance)
+					.map(PackageElement.class::cast)
+					.forEach(pkg -> processPackage(
+							out,
+							pkg,
+							docEnv.getIncludedElements().stream()
+									.filter(element -> pkg.equals(findPackage(element)))));
 			out.write(FOOTER);
-			out.close();
-
 			return true;
 		}
 		catch(IOException e)
@@ -68,56 +75,56 @@ public class GenerateTocXML
 		}
 	}
 
-	public static int optionLength(String option)
+	private static PackageElement findPackage(Element element)
 	{
-		return Standard.optionLength(option);
-	}
-
-	public static boolean validOptions(String[][] options, DocErrorReporter reporter)
-	{
-		return Standard.validOptions(options,reporter);
-	}
-
-	public static LanguageVersion languageVersion()
-	{
-		return Standard.languageVersion();
-	}
-
-	private static void processPackage(Writer out, PackageDoc pkg)
-		throws IOException
-	{
-		out.write("<ENTRY HREF='");
-		String pkgPath = pkg.name().replace('.','/') + "/";
-		out.write(pkgPath);
-		out.write("package-summary.html'><TITLE>");
-		out.write(pkg.name());
-		out.write("</TITLE>\n");
-
-		ClassDoc[] classes = pkg.allClasses();
-		String[] classNames = new String[classes.length];
-		for(int i = 0; i < classes.length; i++)
+		Element result = element;
+		while ((result != null) && !(result instanceof PackageElement))
 		{
-			classNames[i] = classes[i].name();
+			result = result.getEnclosingElement();
 		}
-		Arrays.sort(classNames);
-
-		for(int i = 0; i < classes.length; i++)
-		{
-			processClass(out,pkgPath,classNames[i]);
-		}
-
-		out.write("</ENTRY>");
+		return ((PackageElement) result);
 	}
 
-	private static void processClass(Writer out, String pkgPath, String clazz)
-		throws IOException
+	private static void processPackage(Writer out, PackageElement pkg, Stream<? extends Element> includedPkgContents)
 	{
-		out.write("<ENTRY HREF='");
-		out.write(pkgPath);
-		out.write(clazz);
-		out.write(".html'><TITLE>");
-		out.write(clazz);
-		out.write("</TITLE>\n");
-		out.write("</ENTRY>");
+		try
+		{
+			out.write("<ENTRY HREF='");
+			String pkgName = pkg.getQualifiedName().toString();
+			String pkgPath = pkgName.replace('.','/') + "/";
+			out.write(pkgPath);
+			out.write("package-summary.html'><TITLE>");
+			out.write(pkgName);
+			out.write("</TITLE>\n");
+			includedPkgContents.filter(TypeElement.class::isInstance)
+					.map(TypeElement.class::cast)
+					.map(TypeElement::getQualifiedName)
+					.map(Name::toString)
+					.sorted()
+					.forEach(className -> processClass(out, pkgPath, className.substring(pkgPath.length())));
+			out.write("</ENTRY>");
+		}
+		catch (IOException ioe)
+		{
+			throw new RuntimeException(ioe);
+		}
+	}
+
+	private static void processClass(Writer out, String pkgPath, String className)
+	{
+		try
+		{
+			out.write("<ENTRY HREF='");
+			out.write(pkgPath);
+			out.write(className);
+			out.write(".html'><TITLE>");
+			out.write(className);
+			out.write("</TITLE>\n");
+			out.write("</ENTRY>");
+		}
+		catch (IOException ioe)
+		{
+			throw new RuntimeException(ioe);
+		}
 	}
 }
