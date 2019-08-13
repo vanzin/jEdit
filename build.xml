@@ -16,9 +16,6 @@
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
 		  value="11"/>
-	<!-- based on http://packages.slackverse.org/?v=1&p=92 -->
-	<property name="slackware.target.java.version"
-		  value="1_8_0"/>
 
 	<!-- Various Paths -->
 	<property name="config.lib.dir"
@@ -1429,8 +1426,6 @@
 					value="${jedit.build.number}"/>
 				<filter token="jedit.version"
 					value="${jedit.version}"/>
-				<filter token="slackware.target.java.version"
-					value="${slackware.target.java.version}"/>
 				<filter token="target.java.version"
 					value="${target.java.version}"/>
 				<filter token="win.filename"

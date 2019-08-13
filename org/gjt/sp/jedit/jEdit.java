@@ -80,6 +80,8 @@ import org.gjt.sp.util.TaskManager;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
+
+import static java.lang.Integer.parseInt;
 //}}}
 
 /**
@@ -120,7 +122,8 @@ public class jEdit
 		StringList slargs = new StringList(args);
 		//{{{ Check for Java 11 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("11") < 0)
+		int javaMajorVersion = parseInt(javaVersion.split("\\.", 2)[0]);
+		if(javaMajorVersion < 11)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + '.');
@@ -215,7 +218,7 @@ public class jEdit
 				{
 					try
 					{
-						level = Integer.parseInt(arg.substring("-log=".length()));
+						level = parseInt(arg.substring("-log=".length()));
 					}
 					catch(NumberFormatException nf)
 					{
@@ -312,8 +315,8 @@ public class jEdit
 				if(!"b".equals(check))
 					throw new IllegalArgumentException("Wrong port file format");
 
-				int port = Integer.parseInt(in.readLine());
-				int key = Integer.parseInt(in.readLine());
+				int port = parseInt(in.readLine());
+				int key = parseInt(in.readLine());
 
 				// socket is closed via BeanShell script below
 				@SuppressWarnings("resource")
@@ -776,7 +779,7 @@ public class jEdit
 		{
 			try
 			{
-				return Integer.parseInt(value.trim());
+				return parseInt(value.trim());
 			}
 			catch(NumberFormatException nf)
 			{
@@ -853,7 +856,7 @@ public class jEdit
 
 			try
 			{
-				size = Integer.parseInt(sizeString);
+				size = parseInt(sizeString);
 			}
 			catch(NumberFormatException nf)
 			{
@@ -862,7 +865,7 @@ public class jEdit
 
 			try
 			{
-				style = Integer.parseInt(styleString);
+				style = parseInt(styleString);
 			}
 			catch(NumberFormatException nf)
 			{
@@ -4189,7 +4192,7 @@ public class jEdit
 				try
 				{
 					untitledCount = Math.max(untitledCount,
-						Integer.parseInt(buffer.getName()
+						parseInt(buffer.getName()
 						.substring(9)));
 				}
 				catch(NumberFormatException nf)
@@ -4501,12 +4504,12 @@ loop:
 						int line, col;
 						if(lineCol.length > 1)
 						{
-							line = Integer.parseInt(lineCol[0]);
-							col = Integer.parseInt(lineCol[1]);
+							line = parseInt(lineCol[0]);
+							col = parseInt(lineCol[1]);
 						}
 						else
 						{
-							line = Integer.parseInt(marker.substring(6));
+							line = parseInt(marker.substring(6));
 							col = 1;
 						}
 						pos = buffer.getLineStartOffset(line - 1) + (col - 1);

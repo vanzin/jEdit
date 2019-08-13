@@ -19,15 +19,15 @@ General jEdit documentation can be found in the 'doc' directory.
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
 
-  - A Java compiler of version 1.8, such as Oracle's javac which is
+  - A Java compiler of version 11, such as OpenJDK's javac which is
     included in the JDK. Get it from <http://www.java.com/download>
-    or from your package manager - e. g. openjdk-8-jdk.
+    or from your package manager - e. g. openjdk-11-jdk.
 
  For building the API documentation:
 
   - Sun's javadoc tool, which is included in the JDK.
     Get it from <http://www.java.com/download> or from your package
-    manager - e. g. openjdk-8-jdk.
+    manager - e. g. openjdk-11-jdk.
 
  For building the windows installer (for the final step):
 

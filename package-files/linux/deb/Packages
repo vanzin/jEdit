@@ -3,8 +3,8 @@ Version: 5:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Installed-Size: @deb.installed.size@
-Recommends: default-jre | openjdk-8-jre
-Suggests: default-jdk | openjdk-8-jdk, exuberant-ctags, cscope, global, ant
+Recommends: default-jre | openjdk-11-jre
+Suggests: default-jdk | openjdk-11-jdk, exuberant-ctags, cscope, global, ant
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Filename: @deb.repository.file@

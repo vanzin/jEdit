@@ -22,7 +22,7 @@
 								<answer>
 										<para>First, make sure you have a working installation of
 										the Java platform. To run jEdit, you will need a platform
-										package having a version number of at least 1.8. If you do not
+										package having a version number of at least 11. If you do not
 										have the Java platform, we recommend downloading the larger
 										<quote>Software Development Kit</quote> (SDK), instead of
 										the smaller <quote>Java Runtime Environment</quote> (JRE),
@@ -253,7 +253,7 @@
 
 								<answer>
 										<para>The latest version of jEdit requires at
-										least version 1.8 of the Java platform, and therefore may
+										least version 11 of the Java platform, and therefore may
 										not be compatible with 3rd party virtual machines.</para>
 								</answer>
 						</qandaentry>

@@ -38,7 +38,7 @@ import org.gjt.sp.util.Log;
 /**
  * @deprecated
  * Replaced by BufferPrinter1_7. All the workarounds for java 1.3 and 1.4 don't
- * matter any more since jEdit requires java 1.8 at minimum.
+ * matter any more since jEdit requires java 11 at minimum.
  */
 public class BufferPrinter1_4
 {

@@ -20,6 +20,8 @@ import java.util.Properties;
 import java.security.*;
 import java.net.URL;
 
+import static java.lang.Integer.parseInt;
+
 public class Install
 {
 	/**
@@ -60,12 +62,13 @@ public class Install
 		boolean isGUI = args.length == 0;
 
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.8") < 0)
+		int javaMajorVersion = parseInt(javaVersion.split("\\.", 2)[0]);
+		if(javaMajorVersion < 11)
 		{
 			errorAndExit(isGUI,
 					  "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
-					+"This installer requires Java 1.8 or later.");
+					+"This installer requires Java 11 or later.");
 		}
 
 		if(isRunningFromExclam())
