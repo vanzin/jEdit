@@ -32,7 +32,7 @@ package org.gjt.sp.jedit.bsh.org.objectweb.asm;
 public class Label {
 
   /**
-   * The code writer to which this label belongs, or <tt>null</tt> if unknown.
+   * The code writer to which this label belongs, or {@code null} if unknown.
    */
 
   CodeWriter owner;
@@ -110,7 +110,7 @@ public class Label {
   Label next;
 
   /**
-   * <tt>true</tt> if this basic block has been pushed in the basic block stack.
+   * {@code true} if this basic block has been pushed in the basic block stack.
    * See {@link CodeWriter#visitMaxs visitMaxs}.
    */
 
@@ -141,8 +141,8 @@ public class Label {
    * @param out the bytecode of the method.
    * @param source the position of first byte of the bytecode instruction that
    *      contains this label.
-   * @param wideOffset <tt>true</tt> if the reference must be stored in 4 bytes,
-   *      or <tt>false</tt> if it must be stored with 2 bytes.
+   * @param wideOffset {@code true} if the reference must be stored in 4 bytes,
+   *      or {@code false} if it must be stored with 2 bytes.
    * @throws IllegalArgumentException if this label has not been created by the
    *      given code writer.
    */
@@ -214,7 +214,7 @@ public class Label {
    * @param owner the code writer that calls this method.
    * @param position the position of this label in the bytecode.
    * @param data the bytecode of the method.
-   * @return <tt>true</tt> if a blank that was left for this label was to small
+   * @return {@code true} if a blank that was left for this label was to small
    *      to store the offset. In such a case the corresponding jump instruction
    *      is replaced with a pseudo instruction (using unused opcodes) using an
    *      unsigned two bytes offset. These pseudo instructions will need to be

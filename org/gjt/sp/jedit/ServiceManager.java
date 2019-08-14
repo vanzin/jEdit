@@ -68,7 +68,7 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
  * </ul>
  *
  * To see all of the services offered by jEdit core, see
- * jEdit's <tt>services.xml</tt> file.
+ * jEdit's {@code services.xml} file.
  * Some core services are listed below:
  * <ul>
  * <li>{@link org.gjt.sp.jedit.buffer.FoldHandler}</li>
@@ -282,7 +282,7 @@ public class ServiceManager
      * @return the service instance
      * @since jEdit 4.4pre1
      */
-    @SuppressWarnings({"unchecked"}) 
+    @SuppressWarnings({"unchecked"})
 	public static <E> E getService(Class<E> clazz, String name)
 	{
 		return (E) getService(clazz.getName(), name);

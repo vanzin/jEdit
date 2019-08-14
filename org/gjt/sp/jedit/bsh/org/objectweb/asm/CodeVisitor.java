@@ -191,8 +191,8 @@ public interface CodeVisitor {
    * @param min the minimum key value.
    * @param max the maximum key value.
    * @param dflt beginning of the default handler block.
-   * @param labels beginnings of the handler blocks. <tt>labels[i]</tt> is the
-   *      beginning of the handler block for the <tt>min + i</tt> key.
+   * @param labels beginnings of the handler blocks. {@code labels[i]} is the
+   *      beginning of the handler block for the {@code min + i} key.
    */
 
   void visitTableSwitchInsn (int min, int max, Label dflt, Label labels[]);
@@ -202,8 +202,8 @@ public interface CodeVisitor {
    *
    * @param dflt beginning of the default handler block.
    * @param keys the values of the keys.
-   * @param labels beginnings of the handler blocks. <tt>labels[i]</tt> is the
-   *      beginning of the handler block for the <tt>keys[i]</tt> key.
+   * @param labels beginnings of the handler blocks. {@code labels[i]} is the
+   *      beginning of the handler block for the {@code keys[i]} key.
    */
 
   void visitLookupSwitchInsn (Label dflt, int keys[], Label labels[]);
@@ -228,7 +228,7 @@ public interface CodeVisitor {
    * @param end end of the exception handler's scope (exclusive).
    * @param handler beginning of the exception handler's code.
    * @param type internal name of the type of exceptions handled by the handler,
-   *      or <tt>null</tt> to catch any exceptions (for "finally" blocks).
+   *      or {@code null} to catch any exceptions (for "finally" blocks).
    * @throws IllegalArgumentException if one of the labels has not already been
    *      visited by this visitor (by the {@link #visitLabel visitLabel}
    *      method).
@@ -278,7 +278,7 @@ public interface CodeVisitor {
    * @param line a line number. This number refers to the source file
    *      from which the class was compiled.
    * @param start the first instruction corresponding to this line number.
-   * @throws IllegalArgumentException if <tt>start</tt> has not already been
+   * @throws IllegalArgumentException if {@code start} has not already been
    *      visited by this visitor (by the {@link #visitLabel visitLabel}
    *      method).
    */

@@ -177,7 +177,7 @@ public class ClassWriter implements ClassVisitor {
   private ByteVector fields;
 
   /**
-   * <tt>true</tt> if the maximum stack size and number of local variables must
+   * {@code true} if the maximum stack size and number of local variables must
    * be automatically computed.
    */
 
@@ -433,9 +433,9 @@ public class ClassWriter implements ClassVisitor {
   /**
    * Constructs a new {@link ClassWriter ClassWriter} object.
    *
-   * @param computeMaxs <tt>true</tt> if the maximum stack size and the maximum
+   * @param computeMaxs {@code true} if the maximum stack size and the maximum
    *      number of local variables must be automatically computed. If this flag
-   *      is <tt>true</tt>, then the arguments of the {@link
+   *      is {@code true}, then the arguments of the {@link
    *      CodeVisitor#visitMaxs visitMaxs} method of the {@link CodeVisitor
    *      CodeVisitor} returned by the {@link #visitMethod visitMethod} method
    *      will be ignored, and computed automatically from the signature and
@@ -891,7 +891,7 @@ public class ClassWriter implements ClassVisitor {
    *
    * @param key a constant pool item.
    * @return the constant pool's hash table item which is equal to the given
-   *      item, or <tt>null</tt> if there is no such item.
+   *      item, or {@code null} if there is no such item.
    */
 
   private Item get (final Item key) {

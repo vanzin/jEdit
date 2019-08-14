@@ -33,7 +33,7 @@ package org.gjt.sp.jedit.bsh.org.objectweb.asm;
 public class CodeWriter implements CodeVisitor {
 
   /**
-   * <tt>true</tt> if preconditions must be checked at runtime or not.
+   * {@code true} if preconditions must be checked at runtime or not.
    */
 
   final static boolean CHECK = false;
@@ -153,7 +153,7 @@ public class CodeWriter implements CodeVisitor {
   // --------------------------------------------------------------------------
 
   /**
-   * <tt>true</tt> if the maximum stack size and number of local variables must
+   * {@code true} if the maximum stack size and number of local variables must
    * be automatically computed.
    */
 
@@ -164,7 +164,7 @@ public class CodeWriter implements CodeVisitor {
    * relative to the beginning of the current basic block, i.e., the true stack
    * size after the last visited instruction is equal to the {@link
    * Label#beginStackSize beginStackSize} of the current basic block plus
-   * <tt>stackSize</tt>.
+   * {@code stackSize}.
    */
 
   private int stackSize;
@@ -174,7 +174,7 @@ public class CodeWriter implements CodeVisitor {
    * size is relative to the beginning of the current basic block, i.e., the
    * true maximum stack size after the last visited instruction is equal to the
    * {@link Label#beginStackSize beginStackSize} of the current basic block plus
-   * <tt>stackSize</tt>.
+   * {@code stackSize}.
    */
 
   private int maxStackSize;
@@ -483,7 +483,7 @@ public class CodeWriter implements CodeVisitor {
    * Constructs a CodeWriter.
    *
    * @param cw the class writer in which the method must be added.
-   * @param computeMaxs <tt>true</tt> if the maximum stack size and number of
+   * @param computeMaxs {@code true} if the maximum stack size and number of
    *      local variables must be automatically computed.
    */
 
@@ -512,7 +512,7 @@ public class CodeWriter implements CodeVisitor {
    * @param name the method's name.
    * @param desc the method's descriptor (see {@link Type Type}).
    * @param exceptions the internal names of the method's exceptions. May be
-   *      <tt>null</tt>.
+   *      {@code null}.
    */
 
   protected void init (
@@ -1068,9 +1068,9 @@ public class CodeWriter implements CodeVisitor {
    * @param desc the descriptor of a method.
    * @return the size of the arguments of the method (plus one for the implicit
    *      this argument), argSize, and the size of its return value, retSize,
-   *      packed into a single int i = <tt>(argSize << 2) | retSize</tt>
-   *      (argSize is therefore equal to <tt>i >> 2</tt>, and retSize to
-   *      <tt>i & 0x03</tt>).
+   *      packed into a single int i = {@code (argSize << 2) | retSize}
+   *      (argSize is therefore equal to {@code i >> 2}, and retSize to
+   *      {@code i & 0x03}).
    */
 
   private static int getArgumentsAndReturnSizes (final String desc) {
@@ -1269,17 +1269,17 @@ public class CodeWriter implements CodeVisitor {
    *      plus one (or, in other words, by the index of the <i>first</i> byte of
    *      the <i>next</i> instruction).
    * @param sizes the number of bytes to be <i>added</i> to the above
-   *      instructions. More precisely, for each i &lt; <tt>len</tt>,
-   *      <tt>sizes</tt>[i] bytes will be added at the end of the instruction
-   *      designated by <tt>indexes</tt>[i] or, if <tt>sizes</tt>[i] is
-   *      negative, the <i>last</i> |<tt>sizes[i]</tt>| bytes of the instruction
+   *      instructions. More precisely, for each i &lt; {@code len},
+   *      {@code sizes}[i] bytes will be added at the end of the instruction
+   *      designated by {@code indexes[i]} or, if {@code sizes[i]} is
+   *      negative, the <i>last</i> |{@code sizes[i]}| bytes of the instruction
    *      will be removed (the instruction size <i>must not</i> become negative
    *      or null). The gaps introduced by this method must be filled in
    *      "manually" in the array returned by the {@link #getCode getCode}
    *      method.
    * @param len the number of instruction to be resized. Must be smaller than or
-   *      equal to <tt>indexes</tt>.length and <tt>sizes</tt>.length.
-   * @return the <tt>indexes</tt> array, which now contains the new positions of
+   *      equal to {@code indexes.length} and {@code sizes.length}.
+   * @return the {@code indexes} array, which now contains the new positions of
    *      the resized instructions (designated as above).
    */
 
@@ -1701,7 +1701,7 @@ public class CodeWriter implements CodeVisitor {
    * Computes the future value of a bytecode offset.
    * <p>
    * Note: it is possible to have several entries for the same instruction
-   * in the <tt>indexes</tt> and <tt>sizes</tt>: two entries (index=a,size=b)
+   * in the {@code indexes} and {@code sizes}: two entries (index=a,size=b)
    * and (index=a,size=b') are equivalent to a single entry (index=a,size=b+b').
    *
    * @param indexes current positions of the instructions to be resized. Each
@@ -1709,10 +1709,10 @@ public class CodeWriter implements CodeVisitor {
    *      plus one (or, in other words, by the index of the <i>first</i> byte of
    *      the <i>next</i> instruction).
    * @param sizes the number of bytes to be <i>added</i> to the above
-   *      instructions. More precisely, for each i < <tt>len</tt>,
-   *      <tt>sizes</tt>[i] bytes will be added at the end of the instruction
-   *      designated by <tt>indexes</tt>[i] or, if <tt>sizes</tt>[i] is
-   *      negative, the <i>last</i> |<tt>sizes[i]</tt>| bytes of the instruction
+   *      instructions. More precisely, for each i < {@code len},
+   *      {@code sizes[i]} bytes will be added at the end of the instruction
+   *      designated by {@code indexes[i]} or, if {@code sizes[i]} is
+   *      negative, the <i>last</i> |{@code sizes[i]}| bytes of the instruction
    *      will be removed (the instruction size <i>must not</i> become negative
    *      or null).
    * @param begin index of the first byte of the source instruction.

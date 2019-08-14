@@ -244,7 +244,7 @@ final class ByteVector {
    * Puts an array of bytes into this byte vector. The byte vector is
    * automatically enlarged if necessary.
    *
-   * @param b an array of bytes. May be <tt>null</tt> to put <tt>len</tt> null
+   * @param b an array of bytes. May be {@code null} to put {@code len} null
    *      bytes into this byte vector.
    * @param off index of the fist byte of b that must be copied.
    * @param len number of bytes of b that must be copied.

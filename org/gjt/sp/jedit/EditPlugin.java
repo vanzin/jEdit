@@ -79,7 +79,7 @@ import java.io.*;
  * documentation in HTML format. </li>
  * <li><code>plugin.<i>className</i>.longdescription</code> - the path to
  * the long description in XHTML (no fancy stuff here, please - just proper
- * XHTML subset with the basic tags: <tt>html, h1, h2, p, li, ul, ol, a href,b ,i, u, br/ </tt>)
+ * XHTML subset with the basic tags: {@code html, h1, h2, p, li, ul, ol, a, b, i, u, br})
  * <p> The long description is extracted from the plugin at various times,
  * primarily at plugin packaging time to update the data on the
  * plugin detail pages of Plugin Central. </p>
@@ -327,7 +327,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns the home of your plugin.
 	 *
-	 * @return the plugin home. It can be null if there is no 
+	 * @return the plugin home. It can be null if there is no
 	 *	   settings directory
 	 * @since 4.3pre10
 	 * @see #getResourceAsStream
@@ -371,7 +371,7 @@ public abstract class EditPlugin
 	//{{{ getPluginHome() method
 	/**
 	 * <p>Returns the home of the specified plugin.</p>
-	 * 
+	 *
 	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
@@ -413,9 +413,9 @@ public abstract class EditPlugin
 			return null;
 
 		File file = new File(settingsDirectory, "plugins");
-		if (!file.isDirectory()) 
+		if (!file.isDirectory())
 		{
-			if (!file.mkdir()) 
+			if (!file.mkdir())
 			{
 				Log.log(Log.ERROR, EditPlugin.class, "Can't create directory:" + file.getAbsolutePath());
 			}
@@ -456,7 +456,7 @@ public abstract class EditPlugin
 	/**
 	 * <p>Returns an input stream to the specified resource, or <code>null</code>
 	 * if none is found.</p>
-	 * 
+	 *
 	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
@@ -484,7 +484,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns an input stream to the specified resource, or <code>null</code>
 	 * if none is found.
-	 * 
+	 *
 	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
@@ -496,13 +496,13 @@ public abstract class EditPlugin
 	 */
 	private static InputStream getResourceAsStream(String pluginClassName, String path)
 	{
-		try 
+		try
 		{
 			File file = getResourcePath(pluginClassName, path);
 			if (file == null || !file.exists())
 				return null;
 			return new FileInputStream(file);
-		} 
+		}
 		catch (IOException e)
 		{
 			return null;
@@ -570,7 +570,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns an output stream to the specified resource, or <code>null</node> if access
 	 * to that resource is denied.
-	 * 
+	 *
 	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
@@ -582,7 +582,7 @@ public abstract class EditPlugin
 	 */
 	private static OutputStream getResourceAsOutputStream(String pluginClassName, String path)
 	{
-		try 
+		try
 		{
 			File file = getResourcePath(pluginClassName, path);
 			if (file == null)

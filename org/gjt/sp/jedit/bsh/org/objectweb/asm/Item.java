@@ -220,8 +220,8 @@ final class Item {
    * Indicates if the given item is equal to this one.
    *
    * @param i the item to be compared to this one.
-   * @return <tt>true</tt> if the given item if equal to this one,
-   *      <tt>false</tt> otherwise.
+   * @return {@code true} if the given item if equal to this one,
+   *      {@code false} otherwise.
    */
 
   boolean isEqualTo (final Item i) {

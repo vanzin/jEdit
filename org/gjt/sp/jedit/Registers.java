@@ -110,7 +110,7 @@ public class Registers
 			textArea.setSelectedText("");
 		}
 		else
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 	} //}}}
 
 	//{{{ append() methods
@@ -150,7 +150,7 @@ public class Registers
 	{
 		if(cut && !textArea.isEditable())
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 
@@ -210,7 +210,7 @@ public class Registers
 	 * @param textArea The text area
 	 * @param register The register
 	 * @param preferredDataFlavor the preferred dataflavor. If not available
-	 * <tt>DataFlavor.stringFlavor</tt> will be used
+	 * {@code DataFlavor.stringFlavor} will be used
 	 * @since jEdit 4.4pre1
 	 */
 	public static void paste(TextArea textArea, char register, DataFlavor preferredDataFlavor)
@@ -230,7 +230,7 @@ public class Registers
 	{
 		if(!textArea.isEditable())
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 
@@ -238,7 +238,7 @@ public class Registers
 
 		if(reg == null)
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 		Transferable transferable = reg.getTransferable();
@@ -267,7 +267,7 @@ public class Registers
 		}
 		if(selection == null)
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
@@ -281,7 +281,7 @@ public class Registers
 	 * @param register The register
 	 * @param vertical Vertical (columnar) paste
 	 * @param preferredDataFlavor the preferred dataflavor. If not available
-	 * <tt>DataFlavor.stringFlavor</tt> will be used
+	 * {@code DataFlavor.stringFlavor} will be used
 	 * @since jEdit 4.4pre1
 	 */
 	public static void paste(TextArea textArea, char register,
@@ -294,7 +294,7 @@ public class Registers
 		}
 		if(!textArea.isEditable())
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 
@@ -302,7 +302,7 @@ public class Registers
 
 		if(reg == null)
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 		Transferable transferable = reg.getTransferable();
@@ -317,7 +317,7 @@ public class Registers
 		}
 		if(selection == null)
 		{
-			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();

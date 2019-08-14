@@ -386,7 +386,7 @@ public class ExtendedGridLayoutConstraints
 	  *     {@code x.equals(z)} returns {@code true}.
 	  * <li>It is <i>consistent</i>: for any non-null reference values
 	  *     {@code x} and {@code y}, multiple invocations of
-	  *     <tt>x.equals(y)</tt> consistently return {@code true}
+	  *     {@code x.equals(y)} consistently return {@code true}
 	  *     or consistently return {@code false}, provided no
 	  *     information used in {@code equals} comparisons on the
 	  *     objects is modified.
@@ -394,7 +394,7 @@ public class ExtendedGridLayoutConstraints
 	  *     {@code x.equals(null)} returns {@code false}.
 	  * </ul>
 	  * <p>
-	  * The <tt>equals</tt> method for class
+	  * The {@code equals} method for class
 	  * {@code ExtendedGridLayoutConstraints} returns {@code true}
 	  * if and only if the constraints objects describe the same {@code Component}
 	  *
@@ -426,18 +426,18 @@ public class ExtendedGridLayoutConstraints
 	  * The general contract of {@code hashCode} is:
 	  * <ul>
 	  * <li>Whenever it is invoked on the same object more than once during
-	  *     an execution of a Java application, the <tt>hashCode</tt> method
+	  *     an execution of a Java application, the {@code hashCode} method
 	  *     must consistently return the same integer, provided no information
-	  *     used in <tt>equals</tt> comparisons on the object is modified.
+	  *     used in {@code equals} comparisons on the object is modified.
 	  *     This integer need not remain consistent from one execution of an
 	  *     application to another execution of the same application.
-	  * <li>If two objects are equal according to the <tt>equals(Object)</tt>
+	  * <li>If two objects are equal according to the {@code equals(Object)}
 	  *     method, then calling the {@code hashCode} method on each of
 	  *     the two objects must produce the same integer result.
 	  * <li>It is <em>not</em> required that if two objects are unequal
 	  *     according to the
 	  *     <a href="http://download.oracle.com/javase/6/docs/api/java/lang/Object.html#equals(java.lang.Object)">{@code java.lang.Object#equals(java.lang.Object)}</a>
-	  *     method, then calling the <tt>hashCode</tt> method on each of the
+	  *     method, then calling the {@code hashCode} method on each of the
 	  *     two objects must produce distinct integer results.  However, the
 	  *     programmer should be aware that producing distinct integer results
 	  *     for unequal objects may improve the performance of hashtables.
