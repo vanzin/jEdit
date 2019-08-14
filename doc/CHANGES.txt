@@ -33,6 +33,12 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- The Windows EXE launcher now considers JAVA_HOME environment variable if no
+  matching Java is found in the registry (Björn "Vampire" Kautler)
+
+- The Windows installer now uses modern and resizable style and allows
+  installation without administrator privileges (Björn "Vampire" Kautler)
+
 - Chinese Taiwan localization from David Day (Patch #620 - Dale Anson)
 
 - Fix all deprecation warnings produced when compiling with Java 9 (Dale Anson)

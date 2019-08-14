@@ -42,10 +42,10 @@
 ### executable for building the Windows installer.
 
 # Example Windows location
-#innosetup.compiler.executable=C:\\Program Files\\Inno Setup 5\\ISCC.exe
+#innosetup.compiler.executable=C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe
 
 # Example wine location
-#innosetup.compiler.executable=/home/vampire/.wine/drive_c/Program Files/Inno Setup 5/ISCC.exe
+#innosetup.compiler.executable=/home/vampire/.wine/drive_c/Program Files (x86)/Inno Setup 6/ISCC.exe
 #innosetup.via.wine=true
 
 ### For uploading the docs to the public webserver

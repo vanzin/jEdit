@@ -21,7 +21,8 @@ AppVersion=@jedit.version@
 ArchitecturesInstallIn64BitMode=x64
 ChangesAssociations=true
 ChangesEnvironment=true
-DefaultDirName={pf}\jEdit
+CloseApplicationsFilter=*.*
+DefaultDirName={autopf}\jEdit
 DefaultGroupName=jEdit
 FlatComponentsList=false
 ; Do not use LicenseFile here as the GPL does not require acceptance of
@@ -29,6 +30,7 @@ FlatComponentsList=false
 InfoBeforeFile=@dist.dir.for.innosetup@\doc\COPYING.txt
 OutputBaseFilename=@win.filename@
 OutputDir=@dist.dir.for.innosetup@
+PrivilegesRequiredOverridesAllowed=dialog
 SetupIconFile=@base.dir.for.innosetup@\icons\jedit.ico
 ShowTasksTreeLines=true
 SolidCompression=true
@@ -43,6 +45,7 @@ VersionInfoTextVersion=@jedit.version@
 VersionInfoVersion=@jedit.build.number@
 WizardImageFile=@base.dir.for.innosetup@\icons\WindowsInstallerImage.bmp
 WizardSmallImageFile=@base.dir.for.innosetup@\icons\WindowsInstallerSmallImage.bmp
+WizardStyle=modern
 
 [Components]
 Name: main; Description: jEdit - Programmer's Text Editor; Flags: fixed; Types: custom compact full
@@ -73,31 +76,33 @@ Name: {group}\{cm:ProgramOnTheWeb,jEdit}; Filename: {app}\jEdit.url; Comment: jE
 Name: {group}\{cm:LaunchProgram,jEdit Server}; Filename: {app}\jedit.exe; Parameters: "-background -nogui --l4j-dont-wait"; WorkingDir: {app}; Comment: {cm:LaunchProgram,jEdit Server}
 Name: {group}\{cm:QuitProgram,jEdit Server}; Filename: {app}\jedit.exe; Parameters: "-quit"; WorkingDir: {app}; Comment: {cm:QuitProgram,jEdit Server}
 Name: {group}\{cm:UninstallProgram,jEdit}; Filename: {uninstallexe}; Comment: {cm:UninstallProgram,jEdit}
-Name: {userdesktop}\jEdit; Filename: {app}\jedit.exe; Tasks: desktopicon; WorkingDir: {app}; Comment: jEdit - Programmer's Text Editor
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\jEdit; Filename: {app}\jedit.exe; Tasks: quicklaunchicon; WorkingDir: {app}; Comment: jEdit - Programmer's Text Editor
+Name: {autodesktop}\jEdit; Filename: {app}\jedit.exe; Tasks: desktopicon; WorkingDir: {app}; Comment: jEdit - Programmer's Text Editor
+Name: {autoappdata}\Microsoft\Internet Explorer\Quick Launch\jEdit; Filename: {app}\jedit.exe; Tasks: quicklaunchicon; WorkingDir: {app}; Comment: jEdit - Programmer's Text Editor
 
 [Languages]
 Name: en; MessagesFile: compiler:Default.isl
 Name: de; MessagesFile: compiler:Languages\German.isl
-Name: eu; MessagesFile: compiler:Languages\Basque.isl
+Name: hy; MessagesFile: compiler:Languages\Armenian.isl
 Name: pt_BR; MessagesFile: compiler:Languages\BrazilianPortuguese.isl
 Name: ca; MessagesFile: compiler:Languages\Catalan.isl
+Name: co; MessagesFile: compiler:Languages\Corsican.isl
 Name: cs; MessagesFile: compiler:Languages\Czech.isl
 Name: da; MessagesFile: compiler:Languages\Danish.isl
 Name: nl; MessagesFile: compiler:Languages\Dutch.isl
 Name: fi; MessagesFile: compiler:Languages\Finnish.isl
 Name: fr; MessagesFile: compiler:Languages\French.isl
 Name: he; MessagesFile: compiler:Languages\Hebrew.isl
-Name: hu; MessagesFile: compiler:Languages\Hungarian.isl
+Name: is; MessagesFile: compiler:Languages\Icelandic.isl
 Name: it; MessagesFile: compiler:Languages\Italian.isl
 Name: ja; MessagesFile: compiler:Languages\Japanese.isl
 Name: no; MessagesFile: compiler:Languages\Norwegian.isl
 Name: pl; MessagesFile: compiler:Languages\Polish.isl
 Name: pt; MessagesFile: compiler:Languages\Portuguese.isl
 Name: ru; MessagesFile: compiler:Languages\Russian.isl
-Name: sk; MessagesFile: compiler:Languages\Slovak.isl
 Name: sl; MessagesFile: compiler:Languages\Slovenian.isl
 Name: es; MessagesFile: compiler:Languages\Spanish.isl
+Name: tr; MessagesFile: compiler:Languages\Turkish.isl
+Name: uk; MessagesFile: compiler:Languages\Ukrainian.isl
 
 [CustomMessages]
 ; Default messages
@@ -107,6 +112,7 @@ AutostartJEditServer=Start jEdit Server automatically on system startup
 QuitProgram=Quit %1
 OpenWithProgram=Open with %1
 pleaseQuitJEdit=The installer will now try to quit a running instance of jEdit.%nPlease save your work and exit jEdit for the installation to continue.
+quittingJEditAborted=Quitting jEdit was aborted.
 ViewFile=View %1
 ; German messages
 de.APIDocumentation=API Dokumentation (für Macro und Plugin Entwicklung)
@@ -115,6 +121,7 @@ de.AutostartJEditServer=jEdit Server automatisch beim Hochfahren starten
 de.QuitProgram=%1 beenden
 de.OpenWithProgram=Mit %1 öffnen
 de.pleaseQuitJEdit=Die Installation wird nun versuchen eine laufende Instanz von jEdit zu beenden.%nBitte speichern Sie Ihre Arbeit und beenden Sie jEdit um mit der Installation fortzufahren.
+de.quittingJEditAborted=Das Beenden von jEdit wurde abgebrochen.
 de.ViewFile=%1 anzeigen
 ; French messages
 fr.APIDocumentation=API Documentation (pour développement de Macro et Plugin)
@@ -123,14 +130,15 @@ fr.AutostartJEditServer=Démarrer automatiquement le serveur jEdit au démarrage
 fr.QuitProgram=Quitter %1
 fr.OpenWithProgram=Ouvrir avec %1
 fr.pleaseQuitJEdit=L'installation va tenter à présent de quitter une instance de jEdit en cours.%nVeuillez enregistrer votre travail et quitter jEdit afin de poursuivre l'installation.
+fr.quittingJEditAborted=Quitter jEdit a été annulé.
 fr.ViewFile=Afficher %1
 
 [Registry]
-Root: HKCR; Subkey: *\Shell; Flags: uninsdeletekeyifempty
-Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}; Flags: uninsdeletekey
-Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}\Command; ValueType: string; ValueData: """{app}\jedit.exe"" ""%1"""
-Root: HKCR; Subkey: *\Shell\{cm:OpenWithProgram,jEdit}; ValueName: Icon; ValueType: string; ValueData: "{app}\jedit.exe"
-Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: jEdit Server; ValueData: """{app}\jedit.exe"" -background -nogui --l4j-dont-wait"; Flags: uninsdeletevalue; Tasks: autostartserver
+Root: HKA; Subkey: Software\Classes\*\Shell; Flags: uninsdeletekeyifempty
+Root: HKA; Subkey: Software\Classes\*\Shell\{cm:OpenWithProgram,jEdit}; Flags: uninsdeletekey
+Root: HKA; Subkey: Software\Classes\*\Shell\{cm:OpenWithProgram,jEdit}\Command; ValueType: string; ValueData: """{app}\jedit.exe"" ""%1"""
+Root: HKA; Subkey: Software\Classes\*\Shell\{cm:OpenWithProgram,jEdit}; ValueName: Icon; ValueType: string; ValueData: "{app}\jedit.exe"
+Root: HKA; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: jEdit Server; ValueData: """{app}\jedit.exe"" -background -nogui --l4j-dont-wait"; Flags: uninsdeletevalue; Tasks: autostartserver
 
 [Run]
 Filename: {app}\jedit.exe; Description: {cm:ViewFile,README}; Parameters: "--l4j-dont-wait -nosettings ""{app}\doc\README.txt"""; WorkingDir: {app}; Flags: nowait postinstall skipifsilent
@@ -170,9 +178,9 @@ procedure updatePATHVariableInRegistry;
 var
 	path : String;
 begin
-	RegQueryStringValue(HKLM,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
+	RegQueryStringValue(HKA,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
 	if appendAppDirIfNecessary(path) then begin
-		RegWriteStringValue(HKLM,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
+		RegWriteStringValue(HKA,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
 	end;
 end;
 
@@ -227,9 +235,9 @@ procedure cleanPATHVariableInRegistry;
 var
 	path : String;
 begin
-	RegQueryStringValue(HKLM,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
+	RegQueryStringValue(HKA,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
 	if removeAppDirIfNecessary(path) then begin
-		RegWriteStringValue(HKLM,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
+		RegWriteStringValue(HKA,'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path',path);
 	end;
 end;
 
@@ -266,7 +274,7 @@ begin
 	end;
 end;
 
-procedure quitJEdit;
+function quitJEdit: String;
 var
 	resultCode : Integer;
 begin
@@ -275,14 +283,13 @@ begin
 			ExtractTemporaryFile('@jar.filename@');
 			ExtractTemporaryFile('jedit.exe');
 			ExecAsOriginalUser(ExpandConstant('{tmp}/jedit.exe'),'-quit',ExpandConstant('{tmp}'),SW_SHOW,ewWaitUntilTerminated,resultCode);
+			Sleep(2000);
 		end;
-		IDCANCEL: Abort;
+		IDCANCEL: Result := CustomMessage('quittingJEditAborted');
 	end;
 end;
 
-procedure CurStepChanged(CurStep: TSetupStep);
+function PrepareToInstall(var NeedsRestart: Boolean): String;
 begin
-	if CurStep = ssInstall then begin
-		quitJEdit;
-	end;
+	Result := quitJEdit;
 end;

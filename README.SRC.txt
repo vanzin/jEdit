@@ -31,15 +31,15 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the windows installer (for the final step):
 
-  - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
+  - Inno Setup 6.0.0 or newer. Get it from <http://www.jrsoftware.org/isdl.php>
   - A box running windows or wine, e. g. on *nix. If Inno Setup should be
     run via wine, a wine version of at least 1.3.10 is required because
     of a bug in earlier wine versions.
 
- For building the Mac OS X disk image (DMG) for easy distribution
+ For building the OS X disk image (DMG) for easy distribution
  (for the final step):
 
-  - A box running Mac OS X
+  - A box running OS X
 
 
 * Tasks
@@ -49,7 +49,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
  - retrieve                retrieve the dependencies
   retrieves almost all dependencies needed for building jEdit, only InnoSetup for the
-  windows installer and wine, if InnoSetup should be run on *nix or Mac OS X, have to
+  windows installer and wine, if InnoSetup should be run on *nix or OS X, have to
   be installed and configured in build.properties manually.
 
  - build                   build the jEdit JAR-file with full debug-information
@@ -98,17 +98,17 @@ General jEdit documentation can be found in the 'doc' directory.
  - dist-java               build the Java-installer
   builds the Java installer in the dist-folder, configured in build.properties.
 
- - dist-mac                build the Mac OS X disk image (DMG-file)
-  builds the Mac OS X internet-enabled disk image (DMG-file) if building on a box
-  running Mac OS X. If building on a box running something else, there will be a file
+ - dist-mac                build the OS X disk image (DMG-file)
+  builds the OS X internet-enabled disk image (DMG-file) if building on a box
+  running OS X. If building on a box running something else, there will be a file
   called jedit<version_here>-dist-mac-finish.tar.bz2 in the dist-folder,
-  configured in build.properties. Give that to someone running Mac OS X and ask him
+  configured in build.properties. Give that to someone running OS X and ask him
   to extract the archive and to execute "ant dist-mac-finish".
   The only thing that needs to be installed for this final step is Apache Ant.
 
- - dist-mac-finish         finish building the Mac OS X disk image (DMG-file) on Mac OS X
-  builds the Mac OS X internet-enabled disk image (DMG-file) in the dist-folder,
-  configured in build.properties if building on a box running Mac OS X.
+ - dist-mac-finish         finish building the OS X disk image (DMG-file) on OS X
+  builds the OS X internet-enabled disk image (DMG-file) in the dist-folder,
+  configured in build.properties if building on a box running OS X.
   This target is normally only run directly, if someone just has to do
   the final step that was prepared by "dist-mac" or "dist".
 
