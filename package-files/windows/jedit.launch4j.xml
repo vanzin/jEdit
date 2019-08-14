@@ -26,14 +26,15 @@
 	<jar>@jar.filename@</jar>
 	<dontWrapJar>true</dontWrapJar>
 	<errTitle>jEdit</errTitle>
-	<downloadUrl>http://www.java.com/download</downloadUrl>
+	<downloadUrl>https://openjdk.java.net/install/</downloadUrl>
 	<supportUrl>http://www.jEdit.org</supportUrl>
 	<cmdLine>-reuseview</cmdLine>
 	<stayAlive>true</stayAlive>
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
-		<minVersion>@target.java.version@.0</minVersion>
-		<!-- Prefer JDK to make tools.jar available if possible. -->
+		<path>%JAVA_HOME%</path>
+		<bundledJreAsFallback>true</bundledJreAsFallback>
+		<minVersion>@target.java.version@</minVersion>
 		<jdkPreference>preferJdk</jdkPreference>
 	</jre>
 	<versionInfo>
