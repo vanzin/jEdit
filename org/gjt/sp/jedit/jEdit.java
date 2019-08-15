@@ -154,24 +154,6 @@ public class jEdit
 		// are closed
 		background = OperatingSystem.isMacOS();
 
-		// Fix X11 windows class for Java 8. For Java 9, this is done in the
-		// jar manifest file.
-		if (OperatingSystem.isX11() && javaVersion.startsWith("1.8"))
-		{
-			try
-			{
-				Toolkit xToolkit = Toolkit.getDefaultToolkit();
-				Field awtAppClassNameField =
-					xToolkit.getClass().getDeclaredField("awtAppClassName");
-				awtAppClassNameField.setAccessible(true);
-				awtAppClassNameField.set(xToolkit, System.getProperty("x11.wmclass", "jedit"));
-			}
-			catch (Exception e)
-			{
-				Log.log(Log.ERROR, jEdit.class, e);
-			}
-		}
-
 		//{{{ Parse command line
 		boolean endOpts = false;
 		int level = Log.WARNING;
