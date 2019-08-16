@@ -1472,7 +1472,7 @@ options.general.restore.cli=... einschließlich der auf der Befehlszeile angegeb
 options.general.encodingDetectors=Erkennungszeichen für Kodierungen:
 options.general.fallbackEncodings=Liste der Rückfall-Kodierungen:
 options.general.fallbackEncodings.tooltip=(Experimentell) Leerzeichen-getrennte Liste von Zeichenkodierungen, die bei Kodierungsfehlern während des Ladens versucht werden sollen
-options.general.systrayicon=jEdit-Symbol im Infobereich der Windows-Taskleiste anzeigen
+options.general.systrayicon=jEdit-Symbol im Infobereich anzeigen
 #}}}
 
 #{{{ Abbreviations pane
@@ -1502,7 +1502,7 @@ options.appearance.showTips=Zeige Tips beim Starten
 options.appearance.experimental.label=Experimentelle Optionen
 options.appearance.experimental.caption=Die folgenden drei Optionen arbeiten u.U. \
   nicht korrekt mit einigen Versionen von Java.\n\
-  Wenn Sie Probleme feststellen, schalten Sie diese aus\n.
+  Wenn Sie Probleme feststellen, schalten Sie diese aus.
 
 options.appearance.textColors=Farben von jEdits Textbereich in allen Textkomponenten verwenden
 options.appearance.decorateFrames=Fensterränder unter Verwendung von Swing look & feel zeichnen
