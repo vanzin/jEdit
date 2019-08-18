@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.textarea;
 
 // {{{ Imports
+import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 import java.text.AttributedCharacterIterator;
 import java.awt.Point;
@@ -116,23 +117,37 @@ class InputMethodSupport
 	// {{{ implements InputMethodRequests
 	public Rectangle getTextLocation(TextHitInfo offset)
 	{
-		if(composedTextLayout != null)
+		int caretPosition = owner.getCaretPosition();
+		if((composedTextLayout != null) && (offset != null))
 		{
 			// return location of composed text.
-			Point caret = owner.offsetToXY(owner.getCaretPosition());
-			return getCaretRectangle(caret.x + composedCaretX, caret.y);
+			Point caret = owner.offsetToXY(caretPosition);
+			Point hitPoint = new Point();
+			composedTextLayout.hitToPoint(offset, hitPoint);
+			return getCaretRectangle(caret.x + hitPoint.x, caret.y + hitPoint.y);
 		}
 		else
 		{
 			// return location of selected text.
-			Selection selection_on_caret = owner.getSelectionAtOffset(owner.getCaretPosition());
+			Selection selection_on_caret = owner.getSelectionAtOffset(caretPosition);
 			if(selection_on_caret != null)
 			{
-				Point selection_start = owner.offsetToXY(selection_on_caret.getStart());
-				return getCaretRectangle(selection_start.x, selection_start.y);
+				int caretLine = owner.getLineOfOffset(caretPosition);
+				int selectionStartLine = selection_on_caret.getStartLine();
+				if (selectionStartLine == caretLine) {
+					Point selection_start = owner.offsetToXY(selection_on_caret.getStart());
+					return getCaretRectangle(selection_start.x, selection_start.y);
+				} else {
+					Point caretLineStart = owner.offsetToXY(caretLine, 0);
+					return getCaretRectangle(caretLineStart.x, caretLineStart.y);
+				}
+			}
+			else
+			{
+				Point caret = owner.offsetToXY(caretPosition);
+				return getCaretRectangle(caret.x, caret.y);
 			}
 		}
-		return null;
 	}
 
 	public TextHitInfo getLocationOffset(int x, int y)
@@ -145,7 +160,15 @@ class InputMethodSupport
 			float local_y = y - origin.y - caret.y
 				- (composedTextLayout.getLeading()+1)
 				- composedTextLayout.getAscent();
-			return composedTextLayout.hitTestChar(local_x, local_y);
+
+			Rectangle2D composedBounds = composedTextLayout.getBounds();
+			if ((local_x < composedBounds.getMinX()) || (local_x > composedBounds.getMaxX())
+					|| (local_y < composedBounds.getMinY()) || local_y > composedBounds.getMaxY())
+			{
+				return null;
+			}
+
+			return composedTextLayout.hitTestChar(local_x, local_y, composedBounds);
 		}
 		return null;
 	}
@@ -158,7 +181,7 @@ class InputMethodSupport
 	public AttributedCharacterIterator getCommittedText(int beginIndex , int endIndex
 		, AttributedCharacterIterator.Attribute[] attributes)
 	{
-		return (new AttributedString(owner.getText(beginIndex, endIndex - beginIndex))).getIterator();
+		return new AttributedString(owner.getText(beginIndex, endIndex - beginIndex)).getIterator();
 	}
 
 	public int getCommittedTextLength()
@@ -175,13 +198,13 @@ class InputMethodSupport
 			String sample = owner.getText(offset, length);
 			if(sample != null && sample.equals(lastCommittedText))
 			{
-				AttributedCharacterIterator canceled = (new AttributedString(sample)).getIterator();
+				AttributedCharacterIterator canceled = new AttributedString(sample).getIterator();
 				owner.getBuffer().remove(offset, length);
 				owner.setCaretPosition(offset);
 				lastCommittedText = null;
 				return canceled;
 			}
-			// Cleare last committed information to prevent
+			// Clear last committed information to prevent
 			// accidental match.
 			lastCommittedText = null;
 		}
@@ -193,7 +216,7 @@ class InputMethodSupport
 		Selection selection_on_caret = owner.getSelectionAtOffset(owner.getCaretPosition());
 		if(selection_on_caret != null)
 		{
-			return (new AttributedString(owner.getSelectedText(selection_on_caret))).getIterator();
+			return new AttributedString(owner.getSelectedText(selection_on_caret)).getIterator();
 		}
 		return null;
 	}
@@ -248,7 +271,7 @@ class InputMethodSupport
 			{
 				composedCaretX = Math.round(composedTextLayout.getCaretInfo(caret)[0]);
 			}
-			// Adjust visiblity.
+			// Adjust visibility.
 			int insertion_x = owner.offsetToXY(owner.getCaretPosition()).x;
 			TextHitInfo visible = event.getVisiblePosition();
 			int composed_visible_x = (visible != null)
