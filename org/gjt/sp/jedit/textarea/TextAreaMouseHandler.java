@@ -26,9 +26,14 @@ import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.jedit.Registers;
 
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 import static java.awt.event.InputEvent.*;
+import static java.awt.event.MouseEvent.BUTTON1;
+import static java.awt.event.MouseEvent.BUTTON2;
+import static java.awt.event.MouseEvent.BUTTON3;
+
 import java.awt.*;
 
 /** Standalone TextArea MouseHandler.
@@ -51,7 +56,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		showCursor();
 
 		int btn = evt.getButton();
-		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
+		if (btn != BUTTON1 && btn != BUTTON2 && btn != BUTTON3)
 		{
 			// Suppress presses with unknown button, to avoid
 			// problems due to horizontal scrolling.
@@ -68,7 +73,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		textArea.getInputHandler().resetLastActionCount();
 
 		quickCopyDrag = (textArea.isQuickCopyEnabled() &&
-			isMiddleButton(evt.getModifiersEx()));
+			isMiddleButton(evt));
 
 		if(!quickCopyDrag)
 		{
@@ -521,7 +526,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	public void mouseReleased(MouseEvent evt)
 	{
 		int btn = evt.getButton();
-		if (btn != MouseEvent.BUTTON1 && btn != MouseEvent.BUTTON2 && btn != MouseEvent.BUTTON3)
+		if (btn != BUTTON1 && btn != BUTTON2 && btn != BUTTON3)
 		{
 			// Suppress releases with unknown button, to avoid
 			// problems due to horizontal scrolling.
@@ -544,14 +549,14 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			}
 		}
 		else if(!dragged && textArea.isQuickCopyEnabled() &&
-			isMiddleButton(evt.getModifiersEx()))
+			isMiddleButton(evt))
 		{
 			textArea.requestFocus();
 			TextArea.focusedComponent = textArea;
 
 			textArea.setCaretPosition(dragStart,false);
 			if(!textArea.isEditable())
-				textArea.getToolkit().beep();
+				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
 			else
 				Registers.paste(textArea,'%',control);
 		}
@@ -579,7 +584,18 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return isRightButton(evt.getModifiersEx());
+		return isRightButton(evt);
+	} //}}}
+
+	//{{{ isLeftButton() method
+	/**
+	 * @param evt A mouse event
+	 * @return true if the mouse event is due to the left button
+	 * @since jEdit 5.6
+	 */
+	public static boolean isLeftButton(MouseEvent evt)
+	{
+		return evt.getButton() == BUTTON1;
 	} //}}}
 
 	//{{{ isMiddleButton() method
@@ -587,18 +603,38 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @return true if the modifier match the middle button
 	 * @since jEdit 4.3pre7
+	 * @deprecated use {@link #isMiddleButton(MouseEvent)}
 	 */
+	@Deprecated
 	public static boolean isMiddleButton(int modifiers)
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & BUTTON1_DOWN_MASK) == BUTTON1_DOWN_MASK)
-				return (modifiers & ALT_DOWN_MASK) == ALT_DOWN_MASK;
+			if((modifiers & BUTTON1_MASK) == BUTTON1_MASK)
+				return (modifiers & ALT_MASK) == ALT_MASK;
 			else
-				return (modifiers & BUTTON2_DOWN_MASK) == BUTTON2_DOWN_MASK;
+				return (modifiers & BUTTON2_MASK) == BUTTON2_MASK;
 		}
 		else
-			return (modifiers & BUTTON2_DOWN_MASK) == BUTTON2_DOWN_MASK;
+			return (modifiers & BUTTON2_MASK) == BUTTON2_MASK;
+	}
+
+	/**
+	 * @param evt A mouse event
+	 * @return true if the mouse event is due to the middle button
+	 * @since jEdit 5.6
+	 */
+	public static boolean isMiddleButton(MouseEvent evt)
+	{
+		if (OperatingSystem.isMacOS())
+		{
+			if(evt.getButton() == BUTTON1)
+				return (evt.getModifiersEx() & ALT_DOWN_MASK) == ALT_DOWN_MASK;
+			else
+				return evt.getButton() == BUTTON2;
+		}
+		else
+			return evt.getButton() == BUTTON2;
 	} //}}}
 
 	//{{{ isRightButton() method
@@ -606,18 +642,38 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @return true if the modifier match the right button
 	 * @since jEdit 4.3pre7
+	 * @deprecated use {@link #isRightButton(MouseEvent)}
 	 */
+	@Deprecated
 	public static boolean isRightButton(int modifiers)
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & BUTTON1_DOWN_MASK) == BUTTON1_DOWN_MASK)
-				return (modifiers & CTRL_DOWN_MASK) == CTRL_DOWN_MASK;
+			if((modifiers & BUTTON1_MASK) == BUTTON1_MASK)
+				return (modifiers & CTRL_MASK) == CTRL_MASK;
 			else
-				return (modifiers & BUTTON3_DOWN_MASK) == BUTTON3_DOWN_MASK;
+				return (modifiers & BUTTON3_MASK) == BUTTON3_MASK;
 		}
 		else
-			return (modifiers & BUTTON3_DOWN_MASK) == BUTTON3_DOWN_MASK;
+			return (modifiers & BUTTON3_MASK) == BUTTON3_MASK;
+	}
+
+	/**
+	 * @param evt A mouse event
+	 * @return true if the mouse event is due to the right button
+	 * @since jEdit 5.6
+	 */
+	public static boolean isRightButton(MouseEvent evt)
+	{
+		if (OperatingSystem.isMacOS())
+		{
+			if(evt.getButton() == BUTTON1)
+				return (evt.getModifiersEx() & CTRL_DOWN_MASK) == CTRL_DOWN_MASK;
+			else
+				return evt.getButton() == BUTTON3;
+		}
+		else
+			return evt.getButton() == BUTTON3;
 	} //}}}
 
 	//{{{ Private methods

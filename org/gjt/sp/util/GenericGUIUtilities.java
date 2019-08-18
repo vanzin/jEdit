@@ -179,27 +179,59 @@ public class GenericGUIUtilities {
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return TextAreaMouseHandler.isRightButton(evt.getModifiersEx());
+		return TextAreaMouseHandler.isRightButton(evt);
+	} //}}}
+
+	//{{{ isLeftButton() method
+	/**
+	 * @param evt A mouse event
+	 * @since jEdit 5.6
+	 */
+	public static boolean isLeftButton(MouseEvent evt)
+	{
+		return TextAreaMouseHandler.isLeftButton(evt);
 	} //}}}
 
 	//{{{ isMiddleButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 5.3.1
+	 * @deprecated use {@link #isMiddleButton(MouseEvent)}
 	 */
+	@Deprecated
 	public static boolean isMiddleButton(int modifiers)
 	{
 		return TextAreaMouseHandler.isMiddleButton(modifiers);
+	}
+
+	/**
+	 * @param evt A mouse event
+	 * @since jEdit 5.6
+	 */
+	public static boolean isMiddleButton(MouseEvent evt)
+	{
+		return TextAreaMouseHandler.isMiddleButton(evt);
 	} //}}}
 
 	//{{{ isRightButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 5.3.1
+	 * @deprecated use {@link #isRightButton(MouseEvent)}
 	 */
+	@Deprecated
 	public static boolean isRightButton(int modifiers)
 	{
 		return TextAreaMouseHandler.isRightButton(modifiers);
+	}
+
+	/**
+	 * @param evt A mouse event
+	 * @since jEdit 5.6
+	 */
+	public static boolean isRightButton(MouseEvent evt)
+	{
+		return TextAreaMouseHandler.isRightButton(evt);
 	} //}}}
 
 	//{{{ getScreenBounds() method
@@ -385,7 +417,7 @@ public class GenericGUIUtilities {
 		defaults.put("ToggleButton.contentMargins", margin);
 		button.putClientProperty("Nimbus.Overrides", defaults);
 	} //}}}
-	
+
 	//{{{
 	/**
  	 * Makes components the same size by finding the largest width and height of the
@@ -394,13 +426,13 @@ public class GenericGUIUtilities {
  	 * @param components The components to make the same size.
 	 * @since jEdit 5.3.1
  	 */
-	public static void makeSameSize(Component... components) 
+	public static void makeSameSize(Component... components)
 	{
 		if (components == null)
 			return;
 		int width = 0;
 		int height = 0;
-		for (Component component : components) 
+		for (Component component : components)
 		{
 			if (component == null)
 				continue;
@@ -408,11 +440,11 @@ public class GenericGUIUtilities {
 			height = Math.max(height, component.getPreferredSize().height);
 		}
 		Dimension d = new Dimension(width, height);
-		for (Component component : components) 
+		for (Component component : components)
 		{
 			if (component == null)
 				continue;
-			component.setPreferredSize(d);	
+			component.setPreferredSize(d);
 		}
 	} //}}}
 
