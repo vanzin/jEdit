@@ -11,7 +11,7 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 - Fix wrong behavior of input method framework support that returned wrong
   locations for offsets and wrong offsets for locations
-  (Björn "Vampire" Kautler)
+  (#4082 - Björn "Vampire" Kautler)
 
 - Upgrade OS X launcher stub to be compatible with newer Java versions
   (#4077 - Björn "Vampire" Kautler)
