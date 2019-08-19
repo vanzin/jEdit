@@ -9,6 +9,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Re-add missing help viewer back and forward icons (Björn "Vampire" Kautler)
+
 - Fix wrong behavior of input method framework support that returned wrong
   locations for offsets and wrong offsets for locations
   (#4082 - Björn "Vampire" Kautler)

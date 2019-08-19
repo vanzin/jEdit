@@ -783,6 +783,11 @@ paste-from-list.max-item-length=1000
 paste-from-list.max-preview-length=100000
 #}}}
 
+#{{{ Help Viewer
+helpviewer.back.icon=22x22/actions/go-previous.png
+helpviewer.forward.icon=22x22/actions/go-next.png
+#}}}
+
 #}}}
 
 #{{{ Global options dialog
