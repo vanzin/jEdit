@@ -52,6 +52,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 - Adjust Appearance option pane to allow setting "primary" and "secondary" fonts
   for all look and feels (Dale Anson)
 
+- Improve Regular Expressions documentation (Björn "Vampire" Kautler)
+
 }}}
 {{{ API Changes
 

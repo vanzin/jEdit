@@ -6,7 +6,7 @@
     <!-- :xml.root=users-guide.xml: -->
 
     <para>jEdit uses regular expressions from <ulink
-    url="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
+    url="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
     to implement inexact search and replace. Click there to see a complete
     reference guide to all supported meta-characters.</para>
 
@@ -45,11 +45,27 @@
         </listitem>
 
         <listitem>
+            <para><literal>\b</literal> matches at a word boundary</para>
+        </listitem>
+
+        <listitem>
             <para><literal>\B</literal> matches at a non-word break</para>
         </listitem>
 
         <listitem>
-            <para><literal>\b</literal> matches at a word boundary</para>
+            <para><literal>\A</literal> The beginning of the input</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\G</literal> The end of the previous match</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\Z</literal> The end of the input but for the final terminator, if any</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\z</literal> The end of the input</para>
         </listitem>
     </itemizedlist>
 
@@ -57,53 +73,47 @@
 
     <itemizedlist>
         <listitem>
-            <para><literal>.</literal> matches any single character</para>
+            <para><literal>.</literal> matches any single character (may or may not match line terminators)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\d</literal> matches any decimal digit</para>
+            <para><literal>\d</literal> matches any decimal digit (<literal>[0-9]</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\D</literal> matches any non-digit</para>
+            <para><literal>\D</literal> matches any non-digit (<literal>[^0-9]</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\n</literal> matches the newline character</para>
+            <para><literal>\n</literal> matches the newline character (<literal>\u000A</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\s</literal> matches any whitespace character</para>
+            <para><literal>\s</literal> matches any whitespace character (<literal>[ \t\n\x0B\f\r]</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\xNN</literal> matches hexadecimal character code <literal>NN</literal></para>
-        </listitem>
-
-
-        <listitem>
-            <para><literal>\S</literal> matches any non-whitespace
-            character</para>
+            <para><literal>\x<replaceable>hh</replaceable></literal> matches hexadecimal character code <literal>0xhh</literal></para>
         </listitem>
 
         <listitem>
-            <para><literal>\t</literal> matches a horizontal tab
-            character</para>
+            <para><literal>\S</literal> matches any non-whitespace character (<literal>[^\s]</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\w</literal> matches any word (alphanumeric)
-            character</para>
+            <para><literal>\t</literal> matches a horizontal tab character (<literal>\u0009</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\W</literal> matches any non-word (alphanumeric)
-            character</para>
+            <para><literal>\w</literal> matches any word character (<literal>[a-zA-Z_0-9]</literal>)</para>
         </listitem>
 
         <listitem>
-            <para><literal>\\</literal> matches the backslash (<quote>\</quote>)
-            character</para>
+            <para><literal>\W</literal> matches any non-word character (<literal>[^\w]</literal>)</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\\</literal> matches the backslash character (<quote>\</quote>)</para>
         </listitem>
     </itemizedlist>
 
@@ -113,20 +123,24 @@
         <listitem>
             <para><literal>[<replaceable>abc</replaceable>]</literal> matches
             any character in the set <replaceable>a</replaceable>,
-            <replaceable>b</replaceable> or <replaceable>c</replaceable></para>
+            <replaceable>b</replaceable> or <replaceable>c</replaceable>.
+            A leading <quote>]</quote> will be interpreted literally.</para>
         </listitem>
 
         <listitem>
             <para><literal>[^<replaceable>abc</replaceable>]</literal> matches
             any character not in the set <replaceable>a</replaceable>,
-            <replaceable>b</replaceable> or <replaceable>c</replaceable></para>
+            <replaceable>b</replaceable> or <replaceable>c</replaceable>.
+            A leading <quote>]</quote> after the <quote>^</quote>
+            will be interpreted literally.</para>
         </listitem>
 
         <listitem>
-            <para><literal>[<replaceable>a-z</replaceable>]</literal> matches
-            any character in the range <replaceable>a</replaceable> to
-            <replaceable>z</replaceable>, inclusive. A leading or trailing dash
-            will be interpreted literally</para>
+            <para><literal>[<replaceable>a-zA-Z</replaceable>]</literal> matches
+            any character in the ranges <replaceable>a</replaceable> to
+            <replaceable>z</replaceable> and <replaceable>A</replaceable> to
+            <replaceable>Z</replaceable>, inclusive. A leading or trailing dash
+            and a leading <quote>]</quote> will be interpreted literally.</para>
         </listitem>
     </itemizedlist>
 
@@ -140,13 +154,15 @@
         </listitem>
 
         <listitem>
-            <para><literal>(?:<replaceable>...</replaceable>)</literal> pure
-            grouping operator, does not save contents</para>
+            <para><literal>(?&lt;<replaceable>name</replaceable>&gt;<replaceable>abc</replaceable>)</literal>
+            matches whatever the expression <replaceable>abc</replaceable> would match,
+            and saves it as a subexpression called <replaceable>name</replaceable>.
+            Also used for grouping</para>
         </listitem>
 
         <listitem>
-            <para><literal>(?#<replaceable>...</replaceable>)</literal> embedded
-            comment, ignored by engine</para>
+            <para><literal>(?:<replaceable>...</replaceable>)</literal> pure
+            grouping operator, does not save contents</para>
         </listitem>
 
         <listitem>
@@ -164,6 +180,26 @@
         </listitem>
 
         <listitem>
+            <para><literal>(?&lt;=<replaceable>...</replaceable>)</literal> positive
+            lookbehind; the regular expression will match if the text in the
+            brackets matches, but that text will not be considered part of the
+            match</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>(?&lt;!<replaceable>...</replaceable>)</literal> negative
+            lookbehind; the regular expression will match if the text in the
+            brackets does not match, and that text will not be considered part
+            of the match</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>(?&gt;<replaceable>...</replaceable>)</literal> pure
+            possessive grouping operator, does not save contents and does not
+            back off during backtracking</para>
+        </listitem>
+
+        <listitem>
             <para><literal>\<replaceable>n</replaceable></literal> where 0 &lt;
             <replaceable>n</replaceable> &lt; 10, matches the same thing the
             <replaceable>n</replaceable>th subexpression matched. Can only be
@@ -175,6 +211,18 @@
             <replaceable>n</replaceable> &lt; 10, substituted with the text
             matched by the <replaceable>n</replaceable>th subexpression. Can
             only be used in the replacement string</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\k&lt;<replaceable>name</replaceable>&gt;</literal>,
+            matches the same thing the subexpression called <replaceable>name</replaceable>
+            matched. Can only be used in the search string</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>${<replaceable>name</replaceable>}</literal>,
+            substituted with the text matched by the subexpression called <replaceable>name</replaceable>.
+            Can only be used in the replacement string</para>
         </listitem>
     </itemizedlist>
 
@@ -195,59 +243,67 @@
 
     <itemizedlist>
         <listitem>
-            <para><literal>?</literal> matches the preceding expression or the
-            null string</para>
+            <para><literal>?</literal> matches the preceding expression once or not at all</para>
         </listitem>
 
         <listitem>
-            <para><literal>*</literal> matches the null string or any number of
-            repetitions of the preceding expression</para>
+            <para><literal>*</literal> matches the preceding expression zero or more times</para>
         </listitem>
 
         <listitem>
-            <para><literal>+</literal> matches one or more repetitions of the
-            preceding expression</para>
+            <para><literal>+</literal> matches the preceding expression one or more times</para>
         </listitem>
 
         <listitem>
-            <para><literal>{<replaceable>m</replaceable>}</literal> matches
-            exactly <replaceable>m</replaceable> repetitions of the
-            one-character expression</para>
+            <para><literal>{<replaceable>n</replaceable>}</literal>matches the preceding expression
+            exactly <replaceable>n</replaceable> times</para>
         </listitem>
 
         <listitem>
-            <para><literal>{<replaceable>m</replaceable>,<replaceable>n</replaceable>}</literal>
-            matches between <replaceable>m</replaceable> and
-            <replaceable>n</replaceable> repetitions of the preceding
-            expression, inclusive</para>
+            <para><literal>{<replaceable>n</replaceable>,<replaceable>m</replaceable>}</literal>
+            matches the preceding expression between <replaceable>n</replaceable> and
+            <replaceable>m</replaceable> times, inclusive</para>
         </listitem>
 
         <listitem>
-            <para><literal>{<replaceable>m</replaceable>,}</literal> matches
-            <replaceable>m</replaceable> or more repetitions of the preceding
-            expression</para>
+            <para><literal>{<replaceable>n</replaceable>,}</literal> matches
+            the preceding expression <replaceable>n</replaceable> or more times</para>
         </listitem>
     </itemizedlist>
 
-    <bridgehead>Stingy (Minimal) Matching</bridgehead>
+    <bridgehead>Greedy, Reluctant and Possessive Matching</bridgehead>
 
     <para>If a repeating operator (above) is immediately followed by a
-    <literal>?</literal>, the repeating operator will stop at the smallest
+    <literal>?</literal>, it behaves reluctant, that is
+    the repeating operator will stop at the smallest
     number of repetitions that can complete the rest of the match.</para>
-     <note>
-                <title>On regex search</title>
 
-                <para>There are some known issues with the
-                <literal>java.util.regex</literal> library, as it stands in
-                Java. In particular, it is possible to create
-                regular expressions that hang the JVM, or cause stack overflow
-                errors, which was not as easy to accomplish using the legacy
-                <literal>gnu.regexp</literal> library. If you find that
-                <literal>gnu.regexp</literal>, used in jEdit 4.2 and earlier, is
-                more suitable for your search/replace needs, you can try the
-                <emphasis role="bold">XSearch plugin</emphasis>, which still
-                uses it and can provide a replacement to the built-in search
-                dialog.</para>
-            </note>
+    <para>If a repeating operator (above) is immediately followed by a
+    <literal>+</literal>, it behaves possessive, that is
+    the repeating operator will match as much characters as it can
+    and will not back off during backtracking,
+    even if that would allow to complete the rest of the match.</para>
+
+    <para>If a repeating operator (above) is not immediately followed by a
+    <literal>?</literal> or <literal>+</literal>, it behaves greedy, that is
+    the repeating operator will match as much characters as it can
+    but it will back off character by character during backtracking,
+    if that would allow to complete the rest of the match.</para>
+
+    <note>
+        <title>On regex search</title>
+
+        <para>There are some known issues with the
+        <literal>java.util.regex</literal> library, as it stands in
+        Java. In particular, it is possible to create
+        regular expressions that hang the JVM, or cause stack overflow
+        errors, which was not as easy to accomplish using the legacy
+        <literal>gnu.regexp</literal> library. If you find that
+        <literal>gnu.regexp</literal>, used in jEdit 4.2 and earlier, is
+        more suitable for your search/replace needs, you can try the
+        <emphasis role="bold">XSearch plugin</emphasis>, which still
+        uses it and can provide a replacement to the built-in search
+        dialog.</para>
+    </note>
 
 </appendix>
