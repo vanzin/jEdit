@@ -7,7 +7,7 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ### French translation by Jojaba (http://jojaba.free.fr)
 
-#{{{ jEdit core (jedit_gui.props)
+#{{{ jEdit core
 
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
@@ -1253,7 +1253,6 @@ options.general.restore.cli=...en incluant les noms de fichiers spécifiés en l
 options.general.encodingDetectors=Liste des détecteurs automatiques d'encodage :
 options.general.fallbackEncodings=Liste des encodages ajoutés pour prise en charge automatique :
 options.general.fallbackEncodings.tooltip=Une liste d'encodages séparés par un espace pour résoudre des problèmes de reconnaissance d'encodage au démarrage
-options.general.systrayicon=Afficher l'icône de la zone de notification
 #}}}
 
 #{{{ Abbreviations pane
@@ -1293,6 +1292,7 @@ options.appearance.decorateDialogs=Utiliser Swing look & feel pour le style des 
 options.appearance.localization.section.label=Localisation
 options.appearance.usedefaultlocale.label=Utiliser la langue par défaut
 options.appearance.lang.label=Langue (la modification est effective après redémarrage)
+options.appearance.systrayicon=Afficher l'icône de la zone de notification
 #}}}
 
 #{{{ Context Menu pane

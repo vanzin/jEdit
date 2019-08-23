@@ -7,7 +7,7 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
-#{{{ jEdit core (jedit_gui.props)
+#{{{ jEdit core
 
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
@@ -1434,7 +1434,6 @@ options.general.restore.cli=... включая файлы указанные в 
 options.general.encodingDetectors=Список автодетекторов кодировок:
 options.general.fallbackEncodings=Список резервных кодировок:
 options.general.fallbackEncodings.tooltip=Список кодировок, разделённых пробелами, используемых при ошибках кодировки при загрузке
-options.general.systrayicon=Показывать иконку в панели операционной системы
 #}}}
 
 #{{{ Abbreviations pane
@@ -1474,6 +1473,7 @@ options.appearance.decorateDialogs=Рисовать бордюры диалог�
 options.appearance.localization.section.label=Язык
 options.appearance.usedefaultlocale.label=Использовать язык по умолчанию
 options.appearance.lang.label=Язык (изменения вступят в силу при следующем старте)
+options.appearance.systrayicon=Показывать иконку в панели операционной системы
 #}}}
 
 #{{{ Context Menu pane

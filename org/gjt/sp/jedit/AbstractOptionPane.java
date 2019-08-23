@@ -134,6 +134,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	public JLabel newLabel(String label, Component comp)
 	{
 		JLabel retval = new JLabel(label);
+		retval.setLabelFor(comp);
 		try /* to get the tooltip of the component */
 		{
 			JComponent jc = (JComponent) comp;

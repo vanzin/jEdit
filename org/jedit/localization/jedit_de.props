@@ -42,7 +42,7 @@
 ###}}}
 ### -------------------------------------------------------------------------------------------------
 
-#{{{ jEdit core (jedit_gui.props)
+#{{{ jEdit core
 
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
@@ -95,6 +95,13 @@ load-layout.title=Dock-Layout laden
 load-layout.message=Zu ladendes Dock-Layout:
 save-layout.title=Dock-Layout speichern
 save-layout.message=Zu speicherndes Dock-Layout:
+
+screen-rectangle-selection.directions=<html>\
+        Zeige mit der Maus auf die Stelle an der Infobereichsicons angezeigt werden,<br/>\
+        so dass der gewünschte Hintergrund für das Icon in dem roten Rechteck ist.<br/>\
+        Drücke ENTER um die Auswahl abzuschließen.<br/>\
+        Drücke ESCAPE um die auswahl abzubrechen.\
+    <html>
 #}}}
 
 #{{{ Tool bar
@@ -1472,7 +1479,6 @@ options.general.restore.cli=... einschließlich der auf der Befehlszeile angegeb
 options.general.encodingDetectors=Erkennungszeichen für Kodierungen:
 options.general.fallbackEncodings=Liste der Rückfall-Kodierungen:
 options.general.fallbackEncodings.tooltip=(Experimentell) Leerzeichen-getrennte Liste von Zeichenkodierungen, die bei Kodierungsfehlern während des Ladens versucht werden sollen
-options.general.systrayicon=jEdit-Symbol im Infobereich anzeigen
 #}}}
 
 #{{{ Abbreviations pane
@@ -1511,6 +1517,16 @@ options.appearance.decorateDialogs=Ränder von Dialogboxen unter Verwendung von 
 options.appearance.localization.section.label=Lokalisierung
 options.appearance.usedefaultlocale.label=Standard-Sprache verwenden
 options.appearance.lang.label=Sprache (Änderung erfordert jEdit-Neustart)
+
+options.appearance.systrayicon.label=Infobereichsicon
+options.appearance.systrayicon.not.supported=Infobereich ist nicht verfügbar, auf einigen Linux Systemen muss man eventuell eine Erweiterung installieren um den Infobereich zu aktivieren
+options.appearance.systrayicon=jEdit-Symbol im Infobereich anzeigen
+options.appearance.systrayicon.background.default=Standard Hintergrundfarbe
+options.appearance.systrayicon.background.autodetect=Hintergrundfarbe automatisch erkennen
+options.appearance.systrayicon.background.fixed=Feste Hintergrundfarbe
+options.appearance.systrayicon.background.picked=Ausgewähltes Hintergrundrechteck
+options.appearance.systrayicon.background.color.label=Hintergrundfarbe
+options.appearance.systrayicon.background.pixel.label=Hintergrundpixel
 #}}}
 
 #{{{ Context Menu pane

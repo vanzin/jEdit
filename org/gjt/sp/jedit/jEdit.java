@@ -866,9 +866,8 @@ public class jEdit
 	public static Color getColorProperty(String name)
 	{
 		return getColorProperty(name,Color.black);
-	} //}}}
+	}
 
-	//{{{ getColorProperty() method
 	/**
 	 * Returns the value of a color property.
 	 * @param name The property name
@@ -894,6 +893,44 @@ public class jEdit
 	public static void setColorProperty(String name, Color value)
 	{
 		setProperty(name, SyntaxUtilities.getColorHexString(value));
+	} //}}}
+
+	//{{{ getColorMatrixProperty() method
+	/**
+	 * Returns the value of a color matrix property.
+	 * @param name The property name
+	 * @since jEdit 5.6
+	 */
+	public static Color[][] getColorMatrixProperty(String name)
+	{
+		return getColorMatrixProperty(name, null);
+	}
+
+	/**
+	 * Returns the value of a color matrix property.
+	 * @param name The property name
+	 * @param def The default value
+	 * @since jEdit 5.6
+	 */
+	public static Color[][] getColorMatrixProperty(String name, Color[][] def)
+	{
+		String value = getProperty(name);
+		if(value == null)
+			return def;
+		else
+			return SyntaxUtilities.parseColorMatrix(value, def);
+	} //}}}
+
+	//{{{ setColorMatrixProperty() method
+	/**
+	 * Sets the value of a color matrix property.
+	 * @param name The property name
+	 * @param value The value
+	 * @since jEdit 5.6
+	 */
+	public static void setColorMatrixProperty(String name, Color[][] value)
+	{
+		setProperty(name, SyntaxUtilities.getColorMatrixString(value));
 	} //}}}
 
 	//{{{ setProperty() method

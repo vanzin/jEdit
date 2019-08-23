@@ -7,7 +7,7 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
-#{{{ jEdit core (jedit_gui.props)
+#{{{ jEdit core
 
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
@@ -1254,7 +1254,6 @@ options.general.restore.cli=... コマンドラインでファイル名が指定
 options.general.encodingDetectors=エンコーディング検出方法(複数可):
 options.general.fallbackEncodings=代替エンコーディング(複数可):
 options.general.fallbackEncodings.tooltip=ロード中のエンコーディングエラーに対して再試行する、ホワイトスペースで分割された複数のエンコーディング
-options.general.systrayicon=システムトレイアイコンを表示
 #}}}
 
 #{{{ Abbreviations pane
@@ -1294,6 +1293,7 @@ options.appearance.decorateDialogs=Swing のルック・アンド・フィール
 options.appearance.localization.section.label=ローカライズ
 options.appearance.usedefaultlocale.label=デフォルトのロケールを使用
 options.appearance.lang.label=言語 (再起動で変更が反映されます)
+options.appearance.systrayicon=システムトレイアイコンを表示
 #}}}
 
 #{{{ Context Menu pane

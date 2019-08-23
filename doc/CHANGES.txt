@@ -39,6 +39,12 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- The tray icon on Linux systems now by default tries to detect the proper
+  background color and also lets the user either select a fixed color for
+  the background or select some arbitrary rectangle as background for the
+  tray icon, making the icon much less ugly on dark themes.
+  (Björn "Vampire" Kautler)
+
 - The Windows EXE launcher now considers JAVA_HOME environment variable if no
   matching Java is found in the registry (Björn "Vampire" Kautler)
 

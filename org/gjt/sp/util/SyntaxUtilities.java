@@ -27,11 +27,17 @@ package org.gjt.sp.util;
 import java.awt.Color;
 import java.awt.Font;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.IPropertyManager;
+
+import static java.util.stream.Collectors.joining;
 //}}}
 
 /**
@@ -44,14 +50,63 @@ import org.gjt.sp.jedit.IPropertyManager;
 public class SyntaxUtilities
 {
 	public static IPropertyManager propertyManager;
-	
-	
+	private static final Pattern COLOR_MATRIX_PATTERN = Pattern.compile("(?x)\n" +
+			"^\n" +
+			"\\s*+ # optionally preceded by whitespace\n" +
+			"\\[\n" +
+			"    (?: # one or more comma-separated matrix rows\n" +
+			"        \\s*+ # optionally preceded by whitespace\n" +
+			"        (?> # one matrix row\n" +
+			"            \\s*+ # optionally preceded by whitespace\n" +
+			"            \\[\n" +
+			"                (?: # one or more comma-separated colors\n" +
+			"                    \\s*+ # optionally preceded by whitespace\n" +
+			"                    (?>                                       # one color\n" +
+			"                        \\#\\p{XDigit}{6}(?:\\p{XDigit}{2})?+ # with '#' and 6 to 8 hex digits\n" +
+			"                        | red                                 # or as simple word\n" +
+			"                        | green\n" +
+			"                        | blue\n" +
+			"                        | yellow\n" +
+			"                        | orange\n" +
+			"                        | white\n" +
+			"                        | lightGray\n" +
+			"                        | gray\n" +
+			"                        | darkGray\n" +
+			"                        | black\n" +
+			"                        | cyan\n" +
+			"                        | magenta\n" +
+			"                        | pink\n" +
+			"                    )\n" +
+			"                    \\s*+ # optionally followed by whitespace\n" +
+			"                    (?:           # optionally followed\n" +
+			"                        ,         # by a comma\n" +
+			"                        (?!\\s*]) # that is not followed by a closing bracket\n" +
+			"                    )?+ \n" +
+			"                )++\n" +
+			"                \\s*+\n" +
+			"            ]\n" +
+			"        )\n" +
+			"        \\s*+ # optionally followed by whitespace\n" +
+			"        (?:           # optionally followed\n" +
+			"            ,         # by a comma\n" +
+			"            (?!\\s*]) # that is not followed by a closing bracket\n" +
+			"        )?+\n" +
+			"    )++\n" +
+			"    \\s*+ # optionally followed by whitespace\n" +
+			"]\n" +
+			"\\s*+ # optionally followed by whitespace\n" +
+			"$");
+	private static final Pattern COMMA_BETWEEN_BRACKETS_SEPARATOR_PATTERN =
+			Pattern.compile("(?<=])\\s*+,\\s*+(?=\\[)");
+	private static final Pattern COMMA_SEPARATOR_PATTERN =
+			Pattern.compile("\\s*+,\\s*+");
+
 	//{{{ getColorHexString() method
 	/**
 	 * Converts a color object to its hex value. The hex value
 	 * prefixed is with `#', for example `#ff0088'.
 	 * @param c The color object
-	 * @since jEdit 4.3pre13	 
+	 * @since jEdit 4.3pre13
 	 */
 	public static String getColorHexString(Color c)
 	{
@@ -59,7 +114,7 @@ public class SyntaxUtilities
 		String colString = Integer.toHexString(c.getRGB());
 		return mask.substring(0, mask.length() - colString.length()).concat(colString);
 	} //}}}
-	
+
 	//{{{ parseColor() method
 	/**
 	 * @since jEdit 4.3pre13
@@ -75,8 +130,8 @@ public class SyntaxUtilities
 			try
 			{
 			    name = name.substring(1);
-			    if (name.length() == 6) 
-			        name = "ff" + name;    
+			    if (name.length() == 6)
+			        name = "ff" + name;
 			    BigInteger bi = new BigInteger(name, 16);
 			    return new Color(bi.intValue(), true);
 			}
@@ -114,7 +169,65 @@ public class SyntaxUtilities
 		else
 			return defaultColor;
 	} //}}}
-	
+
+	//{{{ getColorMatrixString() method
+	public static String getColorMatrixString(Color[][] matrix)
+	{
+		if (matrix == null)
+			return null;
+
+		return Arrays.stream(matrix)
+				.map(row -> Arrays.stream(row)
+						.map(SyntaxUtilities::getColorHexString)
+						.collect(joining(",", "[", "]")))
+				.collect(joining(",", "[", "]"));
+	} //}}}
+
+	//{{{ parseColorMatrix() method
+	/**
+	 * Parses a color matrix of the form {@code "[[red, green], [blue, yellow]]"} into
+	 * a two dimensional array. If the syntax is invalid, the given default value is
+	 * returned. For the individual colors the same syntax as for
+	 * {@link #parseColor(String, Color)} is supported.
+	 *
+	 * <p>Only rectangular matrices are supported. If the lines of the matrix have
+	 * different lengths, also the default value is returned.
+	 *
+	 * @param matrix The color matrix
+	 * @param defaultColorMatrix The default value if there was a syntax error
+	 *
+	 * @since jEdit 5.6
+	 */
+	public static Color[][] parseColorMatrix(String matrix, Color[][] defaultColorMatrix)
+	{
+		if(matrix == null || !COLOR_MATRIX_PATTERN.matcher(matrix).matches())
+			return defaultColorMatrix;
+
+		matrix = matrix.strip();
+		Color[][] result = COMMA_BETWEEN_BRACKETS_SEPARATOR_PATTERN
+				.splitAsStream(matrix.substring(1, matrix.length() - 1))
+				.map(row ->
+				{
+					row = row.strip();
+					return COMMA_SEPARATOR_PATTERN
+							.splitAsStream(row.substring(1, row.length() - 1))
+							.map(String::strip)
+							.map(color -> parseColor(color, null))
+							.toArray(Color[]::new);
+				})
+				.toArray(Color[][]::new);
+
+		// if any color was invalid
+		// or rows are not of same length
+		// return default value
+		if (Arrays.stream(result).flatMap(Arrays::stream).anyMatch(Objects::isNull)
+				|| (Arrays.stream(result).mapToInt(row -> row.length).distinct().count() != 1)) {
+			return defaultColorMatrix;
+		}
+
+		return result;
+	} //}}}
+
 	//{{{ parseStyle() method
 	/**
 	 * Converts a style string to a style object.
@@ -170,7 +283,7 @@ public class SyntaxUtilities
 						(italic ? Font.ITALIC : 0) | (bold ? Font.BOLD : 0),
 						size));
 	} //}}}
-		
+
 	//{{{ parseStyle() method
 	/**
 	 * Converts a style string to a style object.
@@ -187,7 +300,7 @@ public class SyntaxUtilities
 	{
 		return parseStyle(str, family, size, color, Color.black);
 	} //}}}
-	
+
 	//{{{ loadStyles() methods
 	/**
 	 * Loads the syntax styles from the properties, giving them the specified
@@ -200,7 +313,7 @@ public class SyntaxUtilities
 	{
 		return loadStyles(family,size,true);
 	}
-	
+
 	/**
 	 * Loads the syntax styles from the properties, giving them the specified
 	 * base font family and size.
@@ -233,6 +346,6 @@ public class SyntaxUtilities
 
 		return styles;
 	} //}}}
-	
+
 	private SyntaxUtilities(){}
 }

@@ -7,7 +7,7 @@
 ### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
-#{{{ jEdit core (jedit_gui.props)
+#{{{ jEdit core
 
 #{{{ Default user catalog file
 defaultCatalog=<?xml version="1.0"?>\n\
@@ -1245,7 +1245,6 @@ options.general.restore.cli=... 添加命令行指定的文件名
 options.general.encodingDetectors=编码自动探测器列表:
 options.general.fallbackEncodings=后备编码列表:
 options.general.fallbackEncodings.tooltip=处理加载时编码错误的编码列表(空白符隔开)
-options.general.systrayicon=显示系统托盘图标
 #}}}
 
 #{{{ Abbreviations pane
@@ -1284,6 +1283,7 @@ options.appearance.decorateDialogs=使用Swing外观和感觉绘制对话框边�
 options.appearance.localization.section.label=本地化
 options.appearance.usedefaultlocale.label=使用默认本地化
 options.appearance.lang.label=语言 (重启后有效)
+options.appearance.systrayicon=显示系统托盘图标
 #}}}
 
 #{{{ Context Menu pane
