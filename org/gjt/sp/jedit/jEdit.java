@@ -449,7 +449,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
-		initLocalizationProperties();
+		initLocalizationProperties(false);
 
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
@@ -1037,6 +1037,7 @@ public class jEdit
 	 */
 	public static void propertiesChanged()
 	{
+		initLocalizationProperties(true);
 		initPLAF();
 
 		keymapManager.reload();
@@ -3940,10 +3941,10 @@ public class jEdit
 	/**
 	 * Loads localization property file(s).
 	 */
-	private static void initLocalizationProperties()
+	private static void initLocalizationProperties(boolean reinit)
 	{
 		String language = getCurrentLanguage();
-		if ("en".equals(language))
+		if (!reinit && "en".equals(language))
 		{
 			// no need to load english as localization property as it always loaded as default language
 			return;

@@ -39,6 +39,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Apply UI language changes immediately without the need to restart.
+  (Björn "Vampire" Kautler)
+
 - The tray icon on Linux systems now by default tries to detect the proper
   background color and also lets the user either select a fixed color for
   the background or select some arbitrary rectangle as background for the
