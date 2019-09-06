@@ -345,7 +345,7 @@ public class AppearanceOptionPane extends AbstractOptionPane implements ItemList
 			if (OperatingSystem.isX11())
 			{
 				String systemTrayIconBackgroundOld =
-						jEdit.getProperty("systrayicon.background");
+						jEdit.getProperty("systrayicon.background", "autodetect");
 				String systemTrayIconBackgroundNew;
 				if (systemTrayIconBackgroundDefault.isSelected())
 					systemTrayIconBackgroundNew = "default";
