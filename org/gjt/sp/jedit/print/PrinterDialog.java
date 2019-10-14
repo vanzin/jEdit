@@ -158,7 +158,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             setContentPane( contents );
 
             // auto-select the default printer
-            /*
             PrintService defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
             if ( defaultPrintService != null )
             {
@@ -168,7 +167,6 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
             {
                 printers.setSelectedIndex( 0 );
             }
-            */
 
 
             // loads some default values if needed
@@ -873,7 +871,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                 printers.setSelectedValue(defaultPrintService, true);      
                 selectedPrintService = defaultPrintService;
             }
-            else 
+            if (selectedPrintService == null) 
             {
                 selectedPrintService = printers.getModel().getElementAt( 0 );
             }
