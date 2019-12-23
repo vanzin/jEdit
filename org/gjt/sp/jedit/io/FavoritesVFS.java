@@ -70,7 +70,8 @@ public class FavoritesVFS extends VFS
 	public VFSFile[] _listFiles(Object session, String url,
 		Component comp)
 	{
-		return getFavorites();
+		if (url.equals(PROTOCOL + ':')) return getFavorites();
+		else return null;
 	} //}}}
 
 	//{{{ _getFile() method
