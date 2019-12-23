@@ -1180,7 +1180,7 @@ public class GUIUtilities
 				FontRenderContext frc = new FontRenderContext(null, true, false);
 				float scale =
 					font1.getLineMetrics("", frc).getHeight() / font2.getLineMetrics("", frc).getHeight();
-				return new Font(font2.getFamily(), font2.getStyle(), (int)(scale * font1.getSize()));
+				return new Font(font2.getFamily(), font2.getStyle(), (int)(scale * font1.getSize() * 0.85));
 			}
 		}
 	} //}}}
