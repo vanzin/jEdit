@@ -655,6 +655,10 @@ public class Chunk extends Token
 		// instance to the char array.
 		font.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, flags);
 
+		if ((result.getLayoutFlags() & GlyphVector.FLAG_COMPLEX_GLYPHS) != 0) {
+			result = font.createGlyphVector(frc, new String(text, start, end - start));
+		}
+
 		return result;
 	} // }}}
 
