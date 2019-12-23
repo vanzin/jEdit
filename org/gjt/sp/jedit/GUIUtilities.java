@@ -1174,7 +1174,9 @@ public class GUIUtilities
 				return new Font("Monospaced", Font.PLAIN, 12);
 			}
 			else {
-				Font font2 = new Font("Lucida Sans Typewriter", Font.PLAIN, font1.getSize());
+				Font font2 =
+					new Font(OperatingSystem.isWindows() ? "Lucida Console" : "Monospaced",
+						Font.PLAIN, font1.getSize());
 				FontRenderContext frc = new FontRenderContext(null, true, false);
 				float scale =
 					font1.getLineMetrics("", frc).getHeight() / font2.getLineMetrics("", frc).getHeight();
