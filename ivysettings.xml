@@ -22,13 +22,9 @@
 
 <ivysettings>
 	<settings defaultResolver="default"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-shared.xml"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-local.xml"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml"/>
 
 	<resolvers>
+		<ibiblio name="public" root="https://repo1.maven.org/maven2/" m2compatible="true"/>
 		<url name="jedit-plugins">
 			@jedit.plugins.artifact.patterns@
 		</url>
@@ -36,4 +32,10 @@
 	<modules>
 		<module organisation="org.jedit.plugins" resolver="jedit-plugins" />
 	</modules>
+
+	
+	<include url="${ivy.default.settings.dir}/ivysettings-shared.xml"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-local.xml"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml"/>
 </ivysettings>
