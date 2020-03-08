@@ -9,6 +9,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- When launching jEdit if a file named like the untitled buffer from
+  perspective exists, then load it (#4087 - Matthieu Casanova)
+
 - Do not only highlight the first match in hypersearch results
   (#4083 - Matthieu Casanova)
 

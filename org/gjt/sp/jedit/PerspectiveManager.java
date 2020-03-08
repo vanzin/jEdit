@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
@@ -337,14 +340,30 @@ public class PerspectiveManager
 		{
 			if(name.equals("BUFFER"))
 			{
-				if (restoreFiles && !skipRemote(charData.toString()))
+				String bufferPath = charData.toString();
+				if (restoreFiles && !skipRemote(bufferPath))
 				{
 					boolean bufferUntitled = false;
-					if(untitled != null) {
+					boolean fileExists = false;
+					VFS vfs = VFSManager.getVFSForPath(bufferPath);
+					Object session = vfs.createVFSSession(bufferPath, view);
+					try {
+						VFSFile vfsFile = vfs._getFile(session, bufferPath, view);
+						fileExists = vfsFile.isReadable();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						try {
+							vfs._endVFSSession(session, view);
+						} catch (IOException e) {
+							Log.log(Log.ERROR, this, e);
+						}
+					}
+					if(untitled != null && !fileExists) {
 						bufferUntitled = "TRUE".equals(untitled);
 					}
 
-					Buffer restored = jEdit.openTemporary(null,null, charData.toString(), bufferUntitled, null, bufferUntitled);
+					Buffer restored = jEdit.openTemporary(null,null, bufferPath, bufferUntitled, null, bufferUntitled);
 					// if the autoReload attributes are not present, don't set anything
 					// it's sufficient to check whether they are present on the first BUFFER element
 					if (restored != null)
