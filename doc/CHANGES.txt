@@ -9,6 +9,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Do not only highlight the first match in hypersearch results
+  (#4083 - Matthieu Casanova)
+
 - Re-add missing help viewer back and forward icons (Björn "Vampire" Kautler)
 
 - Fix wrong behavior of input method framework support that returned wrong
