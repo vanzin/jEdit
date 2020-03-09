@@ -83,6 +83,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 - Add HL7 mode (Thiemo Kellner / Dale Anson)
 
+- Update drawj2d mode (patch ##622 A. Vontobel / Matthieu Casanova)
+
 }}}
 
 }}}
