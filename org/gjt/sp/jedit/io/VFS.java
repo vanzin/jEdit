@@ -43,6 +43,8 @@ import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
+
+import javax.annotation.Nullable;
 //}}}
 
 /**
@@ -888,9 +890,8 @@ public abstract class VFS
 	 * @return The specified directory entry, or null if it doesn't exist.
 	 * @since jEdit 4.3pre2
 	 */
-	public VFSFile _getFile(Object session, String path,
-		Component comp)
-		throws IOException
+	@Nullable
+	public VFSFile _getFile(Object session, String path, Component comp) throws IOException
 	{
 		return null;
 	} //}}}

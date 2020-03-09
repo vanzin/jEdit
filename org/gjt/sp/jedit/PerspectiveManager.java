@@ -343,25 +343,30 @@ public class PerspectiveManager
 				String bufferPath = charData.toString();
 				if (restoreFiles && !skipRemote(bufferPath))
 				{
-					boolean bufferUntitled = false;
 					boolean fileExists = false;
 					VFS vfs = VFSManager.getVFSForPath(bufferPath);
 					Object session = vfs.createVFSSession(bufferPath, view);
-					try {
+					try
+					{
 						VFSFile vfsFile = vfs._getFile(session, bufferPath, view);
-						fileExists = vfsFile.isReadable();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} finally {
-						try {
+						fileExists = vfsFile != null;
+					}
+					catch (IOException e)
+					{
+						Log.log(Log.ERROR, this, e);
+					}
+					finally
+					{
+						try
+						{
 							vfs._endVFSSession(session, view);
-						} catch (IOException e) {
+						}
+						catch (IOException e)
+						{
 							Log.log(Log.ERROR, this, e);
 						}
 					}
-					if(untitled != null && !fileExists) {
-						bufferUntitled = "TRUE".equals(untitled);
-					}
+					boolean bufferUntitled = !fileExists && "TRUE".equals(untitled);
 
 					Buffer restored = jEdit.openTemporary(null,null, bufferPath, bufferUntitled, null, bufferUntitled);
 					// if the autoReload attributes are not present, don't set anything
