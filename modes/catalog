@@ -444,7 +444,7 @@
 <MODE NAME="plaintex"		FILE="plaintex.xml" />
 
 <MODE NAME="plantuml" FILE="plantuml.xml" 
-        FILE_NAME_GLOB="*.{plant,plantuml,pu}"/>
+        FILE_NAME_GLOB="*.{plant,plantuml,pu,puml}"/>
 
 <MODE NAME="PostgreSQL" FILE="pg-sql.xml"
               FILE_NAME_GLOB="*.{pg_sql,pg-sql}" />
