@@ -572,7 +572,7 @@ loop:		for(;;)
 				}
 				else
 				{
-					Integer[] args = {Integer.valueOf(reverse ? 1 : 0)};
+					Integer[] args = {reverse ? 1 : 0};
 					int result = GUIUtilities.confirm(comp,
 						"keepsearching",args,
 						JOptionPane.YES_NO_OPTION,
@@ -766,8 +766,7 @@ loop:		for(;;)
 
 			if(!BeanShell.isScriptRunning())
 			{
-				Object[] args = {Integer.valueOf(retVal),
-				                 Integer.valueOf(1)};
+				Object[] args = {retVal, 1};
 				view.getStatus().setMessageAndClear(jEdit.getProperty(
 					"view.status.replace-all",args));
 			}
@@ -962,8 +961,7 @@ loop:		while(path != null)
 		/* Don't do this when playing a macro, cos it's annoying */
 		if(!BeanShell.isScriptRunning())
 		{
-			Object[] args = {Integer.valueOf(occurCount),
-			                 Integer.valueOf(fileCount)};
+			Object[] args = {occurCount, fileCount};
 			view.getStatus().setMessageAndClear(jEdit.getProperty(
 				"view.status.replace-all",args));
 			if(occurCount == 0)
@@ -1072,7 +1070,7 @@ loop:		while(path != null)
 	 */
 	private static void initReplace() throws Exception
 	{
-		if(beanshell && replace.length() != 0)
+		if(beanshell && !replace.isEmpty())
 		{
 			String text;
 			if( replace.trim().startsWith( "{" ) )
