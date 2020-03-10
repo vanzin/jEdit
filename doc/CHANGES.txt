@@ -77,6 +77,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Added openSIPS mode (Matthieu Casanova)
+
 - Update Java mode to support Java 10 "var" type. (Dale Anson)
 
 - Add PlantUML mode (Andreas Studer / Dale Anson)
