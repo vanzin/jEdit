@@ -398,7 +398,7 @@ public class SearchAndReplace
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null)
+		if(!comp.isShowing())
 			comp = view;
 
 		record(view,"hyperSearch(view," + selection + ')',false,
@@ -456,7 +456,7 @@ public class SearchAndReplace
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null || !comp.isShowing())
+		if(!comp.isShowing())
 			comp = view;
 
 		String path = fileset.getNextFile(view,null);
@@ -705,7 +705,7 @@ loop:		for(;;)
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null)
+		if(!comp.isShowing())
 			comp = view;
 
 		JEditTextArea textArea = view.getTextArea();
@@ -808,7 +808,7 @@ loop:		for(;;)
 
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null)
+		if(!comp.isShowing())
 			comp = view;
 
 		boolean smartCaseReplace = getSmartCaseReplace();
@@ -867,7 +867,7 @@ loop:		for(;;)
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null)
+		if(!comp.isShowing())
 			comp = view;
 
 		if(fileset.getFileCount(view) == 0)
