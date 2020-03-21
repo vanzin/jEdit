@@ -77,6 +77,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Update RPM Spec mode (bug #3880 Matthieu Casanova)
+
 - Added openSIPS mode (Matthieu Casanova)
 
 - Update Java mode to support Java 10 "var" type. (Dale Anson)
