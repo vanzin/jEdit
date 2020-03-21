@@ -43,6 +43,7 @@ public class UrlVFS extends VFS
 	} //}}}
 
 	//{{{ constructPath() method
+	@Override
 	public String constructPath(String parent, String path)
 	{
 		if(parent.endsWith("/"))
@@ -52,8 +53,8 @@ public class UrlVFS extends VFS
 	} //}}}
 
 	//{{{ _createInputStream() method
-	public InputStream _createInputStream(Object session,
-		String path, boolean ignoreErrors, Component comp)
+	@Override
+	public InputStream _createInputStream(Object session, String path, boolean ignoreErrors, Component comp)
 		throws IOException
 	{
 		try
@@ -70,8 +71,8 @@ public class UrlVFS extends VFS
 	} //}}}
 
 	//{{{ _createOutputStream() method
-	public OutputStream _createOutputStream(Object session, String path,
-		Component comp) throws IOException
+	@Override
+	public OutputStream _createOutputStream(Object session, String path, Component comp) throws IOException
 	{
 		try
 		{
