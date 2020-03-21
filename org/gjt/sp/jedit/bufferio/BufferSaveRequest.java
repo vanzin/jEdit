@@ -219,8 +219,7 @@ public class BufferSaveRequest extends BufferIORequest
 		try
 		{
 			// Only backup once per session
-			if(buffer.getProperty(Buffer.BACKED_UP) == null
-				|| jEdit.getBooleanProperty("backupEverySave"))
+			if(!buffer.hasProperty(Buffer.BACKED_UP) || jEdit.getBooleanProperty("backupEverySave"))
 			{
 				if (jEdit.getIntegerProperty("backups",1) > 0)
 					vfs._backup(session,path,view);

@@ -111,9 +111,9 @@ public class JEditBuffer
 
 		// fill in defaults for these from system properties if the
 		// corresponding buffer.XXX properties not set
-		if(getProperty(ENCODING) == null)
+		if(!hasProperty(ENCODING))
 			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
-		if(getProperty(LINESEP) == null)
+		if(!hasProperty(LINESEP))
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 
 		setFoldHandler(new DummyFoldHandler());
@@ -133,9 +133,9 @@ public class JEditBuffer
 
 		loadText(null,null);
 		// corresponding buffer.XXX properties not set
-		if(getProperty(ENCODING) == null)
+		if(!hasProperty(ENCODING))
 			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
-		if(getProperty(LINESEP) == null)
+		if(!hasProperty(LINESEP))
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 
 		setFoldHandler(new DummyFoldHandler());
@@ -1546,6 +1546,21 @@ loop:		for(int i = 0; i < seg.count; i++)
 				return retVal;
 			}
 		}
+	} //}}}
+
+	//{{{ hasProperty() method
+	/**
+	 * @return true if the buffer local property exists.
+	 *
+	 * This method is thread-safe.
+	 *
+	 * @param name The property name. For backwards compatibility, this
+	 * is an {@code Object}, not a {@code String}.
+	 * @since jEdit 5.6pre1
+	 */
+	public boolean hasProperty(Object name)
+	{
+		return null != getProperty(name);
 	} //}}}
 
 	//{{{ getDefaultProperty() method
