@@ -68,11 +68,7 @@ public class BufferSaveRequest extends BufferIORequest
 		 * since some VFS's might not allow # in filenames.
 		 */
 
-		boolean vfsRenameCap = (vfs.getCapabilities() &
-			VFS.RENAME_CAP) != 0;
-
-		boolean wantTwoStage = wantTwoStageSave(buffer);
-		boolean twoStageSave = vfsRenameCap && wantTwoStage;
+		boolean twoStageSave = willTwoStageSave(buffer);
 
 		try
 		{
@@ -243,11 +239,13 @@ public class BufferSaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ wantTwoStageSave() method
-	private static boolean wantTwoStageSave(Buffer buffer)
+	private boolean willTwoStageSave(Buffer buffer)
 	{
-		return !buffer.getBooleanProperty("forbidTwoStageSave") &&
-			(buffer.getBooleanProperty("overwriteReadonly") ||
-			jEdit.getBooleanProperty("twoStageSave"));
+		boolean vfsRenameCap = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
+		return vfsRenameCap &&
+				!buffer.getBooleanProperty("forbidTwoStageSave") &&
+				(buffer.getBooleanProperty("overwriteReadonly") ||
+						jEdit.getBooleanProperty("twoStageSave"));
 	}//}}}
 
 	//}}}
