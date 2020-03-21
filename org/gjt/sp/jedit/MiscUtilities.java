@@ -285,7 +285,7 @@ public class MiscUtilities
 				|| OperatingSystem.isVMS())
 		{
 			// nice and simple
-			if(path.length() > 0 && path.charAt(0) == '/')
+			if(!path.isEmpty() && path.charAt(0) == '/')
 				return true;
 		}
 
