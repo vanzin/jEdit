@@ -414,6 +414,7 @@ public abstract class VFS
 	 * @param path The path name
 	 * @since jEdit 4.1pre7
 	 */
+	@Nullable
 	public String getTwoStageSaveName(String path)
 	{
 		return MiscUtilities.constructPath(getParentOfPath(path),
