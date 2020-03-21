@@ -51,14 +51,15 @@ public class FileRootsVFS extends VFS
 	} //}}}
 
 	//{{{ getParentOfPath() method
+	@Override
 	public String getParentOfPath(String path)
 	{
 		return PROTOCOL + ':';
 	} //}}}
 
 	//{{{ _listFiles() method
-	public VFSFile[] _listFiles(Object session, String url,
-		Component comp)
+	@Override
+	public VFSFile[] _listFiles(Object session, String url, Component comp)
 	{
 		File[] roots = listRoots();
 
@@ -73,14 +74,14 @@ public class FileRootsVFS extends VFS
 	} //}}}
 
 	//{{{ _getFile() method
-	public VFSFile _getFile(Object session, String path,
-		Component comp)
+	@Override
+	public VFSFile _getFile(Object session, String path, Component comp)
 	{
 		return new Root(new File(path));
 	} //}}}
 
 	//{{{ Private members
-	private static FileSystemView fsView = FileSystemView.getFileSystemView();
+	private static final FileSystemView fsView = FileSystemView.getFileSystemView();
 
 	//{{{ listRoots() method
 	private static File[] listRoots()
@@ -89,7 +90,7 @@ public class FileRootsVFS extends VFS
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
-			LinkedList<File> roots = new LinkedList<File>();
+			LinkedList<File> roots = new LinkedList<>();
 
 			roots.add(new File("/"));
 
@@ -159,6 +160,7 @@ public class FileRootsVFS extends VFS
 				setType(VFSFile.FILE);
 		}
 
+		@Override
 		public String getExtendedAttribute(String name)
 		{
 			if(name.equals(EA_TYPE))
