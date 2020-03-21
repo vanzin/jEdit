@@ -72,7 +72,7 @@ public class MiscUtilities
 	 */
 	public static String canonPath(String path)
 	{
-		if(path.length() == 0)
+		if(path.isEmpty())
 			return path;
 
 		if(path.startsWith("file://"))
@@ -307,7 +307,7 @@ public class MiscUtilities
 		if (parent == null)
 			parent = System.getProperty("user.dir");
 
-		if (path == null || path.length() == 0)
+		if (path == null || path.isEmpty())
 			return parent;
 
 		// have to handle this case specially on windows.
@@ -344,7 +344,7 @@ public class MiscUtilities
 			else
 				break;
 		}
-		if(path.length() == 0)
+		if(path.isEmpty())
 			return parent;
 
 		if(OperatingSystem.isWindows()
@@ -729,7 +729,7 @@ public class MiscUtilities
 	public static String getBackupDirectory()
 	{
 		String backupDirectory = jEdit.getProperty("backup.directory");
-		if(backupDirectory == null || backupDirectory.length() == 0)
+		if(backupDirectory == null || backupDirectory.isEmpty())
 		{
 			return null;
 		} else {
