@@ -28,18 +28,12 @@ import java.awt.event.TextListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.gjt.sp.util.StringModel;
@@ -71,17 +65,11 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 {
 	// {{{ Members
 	OptionGroup optionGroup;
-
 	JSplitPane splitter;
-
 	JTree paneTree;
-
 	OptionPane currentPane;
-
 	OptionTreeModel optionTreeModel;
-
-	HashMap<Object, OptionPane> deferredOptionPanes;
-
+	Map<Object, OptionPane> deferredOptionPanes;
 	JPanel stage;
 
 	StringModel title = new StringModel();
@@ -104,12 +92,14 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 	{
 		return title.toString();
 	}
+
 	void setTitle(String newTitle)
 	{
 		title.setText(newTitle);
 	}
 
 	// {{{ valueChanged() method
+	@Override
 	public void valueChanged(TreeSelectionEvent evt)
 	{
 		TreePath path = evt.getPath();
@@ -214,7 +204,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
         // {{{ selectPane() methods
 	private boolean selectPane(OptionGroup node, String name)
 	{
-		return selectPane(node, name, new ArrayList<Object>());
+		return selectPane(node, name, new ArrayList<>());
 	} 
 
 	private boolean selectPane(OptionGroup node, String name, ArrayList<Object> path)
@@ -233,13 +223,10 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 					path.add(grp);
 					path.add(grp.getMember(0));
 					TreePath treePath = new TreePath(path.toArray());
-					if (treePath != null)
-					{
-						paneTree.scrollPathToVisible(treePath);
-						paneTree.setSelectionPath(treePath);
+					paneTree.scrollPathToVisible(treePath);
+					paneTree.setSelectionPath(treePath);
 
-						return true;
-					}
+					return true;
 				}
 				else if (selectPane((OptionGroup) obj, name, path))
 				{
@@ -283,6 +270,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 	} // }}}
 
 	// {{{ init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -294,12 +282,12 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		// a label and only add its children
 		for (Enumeration<Object> members = optionGroup.getMembers(); members.hasMoreElements();)
 		{
-				Object member = members.nextElement();
-				if (member instanceof OptionGroup)
-						rootGroup.addOptionGroup((OptionGroup)member);
-				else if (member instanceof String)
-						rootGroup.addOptionPane((String)member);
-				// TODO are there any other cases that must handled?
+			Object member = members.nextElement();
+			if (member instanceof OptionGroup)
+				rootGroup.addOptionGroup((OptionGroup)member);
+			else if (member instanceof String)
+				rootGroup.addOptionPane((String)member);
+			// TODO are there any other cases that must handled?
 		}
 
 		paneTree = new JTree(optionTreeModel);
@@ -321,8 +309,8 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 		paneTree.setRootVisible(false);
 		
 		JScrollPane scroller = new JScrollPane(paneTree,
-			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroller.setMinimumSize(new Dimension(120, 0));
 		JScrollPane scroll = new JScrollPane(stage);
 		scroll.getVerticalScrollBar().setUnitIncrement(10);
@@ -349,6 +337,7 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 	} //}}}
 
 	//{{{ save() methods
+	@Override
 	protected void _save()
 	{
 		if (currentPane != null)
@@ -360,7 +349,6 @@ public class OptionGroupPane extends AbstractOptionPane implements TreeSelection
 
 	private void save(Object obj)
 	{
-
 		if (obj instanceof OptionGroup)
 		{
 			OptionGroup grp = (OptionGroup) obj;
