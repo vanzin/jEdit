@@ -24,7 +24,6 @@ package org.jedit.keymap;
 //{{{ Imports
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -90,7 +89,7 @@ public class KeymapManagerImpl implements KeymapManager
 	{
 		Collection<String> systemKeymapNames = getKeymapsFromFolder(systemKeymapFolder);
 		Collection<String> userKeymapNames = getKeymapsFromFolder(userKeymapFolder);
-		Set<String> keyMaps = new HashSet<String>();
+		Set<String> keyMaps = new HashSet<>();
 		keyMaps.addAll(systemKeymapNames);
 		keyMaps.addAll(userKeymapNames);
 		return keyMaps;
@@ -161,24 +160,17 @@ public class KeymapManagerImpl implements KeymapManager
 		if (!originalKeymap.isFile())
 			throw new IllegalArgumentException("Keymap " + name + " doesn't exist");
 		keymapFile.getParentFile().mkdirs();
-		BufferedInputStream in = null;
-		BufferedOutputStream out = null;
+
 		Log.log(Log.DEBUG, this, "Copying "+ originalKeymap.getAbsolutePath() + " to " + keymapFile.getAbsolutePath());
-		try
+		try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(originalKeymap));
+		     BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(keymapFile)))
 		{
-			in = new BufferedInputStream(new FileInputStream(originalKeymap));
-			out = new BufferedOutputStream(new FileOutputStream(keymapFile));
 			IOUtilities.copyStream(null, in, out, false);
 			return true;
 		}
 		catch (IOException e)
 		{
 			Log.log(Log.ERROR, this, e);
-		}
-		finally
-		{
-			IOUtilities.closeQuietly((Closeable)in);
-			IOUtilities.closeQuietly((Closeable)out);
 		}
 		return false;
 	} //}}}
@@ -219,7 +211,7 @@ public class KeymapManagerImpl implements KeymapManager
 	{
 		if (folder == null)
 			return Collections.emptyList();
-		Collection<String> names = new ArrayList<String>();
+		Collection<String> names = new ArrayList<>();
 		File[] files = folder.listFiles(new KeymapFileFilter());
 		if (files != null)
 		{
