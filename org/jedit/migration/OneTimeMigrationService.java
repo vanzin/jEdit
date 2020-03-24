@@ -18,12 +18,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
 package org.jedit.migration;
+
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 import org.jedit.core.MigrationService;
+
+import java.util.Arrays;
 
 //{{{ OneTimeMigrationService class
 /** Base class from which one can more easily implement a migration step
@@ -49,35 +51,40 @@ import org.jedit.core.MigrationService;
     @author Alan Ezust
     @since jEdit 5.1
 */
-abstract public class OneTimeMigrationService implements MigrationService
+public abstract class OneTimeMigrationService implements MigrationService
 {
-	/** Performs doMigrate() on each installed
-		OneTimeMigrationService */
+	/**
+	 * Performs doMigrate() on each installed OneTimeMigrationService
+	 */
 	public static void execute()
 	{
 		String[] migrations = ServiceManager.getServiceNames(OneTimeMigrationService.class);
-		if (migrations.length == 0) return;
+		if (migrations.length == 0)
+			return;
 		for (String migration: migrations)
 		{
-			Object obj = ServiceManager.getService(OneTimeMigrationService.class, migration);
-			OneTimeMigrationService svc = (OneTimeMigrationService) obj;
+			OneTimeMigrationService svc = ServiceManager.getService(OneTimeMigrationService.class, migration);
 			svc.doMigration();
 		}
 	}
 
 	protected String name;
 
-	/** @param name of this service. Used to identify and determine if it's been
-        done eariler. */
-	public OneTimeMigrationService(String name)
+	/**
+	 * @param name of this service. Used to identify and determine if it's been done eariler.
+	 */
+	protected OneTimeMigrationService(String name)
 	{
 		this.name = name;
 	}
 
-	/** Calls migrate() but only once per installation. */
+	/**
+	 * Calls migrate() but only once per installation.
+	 */
 	public void doMigration()
 	{
-		if (!jEdit.getBooleanProperty("migration.step." + name)) {
+		if (!jEdit.getBooleanProperty("migration.step." + name))
+		{
 			Log.log(Log.MESSAGE, this, "Performing migration step: " + name);
 			migrate();
 			jEdit.setBooleanProperty("migration.step." + name, true);
