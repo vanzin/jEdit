@@ -25,8 +25,6 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 import org.jedit.core.MigrationService;
 
-import java.util.Arrays;
-
 //{{{ OneTimeMigrationService class
 /** Base class from which one can more easily implement a migration step
     that should be executed only once per installation.
