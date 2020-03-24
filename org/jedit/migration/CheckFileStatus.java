@@ -24,13 +24,21 @@ import org.gjt.sp.jedit.options.GeneralOptionPane;
 
 
 //{{{ CheckFileStatus class
-/** Migration step for the 'checkFileStatus' property whose meaning changed slightly
-    in jEdit. Default value was before 0 and is now 1. */
-public class CheckFileStatus extends OneTimeMigrationService {
-	public CheckFileStatus() {
+/**
+ * Migration step for the 'checkFileStatus' property whose meaning changed slightly
+ * in jEdit. Default value was before 0 and is now 1.
+ */
+public class CheckFileStatus extends OneTimeMigrationService
+{
+	public CheckFileStatus()
+	{
 		super("checkFileStatus");
 	}
-	public void migrate() {
+
+
+	@Override
+	public void migrate()
+	{
 		if ((jEdit.getIntegerProperty("checkFileStatus", GeneralOptionPane.checkFileStatus_focus) == 0))
 			jEdit.setIntegerProperty("checkFileStatus", GeneralOptionPane.checkFileStatus_focus);
 	}
