@@ -42,13 +42,14 @@ import javax.annotation.Nonnull;
  */
 public class CharsetEncoding implements Encoding
 {
-	//{{{ Constructor
+	//{{{ Constructors
 	public CharsetEncoding(String name)
 	{
 		body = Charset.forName(name);
 	} //}}}
 
 	//{{{ implements Encoding
+	@Override
 	@Nonnull
 	public Reader getTextReader(@Nonnull InputStream in) throws IOException
 	{
@@ -59,6 +60,7 @@ public class CharsetEncoding implements Encoding
 		return new InputStreamReader(in, body.newDecoder());
 	}
 
+	@Override
 	@Nonnull
 	public Writer getTextWriter(@Nonnull OutputStream out) throws IOException
 	{
@@ -67,6 +69,7 @@ public class CharsetEncoding implements Encoding
 		return new OutputStreamWriter(out, body.newEncoder());
 	}
 
+	@Override
 	@Nonnull
 	public Reader getPermissiveTextReader(@Nonnull InputStream in) throws IOException
 	{
