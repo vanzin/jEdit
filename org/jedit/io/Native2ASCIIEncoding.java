@@ -32,9 +32,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.MalformedInputException;
+import java.nio.charset.StandardCharsets;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -51,12 +51,14 @@ import org.gjt.sp.jedit.io.Encoding;
 public class Native2ASCIIEncoding implements Encoding
 {
 	//{{{ implements Encoding
+	@Override
 	@Nonnull
 	public Reader getTextReader(@Nonnull InputStream in) throws IOException
 	{
 		return new Native2ASCIIReader(in, false);
 	}
 
+	@Override
 	@Nonnull
 	public Writer getTextWriter(@Nonnull OutputStream out) throws IOException
 	{
@@ -94,7 +96,7 @@ public class Native2ASCIIEncoding implements Encoding
 			}
 
 			@Override
-			public void write(@Nonnull char cbuf[]) throws IOException
+			public void write(@Nonnull char[] cbuf) throws IOException
 			{
 				write(cbuf, 0, cbuf.length);
 			}
@@ -140,6 +142,7 @@ public class Native2ASCIIEncoding implements Encoding
 		};
 	}
 
+	@Override
 	@Nonnull
 	public Reader getPermissiveTextReader(@Nonnull InputStream in) throws IOException
 	{
@@ -168,7 +171,7 @@ public class Native2ASCIIEncoding implements Encoding
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private final CharsetEncoder asciiEncoder = Charset.forName("ASCII").newEncoder();
+	private final CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
 	private final CharsetEncoding asciiEncoding = new CharsetEncoding("ASCII");
 	//}}}
 
@@ -461,8 +464,8 @@ outer:
 		private static final Encoding iso_8859_1Encoding = new CharsetEncoding("ISO-8859-1");
 
 		//{{{ Instance variables
-		private PushbackReader in;
-		private boolean permissive;
+		private final PushbackReader in;
+		private final boolean permissive;
 		private char[] skipBuffer;
 		private boolean escaped;
 		//}}}
