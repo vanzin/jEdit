@@ -16,11 +16,13 @@ import org.gjt.sp.jedit.textarea.TextArea;
 	Rewritten in Java by Alan Ezust in 2013.
 */
 
-public class EmacsUtil {
+public class EmacsUtil
+{
 	Buffer buffer; 
 	TextArea textArea;
 	
-	public EmacsUtil() {
+	public EmacsUtil()
+	{
 		buffer =  jEdit.getActiveView().getBuffer();
 		textArea = jEdit.getActiveView().getTextArea();
 	}
@@ -191,7 +193,6 @@ public class EmacsUtil {
 			{
 				textArea.goToNextCharacter (false);
 			}
-	
 			else
 			{
 				eat = false;
@@ -283,8 +284,7 @@ public class EmacsUtil {
 				return null;
 			}
 	
-			selection = new Selection.Range (Math.min (caret, mark),
-											 Math.max (caret, mark));
+			selection = new Selection.Range (Math.min (caret, mark), Math.max (caret, mark));
 			textArea.setSelection (selection);
 		}
 	
@@ -322,26 +322,26 @@ public class EmacsUtil {
 	{
 		addToClipboardAndHistory (textArea.getSelectedText (selection));
 	}
-	
+
 	public int findEndOfSentence()
 	{
 		int caret = textArea.getCaretPosition();
-	
+
 		for (;;)
 		{
 			if (atEndOfBuffer (caret))
 				break;
-	
+
 			char ch = charAt (caret);
 			if (ch == '.' && Character.isWhitespace (charAt (caret + 1)))
-            {
-					caret++;
-					break;
+			{
+				caret++;
+				break;
 			}
-	
+
 			caret++;
 		}
-		
+
 		return caret;
 	}
 	
