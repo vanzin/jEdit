@@ -46,6 +46,11 @@ public class CharsetEncoding implements Encoding
 	public CharsetEncoding(String name)
 	{
 		body = Charset.forName(name);
+	}
+
+	public CharsetEncoding(Charset charset)
+	{
+		body = charset;
 	} //}}}
 
 	//{{{ implements Encoding

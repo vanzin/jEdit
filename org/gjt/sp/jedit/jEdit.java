@@ -46,6 +46,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
@@ -3772,7 +3773,7 @@ public class jEdit
 		{
 			// Using our CharsetEncoding to reliably detect
 			// encoding errors.
-			CharsetEncoding utf8 = new CharsetEncoding("UTF-8");
+			CharsetEncoding utf8 = new CharsetEncoding(StandardCharsets.UTF_8);
 			text = utf8.getTextReader(bytes);
 		}
 		finally

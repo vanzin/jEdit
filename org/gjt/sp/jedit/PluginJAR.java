@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1570,7 +1571,7 @@ public class PluginJAR
 					try
 					{
 						in = classLoader.getResourceAsStream(name);
-						CharsetEncoding utf8 = new CharsetEncoding("UTF-8");
+						CharsetEncoding utf8 = new CharsetEncoding(StandardCharsets.UTF_8);
 						Reader utf8in = utf8.getTextReader(in);
 						props.load(utf8in);
 						localizationProperties.put(languageName, props);

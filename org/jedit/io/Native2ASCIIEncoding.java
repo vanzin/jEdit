@@ -172,7 +172,7 @@ public class Native2ASCIIEncoding implements Encoding
 
 	//{{{ Instance variables
 	private final CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
-	private final CharsetEncoding asciiEncoding = new CharsetEncoding("ASCII");
+	private final CharsetEncoding asciiEncoding = new CharsetEncoding(StandardCharsets.US_ASCII);
 	//}}}
 
 	private static class Native2ASCIIReader extends FilterReader
@@ -461,7 +461,7 @@ outer:
 		//{{{ Private members
 
 		private static final int MAX_SKIP_BUFFER_SIZE = 8192;
-		private static final Encoding iso_8859_1Encoding = new CharsetEncoding("ISO-8859-1");
+		private static final Encoding iso_8859_1Encoding = new CharsetEncoding(StandardCharsets.ISO_8859_1);
 
 		//{{{ Instance variables
 		private final PushbackReader in;
