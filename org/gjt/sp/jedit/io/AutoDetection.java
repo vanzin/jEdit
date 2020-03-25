@@ -33,6 +33,8 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.util.Log;
+
+import javax.annotation.Nullable;
 //}}}
 
 /**
@@ -79,13 +81,11 @@ public class AutoDetection
 	 */
 	public static List<EncodingDetector> getEncodingDetectors()
 	{
-		List<EncodingDetector> detectors
-			= new ArrayList<EncodingDetector>();
+		List<EncodingDetector> detectors = new ArrayList<>();
 		String propName = "encodingDetectors";
 		String selectedDetectors
 			= jEdit.getProperty(propName);
-		if (selectedDetectors != null
-			&& selectedDetectors.length() > 0)
+		if (selectedDetectors != null && !selectedDetectors.isEmpty())
 		{
 			for (String name: selectedDetectors.split("\\s+"))
 			{
@@ -210,11 +210,12 @@ public class AutoDetection
 	/**
 	 * Returns a service of EncodingDetector for name.
 	 */
+	@Nullable
 	private static EncodingDetector getEncodingDetectorService(String name)
 	{
 		String serviceClass = "org.gjt.sp.jedit.io.EncodingDetector";
 		Object service = ServiceManager.getService(serviceClass, name);
-		if (service != null && service instanceof EncodingDetector)
+		if (service instanceof EncodingDetector)
 		{
 			return (EncodingDetector)service;
 		}
