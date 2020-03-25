@@ -28,15 +28,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.Box;
 import javax.swing.DefaultCellEditor;
@@ -70,6 +62,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	public void _init()
 	{
 		setLayout(new BorderLayout());
@@ -79,10 +72,11 @@ public class DockingOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH, createDockingFrameworkChooser());
 
 		dockableSetSelection.setModel(
-			new DefaultComboBoxModel<String>(windowModel.getDockableSets().toArray(new String[0])));
+			new DefaultComboBoxModel<>(windowModel.getDockableSets().toArray(StandardUtilities.EMPTY_STRING_ARRAY)));
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	public void _save()
 	{
 		jEdit.setBooleanProperty(AUTO_LOAD_MODE_LAYOUT_PROP, autoLoadModeLayout.isSelected());
@@ -112,7 +106,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	{
 		String [] frameworks =
 			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
-		dockingFramework = new JComboBox<String>(frameworks);
+		dockingFramework = new JComboBox<>(frameworks);
 
 		String framework = View.getDockingFrameworkName();
 		for (int i = 0; i < frameworks.length; i++)
@@ -131,14 +125,11 @@ public class DockingOptionPane extends AbstractOptionPane
 		p.add(dockingFramework);
 
 		return p;
-
 	}
-
 
 	private JPanel createDockingOptionsPanel()
 	{
-		JPanel p = new JPanel();
-		p.setLayout(new GridLayout(0, 1));
+		JPanel p = new JPanel(new GridLayout(0, 1));
 		boolean autoLoadModeLayoutProp = jEdit.getBooleanProperty(
 			AUTO_LOAD_MODE_LAYOUT_PROP, false);
 		autoLoadModeLayout = new JCheckBox(
@@ -150,13 +141,7 @@ public class DockingOptionPane extends AbstractOptionPane
 			jEdit.getBooleanProperty(AUTO_SAVE_MODE_LAYOUT_PROP, false));
 		p.add(autoSaveModeLayout);
 		autoSaveModeLayout.setEnabled(autoLoadModeLayoutProp);
-		autoLoadModeLayout.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				autoSaveModeLayout.setEnabled(autoLoadModeLayout.isSelected());
-			}
-		});
+		autoLoadModeLayout.addActionListener(e -> autoSaveModeLayout.setEnabled(autoLoadModeLayout.isSelected()));
 		Box vSetSelection = Box.createVerticalBox();
 		p.add(vSetSelection);
 		Box setSelection = Box.createHorizontalBox();
@@ -165,15 +150,9 @@ public class DockingOptionPane extends AbstractOptionPane
 		setSelection.add(new JLabel(jEdit.getProperty(
 			"options.docking.selectSet.label")));
 		setSelection.add(Box.createHorizontalStrut(6));
-		dockableSetSelection = new JComboBox<String>();
+		dockableSetSelection = new JComboBox<>();
 		setSelection.add(dockableSetSelection);
-		dockableSetSelection.addItemListener(new ItemListener()
-		{
-			public void itemStateChanged(ItemEvent e)
-			{
-				windowModel.showSet((String) dockableSetSelection.getSelectedItem());
-			}
-		});
+		dockableSetSelection.addItemListener(e -> windowModel.showSet((String) dockableSetSelection.getSelectedItem()));
 		setSelection.add(Box.createHorizontalStrut(6));
 		vSetSelection.add(Box.createVerticalStrut(6));
 		return p;
@@ -210,8 +189,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ DockPositionCellRenderer class
-	static class DockPositionCellRenderer extends JComboBox<String>
-		implements TableCellRenderer
+	private static class DockPositionCellRenderer extends JComboBox<String> implements TableCellRenderer
 	{
 		DockPositionCellRenderer()
 		{
@@ -223,9 +201,9 @@ public class DockingOptionPane extends AbstractOptionPane
 				DockableWindowManager.RIGHT
 			});
 			DockPositionCellRenderer.this.setRequestFocusEnabled(false);
-
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table,
 			Object value, boolean isSelected, boolean hasFocus,
 			int row, int column)
@@ -243,16 +221,16 @@ class WindowTableModel extends AbstractTableModel
 	private static final String PLUGIN_SET_PREFIX = "Plugin: ";
 	private static final String CORE_DOCKABLE_SET = "Core";
 	private static final String ALL_DOCKABLE_SET = "All";
-	private HashMap<String, List<Entry>> dockableSets;
+	private final Map<String, List<Entry>> dockableSets;
 	private List<Entry> windows;
 
 	//{{{ WindowTableModel constructor
 	WindowTableModel()
 	{
-		dockableSets = new HashMap<String, List<Entry>>();
-		List<Entry> all = new ArrayList<Entry>();
+		dockableSets = new HashMap<>();
+		List<Entry> all = new ArrayList<>();
 		dockableSets.put(ALL_DOCKABLE_SET, all);
-		windows = new ArrayList<Entry>();
+		windows = new ArrayList<>();
 		String[] dockables = DockableWindowManager.getRegisteredDockableWindows();
 		for (String dockable: dockables)
 		{
@@ -263,12 +241,8 @@ class WindowTableModel extends AbstractTableModel
 				set = PLUGIN_SET_PREFIX + plugin;
 			else
 				set = CORE_DOCKABLE_SET;
-			List<Entry> currentSetDockables = dockableSets.get(set);
-			if (currentSetDockables == null)
-			{
-				currentSetDockables = new ArrayList<Entry>();
-				dockableSets.put(set, currentSetDockables);
-			}
+
+			List<Entry> currentSetDockables = dockableSets.computeIfAbsent(set, k -> new ArrayList<>());
 			Entry entry = new Entry(dockable);
 			currentSetDockables.add(entry);
 			all.add(entry);
@@ -278,9 +252,7 @@ class WindowTableModel extends AbstractTableModel
 
 	public List<String> getDockableSets()
 	{
-		List<String> sets = new ArrayList<String>();
-		for (String set: dockableSets.keySet())
-			sets.add(set);
+		List<String> sets = new ArrayList<>(dockableSets.keySet());
 		sets.remove(ALL_DOCKABLE_SET);
 		sets.remove(CORE_DOCKABLE_SET);
 		Collections.sort(sets);
@@ -293,23 +265,26 @@ class WindowTableModel extends AbstractTableModel
 	public void showSet(String set)
 	{
 		windows = dockableSets.get(set);
-		Collections.sort(windows,new WindowCompare());
+		windows.sort(new WindowCompare());
 		fireTableDataChanged();
 	} //}}}
 
 	//{{{ getColumnCount() method
+	@Override
 	public int getColumnCount()
 	{
 		return 2;
 	} //}}}
 
 	//{{{ getRowCount() method
+	@Override
 	public int getRowCount()
 	{
 		return windows.size();
 	} //}}}
 
 	//{{{ getColumnClass() method
+	@Override
 	public Class getColumnClass(int col)
 	{
 		switch(col)
@@ -323,9 +298,10 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ getValueAt() method
+	@Override
 	public Object getValueAt(int row, int col)
 	{
-		Entry window = (Entry)windows.get(row);
+		Entry window = windows.get(row);
 		switch(col)
 		{
 		case 0:
@@ -338,18 +314,20 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ isCellEditable() method
+	@Override
 	public boolean isCellEditable(int row, int col)
 	{
 		return col != 0;
 	} //}}}
 
 	//{{{ setValueAt() method
+	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(col == 0)
 			return;
 
-		Entry window = (Entry)windows.get(row);
+		Entry window = windows.get(row);
 		switch(col)
 		{
 		case 1:
@@ -363,6 +341,7 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ getColumnName() method
+	@Override
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -379,18 +358,15 @@ class WindowTableModel extends AbstractTableModel
 	//{{{ save() method
 	public void save()
 	{
-		for(int i = 0; i < windows.size(); i++)
-		{
-			((Entry)windows.get(i)).save();
-		}
+		windows.forEach(Entry::save);
 	} //}}}
 
 	//{{{ Entry class
-	static class Entry
+	private static class Entry
 	{
-		String name;
-		String title;
-		String dockPosition;
+		final String name;
+		private String title;
+		private String dockPosition;
 
 		Entry(String name)
 		{
@@ -413,6 +389,7 @@ class WindowTableModel extends AbstractTableModel
 	//{{{ WindowCompare class
 	static class WindowCompare implements Comparator<Object>
 	{
+		@Override
 		public int compare(Object obj1, Object obj2)
 		{
 			Entry e1 = (Entry)obj1;
