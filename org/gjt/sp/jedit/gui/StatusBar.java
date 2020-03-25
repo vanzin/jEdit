@@ -74,7 +74,7 @@ public class StatusBar extends JPanel
 		panel.add(BorderLayout.EAST,box);
 		add(BorderLayout.CENTER,panel);
 
-		MouseHandler mouseHandler = new MouseHandler();
+		MouseListener mouseHandler = new MouseHandler();
 
 		caretStatus = new ToolTipLabel();
 		caretStatus.setName("caretStatus");
@@ -189,14 +189,15 @@ public class StatusBar extends JPanel
 	} //}}}
 
 	//{{{ TaskListener implementation
-	private class TaskHandler implements TaskListener
+	private class TaskHandler extends TaskAdapter
 	{
 		private final Runnable statusLineIo = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				// don't obscure existing message
-				if(!currentMessageIsIO && message != null && !"".equals(message.getText().trim()))
+				if(!currentMessageIsIO && message != null && !message.getText().trim().isEmpty())
 					return;
 
 				int requestCount = TaskManager.instance.countIoTasks();
@@ -223,35 +224,17 @@ public class StatusBar extends JPanel
 		};
 
 		//{{{ waiting() method
+		@Override
 		public void waiting(Task task)
 		{
 			SwingUtilities.invokeLater(statusLineIo);
 		} //}}}
-	
-		//{{{ running() method
-		public void running(Task task)
-		{
-		} //}}}
-	
+
 		//{{{ done() method
+		@Override
 		public void done(Task task)
 		{
 			SwingUtilities.invokeLater(statusLineIo);
-		} //}}}
-	
-		//{{{ statusUpdate() method
-		public void statusUpdated(Task task)
-		{
-		} //}}}
-
-		//{{{ maximumUpdated() method
-		public void maximumUpdated(Task task)
-		{
-		} //}}}
-
-		//{{{ valueUpdated() method
-		public void valueUpdated(Task task)
-		{
 		} //}}}
 	} //}}}
 
@@ -279,14 +262,11 @@ public class StatusBar extends JPanel
 	{
 		setMessage(message);
 
-		tempTimer = new Timer(0,new ActionListener()
+		tempTimer = new Timer(0, evt ->
 		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				// so if view is closed in the meantime...
-				if(isShowing())
-					setMessage(null);
-			}
+			// so if view is closed in the meantime...
+			if(isShowing())
+				setMessage(null);
 		});
 
 		tempTimer.setInitialDelay(10000);
