@@ -45,80 +45,80 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
 	@Override
-    public Widget getWidget(View view)
+	public Widget getWidget(View view)
 	{
 		Widget widget = new TaskMonitorWidget(view);
 		widget.getComponent().setToolTipText(jEdit.getProperty("statusbar.task-monitor.tooltip"));
 		return widget;
 	} //}}}
 
-    //{{{ TaskMonitorWidget class
-    private static class TaskMonitorWidget extends JLabel implements Widget, TaskListener
-    {
+	//{{{ TaskMonitorWidget class
+	private static class TaskMonitorWidget extends JLabel implements Widget, TaskListener
+	{
 		private final MessageFormat messageFormat;
 		private final Object[] args;
 		private final StringBuffer stringBuffer;
-		private FieldPosition fieldPosition;
+		private final FieldPosition fieldPosition;
 
-		private TaskMonitorWidget(final View view)
-        {
-			setBorder(BorderFactory.createEmptyBorder(0,2,0,2));
+		private TaskMonitorWidget(View view)
+		{
+			setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 			setFont(getFont().deriveFont(Font.BOLD));
 			String property = jEdit.getProperty("statusbar.task-monitor.template");
 			args = new Object[1];
 			messageFormat = new MessageFormat(property);
 			fieldPosition = new FieldPosition(0);
-            addMouseListener(new MouseAdapter()
-            {
-                @Override
-                public void mouseClicked(MouseEvent e)
-                {
-                    if (SwingUtilities.isLeftMouseButton(e))
-                    {
-                        view.getDockableWindowManager().showDockableWindow("task-monitor");
-                    }
-                }
-            });
+			addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if (SwingUtilities.isLeftMouseButton(e))
+					{
+						view.getDockableWindowManager().showDockableWindow("task-monitor");
+					}
+				}
+			});
 			stringBuffer = new StringBuffer();
 		}
 
-        @Override
-        public void addNotify()
-        {
-            super.addNotify();
-            TaskManager.instance.addTaskListener(this);
-            update();
-        }
+		@Override
+		public void addNotify()
+		{
+			super.addNotify();
+			TaskManager.instance.addTaskListener(this);
+			update();
+		}
 
-        @Override
-        public void removeNotify()
-        {
-            super.removeNotify();
-            TaskManager.instance.removeTaskListener(this);
-        }
+		@Override
+		public void removeNotify()
+		{
+			super.removeNotify();
+			TaskManager.instance.removeTaskListener(this);
+		}
 
-        @Override
-        public JComponent getComponent()
-        {
-            return this;
-        }
+		@Override
+		public JComponent getComponent()
+		{
+			return this;
+		}
 
-        @Override
-        public void propertiesChanged()
-        {
-        }
+		@Override
+		public void propertiesChanged()
+		{
+		}
 
-        @Override
-        public void update()
-        {
-            int count = TaskManager.instance.countTasks();
-            if (count == 0)
-            {
+		@Override
+		public void update()
+		{
+			int count = TaskManager.instance.countTasks();
+			if (count == 0)
+			{
 				setIcon(null);
-                setText(null);
-            }
-            else
-            {
+				setText(null);
+			}
+			else
+			{
 				synchronized (messageFormat)
 				{
 					setIcon(GUIUtilities.loadIcon("loader.gif"));
@@ -127,42 +127,42 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
 					stringBuffer.setLength(0);
 				}
 			}
-        }
+		}
 
-        @Override
-        public void waiting(Task task)
-        {
-            update();
-        }
+		@Override
+		public void waiting(Task task)
+		{
+			update();
+		}
 
-        @Override
-        public void running(Task task)
-        {
-            update();
-        }
+		@Override
+		public void running(Task task)
+		{
+			update();
+		}
 
-        @Override
-        public void done(Task task)
-        {
-            update();
-        }
+		@Override
+		public void done(Task task)
+		{
+			update();
+		}
 
-        @Override
-        public void statusUpdated(Task task)
-        {
-            update();
-        }
+		@Override
+		public void statusUpdated(Task task)
+		{
+			update();
+		}
 
-        @Override
-        public void maximumUpdated(Task task)
-        {
-            update();
-        }
+		@Override
+		public void maximumUpdated(Task task)
+		{
+			update();
+		}
 
-        @Override
-        public void valueUpdated(Task task)
-        {
-            update();
-        }
+		@Override
+		public void valueUpdated(Task task)
+		{
+			update();
+		}
 	} //}}}
 }
