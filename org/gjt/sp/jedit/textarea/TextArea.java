@@ -109,8 +109,7 @@ public abstract class TextArea extends JPanel
 		// some plugins add stuff in a "right-hand" gutter
 		RequestFocusLayerUI reqFocus = new RequestFocusLayerUI();
 		verticalBox = new Box(BoxLayout.X_AXIS);
-		verticalBox.add(new JLayer<JComponent>(
-			vertical = new JScrollBar(Adjustable.VERTICAL), reqFocus));
+		verticalBox.add(new JLayer<>(vertical = new JScrollBar(Adjustable.VERTICAL), reqFocus));
 		vertical.setRequestFocusEnabled(false);
 		add(ScrollLayout.RIGHT,verticalBox);
 		add(ScrollLayout.BOTTOM, new JLayer<JComponent>(
@@ -166,7 +165,7 @@ public abstract class TextArea extends JPanel
 	 */
 	public void initInputHandler()
 	{
-		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>()
+		actionContext = new JEditActionContext<>()
 		{
 			@Override
 			public void invokeAction(EventObject evt, JEditBeanShellAction action)
@@ -257,7 +256,6 @@ public abstract class TextArea extends JPanel
 	 */
 	public AbstractInputHandler getInputHandler()
 	{
-
 		return inputHandlerProvider.getInputHandler();
 	} //}}}
 
@@ -4125,7 +4123,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 		String comment = buffer.getContextSensitiveProperty(caret,"lineComment");
-		if(comment == null || comment.length() == 0)
+		if(comment == null || comment.isEmpty())
 		{
 			rangeLineComment();
 			return;
@@ -4165,7 +4163,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
 		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
 		if(!buffer.isEditable() || commentStart == null || commentEnd == null
-			|| commentStart.length() == 0 || commentEnd.length() == 0)
+			|| commentStart.isEmpty() || commentEnd.isEmpty())
 		{
 			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
@@ -4285,7 +4283,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 					text,maxLineLen,buffer.getTabSize());
 				buffer.insert(start,text);
 				int caretPos = start;
-				if (text.length() != 0)
+				if (!text.isEmpty())
 				{
 					caretPos += Math.min(text.length(),
 					TextUtilities.ignoringWhitespaceIndex(
@@ -6149,7 +6147,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
 		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
 		if(!buffer.isEditable() || commentStart == null || commentEnd == null
-			|| commentStart.length() == 0 || commentEnd.length() == 0)
+			|| commentStart.isEmpty() || commentEnd.isEmpty())
 		{
 			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
@@ -6166,7 +6164,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			for (int line : lines)
 			{
 				String text = getLineText(line);
-				if (text.trim().length() == 0)
+				if (text.trim().isEmpty())
 					continue;
 				buffer.insert(getLineEndOffset(line) - 1, commentEnd);
 				buffer.insert(getLineStartOffset(line) +
@@ -6330,7 +6328,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		private final BreakIterator charBreaker;
 		private final int index0Offset;
 
-		public LineCharacterBreaker(TextArea textArea, int offset)
+		LineCharacterBreaker(TextArea textArea, int offset)
 		{
 			final int line = textArea.getLineOfOffset(offset);
 			charBreaker = BreakIterator.getCharacterInstance();
@@ -6384,7 +6382,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			private final CharSequence sequence;
 			private int index;
 
-			public CharIterator(CharSequence sequence)
+			CharIterator(CharSequence sequence)
 			{
 				this.sequence = sequence;
 				index = 0;
@@ -6418,7 +6416,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				int length = sequence.length();
 				if (index < length)
 				{
-					index = index + 1;
+					index += 1;
 					return current();
 				}
 				else
@@ -6432,7 +6430,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				if (index > 0)
 				{
-					index = index - 1;
+					index -= 1;
 					return current();
 				}
 				else
