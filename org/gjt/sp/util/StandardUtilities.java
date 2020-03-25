@@ -24,7 +24,6 @@
 
 package org.gjt.sp.util;
 
-
 //{{{ Imports
 import javax.annotation.Nullable;
 import javax.swing.text.Segment;
@@ -45,6 +44,8 @@ import java.util.Stack;
  */
 public class StandardUtilities
 {
+	public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
 	//{{{ charsToEscapes() methods
 	/**
 	 * Escapes newlines, tabs, backslashes, and quotes in the specified

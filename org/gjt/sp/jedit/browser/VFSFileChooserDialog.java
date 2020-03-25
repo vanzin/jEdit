@@ -50,7 +50,6 @@ import org.gjt.sp.util.*;
  */
 public class VFSFileChooserDialog extends EnhancedDialog
 {
-
 	//{{{ VFSFileChooserDialog constructor
 	public VFSFileChooserDialog(View view, String path,
 		int mode, boolean multipleSelection)
@@ -144,13 +143,13 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				browser.filesActivated(VFSBrowser.M_OPEN,false);
 			return;
 		}
-		else if(choosingDir && (filename == null || filename.length() == 0))
+		else if(choosingDir && (filename == null || filename.isEmpty()))
 		{
 			isOK = true;
 			dispose();
 			return;
 		}
-		else if(filename == null || filename.length() == 0)
+		else if(filename == null || filename.isEmpty())
 		{
 			javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 			return;
@@ -167,11 +166,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				bufferDir,filename.substring(2));
 		}
 
-		final int[] type = { -1 };
+		int[] type = { -1 };
 		filename = MiscUtilities.expandVariables(filename);
-		final String path = MiscUtilities.constructPath(
-			browser.getDirectory(),filename);
-		final VFS vfs = VFSManager.getVFSForPath(path);
+		String path = MiscUtilities.constructPath(browser.getDirectory(),filename);
+		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
 			return;
@@ -180,6 +178,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			vfs,session,path,type));
 		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				switch(type[0])
@@ -196,7 +195,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					isOK = true;
 					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
 					{
-						Hashtable<String, Object> props = new Hashtable<String, Object>();
+						Hashtable<String, Object> props = new Hashtable<>();
 						if(browser.currentEncoding != null)
 						{
 							props.put(JEditBuffer.ENCODING, browser.currentEncoding);
@@ -239,7 +238,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			else
 				return new String[] { browser.getDirectory() };
 		}
-		else if(filename != null && filename.length() != 0)
+		else if(filename != null && !filename.isEmpty())
 		{
 			String path = browser.getDirectory();
 			return new String[] { MiscUtilities.constructPath(
@@ -410,14 +409,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ getSelectedFiles() method
 	private String[] getSelectedFiles(int type1, int type2)
 	{
-		List<String> l = new ArrayList<String>();
+		List<String> l = new ArrayList<>();
 		VFSFile[] selectedFiles = browser.getSelectedFiles();
 		for (VFSFile file : selectedFiles)
 		{
 			if (file.getType() == type1 || file.getType() == type2)
 				l.add(file.getPath());
 		}
-		return l.toArray(new String[l.size()]);
+		return l.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 	//}}}
@@ -427,6 +426,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ ActionHandler class
 	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
@@ -440,6 +440,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	private class BrowserHandler implements BrowserListener
 	{
 		//{{{ filesSelected() method
+		@Override
 		public void filesSelected(VFSBrowser browser, VFSFile[] files)
 		{
 			boolean choosingDir = (browser.getMode()
@@ -488,6 +489,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		} //}}}
 
 		//{{{ filesActivated() method
+		@Override
 		public void filesActivated(VFSBrowser browser, VFSFile[] files)
 		{
 			filenameField.selectAll();
@@ -529,10 +531,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ IoTaskListener class
-	private class IoTaskHandler implements TaskListener
+	private class IoTaskHandler extends TaskAdapter
 	{
 		private final Runnable cursorStatus = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				int requestCount = TaskManager.instance.countIoTasks();
@@ -551,34 +554,28 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		};
 
 		//{{{ waiting() method
+		@Override
 		public void waiting(Task task)
 		{
 			SwingUtilities.invokeLater(cursorStatus);
 		} //}}}
 	
 		//{{{ running() method
+		@Override
 		public void running(Task task)
 		{
 			SwingUtilities.invokeLater(cursorStatus);
 		} //}}}
 	
 		//{{{ done() method
+		@Override
 		public void done(Task task)
 		{
 			SwingUtilities.invokeLater(cursorStatus);
 		} //}}}
 
-		//{{{ statusUpdated() method
-		public void statusUpdated(Task task)
-		{
-		} //}}}
-
-		//{{{ maximumUpdated() method
-		public void maximumUpdated(Task task)
-		{
-		} //}}}
-
 		//{{{ progressUpdate() method
+		@Override
 		public void valueUpdated(Task task)
 		{
 			SwingUtilities.invokeLater(cursorStatus);
@@ -596,13 +593,13 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		GetFileTypeRequest(VFS vfs, Object session,
 			String path, int[] type)
 		{
-			super();
 			this.vfs     = vfs;
 			this.session = session;
 			this.path    = path;
 			this.type    = type;
 		}
 
+		@Override
 		public void _run()
 		{
 			try
