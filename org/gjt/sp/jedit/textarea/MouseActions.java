@@ -28,7 +28,7 @@ import org.gjt.sp.jedit.IPropertyManager;
 
 public class MouseActions implements MouseActionsProvider
 {
-	private IPropertyManager propertyManager;
+	private final IPropertyManager propertyManager;
 
 	//{{{ MouseActions constructor
 	MouseActions(IPropertyManager propertyManager, String name)
@@ -38,6 +38,7 @@ public class MouseActions implements MouseActionsProvider
 	} //}}}
 
 	//{{{ getActionForEvent() method
+	@Override
 	public String getActionForEvent(MouseEvent evt, String variant)
 	{
 		String modStr = KeyEventTranslator.getModifierString(evt);
@@ -54,5 +55,5 @@ public class MouseActions implements MouseActionsProvider
 		}
 	} //}}}
 
-	private String name;
+	private final String name;
 }
