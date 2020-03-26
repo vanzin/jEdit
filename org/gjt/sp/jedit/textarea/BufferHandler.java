@@ -62,6 +62,7 @@ class BufferHandler implements BufferListener
 	} //}}}
 
 	//{{{ bufferLoaded() method
+	@Override
 	public void bufferLoaded(JEditBuffer buffer)
 	{
 		displayManager.bufferLoaded();
@@ -69,12 +70,14 @@ class BufferHandler implements BufferListener
 	} //}}}
 
 	//{{{ foldHandlerChanged() method
+	@Override
 	public void foldHandlerChanged(JEditBuffer buffer)
 	{
 		displayManager.foldHandlerChanged();
 	} //}}}
 
 	//{{{ foldLevelChanged() method
+	@Override
 	public void foldLevelChanged(JEditBuffer buffer, int start, int end)
 	{
 		//System.err.println("foldLevelChanged " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
@@ -88,8 +91,8 @@ class BufferHandler implements BufferListener
 	} //}}}
 
 	//{{{ contentInserted() method
-	public void contentInserted(JEditBuffer buffer, int startLine,
-		int offset, int numLines, int length)
+	@Override
+	public void contentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(buffer.isLoading())
 			return;
@@ -164,6 +167,7 @@ class BufferHandler implements BufferListener
 	 * @param length The number of characters inserted
 	 * @since jEdit 4.3pre11
 	 */
+	@Override
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(buffer.isLoading())
@@ -188,8 +192,8 @@ class BufferHandler implements BufferListener
 	 * @param length The number of characters to be removed
 	 * @since jEdit 4.3pre3
 	 */
-	public void preContentRemoved(JEditBuffer buffer, int startLine,
-		int offset, int numLines, int length)
+	@Override
+	public void preContentRemoved(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(buffer.isLoading())
 			return;
@@ -259,8 +263,8 @@ class BufferHandler implements BufferListener
 	} //}}}
 
 	//{{{ contentRemoved() method
-	public void contentRemoved(JEditBuffer buffer, int startLine,
-		int start, int numLines, int length)
+	@Override
+	public void contentRemoved(JEditBuffer buffer, int startLine, int start, int numLines, int length)
 	{
 		if(buffer.isLoading())
 			return;
@@ -320,6 +324,7 @@ class BufferHandler implements BufferListener
 	//}}}
 
 	//{{{ transactionComplete() method
+	@Override
 	public void transactionComplete(JEditBuffer buffer)
 	{
 		if(textArea.getDisplayManager() != displayManager)

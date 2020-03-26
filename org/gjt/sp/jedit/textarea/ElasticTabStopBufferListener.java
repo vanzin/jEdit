@@ -20,13 +20,13 @@
  */
 package org.gjt.sp.jedit.textarea;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.buffer.BufferAdapter;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.textarea.TextArea;
 
 /** Buffer Listener for Elastic Tabstops.  
   */
@@ -57,8 +57,8 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	}//}}}
 	
 	//{{{ contentInserted() method
-	public void contentInserted(JEditBuffer buffer, int startLine, int offset,
-			int numLines, int length) 
+	@Override
+	public void contentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(!buffer.elasticTabstopsOn)
 		{
@@ -67,7 +67,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		String charDeleted;
 		boolean isASimpleChar = false;
 		boolean singleTabInserted = false;
-		if((numLines==0)&(length==1))
+		if(numLines == 0 && length == 1)
 		{
 			isASimpleChar = true;
 			charDeleted = buffer.getText(offset, length);
@@ -223,8 +223,8 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	 * @param length The number of characters removed
 	 * @since jEdit 4.3pre3
 	 */
-	public void contentRemoved(JEditBuffer buffer, int startLine, int offset,
-		int numLines, int length)
+	@Override
+	public void contentRemoved(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(!buffer.elasticTabstopsOn)
 		{
@@ -236,7 +236,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		{
 			return;
 		}
-		if((numLines==0)&(length==1))
+		if(numLines == 0 && length == 1)
 		{
 			isASimpleChar = true;
 		}
@@ -380,11 +380,11 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 			}
 			//once we reach here we have three things to do
 			//1)delete columnBlocks using firstBlockToBeDeleted and lastBlockToBeDeleted
-			Vector<Node> blocksToBeRemoved =null;
+			List<Node> blocksToBeRemoved = null;
 			if(firstBlockToBeRemoved!=null)
 			{
 				int startIndex = rootBlock.getChildren().indexOf(firstBlockToBeRemoved);
-				blocksToBeRemoved = new Vector<Node>();
+				blocksToBeRemoved = new ArrayList<>();
 				if(lastBlockToBeRemoved == null)
 				{
 					throw new IllegalArgumentException("Deletion not handled properly");
@@ -487,7 +487,8 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	}//}}}
 		
 	//{{{ transactionComplete() method
-	public void transactionComplete(JEditBuffer buffer) 
+	@Override
+	public void transactionComplete(JEditBuffer buffer)
 	{
 		if(!buffer.getBooleanProperty("elasticTabstops"))
 		{
@@ -503,6 +504,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	//}}}
 		
 	//{{{ preContentInserted() method
+	@Override
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(!buffer.elasticTabstopsOn)
@@ -515,8 +517,8 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	} //}}}
 		
 	//{{{ preContentRemoved() method
-	public void preContentRemoved(JEditBuffer buffer, int startLine, int offset,
-		int numLines, int length) 
+	@Override
+	public void preContentRemoved(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
 		if(!buffer.elasticTabstopsOn)
 		{
@@ -527,7 +529,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		if(buffer.getColumnBlock()!=null)
 		{	
 			buffer.getColumnBlock().setDirtyStatus(true);
-			if((numLines==0)&(length==1))
+			if(numLines == 0 && length == 1)
 			{
 				String str = buffer.getText(offset, length);
 				if(str.equals("\t"))
