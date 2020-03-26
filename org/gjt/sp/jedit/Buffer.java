@@ -242,6 +242,7 @@ public class Buffer extends JEditBuffer
 		//{{{ Do some stuff once loading is finished
 		Runnable runnable = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				String newPath = getStringProperty(
@@ -633,18 +634,15 @@ public class Buffer extends JEditBuffer
 		}
 
 		// Once save is complete, do a few other things
-		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
-			{
-				public void run()
-				{
-					setPerformingIO(false);
-					setProperty("overwriteReadonly",null);
-					finishSaving(view,oldPath,oldSymlinkPath,
-						newPath,rename,getBooleanProperty(
-							BufferIORequest.ERROR_OCCURRED));
-					updateMarkersFile(view);
-				}
-			});
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(() ->
+		{
+			setPerformingIO(false);
+			setProperty("overwriteReadonly",null);
+			finishSaving(view,oldPath,oldSymlinkPath,
+				newPath,rename,getBooleanProperty(
+					BufferIORequest.ERROR_OCCURRED));
+			updateMarkersFile(view);
+		});
 
 		return true;
 	} //}}}
@@ -988,7 +986,7 @@ public class Buffer extends JEditBuffer
 		return MiscUtilities.isBackup(MiscUtilities.getFileName(getPath()));
 	} //}}}
 
-
+	@Override
 	public boolean isEditable()
 	{
 		return super.isEditable() && !isLocked(); // respects "locked" property
@@ -1752,7 +1750,7 @@ public class Buffer extends JEditBuffer
 		setFlag(AUTORELOAD,jEdit.getBooleanProperty("autoReload"));
 		setFlag(AUTORELOAD_DIALOG,jEdit.getBooleanProperty("autoReloadDialog"));
 
-		undoListeners = new Vector<BufferUndoListener>();
+		undoListeners = new Vector<>();
 	} //}}}
 
 	//{{{ commitTemporary() method
@@ -1828,6 +1826,7 @@ public class Buffer extends JEditBuffer
 	}
 
 	//{{{ fireBeginUndo() method
+	@Override
 	protected void fireBeginUndo()
 	{
 		for (BufferUndoListener listener: undoListeners)
@@ -1845,6 +1844,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ fireEndUndo() method
+	@Override
 	protected void fireEndUndo()
 	{
 		for (BufferUndoListener listener: undoListeners)
@@ -1862,6 +1862,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ fireBeginRedo() method
+	@Override
 	protected void fireBeginRedo()
 	{
 		for (BufferUndoListener listener: undoListeners)
@@ -1879,6 +1880,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ fireEndRedo() method
+	@Override
 	protected void fireEndRedo()
 	{
 		for (BufferUndoListener listener: undoListeners)
@@ -1941,7 +1943,7 @@ public class Buffer extends JEditBuffer
 	//{{{ Instance variables
 	/** Indicate if the autoreload property was overridden */
 	private int longLineLimit;
-	private TokenMarker textTokenMarker;
+	private final TokenMarker textTokenMarker;
 	private boolean autoreloadOverridden;
 	private String path;
 	private String symlinkPath;
@@ -1957,7 +1959,7 @@ public class Buffer extends JEditBuffer
 	private final Vector<Marker> markers;
 
 	private Socket waitSocket;
-	private List<BufferUndoListener> undoListeners;
+	private final List<BufferUndoListener> undoListeners;
 //
 //	/** the current ioTask of this buffer */
 //	private volatile IoTask ioTask;
@@ -2044,13 +2046,7 @@ public class Buffer extends JEditBuffer
 
 			// show this message when all I/O requests are
 			// complete
-			AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
-			{
-				public void run()
-				{
-					GUIUtilities.message(view,"autosave-loaded",args);
-				}
-			});
+			AwtRunnableQueue.INSTANCE.runAfterIoTasks(() -> GUIUtilities.message(view,"autosave-loaded",args));
 
 			return true;
 		}

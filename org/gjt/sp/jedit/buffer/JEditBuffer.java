@@ -42,7 +42,6 @@ import org.gjt.sp.util.StandardUtilities;
 import javax.annotation.Nonnull;
 import javax.swing.text.Position;
 import javax.swing.text.Segment;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -88,7 +87,7 @@ public class JEditBuffer
 	//{{{ JEditBuffer constructors
 
 	{
-		bufferListeners = new Vector<Listener>();
+		bufferListeners = new Vector<>();
 		lock = new ReentrantReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
@@ -96,7 +95,7 @@ public class JEditBuffer
 		undoMgr = new UndoManager(this);
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
-		properties = new HashMap<Object, PropValue>();
+		properties = new HashMap<>();
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -1615,13 +1614,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		// Need to reset properties that were cached defaults,
 		// since the defaults might have changed.
-		Iterator<PropValue> iter = properties.values().iterator();
-		while(iter.hasNext())
-		{
-			PropValue value = iter.next();
-			if(value.defaultValue)
-				iter.remove();
-		}
+		properties.values().removeIf(value -> value.defaultValue);
 	} //}}}
 
 	//{{{ getStringProperty() method
@@ -1993,7 +1986,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 							for (Integer foldLevel: precedingFoldLevels)
 							{
 								j--;
-								lineMgr.setFoldLevel(j,foldLevel.intValue());
+								lineMgr.setFoldLevel(j, foldLevel);
 							}
 							if (j < firstUpdatedFoldLevel)
 								firstUpdatedFoldLevel = j;
@@ -2792,7 +2785,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/** This field should be read instead of "elasticTabstops" property
 	  * when efficiency matters. */
 	// synchronization done in TextArea.propertiesChanged()
-	public boolean elasticTabstopsOn = false;
+	public boolean elasticTabstopsOn;
 	private ColumnBlock columnBlock;
 
 	//{{{ getListener() method
