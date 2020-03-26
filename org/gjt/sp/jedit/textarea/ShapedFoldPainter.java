@@ -33,8 +33,9 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 public abstract class ShapedFoldPainter implements FoldPainter 
 {
 	// {{{ paintFoldEnd()
+	@Override
 	public void paintFoldEnd(Gutter gutter, Graphics2D gfx, int screenLine,
-			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
+				 int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
 		gfx.setColor(gutter.getFoldColor());
 		int _y = y + lineHeight / 2;
@@ -48,17 +49,19 @@ public abstract class ShapedFoldPainter implements FoldPainter
 	}// }}}
 
 	// {{{ paintFoldMiddle()
+	@Override
 	public void paintFoldMiddle(Gutter gutter, Graphics2D gfx, int screenLine,
-			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
+				    int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
 		gfx.setColor(gutter.getFoldColor());
 		gfx.drawLine(5,y,5,y+lineHeight-1);
 	}// }}}
 
 	// {{{ paintFoldStart()
+	@Override
 	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
-			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
-			JEditBuffer buffer)
+				   int physicalLine, boolean nextLineVisible, int y, int lineHeight,
+				   JEditBuffer buffer)
 	{
 		int _y = y + lineHeight / 2;
 		int _x = 5;
