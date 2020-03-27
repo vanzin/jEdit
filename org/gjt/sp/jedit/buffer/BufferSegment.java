@@ -50,6 +50,7 @@ class BufferSegment implements CharSequence
 		this.next = next;
 	}
 
+	@Override
 	public char charAt(int index)
 	{
 		if (index < len)
@@ -60,11 +61,13 @@ class BufferSegment implements CharSequence
 			throw new ArrayIndexOutOfBoundsException(index);
 	}
 
+	@Override
 	public int length()
 	{
 		return len + ((next != null) ? next.length() : 0);
 	}
 
+	@Override
 	public CharSequence subSequence(int start,
 					int end)
 	{
