@@ -555,10 +555,13 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			else
 				i = 0;
 			Match m = null;
-			List<Integer> matches = new ArrayList<Integer>();
-			try {
+			List<Integer> matches = new ArrayList<>();
+			try
+			{
 				m = matcher.nextMatch(s.substring(i), true, true, true, false);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e)
+			{
 				Thread.currentThread().interrupt();
 			}
 			while (m != null)
@@ -567,9 +570,12 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				matches.add(i + m.end);
 				i += m.end;
 
-				try {
+				try
+				{
 					m = matcher.nextMatch(s.substring(i), true, true, true, false);
-				} catch (InterruptedException e) {
+				}
+				catch (InterruptedException e)
+				{
 					Thread.currentThread().interrupt();
 					m = null;
 				}
