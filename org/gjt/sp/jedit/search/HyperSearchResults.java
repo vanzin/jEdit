@@ -590,14 +590,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				goToSelectedNode(M_OPEN);
 
 				// fuck me dead
-				EventQueue.invokeLater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						resultTree.requestFocus();
-					}
-				});
+				EventQueue.invokeLater(resultTree::requestFocus);
 
 				evt.consume();
 				break;
