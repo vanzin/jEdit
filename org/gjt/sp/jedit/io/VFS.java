@@ -849,14 +849,14 @@ public abstract class VFS
 		boolean skipBinary, boolean skipHidden)
 		throws IOException
 	{
-		List<String> files = new ArrayList<String>(100);
+		List<String> files = new ArrayList<>(100);
 
-		listFiles(session,new HashSet<String>(), files,directory,filter,
+		listFiles(session,new HashSet<>(), files,directory,filter,
 			recursive, comp, skipBinary, skipHidden);
 
-		String[] retVal = files.toArray(new String[files.size()]);
+		String[] retVal = files.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 
-		Arrays.sort(retVal,new StandardUtilities.StringCompare<String>(true));
+		Arrays.sort(retVal,new StandardUtilities.StringCompare<>(true));
 
 		return retVal;
 	} //}}}
@@ -1151,6 +1151,7 @@ public abstract class VFS
 			this.sortIgnoreCase = sortIgnoreCase;
 		}
 
+		@Override
 		public int compare(VFSFile file1, VFSFile file2)
 		{
 			if(!sortMixFilesAndDirs)
@@ -1165,9 +1166,9 @@ public abstract class VFS
 	} //}}}
 
 	//{{{ Private members
-	private String name;
-	private int caps;
-	private String[] extAttrs;
+	private final String name;
+	private final int caps;
+	private final String[] extAttrs;
 	private static List<ColorEntry> colors;
 	private static final Object lock = new Object();
 
@@ -1176,6 +1177,7 @@ public abstract class VFS
 	{
 		EditBus.addToBus(new EBComponent()
 		{
+			@Override
 			public void handleMessage(EBMessage msg)
 			{
 				if(msg instanceof PropertiesChanged)
@@ -1269,7 +1271,7 @@ public abstract class VFS
 	{
 		synchronized(lock)
 		{
-			colors = new ArrayList<ColorEntry>();
+			colors = new ArrayList<>();
 
 			if(!jEdit.getBooleanProperty("vfs.browser.colorize"))
 				return;
@@ -1320,9 +1322,10 @@ public abstract class VFS
 		}
 
 		private Object session;
-		private String path;
-		private Component comp;
+		private final String path;
+		private final Component comp;
 
+		@Override
 		public void run()
 		{
 			session = createVFSSession(path, comp);
