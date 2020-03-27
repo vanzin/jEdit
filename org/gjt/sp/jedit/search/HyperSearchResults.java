@@ -44,7 +44,6 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.HtmlUtilities;
-import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.util.TaskManager;
 //}}}
 
@@ -71,32 +70,28 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		toolBar.add(caption);
 		toolBar.add(Box.createGlue());
 
-		ActionHandler ah = new ActionHandler();
-
 		highlight = new RolloverButton();
 		highlight.setToolTipText(jEdit.getProperty(
 			"hypersearch-results.highlight.label"));
-		highlight.addActionListener(ah);
 		toolBar.add(highlight);
 
 		clear = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("hypersearch-results.clear.icon")));
 		clear.setToolTipText(jEdit.getProperty(
 			"hypersearch-results.clear.label"));
-		clear.addActionListener(ah);
+		clear.addActionListener(e -> removeAllNodes());
 		toolBar.add(clear);
 
 		multi = new RolloverButton();
 		multi.setToolTipText(jEdit.getProperty(
 			"hypersearch-results.multi.label"));
-		multi.addActionListener(ah);
 		toolBar.add(multi);
 
 		stop = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("hypersearch-results.stop.icon")));
 		stop.setToolTipText(jEdit.getProperty(
 			"hypersearch-results.stop.label"));
-		stop.addActionListener(ah);
+		stop.addActionListener(e -> TaskManager.instance.cancelTasksByClass(HyperSearchRequest.class));
 		toolBar.add(stop);
 		stop.setEnabled(false);
 
@@ -131,6 +126,33 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		scrollPane.setPreferredSize(dim);
 		add(BorderLayout.CENTER, scrollPane);
 		resultTree.setTransferHandler(new ResultTreeTransferHandler());
+
+		highlight.addActionListener(e ->
+		{
+			String prop = jEdit.getProperty(HIGHLIGHT_PROP);
+			Font f = resultTree.getFont();
+			SyntaxStyle style = new StyleEditor(jEdit.getActiveView(),
+				HtmlUtilities.parseHighlightStyle(prop, f),
+				"hypersearch").getStyle();
+			if (style != null)
+				jEdit.setProperty(HIGHLIGHT_PROP, GUIUtilities.getStyleString(style));
+			updateHighlightStatus();
+		});
+		multi.addActionListener(e ->
+		{
+			multiStatus = !multiStatus;
+			updateMultiStatus();
+
+			if(!multiStatus)
+			{
+				for(int i = resultTreeRoot.getChildCount() - 2; i >= 0; i--)
+				{
+					resultTreeModel.removeNodeFromParent(
+						(MutableTreeNode)resultTreeRoot
+							.getChildAt(i));
+				}
+			}
+		});
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
@@ -483,51 +505,6 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//}}}
-
-	//{{{ ActionHandler class
-	public class ActionHandler implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == highlight)
-			{
-				String prop = jEdit.getProperty(HIGHLIGHT_PROP);
-				Font f = (resultTree != null) ? resultTree.getFont() :
-					UIManager.getFont("Tree.font");
-				SyntaxStyle style = new StyleEditor(jEdit.getActiveView(),
-					HtmlUtilities.parseHighlightStyle(prop, f),
-					"hypersearch").getStyle();
-				if (style != null)
-					jEdit.setProperty(HIGHLIGHT_PROP, GUIUtilities.getStyleString(style));
-				updateHighlightStatus();
-			}
-			else if(source == clear)
-			{
-				removeAllNodes();
-			}
-			else if(source == multi)
-			{
-				multiStatus = !multiStatus;
-				updateMultiStatus();
-
-				if(!multiStatus)
-				{
-					for(int i = resultTreeRoot.getChildCount() - 2; i >= 0; i--)
-					{
-						resultTreeModel.removeNodeFromParent(
-							(MutableTreeNode)resultTreeRoot
-							.getChildAt(i));
-					}
-				}
-			}
-			else if(source == stop)
-			{
-				TaskManager.instance.cancelTasksByClass(HyperSearchRequest.class);
-			}
-		}
-	} //}}}
 
 	//{{{ HighlightingTree class
 	class HighlightingTree extends JTree
