@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -54,6 +53,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -71,12 +71,12 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 		add(BorderLayout.NORTH,panel);
 
-		listModel = new DefaultListModel<ToolBarOptionPane.Button>();
+		listModel = new DefaultListModel<>();
 		reloadButtonList(jEdit.getProperty("view.toolbar"));
 
-		list = new JList<ToolBarOptionPane.Button>(listModel);
+		list = new JList<>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(new ListHandler());
+		list.addListSelectionListener(e -> updateButtons());
 		list.setCellRenderer(new ButtonCellRenderer());
 
 		add(BorderLayout.CENTER,new JScrollPane(list));
@@ -85,7 +85,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		JPanel buttons = new JPanel();
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		ActionHandler actionHandler = new ActionHandler();
+		ActionListener actionHandler = new ActionHandler();
 		add = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.add.icon")));
 		add.setToolTipText(jEdit.getProperty("options.toolbar.add"));
 		add.addActionListener(actionHandler);
@@ -123,7 +123,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,buttons);
 
 		//{{{ Ceate icons list
-		iconList = new DefaultComboBoxModel<IconListEntry>();
+		iconList = new DefaultComboBoxModel<>();
 		StringTokenizer st = new StringTokenizer(jEdit.getProperty("icons"));
 		while(st.hasMoreElements())
 		{
@@ -134,6 +134,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	} ///}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("view.showToolbar",showToolbar
@@ -224,19 +225,6 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ Inner classes
-
-	//{{{ ButtonCompare class
-	static class ButtonCompare implements Comparator<Button>
-	{
-		public int compare(Button button1, Button button2)
-		{
-			return StandardUtilities.compareStrings(
-				button1.label,
-				button2.label,
-				true);
-		}
-	} //}}}
-
 	//{{{ Button class
 	static class Button
 	{
@@ -292,6 +280,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ ButtonCellRenderer class
 	static class ButtonCellRenderer extends DefaultListCellRenderer
 	{
+		@Override
 		public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean isSelected,
 			boolean cellHasFocus)
@@ -309,6 +298,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ IconCellRenderer class
 	static class IconCellRenderer extends DefaultListCellRenderer
 	{
+		@Override
 		public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean isSelected,
 			boolean cellHasFocus)
@@ -326,6 +316,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -421,16 +412,6 @@ public class ToolBarOptionPane extends AbstractOptionPane
 			}
 		}
 	} //}}}
-
-	//{{{ ListHandler class
-	class ListHandler implements ListSelectionListener
-	{
-		public void valueChanged(ListSelectionEvent evt)
-		{
-			updateButtons();
-		}
-	} //}}}
-
 	//}}}
 } //}}}
 
@@ -450,7 +431,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		ActionHandler actionHandler = new ActionHandler();
+		ActionListener actionHandler = new ActionHandler();
 		ButtonGroup grp = new ButtonGroup();
 
 		JPanel typePanel = new JPanel(new GridLayout(3,1,6,6));
@@ -477,7 +458,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		ActionSet[] actionsList = jEdit.getActionSets();
 		String selectedActionSet = jEdit.getProperty("options.toolbar.selectedActionSet");
 		ActionSet selectedItem = null;
-		Vector<ActionSet> vec = new Vector<ActionSet>(actionsList.length);
+		Vector<ActionSet> vec = new Vector<>(actionsList.length);
 		for (ActionSet actionSet : actionsList)
 		{
 			if (actionSet.getActionCount() != 0)
@@ -487,8 +468,8 @@ class ToolBarEditDialog extends EnhancedDialog
 					selectedItem = actionSet;
 			}
 		}
-		Collections.sort(vec, new ActionSetCompare());
-		combo = new JComboBox<ActionSet>(vec);
+		vec.sort((o1, o2) -> StandardUtilities.compareStrings(o1.getLabel(), o2.getLabel(), false));
+		combo = new JComboBox<>(vec);
 		if (selectedItem != null)
 			combo.setSelectedItem(selectedItem);
 		else
@@ -558,7 +539,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		}
 		else
 		{
-			if(current.actionName.equals("-"))
+			if("-".equals(current.actionName))
 			{
 				separator.setSelected(true);
 				builtin.setSelected(true);
@@ -590,12 +571,10 @@ class ToolBarEditDialog extends EnhancedDialog
 				else
 				{
 					builtin.setSelected(true);
-					ListModel model = builtinCombo.getModel();
+					ListModel<ToolBarOptionPane.IconListEntry> model = builtinCombo.getModel();
 					for(int i = 0; i < model.getSize(); i++)
 					{
-						ToolBarOptionPane.IconListEntry entry
-							= (ToolBarOptionPane.IconListEntry)
-							model.getElementAt(i);
+						ToolBarOptionPane.IconListEntry entry = model.getElementAt(i);
 						if(entry.name.equals(current.iconName))
 						{
 							builtinCombo.setSelectedIndex(i);
@@ -614,6 +593,7 @@ class ToolBarEditDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		isOK = true;
@@ -621,6 +601,7 @@ class ToolBarEditDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
@@ -658,9 +639,7 @@ class ToolBarEditDialog extends EnhancedDialog
 			String actionName;
 			if(action.isSelected())
 			{
-				ToolBarOptionPane.Button button =
-					(ToolBarOptionPane.Button)list
-					.getSelectedValue();
+				ToolBarOptionPane.Button button = list.getSelectedValue();
 				label = button.label;
 				actionName = button.actionName;
 			}
@@ -676,15 +655,17 @@ class ToolBarEditDialog extends EnhancedDialog
 
 	//{{{ Instance variables
 	private boolean isOK;
-	private JRadioButton separator, action;
-	private JComboBox<ActionSet> combo;
-	private JList<ToolBarOptionPane.Button> list;
-	private JRadioButton builtin;
-	private JComboBox<ToolBarOptionPane.IconListEntry> builtinCombo;
-	private JRadioButton file;
-	private JButton fileButton;
+	private final JRadioButton separator;
+	private final JRadioButton action;
+	private final JComboBox<ActionSet> combo;
+	private final JList<ToolBarOptionPane.Button> list;
+	private final JRadioButton builtin;
+	private final JComboBox<ToolBarOptionPane.IconListEntry> builtinCombo;
+	private final JRadioButton file;
+	private final JButton fileButton;
 	private String fileIcon;
-	private JButton ok, cancel;
+	private final JButton ok;
+	private final JButton cancel;
 	//}}}
 
 	//{{{ updateEnabled() method
@@ -707,7 +688,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		String actionSetLabel = actionSet.getLabel();
 		jEdit.setProperty("options.toolbar.selectedActionSet", actionSetLabel);
 		EditAction[] actions = actionSet.getActions();
-		Vector<ToolBarOptionPane.Button> listModel = new Vector<ToolBarOptionPane.Button>(actions.length);
+		Vector<ToolBarOptionPane.Button> listModel = new Vector<>(actions.length);
 
 		for (EditAction action : actions)
 		{
@@ -719,7 +700,7 @@ class ToolBarEditDialog extends EnhancedDialog
 				null, null, label));
 		}
 
-		Collections.sort(listModel,new ToolBarOptionPane.ButtonCompare());
+		listModel.sort((button1, button2) -> StandardUtilities.compareStrings(button1.label, button2.label, true));
 		list.setListData(listModel);
 	} //}}}
 
@@ -728,6 +709,7 @@ class ToolBarEditDialog extends EnhancedDialog
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -766,13 +748,4 @@ class ToolBarEditDialog extends EnhancedDialog
 			}
 		}
 	} //}}}
-	class ActionSetCompare implements Comparator<ActionSet> {
-
-		@Override
-		public int compare(ActionSet o1, ActionSet o2)
-		{
-			return StandardUtilities.compareStrings(o1.getLabel(), o2.getLabel(), false);
-		}
-
-	}
 } //}}}
