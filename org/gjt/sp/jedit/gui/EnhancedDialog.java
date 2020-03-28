@@ -43,7 +43,7 @@ public abstract class EnhancedDialog extends JDialog
 		_init();
 	}
 
-    protected EnhancedDialog(Dialog parent, String title, boolean modal)
+	protected EnhancedDialog(Dialog parent, String title, boolean modal)
 	{
 		super(parent,title,modal);
 		_init();
@@ -65,8 +65,7 @@ public abstract class EnhancedDialog extends JDialog
 	//{{{ Private members
 	private void _init()
 	{
-		((Container)getLayeredPane()).addContainerListener(
-                new ContainerHandler());
+		getLayeredPane().addContainerListener(new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
 
 		keyHandler = new KeyHandler();
@@ -87,13 +86,13 @@ public abstract class EnhancedDialog extends JDialog
 	class ContainerHandler extends ContainerAdapter
 	{
 		@Override
-        public void componentAdded(ContainerEvent evt)
+		public void componentAdded(ContainerEvent evt)
 		{
 			componentAdded(evt.getChild());
 		}
 
 		@Override
-        public void componentRemoved(ContainerEvent evt)
+		public void componentRemoved(ContainerEvent evt)
 		{
 			componentRemoved(evt.getChild());
 		}
@@ -128,7 +127,7 @@ public abstract class EnhancedDialog extends JDialog
 	class KeyHandler extends KeyAdapter
 	{
 		@Override
-        public void keyPressed(KeyEvent evt)
+		public void keyPressed(KeyEvent evt)
 		{
 			if(evt.isConsumed()) return;
 			Component comp = getFocusOwner();
@@ -205,7 +204,7 @@ public abstract class EnhancedDialog extends JDialog
 	class WindowHandler extends WindowAdapter
 	{
 		@Override
-        public void windowClosing(WindowEvent evt)
+		public void windowClosing(WindowEvent evt)
 		{
 			cancel();
 		}
