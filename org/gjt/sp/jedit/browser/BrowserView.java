@@ -54,7 +54,7 @@ class BrowserView extends JPanel
 	{
 		this.browser = browser;
 
-		tmpExpanded = new HashSet<String>();
+		tmpExpanded = new HashSet<>();
 		DockableWindowManager dwm = jEdit.getActiveView().getDockableWindowManager();
 		KeyListener keyListener = dwm.closeListener(VFSBrowser.NAME);
 
@@ -84,15 +84,7 @@ class BrowserView extends JPanel
 			parentScroller, tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				parentDirectories.ensureIndexIsVisible(
-					parentDirectories.getModel()
-					.getSize());
-			}
-		});
+		EventQueue.invokeLater(() -> parentDirectories.ensureIndexIsVisible(parentDirectories.getModel().getSize()));
 
 		if(browser.isMultipleSelectionEnabled())
 			table.getSelectionModel().setSelectionMode(
@@ -169,18 +161,15 @@ class BrowserView extends JPanel
 		}
 
 		final Object[] loadInfo = new Object[2];
-		Runnable awtRunnable = new Runnable()
+		Runnable awtRunnable = () ->
 		{
-			public void run()
-			{
-				browser.directoryLoaded(node,loadInfo,addToHistory);
-				if (delayedAWTTask != null)
-					delayedAWTTask.run();
+			browser.directoryLoaded(node,loadInfo,addToHistory);
+			if (delayedAWTTask != null)
+				delayedAWTTask.run();
 
-				// -1 means the divider should be reset to a value that attempts
-				// to honor the preferred size of the left/top component
-				splitPane.setDividerLocation(-1);
-			}
+			// -1 means the divider should be reset to a value that attempts
+			// to honor the preferred size of the left/top component
+			splitPane.setDividerLocation(-1);
 		};
 		ThreadUtilities.runInBackground(new ListDirectoryBrowserTask(browser,
 			session, vfs, path, loadInfo, awtRunnable));
@@ -203,7 +192,7 @@ class BrowserView extends JPanel
 
 			String parent = path;
 
-			for(;;)
+			while (true)
 			{
 				VFS _vfs = VFSManager.getVFSForPath(parent);
 				VFSFile file = null;
@@ -367,10 +356,13 @@ class BrowserView extends JPanel
 		// currently showing directory.
 		popup.addPopupMenuListener(new PopupMenuListener()
 		{
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {}
 
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
 
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
 			{
 				// we use SwingUtilities.invokeLater()
