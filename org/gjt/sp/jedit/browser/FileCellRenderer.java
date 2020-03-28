@@ -59,6 +59,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	} //}}}
 
 	//{{{ getTableCellRendererComponent() method
+	@Override
 	public Component getTableCellRendererComponent(JTable table,
 		Object value, boolean isSelected, boolean hasFocus, 
 		int row, int column)
@@ -130,6 +131,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	} //}}}
 
 	//{{{ paintComponent() method
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		if(!isSelected)
@@ -248,6 +250,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		} //}}}
 
 		//{{{ paintBorder() method
+		@Override
 		public void paintBorder(Component c, Graphics g,
 			int x, int y, int width, int height)
 		{
@@ -268,6 +271,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		} //}}}
 
 		//{{{ getBorderInsets() method
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(1,level * LEVEL_WIDTH
@@ -275,6 +279,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		} //}}}
 
 		//{{{ isBorderOpaque() method
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return false;
@@ -288,8 +293,8 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		} //}}}
 
 		//{{{ Private members
-		private int state;
-		private int level;
+		private final int state;
+		private final int level;
 
 		static
 		{
