@@ -98,12 +98,12 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		buttons.add(Box.createHorizontalStrut(6));
 		moveUp = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.moveUp.icon")));
 		moveUp.setToolTipText(jEdit.getProperty("options.toolbar.moveUp"));
-		moveUp.addActionListener(actionHandler);
+		moveUp.addActionListener(e -> moveItem(-1));
 		buttons.add(moveUp);
 		buttons.add(Box.createHorizontalStrut(6));
 		moveDown = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.moveDown.icon")));
 		moveDown.setToolTipText(jEdit.getProperty("options.toolbar.moveDown"));
-		moveDown.addActionListener(actionHandler);
+		moveDown.addActionListener(e -> moveItem(1));
 		buttons.add(moveDown);
 		buttons.add(Box.createHorizontalStrut(6));
 		edit = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.edit.icon")));
@@ -344,29 +344,11 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				}
 				updateButtons();
 			}
-			else if(source == moveUp)
-			{
-				int index = list.getSelectedIndex();
-				Button selected = (Button)list.getSelectedValue();
-				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected, index-1);
-				list.setSelectedIndex(index-1);
-				list.ensureIndexIsVisible(index-1);
-			}
-			else if(source == moveDown)
-			{
-				int index = list.getSelectedIndex();
-				Button selected = (Button)list.getSelectedValue();
-				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected,index+1);
-				list.setSelectedIndex(index+1);
-				list.ensureIndexIsVisible(index+1);
-			}
 			else if(source == edit)
 			{
 				ToolBarEditDialog dialog = new ToolBarEditDialog(
 					ToolBarOptionPane.this, iconList,
-					(Button)list.getSelectedValue());
+					list.getSelectedValue());
 				Button selection = dialog.getSelection();
 				if(selection == null)
 					return;
@@ -403,6 +385,17 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				}
 			}
 		}
+	} //}}}
+
+	//{{{ moveItem() method
+	private void moveItem(int move)
+	{
+		int index = list.getSelectedIndex();
+		Button selected = list.getSelectedValue();
+		listModel.removeElementAt(index);
+		listModel.insertElementAt(selected, index + move);
+		list.setSelectedIndex(index + move);
+		list.ensureIndexIsVisible(index + move);
 	} //}}}
 	//}}}
 } //}}}
@@ -466,7 +459,7 @@ class ToolBarEditDialog extends EnhancedDialog
 			combo.setSelectedItem(selectedItem);
 		else
 			jEdit.unsetProperty("options.toolbar.selectedActionSet");
-		combo.addActionListener(actionHandler);
+		combo.addActionListener(e -> updateList());
 
 		actionPanel.add(BorderLayout.NORTH,combo);
 
@@ -508,11 +501,11 @@ class ToolBarEditDialog extends EnhancedDialog
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
 		southPanel.setBorder(new EmptyBorder(17, 0, 0, 0));
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(actionHandler);
+		JButton ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(e -> ok());
 		getRootPane().setDefaultButton(ok);
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		cancel.addActionListener(actionHandler);
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(e -> cancel());
 		
 		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
@@ -656,8 +649,6 @@ class ToolBarEditDialog extends EnhancedDialog
 	private final JRadioButton file;
 	private final JButton fileButton;
 	private String fileIcon;
-	private final JButton ok;
-	private final JButton cancel;
 	//}}}
 
 	//{{{ updateEnabled() method
@@ -707,19 +698,9 @@ class ToolBarEditDialog extends EnhancedDialog
 			Object source = evt.getSource();
 			if(source instanceof JRadioButton)
 				updateEnabled();
-			if(source == ok)
-				ok();
-			else if(source == cancel)
-				cancel();
-			else if(source == combo)
-				updateList();
-			else if(source == fileButton)
+			if(source == fileButton)
 			{
-				String directory;
-				if(fileIcon == null)
-					directory = null;
-				else
-					directory = MiscUtilities.getParentOfPath(fileIcon);
+				String directory = fileIcon == null ? null : MiscUtilities.getParentOfPath(fileIcon);
 				String[] paths = GUIUtilities.showVFSFileDialog(null,directory,
 					VFSBrowser.OPEN_DIALOG,false);
 				if(paths == null)
