@@ -186,7 +186,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		while(st.hasMoreTokens())
 		{
 			String actionName = st.nextToken();
-			if(actionName.equals("-"))
+			if("-".equals(actionName))
 				listModel.addElement(new ToolBarOptionPane.Button("-", null, null, "-"));
 			else
 			{
@@ -199,22 +199,14 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 				Icon icon;
 				String iconName;
-				if(actionName.equals("-"))
-				{
-					iconName = null;
-					icon = null;
-				}
+				iconName = jEdit.getProperty(actionName + ".icon");
+				if(iconName == null)
+					icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
 				else
 				{
-					iconName = jEdit.getProperty(actionName + ".icon");
-					if(iconName == null)
+					icon = GUIUtilities.loadIcon(iconName);
+					if(icon == null)
 						icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
-					else
-					{
-						icon = GUIUtilities.loadIcon(iconName);
-						if(icon == null)
-							icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
-					}
 				}
 				listModel.addElement(new Button(actionName, iconName, icon, label));
 			}
