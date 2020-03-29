@@ -45,6 +45,7 @@ import java.util.*;
 import java.util.List;
 import java.lang.ref.SoftReference;
 
+import javax.annotation.Nonnull;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -73,7 +74,6 @@ import java.awt.font.FontRenderContext;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 //}}}
@@ -126,7 +126,7 @@ public class GUIUtilities
 			return null;
 
 		// * Enable old icon naming scheme support
-		if(deprecatedIcons != null && deprecatedIcons.containsKey(iconName))
+		if(deprecatedIcons.containsKey(iconName))
 			iconName = deprecatedIcons.get(iconName);
 
 		// check if there is a cached version first
@@ -137,8 +137,8 @@ public class GUIUtilities
 		}
 		if(cache == null)
 		{
-			cache = new Hashtable<String, Icon>();
-			iconCache = new SoftReference<Map<String, Icon>>(cache);
+			cache = new Hashtable<>();
+			iconCache = new SoftReference<>(cache);
 		}
 		Icon icon = cache.get(iconName);
 		if(icon != null)
@@ -370,12 +370,12 @@ public class GUIUtilities
 	 */
 	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt)
 	{
-		List<JMenuItem> list = new ArrayList<JMenuItem>();
+		List<JMenuItem> list = new ArrayList<>();
 		String serviceClassName =  DynamicContextMenuService.class.getName();
 		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
 		for (String menuServiceName : menuServiceList)
 		{
-			if (menuServiceName != null && menuServiceName.trim().length() > 0)
+			if (menuServiceName != null && !menuServiceName.trim().isEmpty())
 			{
 				DynamicContextMenuService dcms = (DynamicContextMenuService)
 						ServiceManager.getService(serviceClassName, menuServiceName);
@@ -493,8 +493,7 @@ public class GUIUtilities
 				else
 				{
 					JButton b = loadToolButton(context,button);
-					if(b != null)
-						toolB.add(b);
+					toolB.add(b);
 				}
 			}
 		}
@@ -512,6 +511,7 @@ public class GUIUtilities
 	 * @param name The name of the button
 	 * @return a button
 	 */
+	@Nonnull
 	public static EnhancedButton loadToolButton(String name)
 	{
 		return loadToolButton(jEdit.getActionContext(),name);
@@ -531,6 +531,7 @@ public class GUIUtilities
 	 * @return the button
 	 * @since jEdit 4.2pre1
 	 */
+	@Nonnull
 	public static EnhancedButton loadToolButton(ActionContext context,
 		String name)
 	{
@@ -585,7 +586,7 @@ public class GUIUtilities
 	*/
 	public static String getPlatformShortcutLabel(String label)
 	{
-		if( !OperatingSystem.isMacOSLF() || label == null || label.length() == 0)
+		if( !OperatingSystem.isMacOSLF() || label == null || label.isEmpty())
 			return label;
 
 		String[] strokes = label.split(" +");
@@ -619,16 +620,16 @@ public class GUIUtilities
 			shortcut1 = platform ? getPlatformShortcutLabel(shortcut1) : shortcut1;
 			shortcut2 = platform ? getPlatformShortcutLabel(shortcut2) : shortcut2;
 
-			if(shortcut1 == null || shortcut1.length() == 0)
+			if(shortcut1 == null || shortcut1.isEmpty())
 			{
-				if(shortcut2 == null || shortcut2.length() == 0)
+				if(shortcut2 == null || shortcut2.isEmpty())
 					return null;
 				else
 					return shortcut2;
 			}
 			else
 			{
-				if(shortcut2 == null || shortcut2.length() == 0)
+				if(shortcut2 == null || shortcut2.isEmpty())
 					return shortcut1;
 				else
 					return shortcut1 + " or " + shortcut2;
@@ -682,14 +683,7 @@ public class GUIUtilities
                 {
                         try
                         {
-                            EventQueue.invokeAndWait(new Runnable()
-                            {
-                                    @Override
-                                    public void run()
-                                    {
-                                            message(comp, name, args);
-                                    }
-                            });
+                            EventQueue.invokeAndWait(() -> message(comp, name, args));
                         }
                         catch (Exception e)		// NOPMD
                         {
@@ -726,14 +720,7 @@ public class GUIUtilities
                 {
                         try
                         {
-                                EventQueue.invokeAndWait(new Runnable()
-                                {
-                                        @Override
-                                        public void run()
-                                        {
-                                                error(comp, name, args);
-                                        }
-                                });
+                                EventQueue.invokeAndWait(() -> error(comp, name, args));
                         }
                         catch (Exception e)		// NOPMD
                         {
@@ -850,14 +837,7 @@ public class GUIUtilities
 		final String[] retValue = new String[1];
 		try
 		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					retValue[0] = inputProperty(comp, name, args, def);
-				}
-			});
+			EventQueue.invokeAndWait(() -> retValue[0] = inputProperty(comp, name, args, def));
 		}
 		catch (Exception e)
 		{
@@ -897,14 +877,7 @@ public class GUIUtilities
 		final int [] retValue = new int[1];
 		try
 		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					retValue[0] = confirm(comp, name, args, buttons, type);
-				}
-			});
+			EventQueue.invokeAndWait(() -> retValue[0] = confirm(comp, name, args, buttons, type));
 		}
 		catch (Exception e)
 		{
@@ -945,14 +918,7 @@ public class GUIUtilities
 		final int[] retValue = new int[1];
 		try
 		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					retValue[0] = option(comp, name, args, type, options, initialValue);
-				}
-			});
+			EventQueue.invokeAndWait(() -> retValue[0] = option(comp, name, args, type, options, initialValue));
 		}
 		catch (Exception e)
 		{
@@ -981,7 +947,7 @@ public class GUIUtilities
 	{
 		if (EventQueue.isDispatchThread())
 		{
-			JList<Object> list = new JList<Object>(listModel);
+			JList<Object> list = new JList<>(listModel);
 			list.setVisibleRowCount(8);
 
 			Object[] message = {
@@ -998,14 +964,7 @@ public class GUIUtilities
 		final int [] retValue = new int[1];
 		try
 		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					retValue[0] = listConfirm(comp, name, args, listModel);
-				}
-			});
+			EventQueue.invokeAndWait(() -> retValue[0] = listConfirm(comp, name, args, listModel));
 		}
 		catch (Exception e)
 		{
@@ -1059,14 +1018,7 @@ public class GUIUtilities
 		final int [] retValue = new int[1];
 		try
 		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					retValue[0] = listConfirm(comp, name, args, listModel, selectedItems);
-				}
-			});
+			EventQueue.invokeAndWait(() -> retValue[0] = listConfirm(comp, name, args, listModel, selectedItems));
 		}
 		catch (Exception e)
 		{
@@ -1976,13 +1928,7 @@ public class GUIUtilities
 		// Have to do it in the EDT, since it creates gui components
 		try
 		{
-			SwingUtilities.invokeAndWait(new Runnable()
-			{
-				public void run()
-				{
-					splash = new SplashScreen();
-				}
-			});
+			SwingUtilities.invokeAndWait(() -> splash = new SplashScreen());
 		}
 		catch (Exception e)
 		{
@@ -2012,7 +1958,7 @@ public class GUIUtilities
 	private static SoftReference<Map<String, Icon>> iconCache;
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
 	private static final String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
-	private static final HashMap<String, String> deprecatedIcons = new HashMap<String, String>();
+	private static final HashMap<String, String> deprecatedIcons = new HashMap<>();
 
 	//{{{ _loadMenuItem() method
 	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic)
@@ -2149,14 +2095,8 @@ public class GUIUtilities
 	//{{{ Inner classes
 
 	private static final AtomicLong executorThreadsCounter = new AtomicLong();
-	private static final ScheduledExecutorService schedExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory()
-	{
-		@Override
-		public Thread newThread(Runnable r)
-		{
-			return new Thread(r, "SizeSaver-" + executorThreadsCounter.incrementAndGet());
-		}
-	});
+	private static final ScheduledExecutorService schedExecutor =
+		Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "SizeSaver-" + executorThreadsCounter.incrementAndGet()));
 	//{{{ SizeSaver class
 	/**
 	 * A combined ComponentListener and WindowStateListener to continually save a Frames size.<br />
@@ -2248,21 +2188,7 @@ public class GUIUtilities
 		public void componentMoved(ComponentEvent ce)
 		{
 			final Rectangle bounds = frame.getBounds();
-			final Runnable sizeSaver = new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					EventQueue.invokeLater(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							save(frame.getExtendedState(), bounds);
-						}
-					});
-				}
-			};
+			final Runnable sizeSaver = () -> EventQueue.invokeLater(() -> save(frame.getExtendedState(), bounds));
 
 			cancelResizeSave();
 			resizeDelayFuture = schedExecutor.schedule(sizeSaver, 500, TimeUnit.MILLISECONDS);
