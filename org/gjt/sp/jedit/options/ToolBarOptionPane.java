@@ -27,16 +27,12 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.io.VFSFile;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -690,7 +686,7 @@ class ToolBarEditDialog extends EnhancedDialog
 	{
 		String directory = fileIcon == null ? null : MiscUtilities.getParentOfPath(fileIcon);
 		String[] paths = GUIUtilities.showVFSFileDialog(null,directory, VFSBrowser.OPEN_DIALOG,false);
-		if(paths == null)
+		if(paths.length == 0)
 			return;
 
 		fileIcon = "file:" + paths[0];

@@ -9,6 +9,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed a NPE when trying to choose a non existing icon when adding a
+  toolbar item (#3770 - Matthieu Casanova)
+
 - When launching jEdit if a file named like the untitled buffer from
   perspective exists, then load it (#4087 - Matthieu Casanova)
 
