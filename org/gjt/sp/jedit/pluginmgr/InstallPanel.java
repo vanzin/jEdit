@@ -1090,7 +1090,8 @@ class InstallPanel extends JPanel implements EBComponent
 				jEdit.getSettingsDirectory() + File.separator);
 			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window,
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
-			if (selectedFiles == null || selectedFiles.length != 1) return;
+			if (selectedFiles.length != 1)
+				return;
 
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);

@@ -1041,6 +1041,7 @@ public class GUIUtilities
 	 * @return The selected file(s)
 	 * @since jEdit 2.6pre2
 	 */
+	@Nonnull
 	public static String[] showVFSFileDialog(View view, String path,
 		int type, boolean multipleSelection)
 	{
@@ -1073,6 +1074,7 @@ public class GUIUtilities
 	 * @return The selected file(s)
 	 * @since jEdit 4.3pre10
 	 */
+	@Nonnull
 	public static String[] showVFSFileDialog(Dialog parent, View view,
 		String path, int type, boolean multipleSelection)
 	{
@@ -1098,6 +1100,7 @@ public class GUIUtilities
 	 * @return The selected file(s)
 	 * @since jEdit 4.3pre10
 	 */
+	@Nonnull
 	public static String[] showVFSFileDialog(Frame parent, View view,
 		String path, int type, boolean multipleSelection)
 	{

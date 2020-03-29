@@ -309,7 +309,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
 
                     // show file chooser
                     String[] files = GUIUtilities.showVFSFileDialog( PrinterDialog.this, view, initialFile.getAbsolutePath(), VFSBrowser.SAVE_DIALOG, false );
-                    if ( files != null && files.length > 0 )
+                    if (files.length > 0)
                     {
                         File file = new File( files[0] );
                         selectedPrintService = getPostscriptPrintService( file );

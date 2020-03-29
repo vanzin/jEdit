@@ -408,7 +408,7 @@ public class Buffer extends JEditBuffer
 		String[] files = GUIUtilities.showVFSFileDialog(view, fileSavePath, VFSBrowser.SAVE_DIALOG,false);
 		// files[] should have length 1, since the dialog type is
 		// SAVE_DIALOG
-		if(files == null)
+		if(files.length == 0)
 			return false;
 
 		boolean saved = save(view, files[0], rename);

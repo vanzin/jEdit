@@ -72,20 +72,17 @@ public class Macros
 	{
 		String[] paths = GUIUtilities.showVFSFileDialog(view,
 			null,JFileChooser.OPEN_DIALOG,true);
-		if(paths != null)
+		Buffer buffer = view.getBuffer();
+		try
 		{
-			Buffer buffer = view.getBuffer();
-			try
-			{
-				buffer.beginCompoundEdit();
+			buffer.beginCompoundEdit();
 
-				for (String path : paths)
-					runScript(view, path, false);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
+			for (String path : paths)
+				runScript(view, path, false);
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
 		}
 	} //}}}
 

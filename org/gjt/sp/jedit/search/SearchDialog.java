@@ -1048,7 +1048,7 @@ public class SearchDialog extends EnhancedDialog
 					view, path,
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 					false);
-				if(dirs != null)
+				if(dirs.length > 0)
 					directoryField.setText(dirs[0]);
 			}
 			else if(evt.getSource() == synchronize)

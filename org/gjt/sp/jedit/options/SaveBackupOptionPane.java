@@ -107,7 +107,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			String[] choosenFolder =
 				GUIUtilities.showVFSFileDialog(null, autosaveDirectory.getText(),
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG, false);
-			if (choosenFolder != null)
+			if (choosenFolder.length > 0)
 				autosaveDirectory.setText(choosenFolder[0]);
 		});
 		JPanel panel = new JPanel(new BorderLayout());
@@ -144,7 +144,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			String[] choosenFolder =
 				GUIUtilities.showVFSFileDialog(null, backupDirectory.getText(),
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG, false);
-			if (choosenFolder != null)
+			if (choosenFolder.length > 0)
 				backupDirectory.setText(choosenFolder[0]);
 		});
 		panel = new JPanel(new BorderLayout());

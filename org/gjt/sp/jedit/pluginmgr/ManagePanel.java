@@ -845,7 +845,8 @@ public class ManagePanel extends JPanel
 				jEdit.getSettingsDirectory() + File.separator);
 			String[] selectedFiles = GUIUtilities.showVFSFileDialog(window,
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
-			if (selectedFiles == null || selectedFiles.length != 1) return;
+			if (selectedFiles.length != 1)
+				return;
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
 			if (success)

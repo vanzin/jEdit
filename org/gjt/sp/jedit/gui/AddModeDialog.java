@@ -163,13 +163,6 @@ public class AddModeDialog extends EnhancedDialog
 		int type = VFSBrowser.OPEN_DIALOG;
 		boolean multiSelect = false;
 		String[] filename = GUIUtilities.showVFSFileDialog(view, path, type, multiSelect);
-		if (filename != null && filename.length > 0)
-		{
-			modeFile.setText(filename[0]);
-		}
-		else
-		{
-			modeFile.setText("");
-		}
+		modeFile.setText(filename.length > 0 ? filename[0] : "");
 	}
 }
