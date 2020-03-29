@@ -145,7 +145,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		{
 			if(i != 0)
 				buf.append(' ');
-			Button button = (Button)listModel.elementAt(i);
+			Button button = listModel.elementAt(i);
 			buf.append(button.actionName);
 			jEdit.setProperty(button.actionName + ".icon",button.iconName);
 		}
