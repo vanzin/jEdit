@@ -57,6 +57,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -751,6 +752,7 @@ public class PluginJAR
 	 * @param classname The classname of a plugin
 	 * @return A list of classnames of plugins the plugin depends on.
 	 */
+	@Nonnull
 	public static Set<String> getDependencies(String classname) throws IllegalArgumentException
 	{
 		Set<String> ret = new HashSet<>();
