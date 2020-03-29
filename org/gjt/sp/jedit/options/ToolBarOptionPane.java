@@ -27,12 +27,16 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -220,10 +224,10 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ Button class
 	static class Button
 	{
-		String actionName;
-		String iconName;
-		Icon icon;
-		String label;
+		final String actionName;
+		final String iconName;
+		private final Icon icon;
+		final String label;
 
 		Button(String actionName, String iconName, Icon icon, String label)
 		{
@@ -404,7 +408,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 class ToolBarEditDialog extends EnhancedDialog
 {
 	//{{{ ToolBarEditDialog constructor
-	public ToolBarEditDialog(Component comp,
+	ToolBarEditDialog(Component comp,
 		DefaultComboBoxModel<ToolBarOptionPane.IconListEntry> iconListModel,
 		ToolBarOptionPane.Button current)
 	{
@@ -416,23 +420,19 @@ class ToolBarEditDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		ActionListener actionHandler = new ActionHandler();
 		ButtonGroup grp = new ButtonGroup();
 
 		JPanel typePanel = new JPanel(new GridLayout(3,1,6,6));
 		typePanel.setBorder(new EmptyBorder(0,0,6,0));
-		typePanel.add(new JLabel(
-			jEdit.getProperty("options.toolbar.edit.caption")));
+		typePanel.add(new JLabel(jEdit.getProperty("options.toolbar.edit.caption")));
 
-		separator = new JRadioButton(jEdit.getProperty("options.toolbar"
-			+ ".edit.separator"));
-		separator.addActionListener(actionHandler);
+		separator = new JRadioButton(jEdit.getProperty("options.toolbar.edit.separator"));
+		separator.addActionListener(e -> updateEnabled());
 		grp.add(separator);
 		typePanel.add(separator);
 
-		action = new JRadioButton(jEdit.getProperty("options.toolbar"
-			+ ".edit.action"));
-		action.addActionListener(actionHandler);
+		action = new JRadioButton(jEdit.getProperty("options.toolbar.edit.action"));
+		action.addActionListener(e -> updateEnabled());
 		grp.add(action);
 		typePanel.add(action);
 
@@ -463,7 +463,7 @@ class ToolBarEditDialog extends EnhancedDialog
 
 		actionPanel.add(BorderLayout.NORTH,combo);
 
-		list = new JList<ToolBarOptionPane.Button>();
+		list = new JList<>();
 		list.setVisibleRowCount(8);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		actionPanel.add(BorderLayout.CENTER,new JScrollPane(list));
@@ -474,16 +474,14 @@ class ToolBarEditDialog extends EnhancedDialog
 		labelPanel.setBorder(new EmptyBorder(0,0,0,12));
 		JPanel compPanel = new JPanel(new GridLayout(2,1));
 		grp = new ButtonGroup();
-		labelPanel.add(builtin = new JRadioButton(jEdit.getProperty(
-			"options.toolbar.edit.builtin")));
-		builtin.addActionListener(actionHandler);
+		labelPanel.add(builtin = new JRadioButton(jEdit.getProperty("options.toolbar.edit.builtin")));
+		builtin.addActionListener(e -> updateEnabled());
 		grp.add(builtin);
-		labelPanel.add(file = new JRadioButton(jEdit.getProperty(
-			"options.toolbar.edit.file")));
+		labelPanel.add(file = new JRadioButton(jEdit.getProperty("options.toolbar.edit.file")));
 		grp.add(file);
-		file.addActionListener(actionHandler);
+		file.addActionListener(e -> updateEnabled());
 		iconPanel.add(BorderLayout.WEST,labelPanel);
-		builtinCombo = new JComboBox<ToolBarOptionPane.IconListEntry>(iconListModel);
+		builtinCombo = new JComboBox<>(iconListModel);
 		builtinCombo.setRenderer(new ToolBarOptionPane.IconCellRenderer());
 		compPanel.add(builtinCombo);
 
@@ -491,7 +489,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		fileButton.setMargin(new Insets(1,1,1,1));
 		fileButton.setIcon(GUIUtilities.loadIcon("Blank24.gif"));
 		fileButton.setHorizontalAlignment(SwingConstants.LEFT);
-		fileButton.addActionListener(actionHandler);
+		fileButton.addActionListener(e -> browseIcon());
 		compPanel.add(fileButton);
 		iconPanel.add(BorderLayout.CENTER,compPanel);
 		actionPanel.add(BorderLayout.SOUTH,iconPanel);
@@ -687,38 +685,25 @@ class ToolBarEditDialog extends EnhancedDialog
 		list.setListData(listModel);
 	} //}}}
 
-	//}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	//{{{ browseIcon() method
+	private void browseIcon()
 	{
-		@Override
-		public void actionPerformed(ActionEvent evt)
+		String directory = fileIcon == null ? null : MiscUtilities.getParentOfPath(fileIcon);
+		String[] paths = GUIUtilities.showVFSFileDialog(null,directory, VFSBrowser.OPEN_DIALOG,false);
+		if(paths == null)
+			return;
+
+		fileIcon = "file:" + paths[0];
+
+		try
 		{
-			Object source = evt.getSource();
-			if(source instanceof JRadioButton)
-				updateEnabled();
-			if(source == fileButton)
-			{
-				String directory = fileIcon == null ? null : MiscUtilities.getParentOfPath(fileIcon);
-				String[] paths = GUIUtilities.showVFSFileDialog(null,directory,
-					VFSBrowser.OPEN_DIALOG,false);
-				if(paths == null)
-					return;
-
-				fileIcon = "file:" + paths[0];
-
-				try
-				{
-					fileButton.setIcon(new ImageIcon(new URL(
-						fileIcon)));
-				}
-				catch(MalformedURLException mf)
-				{
-					Log.log(Log.ERROR,this,mf);
-				}
-				fileButton.setText(MiscUtilities.getFileName(fileIcon));
-			}
+			fileButton.setIcon(new ImageIcon(new URL(fileIcon)));
 		}
+		catch(MalformedURLException mf)
+		{
+			Log.log(Log.ERROR,this,mf);
+		}
+		fileButton.setText(MiscUtilities.getFileName(fileIcon));
 	} //}}}
+	//}}}
 } //}}}
