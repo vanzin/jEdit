@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import javax.annotation.Nonnull;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.BorderLayout;
@@ -218,26 +219,37 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ getSelectedFiles() method
+
+	/**
+	 * Returns the selected files.
+	 * If the browser is in {@link VFSBrowser#OPEN_DIALOG} mode, the file will have to be readable
+	 *
+	 * @return a String array containing paths, since jEdit 5.6pre1 it is never null (might be an empty array)
+	 */
+	@Nonnull
 	public String[] getSelectedFiles()
 	{
 		if(!isOK)
-			return null;
+			return StandardUtilities.EMPTY_STRING_ARRAY;
 
 		if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 		{
 			if(browser.getSelectedFiles().length > 0)
-			{
-				return getSelectedFiles(VFSFile.DIRECTORY,
-					VFSFile.FILESYSTEM);
-			}
+				return getSelectedFiles(VFSFile.DIRECTORY, VFSFile.FILESYSTEM);
 			else
 				return new String[] { browser.getDirectory() };
 		}
 		else if(filename != null && !filename.isEmpty())
 		{
 			String path = browser.getDirectory();
-			return new String[] { MiscUtilities.constructPath(
-				path,filename) };
+			String absolutePath = MiscUtilities.constructPath(path, filename);
+			if (browser.getMode() == VFSBrowser.OPEN_DIALOG)
+			{
+				if (VFSManager.canReadFile(absolutePath))
+					return new String[] {absolutePath};
+				return StandardUtilities.EMPTY_STRING_ARRAY;
+			}
+			return new String[]{absolutePath};
 		}
 		else
 			return getSelectedFiles(VFSFile.FILE,VFSFile.FILE);
@@ -398,6 +410,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ getSelectedFiles() method
+	@Nonnull
 	private String[] getSelectedFiles(int type1, int type2)
 	{
 		List<String> l = new ArrayList<>();
@@ -405,7 +418,15 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		for (VFSFile file : selectedFiles)
 		{
 			if (file.getType() == type1 || file.getType() == type2)
-				l.add(file.getPath());
+			{
+				if (file.getType() == VFSFile.FILE && browser.getMode() == VFSBrowser.OPEN_DIALOG)
+				{
+					if (file.isReadable())
+						l.add(file.getPath());
+				}
+				else
+					l.add(file.getPath());
+			}
 		}
 		return l.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
