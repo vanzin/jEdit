@@ -29,9 +29,6 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.util.GenericGUIUtilities;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
 import javax.swing.*;
 
 /** Add Mode dialog.
@@ -39,161 +36,140 @@ import javax.swing.*;
  */
 public class AddModeDialog extends EnhancedDialog
 {
-        private JTextField modeName;
-        private JTextField modeFile;
-        private JButton browse;
-        private JTextField filenameGlob;
-        private JTextField firstLineGlob;
-		private final JButton ok;
-		private final JButton cancel;
-		private boolean canceled = false;
+	private final JTextField modeName;
+	private final JTextField modeFile;
+	private final JTextField filenameGlob;
+	private final JTextField firstLineGlob;
+	private boolean canceled;
 
-		public AddModeDialog(View view)
-		{
-				super(view, jEdit.getProperty("options.editing.addMode.dialog.title"), true);
-				
-				JPanel content = new JPanel(new BorderLayout());
-				content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
-				setContentPane(content);
-
-				// main content
-				AbstractOptionPane mainContent = new AbstractOptionPane("addmode");
-				mainContent.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-				
-				modeName = new JTextField(16);
-				mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.modeName"), modeName);
-				
-				modeFile = new JTextField();
-				browse = new JButton("...");
-				browse.addActionListener(new ActionHandler());
-				JPanel browsePanel = new JPanel(new BorderLayout());
-				browsePanel.add(modeFile, BorderLayout.CENTER);
-				browsePanel.add(browse, BorderLayout.EAST);
-				mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.modeFile"), browsePanel);
-
-				filenameGlob = new JTextField(16);
-				mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.filenameGlob"), filenameGlob);
-				firstLineGlob = new JTextField();
-				mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.firstLineGlob"), firstLineGlob);
-				
-				content.add(mainContent);
-
-				// buttons
-				JPanel buttons = new JPanel();
-				buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-				buttons.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 6));
-
-				ok = new JButton(jEdit.getProperty("common.ok"));
-				ok.addActionListener(new ActionHandler());
-				getRootPane().setDefaultButton(ok);
-
-
-				cancel = new JButton(jEdit.getProperty("common.cancel"));
-				cancel.addActionListener(new ActionHandler());
-				GenericGUIUtilities.makeSameSize(ok, cancel);
-
-				buttons.add(Box.createGlue());
-				buttons.add(ok);
-				buttons.add(Box.createHorizontalStrut(6));
-				buttons.add(cancel);
-				
-				content.add(BorderLayout.SOUTH, buttons);
-
-				pack();
-				setLocationRelativeTo(view);
-				setVisible(true);
-		}
-		
-		public String getModeName() 
-		{
-			return modeName.getText();
-		}
-		
-		public String getModeFile()
-		{
-			return modeFile.getText();	
-		}
-		
-		public String getFilenameGlob() 
-		{
-			return filenameGlob.getText();	
-		}
-		
-		public String getFirstLineGlob() 
-		{
-			return firstLineGlob.getText();	
-		}
-		
-		public boolean isCanceled()
-		{
-			return canceled;	
-		}
-		
-
-		@Override
-		public void ok()
-		{
-			// check values
-			String modeName = getModeName();
-			if (modeName == null || modeName.isEmpty()) 
-			{
-				JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.Mode_name_may_not_be_empty.", "Mode name may not be empty."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			String modeFile = getModeFile();
-			if (modeFile == null || modeFile.isEmpty()) 
-			{
-				JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.Mode_file_may_not_be_empty.", "Mode file may not be empty."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			String filenameGlob = getFilenameGlob();
-			String firstLineGlob = getFirstLineGlob();
-			if ((filenameGlob == null || filenameGlob.isEmpty()) && (firstLineGlob == null || firstLineGlob.isEmpty())) 
-			{
-				JOptionPane.showMessageDialog(jEdit.getActiveView(),jEdit.getProperty("options.editing.addMode.dialog.Either_file_name_glob_or_first_line_glob_or_both_must_be_filled_in.", "Either file name glob or first line glob or both must be filled in."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			canceled = false;
-			dispose();
-		}
-
-		@Override
-		public void cancel()
-		{
-			canceled = true;
-			dispose();
-		}
-		
-	private class ActionHandler implements ActionListener
+	public AddModeDialog(View view)
 	{
-		public void actionPerformed(ActionEvent evt)
+		super(view, jEdit.getProperty("options.editing.addMode.dialog.title"), true);
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
+		setContentPane(content);
+
+		// main content
+		AbstractOptionPane mainContent = new AbstractOptionPane("addmode");
+		mainContent.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+		modeName = new JTextField(16);
+		mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.modeName"), modeName);
+
+		modeFile = new JTextField();
+		JButton browse = new JButton("...");
+		browse.addActionListener(e -> browse());
+		JPanel browsePanel = new JPanel(new BorderLayout());
+		browsePanel.add(modeFile, BorderLayout.CENTER);
+		browsePanel.add(browse, BorderLayout.EAST);
+		mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.modeFile"), browsePanel);
+
+		filenameGlob = new JTextField(16);
+		mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.filenameGlob"), filenameGlob);
+		firstLineGlob = new JTextField();
+		mainContent.addComponent(jEdit.getProperty("options.editing.addMode.dialog.firstLineGlob"), firstLineGlob);
+
+		content.add(mainContent);
+
+		// buttons
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.setBorder(BorderFactory.createEmptyBorder(17, 0, 0, 6));
+
+		JButton ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(e -> ok());
+		getRootPane().setDefaultButton(ok);
+
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(e -> cancel());
+		GenericGUIUtilities.makeSameSize(ok, cancel);
+
+		buttons.add(Box.createGlue());
+		buttons.add(ok);
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(cancel);
+
+		content.add(BorderLayout.SOUTH, buttons);
+
+		pack();
+		setLocationRelativeTo(view);
+		setVisible(true);
+	}
+
+	public String getModeName()
+	{
+		return modeName.getText();
+	}
+
+	public String getModeFile()
+	{
+		return modeFile.getText();
+	}
+
+	public String getFilenameGlob()
+	{
+		return filenameGlob.getText();
+	}
+
+	public String getFirstLineGlob()
+	{
+		return firstLineGlob.getText();
+	}
+
+	public boolean isCanceled()
+	{
+		return canceled;
+	}
+
+	@Override
+	public void ok()
+	{
+		// check values
+		String modeName = getModeName();
+		if (modeName == null || modeName.isEmpty())
 		{
-			Object source = evt.getSource();
-			if(source == browse)
-			{
-				View view = jEdit.getActiveView();
-				String path = jEdit.getSettingsDirectory();
-				int type = VFSBrowser.OPEN_DIALOG;
-				boolean multiSelect = false;
-				String[] filename = GUIUtilities.showVFSFileDialog(view, path, type, multiSelect);
-				if (filename != null && filename.length > 0)
-				{
-					modeFile.setText(filename[0]);
-				}
-				else
-				{
-					modeFile.setText("");	
-				}
-			}
-			else if (source == ok)
-			{
-				ok();	
-			}
-			else if (source == cancel)
-			{
-				cancel();
-			}
+			JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.Mode_name_may_not_be_empty.", "Mode name may not be empty."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
+			return;
 		}
-	} 
-		
+		String modeFile = getModeFile();
+		if (modeFile == null || modeFile.isEmpty())
+		{
+			JOptionPane.showMessageDialog(jEdit.getActiveView(), jEdit.getProperty("options.editing.addMode.dialog.Mode_file_may_not_be_empty.", "Mode file may not be empty."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		String filenameGlob = getFilenameGlob();
+		String firstLineGlob = getFirstLineGlob();
+		if ((filenameGlob == null || filenameGlob.isEmpty()) && (firstLineGlob == null || firstLineGlob.isEmpty()))
+		{
+			JOptionPane.showMessageDialog(jEdit.getActiveView(),jEdit.getProperty("options.editing.addMode.dialog.Either_file_name_glob_or_first_line_glob_or_both_must_be_filled_in.", "Either file name glob or first line glob or both must be filled in."), jEdit.getProperty("options.editing.addMode.dialog.errorTitle", "Error"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		canceled = false;
+		dispose();
+	}
+
+	@Override
+	public void cancel()
+	{
+		canceled = true;
+		dispose();
+	}
+
+	private void browse()
+	{
+		View view = jEdit.getActiveView();
+		String path = jEdit.getSettingsDirectory();
+		int type = VFSBrowser.OPEN_DIALOG;
+		boolean multiSelect = false;
+		String[] filename = GUIUtilities.showVFSFileDialog(view, path, type, multiSelect);
+		if (filename != null && filename.length > 0)
+		{
+			modeFile.setText(filename[0]);
+		}
+		else
+		{
+			modeFile.setText("");
+		}
+	}
 }
