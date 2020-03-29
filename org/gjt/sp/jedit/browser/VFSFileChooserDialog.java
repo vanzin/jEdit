@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -176,41 +175,37 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		ThreadUtilities.runInBackground(new GetFileTypeRequest(
 			vfs,session,path,type));
-		AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
+		AwtRunnableQueue.INSTANCE.runAfterIoTasks(() ->
 		{
-			@Override
-			public void run()
+			switch(type[0])
 			{
-				switch(type[0])
-				{
-				case VFSFile.FILE:
-					if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
-						break;
+			case VFSFile.FILE:
+				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+					break;
 
-					if(vfs instanceof FileVFS)
-					{
-						if(doFileExistsWarning(path))
-							break;
-					}
-					isOK = true;
-					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
-					{
-						Hashtable<String, Object> props = new Hashtable<>();
-						if(browser.currentEncoding != null)
-						{
-							props.put(JEditBuffer.ENCODING, browser.currentEncoding);
-						}
-						jEdit.openFile(browser.getView(),
-							browser.getDirectory(),
-							path, false, props);
-					}
-					dispose();
-					break;
-				case VFSFile.DIRECTORY:
-				case VFSFile.FILESYSTEM:
-					browser.setDirectory(path);
-					break;
+				if(vfs instanceof FileVFS)
+				{
+					if(doFileExistsWarning(path))
+						break;
 				}
+				isOK = true;
+				if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+				{
+					Hashtable<String, Object> props = new Hashtable<>();
+					if(browser.currentEncoding != null)
+					{
+						props.put(JEditBuffer.ENCODING, browser.currentEncoding);
+					}
+					jEdit.openFile(browser.getView(),
+						browser.getDirectory(),
+						path, false, props);
+				}
+				dispose();
+				break;
+			case VFSFile.DIRECTORY:
+			case VFSFile.FILESYSTEM:
+				browser.setDirectory(path);
+				break;
 			}
 		});
 	} //}}}
@@ -363,10 +358,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			break;
 		}
 
-		ok.addActionListener(new ActionHandler());
+		ok.addActionListener(e -> ok());
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.setName("cancel");
-		cancel.addActionListener(new ActionHandler());
+		cancel.addActionListener(e -> cancel());
 		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
 		panel.add(Box.createHorizontalStrut(6));
@@ -376,8 +371,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		
 		content.add(BorderLayout.SOUTH,panel);
 
-		TaskManager.instance.addTaskListener(
-				ioTaskHandler = new IoTaskHandler());
+		TaskManager.instance.addTaskListener(ioTaskHandler = new IoTaskHandler());
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
@@ -386,8 +380,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			setVisible(true);
 	} //}}}
 
-	
-	
 	//{{{ doFileExistsWarning() method
 	private boolean doFileExistsWarning(String filename)
 	{
@@ -399,8 +391,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				"fileexists",args,
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);
-			if(result != JOptionPane.YES_OPTION)
-				return true;
+			return result != JOptionPane.YES_OPTION;
 		}
 
 		return false;
@@ -422,20 +413,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//}}}
 
 	//{{{ Inner classes
-
-	//{{{ ActionHandler class
-	private class ActionHandler implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == ok)
-				ok();
-			else if(evt.getSource() == cancel)
-				cancel();
-		}
-	} //}}}
-
 	//{{{ BrowserHandler class
 	private class BrowserHandler implements BrowserListener
 	{
@@ -533,23 +510,19 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ IoTaskListener class
 	private class IoTaskHandler extends TaskAdapter
 	{
-		private final Runnable cursorStatus = new Runnable()
+		private final Runnable cursorStatus = () ->
 		{
-			@Override
-			public void run()
+			int requestCount = TaskManager.instance.countIoTasks();
+			if(requestCount == 0)
 			{
-				int requestCount = TaskManager.instance.countIoTasks();
-				if(requestCount == 0)
-				{
-					getContentPane().setCursor(
-						Cursor.getDefaultCursor());
-				}
-				else if(requestCount >= 1)
-				{
-					getContentPane().setCursor(
-						Cursor.getPredefinedCursor(
-						Cursor.WAIT_CURSOR));
-				}
+				getContentPane().setCursor(
+					Cursor.getDefaultCursor());
+			}
+			else if(requestCount >= 1)
+			{
+				getContentPane().setCursor(
+					Cursor.getPredefinedCursor(
+					Cursor.WAIT_CURSOR));
 			}
 		};
 
@@ -585,13 +558,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ GetFileTypeRequest class
 	private class GetFileTypeRequest extends IoTask
 	{
-		VFS    vfs;
-		Object session;
-		String path;
-		int[]  type;
+		private final VFS    vfs;
+		private final Object session;
+		private final String path;
+		private final int[]  type;
 
-		GetFileTypeRequest(VFS vfs, Object session,
-			String path, int[] type)
+		GetFileTypeRequest(VFS vfs, Object session, String path, int[] type)
 		{
 			this.vfs     = vfs;
 			this.session = session;
@@ -604,10 +576,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			try
 			{
-				VFSFile entry = vfs._getFile(
-						session,
-						path,
-						browser);
+				VFSFile entry = vfs._getFile(session, path, browser);
 				if(entry == null)
 				{
 					// non-existent file
@@ -624,9 +593,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			{
 				try
 				{
-					vfs._endVFSSession(
-						session,
-						browser);
+					vfs._endVFSSession(session, browser);
 				}
 				catch(IOException e)
 				{
