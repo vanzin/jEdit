@@ -907,8 +907,9 @@ public class ManagePanel extends JPanel
 			VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(window, jEdit.getActiveView(),
 				path, VFSBrowser.SAVE_DIALOG, false , true);
 			String[] fileselections = fileChooser.getSelectedFiles();
-			List<Entry> pluginSelections = new ArrayList<Entry>();
-			if (fileselections == null || fileselections.length != 1) return;
+			List<Entry> pluginSelections = new ArrayList<>();
+			if (fileselections.length != 1)
+				return;
 
 			PluginJAR[] jars = jEdit.getPluginJARs();
 			for (PluginJAR jar : jars)
