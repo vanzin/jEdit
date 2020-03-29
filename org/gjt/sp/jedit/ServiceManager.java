@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -30,6 +31,7 @@ import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.jedit.buffer.FoldHandlerProvider;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+//}}}
 
 /**
  * A generic way for plugins (and core) to provide various API extensions.<p>
@@ -145,13 +147,7 @@ public class ServiceManager
 	 */
 	public static void unloadServices(PluginJAR plugin)
 	{
-		Iterator<Descriptor> descriptors = serviceMap.keySet().iterator();
-		while(descriptors.hasNext())
-		{
-			Descriptor d = descriptors.next();
-			if(d.plugin == plugin)
-				descriptors.remove();
-		}
+		serviceMap.keySet().removeIf(d -> d.plugin == plugin);
 	} //}}}
 
 	//{{{ registerService() method
@@ -196,14 +192,13 @@ public class ServiceManager
 	 */
 	public static String[] getServiceTypes()
 	{
-		Set<String> returnValue = new HashSet<String>();
+		Set<String> returnValue = new HashSet<>();
 
 		Set<Descriptor> keySet = serviceMap.keySet();
 		for (Descriptor d : keySet)
 			returnValue.add(d.clazz);
 
-		return returnValue.toArray(
-			new String[returnValue.size()]);
+		return returnValue.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 	//{{{ getServiceNames() method
@@ -218,16 +213,14 @@ public class ServiceManager
 	 */
 	public static String[] getServiceNames(String clazz)
 	{
-		List<String> returnValue = new ArrayList<String>();
+		List<String> returnValue = new ArrayList<>();
 
 		Set<Descriptor> keySet = serviceMap.keySet();
 		for (Descriptor d : keySet)
 			if(d.clazz.equals(clazz))
 				returnValue.add(d.name);
 
-
-		return returnValue.toArray(
-			new String[returnValue.size()]);
+		return returnValue.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 
@@ -250,7 +243,6 @@ public class ServiceManager
 	 */
 	public static Object getService(String clazz, String name)
 	{
-
 		Descriptor key = new Descriptor(clazz,name);
 		Descriptor value = serviceMap.get(key);
 		if(value == null)
@@ -271,18 +263,18 @@ public class ServiceManager
 		}
 	}
 
-    /**
-     * Returns an instance of the given service. The first time this is
+	/**
+	 * Returns an instance of the given service. The first time this is
 	 * called for a given service, the BeanShell code is evaluated. The
 	 * result is cached for future invocations, so in effect services are
 	 * singletons.
-     *
-     * @param clazz The service class
-	 * @param name The service name
-     * @return the service instance
-     * @since jEdit 4.4pre1
-     */
-    @SuppressWarnings({"unchecked"})
+	 *
+	 * @param clazz The service class
+	 * @param name  The service name
+	 * @return the service instance
+	 * @since jEdit 4.4pre1
+	 */
+	@SuppressWarnings({"unchecked"})
 	public static <E> E getService(Class<E> clazz, String name)
 	{
 		return (E) getService(clazz.getName(), name);
@@ -305,7 +297,7 @@ public class ServiceManager
 	//}}}
 
 	//{{{ Private members
-	private static final Map<Descriptor, Descriptor> serviceMap = new HashMap<Descriptor, Descriptor>();
+	private static final Map<Descriptor, Descriptor> serviceMap = new HashMap<>();
 	//}}}
 
 	//{{{ Descriptor class
@@ -413,7 +405,7 @@ public class ServiceManager
 		public String[] getFoldModes()
 		{
 			String[] handlers = getServiceNames(SERVICE);
-			Arrays.sort(handlers,new StandardUtilities.StringCompare<String>());
+			Arrays.sort(handlers,new StandardUtilities.StringCompare<>());
 			return handlers;
 		}
 	}
