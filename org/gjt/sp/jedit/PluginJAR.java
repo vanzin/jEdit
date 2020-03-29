@@ -176,16 +176,16 @@ public class PluginJAR
 
 	// Lists of jarPaths
 	/** These plugins require this plugin */
-	private final Set<String> theseRequireMe = new LinkedHashSet<String>();
+	private final Set<String> theseRequireMe = new LinkedHashSet<>();
 	
 	/** The plugins that uses me as optional dependency. */
-	private final Set<String> theseUseMe = new LinkedHashSet<String>();
+	private final Set<String> theseUseMe = new LinkedHashSet<>();
 	
 	/** This plugin requires these plugins. */
-	private final Set<String> weRequireThese = new LinkedHashSet<String>();
+	private final Set<String> weRequireThese = new LinkedHashSet<>();
 	
 	/** These plugins are an optional dependency for me, I'll use them if they are available, no worries if they aren't. */
-	private final Set<String> weUseThese = new LinkedHashSet<String>();
+	private final Set<String> weUseThese = new LinkedHashSet<>();
 	//}}}
 
 	//{{{ load(String jarPath, boolean activateDependentIfNecessary)
@@ -281,7 +281,7 @@ public class PluginJAR
 	{
 		String dir = MiscUtilities.getParentOfPath(path);
 		StringTokenizer st = new StringTokenizer(jarsString);
-		Collection<String> jarPaths = new LinkedList<String>();
+		Collection<String> jarPaths = new LinkedList<>();
 		while(st.hasMoreTokens())
 		{
 			String _jarPath = MiscUtilities.constructPath(dir,st.nextToken());
@@ -299,7 +299,7 @@ public class PluginJAR
 	public static Collection<String> parseJarsFilesStringNames(String jarsString)
 	{
 		StringTokenizer st = new StringTokenizer(jarsString);
-		Collection<String> jarPaths = new LinkedList<String>();
+		Collection<String> jarPaths = new LinkedList<>();
 		while(st.hasMoreTokens())
 		{
 			jarPaths.add(st.nextToken());
@@ -753,7 +753,7 @@ public class PluginJAR
 	 */
 	public static Set<String> getDependencies(String classname) throws IllegalArgumentException
 	{
-		Set<String> ret = new HashSet<String>();
+		Set<String> ret = new HashSet<>();
 		int i = 0;
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + classname + ".depend." + i++)) != null)
@@ -847,7 +847,7 @@ public class PluginJAR
 	*/
 	public String[] getDependentPlugins()
 	{
-		return theseRequireMe.toArray(new String[theseRequireMe.size()]);
+		return theseRequireMe.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 	//{{{ getOptionallyDependentPlugins() method
@@ -856,7 +856,7 @@ public class PluginJAR
 	*/
 	public String[] getOptionallyDependentPlugins()
 	{
-		return theseUseMe.toArray(new String[theseUseMe.size()]);
+		return theseUseMe.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 	
 	//{{{ getAllDependentPlugins() method
@@ -970,7 +970,7 @@ public class PluginJAR
 	{
 		String filename = MiscUtilities.getFileName(getPath());
 		jEdit.unsetProperty("plugin-blacklist." + filename);
-		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+		if(!(plugin instanceof EditPlugin.Deferred))
 		{
 			return;
 		}
@@ -1499,14 +1499,14 @@ public class PluginJAR
 	public PluginCacheEntry generateCache() throws IOException
 	{
 		properties = new Properties();
-		localizationProperties = new HashMap<String, Properties>();
+		localizationProperties = new HashMap<>();
 
-		List<String> classes = new LinkedList<String>();
-		List<String> resources = new LinkedList<String>();
+		List<String> classes = new LinkedList<>();
+		List<String> resources = new LinkedList<>();
 
 		ZipFile zipFile = getZipFile();
 
-		List<String> plugins = new LinkedList<String>();
+		List<String> plugins = new LinkedList<>();
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
@@ -1603,12 +1603,8 @@ public class PluginJAR
 
 		jEdit.addPluginProps(properties);
 
-		this.classes = cache.classes =
-			classes.toArray(
-			new String[classes.size()]);
-		this.resources = cache.resources =
-			resources.toArray(
-			new String[resources.size()]);
+		this.classes = cache.classes = classes.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
+		this.resources = cache.resources = resources.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 
 		String label = null;
 
@@ -1745,9 +1741,8 @@ public class PluginJAR
 		{
 			breakPlugin();
 
-			Log.log(Log.ERROR,PluginJAR.this,
-				"Error while starting plugin " + plugin.getClassName());
-			Log.log(Log.ERROR,PluginJAR.this,t);
+			Log.log(Log.ERROR,this, "Error while starting plugin " + plugin.getClassName());
+			Log.log(Log.ERROR,this,t);
 			String[] args = { t.toString() };
 			jEdit.pluginError(path, "plugin-error.start-error",args);
 		}
@@ -1788,16 +1783,12 @@ public class PluginJAR
 	//{{{ startPluginLater() method
 	private void startPluginLater()
 	{
-		EventQueue.invokeLater(new Runnable()
+		EventQueue.invokeLater(() ->
 		{
-			@Override
-			public void run()
-			{
-				if (!activated)
-					return;
+			if (!activated)
+				return;
 
-				startPlugin();
-			}
+			startPlugin();
 		});
 	} //}}}
 
@@ -2044,7 +2035,7 @@ public class PluginJAR
 				return Collections.emptyMap();
 
 
-			Map<String, Properties> languages = new HashMap<String, Properties>(languagesCount);
+			Map<String, Properties> languages = new HashMap<>(languagesCount);
 			for (int i = 0;i<languagesCount;i++)
 			{
 				String lang = readString(din);
