@@ -66,6 +66,7 @@ public class BeanShellAction extends EditAction
 	} //}}}
 
 	//{{{ invoke() method
+	@Override
 	public void invoke(View view)
 	{
 		try
@@ -83,6 +84,7 @@ public class BeanShellAction extends EditAction
 	} //}}}
 
 	//{{{ isSelected() method
+	@Override
 	public boolean isSelected(Component comp)
 	{
 		if(isSelected == null)
@@ -132,12 +134,14 @@ public class BeanShellAction extends EditAction
 	} //}}}
 
 	//{{{ noRepeat() method
+	@Override
 	public boolean noRepeat()
 	{
 		return noRepeat;
 	} //}}}
 
 	//{{{ noRecord() method
+	@Override
 	public boolean noRecord()
 	{
 		return noRecord;
@@ -149,22 +153,24 @@ public class BeanShellAction extends EditAction
 	 * recently invoked action.
 	 * @since jEdit 4.2pre1
 	 */
+	@Override
 	public boolean noRememberLast()
 	{
 		return noRememberLast;
 	} //}}}
 
 	//{{{ getCode() method
+	@Override
 	public String getCode()
 	{
 		return code.getSource().trim();
 	} //}}}
 
 	//{{{ Private members
-	private boolean noRepeat;
-	private boolean noRecord;
-	private boolean noRememberLast;
-	private CachedBshMethod code;
+	private final boolean noRepeat;
+	private final boolean noRecord;
+	private final boolean noRememberLast;
+	private final CachedBshMethod code;
 	private CachedBshMethod isSelected;
 
 	//{{{ CachedBshMethod class
@@ -174,7 +180,7 @@ public class BeanShellAction extends EditAction
 		private final String source;
 		private SoftReference<BshMethod> cache;
 
-		public CachedBshMethod(String name, String source)
+		CachedBshMethod(String name, String source)
 		{
 			this.name = name;
 			this.source = source;
@@ -192,7 +198,7 @@ public class BeanShellAction extends EditAction
 				}
 			}
 			BshMethod newOne = BeanShell.cacheBlock(name, source, true);
-			cache = new SoftReference<BshMethod>(newOne);
+			cache = new SoftReference<>(newOne);
 			return newOne;
 		}
 
