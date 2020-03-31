@@ -106,7 +106,7 @@ public class BufferSetManager
 	{
 		if (scope == this.scope)
 			return;
-        jEdit.setProperty("bufferset.scope", scope.name());
+		jEdit.setProperty("bufferset.scope", scope.name());
 		if (scope.compareTo(this.scope) > 0)
 		{
 			// The new scope is wider
@@ -128,7 +128,7 @@ public class BufferSetManager
 			}
 			else
 			{
-				final Map<View,Set<Buffer>> buffersMap = new HashMap<View, Set<Buffer>>();
+				final Map<View,Set<Buffer>> buffersMap = new HashMap<>();
 				jEdit.visit(new JEditVisitorAdapter()
 				{
 					@Override
@@ -136,12 +136,7 @@ public class BufferSetManager
 					{
 						BufferSet bufferSet = editPane.getBufferSet();
 						Buffer[] buffers = bufferSet.getAllBuffers();
-						Set<Buffer> set = buffersMap.get(editPane.getView());
-						if (set == null)
-						{
-							set = new HashSet<Buffer>();
-							buffersMap.put(editPane.getView(), set);
-						}
+						Set<Buffer> set = buffersMap.computeIfAbsent(editPane.getView(), k -> new HashSet<>());
 						set.addAll(Arrays.asList(buffers));
 					}
 				});
@@ -375,7 +370,7 @@ public class BufferSetManager
 	 */
 	public Set<BufferSet> getOwners(Buffer buffer)
 	{
-		final Set<BufferSet> candidates = new HashSet<BufferSet>();
+		final Set<BufferSet> candidates = new HashSet<>();
 		// Collect all BufferSets.
 		jEdit.visit(new JEditVisitorAdapter()
 		{
@@ -386,14 +381,7 @@ public class BufferSetManager
 			}
 		});
 		// Remove all that doesn't contain the buffer.
-		Iterator<BufferSet> i = candidates.iterator();
-		while (i.hasNext())
-		{
-			if (i.next().indexOf(buffer) == -1)
-			{
-				i.remove();
-			}
-		}
+		candidates.removeIf(bufferSet -> bufferSet.indexOf(buffer) == -1);
 		// Remaining are the result.
 		return candidates;
 	} //}}}
