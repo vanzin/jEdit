@@ -44,7 +44,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 public class LineSepWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
-	public Widget getWidget(View view) 
+	@Override
+	public Widget getWidget(View view)
 	{
 		Widget lineSep = new LineSepWidget(view);
 		return lineSep;
@@ -63,7 +64,7 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 			lineSep.setHorizontalAlignment(SwingConstants.CENTER);
 			lineSep.setToolTipText(jEdit.getProperty("view.status.linesep-tooltip"));
 			this.view = view;
-			lineSep.addMouseListener(new MouseAdapter() 
+			lineSep.addMouseListener(new MouseAdapter()
 						 {
 							 @Override
 							 public void mouseClicked(MouseEvent evt)
@@ -75,14 +76,16 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 
 		
 		//{{{ getComponent() method
-		public JComponent getComponent() 
+		@Override
+		public JComponent getComponent()
 		{
 			return lineSep;
 		} //}}}
 
 		
 		//{{{ update() method
-		public void update() 
+		@Override
+		public void update()
 		{
 			Buffer buffer = view.getBuffer();
 			String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
@@ -96,7 +99,8 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 
 		
 	        //{{{ propertiesChanged() method
-	        public void propertiesChanged()
+	        @Override
+		public void propertiesChanged()
 		{
 			// retarded GTK look and feel!
 			Font font = new JLabel().getFont();
