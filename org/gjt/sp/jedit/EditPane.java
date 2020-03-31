@@ -145,9 +145,6 @@ public class EditPane extends JPanel implements BufferSetListener
 	 */
 	public void setBuffer(@Nonnull final Buffer buffer, boolean requestFocus)
 	{
-		if(buffer == null)
-			throw new NullPointerException("The buffer cannot be null");
-
 		if(this.buffer == buffer)
 			return;
 
