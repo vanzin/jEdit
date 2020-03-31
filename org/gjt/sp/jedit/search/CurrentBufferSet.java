@@ -32,18 +32,21 @@ import org.gjt.sp.jedit.*;
 public class CurrentBufferSet implements SearchFileSet
 {
 	//{{{ getFirstFile() method
+	@Override
 	public String getFirstFile(View view)
 	{
 		return view.getBuffer().getPath();
 	} //}}}
 	
 	//{{{ getLastFile() method
+	@Override
 	public String getLastFile(View view)
 	{
 		return view.getBuffer().getPath();
 	} //}}}
 
 	//{{{ getNextFile() method
+	@Override
 	public String getNextFile(View view, String file)
 	{
 		if(file == null)
@@ -53,6 +56,7 @@ public class CurrentBufferSet implements SearchFileSet
 	} //}}}
 	
 	//{{{ getPrevFile() method
+	@Override
 	public String getPrevFile(View view, String file)
 	{
 		if(file == null)
@@ -62,18 +66,21 @@ public class CurrentBufferSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getFiles() method
+	@Override
 	public String[] getFiles(View view)
 	{
 		return new String[] { view.getBuffer().getPath() };
 	} //}}}
 
 	//{{{ getFileCount() method
+	@Override
 	public int getFileCount(View view)
 	{
 		return 1;
 	} //}}}
 
 	//{{{ getCode() method
+	@Override
 	public String getCode()
 	{
 		return "new CurrentBufferSet()";

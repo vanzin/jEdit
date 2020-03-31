@@ -37,6 +37,7 @@ import org.gjt.sp.util.StandardUtilities;
 public abstract class BufferListSet implements SearchFileSet
 {
 	//{{{ getFirstFile() method
+	@Override
 	public synchronized String getFirstFile(View view)
 	{
 		if(files == null)
@@ -49,6 +50,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 	
 	//{{{ getLastFile() method
+	@Override
 	public synchronized String getLastFile(View view)
 	{
 		if(files == null)
@@ -61,18 +63,21 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getNextFile() method
+	@Override
 	public synchronized String getNextFile(View view, String path)
 	{
 		return getPrevOrNextFile(view, path, Direction.NEXT);
 	} //}}}
 	
 	//{{{ getPrevFile() method
+	@Override
 	public synchronized String getPrevFile(View view, String path)
 	{
 		return getPrevOrNextFile(view, path, Direction.PREV);
 	} //}}}
 
 	//{{{ getFiles() method
+	@Override
 	public synchronized String[] getFiles(View view)
 	{
 		if(files == null)
@@ -85,6 +90,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getFileCount() method
+	@Override
 	public synchronized int getFileCount(View view)
 	{
 		if(files == null)
@@ -97,6 +103,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getCode() method
+	@Override
 	public String getCode()
 	{
 		// not supported for arbitrary filesets

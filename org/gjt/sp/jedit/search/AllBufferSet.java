@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+
+import static org.gjt.sp.util.StandardUtilities.EMPTY_STRING_ARRAY;
 //}}}
 
 /**
@@ -82,8 +84,8 @@ public class AllBufferSet extends BufferListSet
 	} //}}}
 
 	//{{{ Instance variables
-	private String glob;
-	private View view;
+	private final String glob;
+	private final View view;
 	//}}}
 
 	//{{{ _getFiles() method
@@ -91,7 +93,7 @@ public class AllBufferSet extends BufferListSet
 	protected String[] _getFiles(Component comp)
 	{
 		Buffer[] buffers = view.getBuffers();
-		List<String> returnValue = new ArrayList<String>(buffers.length);
+		List<String> returnValue = new ArrayList<>(buffers.length);
 
 		Pattern filter;
 		try
@@ -111,6 +113,6 @@ public class AllBufferSet extends BufferListSet
 				returnValue.add(buffer.getPath());
 		}
 
-		return returnValue.toArray(new String[returnValue.size()]);
+		return returnValue.toArray(EMPTY_STRING_ARRAY);
 	} //}}}
 }
