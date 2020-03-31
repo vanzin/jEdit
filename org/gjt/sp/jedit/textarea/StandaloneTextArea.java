@@ -56,7 +56,6 @@ import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.TokenMarker;
-import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 //}}}
@@ -621,7 +620,6 @@ public class StandaloneTextArea extends TextArea
 	}
 
 	//{{{ main() method
-
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame();
