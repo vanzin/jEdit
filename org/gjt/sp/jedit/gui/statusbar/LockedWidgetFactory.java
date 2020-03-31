@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.jEdit;
 public class LockedWidgetFactory implements StatusWidgetFactory
 {
     //{{{ getWidget() class
+    @Override
     public Widget getWidget(View view)
     {
         Widget widget = new LockedWidget(view);
@@ -69,11 +70,13 @@ public class LockedWidgetFactory implements StatusWidgetFactory
             });
         }
 
+        @Override
         public JComponent getComponent()
         {
             return cmp;
         }
 
+        @Override
         public void update()
         {
             Buffer buffer = view.getBuffer();
@@ -86,6 +89,7 @@ public class LockedWidgetFactory implements StatusWidgetFactory
                     new Integer[] { locked ? 1 : 0 }));
         }
 
+        @Override
         public void propertiesChanged()
         {
             // retarded GTK look and feel!
@@ -100,5 +104,4 @@ public class LockedWidgetFactory implements StatusWidgetFactory
 
         }
     } //}}}
-
 }
