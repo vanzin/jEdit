@@ -31,11 +31,13 @@ import java.awt.datatransfer.Transferable;
  */
 public class RichJEditTextTransferableService implements JEditTransferableService
 {
+	@Override
 	public boolean accept(TextArea textArea, String text)
 	{
 		return textArea != null;
 	}
 
+	@Override
 	public Transferable getTransferable(TextArea textArea, String text)
 	{
 		return new RichTextTransferable(text, textArea.getBuffer().getMode().getName());
