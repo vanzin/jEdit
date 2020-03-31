@@ -42,6 +42,8 @@ import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StringList;
+
+import javax.annotation.Nonnull;
 //}}}
 
 /**
@@ -448,6 +450,7 @@ public class MiscUtilities
 	 *    .gz
 	 * @see #getCompleteBaseName(String)
 	 */
+	@Nonnull
 	public static String getFileExtension(String path)
 	{
 		int fsIndex = getLastSeparatorIndex(path);

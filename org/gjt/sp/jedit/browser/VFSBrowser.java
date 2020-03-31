@@ -985,7 +985,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
-			filter = ext == null || ext.length() == 0 ? filter : '*' + ext;	// NOPMD
+			filter = ext.length() == 0 ? filter : '*' + ext;	// NOPMD
 			path = MiscUtilities.getParentOfPath(path);
 		}
 

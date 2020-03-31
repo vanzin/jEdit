@@ -275,9 +275,7 @@ public class CopyFileWorker extends Task
 		String nameNoExtension = MiscUtilities.getBaseName(baseName);
 		for (int i = 1;i<1000;i++)
 		{
-			String name = nameNoExtension + "-copy-" + i;
-			if (extension != null)
-				name += extension;
+			String name = nameNoExtension + "-copy-" + i + extension;
 			s = MiscUtilities.constructPath(path, name);
 			file = vfs._getFile(session, s, comp);
 			if (file == null)
