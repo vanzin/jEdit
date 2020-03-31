@@ -77,6 +77,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- New AbstractWidget class (Matthieu Casanova)
+
 - GUIUtilities.showVFSFileDialog() methods now never returns null (Matthieu Casanova)
 
 - New Method VFSManager.canReadFile(path) (Matthieu Casanova)

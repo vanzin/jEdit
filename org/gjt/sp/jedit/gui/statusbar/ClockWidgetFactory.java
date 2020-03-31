@@ -46,14 +46,15 @@ import org.gjt.sp.jedit.jEdit;
 public class ClockWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
-	public Widget getWidget(View view) 
+	@Override
+	public Widget getWidget(View view)
 	{
 		Widget clock = new ClockWidget();
 		return clock;
 	} //}}}
 
 	//{{{ ClockWidget class
-	private static class ClockWidget implements Widget
+	private static class ClockWidget extends AbstractWidget
 	{
 		private final Clock clock;
 		ClockWidget()
@@ -61,17 +62,10 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 			clock = new Clock();
 		}
 		
-		public JComponent getComponent() 
+		@Override
+		public JComponent getComponent()
 		{
 			return clock;
-		}
-		
-		public void update() 
-		{
-		}
-		
-		public void propertiesChanged()
-		{
 		}
 	} //}}}
 
@@ -127,6 +121,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		} //}}}
 
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			update();
@@ -147,7 +142,6 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		{
 			setText(getTime());
 		} //}}}
-
 		//}}}
 	} //}}}
 }

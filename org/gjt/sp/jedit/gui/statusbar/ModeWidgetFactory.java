@@ -50,7 +50,7 @@ public class ModeWidgetFactory implements StatusWidgetFactory
     } //}}}
 
     //{{{ ModeWidget class
-    private static class ModeWidget implements Widget
+    private static class ModeWidget extends AbstractWidget
     {
 	    private final JLabel mode;
 	    private final View view;
@@ -83,11 +83,6 @@ public class ModeWidgetFactory implements StatusWidgetFactory
 		    Buffer buffer = view.getBuffer();
 		    if (buffer.isLoaded())
 			    mode.setText(buffer.getMode().toString());
-	    }
-	    
-	    @Override
-	    public void propertiesChanged()
-	    {
 	    }
     } //}}}
 }
