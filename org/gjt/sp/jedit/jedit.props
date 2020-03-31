@@ -532,3 +532,6 @@ keymap.default=jEdit
 
 # if lang.usedefaultlocale is true, the lang.current is not used
 lang.usedefaultlocale=true
+
+# Enable subpixel antialiasing by default in textarea.
+view.antiAlias=subpixel HRGB
