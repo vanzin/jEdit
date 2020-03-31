@@ -30,10 +30,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 //}}}
 
 /**
@@ -50,22 +47,25 @@ public class ListVFSFileTransferable implements Transferable
 	//{{{ ListVFSFileTransferable constructor
 	public ListVFSFileTransferable(VFSFile[] files)
 	{
-		this.files = Collections.unmodifiableList(Arrays.asList(files));
+		this.files = List.of(files);
 	} //}}}
 
 	//{{{ getTransferDataFlavors() method
+	@Override
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		return supported;
 	} //}}}
 
 	//{{{ isDataFlavorSupported() method
+	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor)
 	{
 		return jEditFileList.equals(flavor) || DataFlavor.stringFlavor.equals(flavor);
 	} //}}}
 
 	//{{{ getTransferData() method
+	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 	{
 		if (jEditFileList.equals(flavor))
@@ -86,7 +86,7 @@ public class ListVFSFileTransferable implements Transferable
 		}
 		else if (DataFlavor.javaFileListFlavor.equals(flavor))
 		{
-			List<File> files = new ArrayList<File>(this.files.size());
+			Collection<File> files = new ArrayList<>(this.files.size());
 			for (VFSFile file : this.files)
 			{
 				if (file.getVFS() instanceof FileVFS)

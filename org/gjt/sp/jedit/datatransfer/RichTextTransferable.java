@@ -43,16 +43,19 @@ public class RichTextTransferable implements Transferable
 		this.mode = mode;
 	}
 
+	@Override
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		return supportedDataFlavor;
 	}
 
+	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor)
 	{
 		return JEditDataFlavor.jEditRichTextDataFlavor.equals(flavor);
 	}
 
+	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 	{
 		if (!isDataFlavorSupported(flavor))

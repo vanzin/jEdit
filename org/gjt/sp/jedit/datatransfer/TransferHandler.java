@@ -42,7 +42,7 @@ public class TransferHandler
 
 	private TransferHandler()
 	{
-		services = new ArrayList<JEditTransferableService>();
+		services = new ArrayList<>();
 	}
 
 	public static TransferHandler getInstance()
@@ -58,7 +58,7 @@ public class TransferHandler
 
 	public Transferable getTransferable(TextArea textArea, String text)
 	{
-		Map<DataFlavor, Transferable> flavors = new HashMap<DataFlavor, Transferable>();
+		Map<DataFlavor, Transferable> flavors = new HashMap<>();
 		for (JEditTransferableService service : services)
 		{
 			if (service.accept(textArea, text))

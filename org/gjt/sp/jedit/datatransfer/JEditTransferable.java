@@ -38,19 +38,22 @@ public class JEditTransferable implements Transferable
 	public JEditTransferable(Map<DataFlavor, Transferable> flavors)
 	{
 		this.flavors = flavors;
-		dataFlavors = flavors.keySet().toArray(new DataFlavor[flavors.size()]);
+		dataFlavors = flavors.keySet().toArray(new DataFlavor[0]);
 	}
 
+	@Override
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		return dataFlavors;
 	}
 
+	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor)
 	{
 		return flavors.containsKey(flavor);
 	}
 
+	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 	{
 		if (!isDataFlavorSupported(flavor))
