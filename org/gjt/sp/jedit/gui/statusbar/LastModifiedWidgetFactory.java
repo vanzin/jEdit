@@ -32,7 +32,6 @@ import org.gjt.sp.util.Log;
 import javax.swing.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 //}}}
 
 /**
@@ -44,6 +43,7 @@ import java.util.Date;
 public class LastModifiedWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
+	@Override
 	public Widget getWidget(View view)
 	{
 		Widget lastModifiedWidget = new LastModifiedWidget(view);
@@ -56,8 +56,6 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 		private final JLabel lastModifiedLabel;
 		private final View view;
 		private static final SimpleDateFormat sdf = new SimpleDateFormat();
-		private static final Date date = new Date();
-
 
 		LastModifiedWidget(View view)
 		{
@@ -84,12 +82,14 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 		}
 
 		//{{{ getComponent() method
+		@Override
 		public JComponent getComponent()
 		{
 			return lastModifiedLabel;
 		} //}}}
 
 		//{{{ update() method
+		@Override
 		public void update()
 		{
 			Buffer buffer = view.getBuffer();
