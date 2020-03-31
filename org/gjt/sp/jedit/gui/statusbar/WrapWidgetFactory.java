@@ -45,6 +45,7 @@ import org.gjt.sp.jedit.jEdit;
 public class WrapWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
+	@Override
 	public Widget getWidget(View view)
 	{
 		Widget wrap = new WrapWidget(view);
@@ -56,7 +57,8 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 	{
 		private final JLabel wrap;
 		private final View view;
-		public WrapWidget(final View view)
+
+		WrapWidget(final View view)
 		{
 			wrap = new ToolTipLabel();
 			wrap.setHorizontalAlignment(SwingConstants.CENTER);
@@ -72,11 +74,13 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 			});
 		}
 
+		@Override
 		public JComponent getComponent()
 		{
 			return wrap;
 		}
 
+		@Override
 		public void update()
 		{
 			Buffer buffer = view.getBuffer();
@@ -102,6 +106,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 			}
 		}
 
+		@Override
 		public void propertiesChanged()
 		{
 			// retarded GTK look and feel!
