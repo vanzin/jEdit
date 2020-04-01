@@ -51,7 +51,7 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ FoldWidget class
-	private static class FoldWidget extends AbstractWidget
+	private static class FoldWidget implements Widget
 	{
 		private final JLabel fold;
 		private final View view;

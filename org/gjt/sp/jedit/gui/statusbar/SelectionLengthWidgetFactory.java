@@ -51,7 +51,7 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ SelectionLengthWidget class
-	public static class SelectionLengthWidget extends AbstractWidget
+	public static class SelectionLengthWidget implements Widget
 	{
 		private final SelectionLength selectionLength;
 		private final View view;

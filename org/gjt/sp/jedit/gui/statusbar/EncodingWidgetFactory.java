@@ -50,7 +50,7 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ EncodingWidget class
-	private static class EncodingWidget extends AbstractWidget
+	private static class EncodingWidget implements Widget
 	{
 		private final JLabel encoding;
 		private final View view;

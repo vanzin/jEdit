@@ -50,7 +50,7 @@ public class ModeWidgetFactory implements StatusWidgetFactory
     } //}}}
 
     //{{{ ModeWidget class
-    private static class ModeWidget extends AbstractWidget
+    private static class ModeWidget implements Widget
     {
 	    private final JLabel mode;
 	    private final View view;

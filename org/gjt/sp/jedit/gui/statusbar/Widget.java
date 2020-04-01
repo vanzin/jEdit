@@ -28,7 +28,7 @@ import javax.swing.JComponent;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre14
  */
-public interface Widget 
+public interface Widget
 {
 	/** 
 	 * Returns the component that will be inserted in the status bar
@@ -40,8 +40,8 @@ public interface Widget
 	 * a callback telling that the properties have been changed, the widget
 	 * can update itself if needed
 	 */
-	void propertiesChanged();
+	default void propertiesChanged() {}
 	
 	/** A refresh is asked to the widget */
-	void update();
+	default void update() {}
 }

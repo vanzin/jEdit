@@ -63,7 +63,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 	} //}}}
 	
 	//{{{ MemoryStatusWidget class
-	private static class MemoryStatusWidget extends AbstractWidget
+	private static class MemoryStatusWidget implements Widget
 	{
 		private final MemoryStatus memoryStatus;
 

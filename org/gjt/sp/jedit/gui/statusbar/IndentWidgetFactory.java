@@ -47,7 +47,7 @@ public class IndentWidgetFactory implements StatusWidgetFactory
 	}
 
 	//{{{ IndentWidget class
-	private static class IndentWidget extends AbstractWidget
+	private static class IndentWidget implements Widget
 	{
 		private final JLabel indent;
 		private final View view;

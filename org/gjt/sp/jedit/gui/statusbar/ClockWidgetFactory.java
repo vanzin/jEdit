@@ -54,7 +54,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ ClockWidget class
-	private static class ClockWidget extends AbstractWidget
+	private static class ClockWidget implements Widget
 	{
 		private final Clock clock;
 		ClockWidget()
