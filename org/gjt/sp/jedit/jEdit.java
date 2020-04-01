@@ -46,6 +46,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
@@ -1439,38 +1441,8 @@ public class jEdit
 				"modes","catalog"), false, false);
 		} //}}}
 
-		//{{{ Load user catalog second so user modes override global modes.
-		if(settingsDirectory != null)
-		{
-			File userModeDir = new File(MiscUtilities.constructPath(
-				settingsDirectory,"modes"));
-			if(!userModeDir.exists())
-				userModeDir.mkdirs();
-
-			File userCatalog = new File(MiscUtilities.constructPath(
-				settingsDirectory,"modes","catalog"));
-			if(!userCatalog.exists())
-			{
-				// create dummy catalog
-				BufferedWriter out = null;
-				try
-				{
-
-					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(userCatalog), StandardCharsets.UTF_8));
-					out.write(jEdit.getProperty("defaultCatalog"));
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,jEdit.class,io);
-				}
-				finally
-				{
-					IOUtilities.closeQuietly((Closeable)out);
-				}
-			}
-
-			loadModeCatalog(userCatalog.getPath(), false, true);
-		} //}}}
+		//Load user catalog second so user modes override global modes.
+		loadUserModeCatalog();
 
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
@@ -1481,6 +1453,45 @@ public class jEdit
 
 			buffer = buffer.next;
 		}
+	} //}}}
+
+	//{{{ loadUserModeCatalog() method
+	private static void loadUserModeCatalog()
+	{
+		if (settingsDirectory == null)
+			return;
+
+		Log.log(Log.DEBUG, jEdit.class, "Loading user mode catalog");
+		Path userModeDir = Path.of(MiscUtilities.constructPath(settingsDirectory,"modes"));
+		if(Files.notExists(userModeDir))
+		{
+			Log.log(Log.DEBUG, jEdit.class, "The user mode path doesn't exist, creating it");
+			try
+			{
+				Files.createDirectories(userModeDir);
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.DEBUG, jEdit.class, e, e);
+				return;
+			}
+		}
+
+		Path userCatalog = Path.of(MiscUtilities.constructPath(settingsDirectory,"modes","catalog"));
+		if (Files.notExists(userCatalog))
+		{
+			try
+			{
+				// create dummy catalog
+				Files.writeString(userCatalog, jEdit.getProperty("defaultCatalog"));
+			}
+			catch (IOException io)
+			{
+				Log.log(Log.ERROR,jEdit.class,io);
+			}
+		}
+		else
+			loadModeCatalog(userCatalog.toString(), false, true);
 	} //}}}
 
 	//{{{ getMode() method
