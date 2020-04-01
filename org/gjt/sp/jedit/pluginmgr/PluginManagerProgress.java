@@ -57,8 +57,13 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		progress.setMaximum(maximum);
 		content.add(BorderLayout.NORTH,progress);
 
-		stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
-		stop.addActionListener(new ActionHandler());
+		JButton stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
+		stop.addActionListener(e ->
+		{
+			// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
+			thread.stop();
+			dispose();
+		});
 		JPanel panel = new JPanel(new FlowLayout(
 			FlowLayout.CENTER,0,0));
 		panel.add(stop);
@@ -78,15 +83,10 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param value the new value
 	 * @since jEdit 4.3pre3
 	 */
+	@Override
 	public void setValue(final long value)
 	{
-		SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					progress.setValue(valueSoFar + (int) value);
-				}
-			});
+		SwingUtilities.invokeLater(() -> progress.setValue(valueSoFar + (int) value));
 	} //}}}
 
 	//{{{ setMaximum() method
@@ -96,6 +96,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param value the new max value (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
+	@Override
 	public void setMaximum(long value)
 	{
 	} //}}}
@@ -107,6 +108,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param status the new status (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
+	@Override
 	public void setStatus(String status)
 	{
 		SwingUtilities.invokeLater(() -> progress.setString(status));
@@ -119,25 +121,16 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		{
 			if(done == count)
 			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						dispose();
-					}
-				});
+				SwingUtilities.invokeAndWait(this::dispose);
 			}
 			else
 			{
-				SwingUtilities.invokeAndWait(new Runnable()
+				SwingUtilities.invokeAndWait(() ->
 				{
-					public void run()
-					{
-						valueSoFar += roster.getOperation(done - 1)
-							.getMaximum();
-						progress.setValue(valueSoFar);
-						done++;
-					}
+					valueSoFar += roster.getOperation(done - 1)
+						.getMaximum();
+					progress.setValue(valueSoFar);
+					done++;
 				});
 			}
 		}
@@ -152,7 +145,6 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	private Thread thread;
 
 	private final JProgressBar progress;
-	private final JButton stop;
 	private final int count;
 	private int done = 1;
 
@@ -161,21 +153,6 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 
 	private final Roster roster;
 	//}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		@SuppressWarnings("deprecation")
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == stop)
-			{
-				// TODO: Thread.stop is deprecated, this should probably be Thread.interrupt
-				thread.stop();
-				dispose();
-			}
-		}
-	} //}}}
 
 	//{{{ WindowHandler class
 	class WindowHandler extends WindowAdapter
@@ -189,7 +166,8 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 				return;
 
 			done = true;
-			thread = new RosterThread();
+			thread = new Thread(() -> roster.performOperationsInWorkThread(PluginManagerProgress.this),
+				"Plugin manager thread");
 			thread.start();
 		}
 
@@ -202,21 +180,5 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 			dispose();
 		}
 	} //}}}
-
-	//{{{ RosterThread class
-	class RosterThread extends Thread
-	{
-		RosterThread()
-		{
-			super("Plugin manager thread");
-		}
-
-		@Override
-		public void run()
-		{
-			roster.performOperationsInWorkThread(PluginManagerProgress.this);
-		}
-	} //}}}
-
 	//}}}
 }
