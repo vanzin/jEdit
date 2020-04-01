@@ -24,7 +24,6 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
@@ -177,8 +176,9 @@ public class jEdit
 		{
 			String arg = args[i];
 			if(arg == null)
-				continue;
-			else if(arg.length() == 0)
+			{
+			}
+			else if(arg.isEmpty())
 				args[i] = null;
 			else if(arg.startsWith("-") && !endOpts)
 			{
@@ -344,19 +344,8 @@ public class jEdit
 			}
 			finally
 			{
-				if(in != null)
-					try
-					{
-						in.close();
-					}
-					catch (IOException e) {}
-
-				if(out != null)
-					try
-					{
-						out.close();
-					}
-					catch (IOException e) {}
+				IOUtilities.closeQuietly(in);
+				IOUtilities.closeQuietly(out);
 			}
 		}
 
@@ -1081,14 +1070,7 @@ public class jEdit
 
 		if (getBooleanProperty("systrayicon"))
 		{
-			EventQueue.invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					JTrayIconManager.addTrayIcon();
-				}
-			});
+			EventQueue.invokeLater(JTrayIconManager::addTrayIcon);
 		}
 		else
 		{
@@ -1109,7 +1091,7 @@ public class jEdit
 	 */
 	public static String[] getNotLoadedPluginJARs()
 	{
-		List<String> returnValue = new ArrayList<String>();
+		Collection<String> returnValue = new ArrayList<>();
 
 		if(jEditHome != null)
 		{
@@ -1133,8 +1115,7 @@ public class jEdit
 			}
 		}
 
-		String[] _returnValue = new String[returnValue.size()];
-		returnValue.toArray(_returnValue);
+		String[] _returnValue = returnValue.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 		return _returnValue;
 	} //}}}
 
@@ -1475,7 +1456,7 @@ public class jEdit
 				try
 				{
 
-					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(userCatalog), "UTF-8"));
+					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(userCatalog), StandardCharsets.UTF_8));
 					out.write(jEdit.getProperty("defaultCatalog"));
 				}
 				catch(IOException io)
@@ -1520,15 +1501,16 @@ public class jEdit
 	public static Mode[] getModes()
 	{
 		Mode[] modes = ModeProvider.instance.getModes();
-		Set<Mode> selected = new HashSet<Mode>();
-		for (Mode mode : modes) {
+		Set<Mode> selected = new HashSet<>();
+		for (Mode mode : modes)
+		{
 			if (!jEdit.getBooleanProperty("mode.opt-out." + mode.getName(), false))
 			{
 				selected.add(mode);
 			}
 		}
-		modes = selected.toArray(new Mode[selected.size()]);
-		Arrays.sort( modes, new StandardUtilities.StringCompare<Mode>( true ) );
+		modes = selected.toArray(new Mode[0]);
+		Arrays.sort(modes, new StandardUtilities.StringCompare<>(true));
 		return modes;
 	} //}}}
 
@@ -1540,7 +1522,7 @@ public class jEdit
 	public static Mode[] getAllModes()
 	{
 		Mode[] modes = ModeProvider.instance.getModes();
-		Arrays.sort( modes, new StandardUtilities.StringCompare<Mode>( true ) );
+		Arrays.sort(modes, new StandardUtilities.StringCompare<>(true));
 		return modes;
 	} //}}}
 
@@ -1699,13 +1681,7 @@ public class jEdit
 		{
 			URL u = new URL(path);
 			if ("file".equals(u.getProtocol()))
-			{
-				path = URLDecoder.decode(u.getPath(), "UTF-8");
-			}
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			path = MiscUtilities.constructPath(parent,path);
+				path = URLDecoder.decode(u.getPath(), StandardCharsets.UTF_8);
 		}
 		catch (MalformedURLException e)
 		{
@@ -1714,7 +1690,7 @@ public class jEdit
 
 
 		if(props == null)
-			props = new Hashtable<String,Object>();
+			props = new Hashtable<>();
 		composeBufferPropsFromHistory(props, path);
 
 		Buffer newBuffer;
@@ -1874,7 +1850,7 @@ public class jEdit
 		path = MiscUtilities.constructPath(parent,path);
 
 		if(props == null)
-			props = new Hashtable<String, Object>();
+			props = new Hashtable<>();
 		composeBufferPropsFromHistory(props, path);
 
 		synchronized(bufferListLock)
@@ -2003,7 +1979,6 @@ public class jEdit
 			{
 				if (buf.isUntitled() && !buf.isDirty())
 				{
-
 					if (!MiscUtilities.getParentOfPath(buf.getPath()).equals(dir))
 					{
 						// Find the highest Untitled-n file
@@ -2056,8 +2031,10 @@ public class jEdit
 		}
 
 		boolean doNotSave = false;
-		if(buffer.isDirty()) {
-			if (buffer.isUntitled() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) {
+		if(buffer.isDirty())
+		{
+			if (buffer.isUntitled() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
+			{
 				_closeBuffer(view, buffer, true);
 				return true;
 			}
@@ -2080,7 +2057,7 @@ public class jEdit
 			else if(result != JOptionPane.NO_OPTION) {
 				// cancel
 				return false;
-		}
+			}
 			else if(result == JOptionPane.NO_OPTION) {
 				// when we close an untitled buffer, cos we do not want to save it by answering No,
 				// mark to delete the autosave file
@@ -2197,7 +2174,7 @@ public class jEdit
 			if(view != null)
 				view.getEditPane().saveCaretInfo();
 			Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
-			int caret = _caret == null ? 0 : _caret.intValue();
+			int caret = _caret == null ? 0 : _caret;
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
@@ -2295,7 +2272,7 @@ public class jEdit
 			if((!buffer.isNewFile() || (buffer.isUntitled() && autosaveUntitled)) && saveRecent)
 			{
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
-				int caret = _caret == null ? 0 : _caret.intValue();
+				int caret = _caret == null ? 0 : _caret;
 				BufferHistory.setEntry(buffer.getPath(),caret,
 					(Selection[])buffer.getProperty(Buffer.SELECTION),
 					buffer.getStringProperty(JEditBuffer.ENCODING),
@@ -2347,8 +2324,8 @@ public class jEdit
 	 */
 	public static void saveAllBuffers(View view, boolean confirm)
 	{
-		List<Buffer> buffers = new ArrayList<Buffer>();
-		List<String> selectedBuffers = new ArrayList<String>();
+		Collection<Buffer> buffers = new ArrayList<>();
+		List<String> selectedBuffers = new ArrayList<>();
 
 		{
 			Buffer buffer = buffersFirst;
@@ -2363,10 +2340,10 @@ public class jEdit
 
 		if (confirm && !buffers.isEmpty())
 		{
-			DefaultListModel<String> listModel = new DefaultListModel<String>();
+			DefaultListModel<String> listModel = new DefaultListModel<>();
 			for (Buffer buffer : buffers) listModel.addElement(buffer.getPath());
 
-			JList<String> bufferList = new JList<String>(listModel);
+			JList<String> bufferList = new JList<>(listModel);
 			bufferList.setVisibleRowCount(Math.min(listModel.getSize(), 10));
 			bufferList.setSelectionInterval(0, listModel.getSize() - 1);
 
@@ -2383,7 +2360,8 @@ public class jEdit
 
 		Buffer current = view.getBuffer();
 		for (Buffer buffer : buffers) {
-			if (selectedBuffers.contains(buffer.getPath())) {
+			if (selectedBuffers.contains(buffer.getPath()))
+			{
 				if (buffer.isNewFile()) view.setBuffer(buffer);
 				buffer.save(view, null, true, true);
 			}
@@ -2627,14 +2605,7 @@ public class jEdit
 						// File can be changed into link on disk or vice versa, so update
 						// file-path,buffer key value pair in bufferHash
 						final Buffer b = buffer;
-						Runnable runnable = new Runnable()
-						{
-							public void run()
-							{
-								updateBufferHash(b);
-							}
-						};
-						AwtRunnableQueue.INSTANCE.runAfterIoTasks(runnable);
+						AwtRunnableQueue.INSTANCE.runAfterIoTasks(() -> updateBufferHash(b));
 					}
 				}
 				else	// no automatic reload even if general setting is true
@@ -2669,18 +2640,6 @@ public class jEdit
 	{
 		return inputHandler;
 	} //}}}
-
-	/* public static void newViewTest()
-	{
-		long time = System.currentTimeMillis();
-		for(int i = 0; i < 30; i++)
-		{
-			Buffer b = newFile(null);
-			b.insert(0,"x");
-			new View(b,null,false);
-		}
-		System.err.println(System.currentTimeMillis() - time);
-	} */
 
 	//{{{ newView() methods
 	/**
@@ -3356,7 +3315,7 @@ public class jEdit
 		synchronized(pluginErrorLock)
 		{
 			if(pluginErrors == null)
-				pluginErrors = new Vector<ErrorListDialog.ErrorEntry>();
+				pluginErrors = new Vector<>();
 
 			ErrorListDialog.ErrorEntry newEntry =
 				new ErrorListDialog.ErrorEntry(
@@ -3371,14 +3330,7 @@ public class jEdit
 
 			if(isStartupDone())
 			{
-				EventQueue.invokeLater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						showPluginErrorDialog();
-					}
-				});
+				EventQueue.invokeLater(jEdit::showPluginErrorDialog);
 			}
 		}
 	} //}}}
@@ -3400,7 +3352,7 @@ public class jEdit
 		return activeView;
 	} //}}}
 
-		//{{{ updateBufferHash() method
+	//{{{ updateBufferHash() method
 	/**
 	 * @since jEdit 5.3pre1
 	 */
@@ -3409,14 +3361,7 @@ public class jEdit
 		// Remove path,buffer key,value pair from bufferHash. We use iterator over values
 		// to find our buffer i.s.o. removing it with bufferHash.remove(oldPath), because
 		// path can be changed (e.g. file changed on disk into link.
-		for (Iterator<Buffer> iterator = bufferHash.values().iterator(); iterator.hasNext();)
-		{
-			Buffer b = (Buffer) iterator.next();
-			// Since values() is a Collection connected to bufferHash, removing buffer from the
-			// values() collection also removes it from bufferHash
-			if(buffer == b)
-				iterator.remove();
-        }
+		bufferHash.values().removeIf(b -> buffer == b);
 
 		String path = buffer.getSymlinkPath();
 		if((VFSManager.getVFSForPath(path).getCapabilities()
@@ -3426,7 +3371,6 @@ public class jEdit
 		}
 
 		bufferHash.put(path,buffer);
-
 	} //}}}
 
 	//}}}
@@ -3448,7 +3392,7 @@ public class jEdit
 	private static Vector<PluginJAR> jars;
 	private static final JEditPropertyManager propertyManager =
 	                     new JEditPropertyManager();
-	private static long startupTime = System.currentTimeMillis();
+	private static final long startupTime = System.currentTimeMillis();
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
@@ -3475,8 +3419,8 @@ public class jEdit
 	private static View viewsLast;
 	private static View activeView;
 
-	private static final List<Boolean> startupDone = new Vector<Boolean>();
-	private static Vector<String> additionalFiles = new Vector<String>();
+	private static final List<Boolean> startupDone = new Vector<>();
+	private static final Vector<String> additionalFiles = new Vector<>();
 
 	private static Thread mainThread;
 	//}}}
@@ -3620,7 +3564,7 @@ public class jEdit
 				}
 			}
 		};
-		jars = new Vector<PluginJAR>();
+		jars = new Vector<>();
 		FoldHandler.foldHandlerProvider = new ServiceManager.ServiceFoldHandlerProvider();
 		actionContext = new ActionContext()
 		{
@@ -3654,7 +3598,7 @@ public class jEdit
 			}
 		};
 
-		bufferHash = new HashMap<String, Buffer>();
+		bufferHash = new HashMap<>();
 
 		File userKeymapFolder = null;
 		if (settingsDirectory != null)
@@ -3748,15 +3692,7 @@ public class jEdit
 		Thread.currentThread().setContextClassLoader(new JARClassLoader());
 		// Perhaps if Xerces wasn't slightly brain-damaged, we would
 		// not need this
-		EventQueue.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				Thread.currentThread().setContextClassLoader(
-					new JARClassLoader());
-			}
-		});
+		EventQueue.invokeLater(() -> Thread.currentThread().setContextClassLoader(new JARClassLoader()));
 	} //}}}
 
 	//{{{ getResourceAsUTF8Text() method
@@ -3771,9 +3707,8 @@ public class jEdit
 		Reader text = null;
 		try
 		{
-			// Using our CharsetEncoding to reliably detect
-			// encoding errors.
-			CharsetEncoding utf8 = new CharsetEncoding(StandardCharsets.UTF_8);
+			// Using our CharsetEncoding to reliably detect encoding errors.
+			Encoding utf8 = new CharsetEncoding(StandardCharsets.UTF_8);
 			text = utf8.getTextReader(bytes);
 		}
 		finally
@@ -4072,20 +4007,16 @@ public class jEdit
 		{
 			try
 			{
-				EventQueue.invokeAndWait(
-					new Runnable()
+				EventQueue.invokeAndWait(() ->
 					{
-						public void run()
+						try
 						{
-							try
-							{
-								UIManager.setLookAndFeel(sLf);
-							}
-							catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e)
-							{
-								// same as above, there really isn't anything to do and this may be
-								// bogus, the lnf may be from the Look And Feel plugin
-							}
+							UIManager.setLookAndFeel(sLf);
+						}
+						catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e)
+						{
+							// same as above, there really isn't anything to do and this may be
+							// bogus, the lnf may be from the Look And Feel plugin
 						}
 					}
 				);
@@ -4186,7 +4117,7 @@ public class jEdit
 	@Nonnull
 	private static String getPLAFClassName(@Nullable String lf)
 	{
-		if (lf != null && lf.length() != 0)
+		if (lf != null && !lf.isEmpty())
 		{
 			return lf;
 		}
@@ -4238,7 +4169,7 @@ public class jEdit
 			return;
 
 		Arrays.sort(snippets,
-			new StandardUtilities.StringCompare<File>(true));
+			new StandardUtilities.StringCompare<>(true));
 
 		/*
 		 * Force the default encoding to UTF-8 temporarily.
@@ -4335,7 +4266,7 @@ public class jEdit
 			if(password == null)
 				password = "";
 
-			if(username == null || username.length()==0)
+			if(username == null || username.isEmpty())
 			{
 				Log.log(Log.DEBUG, jEdit.class, "HTTP proxy without user");
 				Authenticator.setDefault(new FirewallAuthenticator(null));
@@ -4762,7 +4693,7 @@ loop:
 
 			// move the dirty untitled buffers to the next open view's current editpane bufferset (first or last)
 			boolean moveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
-			if (moveUntitled && !getBufferSetManager().getScope().equals(BufferSet.Scope.global)) {
+			if (moveUntitled && getBufferSetManager().getScope() != BufferSet.Scope.global) {
 				View targetView;
 				if ( view.equals(viewsFirst) ) {
 					targetView = viewsLast;
@@ -4949,5 +4880,4 @@ loop:
 			startupDone.set(startupDoneIndex, true);
 		}
 	} //}}}
-
 }
