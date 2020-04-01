@@ -41,14 +41,15 @@ class ModeCatalogHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "catalog.dtd", getClass());
 	} //}}}
 
 	//{{{ startElement() method
-	public void startElement(String uri, String localName,
-							 String qName, Attributes attrs)
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes attrs)
 	{
 		if (qName.equals("MODE"))
 		{
@@ -93,8 +94,7 @@ class ModeCatalogHandler extends DefaultHandler
 		return new Mode(modeName);
 	}
 
-	private String directory;
-	private boolean resource;
-
+	private final String directory;
+	private final boolean resource;
 }
 
