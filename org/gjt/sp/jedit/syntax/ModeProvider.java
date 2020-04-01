@@ -54,7 +54,7 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(220);
+	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<>(220);
 
 	//{{{ removeAll() method
 	public void removeAll()
@@ -184,7 +184,7 @@ public class ModeProvider
 		if (filename != null && filename.endsWith(".gz"))
 			filename = filename.substring(0, filename.length() - 3);
 
-		List<Mode> acceptable = new ArrayList<Mode>(1);
+		List<Mode> acceptable = new ArrayList<>(1);
 		for(Mode mode : modes.values())
 		{
 			if(mode.accept(filepath, filename, firstLine))
@@ -266,7 +266,7 @@ public class ModeProvider
 	 */
 	public Mode[] getModes()
 	{
-		return modes.values().toArray(new Mode[modes.size()]);
+		return modes.values().toArray(new Mode[0]);
 	} //}}}
 
 	//{{{ addMode() method
@@ -332,11 +332,10 @@ public class ModeProvider
 				// insert the catalog entry for this mode
 				p = Pattern.compile("(?m)(</MODES>)");
 				m = p.matcher(contents);
-				StringBuilder modeLine = new StringBuilder("\t<MODE NAME=\"");
-				modeLine.append(name).append("\" FILE=\"").append(target.toFile().getName()).append("\"");
-				modeLine.append(filenameGlob == null || filenameGlob.isEmpty() ? "" : " FILE_NAME_GLOB=\"" + filenameGlob + "\"");
-				modeLine.append(firstLineGlob == null || firstLineGlob.isEmpty() ? "" : " FIRST_LINE_GLOB=\"" + firstLineGlob + "\"");
-				modeLine.append("/>");
+				String modeLine = "\t<MODE NAME=\"" + name + "\" FILE=\"" + target.toFile().getName() + "\"" +
+					(filenameGlob == null || filenameGlob.isEmpty() ? "" : " FILE_NAME_GLOB=\"" + filenameGlob + "\"") +
+					(firstLineGlob == null || firstLineGlob.isEmpty() ? "" : " FIRST_LINE_GLOB=\"" + firstLineGlob + "\"") +
+					"/>";
 				newContents = m.replaceFirst(modeLine + "\n$1" );
 
 				// rewrite the catalog file
@@ -350,7 +349,6 @@ public class ModeProvider
 				// ignored
 			}
 		}
-
 
 		addMode(mode);
 		loadMode(mode);
