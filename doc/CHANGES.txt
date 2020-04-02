@@ -88,6 +88,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Add Well Known Text (WKT) edit mode (Matthieu Casanova)
+
 - Update RPM Spec mode (bug #3880 Matthieu Casanova)
 
 - Added openSIPS mode (Matthieu Casanova)
@@ -98,7 +100,7 @@ Alan Ezust, and Dale Anson for contributing to this release.
 
 - Add HL7 mode (Thiemo Kellner / Dale Anson)
 
-- Update drawj2d mode (patch ##622 A. Vontobel / Matthieu Casanova)
+- Update drawj2d mode (patch #622 A. Vontobel / Matthieu Casanova)
 
 }}}
 

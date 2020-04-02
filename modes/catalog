@@ -687,7 +687,10 @@
 <MODE NAME="vrml2"		FILE="vrml2.xml"
         FILE_NAME_GLOB="*.{wrl,wrz}"/>
 
-<MODE NAME="xml"		FILE="xml.xml"
+<MODE NAME="wellknowntext"		FILE="wellknowntext.xml"
+          FILE_NAME_GLOB="*.{wkt}"/>
+
+    <MODE NAME="xml"		FILE="xml.xml"
         FILE_NAME_GLOB="*.{xml,xhtml,xsd,qrc,ui,docbook}"
         FIRST_LINE_GLOB="&lt;\?xml*" />
 
