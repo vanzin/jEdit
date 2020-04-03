@@ -1444,15 +1444,9 @@ public class jEdit
 		//Load user catalog second so user modes override global modes.
 		loadUserModeCatalog();
 
-		Buffer buffer = buffersFirst;
-		while(buffer != null)
-		{
-			// This reloads the token marker and sends a message
-			// which causes edit panes to repaint their text areas
-			buffer.setMode();
-
-			buffer = buffer.next;
-		}
+		// This reloads the token marker and sends a message
+		// which causes edit panes to repaint their text areas
+		Arrays.stream(getBuffers()).forEach(Buffer::setMode);
 	} //}}}
 
 	//{{{ loadUserModeCatalog() method
