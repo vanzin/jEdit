@@ -517,7 +517,7 @@ public class Log
 	//{{{ LogListModel class
 	static class LogListModel implements ListModel<String>
 	{
-		final List<ListDataListener> listeners = new ArrayList<ListDataListener>();
+		final List<ListDataListener> listeners = new ArrayList<>();
 
 		//{{{ fireIntervalAdded() method
 		private void fireIntervalAdded(int index1, int index2)
@@ -540,18 +540,21 @@ public class Log
 		} //}}}
 
 		//{{{ addListDataListener() method
+		@Override
 		public void addListDataListener(ListDataListener listener)
 		{
 			listeners.add(listener);
 		} //}}}
 
 		//{{{ removeListDataListener() method
+		@Override
 		public void removeListDataListener(ListDataListener listener)
 		{
 			listeners.remove(listener);
 		} //}}}
 
 		//{{{ getElementAt() method
+		@Override
 		public String getElementAt(int index)
 		{
 			if(wrap)
@@ -566,6 +569,7 @@ public class Log
 		} //}}}
 
 		//{{{ getSize() method
+		@Override
 		public int getSize()
 		{
 			if(wrap)
@@ -580,29 +584,26 @@ public class Log
 			if(lineCount == 0 || listeners.isEmpty())
 				return;
 
-			SwingUtilities.invokeLater(new Runnable()
+			SwingUtilities.invokeLater(() ->
 			{
-				public void run()
+				if(wrap)
 				{
-					if(wrap)
-					{
-						if(oldWrap)
-							fireIntervalRemoved(0,lineCount - 1);
-						else
-						{
-							fireIntervalRemoved(0,
-								logLineCount);
-						}
-						fireIntervalAdded(
-							MAXLINES - lineCount + 1,
-							MAXLINES);
-					}
+					if(oldWrap)
+						fireIntervalRemoved(0,lineCount - 1);
 					else
 					{
-						fireIntervalAdded(
-							logLineCount - lineCount + 1,
+						fireIntervalRemoved(0,
 							logLineCount);
 					}
+					fireIntervalAdded(
+						MAXLINES - lineCount + 1,
+						MAXLINES);
+				}
+				else
+				{
+					fireIntervalAdded(
+						logLineCount - lineCount + 1,
+						logLineCount);
 				}
 			});
 		} //}}}
@@ -639,6 +640,7 @@ public class Log
 		 * would be needed for the "other" printf method, but
 		 * I'll settle for the common case only.
 		 */
+		@Override
 		public PrintStream printf(String format, Object... args)
 		{
 			synchronized (orig)
@@ -680,6 +682,7 @@ public class Log
 		} //}}}
 
 		//{{{ write() method
+		@Override
 		public synchronized void write(int b)
 		{
 			byte[] barray = { (byte)b };
@@ -687,6 +690,7 @@ public class Log
 		} //}}}
 
 		//{{{ write() method
+		@Override
 		public synchronized void write(byte[] b, int off, int len)
 		{
 			String str = new String(b,off,len);
