@@ -68,6 +68,7 @@ class Autosave implements ActionListener
 	} //}}}
 
 	//{{{ actionPerformed() method
+	@Override
 	public void actionPerformed(ActionEvent evt)
 	{
 		if (jEdit.getIntegerProperty("autosave",0) == 0)
