@@ -1409,11 +1409,14 @@ check_selected:
 
 		if(mode == BROWSER)
 		{
-			for (VFSFile file : selectedFiles)
+			if (view != null)
 			{
-				Buffer buffer = jEdit.getBuffer(file.getPath());
-				if (buffer != null && view != null)
-					view.setBuffer(buffer);
+				for (VFSFile file : selectedFiles)
+				{
+					Buffer buffer = jEdit.getBuffer(file.getPath());
+					if (buffer != null)
+						view.setBuffer(buffer);
+				}
 			}
 		}
 
