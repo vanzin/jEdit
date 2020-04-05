@@ -81,13 +81,14 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			return;
 		}
 
-		final List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
+		final List<JMenuItem> menuItems = new ArrayList<>();
 		final JTextField text = new JTextField();
 		text.setToolTipText(jEdit.getProperty("recent-files.textfield.tooltip") +
 			": " + jEdit.getProperty("glob.tooltip"));
 		menu.add(text);
 		text.addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyReleased(KeyEvent e)
 			{
 				String typedText = text.getText();
