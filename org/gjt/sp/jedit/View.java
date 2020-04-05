@@ -139,6 +139,7 @@ import org.gjt.sp.util.StandardUtilities;
  */
 public class View extends JFrame implements InputHandlerProvider
 {
+	public static final EditPane[] EMPTY_EDIT_PANES_ARRAY = new EditPane[0];
 	//{{{ User interface
 
 	//{{{ ToolBar-related constants
@@ -733,14 +734,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		}
 
-		EventQueue.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				newSplitPane.setDividerLocation(dividerPosition);
-			}
-		});
+		EventQueue.invokeLater(() -> newSplitPane.setDividerLocation(dividerPosition));
 
 		newEditPane.focusOnTextArea();
 
@@ -982,9 +976,9 @@ public class View extends JFrame implements InputHandlerProvider
 			if (retval == null) {
 				Comparator<Buffer> sorter = bs.getSorter();
 				if (sorter == null)
-					retval = new LinkedHashSet<Buffer>();
+					retval = new LinkedHashSet<>();
 				else
-					retval = new TreeSet<Buffer>(sorter);
+					retval = new TreeSet<>(sorter);
 			}
 			Collections.addAll(retval, bs.getAllBuffers());
 			// If scope is not editpane, then all buffersets
@@ -1074,11 +1068,9 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		else
 		{
-			List<EditPane> vec = new ArrayList<EditPane>();
+			List<EditPane> vec = new ArrayList<>();
 			getEditPanes(vec,splitPane);
-			EditPane[] ep = new EditPane[vec.size()];
-			vec.toArray(ep);
-			return ep;
+			return vec.toArray(EMPTY_EDIT_PANES_ARRAY);
 		}
 	} //}}}
 
@@ -1222,7 +1214,7 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public void updateTitle()
 	{
-		List<Buffer> buffers = new ArrayList<Buffer>();
+		List<Buffer> buffers = new ArrayList<>();
 		EditPane[] editPanes = getEditPanes();
 		for (EditPane ep : editPanes)
 		{
@@ -1724,7 +1716,7 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		Buffer[] buffers = jEdit.getBuffers();
 
-		Stack<Object> stack = new Stack<Object>();
+		Stack<Object> stack = new Stack<>();
 
 		// we create a stream tokenizer for parsing a simple
 		// stack-based language
@@ -1736,7 +1728,7 @@ public class View extends JFrame implements InputHandlerProvider
 		st.commentChar('!');
 		st.quoteChar('"');
 		st.eolIsSignificant(false);
-		List<Buffer> editPaneBuffers = new ArrayList<Buffer>();
+		Collection<Buffer> editPaneBuffers = new ArrayList<>();
 loop:		while (true)
 		{
 			switch(st.nextToken())
@@ -2139,7 +2131,7 @@ loop:		while (true)
 	//{{{ getOpenBuffers() method
 	private Set<Buffer> getOpenBuffers()
 	{
-		Set<Buffer> openBuffers = new LinkedHashSet<Buffer>();
+		Set<Buffer> openBuffers = new LinkedHashSet<>();
 		for (EditPane editPane: getEditPanes())
 		{
 			openBuffers.addAll(Arrays.asList(
