@@ -120,17 +120,17 @@ public class EditServer extends Thread
 	} //}}}
 
 	//{{{ run() method
+	@Override
 	public void run()
 	{
-		for(;;)
+		while (true)
 		{
 			if(abort)
 				return;
 
-			Socket client = null;
 			try
 			{
-				client = socket.accept();
+				Socket client = socket.accept();
 
 				// Stop script kiddies from opening the edit
 				// server port and just leaving it open, as a
@@ -297,7 +297,7 @@ public class EditServer extends Thread
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private String portFile;
+	private final String portFile;
 	private ServerSocket socket;
 	private int authKey;
 	private boolean ok;
