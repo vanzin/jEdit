@@ -26,8 +26,6 @@ package org.gjt.sp.jedit;
 import org.gjt.sp.jedit.bsh.NameSpace;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
