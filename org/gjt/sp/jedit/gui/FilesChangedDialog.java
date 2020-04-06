@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
@@ -131,12 +130,12 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		if(!alreadyReloaded)
 		{
-			selectAll = new JButton(jEdit.getProperty(
+			JButton selectAll = new JButton(jEdit.getProperty(
 				"files-changed.select-all"));
 			selectAll.setMnemonic(jEdit.getProperty(
 				"files-changed.select-all.mnemonic").charAt(0));
 			buttons.add(selectAll);
-			selectAll.addActionListener(new ActionHandler());
+			selectAll.addActionListener(e -> selectAll());
 
 			buttons.add(Box.createHorizontalStrut(6));
 
@@ -145,7 +144,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			reload.setMnemonic(jEdit.getProperty(
 				"files-changed.reload.mnemonic").charAt(0));
 			buttons.add(reload);
-			reload.addActionListener(new ActionHandler());
+			reload.addActionListener(e -> action("RELOAD"));
 
 			buttons.add(Box.createHorizontalStrut(6));
 
@@ -153,15 +152,15 @@ public class FilesChangedDialog extends EnhancedDialog
 			ignore.setMnemonic(jEdit.getProperty(
 				"files-changed.ignore.mnemonic").charAt(0));
 			buttons.add(ignore);
-			ignore.addActionListener(new ActionHandler());
+			ignore.addActionListener(e -> action("IGNORE"));
 
 			buttons.add(Box.createHorizontalStrut(6));
 		}
 
-		close = new JButton(jEdit.getProperty("common.close"));
+		JButton close = new JButton(jEdit.getProperty("common.close"));
 		getRootPane().setDefaultButton(close);
 		buttons.add(close);
-		close.addActionListener(new ActionHandler());
+		close.addActionListener(e -> dispose());
 
 		content.add(BorderLayout.SOUTH, buttons);
 
@@ -191,30 +190,30 @@ public class FilesChangedDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ Private members
-	private View view;
-	private JTree bufferTree;
-	private DefaultTreeModel bufferTreeModel;
-	private DefaultMutableTreeNode root;
-	private JButton selectAll;
+	private final View view;
+	private final JTree bufferTree;
+	private final DefaultTreeModel bufferTreeModel;
+	private final DefaultMutableTreeNode root;
 
 	// hack so that 'select all' does not change current buffer
 	private boolean selectAllInProgress;
 
 	private JButton reload;
 	private JButton ignore;
-	private JButton close;
 
 	//{{{ updateEnabled() method
 	private void updateEnabled()
@@ -350,26 +349,10 @@ public class FilesChangedDialog extends EnhancedDialog
 
 	//}}}
 
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == selectAll)
-				selectAll();
-			else if(source == reload)
-				action("RELOAD");
-			else if(source == close)
-				dispose();
-			else if (source == ignore)
-				action("IGNORE");
-		}
-	} //}}}
-
 	//{{{ TreeHandler class
 	class TreeHandler implements TreeSelectionListener
 	{
+		@Override
 		public void valueChanged(TreeSelectionEvent evt)
 		{
 			if(selectAllInProgress)
@@ -427,6 +410,6 @@ public class FilesChangedDialog extends EnhancedDialog
 		}
 
 		private Font entryFont;
-		private Font groupFont;
+		private final Font groupFont;
 	} //}}}
 }
