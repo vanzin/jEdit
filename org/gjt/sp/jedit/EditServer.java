@@ -332,6 +332,7 @@ public class EditServer extends Thread
 
 			SwingUtilities.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					try
