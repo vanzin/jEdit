@@ -47,17 +47,19 @@ class ServiceListHandler extends DefaultHandler
 		this.plugin = plugin;
 		this.uri = uri;
 		code = new StringBuilder();
-		stateStack = new Stack<String>();
-		cachedServices = new LinkedList<ServiceManager.Descriptor>();
+		stateStack = new Stack<>();
+		cachedServices = new LinkedList<>();
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "services.dtd", getClass());
 	} //}}}
 
 	//{{{ characters() method
+	@Override
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -66,6 +68,7 @@ class ServiceListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startElement() method
+	@Override
 	public void startElement(String uri, String localName,
 				 String tag, Attributes attrs)
 	{
@@ -75,6 +78,7 @@ class ServiceListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endElement() method
+	@Override
 	public void endElement(String uri, String localName, String name)
 	{
 		String tag = peekElement();
@@ -101,6 +105,7 @@ class ServiceListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startDocument() method
+	@Override
 	public void startDocument()
 	{
 		try
@@ -116,23 +121,22 @@ class ServiceListHandler extends DefaultHandler
 	//{{{ getCachedServices() method
 	public ServiceManager.Descriptor[] getCachedServices()
 	{
-		return cachedServices.toArray(
-			new ServiceManager.Descriptor[cachedServices.size()]);
+		return cachedServices.toArray(new ServiceManager.Descriptor[0]);
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private PluginJAR plugin;
+	private final PluginJAR plugin;
 	private URL uri;
 
 	private String serviceName;
 	private String serviceClass;
-	private StringBuilder code;
+	private final StringBuilder code;
 
-	private Stack<String> stateStack;
+	private final Stack<String> stateStack;
 
-	private List<ServiceManager.Descriptor> cachedServices;
+	private final List<ServiceManager.Descriptor> cachedServices;
 	//}}}
 
 	//{{{ pushElement() method
