@@ -49,6 +49,7 @@ class JEditRegisterSaver implements RegisterSaver
 	} //}}}
 
 	//{{{ loadRegisters() method
+	@Override
 	public void loadRegisters()
 	{
 		if(registersXML == null)
@@ -76,6 +77,7 @@ class JEditRegisterSaver implements RegisterSaver
 	} //}}}
 
 	//{{{ saveRegisters() method
+	@Override
 	public void saveRegisters()
 	{
 		if(registersXML == null)
@@ -111,7 +113,7 @@ class JEditRegisterSaver implements RegisterSaver
 				if(register == null ||
 				   i == '$' ||
 				   i == '%' ||
-				   register.toString().length() == 0)
+				   register.toString().isEmpty())
 					continue;
 
 				out.write("<REGISTER NAME=\"");
