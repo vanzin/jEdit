@@ -31,7 +31,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.XMLUtilities;
-import org.gjt.sp.util.Log;
+
+import javax.annotation.Nullable;
 //}}}
 
 /**
@@ -41,6 +42,8 @@ import org.gjt.sp.util.Log;
  */
 class ServiceListHandler extends DefaultHandler
 {
+	public static final ServiceManager.Descriptor[] EMPTY_DESCRIPTORS = new ServiceManager.Descriptor[0];
+
 	//{{{ ServiceListHandler constructor
 	ServiceListHandler(PluginJAR plugin, URL uri)
 	{
@@ -63,7 +66,7 @@ class ServiceListHandler extends DefaultHandler
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
-		if (tag == "SERVICE")
+		if ("SERVICE".equals(tag))
 			code.append(c, off, len);
 	} //}}}
 
@@ -85,7 +88,7 @@ class ServiceListHandler extends DefaultHandler
 
 		if(name.equals(tag))
 		{
-			if (tag.equals("SERVICE"))
+			if ("SERVICE".equals(tag))
 			{
 				ServiceManager.Descriptor d =
 					new ServiceManager.Descriptor(
@@ -108,20 +111,13 @@ class ServiceListHandler extends DefaultHandler
 	@Override
 	public void startDocument()
 	{
-		try
-		{
-			pushElement(null);
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.ERROR, e, e);
-		}
+		pushElement(null);
 	} //}}}
 
 	//{{{ getCachedServices() method
 	public ServiceManager.Descriptor[] getCachedServices()
 	{
-		return cachedServices.toArray(new ServiceManager.Descriptor[0]);
+		return cachedServices.toArray(EMPTY_DESCRIPTORS);
 	} //}}}
 
 	//{{{ Private members
@@ -140,16 +136,13 @@ class ServiceListHandler extends DefaultHandler
 	//}}}
 
 	//{{{ pushElement() method
-	private String pushElement(String name)
+	private void pushElement(String name)
 	{
-		name = (name == null) ? null : name.intern();
-
 		stateStack.push(name);
-
-		return name;
 	} //}}}
 
 	//{{{ peekElement() method
+	@Nullable
 	private String peekElement()
 	{
 		return stateStack.peek();
