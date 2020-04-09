@@ -41,6 +41,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.StringList;
 
 import javax.annotation.Nonnull;
@@ -1378,7 +1379,7 @@ loop:		for(;;)
 	{
 		Log.log(Log.DEBUG, MiscUtilities.class,"Searching for tools.jar...");
 
-		Collection<String> paths = new LinkedList<String>();
+		Collection<String> paths = new LinkedList<>();
 
 		//{{{ 1. Check whether tools.jar is in the system classpath:
 		paths.add("System classpath: "
@@ -1533,7 +1534,7 @@ loop:		for(;;)
 		{
 			set = EncodingServer.getAvailableNames();
 		}
-		return set.toArray(new String[set.size()]);
+		return set.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 	//{{{ throwableToString() method
@@ -1631,22 +1632,26 @@ loop:		for(;;)
 	//{{{ storeProperties() method
 	/**
 	 * Stores properties with sorted keys.
-     * @param props  Given properties.
-     * @param out  Output stream.
-     * @param comments  Description of the property list.
-     * @since jEdit 5.3
+	 * @param props  Given properties.
+	 * @param out  Output stream.
+	 * @param comments  Description of the property list.
+	 * @since jEdit 5.3
 	 */
 	public static void storeProperties(Properties props, OutputStream out, String comments)
         throws IOException
 	{
-		Properties sorted = new Properties() {
+		Properties sorted = new Properties()
+		{
 			@Override
-			public synchronized Enumeration<Object> keys() {
-				return Collections.enumeration(new TreeSet<Object>(props.keySet()));
+			public synchronized Enumeration<Object> keys()
+			{
+				return Collections.enumeration(new TreeSet<>(props.keySet()));
 			}
+
 			@Override
-			public synchronized Set<Map.Entry<Object,Object>> entrySet() {
-				return (new TreeMap<Object,Object>(props)).entrySet();
+			public synchronized Set<Map.Entry<Object,Object>> entrySet()
+			{
+				return (new TreeMap<>(props)).entrySet();
 			}
 
 		};
