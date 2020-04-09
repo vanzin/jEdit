@@ -60,6 +60,7 @@
 		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="ant-contrib"/>
 
 		<dependency org="junit" name="junit" rev="4.12" conf="test;sources;javadoc"/>
+		<dependency org="org.mockito" name="mockito-junit-jupiter" rev="3.3.3" conf="test;sources;javadoc"/>
 		<dependency org="org.hamcrest" name="hamcrest-library" rev="2.1" conf="test;sources;javadoc"/>
 
 		<dependency org="saxon" name="saxon" rev="6.5.3" conf="docbook"/>
