@@ -567,7 +567,7 @@ public class MiscUtilities
 
 		String protocol = str.substring(0,cIndex);
 		VFS vfs = VFSManager.getVFSForProtocol(protocol);
-		if(vfs != null && !(vfs instanceof UrlVFS))
+		if(!(vfs instanceof UrlVFS))
 			return true;
 
 		try
