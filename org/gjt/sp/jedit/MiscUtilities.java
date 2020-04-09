@@ -230,7 +230,7 @@ public class MiscUtilities
 	 * names only.</b>
 	 * @since jEdit 4.2pre1
 	 */
-	public static String resolveSymlinks(String path)
+	public static String resolveSymlinks(@Nonnull String path)
 	{
 		if(isURL(path))
 			return path;
@@ -425,7 +425,7 @@ public class MiscUtilities
 	 * @param path The path
 	 * @since jEdit 4.3pre3
 	 */
-	public static int getLastSeparatorIndex(String path)
+	public static int getLastSeparatorIndex(@Nonnull String path)
 	{
 		int start = getPathStart(path);
 		if(start != 0)
@@ -554,7 +554,7 @@ public class MiscUtilities
 	 * @param str The string to check
 	 * @return True if the string is a URL, false otherwise
 	 */
-	public static boolean isURL(String str)
+	public static boolean isURL(@Nonnull String str)
 	{
 		int fsIndex = getLastSeparatorIndex(str);
 		if(fsIndex == 0) // /etc/passwd
@@ -1569,7 +1569,7 @@ loop:		for(;;)
 	} //}}}
 
 	//{{{ getPathStart() method
-	private static int getPathStart(String path)
+	private static int getPathStart(@Nonnull String path)
 	{
 		if(path.startsWith("/"))
 			return 0;
