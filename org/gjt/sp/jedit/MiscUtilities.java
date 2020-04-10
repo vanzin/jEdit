@@ -45,6 +45,7 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.StringList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 //}}}
 
 /**
@@ -263,7 +264,7 @@ public class MiscUtilities
 	 * Returns if the specified path name is an absolute path or URL.
 	 * @since jEdit 4.1pre11
 	 */
-	public static boolean isAbsolutePath(String path)
+	public static boolean isAbsolutePath(@Nonnull String path)
 	{
 		if(isURL(path))
 			return true;
@@ -302,7 +303,7 @@ public class MiscUtilities
 	 * @param parent The directory
 	 * @param path The path name
 	 */
-	public static String constructPath(String parent, String path)
+	public static String constructPath(@Nullable String parent, @Nonnull String path)
 	{
 		if(isAbsolutePath(path))
 			return canonPath(path);
@@ -310,7 +311,7 @@ public class MiscUtilities
 		if (parent == null)
 			parent = System.getProperty("user.dir");
 
-		if (path == null || path.isEmpty())
+		if (path.isEmpty())
 			return parent;
 
 		// have to handle this case specially on windows.
