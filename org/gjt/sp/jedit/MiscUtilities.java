@@ -411,6 +411,7 @@ public class MiscUtilities
 	 * Return the first index of either / or the OS-specific file
 	 * separator.
 	 * @param path The path
+	 * @return the index of the first separator or -1 if not found
 	 * @since jEdit 4.3pre3
 	 */
 	public static int getFirstSeparatorIndex(String path)
