@@ -74,7 +74,8 @@ public class MiscUtilities
 	 * @param path The path name
 	 * @since jEdit 4.0pre2
 	 */
-	public static String canonPath(String path)
+	@Nonnull
+	public static String canonPath(@Nonnull String path)
 	{
 		if(path.isEmpty())
 			return path;
@@ -388,7 +389,7 @@ public class MiscUtilities
 	 * @param parent the parent path
 	 * @param path the path to append to the parent
 	 */
-	public static String concatPath(String parent, String path)
+	public static String concatPath(@Nonnull String parent, @Nonnull String path)
 	{
 		parent = canonPath(parent);
 		path = canonPath(path);
@@ -398,9 +399,6 @@ public class MiscUtilities
 			path = path.substring(1);
 		else if (path.length() >= 3 && path.charAt(1) == ':')
 			path = path.replace(':', File.separatorChar);
-
-		if (parent == null)
-			parent = System.getProperty("user.dir");
 
 		if (parent.endsWith(File.separator))
 			return parent + path;
