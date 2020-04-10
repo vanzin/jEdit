@@ -44,6 +44,7 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 //}}}
 
@@ -342,6 +343,7 @@ public abstract class VFS
 	 * @param path The path
 	 * @since jEdit 2.6pre5
 	 */
+	@Nonnull
 	public String getParentOfPath(String path)
 	{
 		// ignore last character of path to properly handle
