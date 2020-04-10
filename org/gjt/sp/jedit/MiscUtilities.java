@@ -88,19 +88,19 @@ public class MiscUtilities
 
 		if(File.separatorChar == '\\')
 		{
-				// get rid of mixed paths on Windows
-				path = path.replace('/','\\');
-				// also get rid of trailing spaces on Windows
-				int trim = path.length();
-				while(path.charAt(trim - 1) == ' ')
-					trim--;
+			// get rid of mixed paths on Windows
+			path = path.replace('/','\\');
+			// also get rid of trailing spaces on Windows
+			int trim = path.length();
+			while(path.charAt(trim - 1) == ' ')
+				trim--;
 
-				if (path.charAt(trim - 1) == '\\')
-					while (trim > 1 && path.charAt(trim - 2) == '\\')
-					{
-						trim--;
-					}
-				path = path.substring(0,trim);
+			if (path.charAt(trim - 1) == '\\')
+				while (trim > 1 && path.charAt(trim - 2) == '\\')
+				{
+					trim--;
+				}
+			path = path.substring(0,trim);
 		}
 
 		if(path.startsWith('~' + File.separator))
@@ -358,9 +358,7 @@ public class MiscUtilities
 		if(path.isEmpty())
 			return parent;
 
-		if(OperatingSystem.isWindows()
-			&& !isURL(parent)
-		&& path.charAt(0) == '\\')
+		if(OperatingSystem.isWindows() && !isURL(parent) && path.charAt(0) == '\\')
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
