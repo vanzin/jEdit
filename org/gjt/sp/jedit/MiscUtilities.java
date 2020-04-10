@@ -275,11 +275,15 @@ public class MiscUtilities
 		else if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
+			{
+				//  c:
 				return true;
-			if(path.length() > 2 && path.charAt(1) == ':'
-				&& (path.charAt(2) == '\\'
-					|| path.charAt(2) == '/'))
+			}
+			if(path.length() > 2 &&
+				path.charAt(1) == ':' &&
+				(path.charAt(2) == '\\' || path.charAt(2) == '/'))
 				return true;
+
 			if(path.startsWith("\\\\")
 				|| path.startsWith("//"))
 				return true;
@@ -319,10 +323,13 @@ public class MiscUtilities
 		if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
-				return path;
-			else if(path.length() > 2 && path.charAt(1) == ':'
-					&& path.charAt(2) != '\\')
 			{
+				// c: -> c:
+				return path;
+			}
+			if  (path.length() > 2 && path.charAt(1) == ':' && path.charAt(2) != '\\')
+			{
+				// c:blabla.txt -> c:\blabla.txt
 				path = path.substring(0,2) + '\\'
 					+ path.substring(2);
 				return canonPath(path);
