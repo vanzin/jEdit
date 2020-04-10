@@ -1660,7 +1660,8 @@ loop:		for(;;)
 		sorted.store(out, comments);
 	} //}}}
 
-	static VarCompressor svc = null;
+	@Nullable
+	static VarCompressor svc;
 
 	//{{{ VarCompressor class
 	/**
@@ -1670,9 +1671,9 @@ loop:		for(;;)
 	static class VarCompressor
 	{
 		/** a reverse mapping of values to environment variable names */
-		final Map<String, String> prefixMap = new HashMap<String, String>();
+		final Map<String, String> prefixMap = new HashMap<>();
 		/** previously compressed strings saved for quick access later */
-		final Map<String, String> previous = new HashMap<String, String>();
+		final Map<String, String> previous = new HashMap<>();
 
 		//{{{ VarCompressor constructor
 		VarCompressor()
@@ -1762,7 +1763,7 @@ loop:		for(;;)
 		//{{{ canBePathPrefix() method
 		// Returns true if the argument may absolutely point a directory.
 		// For speed, no access to file system or network should happen.
-		private boolean canBePathPrefix(String s)
+		private static boolean canBePathPrefix(String s)
 		{
 			// Do not use File#isDirectory() since it causes
 			// access to file system or network to check if
