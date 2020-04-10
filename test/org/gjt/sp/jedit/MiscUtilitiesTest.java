@@ -124,7 +124,7 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void expandVariablesEnvWindowsAsWindows() throws NoSuchFieldException, IllegalAccessException
+	public void expandVariablesEnvWindowsAsWindows() throws  Exception
 	{
 		Map<String,  String> env = System.getenv();
 		Map.Entry<String,  String> firstEntry = env.entrySet().iterator().next();
@@ -135,7 +135,7 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void expandVariablesEnvWindowsAsUnix() throws NoSuchFieldException, IllegalAccessException
+	public void expandVariablesEnvWindowsAsUnix() throws  Exception
 	{
 		Map<String,  String> env = System.getenv();
 		Map.Entry<String,  String> firstEntry = env.entrySet().iterator().next();
@@ -146,7 +146,7 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void expandVariablesEnvUnix() throws NoSuchFieldException, IllegalAccessException
+	public void expandVariablesEnvUnix() throws  Exception
 	{
 		Map<String,  String> env = System.getenv();
 		Map.Entry<String,  String> firstEntry = env.entrySet().iterator().next();
@@ -157,7 +157,7 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void expandVariablesEnvUnix2() throws NoSuchFieldException, IllegalAccessException
+	public void expandVariablesEnvUnix2() throws  Exception
 	{
 		Map<String,  String> env = System.getenv();
 		Map.Entry<String,  String> firstEntry = env.entrySet().iterator().next();
@@ -168,26 +168,26 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void expandVariablesEnvUnixNoMatch() throws NoSuchFieldException, IllegalAccessException
+	public void expandVariablesEnvUnixNoMatch() throws  Exception
 	{
 		Map<String,  String> env = System.getenv();
 		Map.Entry<String,  String> firstEntry = env.entrySet().iterator().next();
 		String  key = firstEntry.getKey();
-		String  value = firstEntry.getValue();
 		updateOS(UNIX);
 		assertEquals("${"+key,  MiscUtilities.expandVariables("${"+key));
 	}
 
 	@Test
-	public void abbreviateUserHomeWindows() throws NoSuchFieldException, IllegalAccessException
+	public void abbreviateUserHomeWindows() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		MiscUtilities.svc = null;
-		assertEquals("%USERPROFILE%",  MiscUtilities.abbreviate(System.getProperty("user.home")));
+		String result = MiscUtilities.abbreviate(System.getProperty("user.home"));
+		assertTrue("%USERPROFILE%".equals(result) || "%HOME%".equals(result));
 	}
 
 	@Test
-	public void abbreviateUserHomeUnix() throws NoSuchFieldException, IllegalAccessException
+	public void abbreviateUserHomeUnix() throws  Exception
 	{
 		updateOS(UNIX);
 		MiscUtilities.svc = null;
@@ -195,31 +195,34 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void resolveSymlinksWindowsUrl() throws NoSuchFieldException, IllegalAccessException
+	public void resolveSymlinksWindowsUrl() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertEquals("http://www.jedit.org", MiscUtilities.resolveSymlinks("http://www.jedit.org"));
 	}
 
 	@Test
-	public void resolveSymlinksWindows1() throws NoSuchFieldException, IllegalAccessException
+	public void resolveSymlinksWindows1() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertEquals("c:", MiscUtilities.resolveSymlinks("c:"));
 	}
 
 	@Test
-	public void resolveSymlinksWindows2() throws NoSuchFieldException, IllegalAccessException
+	public void resolveSymlinksWindows2() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertEquals("c:\\", MiscUtilities.resolveSymlinks("c:\\"));
 	}
 
 	@Test
-	public void resolveSymlinksWindows3() throws NoSuchFieldException, IllegalAccessException
+	public void resolveSymlinksWindows3() throws  Exception
 	{
-		updateOS(WINDOWS_NT);
-		assertEquals("C:\\bla", MiscUtilities.resolveSymlinks("c:\\bla"));
+		if(OperatingSystem.isWindows())
+		{
+			// no idea how to test  that on linux
+			assertEquals("C:\\bla", MiscUtilities.resolveSymlinks("c:\\bla"));
+		}
 	}
 
 	@Test
@@ -241,59 +244,96 @@ public class MiscUtilitiesTest
 	}
 
 	@Test
-	public void isAbsolutePathWindows() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertTrue(MiscUtilities.isAbsolutePath("c:"));
 	}
 
 	@Test
-	public void isAbsolutePathWindows2() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows2() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertTrue(MiscUtilities.isAbsolutePath("c:\\bla"));
 	}
 
 	@Test
-	public void isAbsolutePathWindows3() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows3() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertFalse(MiscUtilities.isAbsolutePath("toto/tutu"));
 	}
 
 	@Test
-	public void isAbsolutePathWindows4() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows4() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertTrue(MiscUtilities.isAbsolutePath("c:/bla"));
 	}
 
 	@Test
-	public void isAbsolutePathWindows5() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows5() throws  Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertTrue(MiscUtilities.isAbsolutePath("//bla"));
 	}
 
 	@Test
-	public void isAbsolutePathWindows6() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathWindows6() throws Exception
 	{
 		updateOS(WINDOWS_NT);
 		assertTrue(MiscUtilities.isAbsolutePath("\\\\bla"));
 	}
 
 	@Test
-	public void isAbsolutePathUnix() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathUnix() throws Exception
 	{
 		updateOS(UNIX);
 		assertTrue(MiscUtilities.isAbsolutePath("/toto/tutu"));
 	}
 
 	@Test
-	public void isAbsolutePathUnix2() throws NoSuchFieldException, IllegalAccessException
+	public void isAbsolutePathUnix2() throws Exception
 	{
 		updateOS(UNIX);
 		assertFalse(MiscUtilities.isAbsolutePath("toto/tutu"));
+	}
+
+	@Test
+	public void constructPathAbsolute()
+	{
+		assertEquals("http://www.jedit.org", MiscUtilities.constructPath(null,  "http://www.jedit.org"));
+	}
+
+	@Test
+	public void constructPathNullEmpty()
+	{
+		assertEquals(System.getProperty("user.dir"), MiscUtilities.constructPath(null,  ""));
+	}
+
+	@Test
+	public void constructPathDot()
+	{
+		assertEquals("/home/dev/jEdit", MiscUtilities.constructPath("/home/dev/jEdit", "."));
+	}
+
+	@Test
+	public void constructPathDotDot()
+	{
+		assertEquals("/home/dev/", MiscUtilities.constructPath("/home/dev/jEdit", ".."));
+	}
+
+	@Test
+	public void constructPathDotDotPath()
+	{
+		assertEquals(File.separator + "home"+ File.separator+"dev"+ File.separator+"yolo", MiscUtilities.constructPath("/home/dev/jEdit", "../yolo"));
+	}
+
+	@Test
+	public void constructPathWindows() throws Exception
+	{
+		updateOS(WINDOWS_NT);
+		assertEquals("c:\\", MiscUtilities.constructPath(null, "c:\\"));
 	}
 
 	private static int getOS() throws IllegalAccessException, NoSuchFieldException
