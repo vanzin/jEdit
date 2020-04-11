@@ -234,8 +234,7 @@ class BrowserView extends JPanel
 				parentList.insertElementAt(file,0);
 				String newParent = _vfs.getParentOfPath(parent);
 
-				if(newParent == null ||
-					MiscUtilities.pathsEqual(parent,newParent))
+				if(MiscUtilities.pathsEqual(parent,newParent))
 					break;
 				else
 					parent = newParent;
