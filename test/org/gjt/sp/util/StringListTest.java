@@ -41,6 +41,18 @@ public class StringListTest
 	}
 
 	@Test
+	public void split2()
+	{
+		assertEquals(new StringList(), StringList.split(null, ","));
+	}
+
+	@Test
+	public void split3()
+	{
+		assertEquals(new StringList(), StringList.split("", ","));
+	}
+
+	@Test
 	public void join()
 	{
 		assertEquals(str, StringList.join(ARRAY, ","));
@@ -50,6 +62,18 @@ public class StringListTest
 	public void join2()
 	{
 		assertEquals(str, StringList.join(List.of(ARRAY), ","));
+	}
+
+	@Test
+	public void join3()
+	{
+		assertEquals("", StringList.join(StandardUtilities.EMPTY_STRING_ARRAY, ","));
+	}
+
+	@Test
+	public void join4()
+	{
+		assertEquals("a", StringList.join(List.of("a"), ","));
 	}
 
 	@Test
