@@ -27,85 +27,86 @@ import org.junit.Test;
 
 import java.awt.*;
 
+import static javax.swing.plaf.metal.MetalLookAndFeel.getSystemTextFont;
 import static org.junit.Assert.*;
 
 public class HtmlUtilitiesTest
 {
-	private Font arial;
-	private Font arialBold;
-	private Font arialItalic;
-	private Font arialBoldItalic;
+	private Font font;
+	private Font fontBold;
+	private Font fontItalic;
+	private Font fontBoldItalic;
 
 	@Before
 	public void setUp() throws Exception
 	{
-		arial = Font.decode("Arial");
-		arialBold = Font.decode("Arial bold");
-		arialItalic = Font.decode("Arial italic");
-		arialBoldItalic = Font.decode("Arial bolditalic");
+		font = getSystemTextFont();
+		fontBold = font.deriveFont(Font.BOLD);
+		fontItalic = font.deriveFont(Font.ITALIC);
+		fontBoldItalic = font.deriveFont(Font.BOLD | Font.ITALIC);
 	}
 
 	@Test
 	public void parseHighlightStyle()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), arial);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), font);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff", font));
 	}
 
 	@Test
 	public void parseHighlightStyleBold()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), arialBold);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:b", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), fontBold);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:b", font));
 	}
 
 	@Test
 	public void parseHighlightStyleItalic()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), arialItalic);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:i", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), fontItalic);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:i", font));
 	}
 
 	@Test
 	public void parseHighlightStyleBoldItalic()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), arialBoldItalic);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:bi", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), fontBoldItalic);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:bi", font));
 	}
 
 	@Test
 	public void parseHighlightStyleBoldItalic2()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), arialBoldItalic);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:ib", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(null, Color.decode("#ccccff"), fontBoldItalic);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgColor:#ccccff style:ib", font));
 	}
 
 	@Test
 	public void parseHighlightStyleFail()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(Color.decode("#000000"), null, arial);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgCo4lor:#ccccff", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(Color.decode("#000000"), null, font);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("bgCo4lor:#ccccff", font));
 	}
 
 	@Test
 	public void parseHighlightStyleFail2()
 	{
-		SyntaxStyle syntaxStyle = new SyntaxStyle(Color.decode("#000000"), null, arial);
-		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("style:a", arial));
+		SyntaxStyle syntaxStyle = new SyntaxStyle(Color.decode("#000000"), null, font);
+		assertEquals(syntaxStyle, HtmlUtilities.parseHighlightStyle("style:a", font));
 	}
 
 	@Test
 	public void style2htmlBoldItalic()
 	{
 		assertEquals("background:rgb(204,204,255);font-weight:bold;font-style: italic;",
-			HtmlUtilities.style2html("bgColor:#ccccff style:bi", arial));
+			HtmlUtilities.style2html("bgColor:#ccccff style:bi", font));
 	}
 
 	@Test
 	public void style2htmlBoldItalic2()
 	{
 		assertEquals("color:rgb(204,204,255);font-weight:bold;font-style: italic;",
-			HtmlUtilities.style2html("color:#ccccff style:bi", arial));
+			HtmlUtilities.style2html("color:#ccccff style:bi", font));
 	}
 
 	@Test
