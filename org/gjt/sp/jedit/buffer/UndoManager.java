@@ -79,12 +79,12 @@ public class UndoManager
 			reviseUndoId();
 			undoCount--;
 
-			Selection s[] = undosLast.undo(this);
+			Selection[] selections = undosLast.undo(this);
 			redosFirst = undosLast;
 			undosLast = undosLast.prev;
 			if(undosLast == null)
 				undosFirst = null;
-			return s;
+			return selections;
 		}
 	} //}}}
 
@@ -261,7 +261,7 @@ public class UndoManager
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JEditBuffer buffer;
+	private final JEditBuffer buffer;
 
 	// queue of undos. last is most recent, first is oldest
 	private Edit undosFirst;
