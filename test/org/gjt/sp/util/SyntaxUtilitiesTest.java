@@ -21,6 +21,7 @@
 
 package org.gjt.sp.util;
 
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.junit.Test;
 
 import java.awt.*;
@@ -46,7 +47,6 @@ public class SyntaxUtilitiesTest
 	{
 		assertEquals(Color.red, SyntaxUtilities.parseColor(null, Color.red));
 	}
-
 
 	@Test
 	public void parseColorRedAlpha()
@@ -148,5 +148,25 @@ public class SyntaxUtilitiesTest
 	public void parseColorWhat()
 	{
 		assertEquals(Color.black, SyntaxUtilities.parseColor("what", Color.black));
+	}
+
+	@Test
+	public void parseStyle()
+	{
+		SyntaxStyle syntaxStyle = new SyntaxStyle(Color.green, Color.red, Font.decode("Arial bolditalic"));
+		SyntaxStyle arial = SyntaxUtilities.parseStyle("color:#ff00ff00 bgColor:#ff0000 style:bi", "Arial", 12, true);
+		assertEquals(syntaxStyle, arial);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void parseStyleError()
+	{
+		SyntaxUtilities.parseStyle("style:a", "Arial", 12, true);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void parseStyleError2()
+	{
+		SyntaxUtilities.parseStyle("stfyle:a", "Arial", 12, true);
 	}
 }
