@@ -78,6 +78,7 @@ public class IndentFoldHandler extends FoldHandler
 	 * @return The fold level of the specified line
 	 * @since jEdit 4.0pre1
 	 */
+	@Override
 	public int getFoldLevel(JEditBuffer buffer, int lineIndex, Segment seg)
 	{
 		int tabSize = buffer.getTabSize();
@@ -111,6 +112,7 @@ public class IndentFoldHandler extends FoldHandler
 	 * number order (i.e. bottomost line first).
 	 * @since jEdit 4.3pre18
 	 */
+	@Override
 	public List<Integer> getPrecedingFoldLevels(JEditBuffer buffer,
 		int lineIndex, Segment seg, int lineFoldLevel)
 	{
@@ -126,9 +128,9 @@ public class IndentFoldHandler extends FoldHandler
 			if (whitespace >= 0)
 				break;
 		}
-		int max = (lineFoldLevel > whitespace) ? lineFoldLevel : whitespace;
+		int max = Math.max(lineFoldLevel, whitespace);
 		for (index++; index < lineIndex; index++)
-			precedingFoldLevels.add(Integer.valueOf(max));
+			precedingFoldLevels.add(max);
 		return precedingFoldLevels;
 	}
 	//}}}
