@@ -21,6 +21,8 @@
 
 package org.gjt.sp.jedit.buffer;
 
+import javax.annotation.Nonnull;
+
 /**
  * A read-only text segment from a buffer. Allows concatenation using a
  * "linked list" approach.
@@ -74,6 +76,7 @@ class BufferSegment implements CharSequence
 		return subSegment(start, end);
 	}
 
+	@Nonnull
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
