@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
+import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
@@ -1561,24 +1562,24 @@ public class GUIUtilities
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 4.1pre9
-	 * @deprecated use {@link GenericGUIUtilities#isMiddleButton(int)}
+	 * @deprecated use {@link TextAreaMouseHandler#isMiddleButton(MouseEvent)}
 	 */
 	@Deprecated
 	public static boolean isMiddleButton(int modifiers)
 	{
-		return GenericGUIUtilities.isMiddleButton(modifiers);
+		return TextAreaMouseHandler.isMiddleButton(modifiers);
 	} //}}}
 
 	//{{{ isRightButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
 	 * @since jEdit 4.1pre9
-	 * @deprecated use {@link GenericGUIUtilities#isRightButton(int)}
+	 * @deprecated use {@link TextAreaMouseHandler#isRightButton(MouseEvent)}
 	 */
 	@Deprecated
 	public static boolean isRightButton(int modifiers)
 	{
-		return GenericGUIUtilities.isRightButton(modifiers);
+		return TextAreaMouseHandler.isRightButton(modifiers);
 	} //}}}
 
 	//{{{ getScreenBounds() method
