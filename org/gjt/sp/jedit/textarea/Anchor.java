@@ -105,7 +105,7 @@ abstract class Anchor
 
 	//{{{ preContentInserted() method
 	/**
-	 * Some content is inserted.
+	 * Some content will be inserted.
 	 *
 	 * @param startLine the start of the insert
 	 * @param numLines the number of inserted lines
