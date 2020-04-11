@@ -22,7 +22,6 @@
 
 package org.gjt.sp.util;
 
-
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Font;
@@ -106,6 +105,7 @@ public class SyntaxUtilities
 	 * Converts a color object to its hex value. The hex value
 	 * prefixed is with `#', for example `#ff0088'.
 	 * @param c The color object
+	 * @return the color (it is prefixed with alpha channel)
 	 * @since jEdit 4.3pre13
 	 */
 	public static String getColorHexString(Color c)
@@ -121,7 +121,7 @@ public class SyntaxUtilities
 	 */
 	public static Color parseColor(String name, Color defaultColor)
 	{
-		if(name == null || name.length() == 0)
+		if(name == null || name.isEmpty())
 			return defaultColor;
 
 		name = name.trim();
