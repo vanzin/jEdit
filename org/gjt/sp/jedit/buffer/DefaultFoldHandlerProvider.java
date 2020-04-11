@@ -22,6 +22,8 @@
  */
 package org.gjt.sp.jedit.buffer;
 
+import org.gjt.sp.util.StandardUtilities;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,7 +33,7 @@ import java.util.HashMap;
  */
 public class DefaultFoldHandlerProvider implements FoldHandlerProvider
 {
-	private final Map<String, FoldHandler> folds = new HashMap<String, FoldHandler>();
+	private final Map<String, FoldHandler> folds = new HashMap<>();
 	/**
 	 * Returns the fold handler with the specified name, or null if
 	 * there is no registered handler with that name.
@@ -40,6 +42,7 @@ public class DefaultFoldHandlerProvider implements FoldHandlerProvider
 	 * @return the FoldHandler or null if it doesn't exist
 	 * @since jEdit 4.3pre10
 	 */
+	@Override
 	public FoldHandler getFoldHandler(String name)
 	{
 		return folds.get(name);
@@ -51,9 +54,10 @@ public class DefaultFoldHandlerProvider implements FoldHandlerProvider
 	 *
 	 * @since jEdit 4.0pre6
 	 */
+	@Override
 	public String[] getFoldModes()
 	{
-		return folds.keySet().toArray(new String[folds.size()]); 
+		return folds.keySet().toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	}
 	
 	/**
