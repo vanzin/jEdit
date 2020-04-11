@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.awt.Toolkit;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.Debug;
@@ -45,12 +44,7 @@ public class DisplayManager
 	static DisplayManager getDisplayManager(JEditBuffer buffer,
 		TextArea textArea)
 	{
-		List<DisplayManager> l = bufferMap.get(buffer);
-		if(l == null)
-		{
-			l = new LinkedList<DisplayManager>();
-			bufferMap.put(buffer,l);
-		}
+		List<DisplayManager> l = bufferMap.computeIfAbsent(buffer, k -> new LinkedList<>());
 
 		/* An existing display manager's fold visibility map
 		that a new display manager will inherit */
@@ -608,7 +602,7 @@ public class DisplayManager
 		}
 		else if(amount > 0)
 			this.firstLine.physDown(amount,skew);
-		else if(amount < 0)
+		else // amount < 0;
 			this.firstLine.physUp(-amount,skew);
 
 		int firstLine = textArea.getFirstLine();
@@ -625,10 +619,8 @@ public class DisplayManager
 		{
 			textArea.chunkCache.scrollDown(firstLine - currentFirstLine);
 		}
-		else if(firstLine < currentFirstLine)
-		{
+		else // firstLine < currentFirstLine
 			textArea.chunkCache.scrollUp(currentFirstLine - firstLine);
-		}
 
 		// we have to be careful
 		notifyScreenLineChanges();
