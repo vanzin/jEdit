@@ -74,8 +74,37 @@ public class SyntaxStyle
 	} //}}}
 
 	//{{{ Private members
-	private Color fgColor;
-	private Color bgColor;
-	private Font font;
+	private final Color fgColor;
+	private final Color bgColor;
+	private final Font font;
 	//}}}
+
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		SyntaxStyle that = (SyntaxStyle) o;
+
+		if (fgColor != null ? !fgColor.equals(that.fgColor) : that.fgColor != null) return false;
+		if (bgColor != null ? !bgColor.equals(that.bgColor) : that.bgColor != null) return false;
+		return font != null ? font.equals(that.font) : that.font == null;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = fgColor != null ? fgColor.hashCode() : 0;
+		result = 31 * result + (bgColor != null ? bgColor.hashCode() : 0);
+		result = 31 * result + (font != null ? font.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "SyntaxStyle{fgColor=" + fgColor + ", bgColor=" + bgColor + ", font=" + font + '}';
+	}
 }
