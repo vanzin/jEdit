@@ -33,7 +33,6 @@ import org.gjt.sp.util.Log;
  */
 class FirstLine extends Anchor
 {
-
 	// scrollLine + skew = vertical scroll bar position
 
 	/**
@@ -79,6 +78,7 @@ class FirstLine extends Anchor
 	 * @param startLine the start of the insert
 	 * @param numLines the number of inserted lines
 	 */
+	@Override
 	void contentInserted(int startLine, int numLines)
 	{
 		if(Debug.SCROLL_DEBUG)
@@ -147,6 +147,7 @@ class FirstLine extends Anchor
 	 * @param startOffset the offset in the start line
 	 * @param numLines the number of removed lines
 	 */
+	@Override
 	void contentRemoved(int startLine, int startOffset, int numLines)
 	{
 		if(Debug.SCROLL_DEBUG)
@@ -300,7 +301,7 @@ class FirstLine extends Anchor
 
 		currentPhysicalLine = getPhysicalLine();
 		int scrollLines = 0;
-		for(;;)
+		while (true)
 		{
 			int nextPhysicalLine = getDisplayManager().getNextVisibleLine(currentPhysicalLine);
 
@@ -359,7 +360,7 @@ class FirstLine extends Anchor
 
 		currentPhysicalLine = getPhysicalLine();
 		int scrollLines = 0;
-		for(;;)
+		while (true)
 		{
 			int prevPhysicalLine = getDisplayManager().getPrevVisibleLine(currentPhysicalLine);
 			if(prevPhysicalLine == -1)
