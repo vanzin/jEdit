@@ -44,7 +44,7 @@ public class IntegerArray
 	{
 		if(len >= array.length)
 		{
-			int[] arrayN = new int[len * 2];
+			int[] arrayN = new int[Math.max(len * 2, 10)];
 			System.arraycopy(array,0,arrayN,0,len);
 			array = arrayN;
 		}
