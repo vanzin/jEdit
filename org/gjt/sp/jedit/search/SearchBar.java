@@ -67,9 +67,8 @@ public class SearchBar extends JToolBar
 		Dimension max = find.getPreferredSize();
 		max.width = Integer.MAX_VALUE;
 		find.setMaximumSize(max);
-		ActionHandler actionHandler = new ActionHandler();
 		find.addKeyListener(new KeyHandler());
-		find.addActionListener(actionHandler);
+		find.addActionListener(e -> find(false));
 		find.getDocument().addDocumentListener(new DocumentHandler());
 
 		Insets margin = new Insets(1,1,1,1);
@@ -78,7 +77,7 @@ public class SearchBar extends JToolBar
 		
 		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
-		ignoreCase.addActionListener(actionHandler);
+		ignoreCase.addActionListener(e -> SearchAndReplace.setIgnoreCase(ignoreCase.isSelected()));
 		ignoreCase.setMargin(margin);
 		ignoreCase.setOpaque(false);
 		ignoreCase.setRequestFocusEnabled(false);
@@ -86,7 +85,7 @@ public class SearchBar extends JToolBar
 		
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
-		regexp.addActionListener(actionHandler);
+		regexp.addActionListener(e -> SearchAndReplace.setRegexp(regexp.isSelected()));
 		regexp.setMargin(margin);
 		regexp.setOpaque(false);
 		regexp.setRequestFocusEnabled(false);
@@ -94,14 +93,18 @@ public class SearchBar extends JToolBar
 		
 		add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
-		hyperSearch.addActionListener(actionHandler);
+		hyperSearch.addActionListener(e ->
+		{
+			jEdit.setBooleanProperty("view.search.hypersearch.toggle", hyperSearch.isSelected());
+			update();
+		});
 		hyperSearch.setMargin(margin);
 		hyperSearch.setOpaque(false);
 		hyperSearch.setRequestFocusEnabled(false);
 
 		add(wholeWord = new JCheckBox(jEdit.getProperty(
 			"search.word.bar")));
-		wholeWord.addActionListener(actionHandler);
+		wholeWord.addActionListener(e -> SearchAndReplace.setWholeWord(wholeWord.isSelected()));
 		wholeWord.setMargin(margin);
 		wholeWord.setOpaque(false);
 		wholeWord.setRequestFocusEnabled(false);
@@ -200,7 +203,7 @@ public class SearchBar extends JToolBar
 
 		String text = find.getText();
 		//{{{ If nothing entered, show search and replace dialog box
-		if(text.length() == 0)
+		if(text.isEmpty())
 		{
 			jEdit.setBooleanProperty("search.hypersearch.toggle",
 				hyperSearch.isSelected());
@@ -334,7 +337,11 @@ public class SearchBar extends JToolBar
 			if(close == null)
 			{
 				close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
-				close.addActionListener(new ActionHandler());
+				close.addActionListener(e ->
+				{
+					view.removeToolBar(this);
+					view.getEditPane().focusOnTextArea();
+				});
 				close.setToolTipText(jEdit.getProperty(
 					"view.search.close-tooltip"));
 			}
@@ -348,45 +355,6 @@ public class SearchBar extends JToolBar
 	//}}}
 
 	//{{{ Inner classes
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		//{{{ actionPerformed() method
-		@Override
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == find)
-				find(false);
-			else if(source == hyperSearch)
-			{
-				jEdit.setBooleanProperty("view.search.hypersearch.toggle",
-					hyperSearch.isSelected());
-				update();
-			}
-			else if(source == ignoreCase)
-			{
-				SearchAndReplace.setIgnoreCase(ignoreCase
-					.isSelected());
-			}
-			else if(source == regexp)
-			{
-				SearchAndReplace.setRegexp(regexp
-					.isSelected());
-			}
-			else if (source == wholeWord)
-			{
-				SearchAndReplace.setWholeWord(wholeWord
-					.isSelected());
-			}
-			else if(source == close)
-			{
-				view.removeToolBar(SearchBar.this);
-				view.getEditPane().focusOnTextArea();
-			}
-		} //}}}
-	} //}}}
 
 	//{{{ DocumentHandler class
 	class DocumentHandler implements DocumentListener
@@ -421,7 +389,7 @@ public class SearchBar extends JToolBar
 			if(!hyperSearch.isSelected())
 			{
 				String text = find.getText();
-				if(text.length() != 0)
+				if(!text.isEmpty())
 				{
 					// don't beep if not found.
 					// subsequent beeps are very
@@ -482,16 +450,5 @@ public class SearchBar extends JToolBar
 			}
 		}
 	} //}}}
-
-	//{{{ FocusHandler class
-	class FocusHandler extends FocusAdapter
-	{
-		@Override
-		public void focusLost(FocusEvent e)
-		{
-			getField().addCurrentToHistory();
-		}
-	} //}}}
-
 	//}}}
 }
