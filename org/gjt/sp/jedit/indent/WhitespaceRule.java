@@ -45,7 +45,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
  */
 public class WhitespaceRule implements IndentRule
 {
-
+	@Override
 	public void apply(JEditBuffer buffer, int thisLineIndex,
 			  int prevLineIndex, int prevPrevLineIndex,
 			  List<IndentAction> indentActions)

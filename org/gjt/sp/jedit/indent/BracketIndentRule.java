@@ -130,6 +130,7 @@ public abstract class BracketIndentRule implements IndentRule
 			}
 		}
 
+		@Override
 		public void handleToken(Segment seg
 			, byte id, int offset, int length
 			, TokenMarker.LineContext context)
@@ -143,6 +144,7 @@ public abstract class BracketIndentRule implements IndentRule
 			scannedIndex += length;
 		}
 
+		@Override
 		public void setLineContext(TokenMarker.LineContext lineContext)
 		{
 		}

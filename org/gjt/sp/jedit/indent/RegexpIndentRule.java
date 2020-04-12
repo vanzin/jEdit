@@ -56,6 +56,7 @@ public class RegexpIndentRule implements IndentRule
 	} //}}}
 
 	//{{{ apply() method
+	@Override
 	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
 		List<IndentAction> indentActions)
@@ -89,9 +90,11 @@ public class RegexpIndentRule implements IndentRule
 		return getClass().getName() + '[' + regexp + ']';
 	} //}}}
 
-	private IndentAction prevPrevAction, prevAction, thisAction;
-	private Pattern regexp;
-	private boolean collapse;
+	private final IndentAction prevPrevAction;
+	private final IndentAction prevAction;
+	private final IndentAction thisAction;
+	private final Pattern regexp;
+	private final boolean collapse;
 
 	//{{{ class TokenFilter
 	/**
@@ -107,6 +110,7 @@ public class RegexpIndentRule implements IndentRule
 			result = new StringBuilder(originalLength);
 		}
 
+		@Override
 		public void handleToken(Segment seg
 			, byte id, int offset, int length
 			, TokenMarker.LineContext context)
@@ -145,6 +149,7 @@ public class RegexpIndentRule implements IndentRule
 			}
 		}
 
+		@Override
 		public void setLineContext(TokenMarker.LineContext lineContext)
 		{
 		}
