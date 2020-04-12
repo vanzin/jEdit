@@ -134,6 +134,7 @@ public class BufferUpdate extends EBMessage
 	} //}}}
 
 	//{{{ paramString() method
+	@Override
 	public String paramString()
 	{
 		return "what=" + what + ",view=" + view + ","
@@ -141,7 +142,7 @@ public class BufferUpdate extends EBMessage
 	} //}}}
 
 	//{{{ Private members
-	private Object what;
-	private View view;
+	private final Object what;
+	private final View view;
 	//}}}
 }
