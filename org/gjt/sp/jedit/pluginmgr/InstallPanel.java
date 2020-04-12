@@ -686,11 +686,7 @@ class InstallPanel extends JPanel implements EBComponent
 								temp.dependents.add(entry);
 								if(!temp.install)
 								{
-									if(temp.installedVersion == null)
-									{
-										temp.install = true;
-									}
-									else if(!temp.plugin.loaded)
+									if (temp.installedVersion == null || !temp.plugin.loaded)
 									{
 										temp.install = true;
 									}
@@ -793,7 +789,7 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ clearSelection() method
 		public void clearSelection()
 		{
-			restoreSelection(Collections.<String>emptySet(), Collections.<String>emptySet());
+			restoreSelection(Collections.emptySet(), Collections.emptySet());
 		} //}}}
 
 		//{{{ restoreSelection() method
@@ -1029,7 +1025,7 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				int length = pluginModel.getRowCount();
 				for (int i = 0; i < length; i++)
-					if (!((Boolean)pluginModel.getValueAt(i,0)).booleanValue())
+					if (!(Boolean) pluginModel.getValueAt(i, 0))
 					{
 						setSelected(false);
 						return;
@@ -1260,18 +1256,10 @@ class InstallPanel extends JPanel implements EBComponent
 					result = StandardUtilities.compareStrings(e1.version, e2.version, true);
 					break;
 				case COLUMN_SIZE:
-					result = (e1.size < e2.size)
-						 ? -1
-						 : ((e1.size == e2.size)
-						    ? 0
-						    : 1);
+					result = Integer.compare(e1.size, e2.size);
 					break;
 				case COLUMN_RELEASE:
-					result = (e1.timestamp < e2.timestamp)
-						 ? -1
-						 : ((e1.timestamp == e2.timestamp)
-						    ? 0
-						    : 1);
+					result = Long.compare(e1.timestamp, e2.timestamp);
 					break;
 				default:
 					result = 0;
@@ -1317,7 +1305,7 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ KeyboardAction class
 	private class KeyboardAction extends AbstractAction
 	{
-		private KeyboardCommand command;
+		private final KeyboardCommand command;
 
 		KeyboardAction(KeyboardCommand command)
 		{
