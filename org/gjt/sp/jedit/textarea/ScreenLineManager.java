@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.textarea;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
+
+import java.util.Arrays;
 //}}}
 
 /**
@@ -126,10 +128,7 @@ class ScreenLineManager
 			{
 				// the array is too small for the new buffer length
 				// create a bigger one and copy data into it
-				char[] screenLinesN = new char[((lineCount + 1) << 1)];
-				System.arraycopy(screenLines,0,screenLinesN,0,
-						 screenLines.length);
-				screenLines = screenLinesN;
+				screenLines = Arrays.copyOf(screenLines, ((lineCount + 1) << 1));
 			}
 			System.arraycopy(screenLines,startLine,screenLines,
 				endLine,lineCount - endLine);
