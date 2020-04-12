@@ -1864,7 +1864,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * to the name of the mode. A bit inelegant, I know...
 	 * @param mode The mode
 	 */
-	public void setMode(Mode mode)
+	public void setMode(@Nonnull Mode mode)
 	{
 		setMode(mode, false);
 	}
@@ -1879,12 +1879,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * value is false
 	 * @since jEdit 4.5pre1
 	 */
-	public void setMode(Mode mode, boolean forceContextInsensitive)
+	public void setMode(@Nonnull Mode mode, boolean forceContextInsensitive)
 	{
 		/* This protects against stupid people (like me)
 		 * doing stuff like buffer.setMode(jEdit.getMode(...)); */
-		if(mode == null)
-			throw new NullPointerException("Mode must be non-null");
+		Objects.requireNonNull(mode);
 
 		this.mode = mode;
 
@@ -2735,10 +2734,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ Used to store property values
 	protected static class PropValue
 	{
-		PropValue(Object value, boolean defaultValue)
+		PropValue(@Nonnull Object value, boolean defaultValue)
 		{
-			if(value == null)
-				throw new NullPointerException();
+			Objects.requireNonNull(value);
 			this.value = value;
 			this.defaultValue = defaultValue;
 		}

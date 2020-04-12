@@ -26,8 +26,10 @@ package org.gjt.sp.jedit.io;
 import java.awt.Component;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.gjt.sp.jedit.MiscUtilities;
@@ -98,10 +100,10 @@ public class CopyFileWorker extends Task
 	 * @param target the target path (it is the file path, not a parent directory)
 	 * @param latch a latch so the caller knows when the copy is done
 	 */
-	private CopyFileWorker(Component comp, String source, String target, @Nullable CountDownLatch latch)
+	private CopyFileWorker(Component comp, @Nonnull String source, @Nonnull String target, @Nullable CountDownLatch latch)
 	{
-		if (source == null || target == null)
-			throw new NullPointerException("The source and target cannot be null");
+		Objects.requireNonNull(source);
+		Objects.requireNonNull(target);
 		if (source.equals(target))
 			throw new IllegalArgumentException("The source and target must not be the same");
 		this.comp = comp;
@@ -136,10 +138,10 @@ public class CopyFileWorker extends Task
 	 * @param behavior the behavior if the target file already exists
 	 * @since jEdit 5.0
 	 */
-	public CopyFileWorker(Component comp, List<String> sources, String target, Behavior behavior)
+	public CopyFileWorker(Component comp, @Nonnull List<String> sources, @Nonnull String target, Behavior behavior)
 	{
-		if (sources == null || target == null)
-			throw new NullPointerException("The source and target cannot be null");
+		Objects.requireNonNull(sources);
+		Objects.requireNonNull(target);
 		this.comp = comp;
 		this.sources = sources;
 		this.target = target;

@@ -1802,7 +1802,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre6
 	 * @see #saveGeometry(Window,String)
 	 */
-	public static void addSizeSaver(Frame frame, String name)
+	public static void addSizeSaver(@Nonnull Frame frame, @Nonnull String name)
 	{
 		addSizeSaver(frame,frame.getParent(),name);
 	} //}}}
@@ -1817,7 +1817,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre7
 	 * @see #saveGeometry(Window,Container,String)
 	 */
-	public static void addSizeSaver(Frame frame, Container parent, String name)
+	public static void addSizeSaver(@Nonnull Frame frame, Container parent, @Nonnull String name)
 	{
 		SizeSaver ss = new SizeSaver(frame,parent,name);
 		frame.addWindowStateListener(ss);
@@ -2126,12 +2126,10 @@ public class GUIUtilities
 		 * @param parent The parent to be relative to.
 		 * @param name The prefix for the settings
 		 */
-		SizeSaver(Frame frame, Container parent, String name)
+		SizeSaver(@Nonnull Frame frame, Container parent, @Nonnull String name)
 		{
-			if (frame == null || name == null)
-			{
-				throw new NullPointerException();
-			}
+			Objects.requireNonNull(frame);
+			Objects.requireNonNull(name);
 			this.frame = frame;
 			this.parent = parent;
 			this.name = name;

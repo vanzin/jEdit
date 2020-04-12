@@ -21,6 +21,9 @@ package org.gjt.sp.jedit.msg;
 
 import org.gjt.sp.jedit.*;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
  * Message sent when a file or directory changes.
  * @author Slava Pestov
@@ -34,13 +37,10 @@ public class VFSUpdate extends EBMessage
 	 * Creates a VFS update message.
 	 * @param path The path in question
 	 */
-	public VFSUpdate(String path)
+	public VFSUpdate(@Nonnull String path)
 	{
 		super(null);
-
-		if(path == null)
-			throw new NullPointerException("Path must be non-null");
-
+		Objects.requireNonNull(path);
 		this.path = path;
 	}
 

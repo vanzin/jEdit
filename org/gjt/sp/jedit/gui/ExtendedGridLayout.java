@@ -272,12 +272,9 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @throws NullPointerException if {@code component} is {@code null}
 	  * @see ExtendedGridLayoutConstraints
 	  */
-	private ExtendedGridLayoutConstraints lookupConstraints(Component component)
+	private ExtendedGridLayoutConstraints lookupConstraints(@Nonnull Component component)
 	{
-		if (null == component)
-		{
-			throw new NullPointerException("component must not be null");
-		}
+		Objects.requireNonNull(component);
 		ExtendedGridLayoutConstraints constraints = comptable.get(component);
 		if (null == constraints)
 		{

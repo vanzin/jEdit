@@ -25,7 +25,11 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.event.InputEvent;
 import java.util.Hashtable;
+import java.util.Objects;
+
 import org.gjt.sp.jedit.*;
+
+import javax.annotation.Nonnull;
 //}}}
 
 /** The default input handler maps sequences of keystrokes into actions and inserts key typed events into the text area.
@@ -43,12 +47,10 @@ public class DefaultInputHandler extends InputHandler
 	 * must not be null.
 	 * @since jEdit 4.3pre1
 	 */
-	public DefaultInputHandler(View view, Hashtable bindings)
+	public DefaultInputHandler(View view, @Nonnull Hashtable bindings)
 	{
 		super(view);
-
-		if(bindings == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(bindings);
 		this.bindings = this.currentBindings = bindings;
 	} //}}}
 

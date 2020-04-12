@@ -25,6 +25,9 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.*;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
  * Message sent when dockable window state changes.
  * @author Slava Pestov
@@ -62,14 +65,10 @@ public class DockableWindowUpdate extends EBMessage
 	 * @param what What happened
 	 * @param dockable The dockable window in question
 	 */
-	public DockableWindowUpdate(DockableWindowManager wm, Object what,
-		String dockable)
+	public DockableWindowUpdate(DockableWindowManager wm, @Nonnull Object what, String dockable)
 	{
 		super(wm);
-
-		if(what == null)
-			throw new NullPointerException("What must be non-null");
-
+		Objects.requireNonNull(what);
 		this.what = what;
 		this.dockable = dockable;
 	} //}}}

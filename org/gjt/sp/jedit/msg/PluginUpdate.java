@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.msg;
 
 import java.io.File;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.gjt.sp.jedit.*;
@@ -79,18 +81,12 @@ public class PluginUpdate extends EBMessage
 	 * @param exit Is the editor exiting?
 	 * @since jEdit 4.2pre3
 	 */
-	public PluginUpdate(PluginJAR jar, Object what, boolean exit)
+	public PluginUpdate(@Nonnull PluginJAR jar, @Nonnull Object what, boolean exit)
 	{
 		super(jar);
-
-		if (jar == null) {
-			throw new IllegalArgumentException("PluginJAR may not be null.");	
-		}
+		Objects.requireNonNull(jar);
+		Objects.requireNonNull(what);
 		this.jar = jar;
-		
-		if(what == null)
-			throw new NullPointerException("What must be non-null");
-
 		EditPlugin plugin = jar.getPlugin();
 		if (plugin != null)
 		{
@@ -110,14 +106,11 @@ public class PluginUpdate extends EBMessage
 	 * @param exit Is the editor exiting?
 	 * @since jEdit 4.2pre3
 	 */
-	public PluginUpdate(File file, Object what, boolean exit)
+	public PluginUpdate(File file, @Nonnull Object what, boolean exit)
 	{
 		super(file);
+		Objects.requireNonNull(what);
 		this.file = file;
-		
-		if(what == null)
-			throw new NullPointerException("What must be non-null");
-
 		this.what = what;
 		this.exit = exit;
 	} //}}}

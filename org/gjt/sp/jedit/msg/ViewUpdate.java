@@ -24,6 +24,9 @@ package org.gjt.sp.jedit.msg;
 
 import org.gjt.sp.jedit.*;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
  * Message sent when a view-related change occurs.
  * @author Slava Pestov
@@ -68,13 +71,10 @@ public class ViewUpdate extends EBMessage
 	 * @param view The view
 	 * @param what What happened
 	 */
-	public ViewUpdate(View view, Object what)
+	public ViewUpdate(View view, @Nonnull Object what)
 	{
 		super(view);
-
-		if(what == null)
-			throw new NullPointerException("What must be non-null");
-
+		Objects.requireNonNull(what);
 		this.what = what;
 	} //}}}
 
