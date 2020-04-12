@@ -35,6 +35,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.ProgressObserver;
 
 import static org.gjt.sp.jedit.io.FileVFS.recursiveDelete;
 //}}}
@@ -49,8 +50,8 @@ class Roster
 	//{{{ Roster constructor
 	Roster()
 	{
-		operations = new ArrayList<Operation>();
-		toLoad = new ArrayList<String>();
+		operations = new ArrayList<>();
+		toLoad = new ArrayList<>();
 	} //}}}
 
 	//{{{ addRemove() method
@@ -64,8 +65,7 @@ class Roster
 	} //}}}
 
 	//{{{ addInstall() method
-	void addInstall(String installed, String url, String installDirectory,
-		int size)
+	void addInstall(String installed, String url, String installDirectory, int size)
 	{
 		addOperation(new Install(installed,url,installDirectory,size));
 	} //}}}
@@ -142,8 +142,8 @@ class Roster
 	//{{{ Private members
 	private static File downloadDir;
 
-	private List<Operation> operations;
-	private List<String> toLoad;
+	private final List<Operation> operations;
+	private final List<String> toLoad;
 
 	//{{{ addOperation() method
 	private void addOperation(Operation op)
@@ -202,6 +202,7 @@ class Roster
 		} //}}}
 
 		//{{{ runInAWTThread() method
+		@Override
 		public void runInAWTThread(Component comp)
 		{
 			// close JAR file and all JARs that depend on this
@@ -277,8 +278,7 @@ class Roster
 		int size;
 
 		//{{{ Install constructor
-		Install(String installed, String url, String installDirectory,
-			int size)
+		Install(String installed, String url, String installDirectory, int size)
 		{
 			// catch those hooligans passing null urls
 			if(url == null)
@@ -291,18 +291,21 @@ class Roster
 		} //}}}
 
 		//{{{ getMaximum() method
+		@Override
 		public int getMaximum()
 		{
 			return size;
 		} //}}}
 
 		//{{{ runInWorkThread() method
+		@Override
 		public void runInWorkThread(PluginManagerProgress progress)
 		{
 			path = download(progress,url);
 		} //}}}
 
 		//{{{ runInAWTThread() method
+		@Override
 		public void runInAWTThread(Component comp)
 		{
 			// check if download failed
@@ -410,8 +413,7 @@ class Roster
 					Log.log(Log.ERROR,this,io);
 				}
 
-				if(jEdit.getBooleanProperty(
-					"plugin-manager.deleteDownloads"))
+				if(jEdit.getBooleanProperty("plugin-manager.deleteDownloads"))
 				{
 					new File(path).delete();
 				}
@@ -426,13 +428,13 @@ class Roster
 		} //}}}
 
 		//{{{ Private members
-		private String installed;
+		private final String installed;
 		private final String url;
-		private String installDirectory;
+		private final String installDirectory;
 		private String path;
 
 		//{{{ download() method
-		private String download(PluginManagerProgress progress, String url)
+		private String download(ProgressObserver progress, String url)
 		{
 			try
 			{
@@ -485,13 +487,7 @@ class Roster
 			{
 				Log.log(Log.ERROR,this,e);
 
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						GUIUtilities.error(null,"plugin-error-download",new Object[]{""});
-					}
-				});
+				SwingUtilities.invokeLater(() -> GUIUtilities.error(null,"plugin-error-download",new Object[]{""}));
 
 				return null;
 			}
@@ -499,13 +495,10 @@ class Roster
 			{
 				Log.log(Log.ERROR,this,io);
 
-				SwingUtilities.invokeLater(new Runnable()
+				SwingUtilities.invokeLater(() ->
 				{
-					public void run()
-					{
-						String[] args = { io.getMessage() };
-						GUIUtilities.error(null,"plugin-error-download",args);
-					}
+					String[] args = { io.getMessage() };
+					GUIUtilities.error(null,"plugin-error-download",args);
 				});
 
 				return null;
@@ -517,7 +510,6 @@ class Roster
 				return null;
 			}
 		} //}}}
-
 		//}}}
 	} //}}}
 }
