@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.util.GenericGUIUtilities;
+import org.gjt.sp.util.swing.event.UniqueActionDocumentListener;
 //}}}
 
 /** Dockable view of register contents */
@@ -78,7 +79,7 @@ public class RegisterViewer extends JPanel
 		registerList.addMouseListener(new MouseHandler());
 		contentTextArea = new JTextArea(10,20);
 		contentTextArea.setEditable(true);
-		documentHandler = new DocumentHandler();
+		documentHandler = new UniqueActionDocumentListener(e -> updateRegisterSafely());
 		//contentTextArea.getDocument().addDocumentListener(documentHandler);
 		contentTextArea.addFocusListener(new FocusHandler());
 		//key bindings
@@ -171,7 +172,7 @@ public class RegisterViewer extends JPanel
 	 */
 	private final JList<String> registerList;
 	private final JTextArea contentTextArea;
-	private final DocumentHandler documentHandler;
+	private final DocumentListener documentHandler;
 	private final View view;
 	private boolean editing;
 	private final JSplitPane splitPane;
@@ -246,6 +247,28 @@ public class RegisterViewer extends JPanel
 			refreshList();
 		}
 	} //}}}
+
+	private void updateRegisterSafely()
+	{
+		try
+		{
+			editing = true;
+			updateRegister();
+		}
+		finally
+		{
+			editing = false;
+		}
+	}
+
+	private void updateRegister()
+	{
+		String value = registerList.getSelectedValue();
+		if(value == null || value.length() < 1)
+			return;
+		char name = value.charAt(0);
+		Registers.setRegister(name,contentTextArea.getText());
+	}
 
 	//}}}
 
@@ -365,50 +388,6 @@ public class RegisterViewer extends JPanel
 			}
 			else if (evt.getClickCount() % 2 == 0)
 				insertRegister();
-		}
-	} //}}}
-
-	//{{{ DocumentHandler Class
-	class DocumentHandler implements DocumentListener
-	{
-		@Override
-		public void changedUpdate(DocumentEvent e)
-		{
-			updateRegisterSafely();
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e)
-		{
-			updateRegisterSafely();
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e)
-		{
-			updateRegisterSafely();
-		}
-
-		private void updateRegisterSafely()
-		{
-			try
-			{
-				editing = true;
-				updateRegister();
-			}
-			finally
-			{
-				editing = false;
-			}
-		}
-
-		private void updateRegister()
-		{
-			String value = registerList.getSelectedValue();
-			if(value == null || value.length() < 1)
-				return;
-			char name = value.charAt(0);
-			Registers.setRegister(name,contentTextArea.getText());
 		}
 	} //}}}
 

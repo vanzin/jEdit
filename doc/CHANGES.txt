@@ -77,6 +77,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- New UniqueActionDocumentListener class, a DocumentListener that does the same action
+  for every event (Matthieu Casanova)
+
 - New AbstractWidget class (Matthieu Casanova)
 
 - GUIUtilities.showVFSFileDialog() methods now never returns null (Matthieu Casanova)

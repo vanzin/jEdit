@@ -34,6 +34,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.StringList;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.swing.event.UniqueActionDocumentListener;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -42,8 +43,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -162,31 +161,7 @@ class InstallPanel extends JPanel implements EBComponent
 				}
 			}
 		});
-		searchField.getDocument().addDocumentListener(new DocumentListener()
-		{
-			void update()
-			{
-				pluginModel.setFilterString(searchField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e)
-			{
-				update();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e)
-			{
-				update();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e)
-			{
-				update();
-			}
-		});
+		searchField.getDocument().addDocumentListener(new UniqueActionDocumentListener(e -> pluginModel.setFilterString(searchField.getText())));
 		table.addKeyListener(new KeyAdapter()
 		{
 			@Override

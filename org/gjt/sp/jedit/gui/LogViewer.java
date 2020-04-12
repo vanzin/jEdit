@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ThreadUtilities;
+import org.gjt.sp.util.swing.event.UniqueActionDocumentListener;
 //}}}
 
 /** Activity Log Viewer
@@ -69,26 +70,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 
 
 		filter = new JTextField();
-		filter.getDocument().addDocumentListener(new DocumentListener()
-		{
-			@Override
-			public void changedUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-		});
+		filter.getDocument().addDocumentListener(new UniqueActionDocumentListener(e -> setFilter()));
 		caption.add(filter);
 		caption.add(tail);
 

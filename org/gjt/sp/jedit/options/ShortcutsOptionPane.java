@@ -29,14 +29,13 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.FilteredTableModel;
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.GrabKeyDialog.KeyBinding;
+import org.gjt.sp.util.swing.event.UniqueActionDocumentListener;
 import org.jedit.keymap.Keymap;
 import org.jedit.keymap.KeymapManager;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -117,26 +116,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		filterTF = new JTextField(40);
 		filterTF.setToolTipText(jEdit.getProperty("options.shortcuts.filter.tooltip"));
-		filterTF.getDocument().addDocumentListener(new DocumentListener()
-		{
-			@Override
-			public void changedUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e)
-			{
-				setFilter();
-			}
-		});
+		filterTF.getDocument().addDocumentListener(new UniqueActionDocumentListener(e -> setFilter()));
 		JButton clearButton = new JButton(jEdit.getProperty(
 				"options.shortcuts.clear.label"));
 		clearButton.addActionListener(e ->
