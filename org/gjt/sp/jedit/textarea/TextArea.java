@@ -24,15 +24,13 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.util.EventObject;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.TooManyListenersException;
+import java.util.*;
 import java.text.BreakIterator;
 import java.text.CharacterIterator;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -4877,18 +4875,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
-		for(int i = 0; i < foo.length; i++)
-			foo[i] = ' ';
+		Arrays.fill(foo, ' ');
 		tabSize = painter.getStringWidth(new String(foo));
 
 		// Calculate an average to use a reasonable value for
 		// propotional fonts.
 		String charWidthSample = "mix";
-		charWidthDouble =
-			painter.getFont().getStringBounds(charWidthSample,
-				painter.getFontRenderContext()).getWidth() / charWidthSample.length();
-	    charWidth = (int)Math.round(charWidthDouble);
-
+		charWidthDouble = painter.getFont().getStringBounds(charWidthSample,
+			painter.getFontRenderContext()).getWidth() / charWidthSample.length();
+		charWidth = (int)Math.round(charWidthDouble);
 
 		String oldWrap = wrap;
 		wrap = buffer.getStringProperty("wrap");
@@ -5101,17 +5096,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			final int firstLine = getFirstLine();
 			final int visible = visibleLines - (lastLinePartial ? 1 : 0);
 
-			Runnable runnable = new Runnable()
+			ThreadUtilities.runInDispatchThread(() ->
 			{
-				@Override
-				public void run()
-				{
-					vertical.setValues(firstLine,visible,0,lineCount);
-					vertical.setUnitIncrement(2);
-					vertical.setBlockIncrement(visible);
-				}
-			};
-			ThreadUtilities.runInDispatchThread(runnable);
+				vertical.setValues(firstLine,visible,0,lineCount);
+				vertical.setUnitIncrement(2);
+				vertical.setBlockIncrement(visible);
+			});
 		}
 	} //}}}
 
@@ -6606,14 +6596,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
-			/****************************************************
+			/* **************************************************
 			 * move caret depending on pressed control-keys:
 			 * - Alt: move cursor, do not select
 			 * - Alt+(shift or control): move cursor, select
 			 * - shift: scroll horizontally
 			 * - control: scroll single line
 			 * - <else>: scroll 3 lines
-			 ****************************************************/
+			 * **************************************************/
 			if(e.isAltDown())
 			{
 				boolean select = e.isShiftDown()
