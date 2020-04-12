@@ -466,8 +466,7 @@ class PluginList
 		void satisfyDependencies(Roster roster, String installDirectory,
 			boolean downloadSource)
 		{
-			for (Dependency dep : deps)
-				dep.satisfy(roster, installDirectory, downloadSource);
+			deps.forEach(dep -> dep.satisfy(roster, installDirectory, downloadSource));
 		}
 
 		public String depsToString()
@@ -510,57 +509,58 @@ class PluginList
 
 		boolean isSatisfied()
 		{
-			if(what.equals("plugin"))
+			switch (what)
 			{
-				for(int i = 0; i < plugin.branches.size(); i++)
+				case "plugin":
+					return isSatisfiedByPlugin();
+				case "jdk":
+					return isSatisfiedByJdk();
+				case "jedit":
+					return isSatisfiedByJEdit();
+				default:
+					Log.log(Log.ERROR, this, "Invalid dependency: " + what);
+					return false;
+			}
+		}
+
+		private boolean isSatisfiedByJEdit()
+		{
+			String build = jEdit.getBuild();
+
+			return (from == null ||
+				StandardUtilities.compareStrings(build, from, false) >= 0) &&
+				(to == null ||
+					StandardUtilities.compareStrings(build, to, false) <= 0);
+		}
+
+		private boolean isSatisfiedByJdk()
+		{
+			String javaVersion = System.getProperty("java.version");
+			// openjdk 9 returns just "9", not 1.X.X like previous versions
+			javaVersion = javaVersion.length() >= 3 ? javaVersion.substring(0, 3) : javaVersion;
+
+			return (from == null ||
+				StandardUtilities.compareStrings(javaVersion, from, false) >= 0) &&
+				(to == null ||
+					StandardUtilities.compareStrings(javaVersion, to, false) <= 0);
+		}
+
+		private boolean isSatisfiedByPlugin()
+		{
+			for(int i = 0; i < plugin.branches.size(); i++)
+			{
+				String installedVersion = plugin.getInstalledVersion();
+				if(installedVersion != null &&
+					(from == null ||
+						StandardUtilities.compareStrings(installedVersion,from,false) >= 0) &&
+					(to == null ||
+						StandardUtilities.compareStrings(installedVersion,to,false) <= 0))
 				{
-					String installedVersion = plugin.getInstalledVersion();
-					if(installedVersion != null
-						&&
-					(from == null || StandardUtilities.compareStrings(
-						installedVersion,from,false) >= 0)
-						&&
-						(to == null || StandardUtilities.compareStrings(
-						      installedVersion,to,false) <= 0))
-					{
-						return true;
-					}
+					return true;
 				}
+			}
 
-				return false;
-			}
-			else if(what.equals("jdk"))
-			{
-				String javaVersion = System.getProperty("java.version");
-				// openjdk 9 returns just "9", not 1.X.X like previous versions
-				javaVersion = javaVersion.length() >= 3 ? javaVersion.substring(0, 3) : javaVersion;
-				if((from == null || StandardUtilities.compareStrings(
-					javaVersion,from,false) >= 0)
-					&&
-					(to == null || StandardUtilities.compareStrings(
-						     javaVersion,to,false) <= 0))
-					return true;
-				else
-					return false;
-			}
-			else if(what.equals("jedit"))
-			{
-				String build = jEdit.getBuild();
-
-				if((from == null || StandardUtilities.compareStrings(
-					build,from,false) >= 0)
-					&&
-					(to == null || StandardUtilities.compareStrings(
-						     build,to,false) <= 0))
-					return true;
-				else
-					return false;
-			}
-			else
-			{
-				Log.log(Log.ERROR,this,"Invalid dependency: " + what);
-				return false;
-			}
+			return false;
 		}
 
 		boolean canSatisfy()
@@ -572,25 +572,20 @@ class PluginList
 			return false;
 		}
 
-		void satisfy(Roster roster, String installDirectory,
-			boolean downloadSource)
+		void satisfy(Roster roster, String installDirectory, boolean downloadSource)
 		{
-			if(what.equals("plugin"))
+			if ("plugin".equals(what))
 			{
 				String installedVersion = plugin.getInstalledVersion();
-				for(int i = 0; i < plugin.branches.size(); i++)
+				for (int i = 0; i < plugin.branches.size(); i++)
 				{
 					Branch branch = plugin.branches.get(i);
-					if((installedVersion == null
-						||
-					StandardUtilities.compareStrings(
-						installedVersion,branch.version,false) < 0)
-						&&
-					(from == null || StandardUtilities.compareStrings(
-						branch.version,from,false) >= 0)
-						&&
-						(to == null || StandardUtilities.compareStrings(
-						      branch.version,to,false) <= 0))
+					if ((installedVersion == null ||
+						StandardUtilities.compareStrings(installedVersion,branch.version,false) < 0) &&
+						(from == null ||
+							StandardUtilities.compareStrings(branch.version,from,false) >= 0) &&
+						(to == null ||
+							StandardUtilities.compareStrings(branch.version,to,false) <= 0))
 					{
 						plugin.install(roster,installDirectory,
 							downloadSource, false);
@@ -602,8 +597,7 @@ class PluginList
 
 		public String toString()
 		{
-			return "[what=" + what + ",from=" + from
-				+ ",to=" + to + ",plugin=" + plugin + ']';
+			return "[what=" + what + ",from=" + from + ",to=" + to + ",plugin=" + plugin + ']';
 		}
 	} //}}}
 
@@ -643,6 +637,5 @@ class PluginList
 			redirected.substring(start, end) :
 			redirected.substring(start);
 	}
-
 	//}}}
 }
