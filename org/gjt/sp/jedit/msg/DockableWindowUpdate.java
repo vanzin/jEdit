@@ -94,15 +94,14 @@ public class DockableWindowUpdate extends EBMessage
 	} //}}}
 
 	//{{{ paramString() method
+	@Override
 	public String paramString()
 	{
-		return "what=" + what
-			+ ",dockable=" + dockable
-			+ "," + super.paramString();
+		return "what=" + what + ",dockable=" + dockable + "," + super.paramString();
 	} //}}}
 
 	//{{{ Private members
-	private Object what;
-	private String dockable;
+	private final Object what;
+	private final String dockable;
 	//}}}
 }
