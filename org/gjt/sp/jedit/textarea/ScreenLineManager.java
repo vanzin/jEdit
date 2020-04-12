@@ -115,6 +115,7 @@ class ScreenLineManager
 	public void contentInserted(int startLine, int numLines)
 	{
 		int endLine = startLine + numLines;
+		// the current line count becomes invalid
 		invalidateScreenLineCount(startLine);
 
 		int lineCount = buffer.getLineCount();
@@ -123,12 +124,13 @@ class ScreenLineManager
 		{
 			if(screenLines.length <= lineCount)
 			{
+				// the array is too small for the new buffer length
+				// create a bigger one and copy data into it
 				char[] screenLinesN = new char[((lineCount + 1) << 1)];
 				System.arraycopy(screenLines,0,screenLinesN,0,
 						 screenLines.length);
 				screenLines = screenLinesN;
 			}
-
 			System.arraycopy(screenLines,startLine,screenLines,
 				endLine,lineCount - endLine);
 
@@ -145,6 +147,7 @@ class ScreenLineManager
 
 		if(numLines > 0 && endLine != screenLines.length)
 		{
+			// copy the lines after removed lines to their new position
 			System.arraycopy(screenLines,endLine + 1,screenLines,
 				startLine + 1,screenLines.length - endLine - 1);
 		}
