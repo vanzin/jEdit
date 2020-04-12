@@ -37,6 +37,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.font.TextLayout;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
+import java.text.CharacterIterator;
 // }}}
 
 /**
@@ -45,22 +46,21 @@ import java.awt.font.TextHitInfo;
  * @author Kazutoshi Satoda
  * @since jEdit 4.3pre7
  */
-
 class InputMethodSupport
 	extends TextAreaExtension
 	implements InputMethodRequests, InputMethodListener
 {
 	// The owner.
-	private TextArea owner;
+	private final TextArea owner;
 	// The composed text layout which was built from last InputMethodEvent.
-	private TextLayout composedTextLayout = null;
+	private TextLayout composedTextLayout;
 	// The X offset to the caret in the composed text.
-	private int composedCaretX = 0;
+	private int composedCaretX;
 	// Last committed information to support cancelLatestCommittedText()
-	private int lastCommittedAt = 0;
-	private String lastCommittedText = null;
+	private int lastCommittedAt;
+	private String lastCommittedText;
 
-	public InputMethodSupport(TextArea owner)
+	InputMethodSupport(TextArea owner)
 	{
 		this.owner = owner;
 		owner.addInputMethodListener(this);
@@ -81,6 +81,7 @@ class InputMethodSupport
 
 
 	// {{{ extends TextAreaExtension
+	@Override
 	public void paintValidLine(Graphics2D gfx, int screenLine,
 				   int physicalLine, int start, int end, int y)
 	{
@@ -115,6 +116,7 @@ class InputMethodSupport
 
 
 	// {{{ implements InputMethodRequests
+	@Override
 	public Rectangle getTextLocation(TextHitInfo offset)
 	{
 		int caretPosition = owner.getCaretPosition();
@@ -150,6 +152,7 @@ class InputMethodSupport
 		}
 	}
 
+	@Override
 	public TextHitInfo getLocationOffset(int x, int y)
 	{
 		if(composedTextLayout != null)
@@ -173,22 +176,26 @@ class InputMethodSupport
 		return null;
 	}
 
+	@Override
 	public int getInsertPositionOffset()
 	{
 		return owner.getCaretPosition();
 	}
 
+	@Override
 	public AttributedCharacterIterator getCommittedText(int beginIndex , int endIndex
 		, AttributedCharacterIterator.Attribute[] attributes)
 	{
 		return new AttributedString(owner.getText(beginIndex, endIndex - beginIndex)).getIterator();
 	}
 
+	@Override
 	public int getCommittedTextLength()
 	{
 		return owner.getBufferLength();
 	}
 
+	@Override
 	public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes)
 	{
 		if(lastCommittedText != null)
@@ -211,6 +218,7 @@ class InputMethodSupport
 		return null;
 	}
 
+	@Override
 	public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes)
 	{
 		Selection selection_on_caret = owner.getSelectionAtOffset(owner.getCaretPosition());
@@ -224,6 +232,7 @@ class InputMethodSupport
 
 
 	// {{{ implements InputMethodListener
+	@Override
 	public void inputMethodTextChanged(InputMethodEvent event)
 	{
 		composedTextLayout = null;
@@ -239,7 +248,7 @@ class InputMethodSupport
 				char c;
 				int count;
 				for(c = text.first(), count = committed_count
-					; c != AttributedCharacterIterator.DONE && count > 0
+					; c != CharacterIterator.DONE && count > 0
 					; c = text.next(), --count)
 				{
 					owner.userInput(c);
@@ -261,6 +270,7 @@ class InputMethodSupport
 		caretPositionChanged(event);
 	}
 
+	@Override
 	public void caretPositionChanged(InputMethodEvent event)
 	{
 		composedCaretX = 0;
