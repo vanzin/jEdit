@@ -52,11 +52,12 @@ public class VFSUpdate extends EBMessage
 		return path;
 	}
 
+	@Override
 	public String paramString()
 	{
 		return "path=" + path + "," + super.paramString();
 	}
 
 	// private members
-	private String path;
+	private final String path;
 }

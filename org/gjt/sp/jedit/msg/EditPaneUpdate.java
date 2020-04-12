@@ -90,12 +90,13 @@ public class EditPaneUpdate extends EBMessage
 		return (EditPane)getSource();
 	}
 
+	@Override
 	public String paramString()
 	{
 		return "what=" + what + "," + super.paramString();
 	}
 	
 	// private members
-	private Object what;
+	private final Object what;
 
 }

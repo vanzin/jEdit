@@ -176,17 +176,17 @@ public class PluginUpdate extends EBMessage
 	} //}}}
 
 	//{{{ paramString() method
+	@Override
 	public String paramString()
 	{
-		return "what=" + what + ",exit=" + exit + ",version=" + version + ","
-			+ super.paramString();
+		return "what=" + what + ",exit=" + exit + ",version=" + version + "," + super.paramString();
 	} //}}}
 
 	//{{{ Private members
-	private PluginJAR jar = null;
-	private File file = null;
-	private Object what;
-	private boolean exit;
+	private PluginJAR jar;
+	private File file;
+	private final Object what;
+	private final boolean exit;
 	private String version;
 	//}}}
 }

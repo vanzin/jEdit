@@ -97,12 +97,13 @@ public class ViewUpdate extends EBMessage
 	} //}}}
 
 	//{{{ paramString() method
+	@Override
 	public String paramString()
 	{
 		return "what=" + what + "," + super.paramString();
 	} //}}}
 
 	//{{{ Private members
-	private Object what;
+	private final Object what;
 	//}}}
 }
