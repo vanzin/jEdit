@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.*;
 
 import org.gjt.sp.jedit.input.AbstractInputHandler;
+import org.gjt.sp.util.StandardUtilities;
 import org.jedit.keymap.Keymap;
 import org.gjt.sp.util.Log;
 //}}}
@@ -196,6 +197,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	} //}}}
 
 	//{{{ getArray() method
+	@Override
 	protected EditAction[] getArray(int size)
 	{
 		return new EditAction[size];
@@ -282,10 +284,11 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 			else if(obj instanceof BeanShellAction)
 				retVal.add(((BeanShellAction)obj).getName());
 		}
-		return retVal.toArray(new String[retVal.size()]);
+		return retVal.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 	} //}}}
 
 	//{{{ getProperty() method
+	@Override
 	public String getProperty(String name)
 	{
 		Keymap keymap = jEdit.getKeymapManager().getKeymap();
@@ -293,12 +296,14 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	} //}}}
 
 	//{{{ getInputHandler() method
+	@Override
 	public AbstractInputHandler getInputHandler()
 	{
 		return jEdit.getInputHandler();
 	} //}}}
 
 	//{{{ compareTo() method
+	@Override
 	public int compareTo(Object o)
 	{
 		return label.compareTo(((ActionSet)o).label);
@@ -316,6 +321,7 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	 * Creates a BeanShellAction.
 	 * @since 4.3pre13
 	 */
+	 @Override
 	 protected EditAction createBeanShellAction(String actionName,
 						    String code,
 						    String selected,
