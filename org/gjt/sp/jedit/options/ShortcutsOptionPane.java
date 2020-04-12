@@ -139,14 +139,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		});
 		JButton clearButton = new JButton(jEdit.getProperty(
 				"options.shortcuts.clear.label"));
-		clearButton.addActionListener(new ActionListener()
+		clearButton.addActionListener(e ->
 		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				filterTF.setText("");
-				filterTF.requestFocus();
-			}
+			filterTF.setText("");
+			filterTF.requestFocus();
 		});
 
 		JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -156,6 +152,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		keyTable = new JTable(filteredModel)
 		{
+			@Override
 			public String getToolTipText(MouseEvent e)
 			{
 				java.awt.Point p = e.getPoint();
@@ -233,7 +230,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	//{{{ initModels() method
 	private void initModels()
 	{
-		filteredModel = new FilteredTableModel<ShortcutsModel>()
+		filteredModel = new FilteredTableModel<>()
 		{
 			@Override
 			public String prepareFilter(String filter)
@@ -287,7 +284,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		if (models.size() > 1)
 			models.add(new ShortcutsModel(ShortcutsModel.ALL, allBindings));
 		ShortcutsModel delegated = filteredModel.getDelegated();
-		Collections.sort(models,new StandardUtilities.StringCompare<ShortcutsModel>(true));
+		models.sort(new StandardUtilities.StringCompare<>(true));
 		if (delegated == null)
 		{
 			delegated = models.get(0);
@@ -531,7 +528,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public void sort(int col)
 		{
-			Collections.sort(bindings,new KeyCompare(col));
+			bindings.sort(new KeyCompare(col));
 		}
 
 		@Override
@@ -695,7 +692,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			KeymapManager keymapManager = jEdit.getKeymapManager();
 			Collection<String> keymapNames = keymapManager.getKeymapNames();
-			keymaps = keymapNames.toArray(new String[keymapNames.size()]);
+			keymaps = keymapNames.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 			if (!isValidName(selectedItem))
 				selectedItem = keymaps[0];
 			fireContentsChanged(this, 0, keymaps.length-1);
