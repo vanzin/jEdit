@@ -26,14 +26,16 @@ package org.gjt.sp.jedit.pluginmgr;
 import java.io.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 import org.gjt.sp.util.*;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
+
+import javax.annotation.Nonnull;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.gjt.sp.jedit.*;
 //}}}
@@ -76,11 +78,7 @@ class PluginList
 	void readPluginList(boolean allowRetry)
 	{
 		String mirror = buildMirror(id);
-		if (mirror == null)
-			return;
-		gzipURL = jEdit.getProperty("plugin-manager.export-url");
-		gzipURL += "?mirror=" + mirror;
-		gzipURL += "&new_url_scheme";
+		gzipURL = jEdit.getProperty("plugin-manager.export-url") + "?mirror=" + mirror + "&new_url_scheme";
 		String path = null;
 		if (jEdit.getSettingsDirectory() == null)
 		{
@@ -96,11 +94,11 @@ class PluginList
 		{
 			try
 			{
-
-				File f = new File(path);
-				if (!f.canRead()) downloadIt = true;
+				File file = new File(path);
+				if (!file.canRead())
+					downloadIt = true;
 				long currentTime = System.currentTimeMillis();
-				long age = currentTime - f.lastModified();
+				long age = currentTime - file.lastModified();
 				/* By default only download plugin lists every 5 minutes */
 				long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * MILLISECONDS_PER_MINUTE;
 				if (age > interval)
@@ -138,7 +136,7 @@ class PluginList
 				if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 					in = new GZIPInputStream(in);
 			}
-			InputSource isrc = new InputSource(new InputStreamReader(in,"UTF8"));
+			InputSource isrc = new InputSource(new InputStreamReader(in, StandardCharsets.UTF_8));
 			isrc.setSystemId("jedit.jar");
 			parser.setContentHandler(handler);
 			parser.setDTDHandler(handler);
@@ -217,9 +215,7 @@ class PluginList
 		}
 		catch(java.net.UnknownHostException e)
 		{
-				GUIUtilities.error(jEdit.getActiveView()
-					, "plugin-manager.list-download.disconnected"
-					, new Object[]{e.getMessage()});
+			GUIUtilities.error(jEdit.getActiveView(), "plugin-manager.list-download.disconnected", new Object[]{e.getMessage()});
 			Log.log (Log.ERROR, this, "CacheRemotePluginList: error", e);
 		}
 		catch (Exception e)
@@ -612,10 +608,10 @@ class PluginList
 	} //}}}
 
 	//{{{ Private members
-
+	@Nonnull
 	private static String buildMirror(String id)
 	{
-		return ((id != null) && !id.equals(MirrorList.Mirror.NONE)) ? id : "default";
+		return id != null && !MirrorList.Mirror.NONE.equals(id) ? id : "default";
 	}
 
 	// TODO: this isn't used, should it be?
