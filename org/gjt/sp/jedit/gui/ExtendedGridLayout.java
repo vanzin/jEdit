@@ -16,20 +16,14 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.annotation.Nonnull;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
+import java.util.*;
 
 import static java.awt.Component.CENTER_ALIGNMENT;
 
@@ -242,6 +236,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @throws IllegalArgumentException if {@code constraints} is not the right one for the component
 	  * @see ExtendedGridLayoutConstraints
 	  */
+	@Override
 	public void addLayoutComponent(Component component, Object constraints)
 	{
 		if (null == constraints)
@@ -297,6 +292,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  *
 	  * @param component The component to be removed
 	  */
+	@Override
 	public void removeLayoutComponent(Component component)
 	{
 		comptable.remove(component);
@@ -312,6 +308,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @param container The container for which the alignment should be returned
 	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
+	@Override
 	public float getLayoutAlignmentX(Container container)
 	{
 		return CENTER_ALIGNMENT;
@@ -327,6 +324,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @param container The container for which the alignment should be returned
 	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
+	@Override
 	public float getLayoutAlignmentY(Container container)
 	{
 		return CENTER_ALIGNMENT;
@@ -341,16 +339,10 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #maximumLayoutSize
 	  * @see #preferredLayoutSize
 	  */
+	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
-		synchronized (parent.getTreeLock())
-		{
-			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<List<ExtendedGridLayoutConstraints>>();
-			Set<ExtendedGridLayoutConstraints> colspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Set<ExtendedGridLayoutConstraints> rowspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Dimension gridSize = buildGrid(parent,gridRows,colspans,rowspans);
-			return getSize(parent,LayoutSize.MINIMUM,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
-		}
+		return computeLayoutSize(parent, LayoutSize.MINIMUM);
 	}
 
 	/**
@@ -362,16 +354,10 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #maximumLayoutSize
 	  * @see #minimumLayoutSize
 	  */
+	@Override
 	public Dimension preferredLayoutSize(Container parent)
 	{
-		synchronized (parent.getTreeLock())
-		{
-			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<List<ExtendedGridLayoutConstraints>>();
-			Set<ExtendedGridLayoutConstraints> colspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Set<ExtendedGridLayoutConstraints> rowspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Dimension gridSize = buildGrid(parent,gridRows,colspans,rowspans);
-			return getSize(parent,LayoutSize.PREFERRED,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
-		}
+		return computeLayoutSize(parent, LayoutSize.PREFERRED);
 	}
 
 	/**
@@ -383,15 +369,22 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #minimumLayoutSize
 	  * @see #preferredLayoutSize
 	  */
+	@Override
 	public Dimension maximumLayoutSize(Container parent)
+	{
+		return computeLayoutSize(parent, LayoutSize.MAXIMUM);
+	}
+
+	@Nonnull
+	private Dimension computeLayoutSize(Container parent, LayoutSize layoutSize)
 	{
 		synchronized (parent.getTreeLock())
 		{
-			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<List<ExtendedGridLayoutConstraints>>();
-			Set<ExtendedGridLayoutConstraints> colspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Set<ExtendedGridLayoutConstraints> rowspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Dimension gridSize = buildGrid(parent,gridRows,colspans,rowspans);
-			return getSize(parent,LayoutSize.MAXIMUM,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
+			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<>();
+			Collection<ExtendedGridLayoutConstraints> colspans = new HashSet<>();
+			Collection<ExtendedGridLayoutConstraints> rowspans = new HashSet<>();
+			Dimension gridSize = buildGrid(parent, gridRows, colspans, rowspans);
+			return getSize(parent, layoutSize, false, gridSize, gridRows, colspans, rowspans, new int[0][0]);
 		}
 	}
 
@@ -401,6 +394,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  *
 	  * @param container The container for which the cached information should be discarded
 	  */
+	@Override
 	public void invalidateLayout(Container container)
 	{
 	}
@@ -410,14 +404,15 @@ public class ExtendedGridLayout implements LayoutManager2
 	  *
 	  * @param parent The container to be laid out
 	  */
+	@Override
 	public void layoutContainer(Container parent)
 	{
 		synchronized (parent.getTreeLock())
 		{
 			// Pass 1: build the grid
-			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<List<ExtendedGridLayoutConstraints>>();
-			Set<ExtendedGridLayoutConstraints> colspans = new HashSet<ExtendedGridLayoutConstraints>();
-			Set<ExtendedGridLayoutConstraints> rowspans = new HashSet<ExtendedGridLayoutConstraints>();
+			List<List<ExtendedGridLayoutConstraints>> gridRows = new ArrayList<>();
+			Collection<ExtendedGridLayoutConstraints> colspans = new HashSet<>();
+			Collection<ExtendedGridLayoutConstraints> rowspans = new HashSet<>();
 			Dimension gridSize = buildGrid(parent,gridRows,colspans,rowspans);
 
 			// Pass 2: compute minimum, preferred and maximum column widths / row heights
@@ -520,11 +515,11 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @param minimumElementSizes   The minimumSizes of the rows or columns
 	  * @param maximumElementSizes   The maximumSizes of the rows or columns
 	  */
-	private void redistributeSpace(int totalSize, int freeSize,
-				       int start, int stop,
-				       int[] preferredElementSizes,
-				       int[] minimumElementSizes,
-				       int[] maximumElementSizes)
+	private static void redistributeSpace(int totalSize, int freeSize,
+					      int start, int stop,
+					      int[] preferredElementSizes,
+					      int[] minimumElementSizes,
+					      int[] maximumElementSizes)
 	{
 		if (totalSize != freeSize)
 		{
@@ -648,8 +643,8 @@ public class ExtendedGridLayout implements LayoutManager2
 	  */
 	private Dimension getSize(Container parent, LayoutSize layoutSize, boolean fillRawSizes,
 				  Dimension gridSize, List<List<ExtendedGridLayoutConstraints>> gridRows,
-				  Set<ExtendedGridLayoutConstraints> colspans,
-				  Set<ExtendedGridLayoutConstraints> rowspans,
+				  Collection<ExtendedGridLayoutConstraints> colspans,
+				  Collection<ExtendedGridLayoutConstraints> rowspans,
 				  int[][] resultArrays)
 	{
 		if (fillRawSizes && (resultArrays.length < 6))
@@ -1007,11 +1002,13 @@ public class ExtendedGridLayout implements LayoutManager2
 	  *                 of a rowspan get stored
 	  * @return The amount of rows and columns in the grid
 	  */
-	private Dimension buildGrid(Container parent, List<List<ExtendedGridLayoutConstraints>> gridRows,
-				    Set<ExtendedGridLayoutConstraints> colspans, Set<ExtendedGridLayoutConstraints> rowspans)
+	private Dimension buildGrid(Container parent,
+				    List<List<ExtendedGridLayoutConstraints>> gridRows,
+				    Collection<ExtendedGridLayoutConstraints> colspans,
+				    Collection<ExtendedGridLayoutConstraints> rowspans)
 	{
 		// put the parent's components in source rows
-		List<List<ExtendedGridLayoutConstraints>> rows = new ArrayList<List<ExtendedGridLayoutConstraints>>();
+		List<List<ExtendedGridLayoutConstraints>> rows = new ArrayList<>();
 		Component[] components = parent.getComponents();
 		for (Component component : components)
 		{
@@ -1021,7 +1018,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				int rowNumber = constraints.getRow();
 				for (int i=rowNumber, c=rows.size() ; i>=c ; i--)
 				{
-					rows.add(new ArrayList<ExtendedGridLayoutConstraints>());
+					rows.add(new ArrayList<>());
 				}
 				List<ExtendedGridLayoutConstraints> row = rows.get(rowNumber);
 				row.add(constraints);
@@ -1029,8 +1026,8 @@ public class ExtendedGridLayout implements LayoutManager2
 		}
 
 		// initialize the rowIterators, gridRowIterators and gridRows
-		List<Iterator<ExtendedGridLayoutConstraints>> rowIterators = new ArrayList<Iterator<ExtendedGridLayoutConstraints>>();
-		List<ListIterator<ExtendedGridLayoutConstraints>> gridRowIterators = new ArrayList<ListIterator<ExtendedGridLayoutConstraints>>();
+		List<Iterator<ExtendedGridLayoutConstraints>> rowIterators = new ArrayList<>();
+		List<ListIterator<ExtendedGridLayoutConstraints>> gridRowIterators = new ArrayList<>();
 		boolean haveNext = false;
 		for (List<ExtendedGridLayoutConstraints> row : rows)
 		{
@@ -1040,7 +1037,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			{
 				haveNext = true;
 			}
-			List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<ExtendedGridLayoutConstraints>();
+			List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<>();
 			gridRows.add(gridRow);
 			gridRowIterators.add(gridRow.listIterator());
 		}
@@ -1168,7 +1165,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				haveNext = false;
 				ListIterator<ExtendedGridLayoutConstraints> gridRowIterator =
 					gridRows.get(gridRows.size()-1).listIterator();
-				List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<ExtendedGridLayoutConstraints>();
+				List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<>();
 				gridRows.add(gridRow);
 				ListIterator<ExtendedGridLayoutConstraints> newGridRowIterator = gridRow.listIterator();
 				while (gridRowIterator.hasNext())
