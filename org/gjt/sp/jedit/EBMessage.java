@@ -94,6 +94,6 @@ public abstract class EBMessage
 	} //}}}
 
 	//{{{ Private members
-	private Object source;
+	private final Object source;
 	//}}}
 }
