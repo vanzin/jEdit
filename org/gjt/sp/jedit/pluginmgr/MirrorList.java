@@ -46,7 +46,7 @@ public class MirrorList
 	//{{{ MirrorList constructor
 	public MirrorList(boolean download, ProgressObserver observer) throws Exception
 	{
-		mirrors = new ArrayList<Mirror>();
+		mirrors = new ArrayList<>();
 
 		Mirror none = new Mirror();
 		none.id = Mirror.NONE;
@@ -187,7 +187,8 @@ public class MirrorList
 	//{{{ MirrorCompare class
 	private static class MirrorCompare implements Comparator<Mirror>
 	{
-		public int compare(Mirror m1,Mirror m2)
+		@Override
+		public int compare(Mirror m1, Mirror m2)
 		{
 			int result;
 			if ((result = m1.continent.compareToIgnoreCase(m2.continent)) == 0)
