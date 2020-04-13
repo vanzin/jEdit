@@ -39,10 +39,9 @@ import org.gjt.sp.jedit.options.PluginOptions;
 class MirrorListHandler extends DefaultHandler
 {
 	//{{{ Constructor
-	MirrorListHandler(MirrorList mirrors, String path)
+	MirrorListHandler(MirrorList mirrors)
 	{
 		this.mirrors = mirrors;
-		this.path = path;
 	} //}}}
 
 	//{{{ resolveEntity() method
@@ -138,13 +137,10 @@ class MirrorListHandler extends DefaultHandler
 	private MirrorList.Mirror mirror;
 
 	private final Stack<String> stateStack = new Stack<>();
-	// TODO: path is not used, it should be removed.
-	private final String path;
 	//}}}
 
 	private String pushElement(String name)
 	{
-		name = name == null ? null : name.intern();
 		stateStack.push(name);
 		return name;
 	}

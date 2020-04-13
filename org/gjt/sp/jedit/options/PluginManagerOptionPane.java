@@ -27,7 +27,6 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.io.*;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.pluginmgr.*;
@@ -307,9 +306,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 				final List<MirrorList.Mirror> mirrors = new ArrayList<>();
 				try
 				{
-					MirrorList mirrorList = new MirrorList(download, this);
+					MirrorList mirrorList;
 					if (download)
-						saveMirrorList(mirrorList.getXml());
+					{
+						mirrorList = MirrorList.mirrorListFromInternet(this);
+						mirrorList.saveXml();
+					}
+					else
+						mirrorList = MirrorList.mirrorListFromDisk(this);
 
 					mirrors.addAll(mirrorList.getMirrors());
 				}
@@ -354,32 +358,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 					updateMirrors.setEnabled(true);
 					updateStatus.setText(null);
 				});
-			}
-		} //}}}
-
-		//{{{ saveMirrorList() method
-		private void saveMirrorList(String xml)
-		{
-			String settingsDirectory = jEdit.getSettingsDirectory();
-			if(settingsDirectory == null)
-				return;
-
-			File mirrorList = new File(MiscUtilities.constructPath(
-				settingsDirectory,"mirrorList.xml"));
-			OutputStream out = null;
-
-			try
-			{
-				out = new BufferedOutputStream(new FileOutputStream(mirrorList));
-				IOUtilities.copyStream(null, new ByteArrayInputStream(xml.getBytes()), out, false);
-			}
-			catch (IOException e)
-			{
-				Log.log(Log.ERROR,this, "Unable to write cached mirror list : " + mirrorList);
-			}
-			finally
-			{
-				IOUtilities.closeQuietly((Closeable)out);
 			}
 		} //}}}
 	} //}}}

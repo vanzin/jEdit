@@ -25,10 +25,15 @@ package org.gjt.sp.jedit.pluginmgr;
 //{{{ Imports
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
+
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 
@@ -43,9 +48,27 @@ import org.gjt.sp.util.Log;
  */
 public class MirrorList
 {
-	//{{{ MirrorList constructor
-	public MirrorList(boolean download, ProgressObserver observer) throws Exception
+	//{{{ mirrorListFromDisk method
+	public static MirrorList mirrorListFromDisk(ProgressObserver progressObserver) throws IOException, SAXException, ParserConfigurationException
 	{
+		Log.log(Log.NOTICE, MirrorList.class, "Loading mirror list from cache");
+		String xml = readXml().orElseThrow(() -> new IOException("Unable to read local mirror cache"));
+		return new MirrorList(xml, progressObserver);
+	} //}}}
+
+	//{{{ mirrorListFromInternet method
+	public static MirrorList mirrorListFromInternet(ProgressObserver progressObserver) throws IOException, ParserConfigurationException, SAXException
+	{
+		Log.log(Log.NOTICE, MirrorList.class, "Loading mirror list from internet");
+		String path = jEdit.getProperty("plugin-manager.mirror-url");
+		String xml = downloadXml(path).orElseThrow(() -> new IOException("Unable to load remote mirror cache"));
+		return new MirrorList(xml, progressObserver);
+	} //}}}
+
+	//{{{ MirrorList constructor
+	public MirrorList(String xml, ProgressObserver observer) throws ParserConfigurationException, SAXException, IOException
+	{
+		this.xml = xml;
 		mirrors = new ArrayList<>();
 
 		Mirror none = new Mirror();
@@ -53,20 +76,9 @@ public class MirrorList
 		none.description = none.location = none.country = none.continent = "";
 		mirrors.add(none);
 
-		String path = jEdit.getProperty("plugin-manager.mirror-url");
-		MirrorListHandler handler = new MirrorListHandler(this,path);
-		if (download)
-		{
-			Log.log(Log.NOTICE, this, "Loading mirror list from internet");
-			downloadXml(path);
-		}
-		else
-		{
-			Log.log(Log.NOTICE, this, "Loading mirror list from cache");
-			readXml();
-		}
-		if (xml == null)
-			return;
+
+		MirrorListHandler handler = new MirrorListHandler(this);
+
 		observer.setValue(1L);
 		Reader in = new BufferedReader(new StringReader(xml));
 
@@ -96,40 +108,64 @@ public class MirrorList
 	//{{{ Private members
 
 	/** The xml mirror list. */
-	private String xml;
+	private final String xml;
 	private final List<Mirror> mirrors;
 
 
 	//{{{ readXml() method
 	/**
-	 * Read and store the mirror list xml.
-	 * @throws IOException exception if it was not possible to read the
-	 * xml or if the url was invalid
+	 * Read the mirror list xml.
+	 * @return
 	 */
-	private void readXml() throws IOException
+	private static Optional<String> readXml()
+	{
+		return getMirrorListFile()
+			.filter(file -> Files.exists(file))
+			.flatMap(MirrorList::readFile);
+	} //}}}
+
+	public void saveXml()
+	{
+		getMirrorListFile().ifPresent(this::saveFile);
+	}
+
+	private static Optional<String> readFile(Path path)
+	{
+		try
+		{
+			return Optional.of(Files.readString(path));
+		}
+		catch (IOException e)
+		{
+			Log.log(Log.ERROR, MirrorList.class, "Unable to read path " + path, e);
+		}
+		return Optional.empty();
+	}
+
+	private void saveFile(Path path)
+	{
+		try
+		{
+			Files.writeString(path, xml);
+		}
+		catch (IOException e)
+		{
+			Log.log(Log.ERROR, this, "Unable to write cached mirror list : " + xml, e);
+		}
+	}
+
+	/**
+	 * @return the local mirror list file
+	 */
+	private static Optional<Path> getMirrorListFile()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
-			return;
+			return Optional.empty();
 
-		File mirrorList = new File(MiscUtilities.constructPath(
-			settingsDirectory,"mirrorList.xml"));
-		if(!mirrorList.exists())
-			return;
-		InputStream inputStream = null;
-		try
-		{
-			inputStream = new BufferedInputStream(new FileInputStream(mirrorList));
-
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			IOUtilities.copyStream(null,inputStream,out, false);
-			xml = out.toString();
-		}
-		finally
-		{
-			IOUtilities.closeQuietly((Closeable)inputStream);
-		}
-	} //}}}
+		Path mirrorList = Path.of(MiscUtilities.constructPath(settingsDirectory,"mirrorList.xml"));
+		return Optional.of(mirrorList);
+	}
 
 	//{{{ downloadXml() method
 	/**
@@ -138,21 +174,15 @@ public class MirrorList
 	 * @param path the url
 	 * @throws IOException exception if it was not possible to read the
 	 * xml or if the url was invalid
+	 * @return
 	 */
-	private void downloadXml(String path) throws IOException
+	private static Optional<String> downloadXml(String path) throws IOException
 	{
-		InputStream inputStream = null;
-		try
+		try (InputStream inputStream = new URL(path).openStream())
 		{
-			inputStream = new URL(path).openStream();
-
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			IOUtilities.copyStream(null,inputStream,out, false);
-			xml = out.toString();
-		}
-		finally
-		{
-			IOUtilities.closeQuietly((Closeable)inputStream);
+			return Optional.of(out.toString());
 		}
 	} //}}}
 
@@ -165,7 +195,7 @@ public class MirrorList
 	//{{{ finished() method
 	void finished()
 	{
-		Collections.sort(mirrors,new MirrorCompare());
+		mirrors.sort(new MirrorCompare());
 	} //}}}
 
 	//}}}
