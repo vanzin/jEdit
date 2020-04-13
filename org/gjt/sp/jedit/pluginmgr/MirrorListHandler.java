@@ -119,6 +119,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endDocument() method
+	@Override
 	public void endDocument()
 	{
 		mirrors.finished();
