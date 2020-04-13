@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 import java.io.*;
@@ -53,7 +52,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-
 		mirrorLabel = new JLabel();
 		updateMirrorLabel();
 		JPanel buttonPanel = new JPanel();
@@ -67,7 +65,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 				jEdit.getSettingsDirectory(),"jars"));
 			int delay = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 10);
 			spinnerModel = new SpinnerNumberModel(delay, 0, 240, 5);
-			cacheForSpinner = new JSpinner(spinnerModel);
+			JSpinner cacheForSpinner = new JSpinner(spinnerModel);
 			spinnerPanel = new JPanel();
 			spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
 			spinnerPanel.add(new JLabel(jEdit.getProperty("options.plugin-manager.list-cache.minutes")));
@@ -93,7 +91,12 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		/* Update mirror list */
 		updateMirrors = new JButton(jEdit.getProperty(
 			"options.plugin-manager.updateMirrors"));
-		updateMirrors.addActionListener(new ActionHandler());
+		updateMirrors.addActionListener(e ->
+		{
+			updateMirrors.setEnabled(false);
+			updateStatus.setText(jEdit.getProperty("options.plugin-manager.workthread"));
+			ThreadUtilities.runInBackground(new UpdateMirrorsThread(true));
+		});
 		updateMirrors.setEnabled(false);
 		ThreadUtilities.runInBackground(new UpdateMirrorsThread(false));
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -159,6 +162,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("plugin-manager.installUser",
@@ -191,7 +195,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	private JRadioButton settingsDir;
 	private JCheckBox downloadSource;
 	private JCheckBox deleteDownloads;
-	private JSpinner cacheForSpinner;
 	private SpinnerNumberModel spinnerModel;
 
 	private MirrorModel miraModel;
@@ -229,7 +232,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		MirrorModel()
 		{
-			mirrors = new ArrayList<MirrorList.Mirror>();
+			mirrors = new ArrayList<>();
 		}
 
 		public String getID(int index)
@@ -237,11 +240,13 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			return mirrors.get(index).id;
 		}
 
+		@Override
 		public int getSize()
 		{
 			return mirrors.size();
 		}
 
+		@Override
 		public String getElementAt(int index)
 		{
 			MirrorList.Mirror mirror = mirrors.get(index);
@@ -268,17 +273,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		@Override
 		public void removeSelectionInterval(int index0, int index1) {}
-	} //}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			updateMirrors.setEnabled(false);
-			updateStatus.setText(jEdit.getProperty("options.plugin-manager.workthread"));
-			ThreadUtilities.runInBackground(new UpdateMirrorsThread(true));
-		}
 	} //}}}
 
 	//{{{ UpdateMirrorsThread class
@@ -310,7 +304,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 				setMaximum(3L);
 				setValue(0L);
 
-				final List<MirrorList.Mirror> mirrors = new ArrayList<MirrorList.Mirror>();
+				final List<MirrorList.Mirror> mirrors = new ArrayList<>();
 				try
 				{
 					MirrorList mirrorList = new MirrorList(download, this);
@@ -324,38 +318,30 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 					if (download)
 					{
 						Log.log(Log.ERROR,this,ex);
-						ThreadUtilities.runInDispatchThread(new Runnable()
-						{
-							public void run()
-							{
-								GUIUtilities.error(PluginManagerOptionPane.this,
-								"ioerror",new String[] { ex.toString() });
-							}
-						});
+						ThreadUtilities.runInDispatchThread(() ->
+							GUIUtilities.error(PluginManagerOptionPane.this, "ioerror",new String[] { ex.toString() })
+						);
 
 					}
 				}
 
-				ThreadUtilities.runInDispatchThread(new Runnable()
+				ThreadUtilities.runInDispatchThread(() ->
 				{
-					public void run()
-					{
-						miraModel.setList(mirrors);
+					miraModel.setList(mirrors);
 
-						String id = jEdit.getProperty("plugin-manager.mirror.id");
-						int size = miraModel.getSize();
-						for (int i=0; i < size; i++)
+					String id = jEdit.getProperty("plugin-manager.mirror.id");
+					int size = miraModel.getSize();
+					for (int i=0; i < size; i++)
+					{
+						if (size == 1 || miraModel.getID(i).equals(id))
 						{
-							if (size == 1 || miraModel.getID(i).equals(id))
-							{
-								miraList.setSelectedIndex(i);
-								break;
-							}
+							miraList.setSelectedIndex(i);
+							break;
 						}
-						if (size == 0)
-						{
-							miraList.clearSelection();
-						}
+					}
+					if (size == 0)
+					{
+						miraList.clearSelection();
 					}
 				});
 
@@ -363,13 +349,10 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			}
 			finally
 			{
-				ThreadUtilities.runInDispatchThread(new Runnable()
+				ThreadUtilities.runInDispatchThread(() ->
 				{
-					public void run()
-					{
-						updateMirrors.setEnabled(true);
-						updateStatus.setText(null);
-					}
+					updateMirrors.setEnabled(true);
+					updateStatus.setText(null);
 				});
 			}
 		} //}}}
