@@ -46,6 +46,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "mirrors.dtd",
@@ -53,6 +54,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ characters() method
+	@Override
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -68,6 +70,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startElement() method
+	@Override
 	public void startElement(String uri, String localName,
 				 String tag, Attributes attrs)
 	{
@@ -81,6 +84,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endElement() method
+	@Override
 	public void endElement(String uri, String localName, String tag)
 	{
 		popElement();
@@ -101,6 +105,7 @@ class MirrorListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startDocument() method
+	@Override
 	public void startDocument()
 	{
 		try
@@ -131,7 +136,7 @@ class MirrorListHandler extends DefaultHandler
 	private final MirrorList mirrors;
 	private MirrorList.Mirror mirror;
 
-	private final Stack<String> stateStack = new Stack<String>();
+	private final Stack<String> stateStack = new Stack<>();
 	// TODO: path is not used, it should be removed.
 	private final String path;
 	//}}}
