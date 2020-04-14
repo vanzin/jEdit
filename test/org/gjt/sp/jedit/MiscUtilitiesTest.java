@@ -90,7 +90,8 @@ public class MiscUtilitiesTest
 	@Test
 	public void canonPathHomeMinus()
 	{
-		jEdit.getViewManager().setActiveView(view);
+		jEdit.setActiveView(view);
+//		jEdit.getViewManager().setActiveView(view);
 		when(view.getBuffer()).thenReturn(buffer);
 		when(buffer.getPath()).thenReturn("/home/jedit-dev/blabla/myfile.txt");
 		assertEquals("/home/jedit-dev/blabla/", MiscUtilities.canonPath("-"));
