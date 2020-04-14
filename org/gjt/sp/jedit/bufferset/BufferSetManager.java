@@ -39,6 +39,7 @@ import java.util.*;
  *
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
+ * @version $Id: jEdit.java 25120 2020-04-03 14:58:39Z kpouer $
  */
 public class BufferSetManager
 {
@@ -112,17 +113,14 @@ public class BufferSetManager
 			// The new scope is wider
 			if (scope == BufferSet.Scope.global)
 			{
-				final Buffer[] buffers = jEdit.getBuffers();
+				final List<Buffer> buffers = jEdit.getBufferManager().getBuffers();
 				jEdit.visit(new JEditVisitorAdapter()
 				{
 					@Override
 					public void visit(EditPane editPane)
 					{
 						BufferSet bufferSet = editPane.getBufferSet();
-						for (Buffer buffer : buffers)
-						{
-							bufferSet.addBuffer(buffer);
-						}
+						buffers.forEach(bufferSet::addBuffer);
 					}
 				});
 			}
@@ -394,7 +392,7 @@ public class BufferSetManager
 	 */
 	private static EditPane getOwner(BufferSet bufferSet)
 	{
-		View[] views = jEdit.getViews();
+		List<View> views = jEdit.getViewManager().getViews();
 		for (View view : views)
 		{
 			EditPane[] editPanes = view.getEditPanes();

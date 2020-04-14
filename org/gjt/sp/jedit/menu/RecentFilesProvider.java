@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.menu;
 //{{{ Imports
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
@@ -124,10 +125,11 @@ public class RecentFilesProvider implements DynamicMenuProvider
 		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
 		Iterator<BufferHistory.Entry> iter = recentVector.iterator();
+		BufferManager bufferManager = jEdit.getBufferManager();
 		while(iter.hasNext())
 		{
 			String path = iter.next().path;
-			if (jEdit.getBooleanProperty("hideOpen") && jEdit.getBuffer(path) != null)
+			if (jEdit.getBooleanProperty("hideOpen") && bufferManager.getBuffer(path).isPresent())
 				continue;
 			JMenuItem menuItem = new JMenuItem(MiscUtilities
 				.getFileName(path));

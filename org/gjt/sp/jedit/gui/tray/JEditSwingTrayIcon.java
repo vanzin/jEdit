@@ -38,7 +38,6 @@ import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditServer;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.util.StringList;
@@ -78,15 +77,16 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 
 	
 	@Override
-	/** Update tooltip to reflect the window titles currently available. */
+	/**
+	 * Update tooltip to reflect the window titles currently available.
+	 */
 	public void handleMessage(EBMessage message)
 	{
 		if (message instanceof EditPaneUpdate && 
 			(((EditPaneUpdate)message).getWhat() == EditPaneUpdate.BUFFER_CHANGED)) {
 			StringList sl = new StringList();
-			for (View v: jEdit.getViews()) 
-				sl.add(v.getTitle());					
-			setToolTip(sl.join(" | "));		
+			jEdit.getViewManager().forEach(view -> sl.add(view.getTitle()));
+			setToolTip(sl.join(" | "));
 		}
 	}
 	

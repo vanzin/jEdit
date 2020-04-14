@@ -66,6 +66,7 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.CharsetEncoding;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
@@ -1046,17 +1047,12 @@ public class PluginJAR
 			// buffers retain a reference to the fold handler in
 			// question... and the easiest way to handle fold
 			// handler unloading is this...
-			Buffer buffer = jEdit.getFirstBuffer();
-			while(buffer != null)
-			{
-				if(buffer.getFoldHandler().getClass()
-					.getClassLoader() == classLoader)
-				{
-					buffer.setFoldHandler(
-						new DummyFoldHandler());
-				}
-				buffer = buffer.getNext();
-			}
+			BufferManager bufferManager = jEdit.getBufferManager();
+			bufferManager
+				.getBuffers()
+				.stream()
+				.filter(buffer -> buffer.getFoldHandler().getClass().getClassLoader() == classLoader)
+				.forEach(buffer -> buffer.setFoldHandler(new DummyFoldHandler()));
 		}
 
 		if(plugin != null && !(plugin instanceof EditPlugin.Broken))
@@ -1767,19 +1763,15 @@ public class PluginJAR
 		// buffers retain a reference to the fold handler in
 		// question... and the easiest way to handle fold
 		// handler loading is this...
-		Buffer buffer = jEdit.getFirstBuffer();
-		while(buffer != null)
-		{
-			FoldHandler handler =
-				FoldHandler.getFoldHandler(
-				buffer.getStringProperty("folding"));
-			// == null before loaded
-			if(handler != null && handler != buffer.getFoldHandler())
+		BufferManager bufferManager = jEdit.getBufferManager();
+		bufferManager.getBuffers()
+			.forEach(buffer ->
 			{
-				buffer.setFoldHandler(handler);
-			}
-			buffer = buffer.getNext();
-		}
+				FoldHandler handler = FoldHandler.getFoldHandler(buffer.getStringProperty("folding"));
+				// == null before loaded
+				if(handler != null && handler != buffer.getFoldHandler())
+					buffer.setFoldHandler(handler);
+			});
 	} //}}}
 
 	//{{{ startPluginLater() method

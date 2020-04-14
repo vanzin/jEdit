@@ -28,10 +28,7 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.text.Segment;
@@ -329,9 +326,10 @@ public class Buffer extends JEditBuffer
 
 		path = MiscUtilities.constructPath(this.path,path);
 
-		Buffer buffer = jEdit.getBuffer(path);
-		if(buffer != null)
+		Optional<Buffer> bufferOptional = jEdit.getBufferManager().getBuffer(path);
+		if(bufferOptional.isPresent())
 		{
+			Buffer buffer = bufferOptional.get();
 			view.getTextArea().setSelectedText(
 				buffer.getText(0,buffer.getLength()));
 			return true;
@@ -915,6 +913,17 @@ public class Buffer extends JEditBuffer
 	public boolean isUntitled()
 	{
 		return getFlag(UNTITLED);
+	} //}}}
+
+
+	//{{{ isTitled() method
+	/**
+	 * @return true if this file is not'untitled'. This method is thread-safe.
+	 * @since jEdit 5.6pre1
+	 */
+	public boolean isTitled()
+	{
+		return !isUntitled();
 	} //}}}
 
 	//{{{ setUntitled() method
@@ -1668,6 +1677,18 @@ public class Buffer extends JEditBuffer
 		return prev;
 	} //}}}
 
+	//{{{ setPrev() method
+	public void setPrev(Buffer prev)
+	{
+		this.prev = prev;
+	} //}}}
+
+	//{{{ setNext() method
+	public void setNext(Buffer next)
+	{
+		this.next = next;
+	} //}}}
+
 	//{{{ getIndex() method
 	/**
 	 * @return the position of this buffer in the buffer list.
@@ -1762,7 +1783,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ close() method
-	void close()
+	public void close()
 	{
 		close(false);
 	}
@@ -2222,8 +2243,7 @@ public class Buffer extends JEditBuffer
 		// But I don't think anyone calls it like that anyway.
 		if(!error && !path.equals(oldPath))
 		{
-			Buffer buffer = jEdit.getBuffer(path);
-
+			Optional<Buffer> optionalBuffer = jEdit.getBufferManager().getBuffer(path);
 			if(rename)
 			{
 				/* if we save a file with the same name as one
@@ -2231,12 +2251,13 @@ public class Buffer extends JEditBuffer
 				 * close the existing file, since the user
 				 * would have confirmed the overwrite in the
 				 * 'save as' dialog box anyway */
-				if(buffer != null && /* can't happen? */
-					!buffer.getPath().equals(oldPath))
-				{
-					buffer.setDirty(false);
-					jEdit.closeBuffer(view,buffer);
-				}
+				optionalBuffer
+					.filter(buffer -> !buffer.getPath().equals(oldPath))
+					.ifPresent(buffer ->
+					{
+						buffer.setDirty(false);
+						jEdit.closeBuffer(view,buffer);
+					});
 
 				setPath(path);
 				jEdit.visit(new JEditVisitorAdapter()
@@ -2257,11 +2278,9 @@ public class Buffer extends JEditBuffer
 				/* if we saved over an already open file using
 				 * 'save a copy as', then reload the existing
 				 * buffer */
-				if(buffer != null && /* can't happen? */
-					!buffer.getPath().equals(oldPath))
-				{
-					buffer.load(view,true);
-				}
+				optionalBuffer
+					.filter(buffer -> !buffer.getPath().equals(oldPath))
+					.ifPresent(buffer -> buffer.load(view, true));
 			}
 		} //}}}
 

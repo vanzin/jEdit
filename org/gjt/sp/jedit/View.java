@@ -34,17 +34,8 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
-import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -77,6 +68,8 @@ import org.gjt.sp.jedit.gui.ToolBarManager;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
 import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
+import org.gjt.sp.jedit.manager.BufferManager;
+import org.gjt.sp.jedit.manager.ViewManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
@@ -1167,6 +1160,32 @@ public class View extends JFrame implements InputHandlerProvider
 		return prev;
 	} //}}}
 
+	//{{{ setPrev() method
+
+	/**
+	 * Set the previous view in linked list.
+	 * To be used by {@link BufferManager} only
+	 * @since jEdit 5.6pre1
+	 * @param prev
+	 */
+	public void setPrev(View prev)
+	{
+		this.prev = prev;
+	} //}}}
+
+	//{{{ setNext() method
+
+	/**
+	 * Set the next view in linked list.
+	 * To be used by {@link BufferManager} only
+	 * @since jEdit 5.6pre1
+	 * @param next
+	 */
+	public void setNext(View next)
+	{
+		this.next = next;
+	} //}}}
+
 	//{{{ handlePropertiesChanged()
 	@EBHandler
 	public void handlePropertiesChanged(PropertiesChanged msg)
@@ -1462,14 +1481,13 @@ public class View extends JFrame implements InputHandlerProvider
 		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 		boolean suppressNotSavedConfirmUntitled = jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled") || autosaveUntitled;
 		Set<Buffer> checkingBuffers = getOpenBuffers();
-		for (View view: jEdit.getViews())
-		{
-			if (view != this)
-			{
-				checkingBuffers.removeAll(
-					view.getOpenBuffers());
-			}
-		}
+		ViewManager viewManager = jEdit.getViewManager();
+		viewManager
+			.getViews()
+			.stream()
+			.filter(view -> view != this)
+			.forEach(view -> checkingBuffers.removeAll(view.getOpenBuffers()));
+
 		for (Buffer buffer: checkingBuffers)
 		{
 			if (buffer.isDirty() && !(buffer.isUntitled() && suppressNotSavedConfirmUntitled))
@@ -1700,6 +1718,7 @@ public class View extends JFrame implements InputHandlerProvider
 	// this is where checked exceptions piss me off. this method only uses
 	// a StringReader which can never throw an exception...
 	{
+		BufferManager bufferManager = jEdit.getBufferManager();
 		if(buffer != null)
 		{
 			return editPane = createEditPane(buffer);
@@ -1707,14 +1726,14 @@ public class View extends JFrame implements InputHandlerProvider
 		else if(splitConfig == null || splitConfig.trim().length() == 0)
 		{
 
-			Buffer buf = jEdit.getFirstBuffer();
+			Buffer buf = bufferManager.getFirst();
 			if (buf == null)
 			{
 				buf = BufferSetManager.createUntitledBuffer();
 			}
 			return editPane = createEditPane(buf);
 		}
-		Buffer[] buffers = jEdit.getBuffers();
+		List<Buffer> buffers = bufferManager.getBuffers();
 
 		Stack<Object> stack = new Stack<>();
 
@@ -1772,36 +1791,39 @@ loop:		while (true)
 					if(obj instanceof Integer)
 					{
 						int index = (Integer) obj;
-						if(index >= 0 && index < buffers.length)
-							buffer = buffers[index];
+						if(index >= 0 && index < buffers.size())
+							buffer = buffers.get(index);
 					}
 					else if(obj instanceof String)
 					{
 						String path = (String)obj;
-						buffer = jEdit.getBuffer(path);
-						if (buffer == null)
+						Optional<Buffer> bufferOptional = bufferManager.getBuffer(path);
+						buffer = bufferOptional.orElseGet(() ->
 						{
-							buffer = jEdit.openTemporary(jEdit.getActiveView(), null,
-												path, true, null, true);
-							jEdit.commitTemporary(buffer);
-						}
+							Buffer buf = jEdit.openTemporary(jEdit.getActiveView(), null,
+								path, true, null, true);
+							jEdit.commitTemporary(buf);
+							return buf;
+						});
 					}
 
 					if(buffer == null)
-						buffer = jEdit.getFirstBuffer();
+						buffer = bufferManager.getFirst();
 					stack.push(buffer);
 					editPaneBuffers.add(buffer);
 				}
 				else if ("buff".equals(st.sval))
 				{
 					String path = (String)stack.pop();
-					buffer = jEdit.getBuffer(path);
-					if (buffer == null)
+
+					Optional<Buffer> bufferOptional = bufferManager.getBuffer(path);
+					if (bufferOptional.isEmpty())
 					{
 						Log.log(Log.WARNING, this, "Buffer " + path + " doesn't exist");
 					}
 					else
 					{
+						buffer = bufferOptional.get();
 						editPaneBuffers.add(buffer);
 					}
 				}
@@ -1953,9 +1975,12 @@ loop:		while (true)
 			}
 		}
 		// Toggle the visibility of the BufferSwitcher itself
-		for (View v: jEdit.getViews())
-			for (EditPane ep: v.getEditPanes())
-				ep.loadBufferSwitcher();
+		// todo : flatmap
+		jEdit.getViewManager()
+			.forEach(view -> {
+				for (EditPane ep: view.getEditPanes())
+					ep.loadBufferSwitcher();
+			});
 	} //}}}
 
 

@@ -25,11 +25,12 @@ package org.gjt.sp.jedit;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
@@ -126,15 +127,12 @@ public class PerspectiveManager
 		if(jEdit.getBufferCount() == 0)
 			return;
 
-		Buffer[] buffers = jEdit.getBuffers();
-		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
-		for (Buffer buffer: buffers)
-		{
-			if (!buffer.isNewFile() || buffer.isUntitled())
-			{
-				savedBuffers.add(buffer);
-			}
-		}
+		BufferManager bufferManager = jEdit.getBufferManager();
+		Collection<Buffer> savedBuffers = bufferManager
+			.getBuffers()
+			.stream()
+			.filter(buffer -> !buffer.isNewFile() || buffer.isUntitled())
+			.collect(Collectors.toList());
 
 		if(!autosave)
 			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspectiveXML);
@@ -170,7 +168,7 @@ public class PerspectiveManager
 				out.write(lineSep);
 			}
 
-			View[] views = jEdit.getViews();
+			View[] views = jEdit.getViewManager().getViews().toArray(new View[0]);
 			for(int i = 0; i < views.length; i++)
 			{
 				View view = views[i];

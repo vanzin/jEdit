@@ -711,7 +711,7 @@ public class Macros
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
 
-		if(jEdit.getBuffer(path) == null)
+		if(jEdit.getBufferManager().getBuffer(path).isEmpty())
 		{
 			GUIUtilities.error(view,"no-temp-macro",null);
 			return;

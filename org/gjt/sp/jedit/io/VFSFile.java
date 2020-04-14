@@ -31,6 +31,7 @@ import java.io.Closeable;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.jedit.manager.BufferManagerImpl;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
@@ -158,7 +159,9 @@ public class VFSFile implements Serializable
 	 */
 	public final Icon getIcon(boolean expanded)
 	{
-		return getIcon(expanded, jEdit._getBuffer(getSymlinkPath()) != null);
+		// I don't know if we should expose _getBuffer in BufferManager interface
+		BufferManagerImpl bufferManager = (BufferManagerImpl) jEdit.getBufferManager();
+		return getIcon(expanded, bufferManager._getBuffer(getSymlinkPath()).isPresent());
 	} //}}}
 
 	//{{{ getIcon() method
@@ -200,7 +203,9 @@ public class VFSFile implements Serializable
 	 */
 	public final Icon getDefaultIcon(boolean expanded)
 	{
-		return getDefaultIcon(expanded, jEdit._getBuffer(getSymlinkPath()) != null);
+		// I don't know if we should expose _getBuffer in BufferManager interface
+		BufferManagerImpl bufferManager = (BufferManagerImpl) jEdit.getBufferManager();
+		return getDefaultIcon(expanded, bufferManager._getBuffer(getSymlinkPath()).isPresent());
 	} //}}}
 
 	//{{{ File types

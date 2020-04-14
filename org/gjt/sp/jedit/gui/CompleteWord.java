@@ -218,7 +218,7 @@ public class CompleteWord extends CompletionPopup
 
 		final Collection<Buffer> sourceBuffers =
 			jEdit.getBooleanProperty("completeFromAllBuffers") ?
-				Arrays.asList(jEdit.getBuffers()) :
+				jEdit.getBufferManager().getBuffers() :
 				getVisibleBuffers();
 
 		for (Buffer b : sourceBuffers)

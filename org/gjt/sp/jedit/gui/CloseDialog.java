@@ -24,13 +24,14 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.util.Collection;
-import java.util.Arrays;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
+
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.TaskManager;
@@ -44,7 +45,7 @@ public class CloseDialog extends EnhancedDialog
 	//{{{ CloseDialog constructor
 	public CloseDialog(View view)
 	{
-		this(view, Arrays.asList(jEdit.getBuffers()));
+		this(view, jEdit.getBufferManager().getBuffers());
 	}
 
 	public CloseDialog(View view, Collection<Buffer> buffers)
@@ -155,11 +156,15 @@ public class CloseDialog extends EnhancedDialog
 	{
 		java.util.List<String> paths = bufferList.getSelectedValuesList();
 
+		BufferManager bufferManager = jEdit.getBufferManager();
 		for (String path : paths)
 		{
-			Buffer buffer = jEdit.getBuffer(path);
-			jEdit._closeBuffer(view, buffer);
-			bufferModel.removeElement(path);
+			bufferManager.getBuffer(path)
+				.ifPresent(buffer ->
+				{
+					jEdit._closeBuffer(view, buffer);
+					bufferModel.removeElement(path);
+				});
 		}
 
 		if(bufferModel.getSize() == 0)
@@ -178,14 +183,18 @@ public class CloseDialog extends EnhancedDialog
 	{
 		java.util.List<String> paths = bufferList.getSelectedValuesList();
 
+		BufferManager bufferManager = jEdit.getBufferManager();
 		for (String path : paths)
 		{
-			Buffer buffer = jEdit.getBuffer(path);
-			if (!buffer.save(view, null, true, true)) return;
-			TaskManager.instance.waitForIoTasks();
-			if (buffer.getBooleanProperty(BufferIORequest.ERROR_OCCURRED)) return;
-			jEdit._closeBuffer(view, buffer);
-			bufferModel.removeElement(path);
+			bufferManager.getBuffer(path)
+				.filter(buffer -> buffer.save(view, null, true, true))
+				.ifPresent(buffer ->
+				{
+					TaskManager.instance.waitForIoTasks();
+					if (buffer.getBooleanProperty(BufferIORequest.ERROR_OCCURRED)) return;
+					jEdit._closeBuffer(view, buffer);
+					bufferModel.removeElement(path);
+				});
 		}
 
 		if(bufferModel.getSize() == 0)
@@ -230,21 +239,20 @@ public class CloseDialog extends EnhancedDialog
 			int index = bufferList.getSelectedIndex();
 			if(index != -1)
 			{
-				String path = (String) bufferModel.getElementAt(index);
-				Buffer buffer = jEdit.getBuffer(path);
-				if (buffer == null)
-				{
-					// it seems this buffer was already closed
-					Log.log(Log.DEBUG, this, "Buffer " + path + " is already closed");
-					bufferModel.removeElementAt(index);
-				}
-				else
-				{
-					view.showBuffer(buffer);
-				}
+				String path = bufferModel.getElementAt(index);
+				jEdit.getBufferManager()
+					.getBuffer(path)
+					.ifPresentOrElse(view::showBuffer, () -> removeIndex(index, path));
 			}
 
 			updateButtons();
+		}
+
+		private void removeIndex(int index, String path)
+		{
+			// it seems this buffer was already closed
+			Log.log(Log.DEBUG, this, "Buffer " + path + " is already closed");
+			bufferModel.removeElementAt(index);
 		}
 	} //}}}
 }

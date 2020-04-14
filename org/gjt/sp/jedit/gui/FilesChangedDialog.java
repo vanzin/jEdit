@@ -27,7 +27,9 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.*;
+
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
@@ -71,10 +73,10 @@ public class FilesChangedDialog extends EnhancedDialog
 		DefaultMutableTreeNode changedDirty = new DefaultMutableTreeNode(
 			jEdit.getProperty("files-changed.changed-dirty"
 			+ (alreadyReloaded ? "-auto" : "")),true);
-		Buffer[] buffers = jEdit.getBuffers();
+		java.util.List<Buffer> buffers = jEdit.getBufferManager().getBuffers();
 		for(int i = 0; i < states.length; i++)
 		{
-			Buffer buffer = buffers[i];
+			Buffer buffer = buffers.get(i);
 			DefaultMutableTreeNode addTo;
 			switch(states[i])
 			{
@@ -278,6 +280,7 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		int row = bufferTree.getRowForPath(paths[0]);
 
+		BufferManager bufferManager = jEdit.getBufferManager();
 		for (TreePath path : paths)
 		{
 			// is it a header?
@@ -288,20 +291,20 @@ public class FilesChangedDialog extends EnhancedDialog
 			if (!(node.getUserObject() instanceof String))
 				return;
 
-			Buffer buffer = jEdit.getBuffer((String) node.getUserObject());
-			if (buffer == null)
-				return;
+			bufferManager.getBuffer((String) node.getUserObject())
+				.ifPresent(buffer ->
+				{
+					if ("RELOAD".equals(action))
+						buffer.reload(view);
+					else
+					{
+						buffer.setAutoReload(false);
+						buffer.setAutoReloadDialog(false);
+					}
 
-			if ("RELOAD".equals(action))
-				buffer.reload(view);
-			else
-			{
-				buffer.setAutoReload(false);
-				buffer.setAutoReloadDialog(false);
-			}
-
-			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
-			parent.remove(node);
+					MutableTreeNode parent = (MutableTreeNode) node.getParent();
+					parent.remove(node);
+				});
 		}
 
 		bufferTreeModel.reload(root);
@@ -369,10 +372,9 @@ public class FilesChangedDialog extends EnhancedDialog
 				path.getLastPathComponent();
 			if(node.getUserObject() instanceof String)
 			{
-				Buffer buffer = jEdit.getBuffer(
-					(String)node.getUserObject());
-				if(buffer != null)
-					view.showBuffer(buffer);
+				jEdit.getBufferManager()
+					.getBuffer((String)node.getUserObject())
+					.ifPresent(buffer -> view.showBuffer(buffer));
 			}
 		}
 	} //}}}

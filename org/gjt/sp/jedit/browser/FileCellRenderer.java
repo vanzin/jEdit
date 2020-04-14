@@ -34,6 +34,7 @@ import javax.swing.table.*;
 import org.gjt.sp.jedit.io.FavoritesVFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.manager.BufferManagerImpl;
 //}}}
 
 /**
@@ -89,7 +90,10 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 					path = file.getPath();
 				else
 					path = file.getSymlinkPath();
-				openBuffer = jEdit._getBuffer(path) != null;
+
+				// I don't know if we should expose _getBuffer in BufferManager interface
+				BufferManagerImpl bufferManager = (BufferManagerImpl) jEdit.getBufferManager();
+				openBuffer = bufferManager._getBuffer(path).isPresent();
 
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded,
@@ -177,8 +181,10 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	public static Icon getIconForFile(VFSFile file,
 		boolean expanded)
 	{
+		// I don't know if we should expose _getBuffer in BufferManager interface
+		BufferManagerImpl bufferManager = (BufferManagerImpl) jEdit.getBufferManager();
 		return getIconForFile(file,expanded,
-			jEdit._getBuffer(file.getSymlinkPath()) != null);
+			bufferManager._getBuffer(file.getSymlinkPath()).isPresent());
 	} //}}}
 
 	//{{{ getIconForFile() method

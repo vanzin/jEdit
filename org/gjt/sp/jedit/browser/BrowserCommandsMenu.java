@@ -32,6 +32,7 @@ import javax.swing.*;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
@@ -53,11 +54,12 @@ public class BrowserCommandsMenu extends JPopupMenu
 				files[0].getDeletePath());
 			int type = files[0].getType();
 
-			boolean fileOpen = (jEdit.getBuffer(files[0].getPath()) != null);
+			BufferManager bufferManager = jEdit.getBufferManager();
+			boolean fileOpen = bufferManager.getBuffer(files[0].getPath()).isPresent();
 
 			/* We check this flag separately so that we can
 			delete open files from the favorites. */
-			boolean deletePathOpen = (jEdit.getBuffer(files[0].getDeletePath()) != null);
+			boolean deletePathOpen = bufferManager.getBuffer(files[0].getDeletePath()).isPresent();
 
 			boolean delete = !deletePathOpen
 				&& (vfs.getCapabilities()
@@ -88,7 +90,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 				// show 'close' item if at least one selected
 				// file is currently open
-				if(jEdit.getBuffer(file.getPath()) != null)
+				if(bufferManager.getBuffer(file.getPath()).isPresent())
 					fileOpen = true;
 			}
 

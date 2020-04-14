@@ -44,6 +44,7 @@ import java.util.concurrent.CountDownLatch;
 import org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.manager.BufferManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
@@ -1213,7 +1214,7 @@ check_selected:
 					continue check_selected;
 				}
 
-				Buffer _buffer = jEdit.getBuffer(file.getPath());
+				Buffer _buffer = jEdit.getBufferManager().getBuffer(file.getPath()).orElse(null);
 				if (_buffer == null)
 				{
 					Hashtable<String, Object> props = new Hashtable<String, Object>();
@@ -1411,12 +1412,12 @@ check_selected:
 		{
 			if (view != null)
 			{
-				for (VFSFile file : selectedFiles)
-				{
-					Buffer buffer = jEdit.getBuffer(file.getPath());
-					if (buffer != null)
-						view.setBuffer(buffer);
-				}
+				BufferManager bufferManager = jEdit.getBufferManager();
+				Arrays.stream(selectedFiles)
+					.map(VFSFile::getPath)
+					.map(bufferManager::getBuffer)
+					.flatMap(Optional::stream)
+					.forEach(view::setBuffer);
 			}
 		}
 

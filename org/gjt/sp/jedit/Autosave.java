@@ -91,12 +91,11 @@ class Autosave implements ActionListener
 			PerspectiveManager.savePerspective(true);
 		}
 		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
-		Buffer[] bufferArray = jEdit.getBuffers();
-		for (Buffer buffer : bufferArray)
-		{
-			if (autosaveUntitled || !buffer.isUntitled())
-				buffer.autosave();
-		}
+		jEdit.getBufferManager()
+			.getBuffers()
+			.stream()
+			.filter(buffer -> autosaveUntitled || !buffer.isUntitled())
+			.forEach(Buffer::autosave);
 
 		// flush log
 		Log.flushStream();

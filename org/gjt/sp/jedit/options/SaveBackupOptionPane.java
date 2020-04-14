@@ -28,6 +28,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.manager.BufferManager;
 //}}}
 
 /**
@@ -201,31 +202,17 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 
 		jEdit.setBooleanProperty("useMD5forDirtyCalculation",
 				useMD5forDirtyCalculation.isSelected());
+		BufferManager bufferManager = jEdit.getBufferManager();
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
 		{
-			Buffer[] buffers = jEdit.getBuffers();
-			for (Buffer buffer : buffers)
-			{
-				if (buffer.isUntitled())
-				{
-					buffer.removeAutosaveFile();
-				}
-			}
+			bufferManager.getUntitledBuffers().forEach(Buffer::removeAutosaveFile);
 		}
 
 		// if autosave dir changed, we should issue to perform an autosave for all dirty and all untitled buffers
 		// to have the autosaves at the new location
 		if (!autosaveDirectoryOriginal.equals(autosaveDirectory.getText()))
 		{
-			Buffer[] buffers = jEdit.getBuffers();
-			for (Buffer buffer : buffers)
-			{
-				// save dirty
-				if ( buffer.isDirty() )
-				{
-					buffer.autosave(true);
-				}
-			}
+			bufferManager.getDirtyBuffers().forEach(buffer -> buffer.autosave(true));
 		}
 	} //}}}
 

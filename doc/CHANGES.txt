@@ -48,6 +48,12 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- New BufferManager, all you need to get loaded buffers from jEdit
+  get it by calling jEdit.getBufferManager() (Matthieu Casanova)
+
+- New ViewManager, all you need to get loaded existing views
+  get it by calling jEdit.getViewManager() (Matthieu Casanova)
+
 - Added new method JEditBuffer.hasProperty() (Matthieu Casanova)
 
 - Apply UI language changes immediately without the need to restart.
