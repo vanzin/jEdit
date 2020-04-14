@@ -53,6 +53,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.xml.sax.SAXParseException;
@@ -3019,6 +3020,10 @@ public class jEdit
 	//{{{ visit() method
 	/**
 	 * Visit the views, editpanes and textareas
+	 *
+	 * @see org.gjt.sp.jedit.manager.ViewManager#forEach(Consumer)
+	 * @see org.gjt.sp.jedit.manager.BufferManager#forEach(Consumer)
+	 *
 	 * @param visitor the visitor
 	 * @since jEdit 4.3pre13
 	 */
