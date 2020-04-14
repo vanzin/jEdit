@@ -3387,7 +3387,7 @@ public class jEdit
 	private static String settingsDirectory;
 	private static String jarCacheDirectory;
 	private static long propsModTime;
-	private static PropertyManager propMgr;
+	private static PropertyManager propMgr = new PropertyManager();
 	private static EditServer server;
 	private static boolean background;
 	private static ActionContext actionContext;
@@ -3732,8 +3732,6 @@ public class jEdit
 	 */
 	private static void initSystemProperties()
 	{
-		propMgr = new PropertyManager();
-
 		try
 		{
 			propMgr.loadSystemProps(getResourceAsUTF8Text(
