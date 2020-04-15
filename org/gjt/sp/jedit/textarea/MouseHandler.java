@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.event.*;
 
 import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.msg.PositionChanging;
 
 import static java.awt.event.MouseEvent.BUTTON1;
@@ -35,8 +34,8 @@ import static java.awt.event.MouseEvent.BUTTON2;
 import static java.awt.event.MouseEvent.BUTTON3;
 //}}}
 
-/** The mouseHandler used for jEdit.
- *
+/**
+ * The mouseHandler used for jEdit.
  */
 public class MouseHandler extends TextAreaMouseHandler
 {
@@ -44,7 +43,6 @@ public class MouseHandler extends TextAreaMouseHandler
 	public MouseHandler(JEditTextArea textArea)
 	{
 		super(textArea);
-		this.textArea = textArea;
 	} //}}}
 
 	//{{{ mousePressed() method
@@ -65,8 +63,4 @@ public class MouseHandler extends TextAreaMouseHandler
 		EditBus.send(new PositionChanging(textArea));
 		super.mousePressed(evt);
 	} //}}}
-
-	//{{{ Private members
-	private JEditTextArea textArea;
-	//}}}
 }
