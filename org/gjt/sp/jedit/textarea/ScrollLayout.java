@@ -63,6 +63,7 @@ public class ScrollLayout implements LayoutManager
  	 * @param comp The component to add at the given position. If <code>null</code>, the 
  	 * component will be removed from that position.
  	 */
+	@Override
 	public void addLayoutComponent(String name, Component comp)
 	{
 		switch(name) {
@@ -101,6 +102,7 @@ public class ScrollLayout implements LayoutManager
  	 * Removes the specified component from the layout.
  	 * @param comp The component to be removed.
  	 */
+	@Override
 	public void removeLayoutComponent(Component comp)
 	{
 		if(center == comp)
@@ -124,6 +126,7 @@ public class ScrollLayout implements LayoutManager
 	} //}}}
 
 	//{{{ preferredLayoutSize() method
+	@Override
 	public Dimension preferredLayoutSize(Container parent)
 	{
 		Dimension dim = new Dimension();
@@ -146,16 +149,16 @@ public class ScrollLayout implements LayoutManager
 	// constrained by left component preferred width
 	private int getLeftPreferredWidth() 
 	{
-		if (left != null) 
+		if (left != null)
 		{
-			return left.getPreferredSize().width;	
+			return left.getPreferredSize().width;
 		}
 		int tlw = topLeft == null ? 0 : topLeft.getPreferredSize().width;
 		int lw = left == null ? 0 : left.getPreferredSize().width;
 		int blw = bottomLeft == null ? 0 : bottomLeft.getPreferredSize().width;
 		return Math.max(lw, Math.max(tlw, blw));
 	}
-	
+
 	private int getCenterPreferredWidth()
 	{
 		int tw = top == null ? 0 : top.getPreferredSize().width;
@@ -169,7 +172,7 @@ public class ScrollLayout implements LayoutManager
 	{
 		if (right != null)
 		{
-			return right.getPreferredSize().width;	
+			return right.getPreferredSize().width;
 		}
 		int trw = topRight == null ? 0 : topRight.getPreferredSize().width;
 		int rw = right == null ? 0 : right.getPreferredSize().width;
@@ -215,6 +218,7 @@ public class ScrollLayout implements LayoutManager
 	//}}}
 	
 	//{{{ minimumLayoutSize() method
+	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
 		Dimension dim = new Dimension();
@@ -257,6 +261,7 @@ public class ScrollLayout implements LayoutManager
 	} //}}}
 
 	//{{{ layoutContainer() method
+	@Override
 	public void layoutContainer(Container parent)
 	{
 		Dimension size = parent.getSize();
@@ -363,7 +368,7 @@ public class ScrollLayout implements LayoutManager
 	private Component bottomRight;
 
 	//{{{ getInsets() method
-	private Insets getInsets(Component parent)
+	private static Insets getInsets(Component parent)
 	{
 		Border border = ((JComponent)parent).getBorder();
 		if(border == null)
