@@ -45,6 +45,9 @@ import org.gjt.sp.jedit.IPropertyManager;
  */
 public class Chunk extends Token
 {
+	public static final Font[] EMPTY_FONT_ARRAY = new Font[0];
+	public static final GlyphVector[] EMPTY_GLYPH_VECTOR_ARRAY = new GlyphVector[0];
+
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
@@ -228,7 +231,7 @@ public class Chunk extends Token
 		}
 
 
-		List<Font> userFonts = new ArrayList<Font>();
+		List<Font> userFonts = new ArrayList<>();
 
 		String family;
 		int i = 0;
@@ -242,14 +245,13 @@ public class Chunk extends Token
 				 * check skips fonts that don't exist.
 				 */
 				Font f = Font.decode(props.getProperty("view.fontSubstList." + i));
-				if (f != null && (!"dialog".equalsIgnoreCase(f.getFamily()) ||
-									"dialog".equalsIgnoreCase(family)))
+				if (!"dialog".equalsIgnoreCase(f.getFamily()) || "dialog".equalsIgnoreCase(family))
 					userFonts.add(f);
 				i++;
 			}
 		}
 
-		preferredFonts = userFonts.toArray(new Font[userFonts.size()]);
+		preferredFonts = userFonts.toArray(EMPTY_FONT_ARRAY);
 
 		// Clear cache, not to hold reference to old fonts which
 		// might become unused after properties changed.
@@ -746,7 +748,7 @@ public class Chunk extends Token
 	// logic find intermediate boundaries.
 	private static class FontSubstitution
 	{
-		public FontSubstitution(Font mainFont, FontRenderContext frc,
+		FontSubstitution(Font mainFont, FontRenderContext frc,
 			char[] text, int start)
 		{
 			this.mainFont = mainFont;
@@ -793,7 +795,7 @@ public class Chunk extends Token
 
 		public GlyphVector[] getGlyphs()
 		{
-			return glyphs.toArray(new GlyphVector[glyphs.size()]);
+			return glyphs.toArray(EMPTY_GLYPH_VECTOR_ARRAY);
 		}
 
 		private final Font mainFont;
@@ -882,7 +884,7 @@ public class Chunk extends Token
 	//{{{ class GlyphCache
 	private static class GlyphCache extends LinkedHashMap<GlyphKey, GlyphVector[]>
 	{
-		public GlyphCache(int capacity)
+		GlyphCache(int capacity)
 		{
 			// Avoid rehashing with known limit.
 			super(capacity + 1, 1.0f, true/*accessOrder*/);

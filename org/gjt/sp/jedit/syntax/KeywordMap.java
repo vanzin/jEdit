@@ -149,7 +149,7 @@ loop:
 	 */
 	public String[] getKeywords()
 	{
-		List<String> vector = new ArrayList<String>(100);
+		List<String> vector = new ArrayList<>(100);
 		for (Keyword kw : map)
 		{
 			Keyword keyword = kw;
@@ -206,8 +206,8 @@ loop:
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private int mapLength;
-	private Keyword[] map;
+	private final int mapLength;
+	private final Keyword[] map;
 	private boolean ignoreCase;
 	private StringBuilder noWordSep;
 	//}}}

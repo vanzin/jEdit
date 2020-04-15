@@ -347,8 +347,7 @@ public class ParserRule
 		this.delegate = delegate;
 		this.token = token;
 		this.matchType = matchType;
-		this.escapeRule = (escape != null && escape.length() > 0) ?
-					createEscapeRule(escape) : null;
+		escapeRule = escape != null && !escape.isEmpty() ? createEscapeRule(escape) : null;
 
 		if(this.delegate == null)
 		{
@@ -367,7 +366,7 @@ public class ParserRule
 	{
 		this.action = action;
 		this.upHashChar = null;
-		Set<Character> hashCharsSet = new HashSet<Character>();
+		Set<Character> hashCharsSet = new HashSet<>();
 		for (char c : hashChars)
 		{
 			hashCharsSet.add(Character.toUpperCase(c));
@@ -388,8 +387,7 @@ public class ParserRule
 		this.delegate = delegate;
 		this.token = token;
 		this.matchType = matchType;
-		this.escapeRule = (escape != null && escape.length() > 0) ?
-					createEscapeRule(escape) : null;
+		this.escapeRule = escape != null && !escape.isEmpty() ? createEscapeRule(escape) : null;
 
 		if(this.delegate == null)
 		{

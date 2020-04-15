@@ -61,7 +61,7 @@ public class Token
 	} //}}}
 
 	//{{{ Token types
-	public static final String[] TOKEN_TYPES = new String[] {
+	public static final String[] TOKEN_TYPES = {
 		"NULL",
 		"COMMENT1",
 		"COMMENT2",

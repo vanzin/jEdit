@@ -192,7 +192,7 @@ public class ParserRuleSet
 		else
 		{
 			int size = rulesForNull.size() + rulesForKey.size();
-			List<ParserRule> mixed = new ArrayList<ParserRule>(size);
+			List<ParserRule> mixed = new ArrayList<>(size);
 			mixed.addAll(rulesForKey);
 			mixed.addAll(rulesForNull);
 			return mixed;

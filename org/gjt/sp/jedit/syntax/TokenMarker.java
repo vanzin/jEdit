@@ -46,6 +46,9 @@ import org.gjt.sp.util.SegmentCharSequence;
  */
 public class TokenMarker
 {
+
+	public static final ParserRuleSet[] EMPTY_PARSER_RULE_SETS_ARRAY = new ParserRuleSet[0];
+
 	//{{{ TokenMarker constructor
 	public TokenMarker()
 	{} //}}}
@@ -77,7 +80,7 @@ public class TokenMarker
 	 */
 	public ParserRuleSet[] getRuleSets()
 	{
-		return ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
+		return ruleSets.values().toArray(EMPTY_PARSER_RULE_SETS_ARRAY);
 	} //}}}
 
 	//{{{ markTokens() method
@@ -264,7 +267,7 @@ unwind:		while(context.parent != null)
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private final Map<String, ParserRuleSet> ruleSets = new Hashtable<String, ParserRuleSet>(64);
+	private final Map<String, ParserRuleSet> ruleSets = new Hashtable<>(64);
 	private ParserRuleSet mainRuleSet;
 
 	// Instead of passing these around to each method, we just store them

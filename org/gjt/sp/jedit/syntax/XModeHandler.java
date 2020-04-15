@@ -53,18 +53,21 @@ public abstract class XModeHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "xmode.dtd", XModeHandler.class);
 	} //}}}
 
 	//{{{ characters() method
+	@Override
 	public void characters(char[] c, int off, int len)
 	{
 		peekElement().setText(c, off, len);
 	} //}}}
 
 	//{{{ startElement() method
+	@Override
 	public void startElement(String uri, String localName,
 				 String qName, Attributes attrs)
 	{
@@ -113,6 +116,7 @@ public abstract class XModeHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endElement() method
+	@Override
 	public void endElement(String uri, String localName, String name)
 	{
 		TagDecl tag = popElement();
@@ -393,14 +397,16 @@ public abstract class XModeHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startDocument() method
+	@Override
 	public void startDocument()
 	{
-		props = new Hashtable<String, String>();
+		props = new Hashtable<>();
 		pushElement(null, null);
-		reloadModes = new Vector<Mode>();
+		reloadModes = new Vector<>();
 	} //}}}
 
 	//{{{ endDocument() method
+	@Override
 	public void endDocument()
 	{
 		ParserRuleSet[] rulesets = marker.getRuleSets();
@@ -463,12 +469,12 @@ public abstract class XModeHandler extends DefaultHandler
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private String modeName;
+	private final String modeName;
 	/** The token marker cannot be null. */
 	private final TokenMarker marker;
 	private KeywordMap keywords;
 	/** this stack can contains null elements. */
-	private Stack<TagDecl> stateStack;
+	private final Stack<TagDecl> stateStack;
 	private String propName;
 	private String propValue;
 	private Hashtable<String, String> props;
@@ -541,8 +547,7 @@ public abstract class XModeHandler extends DefaultHandler
 	 */
 	private class TagDecl
 	{
-
-		public TagDecl(String tagName, Attributes attrs)
+		TagDecl(String tagName, Attributes attrs)
 		{
 			this.tagName = tagName;
 

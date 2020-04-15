@@ -63,6 +63,7 @@ public class DefaultTokenHandler implements TokenHandler
 	 * @param context The line context
 	 * @since jEdit 4.2pre3
 	 */
+	@Override
 	public void handleToken(Segment seg, byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
@@ -92,6 +93,7 @@ public class DefaultTokenHandler implements TokenHandler
 	 * retokenized).
 	 * @since jEdit 4.2pre6
 	 */
+	@Override
 	public void setLineContext(TokenMarker.LineContext lineContext)
 	{
 		this.lineContext = lineContext;

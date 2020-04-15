@@ -192,7 +192,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 * Merges each adjucent chunks if possible, to reduce the number
 	 * of chunks for rendering performance.
 	 */
-	private void mergeAdjucentChunks(Chunk lineHead, Segment lineText)
+	private static void mergeAdjucentChunks(Chunk lineHead, Segment lineText)
 	{
 		Chunk chunk = lineHead;
 		while(chunk.next != null)
@@ -406,7 +406,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	{
 		public static final int DONE = -1;
 
-		public LineBreaker(Segment lineText, int startOffset)
+		LineBreaker(Segment lineText, int startOffset)
 		{
 			iterator = new LineBreakIterator();
 			iterator.setText(lineText);
@@ -462,7 +462,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 */
 	private static class LineBreakIterator extends BreakIterator
 	{
-		public LineBreakIterator()
+		LineBreakIterator()
 		{
 			base = BreakIterator.getLineInstance();
 		}
