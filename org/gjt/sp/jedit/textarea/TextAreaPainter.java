@@ -193,6 +193,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @param cursor the new cursor
 	 * @since jEdit 4.4pre1
 	 */
+	@Override
 	public void setCursor(Cursor cursor)
 	{
 		defaultCursor = cursor == hiddenCursor || cursor.getType() == Cursor.TEXT_CURSOR;
@@ -820,7 +821,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(textArea.getBuffer() != null
 			&& !textArea.getBuffer().isLoading())
 			textArea.recalculateLastPhysicalLine();
-		//textArea.propertiesChanged();
 	} //}}}
 
 	//{{{ getStringWidth() method
@@ -848,7 +848,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 *
 	 * @since jEdit 4.5pre1
 	 */
-		public RenderingHints getRenderingHints()
+	public RenderingHints getRenderingHints()
 	{
 			return renderingHints;
 		} //}}}
@@ -921,6 +921,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @param tabOffset Ignored
 	 * @return The next tab stop after <i>x</i>
 	 */
+	@Override
 	public float nextTabStop(float x, int tabOffset)
 	{
 		int ntabs = (int)(x / textArea.tabSize);
@@ -937,8 +938,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Dimension dim = new Dimension();
 
 		char[] foo = new char[80];
-		for(int i = 0; i < foo.length; i++)
-			foo[i] = ' ';
+		Arrays.fill(foo, ' ');
 		dim.width = (int)getStringWidth(new String(foo));
 		dim.height = getLineHeight() * 25;
 		return dim;
@@ -1063,7 +1063,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fontRenderContext = new FontRenderContext(null, antiAlias.renderHint(),
 				fontRenderHint);
 		}
-		else /** Standard Antialias Version */
+		else /* Standard Antialias Version */
 		{
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -1072,8 +1072,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 
 		renderingHints = new RenderingHints(hints);
-
-
 	} //}}}
 
 	//}}}
@@ -1257,7 +1255,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else
 			{
-				startOffset = (s.getStart() > lineStart) ? s.getStart() : lineStart;
+				startOffset = Math.max(s.getStart(), lineStart);
 				endOffset = s.getEnd();
 			}
 			// Soft-wrap
@@ -1291,7 +1289,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 						}
 						else
 							strStart = tokenStart;
-						int strEnd = (endOffset > next) ? next : endOffset;
+						int strEnd = Math.min(endOffset, next);
 						sub = textArea.getText(strStart, strEnd - strStart);
 						gfx.drawString(sub, x, baseLine);
 						x = nextX(x, style, sub, strStart, strEnd);
