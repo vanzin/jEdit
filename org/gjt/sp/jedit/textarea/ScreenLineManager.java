@@ -26,8 +26,6 @@ package org.gjt.sp.jedit.textarea;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
-
-import java.util.Arrays;
 //}}}
 
 /**
