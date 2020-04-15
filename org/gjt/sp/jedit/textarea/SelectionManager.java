@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import javax.annotation.Nonnull;
 
 import org.gjt.sp.jedit.buffer.*;
@@ -43,7 +39,7 @@ class SelectionManager
 	SelectionManager(TextArea textArea)
 	{
 		this.textArea = textArea;
-		selection = new ArrayList<Selection>();
+		selection = new ArrayList<>();
 	} //}}}
 
 	//{{{ getSelectionCount() method
@@ -64,8 +60,7 @@ class SelectionManager
 	@Nonnull
 	public Selection[] getSelection()
 	{
-		return selection.toArray(
-			new Selection[selection.size()]);
+		return selection.toArray(new Selection[0]);
 	} //}}}
 
 	//{{{ setSelection() method
@@ -250,8 +245,7 @@ class SelectionManager
 	 */
 	int[] getSelectedLines()
 	{
-
-		Set<Integer> set = new TreeSet<Integer>();
+		Collection<Integer> set = new TreeSet<>();
 		for (Selection s : selection)
 		{
 			int endLine =
