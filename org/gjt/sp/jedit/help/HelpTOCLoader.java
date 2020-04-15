@@ -190,8 +190,8 @@ public class HelpTOCLoader {
 	} //}}}
 
 	//{{{ Private members
-	private Map<String, DefaultMutableTreeNode> nodes;
-	private String baseURL;
+	private final Map<String, DefaultMutableTreeNode> nodes;
+	private final String baseURL;
 	//}}}
 
 	//{{{ TOCHandler class
@@ -208,6 +208,7 @@ public class HelpTOCLoader {
 		} //}}}
 
 		//{{{ characters() method
+		@Override
 		public void characters(char[] c, int off, int len)
 		{
 			if(tag.equals("TITLE"))
@@ -226,6 +227,7 @@ public class HelpTOCLoader {
 		} //}}}
 
 		//{{{ startElement() method
+		@Override
 		public void startElement(String uri, String localName,
 					 String name, Attributes attrs)
 		{
@@ -235,6 +237,7 @@ public class HelpTOCLoader {
 		} //}}}
 
 		//{{{ endElement() method
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
 			if(name == null)
@@ -258,16 +261,17 @@ public class HelpTOCLoader {
 
 		//{{{ Private members
 		private String tag;
-		private StringBuilder title = new StringBuilder();
+		private final StringBuilder title = new StringBuilder();
 		private String href;
 		private DefaultMutableTreeNode node;
-		private Stack<DefaultMutableTreeNode> nodes;
+		private final Stack<DefaultMutableTreeNode> nodes;
 		//}}}
 	} //}}}
 
 	//{{{ PluginCompare class
 	static class PluginCompare implements Comparator<EditPlugin>
 	{
+		@Override
 		public int compare(EditPlugin p1, EditPlugin p2)
 		{
 			return StandardUtilities.compareStrings(

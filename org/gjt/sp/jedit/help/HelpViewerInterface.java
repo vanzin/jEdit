@@ -12,29 +12,29 @@ import java.beans.PropertyChangeListener;
  */
 public interface HelpViewerInterface 
 {
-	
 	/**
 	 * 
 	 * @param url
 	 * @param addToHistory 
 	 * @param scrollPos desired vertical scrollbar position after we go there
 	 */
-	public void gotoURL(String url, boolean addToHistory, int scrollPos);
+	void gotoURL(String url, boolean addToHistory, int scrollPos);
 	
-	public String getBaseURL();
+	String getBaseURL();
 	
-	public void addPropertyChangeListener(PropertyChangeListener l);
+	void addPropertyChangeListener(PropertyChangeListener l);
 	
 	/**
 	 * Called when the helpviewer is closed
 	 */
-	public void dispose();
+	void dispose();
+
 	/**
 	 * @return the root pane of this help viewer
 	 */
-	public Component getComponent();
-	public String getShortURL();
+	Component getComponent();
+	String getShortURL();
 	
-	public void queueTOCReload();
-	public void setTitle(String newTitle);
+	void queueTOCReload();
+	void setTitle(String newTitle);
 }

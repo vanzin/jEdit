@@ -35,10 +35,10 @@ import org.gjt.sp.util.Log;
 class HelpIndex
 {
 	//{{{ HelpIndex constructor
-	public HelpIndex()
+	HelpIndex()
 	{
-		words = new HashMap<String, Object>();
-		files = new ArrayList<HelpFile>();
+		words = new HashMap<>();
+		files = new ArrayList<>();
 
 		ignoreWord("a");
 		ignoreWord("an");
@@ -70,12 +70,6 @@ class HelpIndex
 		ignoreWord("with");
 		ignoreWord("you");
 	} //}}}
-
-	/* //{{{ HelpIndex constructor
-	public HelpIndex(String fileListPath, String wordIndexPath)
-	{
-		this();
-	} //}}} */
 
 	//{{{ indexEditorHelp() method
 	/**
@@ -195,9 +189,9 @@ class HelpIndex
 
 	//{{{ Private members
 	// used to mark words to ignore (see constructor for the list)
-	private static Object IGNORE = new Object();
-	private Map<String, Object> words;
-	private List<HelpFile> files;
+	private static final Object IGNORE = new Object();
+	private final Map<String, Object> words;
+	private final List<HelpFile> files;
 
 	//{{{ ignoreWord() method
 	private void ignoreWord(String word)
@@ -221,10 +215,7 @@ class HelpIndex
 
 		StringBuilder titleText = new StringBuilder();
 
-		BufferedReader in = new BufferedReader(
-			new InputStreamReader(_in));
-
-		try
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(_in)))
 		{
 			StringBuilder word = new StringBuilder();
 			boolean insideTag = false;
@@ -281,10 +272,6 @@ class HelpIndex
 				else
 					word.append(ch);
 			}
-		}
-		finally
-		{
-			in.close();
 		}
 
 		if(titleText.length() == 0)

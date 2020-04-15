@@ -33,11 +33,13 @@ import java.util.ArrayList;
  */
 public class HelpHistoryModel
 {
+	public static final HistoryEntry[] EMPTY_HISTORY_ENTRIES_ARRAY = new HistoryEntry[0];
+
 	//{{{ HelpHistoryModel constructor
 	public HelpHistoryModel(int size)
 	{
 		history = new HistoryEntry[size];
-		listeners = new ArrayList<HelpHistoryModelListener>();
+		listeners = new ArrayList<>();
 	} //}}}
 
 	//{{{ forward() method
@@ -158,11 +160,11 @@ public class HelpHistoryModel
 	{
 		if (history.length - historyPos <= 1)
 		{
-			return new HelpHistoryModel.HistoryEntry[0];
+			return EMPTY_HISTORY_ENTRIES_ARRAY;
 		}
 		if (history[historyPos] == null)
 		{
-			return new HelpHistoryModel.HistoryEntry[0];
+			return EMPTY_HISTORY_ENTRIES_ARRAY;
 		}
 		HistoryEntry[] next = new HistoryEntry[history.length-historyPos];
 		System.arraycopy(history,historyPos,next,0,history.length-historyPos);
@@ -190,8 +192,8 @@ public class HelpHistoryModel
 
 	//{{{ Private members
 	private int historyPos;
-	private HistoryEntry[] history;
-	private List<HelpHistoryModelListener> listeners;
+	private final HistoryEntry[] history;
+	private final List<HelpHistoryModelListener> listeners;
 	//}}}
 
 	//{{{ Inner Classes
