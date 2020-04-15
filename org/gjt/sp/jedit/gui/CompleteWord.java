@@ -191,14 +191,7 @@ public class CompleteWord extends CompletionPopup
 	private static Collection<Buffer> getVisibleBuffers()
 	{
 		final Collection<Buffer> buffers = new HashSet<>();
-		jEdit.visit(new JEditVisitorAdapter()
-			{
-				@Override
-				public void visit(EditPane editPane)
-				{
-					buffers.add(editPane.getBuffer());
-				}
-			});
+		jEdit.getEditPaneManager().forEach(editPane -> buffers.add(editPane.getBuffer()));
 		return buffers;
 	} //}}}
 

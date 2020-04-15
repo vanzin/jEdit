@@ -36,6 +36,7 @@ import java.io.StringReader;
 import java.net.Socket;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1054,18 +1055,32 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public EditPane[] getEditPanes()
 	{
+		List<EditPane> list = new ArrayList<>();
+		forEachEditPane(list::add);
+		return list.toArray(EMPTY_EDIT_PANES_ARRAY);
+	} //}}}
+
+	/**
+	 * Perform the given action on every EditPane
+	 *
+	 * @param action an action to perform on every EditPane
+	 */
+	public void forEachEditPane(Consumer<? super EditPane> action)
+	{
+		Objects.requireNonNull(action);
 		if(splitPane == null)
 		{
-			EditPane[] ep = { editPane };
-			return ep;
+			if (editPane != null)
+			{
+				// it can be null if it is called during the view creation.
+				action.accept(editPane);
+			}
 		}
 		else
 		{
-			List<EditPane> vec = new ArrayList<>();
-			getEditPanes(vec,splitPane);
-			return vec.toArray(EMPTY_EDIT_PANES_ARRAY);
+			performAction(splitPane, action);
 		}
-	} //}}}
+	}
 
 	//{{{ getViewConfig() method
 	/**
@@ -1607,15 +1622,15 @@ public class View extends JFrame implements InputHandlerProvider
 	} //}}}
 
 	//{{{ getEditPanes() method
-	private static void getEditPanes(List<EditPane> vec, Component comp)
+	private static void performAction(Component comp, Consumer<? super EditPane> action)
 	{
 		if(comp instanceof EditPane)
-			vec.add((EditPane) comp);
+			action.accept((EditPane) comp);
 		else if(comp instanceof JSplitPane)
 		{
 			JSplitPane split = (JSplitPane)comp;
-			getEditPanes(vec,split.getLeftComponent());
-			getEditPanes(vec,split.getRightComponent());
+			performAction(split.getLeftComponent(), action);
+			performAction(split.getRightComponent(), action);
 		}
 	} //}}}
 

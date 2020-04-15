@@ -80,14 +80,8 @@ public class BufferSetManager
 	{
 		// pass on PropertiesChanged message to BufferSets so
 		// they can resort themselves as needed.
-		jEdit.visit(new JEditVisitorAdapter()
-		{
-			@Override
-			public void visit(EditPane editPane)
-			{
-				editPane.getBufferSet().propertiesChanged();
-			}
-		});
+		// todo : if it is global or per view, it is probably too many calls
+		jEdit.getEditPaneManager().forEach(editPane -> editPane.getBufferSet().propertiesChanged());
 	} //}}}
 
 	//{{{ countBufferSets() method
@@ -197,25 +191,11 @@ public class BufferSetManager
 				bufferSet.addBuffer(buffer);
 				break;
 			case view:
-				EditPane[] editPanes = editPane.getView().getEditPanes();
-				for (EditPane pane:editPanes)
-				{
-					if (pane == null)
-						continue;
-					BufferSet bfs = pane.getBufferSet();
-					bfs.addBuffer(buffer);
-				}
+				editPane.getView().forEachEditPane(pane -> pane.getBufferSet().addBuffer(buffer));
 				break;
 			case global:
-				jEdit.visit(new JEditVisitorAdapter()
-				{
-					@Override
-					public void visit(EditPane editPane)
-					{
-						BufferSet bfs = editPane.getBufferSet();
-						bfs.addBuffer(buffer);
-					}
-				});
+				jEdit.getEditPaneManager().forEach(pane -> pane.getBufferSet().addBuffer(buffer));
+				break;
 		}
 	} //}}}
 
@@ -246,11 +226,7 @@ public class BufferSetManager
 				removeBuffer(bufferSet, buffer);
 				break;
 			case view:
-				EditPane[] editPanes = editPane.getView().getEditPanes();
-				for (EditPane pane : editPanes)
-				{
-					removeBuffer(pane.getBufferSet(), buffer);
-				}
+				editPane.getView().forEachEditPane(pane -> removeBuffer(pane.getBufferSet(), buffer));
 				break;
 			case global:
 				jEdit._closeBuffer(null, buffer);
@@ -370,14 +346,7 @@ public class BufferSetManager
 	{
 		final Set<BufferSet> candidates = new HashSet<>();
 		// Collect all BufferSets.
-		jEdit.visit(new JEditVisitorAdapter()
-		{
-			@Override
-			public void visit(EditPane editPane)
-			{
-				candidates.add(editPane.getBufferSet());
-			}
-		});
+		jEdit.getEditPaneManager().forEach(editPane -> candidates.add(editPane.getBufferSet()));
 		// Remove all that doesn't contain the buffer.
 		candidates.removeIf(bufferSet -> bufferSet.indexOf(buffer) == -1);
 		// Remaining are the result.

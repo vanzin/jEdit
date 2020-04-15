@@ -2468,6 +2468,17 @@ public class jEdit
 		return bufferManager;
 	} //}}}
 
+	//{{{ getEditPaneManager() method
+	/**
+	 * Returns the Edit Pane manger
+	 * @return the edit pane manager
+	 * @since jEdit 5.6pre1
+	 */
+	public static EditPaneManager getEditPaneManager()
+	{
+		return editPaneManager;
+	} //}}}
+
 	//{{{ getViewManager() method
 	/**
 	 * Returns the view manager
@@ -3227,6 +3238,7 @@ public class jEdit
 	private static BufferSetManager bufferSetManager;
 	private static BufferManagerImpl bufferManager = new BufferManagerImpl();
 	private static ViewManagerImpl viewManager = new ViewManagerImpl();
+	private static EditPaneManager editPaneManager = new EditPaneManagerImpl(viewManager);
 
 	private static final Object editBusOrderingLock	= new Object();
 

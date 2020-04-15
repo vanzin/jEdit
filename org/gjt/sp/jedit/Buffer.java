@@ -2260,18 +2260,14 @@ public class Buffer extends JEditBuffer
 					});
 
 				setPath(path);
-				jEdit.visit(new JEditVisitorAdapter()
-				{
-					@Override
-					public void visit(EditPane editPane)
+				jEdit.getEditPaneManager().forEach(editPane ->
 					{
 						BufferSet bufferSet = editPane.getBufferSet();
-						if (bufferSet.indexOf(Buffer.this) != -1)
+						if (bufferSet.indexOf(this) != -1)
 						{
 							bufferSet.sort();
 						}
-					}
-				});
+					});
 			}
 			else
 			{
