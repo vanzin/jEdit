@@ -57,8 +57,9 @@ public interface StructureMatcher
 	//}}}
 
 	//{{{ BracketMatcher class
-	static class BracketMatcher implements StructureMatcher
+	class BracketMatcher implements StructureMatcher
 	{
+		@Override
 		public Match getMatch(TextArea textArea)
 		{
 			int offset = textArea.getCaretPosition()
@@ -87,6 +88,7 @@ public interface StructureMatcher
 			return null;
 		}
 
+		@Override
 		public void selectMatch(TextArea textArea)
 		{
 			textArea.selectToMatchingBracket();
@@ -98,7 +100,7 @@ public interface StructureMatcher
 	 * A structure match, denoted by a start and end position.
 	 * @since jEdit 4.2pre3
 	 */
-	public static class Match
+	class Match
 	{
 		public StructureMatcher matcher;
 		public int startLine;
@@ -128,13 +130,14 @@ public interface StructureMatcher
 	/**
 	 * Paints the structure match highlight.
 	 */
-	static class Highlight extends TextAreaExtension
+	class Highlight extends TextAreaExtension
 	{
 		Highlight(TextArea textArea)
 		{
 			this.textArea = textArea;
 		}
 
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -235,6 +238,6 @@ public interface StructureMatcher
 			}
 		}
 
-		private TextArea textArea;
+		private final TextArea textArea;
 	} //}}}
 }
