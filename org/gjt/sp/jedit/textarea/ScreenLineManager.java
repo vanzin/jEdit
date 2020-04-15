@@ -100,14 +100,20 @@ class ScreenLineManager
 	 */
 	void invalidateScreenLineCounts()
 	{
-		for(int i = 0, lineCount = buffer.getLineCount(); i < lineCount; i++)
-			invalidateScreenLineCount(i);
+		invalidateScreenLineCountRange(0, buffer.getLineCount());
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
 	private void invalidateScreenLineCount(int physicalLineNo)
 	{
 		screenLines[physicalLineNo] = 0;
+	} //}}}
+
+	//{{{ invalidateScreenLineCounts() method
+	private void invalidateScreenLineCountRange(int physicalLineStart, int physicalLineEnd)
+	{
+		for (int i = physicalLineStart; i < physicalLineEnd; i++)
+			screenLines[i] = 0;
 	} //}}}
 
 	//{{{ reset() method
@@ -119,25 +125,33 @@ class ScreenLineManager
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int numLines)
 	{
-		int endLine = startLine + numLines;
-		// the current line count becomes invalid
-		invalidateScreenLineCount(startLine);
-
 		int lineCount = buffer.getLineCount();
-
 		if(numLines > 0)
 		{
 			if(screenLines.length <= lineCount)
 			{
 				// the array is too small for the new buffer length
 				// create a bigger one and copy data into it
-				screenLines = Arrays.copyOf(screenLines, ((lineCount + 1) << 1));
-			}
-			System.arraycopy(screenLines,startLine,screenLines,
-				endLine,lineCount - endLine);
+				char[] screenLinesN = new char[((lineCount + 1) << 1)];
+				if (startLine != 0)
+					System.arraycopy(screenLines, 0, screenLinesN, 0, startLine);
 
-			for(int i = 0; i < numLines; i++)
-				screenLines[startLine + i] = 0;
+				System.arraycopy(screenLines, startLine + 1, screenLinesN,
+					startLine + numLines + 1, lineCount - numLines - startLine);
+				screenLines = screenLinesN;
+			}
+			else
+			{
+				System.arraycopy(screenLines, startLine + 1, screenLines,
+					startLine + numLines + 1, lineCount - numLines - startLine);
+
+				invalidateScreenLineCountRange(startLine, startLine + numLines + 1);
+			}
+		}
+		else
+		{
+			// the current line count becomes invalid
+			invalidateScreenLineCount(startLine);
 		}
 	} //}}}
 
