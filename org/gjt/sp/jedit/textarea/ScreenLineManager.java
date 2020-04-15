@@ -88,13 +88,16 @@ class ScreenLineManager
 		}
 
 		if(Debug.SCREEN_LINES_DEBUG)
-			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + ',' + count + ')'));
+			Log.log(Log.DEBUG,this,"setScreenLineCount(" + line + ',' + count + ')');
 		if (screenLines == null) 
 			reset();
 		screenLines[line] = (char)count;
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
+	/**
+	 * Invalidate all screenlines
+	 */
 	void invalidateScreenLineCounts()
 	{
 		for(int i = 0, lineCount = buffer.getLineCount(); i < lineCount; i++)
