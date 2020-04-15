@@ -118,7 +118,7 @@ public class DisplayManager
 	 * @param line A physical line index
 	 * @since jEdit 4.2pre1
 	 */
-	public final boolean isLineVisible(int line)
+	public boolean isLineVisible(int line)
 	{
 		return folds.search(line) % 2 == 0;
 	} //}}}
@@ -219,7 +219,7 @@ public class DisplayManager
 	 * @param line the physical line
 	 * @return the screen line count
 	 */
-	public final int getScreenLineCount(int line)
+	public int getScreenLineCount(int line)
 	{
 		updateScreenLineCount(line);
 		return screenLineMgr.getScreenLineCount(line);
@@ -233,7 +233,7 @@ public class DisplayManager
 	 * the foldings are collapsed
 	 * @return the number of displayable lines
 	 */
-	public final int getScrollLineCount()
+	public int getScrollLineCount()
 	{
 		return scrollLineCount.getScrollLine();
 	} //}}}
