@@ -126,6 +126,7 @@ class ScreenLineManager
 		int lineCount = buffer.getLineCount();
 		if(numLines > 0)
 		{
+			int nbLinesBeforeInsert = lineCount - numLines;
 			if(screenLines.length <= lineCount)
 			{
 				// the array is too small for the new buffer length
@@ -135,13 +136,13 @@ class ScreenLineManager
 					System.arraycopy(screenLines, 0, screenLinesN, 0, startLine);
 
 				System.arraycopy(screenLines, startLine + 1, screenLinesN,
-					startLine + numLines + 1, lineCount - numLines - startLine - 1);
+					startLine + numLines + 1, nbLinesBeforeInsert - startLine - 1);
 				screenLines = screenLinesN;
 			}
 			else
 			{
 				System.arraycopy(screenLines, startLine + 1, screenLines,
-					startLine + numLines + 1, lineCount - numLines - startLine - 1);
+					startLine + numLines + 1, nbLinesBeforeInsert - startLine - 1);
 
 				invalidateScreenLineCountRange(startLine, startLine + numLines + 1);
 			}

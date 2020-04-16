@@ -99,7 +99,7 @@ public class ScreenLineManagerTest
 		int maxLines = 5;
 		when(buffer.getLineCount()).thenReturn(maxLines);
 		screenLineManager.reset();
-		initLines(maxLines);
+		resetLines(screenLineManager, maxLines);
 		assertTrue(screenLineManager.isScreenLineCountValid(0));
 		assertTrue(screenLineManager.isScreenLineCountValid(1));
 		assertTrue(screenLineManager.isScreenLineCountValid(2));
@@ -113,288 +113,103 @@ public class ScreenLineManagerTest
 		assertFalse(screenLineManager.isScreenLineCountValid(4));
 	}
 
-	/**
-	 * Test editing the second line
-	 */
 	@Test
-	public void contentInsertedExtendArray()
+	public void contentInserted0LineAtStartSmallArray()
 	{
 		int numLines = 0;
-		initForInsert(5, numLines);
-		screenLineManager.contentInserted(1, numLines);
-
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as this screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
-		assertEquals(3, screenLineManager.getScreenLineCount(2));
-		assertEquals(4, screenLineManager.getScreenLineCount(3));
-		assertEquals(5, screenLineManager.getScreenLineCount(4));
-	}
-
-	private void initForInsert(int lineCountBeforeInsert, int numLines)
-	{
-		when(buffer.getLineCount()).thenReturn(lineCountBeforeInsert + numLines);
-		screenLineManager.reset();
-		initLines(lineCountBeforeInsert);
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted1lineOnLine1ExtendArray()
-	{
-		int numLines = 1;
-		initForInsert(5, numLines);
-		screenLineManager.contentInserted(1, numLines);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 3
-		 * 4 : 4
-		 * 5 : 5
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
-
-
-		assertEquals(3, screenLineManager.getScreenLineCount(3));
-		assertEquals(4, screenLineManager.getScreenLineCount(4));
-		assertEquals(5, screenLineManager.getScreenLineCount(5));
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted4linesOnLine0ExtendArray()
-	{
-		int numLines = 4;
-		initForInsert(5, numLines);
+		initForInsert(numLines, 5);
 		screenLineManager.contentInserted(0, numLines);
-		/* should be
-		 * 0 : 1 <- but it is 0 until the display manager updates it
-		 * 1 : 1 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 2
-		 * 6 : 3
-		 * 7 : 4
-		 * 8 : 5
-		 */
+
 		assertFalse(screenLineManager.isScreenLineCountValid(0));
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
-		assertFalse(screenLineManager.isScreenLineCountValid(3));
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertEquals(2, screenLineManager.getScreenLineCount(5));
-		assertEquals(3, screenLineManager.getScreenLineCount(6));
-		assertEquals(4, screenLineManager.getScreenLineCount(7));
-		assertEquals(5, screenLineManager.getScreenLineCount(8));
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted4linesOnLine1ExtendArray()
-	{
-		int numLines = 4;
-		initForInsert(5, numLines);
-		screenLineManager.contentInserted(1, numLines);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 1 <- but it is 0 until the display manager updates it
-		 * 6 : 3
-		 * 7 : 4
-		 * 8 : 5
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
-		assertFalse(screenLineManager.isScreenLineCountValid(3));
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertFalse(screenLineManager.isScreenLineCountValid(5));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
-//		assertEquals(0, screenLineManager.getScreenLineCount(3));
-//		assertEquals(0, screenLineManager.getScreenLineCount(4));
-//		assertEquals(0, screenLineManager.getScreenLineCount(5));
-
-
-		assertEquals(3, screenLineManager.getScreenLineCount(6));
-		assertEquals(4, screenLineManager.getScreenLineCount(7));
-		assertEquals(5, screenLineManager.getScreenLineCount(8));
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted4linesOnLine2ExtendArray()
-	{
-		int numLines = 4;
-		initForInsert(5, numLines);
-		screenLineManager.contentInserted(2, numLines);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 1 <- but it is 0 until the display manager updates it
-		 * 6 : 1 <- but it is 0 until the display manager updates it
-		 * 7 : 4
-		 * 8 : 5
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
-		assertFalse(screenLineManager.isScreenLineCountValid(3));
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertFalse(screenLineManager.isScreenLineCountValid(5));
-		assertFalse(screenLineManager.isScreenLineCountValid(6));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-		assertEquals(2, screenLineManager.getScreenLineCount(1));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
-//		assertEquals(0, screenLineManager.getScreenLineCount(3));
-//		assertEquals(0, screenLineManager.getScreenLineCount(4));
-//		assertEquals(0, screenLineManager.getScreenLineCount(5));
-//		assertEquals(0, screenLineManager.getScreenLineCount(6));
-
-		assertEquals(4, screenLineManager.getScreenLineCount(7));
-		assertEquals(5, screenLineManager.getScreenLineCount(8));
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted2linesOnLastLineExtendArray()
-	{
-		int numLines = 2;
-		initForInsert(5, numLines);
-		screenLineManager.contentInserted(4, numLines);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2
-		 * 2 : 3
-		 * 3 : 4
-		 * 4 : 0 <- but it is 0 until the display manager updates it
-		 * 5 : 0 <- but it is 0 until the display manager updates it
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertFalse(screenLineManager.isScreenLineCountValid(5));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
 		assertEquals(2, screenLineManager.getScreenLineCount(1));
 		assertEquals(3, screenLineManager.getScreenLineCount(2));
 		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertEquals(5, screenLineManager.getScreenLineCount(4));
 	}
 
 	/**
 	 * Test editing the second line
 	 */
 	@Test
-	public void contentInserted()
+	public void contentInserted0LineInMiddleSmallArray()
 	{
 		int numLines = 0;
-		initForInsertAndExtendArray(5, numLines);
+		initForInsert(numLines, 5);
 		screenLineManager.contentInserted(1, numLines);
 
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-
 		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as this screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
 		assertEquals(3, screenLineManager.getScreenLineCount(2));
 		assertEquals(4, screenLineManager.getScreenLineCount(3));
 		assertEquals(5, screenLineManager.getScreenLineCount(4));
 	}
 
-	private void initForInsertAndExtendArray(int maxLines, int numLines)
-	{
-		when(buffer.getLineCount()).thenReturn(maxLines + numLines);
-		screenLineManager.reset();
-		screenLineManager.contentInserted(1, numLines);
-		try
-		{
-			for (int i = maxLines + numLines; i < Integer.MAX_VALUE; i++)
-				screenLineManager.setScreenLineCount(i, 99);
-		}
-		catch (Exception e)
-		{
-			// to fill the array with 99 value
-		}
-		initLines(maxLines + numLines);
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
 	@Test
-	public void contentInserted1lineOnLine1()
+	public void contentInserted0LineAtEndSmallArray()
 	{
-		int numLines = 1;
-		initForInsertAndExtendArray(5, numLines);
-		screenLineManager.contentInserted(1, numLines);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 3
-		 * 4 : 4
-		 * 5 : 5
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
+		int numLines = 0;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(4, numLines);
 
 		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+	}
 
+	@Test
+	public void contentInserted1lineAtStartSmallArray()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(0, numLines);
 
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertEquals(2, screenLineManager.getScreenLineCount(2));
 		assertEquals(3, screenLineManager.getScreenLineCount(3));
 		assertEquals(4, screenLineManager.getScreenLineCount(4));
 		assertEquals(5, screenLineManager.getScreenLineCount(5));
 	}
 
-	/**
-	 * Test editing the second line and adding a new line
-	 */
 	@Test
-	public void contentInserted4linesOnLine0()
+	public void contentInserted1InMiddleSmallArray()
 	{
-		int nbLines = 4;
-		initForInsertAndExtendArray(5, nbLines);
-		screenLineManager.contentInserted(0, 4);
-		/* should be
-		 * 0 : 1 <- but it is 0 until the display manager updates it
-		 * 1 : 1 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 2
-		 * 6 : 3
-		 * 7 : 4
-		 * 8 : 5
-		 */
+		int numLines = 1;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertFalse(screenLineManager.isScreenLineCountValid(2));
+		assertEquals(3, screenLineManager.getScreenLineCount(3));
+		assertEquals(4, screenLineManager.getScreenLineCount(4));
+		assertEquals(5, screenLineManager.getScreenLineCount(5));
+	}
+
+	@Test
+	public void contentInserted1AtEndSmallArray()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(4, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertFalse(screenLineManager.isScreenLineCountValid(5));
+	}
+
+	@Test
+	public void contentInserted4lineAtStartSmallArray()
+	{
+		int numLines = 4;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(0, numLines);
+
 		assertFalse(screenLineManager.isScreenLineCountValid(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
 		assertFalse(screenLineManager.isScreenLineCountValid(2));
@@ -406,109 +221,193 @@ public class ScreenLineManagerTest
 		assertEquals(5, screenLineManager.getScreenLineCount(8));
 	}
 
-	/**
-	 * Test editing the second line and adding a new line
-	 */
 	@Test
-	public void contentInserted4linesOnLine1()
+	public void contentInserted4lineInMiddleSmallArray()
 	{
-		int nbLines = 4;
-		initForInsertAndExtendArray(5, nbLines);
-		screenLineManager.contentInserted(1, 4);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2 <- but it is 0 until the display manager updates it
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 1 <- but it is 0 until the display manager updates it
-		 * 6 : 3
-		 * 7 : 4
-		 * 8 : 5
-		 */
+		int numLines = 4;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
 		assertFalse(screenLineManager.isScreenLineCountValid(2));
 		assertFalse(screenLineManager.isScreenLineCountValid(3));
 		assertFalse(screenLineManager.isScreenLineCountValid(4));
 		assertFalse(screenLineManager.isScreenLineCountValid(5));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(1));
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
-//		assertEquals(0, screenLineManager.getScreenLineCount(3));
-//		assertEquals(0, screenLineManager.getScreenLineCount(4));
-//		assertEquals(0, screenLineManager.getScreenLineCount(5));
-
-
 		assertEquals(3, screenLineManager.getScreenLineCount(6));
 		assertEquals(4, screenLineManager.getScreenLineCount(7));
 		assertEquals(5, screenLineManager.getScreenLineCount(8));
 	}
 
-	/**
-	 * Test editing the second line and adding a new line
-	 */
 	@Test
-	public void contentInserted4linesOnLine2()
+	public void contentInserted4lineAtEndSmallArray()
 	{
-		int nbLines = 4;
-		initForInsertAndExtendArray(5, nbLines);
-		screenLineManager.contentInserted(2, 4);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2
-		 * 2 : 1 <- but it is 0 until the display manager updates it
-		 * 3 : 1 <- but it is 0 until the display manager updates it
-		 * 4 : 1 <- but it is 0 until the display manager updates it
-		 * 5 : 1 <- but it is 0 until the display manager updates it
-		 * 6 : 1 <- but it is 0 until the display manager updates it
-		 * 7 : 4
-		 * 8 : 5
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(2));
-		assertFalse(screenLineManager.isScreenLineCountValid(3));
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertFalse(screenLineManager.isScreenLineCountValid(5));
-		assertFalse(screenLineManager.isScreenLineCountValid(6));
-
-		assertEquals(1, screenLineManager.getScreenLineCount(0));
-		assertEquals(2, screenLineManager.getScreenLineCount(1));
-//		cannot call this as those screenline count is invalid
-//		assertEquals(0, screenLineManager.getScreenLineCount(2));
-//		assertEquals(0, screenLineManager.getScreenLineCount(3));
-//		assertEquals(0, screenLineManager.getScreenLineCount(4));
-//		assertEquals(0, screenLineManager.getScreenLineCount(5));
-//		assertEquals(0, screenLineManager.getScreenLineCount(6));
-
-		assertEquals(4, screenLineManager.getScreenLineCount(7));
-		assertEquals(5, screenLineManager.getScreenLineCount(8));
-	}
-
-	/**
-	 * Test editing the second line and adding a new line
-	 */
-	@Test
-	public void contentInserted2linesOnLastLine()
-	{
-		int nbLines = 4;
-		initForInsertAndExtendArray(5, nbLines);
-		screenLineManager.contentInserted(4, 2);
-		/* should be
-		 * 0 : 1
-		 * 1 : 2
-		 * 2 : 3
-		 * 3 : 4
-		 * 4 : 0 <- but it is 0 until the display manager updates it
-		 * 5 : 0 <- but it is 0 until the display manager updates it
-		 */
-		assertFalse(screenLineManager.isScreenLineCountValid(4));
-		assertFalse(screenLineManager.isScreenLineCountValid(5));
+		int numLines = 4;
+		initForInsert(numLines, 5);
+		screenLineManager.contentInserted(4, numLines);
 
 		assertEquals(1, screenLineManager.getScreenLineCount(0));
 		assertEquals(2, screenLineManager.getScreenLineCount(1));
 		assertEquals(3, screenLineManager.getScreenLineCount(2));
 		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertFalse(screenLineManager.isScreenLineCountValid(5));
+		assertFalse(screenLineManager.isScreenLineCountValid(6));
+		assertFalse(screenLineManager.isScreenLineCountValid(7));
+		assertFalse(screenLineManager.isScreenLineCountValid(8));
+	}
+
+	@Test
+	public void contentInserted0LineAtStartBigArray()
+	{
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertEquals(5, screenLineManager.getScreenLineCount(4));
+		assertEquals(99, screenLineManager.getScreenLineCount(5));
+	}
+
+	/**
+	 * Test editing the second line
+	 */
+	@Test
+	public void contentInserted0LineInMiddleBigArray()
+	{
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertEquals(5, screenLineManager.getScreenLineCount(4));
+		assertEquals(99, screenLineManager.getScreenLineCount(5));
+	}
+
+	@Test
+	public void contentInserted0LineAtEndBigArray()
+	{
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(4, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertEquals(99, screenLineManager.getScreenLineCount(5));
+	}
+
+	@Test
+	public void contentInserted1lineAtStartBigArray()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertEquals(2, screenLineManager.getScreenLineCount(2));
+		assertEquals(3, screenLineManager.getScreenLineCount(3));
+		assertEquals(4, screenLineManager.getScreenLineCount(4));
+		assertEquals(5, screenLineManager.getScreenLineCount(5));
+		assertEquals(99, screenLineManager.getScreenLineCount(6));
+	}
+
+	@Test
+	public void contentInserted1InMiddleBigArray()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertFalse(screenLineManager.isScreenLineCountValid(2));
+		assertEquals(3, screenLineManager.getScreenLineCount(3));
+		assertEquals(4, screenLineManager.getScreenLineCount(4));
+		assertEquals(5, screenLineManager.getScreenLineCount(5));
+		assertEquals(99, screenLineManager.getScreenLineCount(6));
+	}
+
+	@Test
+	public void contentInserted1AtEndBigArray()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(4, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertFalse(screenLineManager.isScreenLineCountValid(5));
+		assertEquals(99, screenLineManager.getScreenLineCount(6));
+	}
+
+	@Test
+	public void contentInserted4lineAtStartBigArray()
+	{
+		int numLines = 4;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertFalse(screenLineManager.isScreenLineCountValid(2));
+		assertFalse(screenLineManager.isScreenLineCountValid(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertEquals(2, screenLineManager.getScreenLineCount(5));
+		assertEquals(3, screenLineManager.getScreenLineCount(6));
+		assertEquals(4, screenLineManager.getScreenLineCount(7));
+		assertEquals(5, screenLineManager.getScreenLineCount(8));
+		assertEquals(99, screenLineManager.getScreenLineCount(9));
+	}
+
+	@Test
+	public void contentInserted4lineInMiddleBigArray()
+	{
+		int numLines = 4;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertFalse(screenLineManager.isScreenLineCountValid(2));
+		assertFalse(screenLineManager.isScreenLineCountValid(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertFalse(screenLineManager.isScreenLineCountValid(5));
+		assertEquals(3, screenLineManager.getScreenLineCount(6));
+		assertEquals(4, screenLineManager.getScreenLineCount(7));
+		assertEquals(5, screenLineManager.getScreenLineCount(8));
+		assertEquals(99, screenLineManager.getScreenLineCount(9));
+	}
+
+	@Test
+	public void contentInserted4lineAtEndBigArray()
+	{
+		int numLines = 4;
+		initForInsert(numLines, 100);
+		screenLineManager.contentInserted(4, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+		assertFalse(screenLineManager.isScreenLineCountValid(5));
+		assertFalse(screenLineManager.isScreenLineCountValid(6));
+		assertFalse(screenLineManager.isScreenLineCountValid(7));
+		assertFalse(screenLineManager.isScreenLineCountValid(8));
+		assertEquals(99, screenLineManager.getScreenLineCount(9));
 	}
 
 	@Test
@@ -517,7 +416,7 @@ public class ScreenLineManagerTest
 		int maxLines = 5;
 		when(buffer.getLineCount()).thenReturn(maxLines);
 		screenLineManager.reset();
-		initLines(maxLines);
+		resetLines(screenLineManager, maxLines);
 		screenLineManager.contentRemoved(1, 1);
 		assertTrue(screenLineManager.isScreenLineCountValid(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
@@ -532,7 +431,7 @@ public class ScreenLineManagerTest
 		int maxLines = 5;
 		when(buffer.getLineCount()).thenReturn(maxLines);
 		screenLineManager.reset();
-		initLines(maxLines);
+		resetLines(screenLineManager, maxLines);
 		screenLineManager.contentRemoved(1, 2);
 		assertTrue(screenLineManager.isScreenLineCountValid(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
@@ -540,9 +439,29 @@ public class ScreenLineManagerTest
 		assertTrue(screenLineManager.isScreenLineCountValid(3));
 	}
 
-	private void initLines(int nb)
+	private void initForInsert(int numLines, int arraySize)
 	{
+		int lineCountBeforeInsert = 5;
+		when(buffer.getLineCount())
+			.thenReturn(arraySize)
+			.thenReturn(lineCountBeforeInsert + numLines);
+		//First return is for the reset()
+		screenLineManager.reset();
+		resetLines(screenLineManager, lineCountBeforeInsert);
+	}
+
+	private void resetLines(ScreenLineManager screenLineManager, int nb)
+	{
+		try
+		{
+			for (int i = 0; i < Integer.MAX_VALUE; i++)
+				screenLineManager.setScreenLineCount(i, 99);
+		}
+		catch (Exception e)
+		{
+			// to fill the array
+		}
 		for (int i = 0; i < nb; i++)
-			screenLineManager.setScreenLineCount(i, i+1);
+			screenLineManager.setScreenLineCount(i, i + 1);
 	}
 }
