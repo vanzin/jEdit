@@ -411,32 +411,98 @@ public class ScreenLineManagerTest
 	}
 
 	@Test
-	public void contentRemoved1Line()
+	public void contentRemoved0LineAtStart()
 	{
-		int maxLines = 5;
-		when(buffer.getLineCount()).thenReturn(maxLines);
-		screenLineManager.reset();
-		resetLines(screenLineManager, maxLines);
-		screenLineManager.contentRemoved(1, 1);
-		assertTrue(screenLineManager.isScreenLineCountValid(0));
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertEquals(5, screenLineManager.getScreenLineCount(4));
+	}
+
+	/**
+	 * Test editing the second line
+	 */
+	@Test
+	public void contentRemoved0LineInMiddle()
+	{
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertTrue(screenLineManager.isScreenLineCountValid(2));
-		assertTrue(screenLineManager.isScreenLineCountValid(3));
-		assertTrue(screenLineManager.isScreenLineCountValid(4));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertEquals(5, screenLineManager.getScreenLineCount(4));
 	}
 
 	@Test
-	public void contentRemoved2Line()
+	public void contentRemoved0LineAtEnd()
 	{
-		int maxLines = 5;
-		when(buffer.getLineCount()).thenReturn(maxLines);
-		screenLineManager.reset();
-		resetLines(screenLineManager, maxLines);
-		screenLineManager.contentRemoved(1, 2);
-		assertTrue(screenLineManager.isScreenLineCountValid(0));
+		int numLines = 0;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(4, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertEquals(2, screenLineManager.getScreenLineCount(1));
+		assertEquals(3, screenLineManager.getScreenLineCount(2));
+		assertEquals(4, screenLineManager.getScreenLineCount(3));
+		assertFalse(screenLineManager.isScreenLineCountValid(4));
+	}
+
+	@Test
+	public void contentRemoved1lineAtStart()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertEquals(3, screenLineManager.getScreenLineCount(1));
+		assertEquals(4, screenLineManager.getScreenLineCount(2));
+		assertEquals(5, screenLineManager.getScreenLineCount(3));
+	}
+
+	@Test
+	public void contentRemoved1InMiddle()
+	{
+		int numLines = 1;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
 		assertFalse(screenLineManager.isScreenLineCountValid(1));
-		assertTrue(screenLineManager.isScreenLineCountValid(2));
-		assertTrue(screenLineManager.isScreenLineCountValid(3));
+		assertEquals(4, screenLineManager.getScreenLineCount(2));
+		assertEquals(5, screenLineManager.getScreenLineCount(3));
+	}
+
+	@Test
+	public void contentRemoved2lineAtStart()
+	{
+		int numLines = 2;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(0, numLines);
+
+		assertFalse(screenLineManager.isScreenLineCountValid(0));
+		assertEquals(3, screenLineManager.getScreenLineCount(1));
+		assertEquals(5, screenLineManager.getScreenLineCount(2));
+	}
+
+	@Test
+	public void contentRemoved2lineInMiddle()
+	{
+		int numLines = 2;
+		initForInsert(numLines, 100);
+		screenLineManager.contentRemoved(1, numLines);
+
+		assertEquals(1, screenLineManager.getScreenLineCount(0));
+		assertFalse(screenLineManager.isScreenLineCountValid(1));
+		assertEquals(5, screenLineManager.getScreenLineCount(2));
 	}
 
 	private void initForInsert(int numLines, int arraySize)
