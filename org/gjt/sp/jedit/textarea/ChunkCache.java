@@ -50,7 +50,7 @@ class ChunkCache
 	ChunkCache(TextArea textArea)
 	{
 		this.textArea = textArea;
-		outFull = new ArrayList<Chunk>();
+		outFull = new ArrayList<>();
 		outFullPhysicalLine = -1;
 		tokenHandler = new DisplayTokenHandler();
 	} //}}}
@@ -65,10 +65,9 @@ class ChunkCache
 	int getMaxHorizontalScrollWidth()
 	{
 		int max = 0;
-		for(int i = 0; i < lineInfo.length; i++)
+		for (LineInfo info : lineInfo)
 		{
-			LineInfo info = lineInfo[i];
-			if(info.width > max)
+			if (info.width > max)
 				max = info.width;
 		}
 		return max;
@@ -507,14 +506,16 @@ class ChunkCache
 
 		assert physicalLine == outFullPhysicalLine;
 
-		List<Chunk> chunkList = null;
-		if(outFull.isEmpty()) {
-			chunkList = new ArrayList<Chunk>();
+		List<Chunk> chunkList;
+		if (outFull.isEmpty())
+		{
+			chunkList = new ArrayList<>();
 			chunkList.add(null);
-		} else
+		}
+		else
 			chunkList = outFull;
 
-		List<LineInfo> returnValue = new ArrayList<LineInfo>(chunkList.size());
+		List<LineInfo> returnValue = new ArrayList<>(chunkList.size());
 		getLineInfosForPhysicalLine(physicalLine,returnValue, chunkList);
 		return returnValue.toArray(new LineInfo[chunkList.size()]);
 	} //}}}
@@ -814,7 +815,8 @@ class ChunkCache
 	{
 		assert physicalLine >= 0;
 
-		if(outFullPhysicalLine != physicalLine) {
+		if(outFullPhysicalLine != physicalLine)
+		{
 			TextAreaPainter painter = textArea.getPainter();
 			TabExpander expander= textArea.getTabExpander();
 			tokenHandler.init(painter.getStyles(),
@@ -846,11 +848,11 @@ class ChunkCache
 		/**
 		 * The offset where begins the line.
 		 */
-		int offset = 0;;
+		int offset;
 		/**
 		 * The line length.
 		 */
-		int length = 0;
+		int length;
 		/**
 		 * true if it is the first subregion of a line.
 		 */
@@ -859,10 +861,10 @@ class ChunkCache
 		 * True if it is the last subregion of a line.
 		 */
 		boolean lastSubregion;
-		Chunk chunks = null;
+		Chunk chunks;
 		/** The line width. */
-		int width = 0;
-		TokenMarker.LineContext lineContext = null;
+		int width;
+		TokenMarker.LineContext lineContext;
 
 		@Override
 		public String toString()
