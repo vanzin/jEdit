@@ -104,6 +104,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 
+- Add SIPp edit mode (Matthieu Casanova)
+
 - Add Well Known Text (WKT) edit mode (Matthieu Casanova)
 
 - Update RPM Spec mode (bug #3880 Matthieu Casanova)
