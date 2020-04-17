@@ -489,7 +489,7 @@ public class ScreenLineManagerTest
 		screenLineManager.contentRemoved(0, numLines);
 
 		assertFalse(screenLineManager.isScreenLineCountValid(0));
-		assertEquals(3, screenLineManager.getScreenLineCount(1));
+		assertEquals(4, screenLineManager.getScreenLineCount(1));
 		assertEquals(5, screenLineManager.getScreenLineCount(2));
 	}
 
