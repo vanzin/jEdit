@@ -54,6 +54,7 @@ public class BufferAutosaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ run() method
+	@Override
 	public void _run()
 	{
 		OutputStream out = null;
@@ -103,11 +104,11 @@ public class BufferAutosaveRequest extends BufferIORequest
 		}
 		finally
 		{
-			IOUtilities.closeQuietly((Closeable)out);
+			IOUtilities.closeQuietly(out);
 		}
 	} //}}}
 
-	private void cleanUpIncomplete(OutputStream out)
+	private void cleanUpIncomplete(Closeable out)
 	{
 		// Incomplete autosave file should not exist.
 		if(out != null)
@@ -115,7 +116,6 @@ public class BufferAutosaveRequest extends BufferIORequest
 			try
 			{
 				out.close();
-				out = null;
 				vfs._delete(session,path,view);
 			}
 			catch(IOException ioe)
