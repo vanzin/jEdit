@@ -135,14 +135,21 @@ class ScreenLineManager
 				if (startLine != 0)
 					System.arraycopy(screenLines, 0, screenLinesN, 0, startLine);
 
-				System.arraycopy(screenLines, startLine + 1, screenLinesN,
-					startLine + numLines + 1, nbLinesBeforeInsert - startLine - 1);
+
+				int lengthToCopy = nbLinesBeforeInsert - startLine - 1;
+				if (lengthToCopy > 0)
+					System.arraycopy(screenLines, startLine + 1, screenLinesN,
+						startLine + numLines + 1, lengthToCopy);
+
 				screenLines = screenLinesN;
 			}
 			else
 			{
-				System.arraycopy(screenLines, startLine + 1, screenLines,
-					startLine + numLines + 1, nbLinesBeforeInsert - startLine - 1);
+
+				int lengthToCopy = nbLinesBeforeInsert - startLine - 1;
+				if (lengthToCopy > 0)
+					System.arraycopy(screenLines, startLine + 1, screenLines,
+						startLine + numLines + 1, lengthToCopy);
 
 				invalidateScreenLineCountRange(startLine, startLine + numLines + 1);
 			}
