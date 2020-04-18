@@ -46,7 +46,7 @@ import org.gjt.sp.jedit.*;
  * @since jEdit 3.2pre2
  * @version $Id$
  */
-class PluginList
+class PluginList extends Task
 {
 	/**
 	 * Magic numbers used for auto-detecting GZIP files.
@@ -61,18 +61,29 @@ class PluginList
 
 	/**
 	 * The mirror id.
-	 * @since jEdit 4.3pre3
 	 */
-	private final String id;
+	private String id;
 	private String cachedURL;
-	private final Task task;
 	String gzipURL;
+	private final Runnable dispatchThreadTask;
 
-	PluginList(Task task)
+	/**
+	 * Instantiate the PluginList.
+	 *
+	 * @param dispatchThreadTask the task to execute in dispatch thread after the list was loaded
+	 */
+	PluginList(Runnable dispatchThreadTask)
+	{
+		this.dispatchThreadTask = dispatchThreadTask;
+	}
+
+	@Override
+	public void _run()
 	{
 		id = jEdit.getProperty("plugin-manager.mirror.id");
-		this.task = task;
+		setStatus(jEdit.getProperty("plugin-manager.list-download-connect"));
 		readPluginList(true);
+		ThreadUtilities.runInDispatchThread(dispatchThreadTask);
 	}
 
 	void readPluginList(boolean allowRetry)
@@ -183,8 +194,7 @@ class PluginList
 		 **/
 		try
 		{
-
-			task.setStatus(jEdit.getProperty("plugin-manager.list-download"));
+			setStatus(jEdit.getProperty("plugin-manager.list-download"));
 			URL downloadURL = new URL(gzipURL);
 			HttpURLConnection c = (HttpURLConnection)downloadURL.openConnection();
 			if(c.getResponseCode() == HttpURLConnection.HTTP_PROXY_AUTH)

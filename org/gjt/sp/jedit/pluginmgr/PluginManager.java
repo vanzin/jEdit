@@ -38,7 +38,6 @@ import org.gjt.sp.jedit.pluginmgr.PluginList.Plugin;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.Task;
 import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
@@ -244,25 +243,8 @@ public class PluginManager extends JFrame
 		installer.loading();
 		updater.loading();
 
-		ThreadUtilities.runInBackground(new Task()
-		{
-			@Override
-			public void _run()
-			{
-				try
-				{
-					downloadingPluginList = true;
-					setStatus(jEdit.getProperty(
-						"plugin-manager.list-download-connect"));
-					pluginList = new PluginList(this);
-				}
-				finally
-				{
-					downloadingPluginList = false;
-				}
-				ThreadUtilities.runInDispatchThread(() -> pluginListUpdated());
-			}
-		});
+		pluginList = new PluginList(this::pluginListUpdated);
+		ThreadUtilities.runInBackground(pluginList);
 	} //}}}
 
 	//{{{ checkForObsoletePlugins()
