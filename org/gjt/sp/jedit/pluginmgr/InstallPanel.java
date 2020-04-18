@@ -252,10 +252,10 @@ class InstallPanel extends JPanel implements EBComponent
 
 	//{{{ loadPluginSet() method
 	/** loads a pluginSet xml file and updates the model to reflect
-	    certain checked selections
-	    @since jEdit 4.3pre10
-	    @author Alan Ezust
-	*/
+	 *  certain checked selections
+	 *  @since jEdit 4.3pre10
+	 *  @author Alan Ezust
+	 */
 	boolean loadPluginSet(String path)
 	{
 		pluginSet.clear();
