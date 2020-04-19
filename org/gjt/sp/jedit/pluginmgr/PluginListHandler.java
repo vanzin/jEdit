@@ -36,10 +36,9 @@ import org.gjt.sp.util.XMLUtilities;
 class PluginListHandler extends DefaultHandler
 {
 	//{{{ PluginListHandler constructor
-	PluginListHandler(PluginList pluginList, String path)
+	PluginListHandler(PluginList pluginList)
 	{
 		this.pluginList = pluginList;
-		this.path = path;
 
 		author = new StringBuilder();
 		description = new StringBuilder();
@@ -49,6 +48,7 @@ class PluginListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "plugins.dtd", getClass());
@@ -57,56 +57,73 @@ class PluginListHandler extends DefaultHandler
 	//{{{ attribute() method
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
-		if(aname == "NAME")
-			name = value;
-		else if(aname == "JAR")
-			jar = value;
-		else if(aname == "VERSION")
-			version = value;
-		else if(aname == "DATE")
-			date = value;
-		else if(aname == "OBSOLETE")
-			obsolete = ("TRUE".equals(value));
-		else if(aname == "WHAT")
-			depWhat = value;
-		else if(aname == "FROM")
-			depFrom = value;
-		else if(aname == "TO")
-			depTo = value;
-		else if(aname == "PLUGIN")
-			depPlugin = value;
-		else if(aname == "SIZE")
+		switch (aname)
 		{
-			size = Integer.parseInt(value);
-			if(size == 0)
-				Log.log(Log.WARNING,this,"SIZE = 0");
+			case "NAME":
+				name = value;
+				break;
+			case "JAR":
+				jar = value;
+				break;
+			case "VERSION":
+				version = value;
+				break;
+			case "DATE":
+				date = value;
+				break;
+			case "OBSOLETE":
+				obsolete = ("TRUE".equals(value));
+				break;
+			case "WHAT":
+				depWhat = value;
+				break;
+			case "FROM":
+				depFrom = value;
+				break;
+			case "TO":
+				depTo = value;
+				break;
+			case "PLUGIN":
+				depPlugin = value;
+				break;
+			case "SIZE":
+				size = Integer.parseInt(value);
+				if (size == 0)
+					Log.log(Log.WARNING, this, "SIZE = 0");
+				break;
 		}
 	} //}}}
 
 	//{{{ characters() method
+	@Override
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
 
-		if(tag.equals("DESCRIPTION"))
+		switch (tag)
 		{
-			description.append(c, off, len);
+			case "DESCRIPTION":
+				description.append(c, off, len);
+				break;
+			case "PLUGIN_SET_ENTRY":
+				pluginSetEntry.append(c, off, len);
+				break;
+			case "AUTHOR":
+				if (author.length() != 0)
+					author.append(", ");
+				author.append(c, off, len);
+				break;
+			case "DOWNLOAD":
+				download.append(c, off, len);
+				break;
+			case "DOWNLOAD_SOURCE":
+				downloadSource.append(c, off, len);
+				break;
 		}
-		else if(tag.equals("PLUGIN_SET_ENTRY"))
-			pluginSetEntry.append(c, off, len);
-		else if(tag.equals("AUTHOR"))
-		{
-			if(author.length() != 0)
-				author.append(", ");
-			author.append(c, off, len);
-		}
-		else if(tag.equals("DOWNLOAD"))
-			download.append(c, off, len);
-		else if(tag.equals("DOWNLOAD_SOURCE"))
-			downloadSource.append(c, off, len);
 	} //}}}
 
 	//{{{ startElement() method
+	@Override
 	public void startElement(String uri, String localName,
 				 String tag, Attributes attrs)
 	{
@@ -120,86 +137,88 @@ class PluginListHandler extends DefaultHandler
 
 		tag = pushElement(tag);
 
-		if(tag.equals("PLUGIN_SET"))
+		switch (tag)
 		{
-			description.setLength(0);
-			pluginSet = new PluginList.PluginSet();
-			pluginSet.name = name;
+			case "PLUGIN_SET":
+				description.setLength(0);
+				pluginSet = new PluginList.PluginSet();
+				pluginSet.name = name;
+				break;
+			case "PLUGIN":
+				description.setLength(0);
+				author.setLength(0);
+				branch = null;
+				plugin = new PluginList.Plugin();
+				break;
+			case "BRANCH":
+				download.setLength(0);
+				branch = new PluginList.Branch();
+				break;
+			case "DOWNLOAD":
+				downloadSize = size;
+				break;
+			case "DOWNLOAD_SOURCE":
+				downloadSourceSize = size;
+				break;
 		}
-		else if(tag.equals("PLUGIN"))
-		{
-			description.setLength(0);
-			author.setLength(0);
-			branch = null;
-			plugin = new PluginList.Plugin();
-		}
-		else if(tag.equals("BRANCH"))
-		{
-			download.setLength(0);
-			branch = new PluginList.Branch();
-		}
-		else if(tag.equals("DOWNLOAD"))
-			downloadSize = size;
-		else if(tag.equals("DOWNLOAD_SOURCE"))
-			downloadSourceSize = size;
 	} //}}}
 
 	//{{{ endElement() method
+	@Override
 	public void endElement(String uri, String localName, String tag)
 	{
 		popElement();
 
-		if(tag.equals("PLUGIN_SET"))
+		switch (tag)
 		{
-			pluginList.addPluginSet(pluginSet);
-			pluginSet = null;
-			pluginSetEntry.setLength(0);
-		}
-		else if(tag.equals("PLUGIN_SET_ENTRY"))
-		{
-			pluginSet.plugins.add(pluginSetEntry.toString());
-			pluginSetEntry.setLength(0);
-		}
-		else if(tag.equals("PLUGIN"))
-		{
-			plugin.jar = jar;
-			plugin.name = name;
-			plugin.author = author.toString();
-			plugin.description = description.toString();
-			pluginList.addPlugin(plugin);
-			jar = null;
-			name = null;
-			author.setLength(0);
-			description.setLength(0);
-		}
-		else if(tag.equals("BRANCH"))
-		{
-			branch.version = version;
-			branch.date = date;
-			branch.download = download.toString();
-			branch.downloadSize = downloadSize;
-			branch.downloadSource = downloadSource.toString();
-			branch.downloadSourceSize = downloadSourceSize;
-			branch.obsolete = obsolete;
-			plugin.branches.add(branch);
-			version = null;
-			download.setLength(0);
-			downloadSource.setLength(0);
-			obsolete = false;
-		}
-		else if(tag.equals("DEPEND"))
-		{
-			PluginList.Dependency dep = new PluginList.Dependency(
-				depWhat,depFrom,depTo,depPlugin);
-			branch.deps.add(dep);
-			depWhat = null;
-			depFrom = null;
-			depTo = null;
-			depPlugin = null;
+			case "PLUGIN_SET":
+				pluginList.addPluginSet(pluginSet);
+				pluginSet = null;
+				pluginSetEntry.setLength(0);
+				break;
+			case "PLUGIN_SET_ENTRY":
+				pluginSet.plugins.add(pluginSetEntry.toString());
+				pluginSetEntry.setLength(0);
+				break;
+			case "PLUGIN":
+				plugin.jar = jar;
+				plugin.name = name;
+				plugin.author = author.toString();
+				plugin.description = description.toString();
+				pluginList.addPlugin(plugin);
+				jar = null;
+				name = null;
+				author.setLength(0);
+				description.setLength(0);
+				break;
+			case "BRANCH":
+				branch.version = version;
+				branch.date = date;
+				branch.download = download.toString();
+				branch.downloadSize = downloadSize;
+				branch.downloadSource = downloadSource.toString();
+				branch.downloadSourceSize = downloadSourceSize;
+				branch.obsolete = obsolete;
+				plugin.branches.add(branch);
+				version = null;
+				download.setLength(0);
+				downloadSource.setLength(0);
+				obsolete = false;
+				break;
+			case "DEPEND":
+				PluginList.Dependency dep = new PluginList.Dependency(
+					depWhat, depFrom, depTo, depPlugin);
+				branch.deps.add(dep);
+				depWhat = null;
+				depFrom = null;
+				depTo = null;
+				depPlugin = null;
+				break;
 		}
 	} //}}}
 
 	//{{{ startDocument() method
+	@Override
 	public void startDocument()
 	{
 		try
@@ -213,6 +232,7 @@ class PluginListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endDocument() method
+	@Override
 	public void endDocument()
 	{
 		pluginList.finished();
@@ -223,8 +243,6 @@ class PluginListHandler extends DefaultHandler
 	//{{{ private members
 	
 	//{{{ Instance variables
-	private final String path;
-
 	private final PluginList pluginList;
 
 	private PluginList.PluginSet pluginSet;
@@ -232,15 +250,15 @@ class PluginListHandler extends DefaultHandler
 
 	private PluginList.Plugin plugin;
 	private String jar;
-	private StringBuilder author;
+	private final StringBuilder author;
 
 	private PluginList.Branch branch;
 	private boolean obsolete;
 	private String version;
 	private String date;
-	private StringBuilder download;
+	private final StringBuilder download;
 	private int downloadSize;
-	private StringBuilder downloadSource;
+	private final StringBuilder downloadSource;
 	private int downloadSourceSize;
 	private int size;
 	private String depWhat;
@@ -249,9 +267,9 @@ class PluginListHandler extends DefaultHandler
 	private String depPlugin;
 
 	private String name;
-	private StringBuilder description;
+	private final StringBuilder description;
 
-	private final Stack<String> stateStack = new Stack<String>();
+	private final Stack<String> stateStack = new Stack<>();
 	//}}}
 
 	//{{{ pushElement() method

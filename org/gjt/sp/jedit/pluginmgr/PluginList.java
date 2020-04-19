@@ -26,15 +26,15 @@ package org.gjt.sp.jedit.pluginmgr;
 import java.io.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
 
 import org.gjt.sp.util.*;
+import org.jedit.io.HttpException;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 
-import javax.annotation.Nonnull;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.gjt.sp.jedit.*;
@@ -48,13 +48,6 @@ import org.gjt.sp.jedit.*;
  */
 class PluginList extends Task
 {
-	/**
-	 * Magic numbers used for auto-detecting GZIP files.
-	 */
-	public static final int GZIP_MAGIC_1 = 0x1f;
-	public static final int GZIP_MAGIC_2 = 0x8b;
-	public static final long MILLISECONDS_PER_MINUTE = 60L * 1000L;
-
 	final List<Plugin> plugins = new ArrayList<>();
 	final Map<String, Plugin> pluginHash = new HashMap<>();
 	final List<PluginSet> pluginSets = new ArrayList<>();
@@ -63,8 +56,6 @@ class PluginList extends Task
 	 * The mirror id.
 	 */
 	private String id;
-	private String cachedURL;
-	String gzipURL;
 	private final Runnable dispatchThreadTask;
 
 	//{{{ PluginList constructor
@@ -83,166 +74,78 @@ class PluginList extends Task
 	public void _run()
 	{
 		id = jEdit.getProperty("plugin-manager.mirror.id");
+		CachePluginList cachePluginList = new CachePluginList(id);
+		RemotePluginList remotePluginList = new RemotePluginList(this, id);
+
 		setStatus(jEdit.getProperty("plugin-manager.list-download-connect"));
-		readPluginList(true);
+		try
+		{
+			String pluginListXml = cachePluginList.getPluginList();
+			if (pluginListXml != null)
+			{
+				try
+				{
+					loadPluginList(pluginListXml);
+				}
+				catch (SAXException | ParserConfigurationException | IOException e)
+				{
+					cachePluginList.deleteCache();
+					String newPluginList = remotePluginList.getPluginList();
+					loadPluginList(newPluginList);
+					cachePluginList.saveCache(newPluginList);
+				}
+			}
+			else
+			{
+				String newPluginList = remotePluginList.getPluginList();
+				loadPluginList(newPluginList);
+				cachePluginList.saveCache(newPluginList);
+			}
+		}
+		catch (HttpException e)
+		{
+			int responseCode = e.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_PROXY_AUTH)
+			{
+				Log.log(Log.ERROR, this, "CacheRemotePluginList: proxy requires authentication");
+				ThreadUtilities.runInDispatchThread(() -> GUIUtilities.error(jEdit.getActiveView(),
+					"plugin-manager.list-download.need-password",
+					new Object[]{}));
+			}
+			else
+			{
+				String responseMessage = e.getMessage();
+				Log.log(Log.ERROR, this, "CacheRemotePluginList: HTTP error: " + responseCode + ' ' + responseMessage);
+				ThreadUtilities.runInDispatchThread(() ->
+					GUIUtilities.error(jEdit.getActiveView(),
+						"plugin-manager.list-download.generic-error",
+						new Object[]{responseCode, responseMessage}));
+			}
+		}
+		catch (Exception e)
+		{
+			Log.log (Log.ERROR, this, "CacheRemotePluginList: error", e);
+			ThreadUtilities.runInDispatchThread(() -> GUIUtilities.error(jEdit.getActiveView(),
+				"plugin-manager.list-download.disconnected",
+				new Object[]{e.getMessage()}));
+		}
+		// even if there was an error we want to update the panels
 		ThreadUtilities.runInDispatchThread(dispatchThreadTask);
 	} //}}}
 
-	//{{{ readPluginList() method
-	private void readPluginList(boolean allowRetry)
+	//{{{ loadPluginList() method
+	private void loadPluginList(String pluginListXml) throws IOException, SAXException, ParserConfigurationException
 	{
-		String mirror = buildMirror(id);
-		gzipURL = jEdit.getProperty("plugin-manager.export-url") + "?mirror=" + mirror + "&new_url_scheme";
-		if (jEdit.getSettingsDirectory() == null)
-		{
-			cachedURL = gzipURL;
-			// don't download it now, it will be done by reading the xml directly
-		}
-		else
-		{
-			String path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
-			cachedURL = "file:///" + path;
-			if (shouldDownload(path))
-			{
-				downloadPluginList();
-			}
-			else
-				Log.log(Log.MESSAGE, this, "Using cached pluginlist");
-		}
-
-		try (InputStream in = openPluginListStream(cachedURL))
-		{
-			PluginListHandler handler = new PluginListHandler(this, cachedURL);
-			XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-			InputSource isrc = new InputSource(new InputStreamReader(in, StandardCharsets.UTF_8));
-			isrc.setSystemId("jedit.jar");
-			parser.setContentHandler(handler);
-			parser.setDTDHandler(handler);
-			parser.setEntityResolver(handler);
-			parser.setErrorHandler(handler);
-			parser.parse(isrc);
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.ERROR, this, "readpluginlist: error", e);
-			if (cachedURL.startsWith("file:///"))
-			{
-				Log.log(Log.DEBUG, this, "Unable to read plugin list, deleting cached file and try again");
-				new File(cachedURL.substring(8)).delete();
-				if (allowRetry)
-				{
-					plugins.clear();
-					pluginHash.clear();
-					pluginSets.clear();
-					readPluginList(false);
-				}
-			}
-		}
+		PluginListHandler handler = new PluginListHandler(this);
+		XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+		InputSource isrc = new InputSource(new StringReader(pluginListXml));
+		isrc.setSystemId("jedit.jar");
+		parser.setContentHandler(handler);
+		parser.setDTDHandler(handler);
+		parser.setEntityResolver(handler);
+		parser.setErrorHandler(handler);
+		parser.parse(isrc);
 	} //}}}
-
-	//{{{ shouldDownload() method
-	private boolean shouldDownload(String cachePath)
-	{
-		try
-		{
-			File file = new File(cachePath);
-			if (!file.canRead())
-				return true;
-			long currentTime = System.currentTimeMillis();
-			long age = currentTime - file.lastModified();
-			/* By default only download plugin lists every 5 minutes */
-			long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * MILLISECONDS_PER_MINUTE;
-			if (age > interval)
-			{
-				Log.log(Log.MESSAGE, this, "PluginList cached copy too old. Downloading from mirror. ");
-				return true;
-			}
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.MESSAGE, this, "No cached copy. Downloading from mirror. ");
-			return true;
-		}
-		return !id.equals(jEdit.getProperty("plugin-manager.mirror.cached-id"));
-	} //}}}
-
-	//{{{ openPluginListStream() method
-	private static InputStream openPluginListStream(String cachedURL) throws IOException
-	{
-		InputStream inputStream = new URL(cachedURL).openStream();
-		InputStream in = new BufferedInputStream(inputStream);
-		if(in.markSupported())
-		{
-			in.mark(2);
-			int b1 = in.read();
-			int b2 = in.read();
-			in.reset();
-
-			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
-				in = new GZIPInputStream(in);
-		}
-		return in;
-	} //}}}
-
-	//{{{ downloadPluginList() method
-	/** Caches it locally */
-	private void downloadPluginList()
-	{
-		BufferedInputStream is = null;
-		BufferedOutputStream out = null;
-		/* download the plugin list, while trying to show informative error messages.
-		 * Currently when :
-		 * - the proxy requires authentication
-		 * - another HTTP error happens (may be good to know that the site is broken)
-		 * - the host can't be reached (reported as internet access error)
-		 * Otherwise, only an error message is logged in the activity log.
-		 **/
-		try
-		{
-			setStatus(jEdit.getProperty("plugin-manager.list-download"));
-			URL downloadURL = new URL(gzipURL);
-			HttpURLConnection c = (HttpURLConnection)downloadURL.openConnection();
-			if(c.getResponseCode() == HttpURLConnection.HTTP_PROXY_AUTH)
-			{
-				GUIUtilities.error(jEdit.getActiveView()
-					, "plugin-manager.list-download.need-password"
-					, new Object[]{});
-				Log.log (Log.ERROR, this, "CacheRemotePluginList: proxy requires authentication");
-			}
-			else if(c.getResponseCode() == HttpURLConnection.HTTP_OK)
-			{
-				InputStream inputStream = c.getInputStream();
-				String fileName = cachedURL.replaceFirst("file:///", "");
-				out = new BufferedOutputStream(new FileOutputStream(fileName));
-				long start = System.currentTimeMillis();
-				is = new BufferedInputStream(inputStream);
-				IOUtilities.copyStream(4096, null, is, out, false);
-				jEdit.setProperty("plugin-manager.mirror.cached-id", id);
-				Log.log(Log.MESSAGE, this, "Updated cached pluginlist " + (System.currentTimeMillis() - start));
-			}
-			else
-			{
-				GUIUtilities.error(jEdit.getActiveView()
-					, "plugin-manager.list-download.generic-error"
-					, new Object[]{c.getResponseCode(), c.getResponseMessage()});
-				Log.log (Log.ERROR, this, "CacheRemotePluginList: HTTP error: "+c.getResponseCode()+ c.getResponseMessage());
-			}
-		}
-		catch(java.net.UnknownHostException e)
-		{
-			GUIUtilities.error(jEdit.getActiveView(), "plugin-manager.list-download.disconnected", new Object[]{e.getMessage()});
-			Log.log (Log.ERROR, this, "CacheRemotePluginList: error", e);
-		}
-		catch (Exception e)
-		{
-			Log.log (Log.ERROR, this, "CacheRemotePluginList: error", e);
-		}
-		finally
-		{
-			IOUtilities.closeQuietly((Closeable)out);
-			IOUtilities.closeQuietly((Closeable)is);
-		}
-	}
 
 	//{{{ addPlugin() method
 	void addPlugin(Plugin plugin)
@@ -617,11 +520,6 @@ class PluginList extends Task
 	} //}}}
 
 	//{{{ Private members
-	@Nonnull
-	private static String buildMirror(String id)
-	{
-		return id != null && !MirrorList.Mirror.NONE.equals(id) ? id : "default";
-	}
 
 	// TODO: this isn't used, should it be?
 	private static String getAutoSelectedMirror()
