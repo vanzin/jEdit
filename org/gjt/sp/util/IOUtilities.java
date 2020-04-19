@@ -23,6 +23,8 @@
 package org.gjt.sp.util;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import javax.annotation.Nullable;
 
 /**
@@ -173,6 +175,50 @@ public class IOUtilities
 		throws IOException
 	{
 		return copyStream(4096, progress, progressPrefix, in, out, canStop);
+	} //}}}
+
+	//{{{ toByteArray() method
+	/**
+	 * Convert an InputStream into a byte array
+	 *
+	 * @param in the input stream
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 5.6pre1
+	 */
+	public static byte[] toByteArray(InputStream in) throws IOException
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream(500000);
+		copyStream(500000, null, null, in, out, false);
+		return out.toByteArray();
+	} //}}}
+
+	//{{{ toString() methods
+	/**
+	 * Convert an InputStream into a String with UTF-8 encoding
+	 *
+	 * @param in the input stream
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 5.6pre1
+	 */
+	public static String toString(InputStream in) throws IOException
+	{
+		return toString(in, StandardCharsets.UTF_8);
+	} //}}}
+
+	//{{{ toString() methods
+	/**
+	 * Convert an InputStream into a String
+	 *
+	 * @param in the input stream
+	 * @param charset the choosend charset
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 5.6pre1
+	 */
+	public static String toString(InputStream in, Charset charset) throws IOException
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream(500000);
+		copyStream(500000, null, null, in, out, false);
+		return out.toString(charset);
 	} //}}}
 
 	//{{{ fileLength() method

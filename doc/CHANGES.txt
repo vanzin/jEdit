@@ -90,6 +90,10 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- New methods IOUtilities.toString(InputStream) (Matthieu Casanova)
+
+- New method IOUtilities.toByteArray(InputStream) (Matthieu Casanova)
+
 - New UniqueActionDocumentListener class, a DocumentListener that does the same action
   for every event (Matthieu Casanova)
 
