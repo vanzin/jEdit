@@ -22,14 +22,47 @@
 package org.gjt.sp.util;
 
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class SyntaxUtilitiesTest
 {
+	@Before
+	public void setUp() throws Exception
+	{
+		Map<String, String> map = new HashMap<>();
+		map.put("view.style.comment1", "color:#cc0000");
+		map.put("view.style.comment2", "color:#ff8400");
+		map.put("view.style.comment3", "color:#6600cc");
+		map.put("view.style.comment4", "color:#cc6600");
+		map.put("view.style.digit", "color:#ff0000");
+		map.put("view.style.foldLine.0", "color:#000000 bgColor:#dafeda style:b");
+		map.put("view.style.foldLine.1", "color:#000000 bgColor:#fff0cc style:b");
+		map.put("view.style.foldLine.2", "color:#000000 bgColor:#e7e7ff style:b");
+		map.put("view.style.foldLine.3", "color:#000000 bgColor:#ffe0f0 style:b");
+		map.put("view.style.function", "color:#9966ff");
+		map.put("view.style.invalid", "color:#ff0066 bgColor:#ffffcc");
+		map.put("view.style.keyword1", "color:#006699 style:b");
+		map.put("view.style.keyword2", "color:#009966 style:b");
+		map.put("view.style.keyword3", "color:#0099ff style:b");
+		map.put("view.style.keyword4", "color:#66ccff style:b");
+		map.put("view.style.label", "color:#02b902");
+		map.put("view.style.literal1", "color:#ff00cc");
+		map.put("view.style.literal2", "color:#cc00cc");
+		map.put("view.style.literal3", "color:#9900cc");
+		map.put("view.style.literal4", "color:#6600cc");
+		map.put("view.style.markup", "color:#0000ff");
+		map.put("view.style.operator", "color:#000000 style:b");
+		map.put("view.style.wrap", "color:#000000 style:b");
+		SyntaxUtilities.propertyManager = map::get;
+	}
+
 	@Test
 	public void getColorHexString()
 	{
@@ -168,5 +201,11 @@ public class SyntaxUtilitiesTest
 	public void parseStyleError2()
 	{
 		SyntaxUtilities.parseStyle("stfyle:a", "Arial", 12, true);
+	}
+
+	@Test
+	public void loadStyles()
+	{
+		SyntaxUtilities.loadStyles("Monospaced", 12);
 	}
 }
