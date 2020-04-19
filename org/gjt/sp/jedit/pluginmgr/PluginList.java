@@ -67,6 +67,7 @@ class PluginList extends Task
 	String gzipURL;
 	private final Runnable dispatchThreadTask;
 
+	//{{{ PluginList constructor
 	/**
 	 * Instantiate the PluginList.
 	 *
@@ -75,8 +76,9 @@ class PluginList extends Task
 	PluginList(Runnable dispatchThreadTask)
 	{
 		this.dispatchThreadTask = dispatchThreadTask;
-	}
+	} //}}}
 
+	//{{{ _run() method
 	@Override
 	public void _run()
 	{
@@ -84,69 +86,34 @@ class PluginList extends Task
 		setStatus(jEdit.getProperty("plugin-manager.list-download-connect"));
 		readPluginList(true);
 		ThreadUtilities.runInDispatchThread(dispatchThreadTask);
-	}
+	} //}}}
 
-	void readPluginList(boolean allowRetry)
+	//{{{ readPluginList() method
+	private void readPluginList(boolean allowRetry)
 	{
 		String mirror = buildMirror(id);
 		gzipURL = jEdit.getProperty("plugin-manager.export-url") + "?mirror=" + mirror + "&new_url_scheme";
-		String path = null;
 		if (jEdit.getSettingsDirectory() == null)
 		{
 			cachedURL = gzipURL;
+			// don't download it now, it will be done by reading the xml directly
 		}
 		else
 		{
-			path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
+			String path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
 			cachedURL = "file:///" + path;
-		}
-		boolean downloadIt = !id.equals(jEdit.getProperty("plugin-manager.mirror.cached-id"));
-		if (path != null)
-		{
-			try
+			if (shouldDownload(path))
 			{
-				File file = new File(path);
-				if (!file.canRead())
-					downloadIt = true;
-				long currentTime = System.currentTimeMillis();
-				long age = currentTime - file.lastModified();
-				/* By default only download plugin lists every 5 minutes */
-				long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * MILLISECONDS_PER_MINUTE;
-				if (age > interval)
-				{
-					Log.log(Log.MESSAGE, this, "PluginList cached copy too old. Downloading from mirror. ");
-					downloadIt = true;
-				}
+				downloadPluginList();
 			}
-			catch (Exception e)
-			{
-				Log.log(Log.MESSAGE, this, "No cached copy. Downloading from mirror. ");
-				downloadIt = true;
-			}
-		}
-		if (downloadIt && cachedURL != gzipURL)
-		{
-			downloadPluginList();
-		}
-		InputStream in = null, inputStream = null;
-		try
-		{
-			if (cachedURL != gzipURL)
+			else
 				Log.log(Log.MESSAGE, this, "Using cached pluginlist");
-			inputStream = new URL(cachedURL).openStream();
-			XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-			PluginListHandler handler = new PluginListHandler(this, cachedURL);
-			in = new BufferedInputStream(inputStream);
-			if(in.markSupported())
-			{
-				in.mark(2);
-				int b1 = in.read();
-				int b2 = in.read();
-				in.reset();
+		}
 
-				if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
-					in = new GZIPInputStream(in);
-			}
+		try (InputStream in = openPluginListStream(cachedURL))
+		{
+			PluginListHandler handler = new PluginListHandler(this, cachedURL);
+			XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 			InputSource isrc = new InputSource(new InputStreamReader(in, StandardCharsets.UTF_8));
 			isrc.setSystemId("jedit.jar");
 			parser.setContentHandler(handler);
@@ -154,7 +121,6 @@ class PluginList extends Task
 			parser.setEntityResolver(handler);
 			parser.setErrorHandler(handler);
 			parser.parse(isrc);
-
 		}
 		catch (Exception e)
 		{
@@ -172,16 +138,55 @@ class PluginList extends Task
 				}
 			}
 		}
-		finally
+	} //}}}
+
+	//{{{ shouldDownload() method
+	private boolean shouldDownload(String cachePath)
+	{
+		try
 		{
-			IOUtilities.closeQuietly((Closeable)in);
-			IOUtilities.closeQuietly((Closeable)inputStream);
+			File file = new File(cachePath);
+			if (!file.canRead())
+				return true;
+			long currentTime = System.currentTimeMillis();
+			long age = currentTime - file.lastModified();
+			/* By default only download plugin lists every 5 minutes */
+			long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * MILLISECONDS_PER_MINUTE;
+			if (age > interval)
+			{
+				Log.log(Log.MESSAGE, this, "PluginList cached copy too old. Downloading from mirror. ");
+				return true;
+			}
 		}
+		catch (Exception e)
+		{
+			Log.log(Log.MESSAGE, this, "No cached copy. Downloading from mirror. ");
+			return true;
+		}
+		return !id.equals(jEdit.getProperty("plugin-manager.mirror.cached-id"));
+	} //}}}
 
-	}
+	//{{{ openPluginListStream() method
+	private static InputStream openPluginListStream(String cachedURL) throws IOException
+	{
+		InputStream inputStream = new URL(cachedURL).openStream();
+		InputStream in = new BufferedInputStream(inputStream);
+		if(in.markSupported())
+		{
+			in.mark(2);
+			int b1 = in.read();
+			int b2 = in.read();
+			in.reset();
 
+			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+				in = new GZIPInputStream(in);
+		}
+		return in;
+	} //}}}
+
+	//{{{ downloadPluginList() method
 	/** Caches it locally */
-	void downloadPluginList()
+	private void downloadPluginList()
 	{
 		BufferedInputStream is = null;
 		BufferedOutputStream out = null;
