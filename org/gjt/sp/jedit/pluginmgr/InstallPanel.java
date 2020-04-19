@@ -29,11 +29,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.util.GenericGUIUtilities;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.StringList;
-import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.*;
 import org.gjt.sp.util.swing.event.UniqueActionDocumentListener;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -353,7 +349,7 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ PluginTableModel class
 	private class PluginTableModel extends AbstractTableModel
 	{
-		private final List<Entry> entries = new ArrayList<>();
+		private List<Entry> entries = new ArrayList<>();
 		private final List<Entry> filteredEntries = new ArrayList<>();
 		private int sortType = EntryCompare.COLUMN_NAME;
 		private String filterString;
@@ -702,45 +698,48 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ update() method
 		public void update()
 		{
-			Set<String> savedChecked = new HashSet<>();
-			Set<String> savedSelection = new HashSet<>();
-			saveSelection(savedChecked,savedSelection);
-
-			PluginList pluginList = window.getPluginList();
-
-			if (pluginList == null) return;
-
-			entries.clear();
-
-			for(PluginList.PluginSet set : pluginList.pluginSets)
-			{
-				for(int j = 0; j < set.plugins.size(); j++)
-				{
-					PluginList.Plugin plugin = pluginList.pluginHash.get(set.plugins.get(j));
-					PluginList.Branch branch = plugin.getCompatibleBranch();
-					String installedVersion = plugin.getInstalledVersion();
-					if (updates)
-					{
-						if(branch != null
-							&& branch.canSatisfyDependencies()
-							&& installedVersion != null
-							&& StandardUtilities.compareStrings(branch.version,
-							installedVersion,false) > 0)
-						{
-							entries.add(new Entry(plugin, set.name));
-						}
-					}
-					else
-					{
-						if(plugin.canBeInstalled())
-							entries.add(new Entry(plugin,set.name));
-					}
-				}
-			}
-
-			sort(sortType);
-			restoreSelection(savedChecked, savedSelection);
+			ThreadUtilities.runInBackground(new UpdateModelTask());
 		} //}}}
+
+		public List<Entry> buildEntryList()
+		{
+			PluginList pluginList = window.getPluginList();
+			if (pluginList == null)
+				return null;
+
+			List<Entry> entries = Collections.synchronizedList(new ArrayList<>());
+			pluginList.pluginSets
+				.stream()
+				.parallel()
+				.forEach(set ->
+				{
+					set.plugins
+						.stream()
+						.parallel()
+						.map(pluginList.pluginHash::get).forEach(plugin ->
+					{
+						PluginList.Branch branch = plugin.getCompatibleBranch();
+						String installedVersion = plugin.getInstalledVersion();
+						if (updates)
+						{
+							if (branch != null
+								&& branch.canSatisfyDependencies()
+								&& installedVersion != null
+								&& StandardUtilities.compareStrings(branch.version,
+								installedVersion, false) > 0)
+							{
+								entries.add(new Entry(plugin, set.name));
+							}
+						}
+						else
+						{
+							if (plugin.canBeInstalled())
+								entries.add(new Entry(plugin, set.name));
+						}
+					});
+				});
+			return entries;
+		}
 
 		//{{{ saveSelection() method
 		public void saveSelection(Set<String> savedChecked, Set<String> savedSelection)
@@ -812,6 +811,28 @@ class InstallPanel extends JPanel implements EBComponent
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		} //}}}
+
+		private class UpdateModelTask extends Task
+		{
+			@Override
+			public void _run()
+			{
+				List<Entry> newEntries = buildEntryList();
+				if (newEntries == null)
+					return;
+
+				ThreadUtilities.runInDispatchThread(() ->
+				{
+					Set<String> savedChecked = new HashSet<>();
+					Set<String> savedSelection = new HashSet<>();
+					saveSelection(savedChecked,savedSelection);
+
+					entries = newEntries;
+					sort(sortType);
+					restoreSelection(savedChecked, savedSelection);
+				});
+			}
+		}
 	} //}}}
 
 	//{{{ Entry class
