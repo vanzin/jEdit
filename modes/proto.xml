@@ -15,10 +15,11 @@
 	..........................................................................
 
 	Creation date	:	18-Feb-2016
-	Last revision	:	18-Feb-2016
+	Last revision	:	19-April-2020
 	Revision		:	1.0
     History			:
 						18-Feb-2016 First release
+						19-April-2020 Add a few keywords
 
 	.....................................................................  -->
 
@@ -81,13 +82,21 @@
 			<KEYWORD1>option</KEYWORD1>
 			<KEYWORD1>service</KEYWORD1>
 			<KEYWORD1>extend</KEYWORD1>
-			
+			<KEYWORD1>syntax</KEYWORD1>
+			<KEYWORD1>reserved</KEYWORD1>
+			<!-- additional keywords -->
+			<KEYWORD1>public</KEYWORD1>
+			<KEYWORD1>weak</KEYWORD1>
+			<KEYWORD1>to</KEYWORD1>
+			<KEYWORD1>max</KEYWORD1>
+
 			<!--  modifiers -->
 			<KEYWORD2>required</KEYWORD2>
 			<KEYWORD2>optional</KEYWORD2>
 			<KEYWORD2>repeated</KEYWORD2>
 			<KEYWORD2>rpc</KEYWORD2>
 			<KEYWORD2>returns</KEYWORD2>
+			<KEYWORD2>oneof</KEYWORD2>
 
 			<!-- types -->
 			<KEYWORD3>double</KEYWORD3>
@@ -105,6 +114,7 @@
 			<KEYWORD3>bool</KEYWORD3>
 			<KEYWORD3>string</KEYWORD3>
 			<KEYWORD3>bytes</KEYWORD3>
+			<KEYWORD3>map</KEYWORD3>
 		</KEYWORDS>
 
 	</RULES>
