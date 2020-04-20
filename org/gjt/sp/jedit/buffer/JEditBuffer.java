@@ -1147,7 +1147,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int newIndent = oldIndent;
 
 		List<IndentRule> indentRules = getIndentRules(lineIndex);
-		List<IndentAction> actions = new LinkedList<IndentAction>();
+		List<IndentAction> actions = new LinkedList<>();
 		for (IndentRule rule : indentRules)
 			rule.apply(this, lineIndex, prevLineIndex, prevPrevLineIndex, actions);
 
@@ -2928,7 +2928,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			int currentLine = startLine;
 			int colBlockWidth=0;
-			Vector<ColumnBlockLine> columnBlockLines = new Vector<ColumnBlockLine>();
+			Vector<ColumnBlockLine> columnBlockLines = new Vector<>();
 			//while(currentLine<=endLine)
 			ColumnBlock parentColumnBlock = (ColumnBlock) parent;
 			for(int ik=startLine- parentColumnBlock.getStartLine();currentLine<=endLine;ik++)
