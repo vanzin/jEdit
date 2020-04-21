@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.textarea;
 
 // {{{ Imports
+import javax.annotation.Nonnull;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 import java.text.AttributedCharacterIterator;
@@ -117,6 +118,7 @@ class InputMethodSupport
 
 	// {{{ implements InputMethodRequests
 	@Override
+	@Nonnull
 	public Rectangle getTextLocation(TextHitInfo offset)
 	{
 		int caretPosition = owner.getCaretPosition();
@@ -145,7 +147,7 @@ class InputMethodSupport
 				{
 					Point caretLineStart = owner.offsetToXY(caretLine, 0);
 					if( caretLineStart == null)
-						return null;
+						return getCaretRectangle(0, 0);
 					return getCaretRectangle(caretLineStart.x, caretLineStart.y);
 				}
 			}
@@ -153,7 +155,7 @@ class InputMethodSupport
 			{
 				Point caret = owner.offsetToXY(caretPosition);
 				if (caret == null)
-					return null;
+					return getCaretRectangle(0, 0);
 				return getCaretRectangle(caret.x, caret.y);
 			}
 		}
