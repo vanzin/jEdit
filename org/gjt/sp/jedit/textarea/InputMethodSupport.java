@@ -152,6 +152,8 @@ class InputMethodSupport
 			else
 			{
 				Point caret = owner.offsetToXY(caretPosition);
+				if (caret == null)
+					return null;
 				return getCaretRectangle(caret.x, caret.y);
 			}
 		}
