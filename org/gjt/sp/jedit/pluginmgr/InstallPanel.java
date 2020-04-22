@@ -48,6 +48,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -242,35 +243,47 @@ class InstallPanel extends JPanel implements EBComponent
 		String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 		if (!path.isEmpty())
 		{
-			loadPluginSet(path);
+			try
+			{
+				loadPluginSet(path);
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.WARNING, this, "Loading Pluginset failed:" + e.getMessage());
+			}
 		}
 	} //}}}
 
-	//{{{ loadPluginSet() method
-	/** loads a pluginSet xml file and updates the model to reflect
-	 *  certain checked selections
-	 *  @since jEdit 4.3pre10
-	 *  @author Alan Ezust
+	//{{{ loadPluginSet() methods
+	/**
+	 * loads a pluginSet xml file and updates the model to reflect
+	 * certain checked selections
+	 * @since jEdit 4.3pre10
+	 * @author Alan Ezust
 	 */
-	boolean loadPluginSet(String path)
+	void loadPluginSet(String path) throws IOException
+	{
+		loadPluginSet(path, null);
+	}
+
+	/**
+	 * loads a pluginSet xml file and updates the model to reflect
+	 * certain checked selections
+	 * @param path the path of the pluginset to load
+	 * @param edtTask a task that will be executed in the Event dispatcher thread after the plugin set was loaded
+	 * @since jEdit 5.6pre1
+	 * @author Alan Ezust
+	 */
+	void loadPluginSet(String path, Runnable edtTask) throws IOException
 	{
 		pluginSet.clear();
 		pluginModel.clearSelection();
 
 		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path, InstallPanel.this);
-		try
-		{
-			InputStream is = vfs._createInputStream(session, path, false, InstallPanel.this);
-			XMLUtilities.parseXML(is, new StringMapHandler());
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.WARNING, this, "Loading Pluginset failed:" + e.getMessage());
-			return false;
-		}
-		pluginModel.update();
-		return true;
+		InputStream is = vfs._createInputStream(session, path, false, InstallPanel.this);
+		XMLUtilities.parseXML(is, new StringMapHandler());
+		pluginModel.update(edtTask);
 	} //}}}
 
 	//{{{ updateModel() method
@@ -281,21 +294,21 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		infoBox.setText(null);
 		pluginModel.update(() ->
-	   {
-		   if (pluginModel.getRowCount() == 0)
-		   {
-			   if (updates)
-				   layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
-			   else
-				   layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
-		   }
-		   else
-		   {
-			   layout.show(InstallPanel.this, "INSTALL");
-			   EventQueue.invokeLater(searchField::requestFocusInWindow);
-		   }
-		   isLoading = false;
-	   });
+		{
+			if (pluginModel.getRowCount() == 0)
+			{
+				if (updates)
+				layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
+			else
+				layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
+			}
+			else
+			{
+				layout.show(InstallPanel.this, "INSTALL");
+				EventQueue.invokeLater(searchField::requestFocusInWindow);
+			}
+			isLoading = false;
+		});
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -307,9 +320,18 @@ class InstallPanel extends JPanel implements EBComponent
 			 chooseButton.path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 			 if (!chooseButton.path.isEmpty())
 			 {
-				 loadPluginSet(chooseButton.path);
-				 pluginModel.clearSelection();
-				 chooseButton.updateUI();
+				 try
+				 {
+					 loadPluginSet(chooseButton.path, () ->
+					 {
+						 pluginModel.clearSelection();
+						 chooseButton.updateUI();
+					 });
+				 }
+				 catch (IOException e)
+				 {
+					 Log.log(Log.WARNING, this, "Loading Pluginset failed:" + e.getMessage());
+				 }
 			 }
 		}
 	} //}}}
@@ -696,12 +718,6 @@ class InstallPanel extends JPanel implements EBComponent
 			table.getTableHeader().repaint();
 		}
 		//}}}
-
-		//{{{ update() method
-		public void update()
-		{
-			ThreadUtilities.runInBackground(new UpdateModelTask(null));
-		} //}}}
 
 		//{{{ update() method
 		public void update(Runnable edtTask)
@@ -1103,12 +1119,19 @@ class InstallPanel extends JPanel implements EBComponent
 				return;
 
 			path = selectedFiles[0];
-			boolean success = loadPluginSet(path);
-			if (success)
+			try
 			{
+				loadPluginSet(path, () ->
+				{
+					jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
+					updateUI();
+				});
 				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
 			}
-			updateUI();
+			catch (IOException e)
+			{
+				Log.log(Log.WARNING, this, "Loading Pluginset failed:" + e.getMessage());
+			}
 		} //}}}
 	}//}}}
 
@@ -1200,7 +1223,7 @@ class InstallPanel extends JPanel implements EBComponent
 				new PluginManagerProgress(window,roster);
 
 				roster.performOperationsInAWTThread(window);
-				pluginModel.update();
+				pluginModel.update(null);
 			}
 		}
 
