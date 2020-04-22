@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -163,11 +164,19 @@ public abstract class Selection implements Cloneable
 		this.end = sel.end;
 	} //}}}
 
-	//{{{ Selection constructor
+	//{{{ Selection constructors
 	protected Selection(int start, int end)
 	{
 		this.start = start;
 		this.end = end;
+	}
+
+	protected Selection(int startLine, int start, int endLine, int end)
+	{
+		this.startLine = startLine;
+		this.start     = start;
+		this.endLine   = endLine;
+		this.end       = end;
 	} //}}}
 
 	// should the next two be public, maybe?
@@ -270,7 +279,7 @@ public abstract class Selection implements Cloneable
 		int setText(JEditBuffer buffer, String text)
 		{
 			buffer.remove(start,end - start);
-			if(text != null && text.length() != 0)
+			if(text != null && !text.isEmpty())
 			{
 				buffer.insert(start,text);
 				return start + text.length();
@@ -375,10 +384,7 @@ public abstract class Selection implements Cloneable
 		//{{{ Rect constructor
 		public Rect(int startLine, int start, int endLine, int end)
 		{
-			this.startLine = startLine;
-			this.start = start;
-			this.endLine = endLine;
-			this.end = end;
+			super(startLine, start, endLine, end);
 		} //}}}
 
 		//{{{ Rect constructor
@@ -475,8 +481,9 @@ public abstract class Selection implements Cloneable
 					rectEnd = lineLen;
 
 				if(rectEnd < rectStart)
-					System.err.println(i + ":::" + start + ':' + end
-						+ " ==> " + rectStart + ':' + rectEnd);
+				{
+					Log.log(Log.ERROR, this, i + ":::" + start + ':' + end + " ==> " + rectStart + ':' + rectEnd);
+				}
 				buf.append(buffer.getText(lineStart + rectStart,
 					rectEnd - rectStart));
 
@@ -502,7 +509,7 @@ public abstract class Selection implements Cloneable
 
 			int maxWidth = 0;
 			int totalLines = 0;
-			/** This list will contains Strings and Integer. */
+			/* This list will contains Strings and Integer. */
 			List<Object> lines = new ArrayList<Object>();
 
 			//{{{ Split the text into lines
@@ -610,7 +617,7 @@ public abstract class Selection implements Cloneable
 			} //}}}
 
 			//{{{ Move the caret down a line
-			if(text == null || text.length() == 0)
+			if(text == null || text.isEmpty())
 				return end;
 			else
 				return endOffset;
