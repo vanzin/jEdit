@@ -280,20 +280,22 @@ class InstallPanel extends JPanel implements EBComponent
 	public void updateModel()
 	{
 		infoBox.setText(null);
-		pluginModel.update();
-		if (pluginModel.getRowCount() == 0)
-		{
-			if (updates)
-				layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
-			else
-				layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
-		}
-		else
-		{
-			layout.show(InstallPanel.this, "INSTALL");
-			EventQueue.invokeLater(searchField::requestFocusInWindow);
-		}
-		isLoading = false;
+		pluginModel.update(() ->
+	   {
+		   if (pluginModel.getRowCount() == 0)
+		   {
+			   if (updates)
+				   layout.show(InstallPanel.this, "PLUGIN_ARE_UP_TO_DATE");
+			   else
+				   layout.show(InstallPanel.this, "NO_PLUGIN_AVAILABLE");
+		   }
+		   else
+		   {
+			   layout.show(InstallPanel.this, "INSTALL");
+			   EventQueue.invokeLater(searchField::requestFocusInWindow);
+		   }
+		   isLoading = false;
+	   });
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -698,7 +700,13 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ update() method
 		public void update()
 		{
-			ThreadUtilities.runInBackground(new UpdateModelTask());
+			ThreadUtilities.runInBackground(new UpdateModelTask(null));
+		} //}}}
+
+		//{{{ update() method
+		public void update(Runnable edtTask)
+		{
+			ThreadUtilities.runInBackground(new UpdateModelTask(edtTask));
 		} //}}}
 
 		public List<Entry> buildEntryList()
@@ -814,6 +822,13 @@ class InstallPanel extends JPanel implements EBComponent
 
 		private class UpdateModelTask extends Task
 		{
+			private final Runnable edtTask;
+
+			UpdateModelTask(Runnable edtTask)
+			{
+				this.edtTask = edtTask;
+			}
+
 			@Override
 			public void _run()
 			{
@@ -830,6 +845,8 @@ class InstallPanel extends JPanel implements EBComponent
 					entries = newEntries;
 					sort(sortType);
 					restoreSelection(savedChecked, savedSelection);
+					if (edtTask != null)
+						edtTask.run();
 				});
 			}
 		}
