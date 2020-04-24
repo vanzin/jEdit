@@ -904,8 +904,7 @@ unwind:		while(context.parent != null)
 	 */
 	public static class LineContext
 	{
-		private static final WeakHashMap<LineContext, WeakReference<LineContext>> intern =
-			new WeakHashMap<LineContext, WeakReference<LineContext>>();
+		private static final WeakHashMap<LineContext, WeakReference<LineContext>> intern = new WeakHashMap<>();
 
 		public LineContext parent;
 		public ParserRule inRule;

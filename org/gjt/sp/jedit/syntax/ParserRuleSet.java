@@ -51,8 +51,8 @@ public class ParserRuleSet
 	{
 		this.modeName = modeName;
 		this.setName = setName;
-		ruleMap = new HashMap<Character, List<ParserRule>>();
-		imports = new ArrayList<ParserRuleSet>();
+		ruleMap = new HashMap<>();
+		imports = new ArrayList<>();
 	} //}}}
 
 	//{{{ getModeName() method
@@ -159,12 +159,7 @@ public class ParserRuleSet
 		}
 		for (Character key : keys)
 		{
-			List<ParserRule> rules = ruleMap.get(key);
-			if (null == rules)
-			{
-				rules = new ArrayList<ParserRule>();
-				ruleMap.put(key,rules);
-			}
+			List<ParserRule> rules = ruleMap.computeIfAbsent(key, k -> new ArrayList<>());
 			rules.add(r);
 		}
 	} //}}}

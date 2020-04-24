@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import javax.annotation.Nullable;
 import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
@@ -424,7 +425,7 @@ public class Chunk extends Token
 	 */
 	final Chunk snippetBeforeLineOffset(int lineOffset)
 	{
-		return snippetBefore(lineOffset - this.offset);
+		return snippetBefore(lineOffset - offset);
 	} //}}}
 
 	//{{{ offsetToX() method
@@ -757,7 +758,7 @@ public class Chunk extends Token
 			rangeStart = start;
 			rangeFont = null;
 			rangeLength = 0;
-			glyphs = new ArrayList<GlyphVector>();
+			glyphs = new ArrayList<>();
 		}
 
 		public void addNonSubstRange(int length)
@@ -802,6 +803,7 @@ public class Chunk extends Token
 		private final FontRenderContext frc;
 		private final char[] text;
 		private int rangeStart;
+		@Nullable
 		private Font rangeFont;
 		private int rangeLength;
 		private final ArrayList<GlyphVector> glyphs;
@@ -833,7 +835,7 @@ public class Chunk extends Token
 			}
 		}
 		GlyphCache newOne = new GlyphCache(glyphCacheCapacity);
-		glyphCache = new SoftReference<GlyphCache>(newOne);
+		glyphCache = new SoftReference<>(newOne);
 		return newOne;
 	} //}}}
 
