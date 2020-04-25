@@ -52,6 +52,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Store the glyph width in the GlyphCache to make token marking faster
+  (Matthieu Casanova)
+
 - New EditPaneManager, with convenient methods to get and iterate over
   EditPanes, get it by calling jEdit.getEditPaneManager() (Matthieu Casanova)
 

@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.text.*;
 import java.awt.font.*;
@@ -81,7 +82,7 @@ public class Chunk extends Token
 						chunks.width,10));
 				}
 
-				if(chunks.isAccessible() && chunks.glyphs != null)
+				if(chunks.isAccessible() && chunks.glyphData != null)
 				{
 					gfx.setFont(chunks.style.getFont());
 					gfx.setColor(chunks.style.getForegroundColor());
@@ -316,9 +317,9 @@ public class Chunk extends Token
 	 */
 	public boolean usedFontSubstitution()
 	{
-		return (fontSubstEnabled && glyphs != null &&
-				(glyphs.length > 1 ||
-				(glyphs.length == 1 && glyphs[0].getFont() != style.getFont())));
+		return (fontSubstEnabled && glyphData != null &&
+				(glyphData.getGlyphVectorData().length > 1 ||
+				(glyphData.getGlyphVectorData().length == 1 && glyphData.getGlyphVectorData()[0].getGlyphVector().getFont() != style.getFont())));
 	}
 	//}}}
 
@@ -382,7 +383,7 @@ public class Chunk extends Token
 	final boolean isInitialized()
 	{
 		return !isAccessible()	// virtual indent
-			|| (glyphs != null)	// normal text
+			|| (glyphData != null)	// normal text
 			|| (width > 0);	// tab
 	} //}}}
 
@@ -431,18 +432,19 @@ public class Chunk extends Token
 	//{{{ offsetToX() method
 	final float offsetToX(int offset)
 	{
-		if(glyphs == null)
+		if(glyphData == null)
 			return 0.0f;
 
 		float x = 0.0f;
-		for (GlyphVector gv : glyphs)
+		for (GlyphVectorData glyphVectorData : glyphData.getGlyphVectorData())
 		{
+			GlyphVector gv = glyphVectorData.getGlyphVector();
 			if (offset < gv.getNumGlyphs())
 			{
 				x += (float) gv.getGlyphPosition(offset).getX();
 				return x;
 			}
-			x += (float) gv.getLogicalBounds().getWidth();
+			x += glyphVectorData.getWidth();
 			offset -= gv.getNumGlyphs();
 		}
 
@@ -454,7 +456,7 @@ public class Chunk extends Token
 	//{{{ xToOffset() method
 	final int xToOffset(float x, boolean round)
 	{
-		if (glyphs == null)
+		if (glyphData == null)
 		{
 			if (round && width - x < x)
 				return offset + length;
@@ -464,9 +466,10 @@ public class Chunk extends Token
 
 		int off = offset;
 		float myx = 0.0f;
-		for (GlyphVector gv : glyphs)
+		for (GlyphVectorData glyphVectorData : glyphData.getGlyphVectorData())
 		{
-			float gwidth = (float) gv.getLogicalBounds().getWidth();
+			GlyphVector gv = glyphVectorData.getGlyphVector();
+			float gwidth = glyphVectorData.getWidth();
 			if (myx + gwidth >= x)
 			{
 				float[] pos = gv.getGlyphPositions(0, gv.getNumGlyphs(), null);
@@ -514,26 +517,8 @@ public class Chunk extends Token
 			GlyphKey cacheKey = new GlyphKey(str,
 				style.getFont(), fontRenderContext);
 			GlyphCache cache = getGlyphCache();
-			GlyphVector[] cachedGlyphs = cache.get(cacheKey);
-			if (cachedGlyphs != null)
-			{
-				glyphs = cachedGlyphs;
-			}
-			else
-			{
-				int textStart = lineText.offset + offset;
-				int textEnd = textStart + length;
-				glyphs = layoutGlyphs(style.getFont(),
-					fontRenderContext,
-					lineText.array, textStart, textEnd);
-				cache.put(cacheKey, glyphs);
-			}
-			float w = 0.0f;
-			for (GlyphVector gv: glyphs)
-			{
-				w += (float)gv.getLogicalBounds().getWidth();
-			}
-			width = w;
+			glyphData = cache.computeIfAbsent(cacheKey, key -> buildGlyphInfo(lineText, fontRenderContext));
+			width = glyphData.getWidth();
 		}
 		assert isInitialized();
 	} //}}}
@@ -568,7 +553,6 @@ public class Chunk extends Token
 	// Windows XP).
 	private static int glyphCacheCapacity = 256;
 	private static SoftReference<GlyphCache> glyphCache;
-
 	//}}}
 
 	//{{{ Instance variables
@@ -576,8 +560,17 @@ public class Chunk extends Token
 	// styles[defaultID].getBackgroundColor()
 	private Color background;
 	private String str;
-	private GlyphVector[] glyphs;
+	private GlyphData glyphData;
 	//}}}
+
+	//{{{ init() method
+	private GlyphData buildGlyphInfo(Segment lineText, FontRenderContext fontRenderContext)
+	{
+		int textStart = lineText.offset + offset;
+		int textEnd = textStart + length;
+		GlyphVector[] glyphs = layoutGlyphs(style.getFont(), fontRenderContext, lineText.array, textStart, textEnd);
+		return new GlyphData(glyphs);
+	} //}}}
 
 	//{{{ getFontSubstList() method
 	/**
@@ -630,10 +623,10 @@ public class Chunk extends Token
 				float x,
 				float y)
 	{
-		for (GlyphVector gv : glyphs)
+		for (GlyphVectorData vectorData : glyphData.getGlyphVectorData())
 		{
-			gfx.drawGlyphVector(gv, x, y);
-			x += (float) gv.getLogicalBounds().getWidth();
+			gfx.drawGlyphVector(vectorData.getGlyphVector(), x, y);
+			x += vectorData.getWidth();
 		}
 	} //}}}
 
@@ -846,11 +839,8 @@ public class Chunk extends Token
 		public final Font font;
 		public final FontRenderContext context;
 
-		GlyphKey(String token, Font font, FontRenderContext context)
+		GlyphKey(@Nonnull String token, @Nonnull Font font, @Nonnull FontRenderContext context)
 		{
-			assert token != null;
-			assert font != null;
-			assert context != null;
 			this.token = token;
 			this.font = font;
 			this.context = context;
@@ -884,7 +874,7 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ class GlyphCache
-	private static class GlyphCache extends LinkedHashMap<GlyphKey, GlyphVector[]>
+	private static class GlyphCache extends LinkedHashMap<GlyphKey, GlyphData>
 	{
 		GlyphCache(int capacity)
 		{
@@ -894,12 +884,65 @@ public class Chunk extends Token
 		}
 
 		@Override
-		protected boolean removeEldestEntry(Map.Entry<GlyphKey, GlyphVector[]> eldest)
+		protected boolean removeEldestEntry(Map.Entry<GlyphKey, GlyphData> eldest)
 		{
 			return size() > capacity;
 		}
 
 		private final int capacity;
+	} //}}}
+
+	//{{{ class GlyphCache
+	private static class GlyphData
+	{
+		private final GlyphVectorData[] glyphVectorData;
+		private final float             width;
+
+		GlyphData(GlyphVector[] glyphs)
+		{
+			glyphVectorData = new GlyphVectorData[glyphs.length];
+			float w = 0.0f;
+			for (int i = 0; i < glyphs.length; i++)
+			{
+				GlyphVectorData glyphVectorData = new GlyphVectorData(glyphs[i]);
+				this.glyphVectorData[i] = glyphVectorData;
+				w += glyphVectorData.getWidth();
+			}
+			width = w;
+		}
+
+		public GlyphVectorData[] getGlyphVectorData()
+		{
+			return glyphVectorData;
+		}
+
+		public float getWidth()
+		{
+			return width;
+		}
+	} //}}}
+
+	//{{{ class GlyphVectorData
+	private static class GlyphVectorData
+	{
+		private final GlyphVector glyphVector;
+		private final float       width;
+
+		private GlyphVectorData(GlyphVector glyphVector)
+		{
+			this.glyphVector = glyphVector;
+			width = (float) glyphVector.getLogicalBounds().getWidth();
+		}
+
+		public GlyphVector getGlyphVector()
+		{
+			return glyphVector;
+		}
+
+		public float getWidth()
+		{
+			return width;
+		}
 	} //}}}
 
 	//}}}
