@@ -54,7 +54,7 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<>(220);
+	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<>(250);
 
 	//{{{ removeAll() method
 	public void removeAll()
@@ -365,7 +365,8 @@ public class ModeProvider
 		try
 		{
 			parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-		} catch (SAXException | ParserConfigurationException saxe)
+		}
+		catch (SAXException | ParserConfigurationException saxe)
 		{
 			Log.log(Log.ERROR, this, saxe);
 			return;
