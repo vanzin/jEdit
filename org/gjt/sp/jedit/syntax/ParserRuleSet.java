@@ -51,7 +51,7 @@ public class ParserRuleSet
 	{
 		this.modeName = modeName;
 		this.setName = setName;
-		ruleMap = new Hashtable<>();
+		ruleMap = new HashMap<>();
 		imports = new ArrayList<>();
 	} //}}}
 
