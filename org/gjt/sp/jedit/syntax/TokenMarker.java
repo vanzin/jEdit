@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import javax.annotation.Nonnull;
 import javax.swing.text.Segment;
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -372,8 +373,8 @@ unwind:		while(context.parent != null)
 		if (null == checkRule.upHashChars)
 		{
 			if (checkRule.upHashChar != null &&
-			    (pos + checkRule.upHashChar.length < line.array.length) &&
-			    !checkHashString(checkRule))
+				pos + checkRule.upHashChar.length < line.array.length &&
+				!checkHashString(checkRule.upHashChar))
 			{
 				return false;
 			}
@@ -884,11 +885,11 @@ unwind:		while(context.parent != null)
 	} //}}}
 
 	//{{{ checkHashString() method
-	private boolean checkHashString(ParserRule rule)
+	private boolean checkHashString(@Nonnull char[] upHashChar)
 	{
-		for (int i = 0; i < rule.upHashChar.length; i++)
+		for (int i = 0; i < upHashChar.length; i++)
 		{
-			if (Character.toUpperCase(line.array[pos+i]) != rule.upHashChar[i])
+			if (Character.toUpperCase(line.array[pos+i]) != upHashChar[i])
 			{
 				return false;
 			}
