@@ -651,7 +651,8 @@ public class Chunk extends Token
 		// instance to the char array.
 		font.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, flags);
 
-		if ((result.getLayoutFlags() & GlyphVector.FLAG_COMPLEX_GLYPHS) != 0) {
+		if ((result.getLayoutFlags() & GlyphVector.FLAG_COMPLEX_GLYPHS) != 0)
+		{
 			result = font.createGlyphVector(frc, new String(text, start, end - start));
 		}
 
@@ -799,7 +800,7 @@ public class Chunk extends Token
 		@Nullable
 		private Font rangeFont;
 		private int rangeLength;
-		private final ArrayList<GlyphVector> glyphs;
+		private final List<GlyphVector> glyphs;
 
 		private void addGlyphVectorOfLastRange()
 		{
