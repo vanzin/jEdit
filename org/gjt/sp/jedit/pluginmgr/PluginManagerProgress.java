@@ -53,7 +53,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		{
 			maximum += roster.getOperation(i).getMaximum();
 		}
-
+		progress.setPreferredSize(new Dimension(400,20));
 		progress.setMaximum(maximum);
 		content.add(BorderLayout.NORTH,progress);
 

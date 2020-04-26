@@ -52,6 +52,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Made a larger plugin download dialog, patch submitted in bug #4050
+  (Kalle Helminen)
+
 - Store rules in an array instead of a Map avoiding computations
   (Matthieu Casanova)
 
