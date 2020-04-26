@@ -158,7 +158,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			} //}}}
 
 			//{{{ check every rule
-			Character ch = Character.valueOf(line.array[pos]);
+			char ch = line.array[pos];
 			List<ParserRule> rules = context.rules.getRules(ch);
 			for (ParserRule rule : rules)
 			{

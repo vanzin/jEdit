@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Pattern;
 //}}}
@@ -51,7 +52,9 @@ public class ParserRuleSet
 	{
 		this.modeName = modeName;
 		this.setName = setName;
-		ruleMap = new HashMap<>();
+		allRules = new ArrayList<>();
+		rulesForNull = new ArrayList<>();
+		ruleArray = new List[BASE_CACHE];
 		imports = new ArrayList<>();
 	} //}}}
 
@@ -102,13 +105,7 @@ public class ParserRuleSet
 				ruleset.resolveImports();
 			}
 
-			for (List<ParserRule> rules : ruleset.ruleMap.values())
-			{
-				for (ParserRule rule : rules)
-				{
-					addRule(rule);
-				}
-			}
+			ruleset.allRules.forEach(this::addRule);
 
 			if (ruleset.keywords != null)
 			{
@@ -132,66 +129,76 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ addRule() method
-	public void addRule(ParserRule r)
+	public void addRule(ParserRule parserRule)
 	{
 		ruleCount++;
-		Character[] keys;
-		if (null == r.upHashChars)
+		allRules.add(parserRule);
+		if (parserRule.upHashChars == null)
 		{
-			keys = new Character[1];
-			if ((null == r.upHashChar) || (0 >= r.upHashChar.length))
+			if (parserRule.upHashChar == null || parserRule.upHashChar.length == 0)
 			{
-				keys[0] = null;
+				rulesForNull.add(parserRule);
 			}
 			else
 			{
-				keys[0] = Character.valueOf(r.upHashChar[0]);
+				addRule(parserRule.upHashChar[0], parserRule);
+				addRule(Character.toLowerCase(parserRule.upHashChar[0]), parserRule);
 			}
 		}
 		else
 		{
-			keys = new Character[r.upHashChars.length];
-			int i = 0;
-			for (char upHashChar : r.upHashChars)
+			for (char upHashChar : parserRule.upHashChars)
 			{
-				keys[i++] = upHashChar;
+				addRule(upHashChar, parserRule);
+				addRule(Character.toLowerCase(upHashChar), parserRule);
 			}
-		}
-		for (Character key : keys)
-		{
-			List<ParserRule> rules = ruleMap.computeIfAbsent(key, k -> new ArrayList<>());
-			rules.add(r);
 		}
 	} //}}}
 
-	//{{{ getRules() method
-	public List<ParserRule> getRules(Character key)
+	//{{{ addRule() method
+	private void addRule(char ch, ParserRule parserRule)
 	{
-		List<ParserRule> rulesForNull = ruleMap.get(null);
-		boolean emptyForNull = rulesForNull == null || rulesForNull.isEmpty();
-		Character upperKey = key == null ? null : Character.valueOf(Character.toUpperCase(key.charValue()));
-		List<ParserRule> rulesForKey = upperKey == null ? null : ruleMap.get(upperKey);
-		boolean emptyForKey = rulesForKey == null || rulesForKey.isEmpty();
-		if (emptyForNull && emptyForKey)
+		if (ch >= ruleArray.length)
 		{
-			return Collections.emptyList();
+			ruleArray = Arrays.copyOf(ruleArray,
+				Math.min(Math.min(ruleArray.length * 2, ch + 1),
+					Character.MAX_VALUE * 2 + 1));
 		}
-		else if (emptyForKey)
+
+		List<ParserRule> parserRules = ruleArray[ch];
+		if (parserRules == null)
 		{
-			return rulesForNull;
+			parserRules = new ArrayList<>();
+			ruleArray[ch] = parserRules;
 		}
-		else if (emptyForNull)
+		parserRules.add(parserRule);
+	} //}}}
+
+	//{{{ getRules() method
+	@Nonnull
+	public List<ParserRule> getRules(char key)
+	{
+		List<ParserRule> rulesForKey = null;
+
+		if (key < ruleArray.length)
+			rulesForKey = ruleArray[key];
+
+		if (rulesForNull.isEmpty())
 		{
+			if (rulesForKey == null)
+				return Collections.emptyList();
 			return rulesForKey;
 		}
-		else
-		{
-			int size = rulesForNull.size() + rulesForKey.size();
-			List<ParserRule> mixed = new ArrayList<>(size);
-			mixed.addAll(rulesForKey);
-			mixed.addAll(rulesForNull);
-			return mixed;
-		}
+
+		// here rulesForNull is not empty
+		if (rulesForKey == null || rulesForKey.isEmpty())
+			return rulesForNull;
+
+		int size = rulesForNull.size() + rulesForKey.size();
+		List<ParserRule> mixed = new ArrayList<>(size);
+		mixed.addAll(rulesForKey);
+		mixed.addAll(rulesForNull);
+		return mixed;
 	} //}}}
 
 	//{{{ getRuleCount() method
@@ -330,6 +337,10 @@ public class ParserRuleSet
 
 	//{{{ Private members
 	private static final ParserRuleSet[] standard;
+	/**
+	 * The base size for the rule array, after that value, chars are less frequent.
+	 */
+	private static final int BASE_CACHE = 165 + 1;
 
 	static
 	{
@@ -350,7 +361,9 @@ public class ParserRuleSet
 
 	private int ruleCount;
 
-	private final Map<Character, List<ParserRule>> ruleMap;
+	private final List<ParserRule> allRules;
+	private List<ParserRule>[] ruleArray;
+	private final List<ParserRule> rulesForNull;
 
 	private final List<ParserRuleSet> imports;
 
