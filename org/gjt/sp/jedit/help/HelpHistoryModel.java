@@ -146,9 +146,9 @@ public class HelpHistoryModel
 	//{{{ getPreviousURLs() method
 	HistoryEntry[] getPreviousURLs()
 	{
-		if (historyPos<=1)
+		if (historyPos <= 1)
 		{
-			return new HelpHistoryModel.HistoryEntry[0];
+			return EMPTY_HISTORY_ENTRIES_ARRAY;
 		}
 		HistoryEntry[] previous = new HistoryEntry[historyPos-1];
 		System.arraycopy(history,0,previous,0,historyPos-1);
@@ -228,9 +228,7 @@ public class HelpHistoryModel
 		//{{{ equals() method
 		public boolean equals(HistoryEntry he)
 		{
-			return he.url.equals(this.url) &&
-			       he.title.equals(this.title) &&
-			       (he.scrollPosition == scrollPosition);
+			return he.url.equals(url) && he.title.equals(title) && (he.scrollPosition == scrollPosition);
 		} //}}}
 
 		//{{{ toString() method

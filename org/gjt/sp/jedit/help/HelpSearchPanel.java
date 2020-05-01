@@ -99,7 +99,7 @@ public class HelpSearchPanel extends JPanel
 			renderingHints = new RenderingHints(hints);
 		}
 
-		private int rank;
+		private final int rank;
 
 		ResultIcon(int rank)
 		{
