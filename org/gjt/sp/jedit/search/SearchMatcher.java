@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.TextUtilities;
  */
 public abstract class SearchMatcher
 {
-	public SearchMatcher()
+	protected SearchMatcher()
 	{
 		returnValue = new Match();
 	}

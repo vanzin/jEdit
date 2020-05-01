@@ -157,7 +157,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		//	? offset + pattern.length - 1
 		//	: length - pattern.length;
 
-		char ch = 0;
+		char ch;
 
 		int bad_char;
 		int good_suffix;
@@ -221,9 +221,9 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	} //}}}
 
 	//{{{ Private members
-	private char[] pattern;
-	private int pattern_end;
-	private boolean ignoreCase;
+	private final char[] pattern;
+	private final int pattern_end;
+	private final boolean ignoreCase;
 
 	// Boyer-Moore member fields
 	private int[] fwd_skip;

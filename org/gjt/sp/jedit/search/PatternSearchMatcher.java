@@ -314,7 +314,7 @@ public class PatternSearchMatcher extends SearchMatcher
 	}
 
 	//{{{ Private members
-	private int flags;
+	private final int flags;
 	private Pattern	re;
 	private final String pattern;
 	//}}}
