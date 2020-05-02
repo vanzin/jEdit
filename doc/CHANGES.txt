@@ -99,6 +99,8 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- Change BoyerMooreSearchMatcher to make it thread safe (Matthieu Casanova)
+
 - New methods IOUtilities.toString(InputStream) (Matthieu Casanova)
 
 - New method IOUtilities.toByteArray(InputStream) (Matthieu Casanova)

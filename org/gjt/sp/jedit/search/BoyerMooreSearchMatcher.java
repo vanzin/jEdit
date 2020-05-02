@@ -125,7 +125,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		int[] skip, suffix;
 		if(reverse)
 		{
-			if(back_skip == null)
+			if(back_suffix == null)
 			{
 				back_skip = generateSkipArray(true);
 				back_suffix = generateSuffixArray(true);
@@ -135,7 +135,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		}
 		else
 		{
-			if(fwd_skip == null)
+			if(fwd_suffix == null)
 			{
 				fwd_skip = generateSkipArray(false);
 				fwd_suffix = generateSuffixArray(false);
