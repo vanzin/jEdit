@@ -99,6 +99,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- StringList.join() method is now deprecated as String.join()
+  is now provided since Java 8 (Matthieu Casanova)
+
 - TextUtilities.join() method is now deprecated as String.join()
   is now provided since Java 8 (Matthieu Casanova)
 

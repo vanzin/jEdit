@@ -93,7 +93,11 @@ public class StringList extends ArrayList<String>
 	/**
 	 * The reverse of split - given a collection, takes each element
 	 * and places it in a string, joined by a delimiter.
+	 * @deprecated use {@link String#join(CharSequence, CharSequence...)} or
+	 * {@link String#join(CharSequence, Iterable)}, thos methods are available
+	 * since Java 8 and are faster in all situations
 	 */
+	@Deprecated
 	public static String join(Collection<String> c, String delim)
 	{
 		StringList sl = new StringList();
