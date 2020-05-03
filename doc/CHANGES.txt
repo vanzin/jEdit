@@ -99,6 +99,9 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ API Changes
 
+- TextUtilities.join() method is now deprecated as String.join()
+  is now provided since Java 8 (Matthieu Casanova)
+
 - Change BoyerMooreSearchMatcher to make it thread safe (Matthieu Casanova)
 
 - New methods IOUtilities.toString(InputStream) (Matthieu Casanova)

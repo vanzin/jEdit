@@ -277,7 +277,11 @@ public class TextUtilities
 	 * @return a joined toString() representation of the collection
 	 *
 	 * @since jedit 4.3pre3
+	 * @deprecated use {@link String#join(CharSequence, CharSequence...)} or
+	 * {@link String#join(CharSequence, Iterable)}, thos methods are available
+	 * since Java 8 and are faster in all situations
 	 */
+	@Deprecated
 	public static String join(Collection<?> c, String delim)
 	{
 		StringBuilder retval = new StringBuilder();

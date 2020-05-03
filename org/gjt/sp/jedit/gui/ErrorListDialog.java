@@ -106,8 +106,7 @@ public class ErrorListDialog extends EnhancedDialog
 		// if the entry is selected by a mouse click.
 		public String toString()
 		{
-			return path + ":\n" +
-				TextUtilities.join(java.util.Arrays.asList(messages), "\n");
+			return path + ":\n" + String.join("\n", messages);
 		}
 	} //}}}
 

@@ -300,7 +300,7 @@ public class BufferLoadRequest extends BufferIORequest
 				failedEncodings.add(encoding);
 			}
 			// All possible detectors and encodings failed.
-			Object[] pp = { TextUtilities.join(failedEncodings,","), "" };
+			Object[] pp = { String.join(",", failedEncodings), "" };
 			if(failedEncodings.size() < 2)
 			{
 				pp[1] = encodingError.toString();
