@@ -24,7 +24,8 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.*;
-import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -36,13 +37,15 @@ import javax.swing.text.StyledDocument;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
-/** Used to list I/O and plugin load errors
-  */
+
+/**
+ * Used to list I/O and plugin load errors
+ */
 public class ErrorListDialog extends EnhancedDialog
 {
 	//{{{ ErrorEntry class
-	
 	public static class ErrorEntry
 	{
 		String path;
@@ -67,26 +70,24 @@ public class ErrorListDialog extends EnhancedDialog
 			Log.log(urgency, this, path + ":");
 			Log.log(urgency, this, message);
 
-			Vector<String> tokenizedMessage = new Vector<String>();
+			Collection<String> tokenizedMessage = new ArrayList<>();
 			int lastIndex = -1;
 			for(int i = 0; i < message.length(); i++)
 			{
 				if(message.charAt(i) == '\n')
 				{
-					tokenizedMessage.addElement(message.substring(
-						lastIndex + 1,i));
+					tokenizedMessage.add(message.substring(lastIndex + 1,i));
 					lastIndex = i;
 				}
 			}
 
 			if(lastIndex != message.length())
 			{
-				tokenizedMessage.addElement(message.substring(
-					lastIndex + 1));
+				tokenizedMessage.add(message.substring(lastIndex + 1));
 			}
 
-			messages = new String[tokenizedMessage.size()];
-			tokenizedMessage.copyInto(messages);
+
+			messages = tokenizedMessage.toArray(StandardUtilities.EMPTY_STRING_ARRAY);
 		}
 
 		public boolean equals(Object o)
@@ -111,9 +112,11 @@ public class ErrorListDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ JTextPaneSized class
-	/** This text pane sets its size to a constant amount of 80x25 chars,
-	    when used inside a scrollpane. */
-	protected class JTextPaneSized extends JTextPane
+	/**
+	 * This text pane sets its size to a constant amount of 80x25 chars,
+	 * when used inside a scrollpane.
+	 */
+	protected static class JTextPaneSized extends JTextPane
 	{
 		@Override
 		public Dimension getPreferredScrollableViewportSize()
@@ -179,13 +182,13 @@ public class ErrorListDialog extends EnhancedDialog
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
 
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(new ActionHandler());
+		JButton ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(e -> dispose());
 
 		if(pluginError)
 		{
-			pluginMgr = new JButton(jEdit.getProperty("error-list.plugin-manager"));
-			pluginMgr.addActionListener(new ActionHandler());
+			JButton pluginMgr = new JButton(jEdit.getProperty("error-list.plugin-manager"));
+			pluginMgr.addActionListener(e -> PluginManager.showPluginManager(JOptionPane.getFrameForComponent(this)));
 			buttons.add(pluginMgr);
 			buttons.add(Box.createHorizontalStrut(6));
 		}
@@ -203,34 +206,16 @@ public class ErrorListDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
-	} //}}}
-
-	//{{{ Private members
-	private JButton ok, pluginMgr;
-	//}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		//{{{ actionPerformed() method
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == ok)
-				dispose();
-			else if(evt.getSource() == pluginMgr)
-			{
-				PluginManager.showPluginManager(JOptionPane.getFrameForComponent(
-					ErrorListDialog.this));
-			}
-		} //}}}
 	} //}}}
 }
