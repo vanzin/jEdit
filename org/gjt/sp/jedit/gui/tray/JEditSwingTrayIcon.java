@@ -24,30 +24,27 @@ package org.gjt.sp.jedit.gui.tray;
 //{{{ Imports
 import java.awt.Frame;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.EditServer;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
-import org.gjt.sp.util.StringList;
+
+import static org.gjt.sp.jedit.EditBus.*;
 //}}}
 
 /**
  * @author Matthieu Casanova
  * @since jEdit 4.5pre1
  */
-public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
+public class JEditSwingTrayIcon extends JEditTrayIcon
 {
 	private boolean restore;
 	private String userDir;
@@ -67,29 +64,26 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 		popup.add(newPlainViewItem);
 		popup.addSeparator();
 		popup.add(exitItem);
-		ActionListener actionListener = new MyActionListener(newViewItem, newPlainViewItem, exitItem);
-		newViewItem.addActionListener(actionListener);
-		newPlainViewItem.addActionListener(actionListener);
-		exitItem.addActionListener(actionListener);
+		newViewItem.addActionListener(e -> jEdit.newView(null));
+		newPlainViewItem.addActionListener(e -> jEdit.newView(null, null, true));
+		exitItem.addActionListener(e -> jEdit.exit(null, true));
 		setMenu(popup);
 		addMouseListener(new MyMouseAdapter());
 	} //}}}
 
-	
-	@Override
 	/**
 	 * Update tooltip to reflect the window titles currently available.
 	 */
-	public void handleMessage(EBMessage message)
+	@EBHandler
+	public void handleMessage(EditPaneUpdate editPaneUpdate)
 	{
-		if (message instanceof EditPaneUpdate && 
-			(((EditPaneUpdate)message).getWhat() == EditPaneUpdate.BUFFER_CHANGED)) {
-			StringList sl = new StringList();
+		if (editPaneUpdate.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
+		{
+			Collection<String> sl = new ArrayList<>();
 			jEdit.getViewManager().forEach(view -> sl.add(view.getTitle()));
-			setToolTip(sl.join(" | "));
+			setToolTip(String.join(" | ", sl));
 		}
 	}
-	
 	
 	//{{{ setTrayIconArgs() method
 	@Override
@@ -103,7 +97,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 	//{{{ MyMouseAdapter class
 	private class MyMouseAdapter extends MouseAdapter
 	{
-		private final Map<Window,Boolean> windowState = new HashMap<Window, Boolean>();
+		private final Map<Window,Boolean> windowState = new HashMap<>();
 
 		@Override
 		public void mouseClicked(MouseEvent e)
@@ -155,42 +149,8 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 		 */
 		private boolean skipWindow(Window window)
 		{
-			if (window.getClass().getName().contains("Tray"))
-				return true;
-			return false;
+			return window.getClass().getName().contains("Tray");
 		} //}}}
 
-	} //}}}
-
-	
-	
-	//{{{ MyActionListener class
-	private static class MyActionListener implements ActionListener
-	{
-		private final JMenuItem newViewItem;
-		private final JMenuItem newPlainViewItem;
-		private final JMenuItem exitItem;
-
-		MyActionListener(JMenuItem newViewItem, JMenuItem newPlainViewItem, JMenuItem exitItem)
-		{
-			this.newViewItem = newViewItem;
-			this.newPlainViewItem = newPlainViewItem;
-			this.exitItem = exitItem;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if (e.getSource() == newViewItem)
-			{
-				jEdit.newView(null);
-			} else if (e.getSource() == newPlainViewItem)
-			{
-				jEdit.newView(null, null, true);
-			} else if (e.getSource() == exitItem)
-			{
-				jEdit.exit(null, true);
-			}
-		}
 	} //}}}
 }
