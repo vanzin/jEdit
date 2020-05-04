@@ -61,7 +61,7 @@ public class ActionBar extends JToolBar
 
 		if(temp)
 		{
-			close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
+			RolloverButton close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
 			close.addActionListener(e -> view.removeToolBar(this));
 			close.setToolTipText(jEdit.getProperty(
 				"view.action.close-tooltip"));
@@ -97,7 +97,6 @@ public class ActionBar extends JToolBar
 	private int repeatCount;
 	private final HistoryTextField action;
 	private CompletionPopup popup;
-	private RolloverButton close;
 	//}}}
 
 	//{{{ invoke() method

@@ -30,11 +30,13 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+
+import static org.gjt.sp.jedit.gui.DockableWindowManager.*;
+import static org.gjt.sp.jedit.gui.DockableWindowManager.TOP;
 //}}}
 
 /** A panel that holds dockable windows.
@@ -43,8 +45,8 @@ import javax.swing.border.Border;
  */
 class DockablePanel extends JPanel
 {
-	private PanelWindowContainer panel;
-	private DockableWindowManagerImpl wm;
+	private final PanelWindowContainer panel;
+	private final DockableWindowManagerImpl wm;
 
 	//{{{ DockablePanel constructor
 	DockablePanel(PanelWindowContainer panel)
@@ -52,7 +54,7 @@ class DockablePanel extends JPanel
 		super(new CardLayout());
 
 		this.panel = panel;
-		this.wm = panel.getDockableWindowManager();
+		wm = panel.getDockableWindowManager();
 
 		ResizeMouseHandler resizeMouseHandler = new ResizeMouseHandler();
 		addMouseListener(resizeMouseHandler);
@@ -72,12 +74,14 @@ class DockablePanel extends JPanel
 	} //}}}
 
 	//{{{ getMinimumSize() method
+	@Override
 	public Dimension getMinimumSize()
 	{
 		return new Dimension(0,0);
 	} //}}}
 
 	//{{{ getPreferredSize() method
+	@Override
 	public Dimension getPreferredSize()
 	{
 		final String position = panel.getPosition();
@@ -87,8 +91,8 @@ class DockablePanel extends JPanel
 			return new Dimension(0,0);
 		else
 		{
-			if(position.equals(DockableWindowManager.TOP)
-				|| position.equals(DockableWindowManager.BOTTOM))
+			if(position.equals(TOP)
+				|| position.equals(BOTTOM))
 			{
 				if(dimension <= 0)
 				{
@@ -114,13 +118,14 @@ class DockablePanel extends JPanel
 	} //}}}
 
 	//{{{ setBounds() method
+	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
 		final String position = panel.getPosition();
 		final int dimension = panel.getDimension();
 
-		if(position.equals(DockableWindowManager.TOP) ||
-			position.equals(DockableWindowManager.BOTTOM))
+		if(position.equals(TOP) ||
+			position.equals(BOTTOM))
 		{
 			if(dimension != 0 && height <= PanelWindowContainer.SPLITTER_WIDTH)
 				panel.show((DockableWindowManagerImpl.Entry) null);
@@ -142,12 +147,13 @@ class DockablePanel extends JPanel
 	static Point dragStart;
 
 	//{{{ ResizeMouseHandler class
-	class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
+	private class ResizeMouseHandler extends MouseAdapter
 	{
 		/** This is true if the mouse is on the split bar. */
 		boolean canDrag;
 
 		//{{{ mousePressed() method
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			if(canDrag)
@@ -159,6 +165,7 @@ class DockablePanel extends JPanel
 		} //}}}
 
 		//{{{ mouseReleased() method
+		@Override
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(canDrag)
@@ -176,6 +183,7 @@ class DockablePanel extends JPanel
 		} //}}}
 
 		//{{{ mouseMoved() method
+		@Override
 		public void mouseMoved(MouseEvent evt)
 		{
 			Border border = getBorder();
@@ -190,29 +198,25 @@ class DockablePanel extends JPanel
 			Insets insets = border.getBorderInsets(DockablePanel.this);
 			canDrag = false;
 			//{{{ Top...
-			if(position.equals(DockableWindowManager.TOP))
+			switch (position)
 			{
-				if(evt.getY() >= getHeight() - insets.bottom)
-					canDrag = true;
-			} //}}}
-			//{{{ Left...
-			else if(position.equals(DockableWindowManager.LEFT))
-			{
-				if(evt.getX() >= getWidth() - insets.right)
-					canDrag = true;
-			} //}}}
-			//{{{ Bottom...
-			else if(position.equals(DockableWindowManager.BOTTOM))
-			{
-				if(evt.getY() <= insets.top)
-					canDrag = true;
-			} //}}}
-			//{{{ Right...
-			else if(position.equals(DockableWindowManager.RIGHT))
-			{
-				if(evt.getX() <= insets.left)
-					canDrag = true;
-			} //}}}
+				case TOP:
+					if (evt.getY() >= getHeight() - insets.bottom)
+						canDrag = true;
+					break;
+				case LEFT:
+					if (evt.getX() >= getWidth() - insets.right)
+						canDrag = true;
+					break;
+				case BOTTOM:
+					if (evt.getY() <= insets.top)
+						canDrag = true;
+					break;
+				case RIGHT:
+					if (evt.getX() <= insets.left)
+						canDrag = true;
+					break;
+			}
 
 			if (dragStart == null)
 			{
@@ -230,6 +234,7 @@ class DockablePanel extends JPanel
 		} //}}}
 
 		//{{{ mouseDragged() method
+		@Override
 		public void mouseDragged(MouseEvent evt)
 		{
 			if(!canDrag)
@@ -244,54 +249,40 @@ class DockablePanel extends JPanel
 
 			int newSize = 0;
 			//{{{ Top...
-			if(position.equals(DockableWindowManager.TOP))
+			switch (position)
 			{
-				newSize = evt.getY();
-				wm.setResizePos(
-					evt.getY() - dragStart.y
-					+ dimension,
-					panel);
-			} //}}}
-			//{{{ Left...
-			else if(position.equals(DockableWindowManager.LEFT))
-			{
-				newSize = evt.getX();
-				wm.setResizePos(evt.getX() - dragStart.x
-					+ dimension,
-					panel);
-			} //}}}
-			//{{{ Bottom...
-			else if(position.equals(DockableWindowManager.BOTTOM))
-			{
-				newSize = dimension - evt.getY();
-				wm.setResizePos(dimension - evt.getY()
-					+ dragStart.y,
-					panel);
-			} //}}}
-			//{{{ Right...
-			else if(position.equals(DockableWindowManager.RIGHT))
-			{
-				newSize = dimension - evt.getX();
-				wm.setResizePos(dimension - evt.getX()
-					+ dragStart.x,
-					panel);
-			} //}}}
+				case TOP:
+					newSize = evt.getY();
+					wm.setResizePos(evt.getY() - dragStart.y + dimension, panel);
+					break;
+				case LEFT:
+					newSize = evt.getX();
+					wm.setResizePos(evt.getX() - dragStart.x + dimension, panel);
+					break;
+				case BOTTOM:
+					newSize = dimension - evt.getY();
+					wm.setResizePos(dimension - evt.getY() + dragStart.y, panel);
+					break;
+				case RIGHT:
+					newSize = dimension - evt.getX();
+					wm.setResizePos(dimension - evt.getX() + dragStart.x, panel);
+					break;
+			}
 
 			if (continuousLayout)
 			{
-				panel.setDimension(newSize
-						   + PanelWindowContainer.SPLITTER_WIDTH);
+				panel.setDimension(newSize + PanelWindowContainer.SPLITTER_WIDTH);
 				wm.revalidate();
 			}
 		} //}}}
 
 		//{{{ mouseExited() method
+		@Override
 		public void mouseExited(MouseEvent evt)
 		{
 			if (dragStart == null)
 			{
-				wm.setCursor(Cursor.getPredefinedCursor(
-					Cursor.DEFAULT_CURSOR));
+				wm.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		} //}}}
 
@@ -300,16 +291,19 @@ class DockablePanel extends JPanel
 		{
 			String position = panel.getPosition();
 
-			if(position.equals(DockableWindowManager.TOP))
-				return Cursor.N_RESIZE_CURSOR;
-			else if(position.equals(DockableWindowManager.LEFT))
-				return Cursor.W_RESIZE_CURSOR;
-			else if(position.equals(DockableWindowManager.BOTTOM))
-				return Cursor.S_RESIZE_CURSOR;
-			else if(position.equals(DockableWindowManager.RIGHT))
-				return Cursor.E_RESIZE_CURSOR;
-			else
-				throw new InternalError();
+			switch (position)
+			{
+				case TOP:
+					return Cursor.N_RESIZE_CURSOR;
+				case LEFT:
+					return Cursor.W_RESIZE_CURSOR;
+				case BOTTOM:
+					return Cursor.S_RESIZE_CURSOR;
+				case RIGHT:
+					return Cursor.E_RESIZE_CURSOR;
+				default:
+					throw new InternalError();
+			}
 		} //}}}
 
 		private boolean continuousLayout;

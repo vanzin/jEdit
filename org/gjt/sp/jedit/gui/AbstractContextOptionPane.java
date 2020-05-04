@@ -188,7 +188,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	private JButton remove;
 	private JButton moveUp, moveDown;
 	private JButton reset;
-	private JLabel caption;
+	private final JLabel caption;
 	private JPanel buttons;
 
 	private void updateButtons()

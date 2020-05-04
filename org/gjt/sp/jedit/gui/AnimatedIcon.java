@@ -120,13 +120,14 @@ public class AnimatedIcon extends ImageIcon
 	private int current;
 	private int delay;
 	private Timer timer;
-	private Component host;
+	private final Component host;
 	private Image icon;
 	//}}}
 
 	//{{{ Animator class
-	class Animator implements ActionListener
+	private class Animator implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			current = (current + 1) % frames.length;

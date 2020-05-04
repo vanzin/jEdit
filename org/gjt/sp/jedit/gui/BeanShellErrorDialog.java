@@ -23,9 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
