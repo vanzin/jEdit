@@ -115,7 +115,8 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		StringList slargs = new StringList(args);
+		// doing a copy to log it later as original args array is modified
+		String[] _args = args.clone();
 		//{{{ Check for Java 11 or later
 		String javaVersion = System.getProperty("java.version");
 		int javaMajorVersion = parseInt(javaVersion.split("\\.", 2)[0]);
@@ -279,7 +280,7 @@ public class jEdit
 
 		Log.init(true,level);
 
-		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + slargs.join(" "));
+		Log.log(Log.MESSAGE,jEdit.class, "starting with command line arguments: " + String.join(" ", _args));
 		//}}}
 
 		//{{{ Try connecting to another running jEdit instance
