@@ -20,6 +20,8 @@
  */
 package org.gjt.sp.jedit.textarea;
 
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+
 import java.awt.font.TextLayout;
 import java.util.Vector;
 
@@ -29,12 +31,14 @@ import javax.swing.text.TabExpander;
 
 public class ElasticTabstopsTabExpander implements TabExpander 
 {
-	TextArea textArea;
-	
+	private final TextArea textArea;
+	private final TextAreaPainter painter;
+
 	//{{{ ElasticTabstopsTabExpander() method
 	public ElasticTabstopsTabExpander(TextArea textArea)
 	{
 		this.textArea = textArea;
+		painter = textArea.getPainter();
 	}//}}}
 	
 	//{{{ nextTabStop() method
@@ -42,13 +46,14 @@ public class ElasticTabstopsTabExpander implements TabExpander
 	public float nextTabStop(float x, int tabOffset) 
 	{
 		float _tabSize = 0;
-		if(textArea.buffer.getBooleanProperty("elasticTabstops")&&textArea.buffer.getColumnBlock()!=null)
+		JEditBuffer buffer = textArea.getBuffer();
+		if(buffer.getBooleanProperty("elasticTabstops")&& buffer.getColumnBlock()!=null)
 		{
-			int line = textArea.buffer.getLineOfOffset(tabOffset);
-			_tabSize = getTabSize(textArea.buffer.getColumnBlock().getColumnBlock(line, tabOffset),line);
+			int line = buffer.getLineOfOffset(tabOffset);
+			_tabSize = getTabSize(buffer.getColumnBlock().getColumnBlock(line, tabOffset),line);
 			if(_tabSize<0)
 			{
-				throw new IllegalArgumentException("Unaccounted tab at line "+textArea.buffer.getLineOfOffset(tabOffset)+" at index "+tabOffset);
+				throw new IllegalArgumentException("Unaccounted tab at line "+ buffer.getLineOfOffset(tabOffset)+" at index "+tabOffset);
 			}
 		}
 		//keep minimum tab size of  textArea.tabSize
@@ -66,15 +71,16 @@ public class ElasticTabstopsTabExpander implements TabExpander
 			if(columnBlock.areTabSizesDirty())
 			{
 				float colBlockWidth = -1;
+				JEditBuffer buffer = textArea.getBuffer();
 				for(int i= 0;i<lines.size();i++)
 				{
-					ColumnBlockLine colBlockLine = (ColumnBlockLine)lines.elementAt(i);
-					int startOffset = colBlockLine.getColumnStartIndex()+textArea.buffer.getLineStartOffset(colBlockLine.getLine());
-					String str = textArea.buffer.getText(startOffset,colBlockLine.getColumnEndIndex()-colBlockLine.getColumnStartIndex());
+					ColumnBlockLine colBlockLine = lines.elementAt(i);
+					int startOffset = colBlockLine.getColumnStartIndex()+ buffer.getLineStartOffset(colBlockLine.getLine());
+					String str = buffer.getText(startOffset,colBlockLine.getColumnEndIndex()-colBlockLine.getColumnStartIndex());
 					float width = 0;
-					if(str.length()!=0)
+					if(!str.isEmpty())
 					{	
-						TextLayout layout = new TextLayout(str,textArea.painter.getFont(),textArea.painter.getFontRenderContext());
+						TextLayout layout = new TextLayout(str, painter.getFont(), painter.getFontRenderContext());
 						width = layout.getAdvance();
 					}
 					colBlockLine.lineLength = width;
@@ -87,9 +93,8 @@ public class ElasticTabstopsTabExpander implements TabExpander
 				columnBlock.columnBlockWidth = colBlockWidth;
 				columnBlock.setTabSizeDirtyStatus(false, false);
 			}
-			ret = columnBlock.columnBlockWidth-((ColumnBlockLine)lines.get(line-columnBlock.startLine)).lineLength;
+			ret = columnBlock.columnBlockWidth- lines.get(line-columnBlock.startLine).lineLength;
 		}	
 		return ret;
 	}//}}}
-
 }
