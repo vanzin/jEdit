@@ -28,15 +28,16 @@ import javax.swing.text.Segment;
 import org.gjt.sp.jedit.buffer.BufferAdapter;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
-/** Buffer Listener for Elastic Tabstops.  
-  */
+/**
+ * Buffer Listener for Elastic Tabstops.
+ */
 public class ElasticTabStopBufferListener extends BufferAdapter
 {
-	TextArea textArea;
+	private final TextArea textArea;
 	
 	private boolean handledInsertion = true;
 	private boolean handledDeletion = true;
-	private boolean singleTabDeleted = false;
+	private boolean singleTabDeleted;
 	
 	//{{{ ElasticTabStopBufferListener() method
 	public ElasticTabStopBufferListener(TextArea textArea)
@@ -83,7 +84,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		}
 		//System.out.println("BEFORE UPDATING COLUMN BLOCKS-----");
 		//System.out.println(rootBlock);
-		int indexofBlockAbove = -1;
+		int indexofBlockAbove;
 		ColumnBlock block = rootBlock.searchChildren(startLine);
 		ColumnBlock blockjustAbove = null;
 		boolean liesWithinBlock = false;
@@ -91,7 +92,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		if(block!=null)
 		{	
 			startIndex =  rootBlock.getChildren().indexOf(block);
-			indexofBlockAbove=startIndex-1;
+			indexofBlockAbove = startIndex - 1;
 			if(block.isLineWithinThisBlock(startLine)==0)
 			{
 				//if the line lies within this block we need to redraw it
@@ -119,10 +120,10 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		}
 		int startingLine =-1;
 		int endLine = -1;
-		if(liesWithinBlock)
+		if (liesWithinBlock)
 		{
 			ColumnBlock innerContainingBlock = block.getContainingBlock(startLine, offset);
-			if((isASimpleChar)&&!(innerContainingBlock==null&&singleTabInserted))
+			if (isASimpleChar && !(innerContainingBlock == null && singleTabInserted))
 			{
 				//a simple char has been entered (no newline )
 				//if this lies inside a column block update the startIndex and endIndex of this blocks corresponding ColumnBlockLine
@@ -130,9 +131,9 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 				//check whether columnBlockWidth is valid 
 				
 				//do nothing if this char does not lie inside a column block
-				if(innerContainingBlock!=null)
+				if (innerContainingBlock != null)
 				{
-					if(!singleTabInserted)
+					if (!singleTabInserted)
 					{	
 						innerContainingBlock.updateColumnBlockLineOffset(startLine, length, false);
 						startingLine = innerContainingBlock.startLine;
@@ -165,7 +166,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					endLine = startLine;
 				}
 			}
-			if((!isASimpleChar)||(innerContainingBlock==null&&singleTabInserted))
+			if (!isASimpleChar || (innerContainingBlock == null && singleTabInserted))
 			{	
 				startingLine = block.getStartLine();
 				endLine = block.getEndLine()+numLines;
@@ -177,19 +178,19 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		{
 			Segment seg  = new Segment();
 			buffer.getText(offset, length, seg);
-			if(buffer.getTabStopPosition(seg)>=0)
+			if (buffer.getTabStopPosition(seg) >= 0)
 			{
-				if(blockjustAbove!=null)
+				if (blockjustAbove != null)
 				{
 					rootBlock.getChildren().remove(blockjustAbove);
-					startingLine=blockjustAbove.startLine;
+					startingLine = blockjustAbove.startLine;
 				}
 				else
 				{
-					startingLine=startLine;
+					startingLine = startLine;
 				}
-				
-				if((block!=null)&&(block.startLine==startLine+numLines+1))
+
+				if (block != null && (block.startLine == startLine + numLines + 1))
 				{
 					rootBlock.getChildren().remove(block);
 					endLine = block.endLine;
@@ -206,8 +207,8 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		rootBlock.setDirtyStatus(false);
 		//System.out.println("AFTER UPDATING COLUMN BLOCKS-----");
 		//System.out.println(rootBlock);
-		if(startingLine!=-1&&endLine!=-1&&handledDeletion)
-		{	
+		if (startingLine != -1 && endLine != -1 && handledDeletion)
+		{
 			textArea.chunkCache.invalidateChunksFromPhys(startingLine);
 			textArea.invalidateLineRange(startingLine, endLine);
 		}
@@ -240,7 +241,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		{
 			isASimpleChar = true;
 		}
-		if((!isASimpleChar))
+		if (!isASimpleChar)
 		{
 			//we need to remove column blocks
 			//find the column block lying just below the first line deleted
@@ -256,23 +257,23 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 				int indexFirstBlockEffected =rootBlock.getChildren().indexOf(firstBlockEffected);
 				ColumnBlock blockAboveFirstEffected = null;
 				boolean justBelowBlock = false;
-				if(indexFirstBlockEffected>0)
+				if (indexFirstBlockEffected > 0)
 				{
-					blockAboveFirstEffected = (ColumnBlock)rootBlock.getChildren().get(indexFirstBlockEffected-1);
-					if(blockAboveFirstEffected.endLine==startLine-1 )
+					blockAboveFirstEffected = (ColumnBlock) rootBlock.getChildren().get(indexFirstBlockEffected - 1);
+					if (blockAboveFirstEffected.endLine == startLine - 1)
 					{
-						justBelowBlock  = true;
+						justBelowBlock = true;
 					}
 				}
-				int posFirstLine =  firstBlockEffected.isLineWithinThisBlock(startLine);
-				boolean firstLineLiesInside =posFirstLine==0;
-				boolean firstLineLiesAbove =posFirstLine<0;
-				int posLastLine =  firstBlockEffected.isLineWithinThisBlock(startLine+numLines);
-				boolean lastLineLiesInside =posLastLine==0;
-				boolean lastLineLiesAbove = posLastLine<0;
-				boolean lastLineLiesBelow = posLastLine>0;
+				int posFirstLine = firstBlockEffected.isLineWithinThisBlock(startLine);
+				boolean firstLineLiesInside = posFirstLine == 0;
+				boolean firstLineLiesAbove = posFirstLine < 0;
+				int posLastLine = firstBlockEffected.isLineWithinThisBlock(startLine + numLines);
+				boolean lastLineLiesInside = posLastLine == 0;
+				boolean lastLineLiesAbove = posLastLine < 0;
+				boolean lastLineLiesBelow = posLastLine > 0;
 				//deletion above block
-				if(lastLineLiesAbove )
+				if (lastLineLiesAbove)
 				{
 					//if last line lies above this block cannot be connected to a block above in this deletion without touching the block above
 					/*if(justBelowBlock&&startLine+numLines+1==firstBlockEffected.startLine)
@@ -284,20 +285,20 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					}*/
 					firstBlockToBeUpdated = firstBlockEffected;
 					//else
-					//{	
-						firstBlockToBeRemoved =lastBlockToBeRemoved= null;
-						startLineToBuild=endLineToBuild=-1;
-					//}	
+					//{
+						firstBlockToBeRemoved = lastBlockToBeRemoved= null;
+						startLineToBuild = endLineToBuild=-1;
+					//}
 				}
 				//deletion inside block
-				else if((firstLineLiesInside||firstLineLiesAbove)&&lastLineLiesInside)
+				else if ((firstLineLiesInside || firstLineLiesAbove) && lastLineLiesInside)
 				{
 					startLineToBuild = Math.min( firstBlockEffected.startLine,startLine);
 					endLineToBuild = firstBlockEffected.endLine-numLines;
 					//if(indexFirstBlockEffected<rootBlock.getChildren().size()-1)
-					//{	
+					//{
 						//firstBlockToBeUpdated =(ColumnBlock)rootBlock.getChildren().get(indexFirstBlockEffected+1) ;
-					//}	
+					//}
 					firstBlockToBeRemoved =lastBlockToBeRemoved= firstBlockEffected;
 					if(justBelowBlock)
 					{
@@ -306,7 +307,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					}
 				}
 				//deletion might cover other blocks as well
-				else if(((firstLineLiesInside)||(firstLineLiesAbove))&&lastLineLiesBelow)
+				else if ((firstLineLiesInside || firstLineLiesAbove)/* && lastLineLiesBelow (always true) */)
 				{
 					startLineToBuild = Math.min(startLine, firstBlockEffected.startLine);
 					firstBlockToBeRemoved = firstBlockEffected;
@@ -329,14 +330,14 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 								//firstBlockToBeUpdated = (ColumnBlock)rootBlock.getChildren().get(indexLastBlock+1);
 							//}
 						}
-						
+
 						//deletion lies above this block
-						else 
+						else
 						{
-							//do not need to consider blockJustAbove here as we cannot connect two column blocks without 
+							//do not need to consider blockJustAbove here as we cannot connect two column blocks without
 							//ending on one of the lines of either
 							//firstBlockToBeUpdated = blockBelow;
-							//if we have reached here there is surely a block above this one 
+							//if we have reached here there is surely a block above this one
 							lastBlockToBeRemoved = (ColumnBlock)rootBlock.getChildren().get(indexLastBlock-1);
 							//if the first Block is wholly covered then all column blocks are being deleted completely and there is nothing to build
 							endLineToBuild = firstLineLiesAbove?-1:startLine;
@@ -358,7 +359,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 						lastBlockToBeRemoved = (ColumnBlock)rootBlock.getChildren().get(rootBlock.getChildren().size()-1);
 						//firstBlockToBeUpdated = null;
 						if(firstLineLiesInside)
-						{	
+						{
 							endLineToBuild = startLine;
 						}
 						else
@@ -366,7 +367,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 							startLineToBuild = -1;
 							endLineToBuild= -1;
 						}
-					} 
+					}
 				}
 			}
 			//deletion lies below all column blocks
@@ -381,7 +382,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 			//once we reach here we have three things to do
 			//1)delete columnBlocks using firstBlockToBeDeleted and lastBlockToBeDeleted
 			List<Node> blocksToBeRemoved = null;
-			if(firstBlockToBeRemoved!=null)
+			if (firstBlockToBeRemoved != null)
 			{
 				int startIndex = rootBlock.getChildren().indexOf(firstBlockToBeRemoved);
 				blocksToBeRemoved = new ArrayList<>();
@@ -395,38 +396,38 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					blocksToBeRemoved.add(rootBlock.getChildren().get(i));
 				}
 
-			}	
+			}
 			//2)update startLine/endLine in column blocks using firstBlockToBeUpdated
-			if(numLines>0)
-			{	
+			if (numLines > 0)
+			{
 				rootBlock.endLine-=numLines;
-				if((lastBlockToBeRemoved!=null)||(firstBlockToBeUpdated!=null))
+				if (lastBlockToBeRemoved != null || firstBlockToBeUpdated != null)
 				{
-					int startIndex=-1;
-					if(lastBlockToBeRemoved!=null)
+					int startIndex;
+					if (lastBlockToBeRemoved != null)
 					{
 						startIndex = rootBlock.getChildren().indexOf(lastBlockToBeRemoved);
 						//start just after the last block to be removed
 						startIndex++;
 					}
-					else if(firstBlockToBeUpdated!=null)
+					else/* if(firstBlockToBeUpdated!=null)*/ // always true
 					{
 						startIndex = rootBlock.getChildren().indexOf(firstBlockToBeUpdated);
 					}
 					for(int i=startIndex;i<rootBlock.getChildren().size();i++)
-					{	
+					{
 						((ColumnBlock)rootBlock.getChildren().get(i)).updateLineNo(-1*numLines);
-					}	
+					}
 				}
 			}
 			//once we are done with (2) we can safely change rootBlock
-			if(blocksToBeRemoved!=null)
-			{	
+			if (blocksToBeRemoved != null)
+			{
 				rootBlock.getChildren().removeAll(blocksToBeRemoved);
-			}	
+			}
 			//3)rebuild column blocks using endLine and startLine
-			if(startLineToBuild!=-1&&endLineToBuild!=-1)
-			{	
+			if (startLineToBuild != -1 && endLineToBuild != -1)
+			{
 				buffer.updateColumnBlocks(startLineToBuild, endLineToBuild, 0, rootBlock);
 				rootBlock.setDirtyStatus(false);
 				textArea.chunkCache.invalidateChunksFromPhys(startLineToBuild);
@@ -437,18 +438,18 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		}
 		else
 		{
-			int startingLine = -1;
-			int endLine = -1;
-			//a simple char has been entered 
+			int startingLine;
+			int endLine;
+			//a simple char has been entered
 			//if this lies inside a column block update the startIndex and endIndex of this blocks corresponding ColumnBlockLine
 			//and all subsequent ColumnBlock Lines after this one
-			//check whether columnBlockWidth is valid 
+			//check whether columnBlockWidth is valid
 			ColumnBlock innerContainingBlock = rootBlock.getContainingBlock(startLine, offset);
 			//do nothing if this char does not lie inside a column block
-			if(innerContainingBlock!=null)
+			if (innerContainingBlock != null)
 			{
 				if(!singleTabDeleted)
-				{	
+				{
 					innerContainingBlock.updateColumnBlockLineOffset(startLine, -1*length, false);
 					startingLine = innerContainingBlock.startLine;
 					endLine = innerContainingBlock.endLine;
@@ -466,20 +467,20 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 					//innerParent.getChildren().removeAllElements();
 					buffer.updateColumnBlocks(startingLine, endLine,(int)innerParent.columnBlockWidth , innerParent);
 				}
-					
-					
+
+
 			}
 			else
 			{
-				//this line must have been  retokenized and repainted by the BufferHandler so repaint it again here after column blocks dirty status is updated 
+				//this line must have been  retokenized and repainted by the BufferHandler so repaint it again here after column blocks dirty status is updated
 				startingLine = startLine;
 				endLine = startLine;
 			}
 			handledDeletion = true;
 			rootBlock.setDirtyStatus(false);
-			if(startingLine!=-1&&endLine!=-1)
-			{	
-				
+			if (startingLine != -1 && endLine != -1)
+			{
+
 				textArea.chunkCache.invalidateChunksFromPhys(startingLine);
 				textArea.invalidateLineRange(startingLine, endLine);
 			}
@@ -490,11 +491,11 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	@Override
 	public void transactionComplete(JEditBuffer buffer)
 	{
-		if(!buffer.getBooleanProperty("elasticTabstops"))
+		if (!buffer.getBooleanProperty("elasticTabstops"))
 		{
 			return;
 		}
-		if((buffer.getBooleanProperty("elasticTabstops"))&&((!handledInsertion)||(!handledDeletion)))
+		if (buffer.getBooleanProperty("elasticTabstops") && (!handledInsertion || !handledDeletion))
 		{	
 			//if we reach here use brute force as a last resolve
 			fullyUpdateColumnBlocks(buffer);
@@ -507,13 +508,13 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 	@Override
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
-		if(!buffer.elasticTabstopsOn)
+		if (!buffer.elasticTabstopsOn)
 		{
 			return;
 		}
 		handledInsertion = false;
-		if(buffer.getColumnBlock()!=null)
-		buffer.getColumnBlock().setDirtyStatus(true);
+		if (buffer.getColumnBlock() != null)
+			buffer.getColumnBlock().setDirtyStatus(true);
 	} //}}}
 		
 	//{{{ preContentRemoved() method
@@ -526,7 +527,7 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 		}
 		handledDeletion = false;
 		singleTabDeleted = false;
-		if(buffer.getColumnBlock()!=null)
+		if (buffer.getColumnBlock() != null)
 		{	
 			buffer.getColumnBlock().setDirtyStatus(true);
 			if(numLines == 0 && length == 1)
@@ -538,6 +539,5 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 				}
 			}
 		}
-	}
-	//}}}
+	} //}}}
 }
