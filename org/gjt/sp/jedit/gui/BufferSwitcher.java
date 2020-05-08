@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import javax.annotation.Nonnull;
 import javax.swing.event.*;
 import javax.accessibility.Accessible;
 
@@ -283,6 +284,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		}
 
 		@Override
+		@Nonnull
 		public Object getTransferData(DataFlavor flavor)
 				throws UnsupportedFlavorException, IOException
 		{
@@ -338,11 +340,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				return false;
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				return false;
 			}
@@ -386,11 +384,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				return false;
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				return false;
 			}
@@ -433,11 +427,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 					data = (BufferTransferableData) t
 							.getTransferData(BufferSwitcher.BufferDataFlavor);
 				}
-				catch (UnsupportedFlavorException e)
-				{
-					return;
-				}
-				catch (IOException e)
+				catch (UnsupportedFlavorException | IOException e)
 				{
 					return;
 				}
