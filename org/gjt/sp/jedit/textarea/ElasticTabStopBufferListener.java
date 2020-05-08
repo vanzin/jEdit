@@ -480,7 +480,6 @@ public class ElasticTabStopBufferListener extends BufferAdapter
 			rootBlock.setDirtyStatus(false);
 			if (startingLine != -1 && endLine != -1)
 			{
-
 				textArea.chunkCache.invalidateChunksFromPhys(startingLine);
 				textArea.invalidateLineRange(startingLine, endLine);
 			}
