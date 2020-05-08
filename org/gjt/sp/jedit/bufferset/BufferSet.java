@@ -201,6 +201,17 @@ public class BufferSet
 		return buffers.size();
 	} //}}}
 
+	//{{{ isEmpty() method
+
+	/**
+	 * @since jEdit 5.6pre1
+	 * @return true if the bufferSet is empty
+	 */
+	public boolean isEmpty()
+	{
+		return buffers.isEmpty();
+	} //}}}
+
 	//{{{ getAllBuffers() methods
 	public void getAllBuffers(BufferSetListener listener)
 	{

@@ -155,7 +155,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
 		final BufferSet bufferSet = editPane.getBufferSet();
-		if(bufferSet.size() == 0)
+		if(bufferSet.isEmpty())
 			return;
 
 		Runnable runnable = () ->
