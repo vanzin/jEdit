@@ -27,6 +27,7 @@ package org.gjt.sp.jedit;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
+import java.util.Arrays;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
@@ -36,6 +37,8 @@ import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
+
+import javax.annotation.Nullable;
 //}}}
 
 /**
@@ -252,11 +255,7 @@ public class Registers
 				mode = data.getMode();
 				selection = data.getText();
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				Log.log(Log.ERROR, Registers.class, e);
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				Log.log(Log.ERROR, Registers.class, e);
 			}
@@ -414,11 +413,7 @@ public class Registers
 			Object data = transferable.getTransferData(dataFlavor);
 			return stripEOLChars(data.toString());
 		}
-		catch (UnsupportedFlavorException e)
-		{
-			Log.log(Log.ERROR, Registers.class, e);
-		}
-		catch (IOException e)
+		catch (UnsupportedFlavorException | IOException e)
 		{
 			Log.log(Log.ERROR, Registers.class, e);
 		}
@@ -456,11 +451,7 @@ public class Registers
 
 		if(name >= registers.length)
 		{
-			Register[] newRegisters = new Register[
-				Math.min(1<<16, name<<1)];
-			System.arraycopy(registers,0,newRegisters,0,
-				registers.length);
-			registers = newRegisters;
+			registers = Arrays.copyOf(registers, Math.min(1<<16, name<<1));
 		}
 
 		registers[name] = newRegister;
@@ -541,6 +532,7 @@ public class Registers
 	 * (eg, "a b $ % ^").
 	 * @since jEdit 4.2pre2
 	 */
+	@Nullable
 	public static String getRegisterNameString()
 	{
 		if(!loaded)
@@ -617,8 +609,7 @@ public class Registers
 	{
 		registers = new Register[256];
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		registers['$'] = new ClipboardRegister(
-			toolkit.getSystemClipboard());
+		registers['$'] = new ClipboardRegister(toolkit.getSystemClipboard());
 		Clipboard selection = toolkit.getSystemSelection();
 		if(selection != null)
 			registers['%'] = new ClipboardRegister(selection);
@@ -825,11 +816,7 @@ public class Registers
 				{
 					return transferable.getTransferData(DataFlavor.stringFlavor).toString();
 				}
-				catch (UnsupportedFlavorException e)
-				{
-					Log.log(Log.ERROR, this, e);
-				}
-				catch (IOException e)
+				catch (UnsupportedFlavorException | IOException e)
 				{
 					Log.log(Log.ERROR, this, e);
 				}
