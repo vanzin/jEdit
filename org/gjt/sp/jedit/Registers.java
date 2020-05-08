@@ -171,13 +171,10 @@ public class Registers
 				try
 				{
 					String registerContents = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-					if(registerContents != null)
-					{
-						if(registerContents.endsWith(separator))
-							selection = registerContents + selection;
-						else
-							selection = registerContents + separator + selection;
-					}
+					if(registerContents.endsWith(separator))
+						selection = registerContents + selection;
+					else
+						selection = registerContents + separator + selection;
 				}
 				catch (UnsupportedFlavorException e)
 				{
