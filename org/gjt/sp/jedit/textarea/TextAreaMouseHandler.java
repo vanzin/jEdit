@@ -36,7 +36,8 @@ import static java.awt.event.MouseEvent.BUTTON3;
 
 import java.awt.*;
 
-/** Standalone TextArea MouseHandler.
+/**
+ * Standalone TextArea MouseHandler.
  *
  * @author Matthieu Casanova
  * @version $Id$
@@ -63,8 +64,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			return;
 		}
 
-		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
-			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
+		control = OperatingSystem.isMacOS() ? evt.isMetaDown() : evt.isControlDown();
 
 		ctrlForRectangularSelection = textArea.isCtrlForRectangularSelection();
 
