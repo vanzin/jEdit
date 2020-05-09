@@ -58,12 +58,13 @@ public class DynamicMenuChanged extends EBMessage
 	} //}}}
 
 	//{{{ paramString() method
+	@Override
 	public String paramString()
 	{
 		return "menu=" + name + "," + super.paramString();
 	} //}}}
 
 	//{{{ Private members
-	private String name;
+	private final String name;
 	//}}}
 }

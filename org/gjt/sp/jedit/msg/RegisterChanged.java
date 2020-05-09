@@ -54,6 +54,7 @@ public class RegisterChanged extends EBMessage
 		 return Registers.getRegister(registerName).toString();
 	 }
 	 
+	 @Override
 	 public String paramString()
 	 {
 		 return "register=" + registerName + "," + super.paramString();

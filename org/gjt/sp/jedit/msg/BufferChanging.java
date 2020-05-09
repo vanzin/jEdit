@@ -62,5 +62,5 @@ public class BufferChanging extends PositionChanging
 		return m_buffer;
 	}
 
-	private Buffer m_buffer;
+	private final Buffer m_buffer;
 }
