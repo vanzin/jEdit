@@ -80,7 +80,7 @@ public class MacrosProvider implements DynamicMenuProvider
 					jEdit.getProperty(obj + ".label"),
 					(String)obj,jEdit.getActionContext()));
 			}
-			else if(obj instanceof Vector)
+			else if(obj instanceof List)
 			{
 				List subList = (List)obj;
 				String name = (String)subList.get(0);
