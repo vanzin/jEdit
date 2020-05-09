@@ -31,12 +31,11 @@ import org.gjt.sp.util.Task;
  */
 public class LocalFileSaveTask extends Task
 {
-
 	private static final int BUFFER_SIZE = 4096;
 
-	private File file;
-	private String body;
-	private String charset;
+	private final File file;
+	private final String body;
+	private final String charset;
 
 	public LocalFileSaveTask(File file, String body, String charset)
 	{

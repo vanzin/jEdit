@@ -57,6 +57,7 @@ public class RegexEncodingDetector implements EncodingDetector
 		this.replacement = replacement;
 	}
 
+	@Override
 	public String detectEncoding(InputStream sample) throws IOException
 	{
 		InputStreamReader reader = new InputStreamReader(sample);

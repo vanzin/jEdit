@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
 
 import org.gjt.sp.util.Log;
 //}}}
@@ -38,6 +39,7 @@ import org.gjt.sp.util.Log;
 public class XMLEncodingDetector implements EncodingDetector
 {
 	//{{{ implements EncodingDetector
+	@Override
 	public String detectEncoding(InputStream sample) throws IOException
 	{
 		// Length of longest XML PI used for encoding detection.
@@ -54,7 +56,7 @@ public class XMLEncodingDetector implements EncodingDetector
 			if(offset == XML_PI_LENGTH)
 				break;
 		}
-		return getXMLEncoding(new String(_xmlPI,0,offset,"ASCII"));
+		return getXMLEncoding(new String(_xmlPI,0,offset, StandardCharsets.US_ASCII));
 	} //}}}
 
 	//{{{ Private members

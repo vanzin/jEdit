@@ -57,6 +57,7 @@ public class EncodingWithBOM implements Encoding
 	} //}}}
 
 	//{{{ implements Encoding
+	@Override
 	@Nonnull
 	public Reader getTextReader(@Nonnull InputStream in) throws IOException
 	{
@@ -69,6 +70,7 @@ public class EncodingWithBOM implements Encoding
 		return plain.getTextReader(in);
 	}
 
+	@Override
 	@Nonnull
 	public Writer getTextWriter(@Nonnull OutputStream out) throws IOException
 	{
@@ -76,6 +78,7 @@ public class EncodingWithBOM implements Encoding
 		return plain.getTextWriter(out);
 	}
 
+	@Override
 	@Nonnull
 	public Reader getPermissiveTextReader(@Nonnull InputStream in) throws IOException
 	{
@@ -97,6 +100,7 @@ public class EncodingWithBOM implements Encoding
 	//{{{ class Detector
 	public static class Detector implements EncodingDetector
 	{
+		@Override
 		public String detectEncoding(InputStream sample) throws IOException
 		{
 			byte[] mark = new byte[4];
@@ -158,11 +162,8 @@ public class EncodingWithBOM implements Encoding
 
 	//{{{ Statics
 	private static final int BOM16 = 0xfeff;
-	private static final byte[] UTF8BOM
-		= { (byte)0xef, (byte)0xbb, (byte)0xbf };
-
-	private static final Map<String, byte[]> bomMap
-		= new HashMap<String, byte[]>();
+	private static final byte[] UTF8BOM = { (byte)0xef, (byte)0xbb, (byte)0xbf };
+	private static final Map<String, byte[]> bomMap = new HashMap<>();
 
 	static
 	{

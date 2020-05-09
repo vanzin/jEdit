@@ -221,8 +221,7 @@ public class FavoritesVFS extends VFS
 			if(favorites == null)
 				loadFavorites();
 
-			return favorites.toArray(
-				new VFSFile[favorites.size()]);
+			return favorites.toArray(new VFSFile[0]);
 		}
 	} //}}}
 

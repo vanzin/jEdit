@@ -112,7 +112,6 @@ import javax.annotation.Nullable;
 public abstract class VFS
 {
 	//{{{ Capabilities
-
 	/**
 	 * Read capability.
 	 * @since jEdit 2.6pre2
@@ -179,7 +178,6 @@ public abstract class VFS
 	 * @since jEdit 5.0pre1
 	 */
 	public static final int NON_AWT_SESSION_CAP = 1 << 8;
-
 	//}}}
 
 	//{{{ Extended attributes
@@ -221,7 +219,7 @@ public abstract class VFS
 		this.name = name;
 		this.caps = caps;
 		// reasonable defaults (?)
-		this.extAttrs = new String[] { EA_SIZE, EA_TYPE };
+		extAttrs = new String[] { EA_SIZE, EA_TYPE };
 	}
 
 	/**
@@ -456,7 +454,7 @@ public abstract class VFS
 	public Object createVFSSessionSafe(final String path,
 	                                   final Component comp)
 	{
-		Object session = null;
+		Object session;
 		if ((getCapabilities() & NON_AWT_SESSION_CAP) != 0)
 		{
 			session = createVFSSession(path, comp);
@@ -1121,8 +1119,8 @@ public abstract class VFS
 
 			for (ColorEntry entry : colors)
 			{
-				if (entry.re.matcher(name).matches())
-					return entry.color;
+				if (entry.getRe().matcher(name).matches())
+					return entry.getColor();
 			}
 
 			return null;
@@ -1137,7 +1135,8 @@ public abstract class VFS
 	 */
 	public static class DirectoryEntryCompare implements Comparator<VFSFile>
 	{
-		private boolean sortIgnoreCase, sortMixFilesAndDirs;
+		private final boolean sortIgnoreCase;
+		private final boolean sortMixFilesAndDirs;
 
 		/**
 		 * Creates a new <code>DirectoryEntryCompare</code>.
@@ -1304,20 +1303,30 @@ public abstract class VFS
 	//{{{ ColorEntry class
 	private static class ColorEntry
 	{
-		Pattern re;
-		Color color;
+		private final Pattern re;
+		private final Color color;
 
 		ColorEntry(Pattern re, Color color)
 		{
 			this.re = re;
 			this.color = color;
 		}
+
+		public Pattern getRe()
+		{
+			return re;
+		}
+
+		public Color getColor()
+		{
+			return color;
+		}
 	} //}}}
 
 	//{{{ SessionGetter class
 	private class SessionGetter implements Runnable
 	{
-		public SessionGetter(String path, Component comp)
+		SessionGetter(String path, Component comp)
 		{
 			this.path = path;
 			this.comp = comp;

@@ -211,7 +211,7 @@ public class FileVFS extends VFS
 	//{{{ LocalFile class
 	public static class LocalFile extends VFSFile
 	{
-		private File file;
+		private final File file;
 
 		// use system default short format
 		public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -548,8 +548,8 @@ public class FileVFS extends VFS
 
 	//{{{ Permission preservation code
 
-	/** Code borrowed from j text editor (http://www.armedbear.org) */
-	/** I made some changes to make it support suid, sgid and sticky files */
+	/* Code borrowed from j text editor (http://www.armedbear.org) */
+	/* I made some changes to make it support suid, sgid and sticky files */
 
 	//{{{ getPermissions() method
 	/**
@@ -646,6 +646,6 @@ public class FileVFS extends VFS
 	//}}}
 
 	//{{{ Private members
-	private static FileSystemView fsView = null;
+	private static FileSystemView fsView;
 	//}}}
 }

@@ -390,7 +390,7 @@ public class VFSManager
 	} //}}}
 
 	//{{{ SendVFSUpdatesSafely class
-	static class SendVFSUpdatesSafely implements Runnable
+	private static class SendVFSUpdatesSafely implements Runnable
 	{
 		@Override
 		public void run()
@@ -402,11 +402,8 @@ public class VFSManager
 				// unless the vfs update for a parent arrives
 				// before any updates for the children. sorting
 				// the list alphanumerically guarantees this.
-				Collections.sort(vfsUpdates,
-					new StandardUtilities.StringCompare<>()
-				);
-				for (VFSUpdate vfsUpdate : vfsUpdates)
-					EditBus.send(vfsUpdate);
+				vfsUpdates.sort(new StandardUtilities.StringCompare<>());
+				vfsUpdates.forEach(EditBus::send);
 
 				vfsUpdates.clear();
 			}
@@ -440,9 +437,9 @@ public class VFSManager
 	//{{{ ErrorDisplayer class
 	private static class ErrorDisplayer implements Runnable
 	{
-		private Frame frame;
+		private final Frame frame;
 
-		public ErrorDisplayer(Frame frame)
+		ErrorDisplayer(Frame frame)
 		{
 			this.frame = frame;
 		}
@@ -476,6 +473,7 @@ public class VFSManager
 			}
 		}
 
+		@Override
 		public void run()
 		{
 			synchronized(errorLock)
