@@ -131,7 +131,7 @@ public class FavoritesVFS extends VFS
 			Favorite favorite = (Favorite) fav;
 			if (favorite.getPath().equals(from))
 			{
-				favorite.label = to;
+				favorite.setLabel(to);
 				return true;
 			}
 		}
@@ -143,7 +143,7 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
-			favorites = new LinkedList<Favorite>();
+			favorites = new LinkedList<>();
 
 			String favoritePath;
 			int i = 0;
@@ -151,13 +151,12 @@ public class FavoritesVFS extends VFS
 			{
 				Favorite favorite = new Favorite(favoritePath,
 					jEdit.getIntegerProperty("vfs.favorite."
-					+ i + ".type",
-								VFSFile.DIRECTORY));
+					+ i + ".type", VFSFile.DIRECTORY));
 				favorites.add(favorite);
 				String label = jEdit.getProperty("vfs.favorite." + i + ".label");
 				if (label != null)
 				{
-					favorite.label = label;
+					favorite.setLabel(label);
 				}
 				i++;
 			}
@@ -239,12 +238,17 @@ public class FavoritesVFS extends VFS
 		Favorite(String path, int type)
 		{
 			super(path,path,PROTOCOL + ':' + path,type, 0L,false);
-			this.label = MiscUtilities.abbreviateView(path);
+			label = MiscUtilities.abbreviateView(path);
 		}
 
 		public String getLabel()
 		{
 			return label;
+		}
+
+		public void setLabel(String label)
+		{
+			this.label = label;
 		}
 
 		@Override
