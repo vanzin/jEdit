@@ -25,7 +25,8 @@ package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.*;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -33,19 +34,21 @@ import org.gjt.sp.jedit.*;
 public class MacrosProvider implements DynamicMenuProvider
 {
 	//{{{ updateEveryTime() method
+	@Override
 	public boolean updateEveryTime()
 	{
 		return false;
 	} //}}}
 
 	//{{{ update() method
+	@Override
 	public void update(JMenu menu)
 	{
-		Vector macroVector = Macros.getMacroHierarchy();
+		List macroList = Macros.getMacroHierarchy();
 
 		int count = menu.getMenuComponentCount();
 
-		createMacrosMenu(menu,macroVector,0);
+		createMacrosMenu(menu,macroList,0);
 
 		if(count == menu.getMenuComponentCount())
 		{
@@ -57,20 +60,20 @@ public class MacrosProvider implements DynamicMenuProvider
 	} //}}}
 
 	//{{{ createMacrosMenu() method
-	private void createMacrosMenu(JMenu menu, Vector vector, int start)
+	private void createMacrosMenu(JMenu menu, List list, int start)
 	{
-		Vector<JMenuItem> menuItems = new Vector<JMenuItem>();
+		List<JMenuItem> menuItems = new ArrayList<>();
 		int maxItems = jEdit.getIntegerProperty("menu.spillover", 20);
 		JMenu subMenu = null;
-		for(int i = start; i < vector.size(); i++)
+		for(int i = start; i < list.size(); i++)
 		{
 			if (i != start && i % maxItems == 0)
 			{
 				subMenu = new JMenu(jEdit.getProperty("common.more"));
-				createMacrosMenu(subMenu, vector, i);
+				createMacrosMenu(subMenu, list, i);
 				break;
 			}
-			Object obj = vector.elementAt(i);
+			Object obj = list.get(i);
 			if(obj instanceof String)
 			{
 				menuItems.add(new EnhancedMenuItem(
@@ -79,16 +82,16 @@ public class MacrosProvider implements DynamicMenuProvider
 			}
 			else if(obj instanceof Vector)
 			{
-				Vector subvector = (Vector)obj;
-				String name = (String)subvector.elementAt(0);
+				List subList = (List)obj;
+				String name = (String)subList.get(0);
 				JMenu submenu = new JMenu(jEdit.getProperty("macros.folder."+ name + ".label", name));
-				createMacrosMenu(submenu,subvector,1);
+				createMacrosMenu(submenu,subList,1);
 				if(submenu.getMenuComponentCount() != 0)
 					menuItems.add(submenu);
 			}
 		}
 
-		Collections.sort(menuItems, new MenuItemTextComparator());
+		menuItems.sort(new MenuItemTextComparator());
 
 		if (subMenu != null)
 			menuItems.add(subMenu);
