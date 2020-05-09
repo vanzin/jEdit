@@ -91,6 +91,7 @@ class TextAreaDropHandler extends DropTargetAdapter
 	} //}}}
 
 	//{{{ drop() method
+	@Override
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drop");
