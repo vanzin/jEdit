@@ -87,12 +87,12 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		Arrays.sort(encodings);
 
 		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
-		for (int i = 0; i < encodings.length; i++)
+		for (String encoding : encodings)
 		{
-			JMenuItem mi = new JMenuItem(encodings[i]);
-			mi.setActionCommand("encoding@" + encodings[i]);
+			JMenuItem mi = new JMenuItem(encoding);
+			mi.setActionCommand("encoding@" + encoding);
 			mi.addActionListener(this);
-			if (menu.getMenuComponentCount() >= maxItems && i < encodings.length)
+			if (menu.getMenuComponentCount() >= maxItems)
 			{
 				JMenu newMenu = new JMenu(jEdit.getProperty("common.more"));
 				menu.add(newMenu);
@@ -147,7 +147,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 
 		if (encoding != null)
 		{
-			props = new Hashtable<String, Object>();
+			props = new Hashtable<>();
 			props.put(JEditBuffer.ENCODING, encoding);
 			// Disable auto-detect because user explicitly
 			// specify an encoding.

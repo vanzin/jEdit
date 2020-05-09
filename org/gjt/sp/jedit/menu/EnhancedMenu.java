@@ -37,8 +37,7 @@ public class EnhancedMenu extends JMenu implements MenuListener
 	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name)
 	{
-		this(name,jEdit.getProperty(name.concat(".label")),
-			jEdit.getActionContext());
+		this(name,jEdit.getProperty(name.concat(".label")), jEdit.getActionContext());
 	} //}}}
 
 	//{{{ EnhancedMenu constructor
@@ -96,13 +95,16 @@ public class EnhancedMenu extends JMenu implements MenuListener
 	} //}}}
 
 	//{{{ menuSelected() method
+	@Override
 	public void menuSelected(MenuEvent evt)
 	{
 		init();
 	} //}}}
 
+	@Override
 	public void menuDeselected(MenuEvent e) {}
 
+	@Override
 	public void menuCanceled(MenuEvent e) {}
 
 	//{{{ init() method
@@ -149,8 +151,9 @@ public class EnhancedMenu extends JMenu implements MenuListener
 
 	//{{{ finalize() method
 	// TODO: 'finalize' is deprecated as of Java 9
+	@Override
 	@SuppressWarnings("deprecation")
-	protected void finalize() throws Exception
+	protected void finalize()
 	{
 		if(ebStub != null)
 			EditBus.removeFromBus(ebStub);

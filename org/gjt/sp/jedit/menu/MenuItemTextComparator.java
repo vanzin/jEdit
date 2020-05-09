@@ -40,11 +40,11 @@ import org.gjt.sp.util.StandardUtilities;
  */
 public class MenuItemTextComparator implements Comparator<JMenuItem>
 {
-
 	// {{{ Compare Method.
+	@Override
 	public int compare(JMenuItem obj1, JMenuItem obj2)
 	{
-		int compareValue = 0;
+		int compareValue;
 		boolean obj1E = obj1 instanceof EnhancedMenuItem;
 		boolean obj2E = obj2 instanceof EnhancedMenuItem;
 		if (obj1E && !obj2E)
