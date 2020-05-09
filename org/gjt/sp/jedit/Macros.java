@@ -728,12 +728,12 @@ public class Macros
 		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
 		jEdit.addActionSet(macroActionSet);
 		macroHierarchy = new Vector();
-		macroHash = new Hashtable<String, Macro>();
+		macroHash = new Hashtable<>();
 	} //}}}
 
 	//{{{ loadMacros() method
-	@SuppressWarnings({"unchecked"})	// TODO: figure out what is in 'vector', might be a vector of vectors
-	private static void loadMacros(List vector, String path, File directory)
+	@SuppressWarnings({"unchecked"})	// TODO: figure out what is in 'list', might be a list of lists
+	private static void loadMacros(List list, String path, File directory)
 	{
 		lastMacro = null;
 
@@ -753,7 +753,7 @@ public class Macros
 				String submenuName = fileName.replace('_', ' ');
 				List submenu = null;
 				//{{{ try to merge with an existing menu first
-				for (Object obj : vector)
+				for (Object obj : list)
 				{
 					if (obj instanceof List)
 					{
@@ -767,22 +767,22 @@ public class Macros
 				} //}}}
 				if (submenu == null)
 				{
-					submenu = new Vector();
+					submenu = new ArrayList();
 					submenu.add(submenuName);
-					vector.add(submenu);
+					list.add(submenu);
 				}
 
 				loadMacros(submenu, path + fileName + '/', file);
 			} else
 			{
-				addMacro(file, path, vector);
+				addMacro(file, path, list);
 			}
 		}
 	} //}}}
 
 	//{{{ addMacro() method
 	@SuppressWarnings({"unchecked"})
-	private static void addMacro(File file, String path, List vector)
+	private static void addMacro(File file, String path, List list)
 	{
 		String fileName = file.getName();
 		Handler handler = getHandlerForPathName(file.getPath());
@@ -803,7 +803,7 @@ public class Macros
 			if(macroHash.get(newMacro.getName()) != null)
 				return;
 
-			vector.add(newMacro.getName());
+			list.add(newMacro.getName());
 			jEdit.setTemporaryProperty(newMacro.getName() + ".label", newMacro.getLabel());
 			jEdit.setTemporaryProperty(newMacro.getName()
 				+ ".mouse-over",
