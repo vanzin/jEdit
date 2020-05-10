@@ -25,6 +25,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import javax.annotation.Nullable;
 import javax.swing.border.*;
 import javax.swing.text.Segment;
 import javax.swing.*;
@@ -444,6 +445,7 @@ public class StatusBar extends JPanel
 	private final Widget lineSepWidget;
 	private final Widget lockedWidget;
 	/* package-private for speed */ StringBuilder buf = new StringBuilder();
+	@Nullable
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
 
