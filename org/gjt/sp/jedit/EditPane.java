@@ -705,7 +705,7 @@ public class EditPane extends JPanel implements BufferSetListener
 					recentBuffer = bufferSet.getPreviousBuffer(index -1);
 				}
 			}
-			else if(!bufferSet.isEmpty())
+			else if(bufferSet.size() != 0)
 			{
 				setBuffer(bufferSet.getBuffer(0));
 				recentBuffer = null;

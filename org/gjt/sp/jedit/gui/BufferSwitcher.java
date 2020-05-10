@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.annotation.Nonnull;
 import javax.swing.event.*;
 import javax.accessibility.Accessible;
 
@@ -155,7 +154,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
 		final BufferSet bufferSet = editPane.getBufferSet();
-		if(bufferSet.isEmpty())
+		if(bufferSet.size() == 0)
 			return;
 
 		Runnable runnable = () ->
@@ -284,7 +283,6 @@ public class BufferSwitcher extends JComboBox<Buffer>
 		}
 
 		@Override
-		@Nonnull
 		public Object getTransferData(DataFlavor flavor)
 				throws UnsupportedFlavorException, IOException
 		{
@@ -340,7 +338,11 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException | IOException e)
+			catch (UnsupportedFlavorException e)
+			{
+				return false;
+			}
+			catch (IOException e)
 			{
 				return false;
 			}
@@ -384,7 +386,11 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException | IOException e)
+			catch (UnsupportedFlavorException e)
+			{
+				return false;
+			}
+			catch (IOException e)
 			{
 				return false;
 			}
@@ -427,7 +433,11 @@ public class BufferSwitcher extends JComboBox<Buffer>
 					data = (BufferTransferableData) t
 							.getTransferData(BufferSwitcher.BufferDataFlavor);
 				}
-				catch (UnsupportedFlavorException | IOException e)
+				catch (UnsupportedFlavorException e)
+				{
+					return;
+				}
+				catch (IOException e)
 				{
 					return;
 				}

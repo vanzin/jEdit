@@ -270,7 +270,7 @@ public class BufferSetManager
 	 */
 	private void bufferRemoved(BufferSet bufferSet)
 	{
-		if (bufferSet.isEmpty())
+		if (bufferSet.size() == 0)
 		{
 			Buffer newEmptyBuffer = createUntitledBuffer();
 			EditPane editPaneOwner = getOwner(bufferSet);
