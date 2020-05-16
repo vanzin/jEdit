@@ -657,7 +657,7 @@ class ChunkCache
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"Updating chunks from " + firstScreenLine
-				+ " to " + lastScreenLine);
+				+ " to " + lastScreenLine + " firstInvalidLine " + firstInvalidLine);
 		}
 
 		// Below comment is not true any more (at least partly):
@@ -665,8 +665,7 @@ class ChunkCache
 		// invalidated, all screen lines/subregions of that line are
 		// invalidated as well. See below comment for code that tries
 		// to uphold this assumption.
-		List<Chunk> out = new ArrayList<Chunk>(0);
-
+		List<Chunk> out = new ArrayList<>(0);
 		int offset;
 		int length;
 
