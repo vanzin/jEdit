@@ -186,7 +186,8 @@ abstract class Anchor
 		this.callChanged = callChanged;
 	}
 
-	boolean isCallReset() {
+	boolean isCallReset()
+	{
 		return callReset;
 	}
 
