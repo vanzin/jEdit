@@ -100,7 +100,7 @@ public class DisplayManager
 		}
 	} //}}}
 
-	private static final Map<JEditBuffer, List<DisplayManager>> bufferMap = new HashMap<JEditBuffer, List<DisplayManager>>();
+	private static final Map<JEditBuffer, List<DisplayManager>> bufferMap = new HashMap<>();
 	//}}}
 
 	//{{{ getBuffer() method
@@ -519,7 +519,8 @@ public class DisplayManager
 				scrollLineCount.reset();
 				//FIXME: Why here?
 				firstLine.ensurePhysicalLineIsVisible();
-			} else if(scrollLineCount.isCallChanged())
+			}
+			else if(scrollLineCount.isCallChanged())
 				scrollLineCount.changed();
 
 			if(firstLine.isCallChanged() ||
@@ -550,22 +551,22 @@ public class DisplayManager
 
 		if(newFirstLine >= currentFirstLine + visibleLines)
 		{
-			this.firstLine.scrollDown(newFirstLine - currentFirstLine);
+			firstLine.scrollDown(newFirstLine - currentFirstLine);
 			textArea.chunkCache.invalidateAll();
 		}
 		else if(newFirstLine <= currentFirstLine - visibleLines)
 		{
-			this.firstLine.scrollUp(currentFirstLine - newFirstLine);
+			firstLine.scrollUp(currentFirstLine - newFirstLine);
 			textArea.chunkCache.invalidateAll();
 		}
 		else if(newFirstLine > currentFirstLine)
 		{
-			this.firstLine.scrollDown(newFirstLine - currentFirstLine);
+			firstLine.scrollDown(newFirstLine - currentFirstLine);
 			textArea.chunkCache.scrollDown(newFirstLine - currentFirstLine);
 		}
 		else if(newFirstLine < currentFirstLine)
 		{
-			this.firstLine.scrollUp(currentFirstLine - newFirstLine);
+			firstLine.scrollUp(currentFirstLine - newFirstLine);
 			textArea.chunkCache.scrollUp(currentFirstLine - newFirstLine);
 		} else
 			assert true;
@@ -591,9 +592,9 @@ public class DisplayManager
 			// JEditTextArea.scrollTo() needs this to simplify
 			// its code
 			if(skew < 0)
-				this.firstLine.scrollUp(-skew);
+				firstLine.scrollUp(-skew);
 			else if(skew > 0)
-				this.firstLine.scrollDown(skew);
+				firstLine.scrollDown(skew);
 			else
 			{
 				// nothing to do
@@ -713,7 +714,7 @@ public class DisplayManager
 		DisplayManager copy)
 	{
 		this.buffer = buffer;
-		this.screenLineMgr = new ScreenLineManager(buffer);
+		screenLineMgr = new ScreenLineManager(buffer);
 		this.textArea = textArea;
 
 		scrollLineCount = new ScrollLineCount(this,textArea);
@@ -964,7 +965,7 @@ public class DisplayManager
 	} //}}}
 	
 	//{{{ MutableInteger class
-	private class MutableInteger
+	private static class MutableInteger
 	{
 		MutableInteger(int value)
 		{
