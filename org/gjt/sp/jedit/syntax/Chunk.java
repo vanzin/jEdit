@@ -675,7 +675,9 @@ public class Chunk extends Token
 		// This is necessary to work around a memory leak in Sun Java 6 where
 		// the sun.font.GlyphLayout is cached and reused while holding an
 		// instance to the char array.
-		font.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, flags);
+		// Since we now give small char array, and it is replaced at every call, we don't
+		// need to reset it anymore but just in case it can be done by calling this
+		// font.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, flags);
 
 		if ((result.getLayoutFlags() & GlyphVector.FLAG_COMPLEX_GLYPHS) != 0)
 		{
