@@ -30,11 +30,9 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.lang.ref.SoftReference;
+import java.util.List;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
@@ -88,8 +86,11 @@ public class Chunk extends Token
 					gfx.setColor(chunks.style.getForegroundColor());
 					if (glyphVector)
 						chunks.drawGlyphs(gfx, x + _x, y);
-					else if(chunks.str != null)
+					else if(chunks.chars != null)
 					{
+						if (chunks.str == null) // lazy init
+							chunks.str = new String(chunks.chars);
+
 						gfx.drawString(chunks.str, x + _x, y);
 					}
 				}
@@ -513,11 +514,22 @@ public class Chunk extends Token
 		}
 		else
 		{
-			str = new String(lineText.array,lineText.offset + offset,length);
-			GlyphKey cacheKey = new GlyphKey(str,
-				style.getFont(), fontRenderContext);
+			// since Java 11, calling font.layoutGlyphVector() performances is directly linked with the
+			// char array length regardless the start and end offset.
+			// Since we usually have the entire buffer in that char array, a buffer of 100MB is about
+			// 100 time slower to display compared to a 1MB buffer.
+			// The problem is in sun.font.SunLayoutEngine class
+			// private static native boolean shape(Font2D font, FontStrike strike, float ptSize, float[] mat,
+			//              long pNativeFont, long pFace, boolean aat,
+			//              char[] chars, GVData data,
+			//              int script, int offset, int limit,
+			//              int baseIndex, Point2D.Float pt, int typo_flags, int slot);
+			// So I copy the necessary chars to a temporary char array
+			chars = new char[length];
+			System.arraycopy(lineText.array, lineText.offset + offset, chars, 0, length);
+			GlyphKey cacheKey = new GlyphKey(chars, style.getFont(), fontRenderContext);
 			GlyphCache cache = getGlyphCache();
-			glyphData = cache.computeIfAbsent(cacheKey, key -> buildGlyphInfo(lineText, fontRenderContext));
+			glyphData = cache.computeIfAbsent(cacheKey, key -> buildGlyphInfo(chars, fontRenderContext));
 			width = glyphData.getWidth();
 		}
 		assert isInitialized();
@@ -559,16 +571,15 @@ public class Chunk extends Token
 	// this is either style.getBackgroundColor() or
 	// styles[defaultID].getBackgroundColor()
 	private Color background;
+	private char[] chars;
 	private String str;
 	private GlyphData glyphData;
 	//}}}
 
 	//{{{ init() method
-	private GlyphData buildGlyphInfo(Segment lineText, FontRenderContext fontRenderContext)
+	private GlyphData buildGlyphInfo(char[] chars, FontRenderContext fontRenderContext)
 	{
-		int textStart = lineText.offset + offset;
-		int textEnd = textStart + length;
-		GlyphVector[] glyphs = layoutGlyphs(style.getFont(), fontRenderContext, lineText.array, textStart, textEnd);
+		GlyphVector[] glyphs = layoutGlyphs(style.getFont(), fontRenderContext, chars, 0, chars.length);
 		return new GlyphData(glyphs);
 	} //}}}
 
@@ -630,21 +641,36 @@ public class Chunk extends Token
 		}
 	} //}}}
 
-	//{{{ layoutGlyphVector() method
+	//{{{ layoutGlyphVector() methods
 	/**
 	 * A wrapper of Font.layoutGlyphVector() to simplify the calls.
 	 */
+	@Deprecated
 	private static GlyphVector layoutGlyphVector(Font font,
 		FontRenderContext frc,
 		char[] text, int start, int end)
+	{
+		int length = end - start;
+		char[] tmpChars;
+		if (text.length > length || start != 0)
+		{
+			tmpChars = new char[length];
+			System.arraycopy(text, start, tmpChars, 0, length);
+		}
+		else
+			tmpChars = text;
+
+		return layoutGlyphVector(font, frc, tmpChars);
+	}
+
+	private static GlyphVector layoutGlyphVector(Font font, FontRenderContext frc, char[] text)
 	{
 		// FIXME: Need BiDi support.
 		int flags = Font.LAYOUT_LEFT_TO_RIGHT
 			| Font.LAYOUT_NO_START_CONTEXT
 			| Font.LAYOUT_NO_LIMIT_CONTEXT;
 
-		GlyphVector result =
-			font.layoutGlyphVector(frc, text, start, end, flags);
+		GlyphVector result = font.layoutGlyphVector(frc, text, 0, text.length, flags);
 
 		// This is necessary to work around a memory leak in Sun Java 6 where
 		// the sun.font.GlyphLayout is cached and reused while holding an
@@ -653,7 +679,7 @@ public class Chunk extends Token
 
 		if ((result.getLayoutFlags() & GlyphVector.FLAG_COMPLEX_GLYPHS) != 0)
 		{
-			result = font.createGlyphVector(frc, new String(text, start, end - start));
+			result = font.createGlyphVector(frc, text);
 		}
 
 		return result;
@@ -836,13 +862,13 @@ public class Chunk extends Token
 	//{{{ class GlyphKey
 	private static class GlyphKey
 	{
-		public final String token;
+		public final char[] chars;
 		public final Font font;
 		public final FontRenderContext context;
 
-		GlyphKey(@Nonnull String token, @Nonnull Font font, @Nonnull FontRenderContext context)
+		GlyphKey(@Nonnull char[] chars, @Nonnull Font font, @Nonnull FontRenderContext context)
 		{
-			this.token = token;
+			this.chars = chars;
 			this.font = font;
 			this.context = context;
 		}
@@ -850,7 +876,7 @@ public class Chunk extends Token
 		@Override
 		public final int hashCode()
 		{
-			return token.hashCode()
+			return Arrays.hashCode(chars)
 				+ font.hashCode()
 				+ context.hashCode();
 		}
@@ -862,7 +888,7 @@ public class Chunk extends Token
 			// compare with other keys, then explicit type
 			// checking and null checking are not necessary.
 			GlyphKey other = (GlyphKey)otherObject;
-			return token.equals(other.token)
+			return Arrays.equals(chars, other.chars)
 				&& font.equals(other.font)
 				&& context.equals(other.context);
 		}
@@ -870,7 +896,7 @@ public class Chunk extends Token
 		@Override
 		public final String toString()
 		{
-			return token;
+			return new String(chars);
 		}
 	} //}}}
 
