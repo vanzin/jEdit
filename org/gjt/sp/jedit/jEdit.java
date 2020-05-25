@@ -119,7 +119,12 @@ public class jEdit
 		String[] _args = args.clone();
 		//{{{ Check for Java 11 or later
 		String javaVersion = System.getProperty("java.version");
-		int javaMajorVersion = parseInt(javaVersion.split("\\.", 2)[0]);
+		String majorVersion = javaVersion.split("\\.", 2)[0];
+		if (majorVersion.endsWith("-ea"))
+		{
+			majorVersion = majorVersion.substring(0, majorVersion.length() - 3);
+		}
+		int javaMajorVersion = parseInt(majorVersion);
 		if(javaMajorVersion < 11)
 		{
 			System.err.println("You are running Java version "
