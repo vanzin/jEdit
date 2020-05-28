@@ -545,8 +545,6 @@ public class Chunk extends Token
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static final char[] EMPTY_TEXT = new char[0];
-
 	private static boolean fontSubstEnabled;
 	private static boolean fontSubstSystemFontsEnabled;
 	private static Font[] preferredFonts;
