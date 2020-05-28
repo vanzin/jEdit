@@ -52,7 +52,11 @@ Alan Ezust, and Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- Major performance improvement at displaying big files (Matthieu Casanova)
+- Important improvement to Font substitution for documents that contains
+  characters that are not supported by the default font (Matthieu Casanova)
+
+- Major performance improvement at displaying big files by changing the
+  call to Font.layoutGlyphVector()  (Matthieu Casanova)
 
 - Made a larger plugin download dialog, patch submitted in bug #4050
   (Kalle Helminen)
