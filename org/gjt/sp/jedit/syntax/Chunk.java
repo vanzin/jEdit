@@ -221,6 +221,7 @@ public class Chunk extends Token
 	public static void propertiesChanged(IPropertyManager props)
 	{
 		fontSubstList = null;
+		lastSubstFont = null;
 		if (props == null)
 		{
 			fontSubstEnabled = false;
@@ -276,10 +277,14 @@ public class Chunk extends Token
 		if (Character.isISOControl(codepoint))
 			return null;
 
+		if (lastSubstFont != null && lastSubstFont.canDisplay(codepoint))
+			return lastSubstFont;
+
 		for (Font candidate: getFontSubstList())
 		{
 			if (candidate.canDisplay(codepoint))
 			{
+				lastSubstFont = candidate;
 				return candidate;
 			}
 		}
@@ -545,7 +550,15 @@ public class Chunk extends Token
 	private static boolean fontSubstEnabled;
 	private static boolean fontSubstSystemFontsEnabled;
 	private static Font[] preferredFonts;
+	@Nullable
 	private static Font[] fontSubstList;
+	/**
+	 * lastSubstFont contains the last font that was used in Font substitution.
+	 * It is set there to make searching subst font faster as when one font was found
+	 * there are great chances that it matches the other chars of the same textarea.
+	 */
+	@Nullable
+	private static Font lastSubstFont;
 
 	// This cache is meant to reduce calls of layoutGlyphVector(),
 	// which was an outclassing CPU bottleneck (profiled on jProfiler,
