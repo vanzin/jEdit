@@ -878,20 +878,20 @@ public class Chunk extends Token
 		public final char[] chars;
 		public final Font font;
 		public final FontRenderContext context;
+		private final int hashCode;
 
 		GlyphKey(@Nonnull char[] chars, @Nonnull Font font, @Nonnull FontRenderContext context)
 		{
 			this.chars = chars;
 			this.font = font;
 			this.context = context;
+			hashCode =  31 * (31 * Arrays.hashCode(chars) + font.hashCode()) + context.hashCode();
 		}
 
 		@Override
 		public final int hashCode()
 		{
-			return Arrays.hashCode(chars)
-				+ font.hashCode()
-				+ context.hashCode();
+			return hashCode;
 		}
 
 		@Override
