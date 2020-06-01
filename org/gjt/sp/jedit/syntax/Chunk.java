@@ -529,6 +529,8 @@ public class Chunk extends Token
 			//              char[] chars, GVData data,
 			//              int script, int offset, int limit,
 			//              int baseIndex, Point2D.Float pt, int typo_flags, int slot);
+			// the reason for that is that Java is now processing the entire text to get a better bidi
+			// support. As we tokenize the text, and don't support bidi (yet), we don't care.
 			// So I copy the necessary chars to a temporary char array
 			chars = new char[length];
 			System.arraycopy(lineText.array, lineText.offset + offset, chars, 0, length);
