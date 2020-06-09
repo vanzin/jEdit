@@ -5,9 +5,12 @@ jEdit 5.6 version history
 {{{ Version 5.6pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Hrotkó Gábor,
-Alan Ezust, and Dale Anson for contributing to this release.
+Alan Ezust, Makarius, and Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
+
+- Fix MiscUtilities.isBackup() method when there is no suffix and prefix set
+  (patch #4088 - Makarius)
 
 - Do not loose the screen line count of lines that were not modified
   when inserting multiple lines (minor optimization)

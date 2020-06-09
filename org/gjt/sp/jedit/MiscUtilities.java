@@ -1076,7 +1076,7 @@ public class MiscUtilities
 		
 		// if the user sets an empty prefix and suffix, then check if the filename 
 		// ends with a number, but isn't a known mode suffix
-		if ((backupPrefix == null || backupPrefix.isEmpty() || backupSuffix == null || backupSuffix.isEmpty()))
+		if ((backupPrefix == null || backupPrefix.isEmpty()) && (backupSuffix == null || backupSuffix.isEmpty()))
 		{
 			if (filename.matches(".*?\\d+")) 
 			{
