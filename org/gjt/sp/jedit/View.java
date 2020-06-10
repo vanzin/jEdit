@@ -24,6 +24,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.awt.*;
+import java.awt.Desktop.Action;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -53,9 +54,11 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import org.jedit.options.CombinedOptions;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.gjt.sp.jedit.gui.AboutDialog;
 import org.gjt.sp.jedit.gui.ActionBar;
 import org.gjt.sp.jedit.gui.CloseDialog;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
@@ -1908,6 +1911,30 @@ loop:		while (true)
 		}
 
 		setJMenuBar(mbar);
+
+		if (Desktop.isDesktopSupported())
+		{
+			Desktop desktop = Desktop.getDesktop();
+
+			if (desktop.isSupported(Action.APP_QUIT_HANDLER))
+			{
+				desktop.setQuitHandler((e, response) ->
+				{
+					jEdit.exit(jEdit.getActiveView(), true);
+					response.cancelQuit();
+				});
+			}
+
+			if (desktop.isSupported(Action.APP_ABOUT))
+			{
+				desktop.setAboutHandler((e) -> new AboutDialog(jEdit.getActiveView()));
+			}
+
+			if (desktop.isSupported(Action.APP_PREFERENCES))
+			{
+				desktop.setPreferencesHandler((e) -> new CombinedOptions(jEdit.getActiveView(), 0));
+			}
+		}
 
 		loadToolBars();
 
