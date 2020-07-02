@@ -93,7 +93,7 @@ public class BeanShell
 		if(command != null)
 		{
 			if(!command.endsWith(";"))
-				command = command + ";";
+				command += ";";
 
 			int repeat = view.getInputHandler().getRepeatCount();
 
@@ -138,7 +138,7 @@ public class BeanShell
 		JEditTextArea textArea = view.getTextArea();
 		Buffer buffer = view.getBuffer();
 
-		if(command == null || command.length() == 0)
+		if(command == null || command.isEmpty())
 			return;
 
 		Selection[] selection = textArea.getSelection();
@@ -149,7 +149,7 @@ public class BeanShell
 		}
 
 		if(!command.endsWith(";"))
-			command = command + ";";
+			command += ";";
 
 		String script = "int[] lines = textArea.getSelectedLines();\n"
 			+ "for(int i = 0; i < lines.length; i++)\n"
@@ -159,7 +159,7 @@ public class BeanShell
 				+ "start = buffer.getLineStartOffset(line);\n"
 				+ "end = buffer.getLineEndOffset(line);\n"
 				+ "text = buffer.getText(start,end - start - 1);\n"
-				+ "newText = " + command + "\n"
+				+ "newText = " + command + '\n'
 				+ "if(newText != null)\n"
 				+ "{\n"
 					+ "buffer.remove(start,end - start - 1);\n"
