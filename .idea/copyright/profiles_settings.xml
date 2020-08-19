@@ -1,6 +1,5 @@
 <component name="CopyrightManager">
   <settings default="GPL v2">
-    <module2copyright />
     <LanguageOptions name="HTML">
       <option name="fileLocation" value="2" />
     </LanguageOptions>
