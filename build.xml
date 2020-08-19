@@ -63,10 +63,17 @@
 		unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
 		      level="info"/>
-		<fail message="Ant 1.9.8 or newer is needed for jEdit to build, please install it and rerun (found Ant version: '${ant.version}')">
+		<fail message="Ant 1.9.10 or newer is needed for jEdit to build, please install it and rerun (found Ant version: '${ant.version}')">
 			<condition>
 				<not>
-					<antversion atleast="1.9.8"/>
+					<antversion atleast="1.9.10"/>
+				</not>
+			</condition>
+		</fail>
+		<fail message="Java 11 or newer is needed for jEdit to build, please install it and rerun (found Java version: '${ant.java.version}')">
+			<condition>
+				<not>
+					<javaversion atleast="11"/>
 				</not>
 			</condition>
 		</fail>

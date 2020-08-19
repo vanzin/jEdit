@@ -9,7 +9,7 @@ General jEdit documentation can be found in the 'doc' directory.
  For all tasks:
 
   - Apache Ant. Get it from <http://ant.apache.org>.
-    1.9.8 or newer has to be used.
+    1.9.10 or newer has to be used.
   - The Ant Optional package. This is included in the download from ants website,
     as well as the AntPlugin from the Plugin Manager,
     but not in some default installs on various *nix systems.
