@@ -120,12 +120,13 @@ Alan Ezust, Makarius, and Dale Anson for contributing to this release.
 
 - New method IOUtilities.toByteArray(InputStream) (Matthieu Casanova)
 
-- New UniqueActionDocumentListener class, a DocumentListener that does the same action
-  for every event (Matthieu Casanova)
+- New UniqueActionDocumentListener class, a DocumentListener that does the same
+  action for every event (Matthieu Casanova)
 
 - New AbstractWidget class (Matthieu Casanova)
 
-- GUIUtilities.showVFSFileDialog() methods now never returns null (Matthieu Casanova)
+- GUIUtilities.showVFSFileDialog() methods now never returns null
+  (Matthieu Casanova)
 
 - New Method VFSManager.canReadFile(path) (Matthieu Casanova)
 
