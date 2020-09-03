@@ -1,155 +1,25 @@
-jEdit 5.6 version history
-       (changes since jEdit 5.5.0)
+jEdit 5.7 version history
+       (changes since jEdit 5.6.0)
 :encoding=UTF-8:
 
-{{{ Version 5.6.0
+{{{ Version 5.7pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Hrotkó Gábor,
-Alan Ezust, Makarius, and Dale Anson for contributing to this release.
+Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fix MiscUtilities.isBackup() method when there is no suffix and prefix set
-  (patch #4088 - Makarius)
-
-- Do not loose the screen line count of lines that were not modified
-  when inserting multiple lines (minor optimization)
-  (#4091 - Matthieu Casanova)
-
-- Fixed a NPE when trying to choose a non existing icon when adding a
-  toolbar item (#3770 - Matthieu Casanova)
-
-- When launching jEdit if a file named like the untitled buffer from
-  perspective exists, then load it (#4087 - Matthieu Casanova)
-
-- Do not only highlight the first match in hypersearch results
-  (#4083 - Matthieu Casanova)
-
-- Re-add missing help viewer back and forward icons (Björn "Vampire" Kautler)
-
-- Fix wrong behavior of input method framework support that returned wrong
-  locations for offsets and wrong offsets for locations
-  (#4082 - Björn "Vampire" Kautler)
-
-- Upgrade OS X launcher stub to be compatible with newer Java versions
-  (#4077 - Björn "Vampire" Kautler)
-
-- Fix Untitled Issue with -background command line option
-  (Patch #617 - Hrotkó Gábor)
-
-- Handle case where user has not set either a backup prefix or suffix
-  (#4069 - Dale Anson)
-
-- Fix odd default colors for style editor (#4055 - Dale Anson)
-
-- Fix NullPointerException in Preview Javadoc macro (#2412 - Dale Anson)
-
-- Fix dockable buttons not wrapping correctly (#2626 - Dale Anson)
-
-- Fix electric scroll not working with page up/down (#2719 - Dale Anson)
-
-- Correct location of context menu popup (#4073 - Dale Anson)
-
-- Fix file browser splitter buttons not working (#4081 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
 
-- Important improvement to Font substitution for documents that contains
-  characters that are not supported by the default font (Matthieu Casanova)
-
-- Major performance improvement at displaying big files by changing the
-  call to Font.layoutGlyphVector()  (Matthieu Casanova)
-
-- Made a larger plugin download dialog, patch submitted in bug #4050
-  (Kalle Helminen)
-
-- Store rules in an array instead of a Map avoiding computations
-  (Matthieu Casanova)
-
-- Store the glyph width in the GlyphCache to make token marking faster
-  (Matthieu Casanova)
-
-- New EditPaneManager, with convenient methods to get and iterate over
-  EditPanes, get it by calling jEdit.getEditPaneManager() (Matthieu Casanova)
-
-- New BufferManager, all you need to get loaded buffers from jEdit
-  get it by calling jEdit.getBufferManager() (Matthieu Casanova)
-
-- New ViewManager, all you need to get loaded existing views
-  get it by calling jEdit.getViewManager() (Matthieu Casanova)
-
-- Added new method JEditBuffer.hasProperty() (Matthieu Casanova)
-
-- Apply UI language changes immediately without the need to restart.
-  (Björn "Vampire" Kautler)
-
-- The tray icon on Linux systems now by default tries to detect the proper
-  background color and also lets the user either select a fixed color for
-  the background or select some arbitrary rectangle as background for the
-  tray icon, making the icon much less ugly on dark themes.
-  (Björn "Vampire" Kautler)
-
-- The Windows EXE launcher now considers JAVA_HOME environment variable if no
-  matching Java is found in the registry (Björn "Vampire" Kautler)
-
-- The Windows installer now uses modern and resizable style and allows
-  installation without administrator privileges (Björn "Vampire" Kautler)
-
-- Chinese Taiwan localization from David Day (Patch #620 - Dale Anson)
-
-- Fix all deprecation warnings produced when compiling with Java 9 (Dale Anson)
-
-- Adjust Appearance option pane to allow setting "primary" and "secondary" fonts
-  for all look and feels (Dale Anson)
-
-- Improve Regular Expressions documentation (Björn "Vampire" Kautler)
 
 }}}
 {{{ API Changes
 
-- StringList.join() method is now deprecated as String.join()
-  is now provided since Java 8 (Matthieu Casanova)
-
-- TextUtilities.join() method is now deprecated as String.join()
-  is now provided since Java 8 (Matthieu Casanova)
-
-- Change BoyerMooreSearchMatcher to make it thread safe (Matthieu Casanova)
-
-- New methods IOUtilities.toString(InputStream) (Matthieu Casanova)
-
-- New method IOUtilities.toByteArray(InputStream) (Matthieu Casanova)
-
-- New UniqueActionDocumentListener class, a DocumentListener that does the same
-  action for every event (Matthieu Casanova)
-
-- New AbstractWidget class (Matthieu Casanova)
-
-- GUIUtilities.showVFSFileDialog() methods now never returns null
-  (Matthieu Casanova)
-
-- New Method VFSManager.canReadFile(path) (Matthieu Casanova)
-
-- New method IntegerArray.isEmpty() (Matthieu Casanova)
 
 }}}
 {{{ Editing
 
-- Add SIPp edit mode (Matthieu Casanova)
-
-- Add Well Known Text (WKT) edit mode (Matthieu Casanova)
-
-- Update RPM Spec mode (bug #3880 Matthieu Casanova)
-
-- Added openSIPS mode (Matthieu Casanova)
-
-- Update Java mode to support Java 10 "var" type. (Dale Anson)
-
-- Add PlantUML mode (Andreas Studer / Dale Anson)
-
-- Add HL7 mode (Thiemo Kellner / Dale Anson)
-
-- Update drawj2d mode (patch #622 A. Vontobel / Matthieu Casanova)
 
 }}}
 
