@@ -102,7 +102,7 @@ public class VFSManager
 		try
 		{
 			VFSFile vfsFile = vfs._getFile(vfsSession, path, jEdit.getActiveView());
-			return vfsFile != null && vfsFile.isReadable() && vfsFile.getType() == VFSFile.DIRECTORY;
+			return vfsFile != null && vfsFile.isReadable();
 		}
 		catch (IOException e)
 		{
