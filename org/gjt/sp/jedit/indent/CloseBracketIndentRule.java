@@ -105,7 +105,8 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	//{{{ AlignBracket class
 	private static class AlignBracket implements IndentAction
 	{
-		private final int openBracketLine;
+		private int openBracketLine;
+		private final int line;
 		private final boolean aligned;
 		private int openBracketColumn;
 		private CharSequence openBracketLineText;
@@ -115,6 +116,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		{
 			int openBracketIndex = TextUtilities.findMatchingBracket(buffer, line, offset);
 			this.aligned = aligned;
+			this.line = line;
 
 			if(openBracketIndex == -1)
 				openBracketLine = -1;
