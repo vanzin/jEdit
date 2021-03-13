@@ -312,12 +312,8 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		}
 		else
 		{
-			if (current != null)
-			{
-
-				Object reason = DockableWindowUpdate.DEACTIVATED;
-				EditBus.send(new DockableWindowUpdate(wm, reason, current.factory.name));
-			}
+			Object reason = DockableWindowUpdate.DEACTIVATED;
+			EditBus.send(new DockableWindowUpdate(wm, reason, current.factory.name));
 			current = null;
 			nullButton.setSelected(true);
 			// removing last component, so remove border
