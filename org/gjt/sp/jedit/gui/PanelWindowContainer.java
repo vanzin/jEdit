@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -446,6 +447,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	private JPopupMenu popup;
 
 	// remember the most recent dockable
+	@Nullable
 	private String mostRecent;
 	//}}}
 
@@ -540,11 +542,12 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	//{{{ DockBorder class
 	static class DockBorder implements Border
 	{
-		String position;
-		Insets insets;
-		Color color1;
-		Color color2;
-		Color color3;
+		private final String position;
+		private final Insets insets;
+
+		private Color color1;
+		private Color color2;
+		private Color color3;
 
 		//{{{ DockBorder constructor
 		DockBorder(String position)
