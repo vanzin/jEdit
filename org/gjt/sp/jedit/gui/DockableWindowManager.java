@@ -5,7 +5,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -434,12 +433,7 @@ public abstract class DockableWindowManager extends JPanel
 	// {{{ addPluginDockable
 	private void addPluginDockable(PluginJAR plugin, String name)
 	{
-		Set<String> dockables = plugins.get(plugin);
-		if (dockables == null)
-		{
-			dockables = new HashSet<String>();
-			plugins.put(plugin, dockables);
-		}
+		Set<String> dockables = plugins.computeIfAbsent(plugin, k -> new HashSet<>());
 		dockables.add(name);
 	}
 	// }}}
@@ -560,7 +554,7 @@ public abstract class DockableWindowManager extends JPanel
 		{
 			String oldPosition = positions.get(dockable);
 			String newPosition = getDockablePosition(dockable);
-			if (oldPosition == null || !newPosition.equals(oldPosition))
+			if (!newPosition.equals(oldPosition))
 			{
 				positions.put(dockable, newPosition);
 				dockingPositionChanged(dockable, oldPosition, newPosition);
@@ -678,10 +672,10 @@ public abstract class DockableWindowManager extends JPanel
 		private List<Key> parseShortcut(String shortcut)
 		{
 			String [] parts = shortcut.split("\\s+");
-			List<Key> keys = new ArrayList<Key>(parts.length);
+			List<Key> keys = new ArrayList<>(parts.length);
 			for (String part: parts)
 			{
-				if (part.length() > 0)
+				if (!part.isEmpty())
 					keys.add(KeyEventTranslator.parseKey(part));
 			}
 			return keys;
@@ -704,19 +698,15 @@ public abstract class DockableWindowManager extends JPanel
 		{
 		}
 
-		public String [] getSavedLayouts()
+		public String[] getSavedLayouts()
 		{
 			String layoutDir = getLayoutDirectory();
 			if (layoutDir == null)
 				return null;
 			File dir = new File(layoutDir);
-			File[] files = dir.listFiles(new FilenameFilter()
-			{
-				public boolean accept(File dir, String name)
-				{
-					return name.endsWith(".xml");
-				}
-			});
+			File[] files = dir.listFiles((dir1, name) -> name.endsWith(".xml"));
+			if (files == null)
+				return null;
 			String[] layouts = new String[files.length];
 			for (int i = 0; i < files.length; i++)
 				layouts[i] = fileToLayout(files[i].getName());

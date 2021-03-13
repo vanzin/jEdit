@@ -23,15 +23,10 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
@@ -127,14 +122,7 @@ public class DockableWindowFactory
 	 */
 	public void unloadDockableWindows(PluginJAR plugin)
 	{
-		Iterator entries = dockableWindowFactories.entrySet().iterator();
-		while(entries.hasNext())
-		{
-			Map.Entry entry = (Map.Entry)entries.next();
-			Window factory = (Window)entry.getValue();
-			if(factory.plugin == plugin)
-				entries.remove();
-		}
+		dockableWindowFactories.entrySet().removeIf(entry -> plugin == entry.getValue().plugin);
 	} //}}}
 
 	//{{{ cacheDockableWindows() method
@@ -215,14 +203,14 @@ public class DockableWindowFactory
 		{
 			this.plugin = plugin;
 			this.uri = uri;
-			stateStack = new Stack<String>();
+			stateStack = new Stack<>();
 			actions = true;
 			movable = MOVABLE_DEFAULT;
 
 			code = new StringBuilder();
-			cachedDockableNames = new LinkedList<String>();
-			cachedDockableActionFlags = new LinkedList<Boolean>();
-			cachedDockableMovableFlags = new LinkedList<Boolean>();
+			cachedDockableNames = new LinkedList<>();
+			cachedDockableActionFlags = new LinkedList<>();
+			cachedDockableMovableFlags = new LinkedList<>();
 		} //}}}
 
 		//{{{ resolveEntity() method
@@ -273,10 +261,8 @@ public class DockableWindowFactory
 					registerDockableWindow(plugin,
 						dockableName,code.toString(),actions, movable);
 					cachedDockableNames.add(dockableName);
-					cachedDockableActionFlags.add(
-						Boolean.valueOf(actions));
-					cachedDockableMovableFlags.add(
-							Boolean.valueOf(movable));
+					cachedDockableActionFlags.add(actions);
+					cachedDockableMovableFlags.add(movable);
 					// make default be true for the next
 					// action
 					actions = true;
@@ -338,7 +324,7 @@ public class DockableWindowFactory
 			int i = 0;
 			for (Boolean value : list)
 			{
-				returnValue[i++] = value.booleanValue();
+				returnValue[i++] = value;
 			}
 
 			return returnValue;
@@ -347,21 +333,21 @@ public class DockableWindowFactory
 		//{{{ Private members
 
 		//{{{ Instance variables
-		private PluginJAR plugin;
+		private final PluginJAR plugin;
 		// What is the purpose of this?
 		private URL uri;
 
-		private java.util.List<String> cachedDockableNames;
-		private java.util.List<Boolean> cachedDockableActionFlags;
-		private java.util.List<Boolean> cachedDockableMovableFlags;
+		private final java.util.List<String> cachedDockableNames;
+		private final java.util.List<Boolean> cachedDockableActionFlags;
+		private final java.util.List<Boolean> cachedDockableMovableFlags;
 
 		private String dockableName;
-		private StringBuilder code;
+		private final StringBuilder code;
 		private boolean actions;
 		private boolean movable;
 		static final boolean MOVABLE_DEFAULT = false;
 
-		private Stack<String> stateStack;
+		private final Stack<String> stateStack;
 		//}}}
 
 		//{{{ pushElement() method
@@ -397,7 +383,7 @@ public class DockableWindowFactory
 		String code;
 		boolean loaded;
 		boolean movable;
-		boolean isBeingCreated = false;
+		boolean isBeingCreated;
 
 		//{{{ Window constructor
 		Window(PluginJAR plugin, String name, String code,
@@ -498,16 +484,17 @@ public class DockableWindowFactory
 		//{{{ OpenAction class
 		class OpenAction extends EditAction
 		{
-			private String dockable;
+			private final String dockable;
 
 			//{{{ OpenAction constructor
 			OpenAction(String name)
 			{
 				super(name);
-				this.dockable = name;
+				dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
+			@Override
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
@@ -526,16 +513,17 @@ public class DockableWindowFactory
 		//{{{ ToggleAction class
 		class ToggleAction extends EditAction
 		{
-			private String dockable;
+			private final String dockable;
 
 			//{{{ ToggleAction constructor
 			ToggleAction(String name)
 			{
 				super(name + "-toggle");
-				this.dockable = name;
+				dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
+			@Override
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
@@ -561,16 +549,17 @@ public class DockableWindowFactory
 		//{{{ FloatAction class
 		class FloatAction extends EditAction
 		{
-			private String dockable;
+			private final String dockable;
 
 			//{{{ FloatAction constructor
 			FloatAction(String name)
 			{
 				super(name + "-float");
-				this.dockable = name;
+				dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
+			@Override
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()

@@ -2,7 +2,9 @@ package org.gjt.sp.jedit.gui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.ActionSet;
@@ -20,6 +22,7 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.options.DockingOptionPane;
+import org.gjt.sp.util.StandardUtilities;
 
 /** Saves and loads dockable layouts to disk
     @author Shlomy Reinstein
@@ -35,12 +38,13 @@ public class DockingLayoutManager implements EBComponent
 	private static final String SAVE_LAYOUT_MESSAGE = "save-layout.message";
 	private static ActionSet actions;
 	private static DockingLayoutManager instance;
-	private Map<View, String> currentMode;
+	private final Map<View, String> currentMode;
 
 	private DockingLayoutManager()
 	{
-		currentMode = new HashMap<View, String>();
+		currentMode = new HashMap<>();
 	}
+
 	private static boolean save(View view, String layoutName)
 	{
 		if (jEdit.getSettingsDirectory() == null)
@@ -114,7 +118,7 @@ public class DockingLayoutManager implements EBComponent
 		if (docking != null)
 			layouts = docking.getSavedLayouts();
 		if (layouts == null)
-			return new String[0];
+			return StandardUtilities.EMPTY_STRING_ARRAY;
 		return layouts;
 	}
 
@@ -150,7 +154,7 @@ public class DockingLayoutManager implements EBComponent
 	{
 		private static final String LOAD_PREFIX = "load-";
 
-		public LoadPerspectiveAction(String layoutName)
+		LoadPerspectiveAction(String layoutName)
 		{
 			super(LOAD_PREFIX + layoutName, new String[] { layoutName });
 			jEdit.setTemporaryProperty(LOAD_PREFIX + layoutName + ".label", LOAD_PREFIX + layoutName);
@@ -163,7 +167,7 @@ public class DockingLayoutManager implements EBComponent
 		}
 	}
 
-	private boolean canChangeEditMode(EBMessage message)
+	private static boolean canChangeEditMode(EBMessage message)
 	{
 		if (message instanceof BufferUpdate)
 		{
@@ -189,6 +193,7 @@ public class DockingLayoutManager implements EBComponent
 		return false;
 	}
 
+	@Override
 	public void handleMessage(EBMessage message)
 	{
 		boolean autoLoadModeLayout = jEdit.getBooleanProperty(
@@ -214,10 +219,8 @@ public class DockingLayoutManager implements EBComponent
 			return;
 		String newMode = getCurrentEditMode(view);
 		String mode = currentMode.get(view);
-		boolean sameMode =
-			(mode == null && newMode == null) ||
-			(mode != null && mode.equals(newMode));
-		if (! sameMode)
+		boolean sameMode = Objects.equals(mode, newMode);
+		if (!sameMode)
 		{
 			boolean autoSaveModeLayout = jEdit.getBooleanProperty(
 				DockingOptionPane.AUTO_SAVE_MODE_LAYOUT_PROP, false);
@@ -228,7 +231,7 @@ public class DockingLayoutManager implements EBComponent
 		}
 	}
 
-	private String getCurrentEditMode(View view)
+	private static String getCurrentEditMode(View view)
 	{
 		Buffer buffer = view.getBuffer();
 		if (buffer == null)
@@ -241,19 +244,15 @@ public class DockingLayoutManager implements EBComponent
 
 	private static final String GLOBAL_MODE = "DEFAULT";
 
-	private void saveModeLayout(View view, String mode)
+	private static void saveModeLayout(View view, String mode)
 	{
 		String modeLayout = getModePerspective(mode);
-		if (modeLayout == null)
-			return;
 		save(view, modeLayout);
 	}
 
-	private void loadModeLayout(View view, String mode)
+	private static void loadModeLayout(View view, String mode)
 	{
 		String modeLayout = getModePerspective(mode);
-		if (modeLayout == null)
-			return;
 		load(view, modeLayout);
 	}
 
@@ -261,19 +260,20 @@ public class DockingLayoutManager implements EBComponent
 	{
 		if (view == null)
 			return;
-		String mode = instance.getCurrentEditMode(view);
-		instance.loadModeLayout(view, mode);
+		String mode = DockingLayoutManager.getCurrentEditMode(view);
+		loadModeLayout(view, mode);
 	}
 
 	public static void saveCurrentModeLayout(View view)
 	{
 		if (view == null)
 			return;
-		String mode = instance.getCurrentEditMode(view);
-		instance.saveModeLayout(view, mode);
+		String mode = DockingLayoutManager.getCurrentEditMode(view);
+		saveModeLayout(view, mode);
 	}
 
-	private String getModePerspective(String mode)
+	@Nonnull
+	private static String getModePerspective(String mode)
 	{
 		if (mode == null)
 			mode = GLOBAL_MODE;
