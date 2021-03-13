@@ -76,6 +76,7 @@ public class JARClassLoader extends ClassLoader
 	/**
 	 * @exception ClassNotFoundException if the class could not be found
 	 */
+	@Override
 	public Class loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
@@ -125,6 +126,7 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ getResourceAsStream() method
+	@Override
 	public InputStream getResourceAsStream(String name)
 	{
 		try
@@ -162,6 +164,7 @@ public class JARClassLoader extends ClassLoader
 	 * overriding getResource() because we want to search FIRST in this
 	 * ClassLoader, then the parent, the path, etc.
 	 */
+	@Override
 	public URL getResource(String name)
 	{
 		try
@@ -273,11 +276,13 @@ public class JARClassLoader extends ClassLoader
 				this.element = element;
 			}
 
+			@Override
 			public boolean hasMoreElements()
 			{
 				return element != null;
 			}
 
+			@Override
 			public URL nextElement()
 			{
 				if(element != null)
@@ -297,6 +302,7 @@ public class JARClassLoader extends ClassLoader
 
 	//{{{ finalize() method
 	// TODO: 'finalize' is deprecated as of Java 9
+	@Override
 	@SuppressWarnings("deprecation")
 	protected void finalize()
 	{
@@ -377,10 +383,10 @@ public class JARClassLoader extends ClassLoader
 
 	private static int INDEX;
 	private static int live;
-	private static Map<String, Object> classHash = new Hashtable<String, Object>();
-	private static Map<String, Object> resourcesHash = new HashMap<String, Object>();
+	private static final Map<String, Object> classHash = new Hashtable<>();
+	private static final Map<String, Object> resourcesHash = new HashMap<>();
 
-	private int id;
+	private final int id;
 	private boolean delegateFirst;
 	private PluginJAR jar;
 
@@ -488,7 +494,7 @@ public class JARClassLoader extends ClassLoader
 		Attributes ma = mf.getMainAttributes();
 
 		URL sealBase = null;
-		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)))
+		if (Boolean.parseBoolean(getMfValue(sa, ma, Name.SEALED)))
 		{
 			try
 			{
