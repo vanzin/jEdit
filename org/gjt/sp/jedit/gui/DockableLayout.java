@@ -65,12 +65,14 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ addLayoutComponent() method
+	@Override
 	public void addLayoutComponent(String name, Component comp)
 	{
 		addLayoutComponent(comp, name);
 	} //}}}
 
 	//{{{ addLayoutComponent() method
+	@Override
 	public void addLayoutComponent(Component comp, Object cons)
 	{
 		if(cons == null || CENTER.equals(cons))
@@ -94,6 +96,7 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ removeLayoutComponent() method
+	@Override
 	public void removeLayoutComponent(Component comp)
 	{
 		if(center == comp)
@@ -109,6 +112,7 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ preferredLayoutSize() method
+	@Override
 	public Dimension preferredLayoutSize(Container parent)
 	{
 		Dimension prefSize = new Dimension(0,0);
@@ -138,6 +142,7 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ minimumLayoutSize() method
+	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
 		// I'm lazy
@@ -145,12 +150,14 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ maximumLayoutSize() method
+	@Override
 	public Dimension maximumLayoutSize(Container parent)
 	{
 		return new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE);
 	} //}}}
 
 	//{{{ layoutContainer() method
+	@Override
 	public void layoutContainer(Container parent)
 	{
 		Dimension size = parent.getSize();
@@ -158,10 +165,10 @@ public class DockableLayout implements LayoutManager2
 		Dimension _topToolbars = new Dimension(0,0);
 		Dimension _bottomToolbars = new Dimension(0,0);
 
-		int topButtonHeight = -1;
-		int bottomButtonHeight = -1;
-		int leftButtonWidth = -1;
-		int rightButtonWidth = -1;
+		int topButtonHeight;
+		int bottomButtonHeight;
+		int leftButtonWidth;
+		int rightButtonWidth;
 
 		Dimension _top = top.getPreferredSize();
 		Dimension _left = left.getPreferredSize();
@@ -445,18 +452,21 @@ public class DockableLayout implements LayoutManager2
 	} //}}}
 
 	//{{{ getLayoutAlignmentX() method
+	@Override
 	public float getLayoutAlignmentX(Container target)
 	{
 		return 0.5f;
 	} //}}}
 
 	//{{{ getLayoutAlignmentY() method
+	@Override
 	public float getLayoutAlignmentY(Container target)
 	{
 		return 0.5f;
 	} //}}}
 
 	//{{{ invalidateLayout() method
+	@Override
 	public void invalidateLayout(Container target) {}
 	//}}}
 }
