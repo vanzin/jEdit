@@ -115,8 +115,8 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		buttonGroup.add(nullButton = new JToggleButton());
 		//}}}
 
-		dockables = new ArrayList<DockableWindowManagerImpl.Entry>();
-		buttons = new ArrayList<AbstractButton>();
+		dockables = new ArrayList<>();
+		buttons = new ArrayList<>();
 		dockablePanel = new DockablePanel(this);
 
 		this.dimension = dimension;
@@ -312,8 +312,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		}
 		else
 		{
-			Object reason = DockableWindowUpdate.DEACTIVATED;
-			EditBus.send(new DockableWindowUpdate(wm, reason, current.factory.name));
+			EditBus.send(new DockableWindowUpdate(wm, DockableWindowUpdate.DEACTIVATED, current.factory.name));
 			current = null;
 			nullButton.setSelected(true);
 			// removing last component, so remove border
