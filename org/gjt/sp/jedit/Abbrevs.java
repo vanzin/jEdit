@@ -24,6 +24,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.gjt.sp.jedit.gui.AddAbbrevDialog;
 import org.gjt.sp.jedit.textarea.*;
@@ -37,8 +38,6 @@ import org.gjt.sp.util.Log;
  */
 public class Abbrevs
 {
-	public static final String ENCODING = "UTF8";
-
 	//{{{ getExpandOnInput() method
 	/**
 	 * @return if abbreviations should be expanded after the
@@ -87,7 +86,7 @@ public class Abbrevs
 		int caret = textArea.getCaretPosition();
 
 		String lineText = buffer.getLineText(line);
-		if(lineText.length() == 0)
+		if(lineText.isEmpty())
 		{
 			if(add)
 				javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
@@ -181,8 +180,7 @@ public class Abbrevs
 				view.getStatus().setMessageAndClear(
 					jEdit.getProperty(
 					"view.status.incomplete-abbrev",
-					new Integer[] { Integer.valueOf(m_pp.size()),
-					Integer.valueOf(expand.posParamCount) }));
+					new Integer[] {m_pp.size(), expand.posParamCount}));
 			}
 
 			return true;
@@ -268,12 +266,7 @@ public class Abbrevs
 		if(!loaded)
 			load();
 
-		Hashtable<String,String> modeAbbrevs = modes.get(mode);
-		if(modeAbbrevs == null)
-		{
-			modeAbbrevs = new Hashtable<String,String>();
-			modes.put(mode,modeAbbrevs);
-		}
+		Map<String, String> modeAbbrevs = modes.computeIfAbsent(mode, k -> new Hashtable<>());
 		modeAbbrevs.put(abbrev,expansion);
 		abbrevsChanged = true;
 	} //}}}
@@ -301,7 +294,7 @@ public class Abbrevs
 				{
 					saveAbbrevs(new OutputStreamWriter(
 						new FileOutputStream(file1),
-						ENCODING));
+						StandardCharsets.UTF_8));
 					file2.delete();
 					file1.renameTo(file2);
 				}
@@ -351,7 +344,7 @@ public class Abbrevs
 			try
 			{
 				loadAbbrevs(new InputStreamReader(
-					new FileInputStream(file),ENCODING));
+					new FileInputStream(file), StandardCharsets.UTF_8));
 				loaded = true;
 			}
 			catch(FileNotFoundException fnf)
@@ -371,7 +364,7 @@ public class Abbrevs
 			{
 				loadAbbrevs(new InputStreamReader(Abbrevs.class
 					.getResourceAsStream("default.abbrevs"),
-					ENCODING));
+					StandardCharsets.UTF_8));
 			}
 			catch(Exception e)
 			{
@@ -406,7 +399,7 @@ public class Abbrevs
 
 		// try mode-specific abbrevs first
 		String expand = null;
-		Hashtable<String,String> modeAbbrevs = modes.get(mode);
+		Map<String,String> modeAbbrevs = modes.get(mode);
 		if(modeAbbrevs != null)
 			expand = modeAbbrevs.get(abbrev);
 
@@ -433,7 +426,7 @@ public class Abbrevs
 			{
 				int index = line.indexOf('|');
 
-				if(line.length() == 0)
+				if(line.isEmpty())
 					continue;
 				else if(line.startsWith("[") && index == -1)
 				{
@@ -443,12 +436,7 @@ public class Abbrevs
 					{
 						String mode = line.substring(1,
 							line.length() - 1);
-						currentAbbrevs = modes.get(mode);
-						if(currentAbbrevs == null)
-						{
-							currentAbbrevs = new Hashtable<String,String>();
-							modes.put(mode,currentAbbrevs);
-						}
+						currentAbbrevs = modes.computeIfAbsent(mode, k -> new Hashtable<>());
 					}
 				}
 				else if(index != -1)
