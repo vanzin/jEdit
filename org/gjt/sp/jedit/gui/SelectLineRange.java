@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
+
 /** Dialog for selection of a range of lines */
 public class SelectLineRange extends EnhancedDialog implements ActionListener
 {
@@ -78,6 +79,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		int startLine;
@@ -117,12 +119,14 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ actionPerformed() method
+	@Override
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
@@ -135,11 +139,11 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private View view;
+	private final View view;
 	private NumericTextField startField;
 	private NumericTextField endField;
-	private JButton ok;
-	private JButton cancel;
+	private final JButton ok;
+	private final JButton cancel;
 	//}}}
 
 	//{{{ createFieldPanel() method
@@ -162,11 +166,13 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		
 		FocusListener focusListener = new FocusListener()
 			{
-				public void focusGained(FocusEvent fe) 
+				@Override
+				public void focusGained(FocusEvent fe)
 				{
 					((JTextField)fe.getSource()).selectAll();
 				}
 				
+				@Override
 				public void focusLost(FocusEvent fe)
 				{
 					JTextField source = (JTextField)fe.getSource();

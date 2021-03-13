@@ -45,9 +45,8 @@ import javax.swing.border.*;
  */
 public class RolloverToggleButton extends JToggleButton
 {
-	
-	private Border originalBorder;
-	private Border rolloverBorder;
+	private final Border originalBorder;
+	private final Border rolloverBorder;
 	
 	//{{{ RolloverButton constructor
 	/**
@@ -79,6 +78,7 @@ public class RolloverToggleButton extends JToggleButton
 	} //}}}
 
 	//{{{ updateUI() method
+	@Override
 	public void updateUI()
 	{
 		super.updateUI();
@@ -87,6 +87,7 @@ public class RolloverToggleButton extends JToggleButton
 	} //}}}
 
 	//{{{ setEnabled() method
+	@Override
 	public void setEnabled(boolean b)
 	{
 		super.setEnabled(b);
@@ -95,6 +96,7 @@ public class RolloverToggleButton extends JToggleButton
 	} //}}}
 
 	//{{{ setBorderPainted() method
+	@Override
 	public void setBorderPainted(boolean b)
 	{
 		try
@@ -114,6 +116,7 @@ public class RolloverToggleButton extends JToggleButton
 	 * We block calls to revalidate() from a setBorderPainted(), for
 	 * performance reasons.
 	 */
+	@Override
 	public void revalidate()
 	{
 		if(!revalidateBlocked)
@@ -121,6 +124,7 @@ public class RolloverToggleButton extends JToggleButton
 	} //}}}
 
 	//{{{ paint() method
+	@Override
 	public void paint(Graphics g)
 	{
 		if(isEnabled())
@@ -145,6 +149,7 @@ public class RolloverToggleButton extends JToggleButton
 	 */
 	class MouseOverHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseEntered(MouseEvent e)
 		{
 			setBorder(rolloverBorder);
@@ -152,6 +157,7 @@ public class RolloverToggleButton extends JToggleButton
 			setBorderPainted(true);
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e)
 		{
 			setBorder(originalBorder);

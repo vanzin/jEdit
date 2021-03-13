@@ -109,16 +109,19 @@ public class ScreenRectangleSelectionButton extends JButton
 			this.image = image;
 		}
 
+		@Override
 		public int getIconWidth()
 		{
 			return dimension.width;
 		}
 
+		@Override
 		public int getIconHeight()
 		{
 			return dimension.height;
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y)
 		{
 			g = g.create();
@@ -136,6 +139,7 @@ public class ScreenRectangleSelectionButton extends JButton
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			int iconWidth = getIcon().getIconWidth();
