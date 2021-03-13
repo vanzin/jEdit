@@ -91,7 +91,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			// fucking GTK look and feel
 			Font font = new JLabel().getFont();
 			//Font font = UIManager.getFont("Label.font");
-			MemoryStatus.this.setFont(font);
+			setFont(font);
 
 			FontRenderContext frc = new FontRenderContext(null,true,false);
 			Rectangle2D bounds = font.getStringBounds(
@@ -156,7 +156,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
-			MemoryStatus.this.repaint();
+			repaint();
 		} //}}}
 
 		//{{{ paintComponent() method
@@ -170,10 +170,8 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			long total = runtime.totalMemory();
 			long used = total - free;
 
-			int width = MemoryStatus.this.getWidth()
-				- insets.left - insets.right;
-			int height = MemoryStatus.this.getHeight()
-				- insets.top - insets.bottom - 1;
+			int width = getWidth() - insets.left - insets.right;
+			int height = getHeight() - insets.top - insets.bottom - 1;
 
 			float fraction = ((float)used) / total;
 
@@ -206,11 +204,11 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 				(int)(insets.top + lm.getAscent()));
 
 			g2.setClip(insets.left + (int)(width * fraction),
-				insets.top,MemoryStatus.this.getWidth()
+				insets.top, getWidth()
 				- insets.left - (int)(width * fraction),
 				height);
 
-			g2.setColor(MemoryStatus.this.getForeground());
+			g2.setColor(getForeground());
 
 			g2.drawString(str,
 				insets.left + ((int) (width - bounds.getWidth()) >> 1),
