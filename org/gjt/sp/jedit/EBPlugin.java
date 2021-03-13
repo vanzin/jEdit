@@ -39,6 +39,7 @@ public abstract class EBPlugin extends EditPlugin implements EBComponent
 	 * Handles a message sent on the EditBus.
 	 */
 	// next version: remove this
+	@Override
 	public void handleMessage(EBMessage message)
 	{
 		EditBus.removeFromBus(this);

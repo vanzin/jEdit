@@ -326,26 +326,17 @@ public class EditBus
 	 * where modifications to the map are postponed until the map
 	 * is unlocked.
 	 */
-	private static class HandlerList
-		extends HashMap<Class<?>, List<EBMessageHandler>>
+	private static class HandlerList extends HashMap<Class<?>, List<EBMessageHandler>>
 	{
-
 		public List<EBMessageHandler> safeGet(Class<?> type)
 		{
-			List<EBMessageHandler> lst = super.get(type);
-			if (lst == null) {
-				lst = new LinkedList<EBMessageHandler>();
-				super.put(type, lst);
-			}
-			return lst;
+			return computeIfAbsent(type, k -> new LinkedList<>());
 		}
-
 
 		public synchronized void lock()
 		{
 			lock++;
 		}
-
 
 		public synchronized void unlock()
 		{
@@ -361,7 +352,6 @@ public class EditBus
 			}
 		}
 
-
 		public synchronized void removeComponent(Object comp)
 		{
 			if (lock != 0)
@@ -376,16 +366,9 @@ public class EditBus
 				List<EBMessageHandler> handlers = entry.getValue();
 				if (handlers == null)
 					continue;
-				for (Iterator<EBMessageHandler> it = handlers.iterator();
-				     it.hasNext(); )
-				{
-					EBMessageHandler emh = it.next();
-					if (emh.comp == comp)
-						it.remove();
-				}
+				handlers.removeIf(emh -> emh.comp == comp);
 			}
 		}
-
 
 		public synchronized void addComponent(Object comp)
 		{
@@ -435,22 +418,20 @@ public class EditBus
 				safeGet(EBMessage.class).add(new EBMessageHandler(comp, null, null));
 		}
 
-
 		private int lock;
-		private List<Object> add = new LinkedList<Object>();
-		private List<Object> remove = new LinkedList<Object>();
+		private final List<Object> add = new LinkedList<>();
+		private final List<Object> remove = new LinkedList<>();
 	} //}}}
 
 	//{{{ SendMessage class
 	private static class SendMessage implements Runnable
 	{
-
-		public SendMessage(EBMessage message)
+		SendMessage(EBMessage message)
 		{
 			this.message = message;
 		}
 
-
+		@Override
 		public void run()
 		{
 			Log.log(Log.DEBUG,EditBus.class,message.toString());
@@ -466,7 +447,7 @@ public class EditBus
 			}
 		}
 
-		private EBMessage message;
+		private final EBMessage message;
 	} //}}}
 
 }

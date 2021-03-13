@@ -46,12 +46,12 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 	 * Creates a new edit action with the specified name.
 	 * @param name The action name
 	 */
-	public EditAction(String name)
+	protected EditAction(String name)
 	{
 		super(name);
 	}
 	
-	public EditAction(String name, Object[] newArgs) 
+	protected EditAction(String name, Object[] newArgs)
 	{
 		super(name, newArgs);
 	} //}}}
@@ -103,7 +103,8 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 	 * @since jEdit 2.7pre2
 	 * abstract since jEdit 4.3pre7
 	 */
-	abstract public void invoke(View view);
+	@Override
+	public abstract void invoke(View view);
 	//}}}
 
 	//{{{ isToggle() method
@@ -213,6 +214,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 		 *
 		 * @param evt The action event
 		 */
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			EditAction action = context.getAction(actionName);
