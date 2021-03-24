@@ -35,11 +35,12 @@ import java.io.IOException;
  * @since 4.3pre10
  * @author Kazutoshi Satoda
  */
+@FunctionalInterface
 public interface EncodingDetector
 {
 	/**
 	 * Returns the name of a detected encoding for the bytes in sample.
 	 * Returns null if this instance could not detect reasonable one.
 	 */
-	public String detectEncoding(InputStream sample) throws IOException;
+	String detectEncoding(InputStream sample) throws IOException;
 }
