@@ -220,27 +220,17 @@ public class BufferLoadRequest extends BufferIORequest
 			// encodingProviders is consist of given
 			// encodings as String or contents-aware
 			// detectors as EncodingDetector.
-			List<Object> encodingProviders = new ArrayList<>();
+			List<EncodingDetector> encodingProviders = getEncodingDetectors();
 
 			boolean autodetect = buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT);
 			if(autodetect)
 			{
 				gzipped = AutoDetection.isGzipped(markedStream);
 				markedStream.reset();
-
-				encodingProviders.addAll(AutoDetection.getEncodingDetectors());
-				// If the detected encoding fail, fallback to
-				// the original encoding.
-				encodingProviders.add(buffer.getStringProperty(JEditBuffer.ENCODING));
-
-				String fallbackEncodings = jEdit.getProperty("fallbackEncodings");
-				if(fallbackEncodings != null && !fallbackEncodings.isEmpty())
-					Collections.addAll(encodingProviders, fallbackEncodings.split("\\s+"));
 			}
 			else
 			{
 				gzipped = buffer.getBooleanProperty(Buffer.GZIPPED);
-				encodingProviders.add(buffer.getStringProperty(JEditBuffer.ENCODING));
 			}
 
 			if(gzipped)
@@ -252,22 +242,10 @@ public class BufferLoadRequest extends BufferIORequest
 
 			Collection<String> failedEncodings = new HashSet<>();
 			Exception encodingError = null;
-			for(Object encodingProvider: encodingProviders)
+			for(EncodingDetector encodingProvider: encodingProviders)
 			{
-				String encoding = null;
-				if (encodingProvider instanceof String)
-				{
-					encoding = (String)encodingProvider;
-				}
-				else if(encodingProvider instanceof EncodingDetector)
-				{
-					markedStream = rewindContentsStream(markedStream, gzipped);
-					encoding = ((EncodingDetector)encodingProvider).detectEncoding(new BufferedInputStream(markedStream));
-				}
-				else
-				{
-					Log.log(Log.DEBUG, this, "Strange encodingProvider: " + encodingProvider);
-				}
+				markedStream = rewindContentsStream(markedStream, gzipped);
+				String encoding = encodingProvider.detectEncoding(new BufferedInputStream(markedStream));
 
 				if(encoding == null || encoding.length() <= 0
 					|| failedEncodings.contains(encoding))
@@ -324,6 +302,34 @@ public class BufferLoadRequest extends BufferIORequest
 		{
 			markedStream.close();
 		}
+	} //}}}
+
+	//{{{ getEncodingDetectors() method
+	private List<EncodingDetector> getEncodingDetectors()
+	{
+		List<EncodingDetector> encodingProviders = new ArrayList<>();
+		boolean autodetect = buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT);
+		if(autodetect)
+		{
+			encodingProviders.addAll(AutoDetection.getEncodingDetectors());
+			// If the detected encoding fail, fallback to
+			// the original encoding.
+			encodingProviders.add(new StaticCharsetEncodingDetector(buffer.getStringProperty(JEditBuffer.ENCODING)));
+
+			String fallbackEncodings = jEdit.getProperty("fallbackEncodings");
+			if(fallbackEncodings != null && !fallbackEncodings.isEmpty())
+			{
+				Arrays.stream(fallbackEncodings
+					.split("\\s+"))
+					.map(StaticCharsetEncodingDetector::new)
+					.forEach(encodingProviders::add);
+			}
+		}
+		else
+		{
+			encodingProviders.add(new StaticCharsetEncodingDetector(buffer.getStringProperty(JEditBuffer.ENCODING)));
+		}
+		return encodingProviders;
 	} //}}}
 
 	//{{{ readMarkers() method
