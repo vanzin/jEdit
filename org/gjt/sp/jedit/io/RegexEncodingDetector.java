@@ -108,4 +108,10 @@ public class RegexEncodingDetector implements EncodingDetector
 		found.appendReplacement(replaced, replacement);
 		return replaced.substring(length_before_match);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "RegexEncodingDetector{pattern=" + pattern + ", replacement='" + replacement + '\'' + '}';
+	}
 }
