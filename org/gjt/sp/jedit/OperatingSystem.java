@@ -149,17 +149,6 @@ public class OperatingSystem
 		return new Rectangle(x,y,w,h);
 	} //}}}
 
-	//{{{ isDOSDerived() method
-	/**
-	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7, or OS/2.
-	 * @deprecated use {@link #isWindows()}
-	 */
-	@Deprecated
-	public static boolean isDOSDerived()
-	{
-		return isWindows() || isOS2();
-	} //}}}
-
 	//{{{ isWindows() method
 	/**
 	 * Returns if we're running Windows 95/98/ME/NT/2000/XP/Vista/Win7.
@@ -262,20 +251,6 @@ public class OperatingSystem
 
 		return hasScreenMenuBar == 1;
 	} //}}}
-
-	//{{{ hasJava17() method
-	/**
-	 * @deprecated - there is no point in checking for this
-	 *				 since we require Java 11.
-	 * Returns if Java 2 version 1.7 is in use.
-	 * @since jEdit 5.0pre1
-	 */
-	@Deprecated
-	public static boolean hasJava17()
-	{
-		return true;
-	} //}}}
-
 
 	//{{{ isCaseInsensitiveFS() method
 	/**

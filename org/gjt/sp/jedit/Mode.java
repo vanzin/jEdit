@@ -263,20 +263,6 @@ public class Mode
 				|| acceptFirstLine(firstLine);
 	} //}}}
 
-	//{{{ acceptFilename() method
-	/**
-	 * Returns true if the buffer name matches the file name glob.
-	 * @param fileName The buffer's name, can be {@code null}
-	 * @return true if the file name matches the file name glob.
-	 * @since jEdit 4.3pre18
-	 * @deprecated use {@link #acceptFile(String, String)} instead
-	 */
-	@Deprecated
-	public boolean acceptFilename(String fileName)
-	{
-		return acceptFile(null, fileName);
-	} //}}}
-
 	//{{{ acceptFile() method
 	/**
 	 * Returns true if the buffer's name or path matches the file name glob.
