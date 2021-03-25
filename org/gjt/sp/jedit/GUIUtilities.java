@@ -29,7 +29,6 @@ import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
-import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
@@ -40,19 +39,16 @@ import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
-
 import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.lang.ref.SoftReference;
 
 import javax.annotation.Nonnull;
-import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -67,7 +63,6 @@ import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-
 
 import java.awt.*;
 import java.awt.event.*;
@@ -92,7 +87,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * <li>{@link #showVFSFileDialog(View,String,int,boolean)}</li>
  * <li>{@link #loadGeometry(Window,String)}</li>
  * <li>{@link #saveGeometry(Window,String)}</li>
- * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li>
  * </ul>
  *
  * @author Slava Pestov
@@ -138,7 +132,7 @@ public class GUIUtilities
 		}
 		if(cache == null)
 		{
-			cache = new Hashtable<>();
+			cache = new HashMap<>();
 			iconCache = new SoftReference<>(cache);
 		}
 		Icon icon = cache.get(iconName);
@@ -564,21 +558,6 @@ public class GUIUtilities
 		return b;
 	} //}}}
 
-	//{{{ prettifyMenuLabel() method
-	/**
-	 * `Prettifies' a menu item label by removing the `$' sign. This
-	 * can be used to process the contents of an <i>action</i>.label
-	 * property.
-	 * @param label the label
-	 * @return a pretty label
-	 * @deprecated use {@link GenericGUIUtilities#prettifyMenuLabel(String)}
-	 */
-	@Deprecated
-	public static String prettifyMenuLabel(String label)
-	{
-		return GenericGUIUtilities.prettifyMenuLabel(label);
-	} //}}}
-
 	//{{{ getPlatformShortcutLabel() method
 	/**
 	* Translates a shortcut description string (e.g. "CS+SEMICOLON") to
@@ -636,20 +615,6 @@ public class GUIUtilities
 					return shortcut1 + " or " + shortcut2;
 			}
 		}
-	} //}}}
-
-	//{{{ setAutoMnemonic() method
-	/**
-	 * Sets the mnemonic for the given button using jEdit convention,
-	 * taking the letter after the dollar.
-	 * @param button The button to set the mnemonic for.
-	 * @since jEdit 5.1
-	 * @deprecated use {@link GenericGUIUtilities#setAutoMnemonic(AbstractButton)}
-	 */
-	@Deprecated
-	public static void setAutoMnemonic(AbstractButton button)
-	{
-		GenericGUIUtilities.setAutoMnemonic(button);
 	} //}}}
 
 	//}}}
@@ -1143,38 +1108,6 @@ public class GUIUtilities
 
 	//{{{ Colors and styles
 
-	//{{{ parseColor() method
-	/**
-	 * Converts a color name to a color object. The name must either be
-	 * a known string, such as `red', `green', etc (complete list is in
-	 * the <code>java.awt.Color</code> class) or a hex color value
-	 * prefixed with `#', for example `#ff0088'.
-	 * @param name The color name
-	 * @deprecated use {@link SyntaxUtilities#parseColor(String, Color)}
-	 */
-	@Deprecated
-	public static Color parseColor(String name)
-	{
-		return SyntaxUtilities.parseColor(name, Color.black);
-	} //}}}
-
-	//{{{ parseStyle() method
-	/**
-	 * Converts a style string to a style object.
-	 * @param str The style string
-	 * @param family Style strings only specify font style, not font family
-	 * @param size Style strings only specify font style, not font family
-	 * @exception IllegalArgumentException if the style is invalid
-	 * @since jEdit 3.2pre6
-	 * @deprecated use {@link SyntaxUtilities#parseStyle(String, String, int, boolean)}
-	 */
-	@Deprecated
-	public static SyntaxStyle parseStyle(String str, String family, int size)
-		throws IllegalArgumentException
-	{
-		return SyntaxUtilities.parseStyle(str,family,size,true);
-	} //}}}
-
 	//{{{ getStyleString() method
 	/**
 	 * Converts a style into it's string representation.
@@ -1274,19 +1207,6 @@ public class GUIUtilities
 	public static void loadGeometry(Window win, String name)
 	{
 		loadGeometry(win, win.getParent(), name);
-	} //}}}
-
-	//{{{ adjustForScreenBounds() method
-	/**
-	 * Gives a rectangle the specified bounds, ensuring it is within the
-	 * screen bounds.
-	 * @since jEdit 4.2pre3
-	 * @deprecated use {@link GenericGUIUtilities#adjustForScreenBounds(Rectangle)}
-	 */
-	@Deprecated
-	public static void adjustForScreenBounds(Rectangle desired)
-	{
-		GenericGUIUtilities.adjustForScreenBounds(desired);
 	} //}}}
 
 	//{{{ UnixWorkaround class
@@ -1529,145 +1449,6 @@ public class GUIUtilities
 			return panel;
 	} //}}}
 
-	//{{{ requestFocus() method
-	/**
-	 * Focuses on the specified component as soon as the window becomes
-	 * active.
-	 * @param win The window
-	 * @param comp The component
-	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
-	 */
-	@Deprecated
-	public static void requestFocus(final Window win, final Component comp)
-	{
-		GenericGUIUtilities.requestFocus(win, comp);
-	} //}}}
-
-	//{{{ isPopupTrigger() method
-	/**
-	 * Returns if the specified event is the popup trigger event.
-	 * This implements precisely defined behavior, as opposed to
-	 * MouseEvent.isPopupTrigger().
-	 * @param evt The event
-	 * @since jEdit 3.2pre8
-	 * @deprecated use {@link GenericGUIUtilities#requestFocus(Window, Component)}
-	 */
-	@Deprecated
-	public static boolean isPopupTrigger(MouseEvent evt)
-	{
-		return GenericGUIUtilities.isPopupTrigger(evt);
-	} //}}}
-
-	//{{{ isMiddleButton() method
-	/**
-	 * @param modifiers The modifiers flag from a mouse event
-	 * @since jEdit 4.1pre9
-	 * @deprecated use {@link TextAreaMouseHandler#isMiddleButton(MouseEvent)}
-	 */
-	@Deprecated
-	public static boolean isMiddleButton(int modifiers)
-	{
-		return TextAreaMouseHandler.isMiddleButton(modifiers);
-	} //}}}
-
-	//{{{ isRightButton() method
-	/**
-	 * @param modifiers The modifiers flag from a mouse event
-	 * @since jEdit 4.1pre9
-	 * @deprecated use {@link TextAreaMouseHandler#isRightButton(MouseEvent)}
-	 */
-	@Deprecated
-	public static boolean isRightButton(int modifiers)
-	{
-		return TextAreaMouseHandler.isRightButton(modifiers);
-	} //}}}
-
-	//{{{ getScreenBounds() method
-	/**
-	 * Returns the screen bounds, taking into account multi-screen
-	 * environments.
-	 * @since jEdit 4.3pre18
-	 * @deprecated use {@link GenericGUIUtilities#getScreenBounds()}
-	 */
-	@Deprecated
-	public static Rectangle getScreenBounds()
-	{
-		return GenericGUIUtilities.getScreenBounds();
-	} //}}}
-
-	//{{{ showPopupMenu() method
-	/**
-	 * Shows the specified popup menu, ensuring it is displayed within
-	 * the bounds of the screen.
-	 * @param popup The popup menu
-	 * @param comp The component to show it for
-	 * @param x The x co-ordinate
-	 * @param y The y co-ordinate
-	 * @since jEdit 4.0pre1
-	 * @see javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu) setComponentPopupMenu
-	 * which works better and is simpler to use: you don't have to write the code to
-	 * show/hide popups in response to mouse events anymore.
-	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int)}
-	 */
-	@Deprecated
-	public static void showPopupMenu(JPopupMenu popup, Component comp,
-		int x, int y)
-	{
-		GenericGUIUtilities.showPopupMenu(popup, comp, x, y);
-	} //}}}
-
-	//{{{ showPopupMenu() method
-	/**
-	 * Shows the specified popup menu, ensuring it is displayed within
-	 * the bounds of the screen.
-	 * @param popup The popup menu
-	 * @param comp The component to show it for
-	 * @param x The x co-ordinate
-	 * @param y The y co-ordinate
-	 * @param point If true, then the popup originates from a single point;
-	 * otherwise it will originate from the component itself. This affects
-	 * positioning in the case where the popup does not fit onscreen.
-	 *
-	 * @since jEdit 4.1pre1
-	 * @deprecated use {@link GenericGUIUtilities#showPopupMenu(JPopupMenu, Component, int, int, boolean)}
-	 */
-	@Deprecated
-	public static void showPopupMenu(JPopupMenu popup, Component comp,
-		int x, int y, boolean point)
-	{
-		GenericGUIUtilities.showPopupMenu(popup, comp, x, y, point);
-
-	} //}}}
-
-	//{{{ isAncestorOf() method
-	/**
-	 * Returns if the first component is an ancestor of the
-	 * second by traversing up the component hierarchy.
-	 *
-	 * @param comp1 The ancestor
-	 * @param comp2 The component to check
-	 * @since jEdit 4.1pre5
-	 * @deprecated use {@link GenericGUIUtilities#isAncestorOf(Component, Component)}
-	 */
-	@Deprecated
-	public static boolean isAncestorOf(Component comp1, Component comp2)
-	{
-		return GenericGUIUtilities.isAncestorOf(comp1, comp2);
-	} //}}}
-
-	//{{{ getParentDialog() method
-	/**
-	 * Traverses the given component's parent tree looking for an
-	 * instance of JDialog, and return it. If not found, return null.
-	 * @param c The component
-	 * @deprecated use {@link GenericGUIUtilities#getParentDialog(Component)}
-	 */
-	@Deprecated
-	public static JDialog getParentDialog(Component c)
-	{
-		return GenericGUIUtilities.getParentDialog(c);
-	} //}}}
-
 	//{{{ getComponentParent() method
 	/**
 	 * Finds a parent of the specified component.
@@ -1706,20 +1487,6 @@ public class GUIUtilities
 		return null;
 	} //}}}
 
-	//{{{ setEnabledRecursively() method
-	/**
-	 * Call setEnabled() recursively on the container and its descendants.
-	 * @param c The container
-	 * @param enabled The enabled state to set
-	 * @since jEdit 4.3pre17
-	 * @deprecated use {@link GenericGUIUtilities#setEnabledRecursively(Container, boolean)}
-	 */
-	@Deprecated
-	public static void setEnabledRecursively(Container c, boolean enabled)
-	{
-		GenericGUIUtilities.setEnabledRecursively(c, enabled);
-	} //}}}
-
 	//{{{ getView() method
 	/**
 	 * Finds the view parent of the specified component.
@@ -1730,67 +1497,6 @@ public class GUIUtilities
 	public static View getView(Component comp)
 	{
 		return (View)getComponentParent(comp,View.class);
-	} //}}}
-
-	//{{{ setButtonContentMargin() method
-	/**
-	 * Sets the content margin of a button (for Nimbus L&amp;F).
-	 * @param button  the button to modify
-	 * @param margin  the new margin
-	 * @since jEdit 5.3
-	 * @deprecated use {@link GenericGUIUtilities#setButtonContentMargin(AbstractButton, Insets)}
-	 */
-	@Deprecated
-	public static void setButtonContentMargin(AbstractButton button, Insets margin)
-	{
-		GenericGUIUtilities.setButtonContentMargin(button, margin);
-	} //}}}
-	
-	//{{{
-	/**
- 	 * Makes components the same size by finding the largest width and height of the
- 	 * given components then setting all components to that width and height. This is
- 	 * especially useful for making JButtons the same size.
- 	 * @param components The components to make the same size.
- 	 * @deprecated use {@link GenericGUIUtilities#makeSameSize(Component...)}
- 	 */
- 	@Deprecated
-	public static void makeSameSize(Component... components) 
-	{
-		GenericGUIUtilities.makeSameSize(components);
-	} //}}}
-
-	//{{{ defaultTableDimension() method
-	/**
-	 * JTable cell size, based on global defaults.
-	 * @deprecated use {@link GenericGUIUtilities#defaultTableCellSize()}
-	 */
-	@Deprecated
-	public static Dimension defaultTableCellSize()
-	{
-		return GenericGUIUtilities.defaultTableCellSize();
-	} //}}}
-
-	//{{{ defaultColumnWidth() method
-	/**
-	 * Column width for JTable, based on global defaults.
-	 * @deprecated use {@link GenericGUIUtilities#defaultColumnWidth()}
-	 */
-	@Deprecated
-	public static int defaultColumnWidth()
-	{
-		return GenericGUIUtilities.defaultColumnWidth();
-	} //}}}
-
-	//{{{ defaultRowHeight() method
-	/**
-	 * Row height for JTable, based on global defaults.
-	 * @deprecated use {@link GenericGUIUtilities#defaultRowHeight()}
-	 */
-	@Deprecated
-	public static int defaultRowHeight()
-	{
-		return GenericGUIUtilities.defaultRowHeight();
 	} //}}}
 
 	//{{{ addSizeSaver() method
@@ -1962,7 +1668,7 @@ public class GUIUtilities
 	private static SoftReference<Map<String, Icon>> iconCache;
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
 	private static final String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
-	private static final HashMap<String, String> deprecatedIcons = new HashMap<>();
+	private static final Map<String, String> deprecatedIcons = new HashMap<>();
 
 	//{{{ _loadMenuItem() method
 	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic)
