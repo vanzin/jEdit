@@ -563,7 +563,6 @@ public class MiscUtilitiesTest
 	public void getBaseName()
 	{
 		assertEquals("aaa", MiscUtilities.getBaseName("c:\\yoyo/ta.ta/aaa"));
-		assertEquals("aaa", MiscUtilities.getFileNameNoExtension("c:\\yoyo/ta.ta/aaa"));
 	}
 
 	@Test

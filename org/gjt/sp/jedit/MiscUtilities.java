@@ -519,16 +519,6 @@ public class MiscUtilities
 			return name;
 		else
 			return name.substring(0,index);
-	}
-	/**
-	  @return the same thing as getBaseName()
-	  @deprecated use getBaseName() instead.
-	  @since jEdit 4.0
-	*/
-	@Deprecated
-	public static String getFileNameNoExtension(String path)
-	{
-		return getBaseName(path);
 	} //}}}
 
 	//{{{ getParentOfPath() method
@@ -1093,7 +1083,6 @@ public class MiscUtilities
 		}
 		return false;
 	} //}}}
-
 
 	//{{{ autodetect() method
 	/**
