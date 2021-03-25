@@ -35,78 +35,74 @@ public class Debug
 	 * Print messages when the gap moves, and other offset manager state
 	 * changes.
 	 */
-	public static boolean OFFSET_DEBUG = false;
+	public static boolean OFFSET_DEBUG;
 
 	/**
 	 * Print messages when text area and display manager perform scroll
 	 * updates.
 	 */
-	public static boolean SCROLL_DEBUG = false;
+	public static boolean SCROLL_DEBUG;
 
 	/**
 	 * Print messages when text area tries to make the caret visible.
 	 */
-	public static boolean SCROLL_TO_DEBUG = false;
+	public static boolean SCROLL_TO_DEBUG;
 
 	/**
 	 * Display an error if the scrolling code detects an inconsistency.
 	 * This kills performance!
 	 */
-	public static boolean SCROLL_VERIFY = false;
+	public static boolean SCROLL_VERIFY;
 
 	/**
 	 * Print messages when screen line counts change.
 	 */
-	public static boolean SCREEN_LINES_DEBUG = false;
+	public static boolean SCREEN_LINES_DEBUG;
 
 	/**
 	 * For checking context, etc.
 	 */
-	public static boolean TOKEN_MARKER_DEBUG = false;
+	public static boolean TOKEN_MARKER_DEBUG;
 
 	/**
 	 * For checking fold level invalidation, etc.
 	 */
-	public static boolean FOLD_DEBUG = false;
+	public static boolean FOLD_DEBUG;
 
 	/**
 	 * For checking the line visibility structure..
 	 */
-	public static boolean FOLD_VIS_DEBUG = false;
+	public static boolean FOLD_VIS_DEBUG;
 
 	/**
 	 * For checking invalidation, etc.
 	 */
-	public static boolean CHUNK_CACHE_DEBUG = false;
+	public static boolean CHUNK_CACHE_DEBUG;
 
 	/**
 	 * Paints boxes around chunks.
 	 */
-	public static boolean CHUNK_PAINT_DEBUG = false;
+	public static boolean CHUNK_PAINT_DEBUG;
 
 	/**
 	 * Show time taken to repaint text area painter.
 	 */
-	public static boolean PAINT_TIMER = false;
+	public static boolean PAINT_TIMER;
 
 	/**
 	 * Show time taken for each EBComponent.
 	 */
-	public static boolean EB_TIMER = false;
+	public static boolean EB_TIMER;
 
 	/**
 	 * Paint strings instead of glyph vectors.
 	 */
-	public static boolean DISABLE_GLYPH_VECTOR = false;
+	public static boolean DISABLE_GLYPH_VECTOR;
 
 	/**
 	 * Logs messages when BeanShell code is evaluated.
 	 */
-	public static boolean BEANSHELL_DEBUG = false;
-
-	/** @deprecated no longer used. */
-	@Deprecated
-	public static boolean ALTERNATIVE_DISPATCHER = false;
+	public static boolean BEANSHELL_DEBUG;
 	
 	/**
 	 * If true, A+ shortcuts are disabled. If you use this, you should also
@@ -118,22 +114,22 @@ public class Debug
 	/**
 	 * Geometry workaround for X11.
 	 */
-	public static boolean GEOMETRY_WORKAROUND = false;
+	public static boolean GEOMETRY_WORKAROUND;
 
 	/**
 	 * Dump key events received by text area?
 	 */
-	public static boolean DUMP_KEY_EVENTS = false;
+	public static boolean DUMP_KEY_EVENTS;
 
 	/**
 	 * Indent debug.
 	 */
-	public static boolean INDENT_DEBUG = false;
+	public static boolean INDENT_DEBUG;
 
 	/**
 	 * Printing debug.
 	 */
-	public static boolean PRINT_DEBUG = false;
+	public static boolean PRINT_DEBUG;
 
 	/**
 	 * Create new search dialogs instead of reusing instances.
@@ -147,7 +143,7 @@ public class Debug
 	 * problems with some Java versions.
 	 * @since jEdit 4.3pre1
 	 */
-	public static boolean DISABLE_MULTIHEAD = false;
+	public static boolean DISABLE_MULTIHEAD;
 
 	/**
 	 * Does a computational delay. Simulates heavy computations for
