@@ -96,7 +96,7 @@ public abstract class TextArea extends JPanel
 		caretEvent = new MutableCaretEvent();
 		blink = true;
 		offsetXY = new Point();
-		structureMatchers = new LinkedList<StructureMatcher>();
+		structureMatchers = new LinkedList<>();
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
 
@@ -753,7 +753,8 @@ public abstract class TextArea extends JPanel
 		if(visibleLines <= 1)
 		{
 			if(Debug.SCROLL_TO_DEBUG)
-			Log.log(Log.DEBUG,this,"visibleLines <= 0");
+				Log.log(Log.DEBUG,this,"visibleLines <= 0");
+
 			// Fix the case when the line is wrapped
 			// it was not possible to see the second (or next)
 			// subregion of a line
