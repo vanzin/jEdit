@@ -182,8 +182,8 @@ public class BufferSet
 	{
 		if (buffers.isEmpty())
 			return null;
-		if (buffers.size() < 2)
-			return buffers.get(buffers.size()-1);
+		if (buffers.size() == 1)
+			return buffers.get(0);
 		if (index >= buffers.size() - 1)
 			return buffers.get(0);
 		return buffers.get(index + 1);
