@@ -17,7 +17,36 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
-- New method BufferSet.contains(Buffer) (Matthieu Casanova)
+- New methods BufferSet.contains()
+    StandardUtilities.objectsEqual()
+    TextArea.showPopupMenu()
+    Mode.acceptFilename()
+    OperatingSystem.isDOSDerived()
+    OperatingSystem.hasJava17()
+    MiscUtilities.getFileNameNoExtension()
+    GUIUtilities.prettifyMenuLabel()
+    GUIUtilities.setAutoMnemonic()
+    GUIUtilities.parseColor()
+    GUIUtilities.parseStyle()
+    GUIUtilities.adjustForScreenBounds()
+    GUIUtilities.requestFocus()
+    GUIUtilities.isPopupTrigger()
+    GUIUtilities.isMiddleButton()
+    GUIUtilities.isRightButton()
+    GUIUtilities.getScreenBounds()
+    GUIUtilities.showPopupMenu()
+    GUIUtilities.showPopupMenu()
+    GUIUtilities.isAncestorOf()
+    GUIUtilities.getParentDialog()
+    GUIUtilities.setEnabledRecursively()
+    GUIUtilities.setButtonContentMargin()
+    GUIUtilities.makeSameSize()
+    GUIUtilities.defaultTableCellSize()
+    GUIUtilities.defaultColumnWidth()
+    GUIUtilities.defaultRowHeight()
+    Buffer.getFile()
+    VFSManager.runInAWTThread()
+    VFSManager.runInWorkThread() (Matthieu Casanova)
 
 }}}
 {{{ Editing
