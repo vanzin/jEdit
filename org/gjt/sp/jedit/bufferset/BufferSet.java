@@ -195,6 +195,18 @@ public class BufferSet
 		return buffers.indexOf(buffer);
 	} //}}}
 
+	//{{{ contains() method
+	/**
+	 * Check if the BufferSet contains the given buffer
+	 * @param buffer the buffer to search
+	 * @return true if it contains this buffer
+	 * @since jEdit 5.7pre1
+	 */
+	public boolean contains(Buffer buffer)
+	{
+		return buffers.contains(buffer);
+	} //}}}
+
 	//{{{ size() method
 	public int size()
 	{

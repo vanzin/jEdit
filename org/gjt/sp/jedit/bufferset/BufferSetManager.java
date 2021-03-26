@@ -348,7 +348,7 @@ public class BufferSetManager
 		// Collect all BufferSets.
 		jEdit.getEditPaneManager().forEach(editPane -> candidates.add(editPane.getBufferSet()));
 		// Remove all that doesn't contain the buffer.
-		candidates.removeIf(bufferSet -> bufferSet.indexOf(buffer) == -1);
+		candidates.removeIf(bufferSet -> !bufferSet.contains(buffer));
 		// Remaining are the result.
 		return candidates;
 	} //}}}

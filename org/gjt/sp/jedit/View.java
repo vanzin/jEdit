@@ -2177,7 +2177,7 @@ loop:		while (true)
 				if (editPane == ep ||
 					(scope == BufferSet.Scope.view && editPane.getView() == view))
 					return;
-				if (editPane.getBufferSet().indexOf(b) < 0)
+				if (!editPane.getBufferSet().contains(b))
 					return;
 				jEdit.getBufferSetManager().removeBuffer(editPane, b);
 			}

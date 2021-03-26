@@ -2100,7 +2100,7 @@ public class jEdit
 				{
 					BufferSet bufferSet = view.getEditPane().getBufferSet();
 					// no need to check every bufferSet since it's view scope
-					if (bufferSet.indexOf(buffer) != -1)
+					if (bufferSet.contains(buffer))
 					{
 						viewOwner++;
 						if (viewOwner > 1)

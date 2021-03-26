@@ -17,6 +17,7 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
+- New method BufferSet.contains(Buffer) (Matthieu Casanova)
 
 }}}
 {{{ Editing

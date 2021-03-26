@@ -2247,7 +2247,7 @@ public class Buffer extends JEditBuffer
 				jEdit.getEditPaneManager().forEach(editPane ->
 					{
 						BufferSet bufferSet = editPane.getBufferSet();
-						if (bufferSet.indexOf(this) != -1)
+						if (bufferSet.contains(this))
 						{
 							bufferSet.sort();
 						}

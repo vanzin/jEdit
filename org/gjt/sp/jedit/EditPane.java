@@ -148,14 +148,14 @@ public class EditPane extends JPanel implements BufferSetListener
 		if(this.buffer == buffer)
 			return;
 
-		if (bufferSet.indexOf(buffer) == -1)
+		if (!bufferSet.contains(buffer))
 		{
 			jEdit.getBufferSetManager().addBuffer(this, buffer);
 		}
 		//if(buffer.insideCompoundEdit())
 		//	buffer.endCompoundEdit();
 		EditBus.send(new BufferChanging(this, buffer));
-		if (bufferSet.indexOf(this.buffer) != -1)
+		if (bufferSet.contains(this.buffer))
 		{
 			// when closing the last buffer of a bufferSet, the current buffer will still be the closed
 			// buffer until a new empty buffer is created.
@@ -668,7 +668,7 @@ public class EditPane extends JPanel implements BufferSetListener
 			return;
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
-		if (bufferSet.indexOf(this.buffer) == -1)
+		if (!bufferSet.contains(this.buffer))
 		{
 			// it happens when having 1 untitled buffer if I open a file. The untitled buffer
 			// is closed but the new buffer is not yet opened
@@ -822,7 +822,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		// need to add the buffer to the bufferSet.
 		// It may not have been done by the setBuffer() because the EditPane is not yet known by jEdit, and for
 		// view and global scope it is added through this list
-		if (bufferSet.indexOf(buffer) == -1)
+		if (!bufferSet.contains(buffer))
 			bufferSet.addBuffer(buffer);
 
 		loadBufferSwitcher();
