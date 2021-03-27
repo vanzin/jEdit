@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008-2012 Matthieu Casanova
+ * Copyright (C) 2008-2021 Matthieu Casanova
  * Portions Copyright (C) 2000-2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -33,7 +32,6 @@ import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.jedit.*;
-
 //}}}
 
 /**
@@ -141,7 +139,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		//{{{ widgets panel
 		String statusbar = jEdit.getProperty("view.status");
 		StringTokenizer st = new StringTokenizer(statusbar);
-		listModel = new DefaultListModel<String>();
+		listModel = new DefaultListModel<>();
 		while (st.hasMoreTokens())
 		{
 			String token = st.nextToken();
@@ -149,10 +147,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		}
 
 
-		list = new JList<String>(listModel);
+		list = new JList<>(listModel);
 		list.setCellRenderer(new WidgetListCellRenderer());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(new ListHandler());
+		list.addListSelectionListener(e -> updateButtons());
 
 		JPanel widgetsPanel = new JPanel(new BorderLayout());
 		widgetsPanel.add(new JScrollPane(list), BorderLayout.CENTER);
@@ -162,7 +160,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		JPanel buttons = new JPanel();
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		ActionHandler actionHandler = new ActionHandler();
+		ActionListener actionHandler = new ActionHandler();
 		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
 		add.setToolTipText(jEdit.getProperty("options.status.add"));
 		add.addActionListener(actionHandler);
@@ -227,7 +225,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			if(i != 0)
 				buf.append(' ');
 
-			String widgetName = (String) listModel.elementAt(i);
+			String widgetName = listModel.elementAt(i);
 			buf.append(widgetName);
 		}
 		jEdit.setProperty("view.status",buf.toString());
@@ -237,7 +235,6 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.show-caret-virtual", showCaretVirtual.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-offset", showCaretOffset.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-bufferlength", showCaretBufferLength.isSelected());
-
 	} //}}}
 
 	//{{{ Private members
@@ -285,7 +282,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		{
 			if (i != 0)
 				buf.append(' ');
-			String widgetName = (String) listModel.elementAt(i);
+			String widgetName = listModel.elementAt(i);
 			String sample = jEdit.getProperty("statusbar."+widgetName+".sample",widgetName);
 			buf.append(sample);
 		}
@@ -376,16 +373,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		}
 	} //}}}
 
-	//{{{ ListHandler class
-	private class ListHandler implements ListSelectionListener
-	{
-		@Override
-		public void valueChanged(ListSelectionEvent evt)
-		{
-			updateButtons();
-		}
-	} //}}}
-
+	//{{{ WidgetListCellRenderer class
 	private static class WidgetListCellRenderer extends DefaultListCellRenderer
 	{
 		@Override
@@ -400,20 +388,14 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			setText(label);
 			return this;
 		}
-	}
-
+	} //}}}
 	//}}}
 
 	//{{{ WidgetSelectionDialog class
 	private class WidgetSelectionDialog extends EnhancedDialog
 	{
-		private final JButton ok;
-		private final JButton cancel;
 		private final JTextField labelField;
-		private final JLabel labelLabel;
-		private final JRadioButton labelRadio;
 		private final JComboBox<String> widgetCombo;
-		private final JLabel widgetLabel;
 		private final JRadioButton widgetRadio;
 		private String value;
 
@@ -422,56 +404,64 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		{
 			super(GenericGUIUtilities.getParentDialog(comp), jEdit.getProperty("options.status.edit.title"), true);
 			ButtonGroup buttonGroup = new ButtonGroup();
-			labelRadio = new JRadioButton(jEdit.getProperty("options.status.edit.labelRadioButton"));
+			JRadioButton labelRadio = new JRadioButton(jEdit.getProperty("options.status.edit.labelRadioButton"));
 			widgetRadio = new JRadioButton(jEdit.getProperty("options.status.edit.widgetRadioButton"));
 			buttonGroup.add(labelRadio);
 			buttonGroup.add(widgetRadio);
 
-			labelLabel = new JLabel(jEdit.getProperty("options.status.edit.labelLabel"));
+			JLabel labelLabel = new JLabel(jEdit.getProperty("options.status.edit.labelLabel"));
 			labelField = new JTextField();
 
-			widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
+			JLabel widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
 
 			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory");
 			Arrays.sort(allWidgets);
 			
 			boolean valueIsWidget = value != null && Arrays.binarySearch(allWidgets, value) >= 0;
 			
-			Vector<String> widgets = new Vector<String>(allWidgets.length);
-			Set<String> usedWidget = new HashSet<String>(listModel.getSize());
+			Vector<String> widgets = new Vector<>(allWidgets.length);
+			Collection<String> usedWidget = new HashSet<>(listModel.getSize());
 			for (int i = 0; i < listModel.getSize(); i++)
 			{
-				usedWidget.add((String) listModel.get(i));
+				usedWidget.add(listModel.get(i));
 			}
 			for (String widget : allWidgets)
 			{
 				if (!usedWidget.contains(widget) || (valueIsWidget && widget.equals(value)))
 					widgets.add(widget);
 			}
-			widgetCombo = new JComboBox<String>(widgets);
+			widgetCombo = new JComboBox<>(widgets);
 			widgetCombo.setRenderer(new WidgetListCellRenderer());
-			ActionHandler actionHandler = new ActionHandler();
-			labelRadio.addActionListener(actionHandler);
-			widgetRadio.addActionListener(actionHandler);
+			labelRadio.addActionListener(e ->
+			{
+				labelField.setEnabled(true);
+				widgetCombo.setEnabled(false);
+				validate();
+			});
+			widgetRadio.addActionListener(e ->
+			{
+				labelField.setEnabled(false);
+				widgetCombo.setEnabled(true);
+				validate();
+			});
 			//{{{ south panel
 			JPanel southPanel = new JPanel();
 			southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
 			southPanel.setBorder(new EmptyBorder(12,0,0,0));
 			southPanel.add(Box.createGlue());
-			ok = new JButton(jEdit.getProperty("common.ok"));
-			ok.addActionListener(actionHandler);
+			JButton ok = new JButton(jEdit.getProperty("common.ok"));
+			ok.addActionListener(e -> ok());
 			getRootPane().setDefaultButton(ok);
 			southPanel.add(ok);
 			southPanel.add(Box.createHorizontalStrut(6));
-			cancel = new JButton(jEdit.getProperty("common.cancel"));
-			cancel.addActionListener(actionHandler);
+			JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
+			cancel.addActionListener(e -> cancel());
 			southPanel.add(cancel);
 			southPanel.add(Box.createGlue());
 			//}}}
 
 			labelField.setEnabled(false);
 			widgetRadio.setSelected(true);
-
 
 			JPanel content = new JPanel(new BorderLayout());
 			content.setBorder(new EmptyBorder(12,12,12,12));
@@ -550,40 +540,6 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		{
 			return value;
 		} //}}}
-
-		//{{{ ActionHandler class
-		private class ActionHandler implements ActionListener
-		{
-			//{{{ actionPerformed() method
-			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
-				Object source = evt.getSource();
-				if (source == ok)
-				{
-					ok();
-				}
-				else if (source == cancel)
-				{
-					cancel();
-				}
-				else if (source == labelRadio)
-				{
-					labelField.setEnabled(true);
-					widgetCombo.setEnabled(false);
-					validate();
-				}
-				else if (source == widgetRadio)
-				{
-					labelField.setEnabled(false);
-					widgetCombo.setEnabled(true);
-					validate();
-				}
-			} //}}}
-
-		} //}}}
-
 	} //}}}
-
 }
 
