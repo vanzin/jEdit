@@ -25,17 +25,15 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
-//}}}
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
+//}}}
 
 public class GutterOptionPane extends AbstractOptionPane
 {
@@ -46,6 +44,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	public void _init()
 	{
 		/* Gutter enable */
@@ -97,13 +96,7 @@ public class GutterOptionPane extends AbstractOptionPane
 		addComponent(gutterComponents);
 		// Disable gutter components when 'show gutter' is unchecked
 		setGutterComponentsEnabledState();
-		gutterEnabled.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent e)
-			{
-				setGutterComponentsEnabledState();
-			}
-		});
+		gutterEnabled.addChangeListener(e -> setGutterComponentsEnabledState());
 
 		/* Selection area background color */
 		addComponent(jEdit.getProperty("options.gutter.selectionAreaBgColor"),
@@ -228,12 +221,13 @@ public class GutterOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	public void _save()
 	{
 		jEdit.setBooleanProperty("view.gutter.lineNumbers", lineNumbersEnabled
 			.isSelected());
 		jEdit.setIntegerProperty("view.gutter.minDigitCount",
-			Integer.valueOf(minLineNumberDigits.getText()));
+			Integer.parseInt(minLineNumberDigits.getText()));
 
 		jEdit.setFontProperty("view.gutter.font",gutterFont.getFont());
 		jEdit.setColorProperty("view.gutter.fgColor",gutterForeground
@@ -290,7 +284,7 @@ public class GutterOptionPane extends AbstractOptionPane
 		jEdit.setColorProperty(SELECTION_AREA_BGCOLOR_PROPERTY,
 			selectionAreaBgColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.gutter.selectionAreaWidth",
-			Integer.valueOf(selectionAreaWidth.getText()));
+			Integer.parseInt(selectionAreaWidth.getText()));
 	} //}}}
 
 	//{{{ setGutterComponentsEnabledState
@@ -304,7 +298,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	private void addFoldStyleChooser()
 	{
 		painters = ServiceManager.getServiceNames(JEditTextArea.FOLD_PAINTER_SERVICE);
-		foldPainter = new JComboBox<String>();
+		foldPainter = new JComboBox<>();
 		String current = JEditTextArea.getFoldPainterName();
 		int selected = 0;
 		for (int i = 0; i < painters.length; i++)

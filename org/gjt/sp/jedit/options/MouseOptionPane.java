@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -37,6 +36,7 @@ public class MouseOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		/* Text drag and drop */
@@ -91,7 +91,7 @@ public class MouseOptionPane extends AbstractOptionPane
 
 		for(int i = 0; i < c; i++)
 		{
-			JComboBox<String> cb = new JComboBox<String>(clickActionNames);
+			JComboBox<String> cb = new JComboBox<>(clickActionNames);
 
 			gutterClickActions[i] = cb;
 
@@ -109,6 +109,7 @@ public class MouseOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	public void _save()
 	{
 		jEdit.setBooleanProperty("view.dragAndDrop",
@@ -138,12 +139,12 @@ public class MouseOptionPane extends AbstractOptionPane
 	private JComboBox[] gutterClickActions;
 
 	// simplified these settings a little...
-	private static final String[] clickActionKeys = new String[] {
+	private static final String[] clickActionKeys = {
 		"toggle-fold",
 		"toggle-fold-fully"
 	};
 
-	private static final String[] clickModifierKeys = new String[] {
+	private static final String[] clickModifierKeys = {
 		"foldClick",
 		"SfoldClick"
 	}; //}}}

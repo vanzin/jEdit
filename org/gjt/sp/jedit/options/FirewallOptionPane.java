@@ -38,6 +38,7 @@ public class FirewallOptionPane extends AbstractOptionPane {
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	public void _init()
 	{
 		// checkbox
@@ -67,7 +68,8 @@ public class FirewallOptionPane extends AbstractOptionPane {
 		httpPass.setEnabled(enabled);
 		httpNonProxy.setEnabled(enabled);
 
-		httpEnabled.addActionListener(new ActionHandler());
+		ActionListener actionHandler = new ActionHandler();
+		httpEnabled.addActionListener(actionHandler);
 
 		// checkbox
 		addComponent(socksEnabled = new JCheckBox(jEdit.getProperty(
@@ -84,10 +86,11 @@ public class FirewallOptionPane extends AbstractOptionPane {
 		socksHost.setEnabled(enabled);
 		socksPort.setEnabled(enabled);
 
-		socksEnabled.addActionListener(new ActionHandler());
+		socksEnabled.addActionListener(actionHandler);
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	public void _save()
 	{
 		jEdit.setBooleanProperty("firewall.enabled", httpEnabled.isSelected());
@@ -115,8 +118,9 @@ public class FirewallOptionPane extends AbstractOptionPane {
 	//}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			httpHost.setEnabled(httpEnabled.isSelected());

@@ -38,7 +38,6 @@ import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.gui.RolloverButton;
 //}}}
 
-
 /**
  * @author Slava Pestov
  * @version $Id$
@@ -52,6 +51,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	public void _init()
 	{
 		/* Font */
@@ -62,14 +62,11 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		fontSubst = new JCheckBox(jEdit.getProperty("options.textarea.fontSubst"));
 		fontSubst.setToolTipText(jEdit.getProperty("options.textarea.fontSubst.tooltip"));
 		fontSubst.setSelected(jEdit.getBooleanProperty("view.enableFontSubst"));
-		fontSubst.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					fontSubstList.setVisible(fontSubst.isSelected());
-					fontSubstSystemFonts.setVisible(fontSubst.isSelected());
-				}
-			});
+		fontSubst.addActionListener(evt ->
+		{
+			fontSubstList.setVisible(fontSubst.isSelected());
+			fontSubstSystemFonts.setVisible(fontSubst.isSelected());
+		});
 		addComponent(fontSubst);
 
 		fontSubstList = new FontList();
@@ -79,37 +76,31 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		fontSubstSystemFonts = new JCheckBox(jEdit.getProperty("options.textarea.fontSubstSystemFonts"));
 		fontSubstSystemFonts.setSelected(jEdit.getBooleanProperty("view.enableFontSubstSystemFonts"));
 		fontSubstSystemFonts.setVisible(fontSubst.isSelected());
-		fontSubstSystemFonts.addActionListener(new ActionListener()
+		fontSubstSystemFonts.addActionListener(evt ->
+		{
+			if (!fontSubstSystemFonts.isSelected()
+				&& (fontSubstList.listSize() == 0))
 			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					if (!fontSubstSystemFonts.isSelected()
-						&& (fontSubstList.listSize() == 0))
-					{
-						JOptionPane.showMessageDialog(fontSubstSystemFonts.getParent(),
-							jEdit.getProperty("options.textarea.fontSubstWarning"),
-							jEdit.getProperty("options.textarea.fontSubstWarning.label"),
-							JOptionPane.WARNING_MESSAGE);
-					}
-				}
-			});
+				JOptionPane.showMessageDialog(fontSubstSystemFonts.getParent(),
+					jEdit.getProperty("options.textarea.fontSubstWarning"),
+					jEdit.getProperty("options.textarea.fontSubstWarning.label"),
+					JOptionPane.WARNING_MESSAGE);
+			}
+		});
 		addComponent(fontSubstSystemFonts, GridBagConstraints.HORIZONTAL);
 
 		/* Anti-aliasing */
-		antiAlias = new JComboBox<String>(AntiAlias.comboChoices);
+		antiAlias = new JComboBox<>(AntiAlias.comboChoices);
 
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
 		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		font.setAntiAliasEnabled(antiAliasValue.val()>0);
-		antiAlias.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					int idx = antiAlias.getSelectedIndex();
-					font.setAntiAliasEnabled(idx > 0);
-					font.repaint();
-				}
-			});
+		antiAlias.addActionListener(evt ->
+		{
+			int idx = antiAlias.getSelectedIndex();
+			font.setAntiAliasEnabled(idx > 0);
+			font.repaint();
+		});
 		antiAlias.setSelectedIndex(antiAliasValue.val());
 		addComponent(jEdit.getProperty("options.textarea"+ ".antiAlias"), antiAlias);
 
@@ -252,6 +243,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	public void _save()
 	{
 		jEdit.setFontProperty("view.font",font.getFont());
@@ -304,8 +296,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 		jEdit.setBooleanProperty("completeFromAllBuffers", completeFromAllBuffers.isSelected());
 		jEdit.setBooleanProperty("insertCompletionWithDigit", insertCompletionWithDigit.isSelected());
-		jEdit.setIntegerProperty("options.textarea.lineSpacing",
-					 Integer.valueOf(lineSpacing.getText()));
+		jEdit.setIntegerProperty("options.textarea.lineSpacing", Integer.parseInt(lineSpacing.getText()));
 	} //}}}
 
 	//{{{ Private members
@@ -353,7 +344,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		implements ActionListener
 	{
 
-		public FontList()
+		FontList()
 		{
 			int i = 0;
 
@@ -363,10 +354,10 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			JLabel l = new JLabel(jEdit.getProperty("options.textarea.fontSubstList"));
 
 			/* Substitution font list. */
-			Font f;
-			fontsModel = new DefaultListModel<Font>();
-			fonts = new JList<Font>(fontsModel);
+			fontsModel = new DefaultListModel<>();
+			fonts = new JList<>(fontsModel);
 			fonts.setCellRenderer(new FontItemRenderer());
+			Font f;
 			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
 			{
 				fontsModel.addElement(f);
@@ -406,7 +397,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			add(BorderLayout.EAST, buttons);
 		}
 
-
+		@Override
 		public void actionPerformed(ActionEvent ae)
 		{
 			if (ae.getSource() == add)
@@ -451,19 +442,17 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			}
 		}
 
-
 		public void save()
 		{
-			Font f;
 			int i = 0;
-			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
+			while (jEdit.getFontProperty("view.fontSubstList." + i) != null)
 			{
 				jEdit.unsetProperty("view.fontSubstList." + i);
 				i++;
 			}
 			for (i = 0; i < fontsModel.size(); i++)
 			{
-				f = (Font) fontsModel.getElementAt(i);
+				Font f = fontsModel.getElementAt(i);
 				jEdit.setFontProperty("view.fontSubstList." + i, f);
 			}
 		}
@@ -473,17 +462,16 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			return fontsModel.size();
 		}
 
-		private DefaultListModel<Font> fontsModel;
-		private JList<Font> fonts;
-		private JButton add;
-		private JButton remove;
-		private JButton up;
-		private JButton down;
-
+		private final DefaultListModel<Font> fontsModel;
+		private final JList<Font> fonts;
+		private final JButton add;
+		private final JButton remove;
+		private final JButton up;
+		private final JButton down;
 
 		private static class FontItemRenderer extends DefaultListCellRenderer
 		{
-
+			@Override
 			public Component getListCellRendererComponent(JList list,
 								      Object value,
 								      int index,
@@ -499,9 +487,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 				setText(f.getFamily() + " " + f.getSize());
 				return this;
 			}
-
 		}
-
 	} //}}}
-
 }

@@ -38,6 +38,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		/* Font */
@@ -73,7 +74,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		// DONE: make sure this can only accept positive numbers, added
 		// NumericTextField as the combobox editor.
 		String[] tabSizes = { "2", "4", "8" };
-		tabSize = new JComboBox<String>(tabSizes);
+		tabSize = new JComboBox<>(tabSizes);
 		tabSize.setEditor(new NumericTextField("", true, true));
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
@@ -106,6 +107,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setFontProperty("print.font", font.getFont());
