@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -55,6 +54,7 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 	//{{{ Protected members
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -65,8 +65,7 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 		colorsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		colorsTable.getTableHeader().setReorderingAllowed(false);
 		colorsTable.addMouseListener(new MouseHandler());
-		colorsTable.getSelectionModel().addListSelectionListener(
-			new SelectionHandler());
+		colorsTable.getSelectionModel().addListSelectionListener(e -> updateEnabled());
 		TableColumnModel tcm = colorsTable.getColumnModel();
 		tcm.getColumn(1).setCellRenderer(new BrowserColorsModel.ColorRenderer());
 		Dimension d = colorsTable.getPreferredSize();
@@ -78,15 +77,20 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 		JPanel buttons = new JPanel();
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		ActionHandler actionHandler = new ActionHandler();
-		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+		ActionListener actionHandler = new ActionHandler();
+		JButton add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
 		add.setToolTipText(jEdit.getProperty("common.add"));
-		add.addActionListener(actionHandler);
+		add.addActionListener(e -> colorsModel.add());
 		buttons.add(add);
 		buttons.add(Box.createHorizontalStrut(6));
 		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
 		remove.setToolTipText(jEdit.getProperty("common.remove"));
-		remove.addActionListener(actionHandler);
+		remove.addActionListener(e ->
+		{
+			int selectedRow = colorsTable.getSelectedRow();
+			colorsModel.remove(selectedRow);
+			updateEnabled();
+		});
 		buttons.add(remove);
 		buttons.add(Box.createHorizontalStrut(6));
 		moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
@@ -106,6 +110,7 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		colorsModel.save();
@@ -116,7 +121,6 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private BrowserColorsModel colorsModel;
 	private JTable colorsTable;
-	private JButton add;
 	private JButton remove;
 	private JButton moveUp;
 	private JButton moveDown;
@@ -140,32 +144,14 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 
 	//}}}
 
-	//{{{ SelectionHandler class
-	class SelectionHandler implements ListSelectionListener
-	{
-		public void valueChanged(ListSelectionEvent evt)
-		{
-			updateEnabled();
-		}
-	} //}}}
-
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == add)
-			{
-				colorsModel.add();
-			}
-			else if(source == remove)
-			{
-				int selectedRow = colorsTable.getSelectedRow();
-				colorsModel.remove(selectedRow);
-				updateEnabled();
-			}
-			else if(source == moveUp)
+			if(source == moveUp)
 			{
 				int selectedRow = colorsTable.getSelectedRow();
 				if(selectedRow != 0)
@@ -189,8 +175,9 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			Point p = evt.getPoint();
@@ -207,204 +194,212 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 				colorsModel.setValueAt(color,row,1);
 		}
 	} //}}}
-} //}}}
 
-//{{{ BrowserColorsModel class
-class BrowserColorsModel extends AbstractTableModel
-{
-	//{{{ BrowserColorsModel constructor
-	BrowserColorsModel()
+	//{{{ BrowserColorsModel class
+	private static class BrowserColorsModel extends AbstractTableModel
 	{
-		entries = new ArrayList<Entry>();
-
-		int i = 0;
-		String glob;
-		while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
+		//{{{ BrowserColorsModel constructor
+		BrowserColorsModel()
 		{
-			entries.add(new Entry(glob,
-				jEdit.getColorProperty(
-				"vfs.browser.colors." + i + ".color",
-				Color.black)));
-			i++;
-		}
-	} //}}}
+			entries = new ArrayList<>();
 
-	//{{{ add() method
-	void add()
-	{
-		entries.add(new Entry("",UIManager.getColor("Tree.foreground")));
-		fireTableRowsInserted(entries.size() - 1,entries.size() - 1);
-	} //}}}
-
-	//{{{ remove() method
-	void remove(int index)
-	{
-		entries.remove(index);
-		fireTableRowsDeleted(entries.size(),entries.size());
-	} //}}}
-
-	//{{{ moveUp() method
-	public void moveUp(int index)
-	{
-		Entry entry = entries.get(index);
-		entries.remove(index);
-		entries.add(index - 1,entry);
-		fireTableRowsUpdated(index - 1,index);
-	} //}}}
-
-	//{{{ moveDown() method
-	public void moveDown(int index)
-	{
-		Entry entry = entries.get(index);
-		entries.remove(index);
-		entries.add(index + 1,entry);
-		fireTableRowsUpdated(index,index + 1);
-	} //}}}
-
-	//{{{ save() method
-	void save()
-	{
-		int i;
-		for(i = 0; i < entries.size(); i++)
-		{
-			Entry entry = entries.get(i);
-			jEdit.setProperty("vfs.browser.colors." + i + ".glob",
-				entry.glob);
-			jEdit.setColorProperty("vfs.browser.colors." + i + ".color",
-				entry.color);
-		}
-		jEdit.unsetProperty("vfs.browser.colors." + i + ".glob");
-		jEdit.unsetProperty("vfs.browser.colors." + i + ".color");
-	} //}}}
-
-	//{{{ getColumnCount() method
-	public int getColumnCount()
-	{
-		return 2;
-	} //}}}
-
-	//{{{ getRowCount() method
-	public int getRowCount()
-	{
-		return entries.size();
-	} //}}}
-
-	//{{{ getValueAt() method
-	public Object getValueAt(int row, int col)
-	{
-		Entry entry = entries.get(row);
-
-		switch(col)
-		{
-		case 0:
-			return entry.glob;
-		case 1:
-			return entry.color;
-		default:
-			return null;
-		}
-	} //}}}
-
-	//{{{ isCellEditable() method
-	public boolean isCellEditable(int row, int col)
-	{
-		return col == 0;
-	} //}}}
-
-	//{{{ setValueAt() method
-	public void setValueAt(Object value, int row, int col)
-	{
-		Entry entry = entries.get(row);
-
-		if(col == 0)
-			entry.glob = (String)value;
-		else
-			entry.color = (Color)value;
-
-		fireTableRowsUpdated(row,row);
-	} //}}}
-
-	//{{{ getColumnName() method
-	public String getColumnName(int index)
-	{
-		switch(index)
-		{
-		case 0:
-			return jEdit.getProperty("options.browser.colors.glob");
-		case 1:
-			return jEdit.getProperty("options.browser.colors.color");
-		default:
-			return null;
-		}
-	} //}}}
-
-	//{{{ getColumnClass() method
-	public Class getColumnClass(int col)
-	{
-		switch(col)
-		{
-		case 0:
-			return String.class;
-		case 1:
-			return Color.class;
-		default:
-			throw new InternalError();
-		}
-	} //}}}
-
-	private List<Entry> entries;
-
-	//{{{ Entry class
-	private static class Entry
-	{
-		String glob;
-		Color color;
-
-		Entry(String glob, Color color)
-		{
-			this.glob = glob;
-			this.color = color;
-		}
-	} //}}}
-
-	//{{{ ColorRenderer class
-	static class ColorRenderer extends JLabel
-		implements TableCellRenderer
-	{
-		//{{{ ColorRenderer constructor
-		ColorRenderer()
-		{
-			setOpaque(true);
-			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
+			int i = 0;
+			String glob;
+			while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
+			{
+				entries.add(new Entry(glob,
+					jEdit.getColorProperty(
+						"vfs.browser.colors." + i + ".color",
+						Color.black)));
+				i++;
+			}
 		} //}}}
 
-		//{{{ getTableCellRendererComponent() method
-		public Component getTableCellRendererComponent(
-			JTable table,
-			Object value,
-			boolean isSelected,
-			boolean cellHasFocus,
-			int row,
-			int col)
+		//{{{ add() method
+		void add()
 		{
-			if (isSelected)
+			entries.add(new Entry("",UIManager.getColor("Tree.foreground")));
+			fireTableRowsInserted(entries.size() - 1,entries.size() - 1);
+		} //}}}
+
+		//{{{ remove() method
+		void remove(int index)
+		{
+			entries.remove(index);
+			fireTableRowsDeleted(entries.size(),entries.size());
+		} //}}}
+
+		//{{{ moveUp() method
+		public void moveUp(int index)
+		{
+			Entry entry = entries.get(index);
+			entries.remove(index);
+			entries.add(index - 1,entry);
+			fireTableRowsUpdated(index - 1,index);
+		} //}}}
+
+		//{{{ moveDown() method
+		public void moveDown(int index)
+		{
+			Entry entry = entries.get(index);
+			entries.remove(index);
+			entries.add(index + 1,entry);
+			fireTableRowsUpdated(index,index + 1);
+		} //}}}
+
+		//{{{ save() method
+		void save()
+		{
+			int i;
+			for(i = 0; i < entries.size(); i++)
 			{
-				setBackground(table.getSelectionBackground());
-				setForeground(table.getSelectionForeground());
+				Entry entry = entries.get(i);
+				jEdit.setProperty("vfs.browser.colors." + i + ".glob",
+					entry.glob);
+				jEdit.setColorProperty("vfs.browser.colors." + i + ".color",
+					entry.color);
 			}
+			jEdit.unsetProperty("vfs.browser.colors." + i + ".glob");
+			jEdit.unsetProperty("vfs.browser.colors." + i + ".color");
+		} //}}}
+
+		//{{{ getColumnCount() method
+		@Override
+		public int getColumnCount()
+		{
+			return 2;
+		} //}}}
+
+		//{{{ getRowCount() method
+		@Override
+		public int getRowCount()
+		{
+			return entries.size();
+		} //}}}
+
+		//{{{ getValueAt() method
+		@Override
+		public Object getValueAt(int row, int col)
+		{
+			Entry entry = entries.get(row);
+
+			switch(col)
+			{
+				case 0:
+					return entry.glob;
+				case 1:
+					return entry.color;
+				default:
+					return null;
+			}
+		} //}}}
+
+		//{{{ isCellEditable() method
+		@Override
+		public boolean isCellEditable(int row, int col)
+		{
+			return col == 0;
+		} //}}}
+
+		//{{{ setValueAt() method
+		@Override
+		public void setValueAt(Object value, int row, int col)
+		{
+			Entry entry = entries.get(row);
+
+			if(col == 0)
+				entry.glob = (String)value;
 			else
+				entry.color = (Color)value;
+
+			fireTableRowsUpdated(row,row);
+		} //}}}
+
+		//{{{ getColumnName() method
+		@Override
+		public String getColumnName(int index)
+		{
+			switch(index)
 			{
-				setBackground(table.getBackground());
-				setForeground(table.getForeground());
+				case 0:
+					return jEdit.getProperty("options.browser.colors.glob");
+				case 1:
+					return jEdit.getProperty("options.browser.colors.color");
+				default:
+					return null;
 			}
+		} //}}}
 
-			if (value != null)
-				setBackground((Color)value);
+		//{{{ getColumnClass() method
+		@Override
+		public Class<?> getColumnClass(int col)
+		{
+			switch(col)
+			{
+				case 0:
+					return String.class;
+				case 1:
+					return Color.class;
+				default:
+					throw new InternalError();
+			}
+		} //}}}
 
-			setBorder(cellHasFocus ? UIManager.getBorder(
-				"Table.focusCellHighlightBorder")
-				: SyntaxHiliteOptionPane.noFocusBorder);
-			return this;
+		private final List<Entry> entries;
+
+		//{{{ Entry class
+		private static class Entry
+		{
+			String glob;
+			Color color;
+
+			Entry(String glob, Color color)
+			{
+				this.glob = glob;
+				this.color = color;
+			}
+		} //}}}
+
+		//{{{ ColorRenderer class
+		private static class ColorRenderer extends JLabel implements TableCellRenderer
+		{
+			//{{{ ColorRenderer constructor
+			ColorRenderer()
+			{
+				setOpaque(true);
+				setBorder(SyntaxHiliteOptionPane.noFocusBorder);
+			} //}}}
+
+			//{{{ getTableCellRendererComponent() method
+			@Override
+			public Component getTableCellRendererComponent(
+				JTable table,
+				Object value,
+				boolean isSelected,
+				boolean cellHasFocus,
+				int row,
+				int col)
+			{
+				if (isSelected)
+				{
+					setBackground(table.getSelectionBackground());
+					setForeground(table.getSelectionForeground());
+				}
+				else
+				{
+					setBackground(table.getBackground());
+					setForeground(table.getForeground());
+				}
+
+				if (value != null)
+					setBackground((Color)value);
+
+				setBorder(cellHasFocus ? UIManager.getBorder(
+					"Table.focusCellHighlightBorder")
+					: SyntaxHiliteOptionPane.noFocusBorder);
+				return this;
+			} //}}}
 		} //}}}
 	} //}}}
 } //}}}
+
