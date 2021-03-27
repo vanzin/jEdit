@@ -58,8 +58,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget memory = new MemoryStatusWidget(view);
-		return memory;
+		return new MemoryStatusWidget(view);
 	} //}}}
 	
 	//{{{ MemoryStatusWidget class
@@ -128,6 +127,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 		public void removeNotify()
 		{
 			timer.stop();
+			timer = null;
 			ToolTipManager.sharedInstance().unregisterComponent(this);
 			super.removeNotify();
 		} //}}}
