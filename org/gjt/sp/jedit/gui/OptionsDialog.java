@@ -29,7 +29,6 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -44,17 +43,13 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  * @todo refactor to use OptionGroupPane
  */
-public abstract class OptionsDialog extends EnhancedDialog
-	implements ActionListener, TreeSelectionListener
+public abstract class OptionsDialog extends EnhancedDialog implements TreeSelectionListener
 {
 	//{{{ Instance variables
 	private String name;
 	private JSplitPane splitter;
 	protected JTree paneTree;
 	private JScrollPane stage;
-	private JButton ok;
-	private JButton cancel;
-	private JButton apply;
 	protected OptionPane currentPane;
 	private Map<Object, OptionPane> deferredOptionPanes;
 	//}}}
@@ -113,9 +108,8 @@ public abstract class OptionsDialog extends EnhancedDialog
 		if(currentPane != null)
 			jEdit.setProperty(name + ".last",currentPane.getName());
 
-		org.jedit.options.OptionTreeModel m = (org.jedit.options.OptionTreeModel) paneTree
-			.getModel();
-		save(m.getRoot());
+		TreeModel treeModel = paneTree.getModel();
+		save(treeModel.getRoot());
 
 		/* This will fire the PROPERTIES_CHANGED event */
 		jEdit.propertiesChanged();
@@ -135,26 +129,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 		GUIUtilities.saveGeometry(this,name);
 		jEdit.setIntegerProperty(name + ".splitter",splitter.getDividerLocation());
 		super.dispose();
-	} //}}}
-
-	//{{{ actionPerformed() method
-	@Override
-	public void actionPerformed(ActionEvent evt)
-	{
-		Object source = evt.getSource();
-
-		if(source == ok)
-		{
-			ok();
-		}
-		else if(source == cancel)
-		{
-			cancel();
-		}
-		else if(source == apply)
-		{
-			ok(false);
-		}
 	} //}}}
 
 	//{{{ valueChanged() method
@@ -330,17 +304,17 @@ public abstract class OptionsDialog extends EnhancedDialog
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
 
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(this);
+		JButton ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(e -> ok());
 		buttons.add(ok);
 		buttons.add(Box.createHorizontalStrut(6));
 		getRootPane().setDefaultButton(ok);
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		cancel.addActionListener(this);
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(e -> cancel());
 		buttons.add(cancel);
 		buttons.add(Box.createHorizontalStrut(6));
-		apply = new JButton(jEdit.getProperty("common.apply"));
-		apply.addActionListener(this);
+		JButton apply = new JButton(jEdit.getProperty("common.apply"));
+		apply.addActionListener(e -> ok(false));
 		buttons.add(apply);
 
 		buttons.add(Box.createGlue());
