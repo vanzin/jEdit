@@ -25,14 +25,8 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
@@ -48,38 +42,25 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget wrap = new WrapWidget(view);
-		return wrap;
+		return new WrapWidget(view);
 	} //}}}
 
 	//{{{ WrapWidget class
-	private static class WrapWidget implements Widget
+	private static class WrapWidget extends AbstractLabelWidget
 	{
-		private final JLabel wrap;
-		private final View view;
-
-		WrapWidget(final View view)
+		//{{{ WrapWidget constructor
+		WrapWidget(View view)
 		{
-			wrap = new ToolTipLabel();
-			wrap.setHorizontalAlignment(SwingConstants.CENTER);
-
-			this.view = view;
-			wrap.addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent evt)
-				{
-					view.getBuffer().toggleWordWrap(view);
-				}
-			});
-		}
+			super(view);
+		} //}}}
 
 		@Override
-		public JComponent getComponent()
+		protected void singleClick(MouseEvent e)
 		{
-			return wrap;
+			view.getBuffer().toggleWordWrap(view);
 		}
 
+		//{{{ update() method
 		@Override
 		public void update()
 		{
@@ -89,43 +70,22 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 			{
 				wrap = "none";
 			}
-			this.wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip",
-								   new String[]{jEdit.getProperty("wrap." + wrap)}));
-			if("none".equals(wrap))
-			{
-				this.wrap.setEnabled(false);
-				this.wrap.setText("n");
-			}
-			else
-			{
-				this.wrap.setEnabled(true);
-				if ("hard".equals(wrap))
-					this.wrap.setText("H");
-				else if ("soft".equals(wrap))
-					this.wrap.setText("S");
-			}
-		}
-
-		@Override
-		public void propertiesChanged()
-		{
-			// retarded GTK look and feel!
-			Font font = new JLabel().getFont();
-			//UIManager.getFont("Label.font");
-			FontMetrics fm = wrap.getFontMetrics(font);
-			Dimension dim = new Dimension(Math.max(Math.max(fm.charWidth('N'),
-									fm.charWidth('H')),
-					fm.charWidth('S')) + 1,
-				fm.getHeight());
-			wrap.setPreferredSize(dim);
-			wrap.setMaximumSize(dim);
-		}
+			label.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip",
+				new String[]{jEdit.getProperty("wrap." + wrap)}));
+			label.setText("Wrap: " + wrap);
+		} //}}}
 
 		private boolean largeBufferDeactivateWrap()
 		{
 			Buffer buffer = view.getBuffer();
 			String largeFileMode = buffer.getStringProperty("largefilemode");
 			return "limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode);
+		} //}}}
+
+		@Override
+		public boolean test(StatusBarEventType statusBarEventType)
+		{
+			return statusBarEventType == StatusBarEventType.Buffer;
 		}
 	} //}}}
 

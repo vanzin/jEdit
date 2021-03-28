@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui.statusbar;
 //{{{ Imports
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.*;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -118,25 +117,10 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 			BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
 			if (currentScope == null || currentScope != scope)
 			{
-				bufferSetLabel.setText(scope.toString().substring(0,1).toUpperCase());
+				bufferSetLabel.setText(scope.name());
 				bufferSetLabel.setToolTipText(jEdit.getProperty("view.status.bufferset-tooltip", new Object[] {scope}));
 				currentScope = scope;
 			}
-		} //}}}
-
-		//{{{ propertiesChanged() method
-		@Override
-		public void propertiesChanged()
-		{
-			// retarded GTK look and feel!
-			Font font = new JLabel().getFont();
-			//UIManager.getFont("Label.font");
-			FontMetrics fm = bufferSetLabel.getFontMetrics(font);
-			Dimension dim = new Dimension(Math.max(fm.charWidth('E'),Math.max(fm.charWidth('V'),
-								fm.charWidth('G'))),
-								fm.getHeight());
-			bufferSetLabel.setPreferredSize(dim);
-			bufferSetLabel.setMaximumSize(dim);
 		} //}}}
 
 		//{{{ handleMessage() method
@@ -152,7 +136,5 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 				}
 			}
 		} //}}}
-
 	} //}}}
-
 }

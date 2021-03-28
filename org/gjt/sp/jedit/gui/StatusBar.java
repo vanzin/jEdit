@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2001, 2004 Slava Pestov
  * Portions copyright (C) 2001 Mike Dillon
- * Portions copyright (C) 2008 Matthieu Casanova
+ * Portions copyright (C) 2008-2021 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ import javax.swing.text.Segment;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.textarea.*;
@@ -39,6 +40,7 @@ import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
 import org.gjt.sp.jedit.gui.statusbar.Widget;
 import org.gjt.sp.jedit.gui.statusbar.ToolTipLabel;
 import org.gjt.sp.util.*;
+import org.gjt.sp.jedit.gui.statusbar.StatusBarEventType;
 //}}}
 
 /** The status bar used to display various information to the user.
@@ -63,9 +65,10 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
+		widgets = new ArrayList<>();
 		setName("StatusBar");
 		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,
-			(OperatingSystem.isMacOS() ? 18 : 0)),
+			OperatingSystem.isMacOS() ? 18 : 0),
 			UIManager.getBorder("TextField.border")));
 
 		this.view = view;
@@ -84,17 +87,6 @@ public class StatusBar extends JPanel
 
 		message = new JLabel(" ");
 		setMessageComponent(message);
-
-		modeWidget = _getWidget("mode");
-		foldWidget = _getWidget("fold");
-		encodingWidget = _getWidget("encoding");
-		wrapWidget = _getWidget("wrap");
-		indentWidget = _getWidget("indent");
-		multiSelectWidget = _getWidget("multiSelect");
-		rectSelectWidget = _getWidget("rectSelect");
-		overwriteWidget = _getWidget("overwrite");
-		lineSepWidget = _getWidget("lineSep");
-		lockedWidget = _getWidget("locked");
 
 		taskHandler = new TaskHandler();
 	} //}}}
@@ -141,30 +133,16 @@ public class StatusBar extends JPanel
 			while (tokenizer.hasMoreTokens())
 			{
 				String token = tokenizer.nextToken();
-				if (Character.isLetter(token.charAt(0)))
+				Widget widget = getWidget(token);
+				if (widget != null)
 				{
-					Widget widget = getWidget(token);
-					if (widget == null)
-					{
-						JLabel label = new JLabel(token);
-						label.setBackground(bg);
-						label.setForeground(fg);
-						box.add(label);
-						continue;
-					}
-					Component c = widget.getComponent();
-					c.setBackground(bg);
-					c.setForeground(fg);
-					box.add(c);
+					widgets.add(widget);
+					Component widgetComponent = widget.getComponent();
+					widgetComponent.setBackground(bg);
+					widgetComponent.setForeground(fg);
+					box.add(widgetComponent);
 					widget.update();
 					widget.propertiesChanged();
-				}
-				else
-				{
-					JLabel label = new JLabel(token);
-					label.setBackground(bg);
-					label.setForeground(fg);
-					box.add(label);
 				}
 			}
 			currentBar = statusBar;
@@ -408,24 +386,25 @@ public class StatusBar extends JPanel
 	//{{{ updateBufferStatus() method
 	public void updateBufferStatus()
 	{
-		wrapWidget.update();
-		indentWidget.update();
-		lineSepWidget.update();
-		modeWidget.update();
-		foldWidget.update();
-		encodingWidget.update();
-		lockedWidget.update();
+		updateEvent(StatusBarEventType.Buffer);
 	} //}}}
 
 	//{{{ updateMiscStatus() method
 	public void updateMiscStatus()
 	{
-		multiSelectWidget.update();
-		rectSelectWidget.update();
-		overwriteWidget.update();
+		updateEvent(StatusBarEventType.Misc);
 	} //}}}
 
+	public void updateEvent(StatusBarEventType statusBarEventType)
+	{
+		widgets
+			.stream()
+			.filter(widget -> widget.test(statusBarEventType))
+			.forEach(Widget::update);
+	}
+
 	//{{{ Private members
+	private java.util.List<Widget> widgets;
 	private String currentBar;
 	private final TaskHandler taskHandler;
 	private final View view;
@@ -434,16 +413,7 @@ public class StatusBar extends JPanel
 	private final ToolTipLabel caretStatus;
 	private Component messageComp;
 	private final JLabel message;
-	private final Widget modeWidget;
-	private final Widget foldWidget;
-	private final Widget encodingWidget;
-	private final Widget wrapWidget;
-	private final Widget indentWidget;
-	private final Widget multiSelectWidget;
-	private final Widget rectSelectWidget;
-	private final Widget overwriteWidget;
-	private final Widget lineSepWidget;
-	private final Widget lockedWidget;
+
 	/* package-private for speed */ StringBuilder buf = new StringBuilder();
 	@Nullable
 	private Timer tempTimer;
@@ -458,33 +428,6 @@ public class StatusBar extends JPanel
 
 	//{{{ getWidget() method
 	private Widget getWidget(String name)
-	{
-		if ("mode".equals(name))
-			return modeWidget;
-		if ("fold".equals(name))
-			return foldWidget;
-		if ("encoding".equals(name))
-			return encodingWidget;
-		if ("wrap".equals(name))
-			return wrapWidget;
-		if ("indent".equals(name))
-			return indentWidget;
-		if ("multiSelect".equals(name))
-			return multiSelectWidget;
-		if ("rectSelect".equals(name))
-			return rectSelectWidget;
-		if ("overwrite".equals(name))
-			return overwriteWidget;
-		if ("lineSep".equals(name))
-			return lineSepWidget;
-		if ("locked".equals(name))
-			return lockedWidget;
-
-		return _getWidget(name);
-	} //}}}
-
-	//{{{ _getWidget() method
-	private Widget _getWidget(String name)
 	{
 		StatusWidgetFactory widgetFactory =
 		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory", name);

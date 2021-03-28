@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
@@ -47,33 +43,19 @@ public class IndentWidgetFactory implements StatusWidgetFactory
 	}
 
 	//{{{ IndentWidget class
-	private static class IndentWidget implements Widget
+	private static class IndentWidget extends AbstractLabelWidget
 	{
-		private final JLabel indent;
-		private final View view;
-
-		IndentWidget(final View view)
+		IndentWidget(View view)
 		{
-			indent = new ToolTipLabel();
-			indent.setHorizontalAlignment(SwingConstants.CENTER);
-
-			this.view = view;
-			indent.addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent evt)
-				{	
-					Buffer buffer = view.getBuffer();
-					buffer.toggleAutoIndent(view);
-					update();
-				}
-			});
+			super(view);
 		}
 
 		@Override
-		public JComponent getComponent()
+		protected void singleClick(MouseEvent e)
 		{
-			return indent;
+			Buffer buffer = view.getBuffer();
+			buffer.toggleAutoIndent(view);
+			update();
 		}
 
 		@Override
@@ -81,23 +63,30 @@ public class IndentWidgetFactory implements StatusWidgetFactory
 		{
 			Buffer buffer = view.getBuffer();
 			String indent = buffer.getStringProperty("autoIndent");
-			this.indent.setToolTipText(jEdit.getProperty("view.status.indent-tooltip"));
+			label.setToolTipText(jEdit.getProperty("view.status.indent-tooltip"));
 			
 			if ("full".equals(indent))
 			{
-				this.indent.setEnabled(true);
-				this.indent.setText("F");
+				label.setEnabled(true);
+				label.setText("F");
 			}
 			else if ("simple".equals(indent))
 			{
-				this.indent.setEnabled(true);
-				this.indent.setText("S");
+				label.setEnabled(true);
+				label.setText("S");
 			}
 			else
 			{
-				this.indent.setEnabled(false);
-				this.indent.setText("n");
+				label.setEnabled(false);
+				label.setText("n");
 			}
+			label.setText(indent);
+		}
+
+		@Override
+		public boolean test(StatusBarEventType statusBarEventType)
+		{
+			return statusBarEventType == StatusBarEventType.Buffer;
 		}
 	} //}}}
 }

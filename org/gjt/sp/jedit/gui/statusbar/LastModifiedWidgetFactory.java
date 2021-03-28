@@ -31,7 +31,6 @@ import org.gjt.sp.util.Log;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 //}}}
 
 /**
@@ -46,21 +45,19 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget lastModifiedWidget = new LastModifiedWidget(view);
-		return lastModifiedWidget;
+		return new LastModifiedWidget(view);
 	} //}}}
 
 	//{{{ BufferSetWidget class
 	public static class LastModifiedWidget implements Widget
 	{
-		private final JLabel lastModifiedLabel;
+		private final JLabel label;
 		private final View view;
-		private static final SimpleDateFormat sdf = new SimpleDateFormat();
 
 		LastModifiedWidget(View view)
 		{
 			this.view = view;
-			lastModifiedLabel = new JLabel()
+			label = new ToolTipLabel()
 			{
 				@Override
 				public void addNotify()
@@ -77,7 +74,7 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 					EditBus.removeFromBus(LastModifiedWidget.this);
 				}
 			};
-			lastModifiedLabel.setToolTipText(jEdit.getProperty("fileprop.lastmod"));
+			label.setToolTipText(jEdit.getProperty("fileprop.lastmod"));
 			update();
 		}
 
@@ -85,7 +82,7 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 		@Override
 		public JComponent getComponent()
 		{
-			return lastModifiedLabel;
+			return label;
 		} //}}}
 
 		//{{{ update() method
@@ -101,11 +98,11 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 				VFSFile file = vfs._getFile(session, path, view);
 				if (file == null)
 				{
-					lastModifiedLabel.setText("");
+					label.setText("");
 				}
 				else
 				{
-					lastModifiedLabel.setText(file.getExtendedAttribute(VFS.EA_MODIFIED));
+					label.setText(file.getExtendedAttribute(VFS.EA_MODIFIED));
 				}
 			}
 			catch (IOException e)
@@ -122,13 +119,6 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 				{
 				}
 			}
-		} //}}}
-
-		//{{{ propertiesChanged() methods
-		@Override
-		public void propertiesChanged()
-		{
-
 		} //}}}
 
 		//{{{ handleMessage() methods

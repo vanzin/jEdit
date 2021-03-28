@@ -1,5 +1,5 @@
 /*
- * MultiSelectWidgetFactory.java - The clock widget service
+ * MultiSelectWidgetFactory.java - The multiple selection widget service
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -25,10 +25,7 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
 
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
@@ -45,70 +42,42 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget multiSelect = new MultiSelectWidget(view);
-		return multiSelect;
+		return new MultiSelectWidget(view);
 	} //}}}
 
 	//{{{ MultiSelectWidget class
-	private static class MultiSelectWidget implements Widget
+	private static class MultiSelectWidget extends AbstractLabelWidget
 	{
-		private final JLabel multiSelect;
-		private final View view;
-		MultiSelectWidget(final View view)
+		MultiSelectWidget(View view)
 		{
-			multiSelect = new ToolTipLabel();
-			multiSelect.setHorizontalAlignment(SwingConstants.CENTER);
-			multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
-			this.view = view;
-			multiSelect.addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					JEditTextArea textArea = view.getTextArea();
-					if (textArea != null)
-						textArea.toggleMultipleSelectionEnabled();
-				}
-			});
+			super(view);
+			label.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 		}
 
 		@Override
-		public JComponent getComponent()
+		protected void singleClick(MouseEvent e)
 		{
-			return multiSelect;
+			JEditTextArea textArea = view.getTextArea();
+			if (textArea != null)
+				textArea.toggleMultipleSelectionEnabled();
 		}
 
+		//{{{ update() method
 		@Override
 		public void update()
 		{
 			JEditTextArea textArea = view.getTextArea();
 			if (textArea != null)
 			{
-				if (textArea.isMultipleSelectionEnabled())
-				{
-					multiSelect.setText("M");
-					multiSelect.setEnabled(true);
-				}
-				else
-				{
-					multiSelect.setText("m");
-					multiSelect.setEnabled(false);
-				}
+				label.setEnabled(textArea.isMultipleSelectionEnabled());
+				label.setText("Multi sel: " + textArea.isMultipleSelectionEnabled());
 			}
-		}
+		} //}}}
 
 		@Override
-		public void propertiesChanged()
+		public boolean test(StatusBarEventType statusBarEventType)
 		{
-			// retarded GTK look and feel!
-			Font font = new JLabel().getFont();
-			//UIManager.getFont("Label.font");
-			FontMetrics fm = multiSelect.getFontMetrics(font);
-			Dimension dim = new Dimension(
-						      Math.max(fm.charWidth('m'),fm.charWidth('M')) + 1,
-						      fm.getHeight());
-			multiSelect.setPreferredSize(dim);
-			multiSelect.setMaximumSize(dim);
+			return statusBarEventType == StatusBarEventType.Misc;
 		}
 	} //}}}
 

@@ -104,11 +104,6 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
 		}
 
 		@Override
-		public void propertiesChanged()
-		{
-		}
-
-		@Override
 		public void update()
 		{
 			int count = TaskManager.instance.countTasks();

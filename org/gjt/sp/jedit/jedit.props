@@ -417,6 +417,7 @@ view.docking.alternateLayout=false
 view.toolbar.alternateLayout=true
 
 #{{{ Status bar
+view.status.highlight=#eeeeee
 view.status.foreground=black
 view.status.background=white
 view.status.visible=true

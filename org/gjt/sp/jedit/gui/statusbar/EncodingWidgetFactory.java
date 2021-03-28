@@ -25,10 +25,7 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.BufferOptions;
@@ -50,38 +47,32 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ EncodingWidget class
-	private static class EncodingWidget implements Widget
+	private static class EncodingWidget extends AbstractLabelWidget
 	{
-		private final JLabel encoding;
-		private final View view;
-		public EncodingWidget(final View view) 
+		EncodingWidget(View view)
 		{
-			encoding = new ToolTipLabel();
-			this.view = view;
-			encoding.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
-			encoding.addMouseListener(new MouseAdapter() 
-						  {
-							  @Override
-							  public void mouseClicked(MouseEvent evt)
-							  {
-								  if(evt.getClickCount() == 2)
-									  new BufferOptions(view,view.getBuffer());
-							  }
-						  });
+			super(view);
+			label.setToolTipText(jEdit.getProperty("view.status.encoding-tooltip"));
 		}
-		
+
 		@Override
-		public JComponent getComponent()
+		protected void doubleClick(MouseEvent e)
 		{
-			return encoding;
+			new BufferOptions(view,view.getBuffer());
 		}
-		
+
 		@Override
 		public void update()
 		{
 			Buffer buffer = view.getBuffer();
 			if (buffer.isLoaded())
-				encoding.setText(buffer.getStringProperty("encoding"));
+				label.setText(buffer.getStringProperty("encoding"));
+		}
+
+		@Override
+		public boolean test(StatusBarEventType statusBarEventType)
+		{
+			return statusBarEventType == StatusBarEventType.Buffer;
 		}
 	} //}}}
 }

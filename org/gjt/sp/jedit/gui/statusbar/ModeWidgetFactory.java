@@ -25,10 +25,8 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.BufferOptions;
@@ -37,52 +35,44 @@ import org.gjt.sp.jedit.jEdit;
 
 /**
  * @author Matthieu Casanova
- * @since jEdit 4.3pre14 
+ * @since jEdit 4.3pre14
  */
 public class ModeWidgetFactory implements StatusWidgetFactory
 {
-    //{{{ getWidget() method
-    @Override
-    public Widget getWidget(View view)
-    {
-	Widget mode = new ModeWidget(view);
-	return mode;
-    } //}}}
+	//{{{ getWidget() method
+	@Override
+	public Widget getWidget(View view)
+	{
+		return new ModeWidget(view);
+	} //}}}
 
-    //{{{ ModeWidget class
-    private static class ModeWidget implements Widget
-    {
-	    private final JLabel mode;
-	    private final View view;
+	//{{{ ModeWidget class
+	private static class ModeWidget extends AbstractLabelWidget
+	{
+		ModeWidget(View view)
+		{
+			super(view);
+			label.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
+		}
 
-	    ModeWidget(final View view)
-	    {
-		    mode = new ToolTipLabel();
-		    this.view = view;
-		    mode.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
-		    mode.addMouseListener(new MouseAdapter() 
-					  {
-						  @Override
-						  public void mouseClicked(MouseEvent evt)
-						  {
-							  if(evt.getClickCount() == 2)
-								  new BufferOptions(view,view.getBuffer());
-						  }
-					  });
-	    }
-	    
-	    @Override
-	    public JComponent getComponent()
-	    {
-		    return mode;
-	    }
-	    
-	    @Override
-	    public void update()
-	    {
-		    Buffer buffer = view.getBuffer();
-		    if (buffer.isLoaded())
-			    mode.setText(buffer.getMode().toString());
-	    }
-    } //}}}
+		@Override
+		protected void doubleClick(MouseEvent e)
+		{
+			new BufferOptions(view, view.getBuffer());
+		}
+
+		@Override
+		public void update()
+		{
+			Buffer buffer = view.getBuffer();
+			if (buffer.isLoaded())
+				label.setText(buffer.getMode().toString());
+		}
+
+		@Override
+		public boolean test(StatusBarEventType statusBarEventType)
+		{
+			return statusBarEventType == StatusBarEventType.Buffer;
+		}
+	} //}}}
 }

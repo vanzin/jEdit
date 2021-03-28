@@ -46,8 +46,7 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget selectionLengthWidget = new SelectionLengthWidget(view);
-		return selectionLengthWidget;
+		return new SelectionLengthWidget(view);
 	} //}}}
 
 	//{{{ SelectionLengthWidget class
@@ -119,7 +118,7 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 			}
 		}
 
-		private class SelectionLength extends JLabel implements CaretListener
+		private class SelectionLength extends ToolTipLabel implements CaretListener
 		{
 			boolean visible;
 

@@ -541,8 +541,8 @@ help-menu=about \
 # Title
 
 #{{{ Status bar component visibility
-view.status=( mode , fold , encoding ) locked wrap multiSelect rectSelect overwrite lineSep buffersets task-monitor memory-status errors clock
-
+view.status=mode fold encoding locked wrap multiSelect rectSelect overwrite lineSep buffersets task-monitor memory-status errors clock
+view.status.compact=false
 view.status.show-caret-status=true
 #}}}
 

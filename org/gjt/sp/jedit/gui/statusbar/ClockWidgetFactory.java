@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008-2021 Matthieu Casanova
  * Portions Copyright (C) 2001, 2004 Slava Pestov
  * Portions copyright (C) 2001 Mike Dillon
  *
@@ -25,16 +25,12 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.util.Date;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.Timer;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
+
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 //}}}
@@ -60,6 +56,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		ClockWidget()
 		{
 			clock = new Clock();
+			clock.addMouseListener(new HighlightMouseAdapter(clock));
 		}
 		
 		@Override
@@ -70,7 +67,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ Clock class
-	private static class Clock extends JLabel implements ActionListener
+	private static class Clock extends ToolTipLabel implements ActionListener
 	{
 		//{{{ Clock constructor
 		Clock()
@@ -111,13 +108,6 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		public String getToolTipText()
 		{
 			return new Date().toString();
-		} //}}}
-
-		//{{{ getToolTipLocation() method
-		@Override
-		public Point getToolTipLocation(MouseEvent event)
-		{
-			return new Point(event.getX(),-20);
 		} //}}}
 
 		//{{{ actionPerformed() method

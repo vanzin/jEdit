@@ -25,14 +25,8 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -48,40 +42,26 @@ public class OverwriteWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget overwrite = new OverwriteWidget(view);
-		return overwrite;
+		return new OverwriteWidget(view);
 	} //}}}
 
 	//{{{ OverwriteWidget constructor
-	private static class OverwriteWidget implements Widget
+	private static class OverwriteWidget extends AbstractLabelWidget
 	{
-		private final JLabel overwrite;
-		private final View view;
-
-		OverwriteWidget(final View view)
+		//{{{ OverwriteWidget constructor
+		OverwriteWidget(View view)
 		{
-			overwrite = new ToolTipLabel();
-			overwrite.setHorizontalAlignment(SwingConstants.CENTER);
-			overwrite.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
-			this.view = view;
-			overwrite.addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent evt)
-				{
-					JEditTextArea textArea = view.getTextArea();
-					if (textArea != null)
-						textArea.toggleOverwriteEnabled();
-				}
-			});
-		}
-
-		//{{{ getComponent() method
-		@Override
-		public JComponent getComponent()
-		{
-			return overwrite;
+			super(view);
+			label.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
 		} //}}}
+
+		@Override
+		protected void singleClick(MouseEvent e)
+		{
+			JEditTextArea textArea = view.getTextArea();
+			if (textArea != null)
+				textArea.toggleOverwriteEnabled();
+		}
 
 		//{{{ update() method
 		@Override
@@ -90,32 +70,15 @@ public class OverwriteWidgetFactory implements StatusWidgetFactory
 			JEditTextArea textArea = view.getTextArea();
 			if (textArea != null)
 			{
-				if (textArea.isOverwriteEnabled())
-				{
-					overwrite.setText("O");
-					overwrite.setEnabled(true);
-				}
-				else
-				{
-					overwrite.setText("o");
-					overwrite.setEnabled(false);
-				}
+				label.setText("Overwrite: " +textArea.isOverwriteEnabled());
+				label.setEnabled(textArea.isOverwriteEnabled());
 			}
 		} //}}}
 
-		//{{{ propertiesChanged() method
 		@Override
-		public void propertiesChanged()
+		public boolean test(StatusBarEventType statusBarEventType)
 		{
-			// retarded GTK look and feel!
-			Font font = new JLabel().getFont();
-			//UIManager.getFont("Label.font");
-			FontMetrics fm = overwrite.getFontMetrics(font);
-			Dimension dim = new Dimension(
-						      Math.max(fm.charWidth('o'),fm.charWidth('O')) + 1,
-						      fm.getHeight());
-			overwrite.setPreferredSize(dim);
-			overwrite.setMaximumSize(dim);
-		} //}}}
+			return statusBarEventType == StatusBarEventType.Misc;
+		}
 	} //}}}
 }

@@ -23,15 +23,26 @@
 
 package org.gjt.sp.jedit.gui.statusbar;
 
+//{{{ Imports
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
+import javax.swing.border.EmptyBorder;
+//}}}
 
 /**
  * @author Slava Pestov
  */
 public class ToolTipLabel extends JLabel
 {
+	//{{{ ToolTipLabel() constructor
+	public ToolTipLabel()
+	{
+		setBorder(new EmptyBorder(0, 10, 0, 10));
+		addMouseListener(new HighlightMouseAdapter(this));
+		setHorizontalAlignment(CENTER);
+	} //}}}
+
 	//{{{ getToolTipLocation() method
 	@Override
 	public Point getToolTipLocation(MouseEvent event)

@@ -22,18 +22,17 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.event.MouseAdapter;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.net.MalformedURLException;
+import java.net.URL;
+import javax.swing.*;
 
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -41,67 +40,73 @@ import org.gjt.sp.jedit.jEdit;
  */
 public class LockedWidgetFactory implements StatusWidgetFactory
 {
-    //{{{ getWidget() class
-    @Override
-    public Widget getWidget(View view)
-    {
-        Widget widget = new LockedWidget(view);
-        return widget;
-    } //}}}
+	//{{{ getWidget() class
+	@Override
+	public Widget getWidget(View view)
+	{
+		Widget widget = new LockedWidget(view);
+		return widget;
+	} //}}}
 
-    //{{{ LockedWidget class
-    private static class LockedWidget implements Widget
-    {
-        private final JLabel cmp;
-        private final View view;
-        LockedWidget(final View view)
-        {
-            cmp = new ToolTipLabel();
-            cmp.setHorizontalAlignment(SwingConstants.CENTER);
+	//{{{ LockedWidget class
+	private static class LockedWidget extends AbstractLabelWidget
+	{
+		private static Icon lockClosed;
+		private static Icon lockOpened;
 
-            this.view = view;
-            cmp.addMouseListener(new MouseAdapter()
-            {
-                @Override
-                public void mouseClicked(MouseEvent evt)
-                {
-                    view.getBuffer().toggleLocked(view);
-                }
-            });
-        }
+		LockedWidget(View view)
+		{
+			super(view);
+			initIcons();
+			Dimension dim = new Dimension(16, 16);
+			label.setMinimumSize(dim);
+			label.setPreferredSize(dim);
+			label.setMaximumSize(dim);
+		}
 
-        @Override
-        public JComponent getComponent()
-        {
-            return cmp;
-        }
+		@Override
+		protected void singleClick(MouseEvent e)
+		{
+			view.getBuffer().toggleLocked(view);
+		}
 
-        @Override
-        public void update()
-        {
-            Buffer buffer = view.getBuffer();
-            Boolean locked = buffer.isLocked();
+		private void initIcons()
+		{
+			if (lockClosed == null)
+			{
+				try
+				{
+					lockClosed = new ImageIcon(
+						new ImageIcon(new URL("jeditresource:/org/gjt/sp/jedit/icons/themes/lock-rounded.png"))
+							.getImage()
+							.getScaledInstance(14, 14, Image.SCALE_SMOOTH));
+					lockOpened = new ImageIcon(
+						new ImageIcon(new URL("jeditresource:/org/gjt/sp/jedit/icons/themes/lock-rounded-open.png"))
+							.getImage()
+							.getScaledInstance(14, 14, Image.SCALE_SMOOTH));
+				}
+				catch (MalformedURLException e)
+				{
+					Log.log(Log.ERROR, this, "Unable to load icon");
+				}
+			}
+		}
 
-            cmp.setText(locked ? "L" : "l");
-            cmp.setEnabled(locked);
+		@Override
+		public void update()
+		{
+			Buffer buffer = view.getBuffer();
+			boolean locked = buffer.isLocked();
+			label.setIcon(locked ? lockClosed : lockOpened);
 
-            cmp.setToolTipText(jEdit.getProperty("view.status.locked-tooltip",
-                    new Integer[] { locked ? 1 : 0 }));
-        }
+			label.setToolTipText(jEdit.getProperty("view.status.locked-tooltip",
+				new Integer[]{locked ? 1 : 0}));
+		}
 
-        @Override
-        public void propertiesChanged()
-        {
-            // retarded GTK look and feel!
-            Font font = new JLabel().getFont();
-            //UIManager.getFont("Label.font");
-            FontMetrics fm = cmp.getFontMetrics(font);
-            Dimension dim = new Dimension(
-                    Math.max(fm.charWidth('r'),fm.charWidth('R')) + 1,
-                    fm.getHeight());
-            cmp.setPreferredSize(dim);
-            cmp.setMaximumSize(dim);
-
-        }
-    } //}}}
+		@Override
+		public boolean test(StatusBarEventType statusBarEventType)
+		{
+			return statusBarEventType == StatusBarEventType.Buffer;
+		}
+	} //}}}
 }
