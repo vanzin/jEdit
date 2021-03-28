@@ -36,19 +36,21 @@ import org.gjt.sp.jedit.gui.StatusBar;
  **/
 public class HoverSetStatusMouseHandler extends MouseAdapter
 {
-	private boolean msgSet = false;
+	private boolean msgSet;
 	private String msg;
-	private String msgKey;
+	private final String msgKey;
 	
 	public HoverSetStatusMouseHandler(String action){
 		msgKey = action + ".mouse-over";
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
 		cleanupStatusBar(evt);
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent evt)
 	{
 		msg = jEdit.getProperty(msgKey);
@@ -60,6 +62,7 @@ public class HoverSetStatusMouseHandler extends MouseAdapter
 		}
 	}
 
+	@Override
 	public void mouseExited(MouseEvent evt)
 	{
 		cleanupStatusBar(evt);
