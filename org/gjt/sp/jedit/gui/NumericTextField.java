@@ -19,6 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
@@ -29,7 +30,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
-import javax.swing.text.DocumentFilter.FilterBypass;
 
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
@@ -53,48 +53,22 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 	
 	public NumericTextField(String text)
 	{
-		this(text, false);
+		this(text, 0, false, true);
 	}
 	
 	public NumericTextField(String text, boolean positiveOnly)
 	{
-		super(text);
-		this.positiveOnly = positiveOnly;
-		integerOnly = true;
-		minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
-		maxValue = Integer.MAX_VALUE;
-		addFilter();
-		loadInvalidStyle();
+		this(text, 0, positiveOnly, true);
 	}
 	
 	public NumericTextField(String text, boolean positiveOnly, boolean integerOnly)
 	{
-		super(text);
-		this.positiveOnly = positiveOnly;
-		this.integerOnly = integerOnly;
-		if (integerOnly)
-		{
-			minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
-			maxValue = Integer.MAX_VALUE;
-		}
-		else 
-		{
-			minValue = positiveOnly ? Float.valueOf(0.0f) : Float.MIN_VALUE;
-			maxValue = Float.MAX_VALUE;
-		}
-		addFilter();
-		loadInvalidStyle();
+		this(text, 0, positiveOnly, integerOnly);
 	}
 	
 	public NumericTextField(String text, int columns, boolean positiveOnly) 
 	{
-		super(text, columns);
-		this.positiveOnly = positiveOnly;
-		integerOnly = true;
-		minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
-		maxValue = Integer.MAX_VALUE;
-		addFilter();
-		loadInvalidStyle();
+		this(text, columns, positiveOnly, true);
 	}
 	
 	public NumericTextField(String text, int columns, boolean positiveOnly, boolean integerOnly)
@@ -104,12 +78,12 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		this.integerOnly = integerOnly;
 		if (integerOnly)
 		{
-			minValue = positiveOnly ? Integer.valueOf(0) : Integer.MIN_VALUE;
+			minValue = positiveOnly ? 0 : Integer.MIN_VALUE;
 			maxValue = Integer.MAX_VALUE;
 		}
 		else 
 		{
-			minValue = positiveOnly ? Float.valueOf(0.0f) : Float.MIN_VALUE;
+			minValue = positiveOnly ? 0.0f : Float.MIN_VALUE;
 			maxValue = Float.MAX_VALUE;
 		}
 		addFilter();
@@ -136,7 +110,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 			if (f < 0.0)
 				return;
 		}
-		
+
 		if (integerOnly)
 		{
 			int i = n.intValue();
@@ -144,7 +118,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 			if (i > max)
 				return;
 		}
-		else 
+		else
 		{
 			float f = n.floatValue();
 			float max = maxValue.floatValue();
@@ -153,7 +127,7 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 		}
 		minValue = n;
 	}
-	
+
 	// set the maximum allowed value for this text field. If this NumericTextField
 	// was constructed with positive only, then values less than zero are ignored.
 	public void setMaxValue(Number n)
@@ -195,193 +169,207 @@ public class NumericTextField extends JTextField implements ComboBoxEditor
 	}
 	
 	// add an Integer or Float document filter as appropriate
-    private void addFilter() {
-    	if (integerOnly)
-    		( ( AbstractDocument ) this.getDocument() ).setDocumentFilter( new IntegerDocumentFilter() );
-    	else
-    		( ( AbstractDocument ) this.getDocument() ).setDocumentFilter( new FloatDocumentFilter() );
-    	
-    	// apply the filter to the current value
-    	try 
-    	{
-    		String text = getText();
-    		((AbstractDocument)getDocument()).getDocumentFilter().replace(null, 0, text.length(), text, null); 
+	private void addFilter()
+	{
+		AbstractDocument document = (AbstractDocument) getDocument();
+		if (integerOnly)
+			document.setDocumentFilter(new IntegerDocumentFilter());
+		else
+			document.setDocumentFilter(new FloatDocumentFilter());
+
+		// apply the filter to the current value
+		try
+		{
+			String text = getText();
+			document.getDocumentFilter().replace(null, 0, text.length(), text, null);
 		}
-		catch(Exception e) {}	// NOPMD
-    }
+		catch (Exception e)
+		{
+		}  // NOPMD
+	}
 
-    class IntegerDocumentFilter extends DocumentFilter {
-        public void insertString( FilterBypass fb, int offset, String string, AttributeSet attr )
-        throws BadLocationException 
-        {
-            if ( string == null || string.length() == 0 ) 
-            {
-                return ;
-            }
-            String newString = new StringBuilder(getText()).insert(offset, string).toString();
-            if (!isInteger( newString ))
+	private class IntegerDocumentFilter extends DocumentFilter
+	{
+		@Override
+		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+			throws BadLocationException
+		{
+			if (string == null || string.isEmpty())
 			{
-				return;				
+				return;
 			}
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-			super.insertString( fb, offset, string, attr );
-        }
-
-        public void remove( FilterBypass fb, int offset, int length )
-        throws BadLocationException 
-        {
-        	String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-            super.remove( fb, offset, length );
-        }
-
-        public void replace( FilterBypass fb, int offset, int length, String text, AttributeSet attrs )
-        throws BadLocationException 
-        {
-            if ( text == null || text.length() == 0 ) 
-            {
-                return ;
-            }
-            String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
-            if (!isInteger( newString ))
+			String newString = new StringBuilder(getText()).insert(offset, string).toString();
+			if (!isInteger(newString))
 			{
-				return;				
+				return;
 			}
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-			super.replace( fb, offset, length, text, attrs );
-        }
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.insertString(fb, offset, string, attr);
+		}
 
-        private boolean isInteger( String string ) 
-        {
-        	if (string == null || string.isEmpty())
-        	{
-        		return false;	
-        	}
-        	try 
-        	{
-        		if (!positiveOnly && "-".equals(string))
-        		{
-        			return true;	
-        		}
+		@Override
+		public void remove(FilterBypass fb, int offset, int length)
+			throws BadLocationException
+		{
+			String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.remove(fb, offset, length);
+		}
+
+		@Override
+		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+			throws BadLocationException
+		{
+			if (text == null || text.isEmpty())
+			{
+				return;
+			}
+			String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
+			if (!isInteger(newString))
+			{
+				return;
+			}
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.replace(fb, offset, length, text, attrs);
+		}
+
+		private boolean isInteger(String string)
+		{
+			if (string == null || string.isEmpty())
+			{
+				return false;
+			}
+			try
+			{
+				if (!positiveOnly && "-".equals(string))
+				{
+					return true;
+				}
 				Integer.parseInt(string);
 				return true;
 			}
-			catch(Exception e) 
+			catch (Exception e)
 			{
 				return false;
 			}
-        }
+		}
 
-        private boolean inRange( String string ) 
-        {
-        	if (string == null || string.isEmpty())
-        	{
-        		return false;	
-        	}
-            int value = Integer.parseInt( string );
-            return value <= maxValue.intValue() && value >= minValue.intValue();
-        }
-    }
-	
-    class FloatDocumentFilter extends DocumentFilter {
-        public void insertString( FilterBypass fb, int offset, String string, AttributeSet attr )
-        throws BadLocationException 
-        {
-            if ( string == null || string.length() == 0 ) 
-            {
-                return ;
-            }
-            String newString = new StringBuilder(getText()).insert(offset, string).toString();
-            if (!isFloat( newString ))
+		private boolean inRange(String string)
+		{
+			if (string == null || string.isEmpty())
 			{
-				return;				
+				return false;
 			}
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-			super.insertString( fb, offset, string, attr );
-        }
+			int value = Integer.parseInt(string);
+			return value <= maxValue.intValue() && value >= minValue.intValue();
+		}
+	}
 
-        public void remove( FilterBypass fb, int offset, int length )
-        throws BadLocationException 
-        {
-        	String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-            super.remove( fb, offset, length );
-        }
-
-        public void replace( FilterBypass fb, int offset, int length, String text, AttributeSet attrs )
-        throws BadLocationException 
-        {
-            if ( text == null || text.length() == 0 ) 
-            {
-                return ;
-            }
-            String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
-            if (!isFloat( newString ))
+	private class FloatDocumentFilter extends DocumentFilter
+	{
+		@Override
+		public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+			throws BadLocationException
+		{
+			if (string == null || string.isEmpty())
 			{
-				return;				
+				return;
 			}
-			setBackground(inRange( newString ) ? defaultBackground : invalidStyle.getBackgroundColor());
-			setForeground(inRange( newString ) ? defaultForeground : invalidStyle.getForegroundColor());
-			super.replace( fb, offset, length, text, attrs );
-        }
+			String newString = new StringBuilder(getText()).insert(offset, string).toString();
+			if (!isFloat(newString))
+			{
+				return;
+			}
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.insertString(fb, offset, string, attr);
+		}
 
-        private boolean isFloat( String string ) 
-        {
-        	if (string == null || string.isEmpty())
-        	{
-        		return false;	
-        	}
-        	try 
-        	{
-        		if (".".equals(string))
-        		{
-        			return true;	
-        		}
-        		if (!positiveOnly && "-".equals(string))
-        		{
-        			return true;	
-        		}
+		@Override
+		public void remove(FilterBypass fb, int offset, int length) throws BadLocationException
+		{
+			String newString = new StringBuilder(getText()).delete(offset, offset + length).toString();
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.remove(fb, offset, length);
+		}
+
+		@Override
+		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+			throws BadLocationException
+		{
+			if (text == null || text.isEmpty())
+			{
+				return;
+			}
+			String newString = new StringBuilder(getText()).replace(offset, offset + length, text).toString();
+			if (!isFloat(newString))
+			{
+				return;
+			}
+			setBackground(inRange(newString) ? defaultBackground : invalidStyle.getBackgroundColor());
+			setForeground(inRange(newString) ? defaultForeground : invalidStyle.getForegroundColor());
+			super.replace(fb, offset, length, text, attrs);
+		}
+
+		private boolean isFloat(String string)
+		{
+			if (string == null || string.isEmpty())
+			{
+				return false;
+			}
+			try
+			{
+				if (".".equals(string))
+				{
+					return true;
+				}
+				if (!positiveOnly && "-".equals(string))
+				{
+					return true;
+				}
 				Float.parseFloat(string);
 				return true;
 			}
-			catch(Exception e) 
+			catch (Exception e)
 			{
 				return false;
 			}
-        }
+		}
 
-        private boolean inRange( String string ) 
-        {
-        	if (string == null || string.isEmpty())
-        	{
-        		return false;	
-        	}
+		private boolean inRange(String string)
+		{
+			if (string == null || string.isEmpty())
+			{
+				return false;
+			}
 			if (".".equals(string))
 			{
-				return true;	
+				return true;
 			}
-            float value = Float.parseFloat( string );
-            boolean toReturn = value <= maxValue.floatValue() && value >= minValue.floatValue();
-            return toReturn;
-        }
-    }
-	
+			float value = Float.parseFloat(string);
+			boolean toReturn = value <= maxValue.floatValue() && value >= minValue.floatValue();
+			return toReturn;
+		}
+	}
+
 	//{{{ ComboBoxEditor methods
+	@Override
 	public Component getEditorComponent()
 	{
-		return this;	
+		return this;
 	}
-	
+
+	@Override
 	public Object getItem()
 	{
-		return getText();	
+		return getText();
 	}
-	
+
+	@Override
 	public void setItem(Object item)
 	{
 		if (item == null)
