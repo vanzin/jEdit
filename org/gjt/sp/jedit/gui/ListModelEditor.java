@@ -22,7 +22,6 @@ import org.gjt.sp.util.GenericGUIUtilities;
 */
 public class ListModelEditor
 {
-
 	public void open(DefaultListModel listModel)
 	{
 		final DefaultTableModel tableModel = createTableModel(listModel);
@@ -34,6 +33,7 @@ public class ListModelEditor
 
 		table.addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyPressed(KeyEvent e)
 			{
 				int[] selRows = table.getSelectedRows();
@@ -104,8 +104,7 @@ public class ListModelEditor
 	}
 
 	@SuppressWarnings({"unchecked"})
-	private void updatelistModel(DefaultListModel listModel,
-	    DefaultTableModel tableModel)
+	private static void updatelistModel(DefaultListModel listModel, DefaultTableModel tableModel)
 	{
 		listModel.removeAllElements();
 		for (int i = 0; i < tableModel.getRowCount(); i++)

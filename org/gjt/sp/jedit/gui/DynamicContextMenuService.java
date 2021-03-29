@@ -17,7 +17,7 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
  * @author ezust
  * @since jEdit 4.3pre15
  */
-abstract public class DynamicContextMenuService {
+public abstract class DynamicContextMenuService {
 	/**
 	 *
 	 * @param ta the TextArea where the context menu was requested.

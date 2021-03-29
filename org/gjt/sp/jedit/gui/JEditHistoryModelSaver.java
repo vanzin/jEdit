@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.jEdit;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharacterCodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /** Handles loading and saving of the "history" files.
@@ -43,6 +44,7 @@ import java.util.*;
 public class JEditHistoryModelSaver implements HistoryModelSaver
 {
 	//{{{ load() method
+	@Override
 	public Map<String, HistoryModel> load(Map<String, HistoryModel> models)
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
@@ -73,7 +75,7 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 				// as an exception instead of replacing with \xFFFD.
 				in = new BufferedReader(new InputStreamReader(
 					new FileInputStream(history),
-					Charset.forName("UTF-8").newDecoder()));
+					StandardCharsets.UTF_8.newDecoder()));
 				models.putAll(loadFromReader(in));
 			}
 			catch(CharacterCodingException e)
@@ -104,6 +106,7 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 	} //}}}
 
 	//{{{ save() method
+	@Override
 	public boolean save(Map<String, HistoryModel> models)
 	{
 		Log.log(Log.MESSAGE,HistoryModel.class,"Saving history");
@@ -127,7 +130,7 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 		try
 		{
 			out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file1), "UTF-8"));
+				new FileOutputStream(file1), StandardCharsets.UTF_8));
 
 			if(models != null)
 			{
@@ -182,14 +185,14 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 	private static Map<String, HistoryModel> loadFromReader(BufferedReader in)
 		throws IOException
 	{
-		Map<String, HistoryModel> result = new HashMap<String, HistoryModel>();
+		Map<String, HistoryModel> result = new HashMap<>();
 
 		HistoryModel currentModel = null;
 		String line;
 
 		while((line = in.readLine()) != null)
 		{
-			if(line.length() > 0 && line.charAt(0) == '[' && line.charAt(line.length() - 1) == ']')
+			if(!line.isEmpty() && line.charAt(0) == '[' && line.charAt(line.length() - 1) == ']')
 			{
 				if(currentModel != null)
 				{

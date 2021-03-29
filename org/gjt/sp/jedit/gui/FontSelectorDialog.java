@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit.gui;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -82,6 +81,7 @@ public class FontSelectorDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		isOK = true;
@@ -89,6 +89,7 @@ public class FontSelectorDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
@@ -204,9 +205,9 @@ public class FontSelectorDialog extends EnhancedDialog
 			styleList.setSelectedIndex(Font.PLAIN);
 		}
 
-		styleField.setText((String)styleList.getSelectedValue());
+		styleField.setText(styleList.getSelectedValue());
 
-		ListHandler listHandler = new ListHandler();
+		ListSelectionListener listHandler = new ListHandler();
 		familyList.addListSelectionListener(listHandler);
 		sizeList.addListSelectionListener(listHandler);
 		styleList.addListSelectionListener(listHandler);
@@ -215,6 +216,7 @@ public class FontSelectorDialog extends EnhancedDialog
 
 		preview = new JLabel(jEdit.getProperty("font-selector.long-text"))
 		{
+			@Override
 			public void paintComponent(Graphics g)
 			{
 				if(fontSelector != null)
@@ -238,11 +240,11 @@ public class FontSelectorDialog extends EnhancedDialog
 		buttons.setBorder(new EmptyBorder(17, 0, 0, 0));
 
 		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(new ActionHandler());
+		ok.addActionListener(e -> ok());
 		getRootPane().setDefaultButton(ok);
 
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		cancel.addActionListener(new ActionHandler());
+		cancel.addActionListener(e -> cancel());
 		
 		GenericGUIUtilities.makeSameSize(ok, cancel);
 
@@ -264,7 +266,7 @@ public class FontSelectorDialog extends EnhancedDialog
 		String[] nameArray = GraphicsEnvironment
 			.getLocalGraphicsEnvironment()
 			.getAvailableFontFamilyNames();
-		List<String> nameVector = new ArrayList<String>(nameArray.length);
+		List<String> nameVector = new ArrayList<>(nameArray.length);
 
 		for(int i = 0; i < nameArray.length; i++)
 		{
@@ -344,39 +346,28 @@ public class FontSelectorDialog extends EnhancedDialog
 
 	//}}}
 
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == ok)
-				ok();
-			else if(evt.getSource() == cancel)
-				cancel();
-		}
-	} //}}}
-
 	//{{{ ListHandler class
-	class ListHandler implements ListSelectionListener
+	private class ListHandler implements ListSelectionListener
 	{
+		@Override
 		public void valueChanged(ListSelectionEvent evt)
 		{
 			Object source = evt.getSource();
 			if(source == familyList)
 			{
-				String family = (String)familyList.getSelectedValue();
+				String family = familyList.getSelectedValue();
 				if(family != null)
 					familyField.setText(family);
 			}
 			else if(source == sizeList)
 			{
-				String size = (String)sizeList.getSelectedValue();
+				String size = sizeList.getSelectedValue();
 				if(size != null)
 					sizeField.setText(size);
 			}
 			else if(source == styleList)
 			{
-				String style = (String)styleList.getSelectedValue();
+				String style = styleList.getSelectedValue();
 				if(style != null)
 					styleField.setText(style);
 			}

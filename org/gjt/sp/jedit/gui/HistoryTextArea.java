@@ -107,6 +107,7 @@ public class HistoryTextArea extends JTextArea
 	/**
 	 * Sets the displayed text.
 	 */
+	@Override
 	public void setText(String text)
 	{
 		super.setText(text);
@@ -116,6 +117,7 @@ public class HistoryTextArea extends JTextArea
 	//{{{ Protected members
 
 	//{{{ processKeyEvent() method
+	@Override
 	protected void processKeyEvent(KeyEvent evt)
 	{
 		if(!isEnabled())
@@ -173,6 +175,7 @@ public class HistoryTextArea extends JTextArea
 	} //}}}
 
 	//{{{ processMouseEvent() method
+	@Override
 	protected void processMouseEvent(MouseEvent evt)
 	{
 		if(!isEnabled())
@@ -196,6 +199,6 @@ public class HistoryTextArea extends JTextArea
 	//}}}
 
 	//{{{ Private variables
-	private HistoryText controller;
+	private final HistoryText controller;
 	//}}}
 }

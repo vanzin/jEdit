@@ -74,7 +74,6 @@ public class EditAbbrevDialog extends JDialog
 	//{{{ Private members
 	private AbbrevEditor editor;
 	private JButton ok;
-	private JButton cancel;
 	private boolean isOK;
 	private String originalAbbrev;
 	private Map abbrevs;
@@ -84,7 +83,7 @@ public class EditAbbrevDialog extends JDialog
 	{
 		this.abbrevs = abbrevs;
 
-		this.originalAbbrev = abbrev;
+		originalAbbrev = abbrev;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12, 12, 11, 11));
@@ -100,7 +99,7 @@ public class EditAbbrevDialog extends JDialog
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(new ActionHandler());
 		getRootPane().setDefaultButton(ok);
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.addActionListener(new ActionHandler());
 		GenericGUIUtilities.makeSameSize(ok, cancel);
 		
@@ -144,14 +143,15 @@ public class EditAbbrevDialog extends JDialog
 	//}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
 			{
 				if(editor.getAbbrev() == null
-					|| editor.getAbbrev().length() == 0)
+					|| editor.getAbbrev().isEmpty())
 				{
 					javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
 					return;

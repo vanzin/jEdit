@@ -286,7 +286,7 @@ public class GrabKeyDialog extends JDialog
 	//{{{ getKeyBinding() method
 	private KeyBinding getKeyBinding(String shortcut)
 	{
-		if(shortcut == null || shortcut.length() == 0)
+		if(shortcut == null || shortcut.isEmpty())
 			return null;
 
 		String spacedShortcut = shortcut + ' ';
@@ -343,7 +343,7 @@ public class GrabKeyDialog extends JDialog
 
 		public boolean isAssigned()
 		{
-			return shortcut != null && shortcut.length() > 0;
+			return shortcut != null && !shortcut.isEmpty();
 		}
 	} //}}}
 
@@ -489,7 +489,7 @@ public class GrabKeyDialog extends JDialog
 		private boolean canClose()
 		{
 			String shortcutString = shortcut.getShortcut();
-			if(shortcutString.length() == 0
+			if(shortcutString.isEmpty()
 				&& binding.isAssigned())
 			{
 				// ask whether to remove the old shortcut
