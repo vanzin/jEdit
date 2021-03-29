@@ -25,12 +25,12 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.GenericGUIUtilities;
 //}}}
+
 /** Paste previous/paste deleted dialog */
 public class PasteFromListDialog extends EnhancedDialog
 {
@@ -39,7 +39,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	{
 		super(view,jEdit.getProperty(name + ".title"),true);
 		this.view = view;
-		this.listModel = model;
+		listModel = model;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(BorderFactory.createEmptyBorder(12, 12, 11, 11));
@@ -48,15 +48,19 @@ public class PasteFromListDialog extends EnhancedDialog
 
 		int maxItemLength =
 			jEdit.getIntegerProperty("paste-from-list.max-item-length", 1000);
-		clips = new JList<String>(model);
+		clips = new JList<>(model);
 		clips.setCellRenderer(new Renderer(maxItemLength));
 		clips.setVisibleRowCount(12);
 
 		clips.addMouseListener(new MouseHandler());
-		clips.addListSelectionListener(new ListHandler());
+		clips.addListSelectionListener(e ->
+		{
+			showClipText();
+			updateButtons();
+		});
 
 		insert = new JButton(jEdit.getProperty("common.insert"));
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
 
 		JLabel label = new JLabel(jEdit.getProperty(name + ".caption"));
 		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
@@ -91,8 +95,8 @@ public class PasteFromListDialog extends EnhancedDialog
 		updateButtons();
 
 		getRootPane().setDefaultButton(insert);
-		insert.addActionListener(new ActionHandler());
-		cancel.addActionListener(new ActionHandler());
+		insert.addActionListener(e -> ok());
+		cancel.addActionListener(e -> cancel());
 
 		GenericGUIUtilities.requestFocus(this,clips);
 
@@ -102,6 +106,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		java.util.List<String> selected = clips.getSelectedValuesList();
@@ -113,7 +118,7 @@ public class PasteFromListDialog extends EnhancedDialog
 
 		String text = getSelectedClipText();
 
-		/**
+		/*
 		 * For each selected clip, we remove it, then add it back
 		 * to the model. This has the effect of moving it to the
 		 * top of the list.
@@ -130,6 +135,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		cleanup();
@@ -138,12 +144,11 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private View view;
-	private MutableListModel<String> listModel;
-	private JList<String> clips;
-	private JTextArea clipText;
-	private JButton insert;
-	private JButton cancel;
+	private final View view;
+	private final MutableListModel<String> listModel;
+	private final JList<String> clips;
+	private final JTextArea clipText;
+	private final JButton insert;
 	//}}}
 
 	//{{{ cleanup()
@@ -159,14 +164,14 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ getSelectedClipText()
 	private String getSelectedClipText()
 	{
-		java.util.List selected = clips.getSelectedValuesList();
+		java.util.List<String> selected = clips.getSelectedValuesList();
 		if (selected == null || selected.isEmpty())
 			return "";
 		if (selected.size() == 1)
 		{
 			// These strings may be very large, so if we can just return the same string
 			// instead of making a copy, do so
-			return selected.get(0).toString();
+			return selected.get(0);
 		}
 		else
 		{
@@ -192,7 +197,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ showClipText() method
 	private void showClipText()
 	{
-		java.util.List selected = clips.getSelectedValuesList();
+		java.util.List<String> selected = clips.getSelectedValuesList();
 		if(selected == null || selected.isEmpty())
 		{
 			clipText.setText("");
@@ -206,9 +211,7 @@ public class PasteFromListDialog extends EnhancedDialog
 
 			if (text.length() > maxPreviewLength)
 			{
-				StringBuilder showText = new StringBuilder(text.substring(0, maxPreviewLength));
-				showText.append('<').append((text.length() - maxPreviewLength)).append(" more bytes>");
-				clipText.setText(showText.toString());
+				clipText.setText(text.substring(0, maxPreviewLength) + '<' + (text.length() - maxPreviewLength) + " more bytes>");
 			}
 			else
 			{
@@ -223,9 +226,9 @@ public class PasteFromListDialog extends EnhancedDialog
 	//}}}
 
 	//{{{ Renderer class
-	static class Renderer extends DefaultListCellRenderer
+	private static class Renderer extends DefaultListCellRenderer
 	{
-		public Renderer(int maxItemLength)
+		Renderer(int maxItemLength)
 		{
 			this.maxItemLength = maxItemLength;
 		}
@@ -268,9 +271,8 @@ public class PasteFromListDialog extends EnhancedDialog
 			return buf.toString();
 		}
 
-		public Component getListCellRendererComponent(
-			JList<?> list, Object value, int index,
-			boolean isSelected, boolean cellHasFocus)
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
@@ -280,36 +282,13 @@ public class PasteFromListDialog extends EnhancedDialog
 			return this;
 		}
 
-		private int maxItemLength;
-	} //}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == insert)
-				ok();
-			else if(source == cancel)
-				cancel();
-		}
-	} //}}}
-
-	//{{{ ListHandler class
-	class ListHandler implements ListSelectionListener
-	{
-		//{{{ valueChanged() method
-		public void valueChanged(ListSelectionEvent evt)
-		{
-			showClipText();
-			updateButtons();
-		} //}}}
+		private final int maxItemLength;
 	} //}}}
 
 	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			if(evt.getClickCount() == 2)

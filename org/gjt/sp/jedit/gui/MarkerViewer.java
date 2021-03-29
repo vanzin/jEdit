@@ -81,7 +81,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 
 		add(BorderLayout.NORTH, toolBar);
 
-		markerList = new JList<Marker>();
+		markerList = new JList<>();
 		markerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		markerList.setCellRenderer(new Renderer());
 		markerList.addMouseListener(new MouseHandler());
@@ -107,19 +107,22 @@ public class MarkerViewer extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent evt)
 	{
 		String cmd = evt.getActionCommand();
-		if (cmd.equals("clear"))
-			view.getBuffer().removeAllMarkers();
-		else if (cmd.equals("add-marker"))
-			view.getEditPane().addMarker();
-		else if (cmd.equals("next-marker"))
+		switch (cmd)
 		{
-			view.getEditPane().goToNextMarker(false);
-			updateSelection();
-		}
-		else if (cmd.equals("prev-marker"))
-		{
-			view.getEditPane().goToPrevMarker(false);
-			updateSelection();
+			case "clear":
+				view.getBuffer().removeAllMarkers();
+				break;
+			case "add-marker":
+				view.getEditPane().addMarker();
+				break;
+			case "next-marker":
+				view.getEditPane().goToNextMarker(false);
+				updateSelection();
+				break;
+			case "prev-marker":
+				view.getEditPane().goToPrevMarker(false);
+				updateSelection();
+				break;
 		}
 	} //}}}
 
@@ -242,7 +245,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 	//{{{ Inner classes
 
 	//{{{ Renderer Class
-	class Renderer extends DefaultListCellRenderer
+	private class Renderer extends DefaultListCellRenderer
 	{
 		@Override
 		public Component getListCellRendererComponent(
@@ -271,7 +274,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 	} //}}}
 
 	//{{{ MouseHandler Class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mousePressed(MouseEvent evt)
@@ -287,7 +290,7 @@ public class MarkerViewer extends JPanel implements ActionListener
 	} //}}}
 	
 	//{{{ KeyHandler Class
-	class KeyHandler extends KeyAdapter
+	private class KeyHandler extends KeyAdapter
 	{
 		@Override
 		public void keyPressed(KeyEvent evt)

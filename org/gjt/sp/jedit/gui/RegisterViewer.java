@@ -83,7 +83,7 @@ public class RegisterViewer extends JPanel
 		//contentTextArea.getDocument().addDocumentListener(documentHandler);
 		contentTextArea.addFocusListener(new FocusHandler());
 		//key bindings
-		this.registerKeyboardAction(e ->
+		registerKeyboardAction(e ->
 			{
 				view.getTextArea().requestFocus();
 				view.toFront();
@@ -275,7 +275,7 @@ public class RegisterViewer extends JPanel
 	//{{{ Inner classes
 
 	//{{{ Renderer Class
-	static class Renderer extends DefaultListCellRenderer
+	private static class Renderer extends DefaultListCellRenderer
 	{
 		@Override
 		public Component getListCellRendererComponent(
@@ -326,7 +326,7 @@ public class RegisterViewer extends JPanel
 	} //}}}
 
 	//{{{ ListHandler Class
-	class ListHandler implements ListSelectionListener
+	private class ListHandler implements ListSelectionListener
 	{
 		@Override
 		public void valueChanged(ListSelectionEvent evt)
@@ -365,7 +365,7 @@ public class RegisterViewer extends JPanel
 	} //}}}
 
 	//{{{ MouseHandler Class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent evt)
@@ -392,7 +392,7 @@ public class RegisterViewer extends JPanel
 	} //}}}
 
 	//{{{ FocusHandler Class
-	class FocusHandler implements FocusListener
+	private class FocusHandler implements FocusListener
 	{
 		@Override
 		public void focusGained(FocusEvent e)

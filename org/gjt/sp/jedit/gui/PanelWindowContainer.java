@@ -97,7 +97,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		closeBox.setMargin(new Insets(0,0,0,0));
 		GenericGUIUtilities.setButtonContentMargin(closeBox, closeBox.getMargin());
 
-		closeBox.addActionListener(new ActionHandler());
+		closeBox.addActionListener(e -> show((DockableWindowManagerImpl.Entry)null));
 
 		menuBtn = new JButton(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 		menuBtn.setRequestFocusEnabled(false);
@@ -464,7 +464,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	} //}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent evt)
@@ -472,15 +472,10 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			if(popup != null && popup.isVisible())
 				popup.setVisible(false);
 
-			if(evt.getSource() == closeBox)
+			if(wm.isDockableWindowVisible(evt.getActionCommand()))
 				show((DockableWindowManagerImpl.Entry)null);
 			else
-			{
-				if(wm.isDockableWindowVisible(evt.getActionCommand()))
-					show((DockableWindowManagerImpl.Entry)null);
-				else
-					wm.showDockableWindow(evt.getActionCommand());
-			}
+				wm.showDockableWindow(evt.getActionCommand());
 		}
 	} //}}}
 
@@ -535,7 +530,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	} //}}}
 
 	//{{{ DockBorder class
-	static class DockBorder implements Border
+	private static class DockBorder implements Border
 	{
 		private final String position;
 		private final Insets insets;
@@ -772,7 +767,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 	} //}}}
 
 	//{{{ ButtonLayout class
-	class ButtonLayout implements LayoutManager
+	private class ButtonLayout implements LayoutManager
 	{
 		//{{{ addLayoutComponent() method
 		@Override

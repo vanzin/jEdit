@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import org.gjt.sp.util.Log;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -55,15 +56,15 @@ public class PingPongList<E> extends JPanel
 {
 	private MyListModel<E> leftModel;
 	private MyListModel<E> rightModel;
-	private JList<E> left;
-	private JList<E> right;
+	private final JList<E> left;
+	private final JList<E> right;
 	private JLabel leftLabel;
 	private JLabel rightLabel;
-	private JPanel leftPanel;
-	private JPanel rightPanel;
-	private JButton selectAllButton;
-	private JButton selectNoneButton;
-	private Box buttonsBox;
+	private final JPanel leftPanel;
+	private final JPanel rightPanel;
+	private final JButton selectAllButton;
+	private final JButton selectNoneButton;
+	private final Box buttonsBox;
 
 	//{{{ PingPongList constructors
 	public PingPongList(List<E> leftData, List<E> rightData)
@@ -75,10 +76,10 @@ public class PingPongList<E> extends JPanel
 	{
 		super(new BorderLayout());
 		JSplitPane splitPane = new JSplitPane(newOrientation);
-		leftModel = new MyListModel<E>(leftData);
+		leftModel = new MyListModel<>(leftData);
 		left = new JList<>(leftModel);
-		rightModel = new MyListModel<E>(rightData);
-		right = new JList<E>(rightModel);
+		rightModel = new MyListModel<>(rightData);
+		right = new JList<>(rightModel);
 		leftPanel = new JPanel(new BorderLayout());
 		rightPanel = new JPanel(new BorderLayout());
 		JScrollPane leftScroll = new JScrollPane(left);
@@ -133,13 +134,13 @@ public class PingPongList<E> extends JPanel
 	// {{ setData methods
 	public void setLeftData(List<E> data) 
 	{
-		leftModel = new MyListModel<E>(data);
+		leftModel = new MyListModel<>(data);
 		left.setModel(leftModel);
 	}
 	
 	public void setRightData(List<E> data) 
 	{
-		rightModel = new MyListModel<E>(data);
+		rightModel = new MyListModel<>(data);
 		right.setModel(rightModel);
 	}
 	// }}}
@@ -259,14 +260,14 @@ public class PingPongList<E> extends JPanel
 	//{{{ moveAllToLeft() method
 	public void moveAllToLeft()
 	{
-		leftModel.addAll(rightModel.data);
+		leftModel.addAll(rightModel.getData());
 		rightModel.clear();
 	} //}}}
 
 	//{{{ moveAllToRight() method
 	public void moveAllToRight()
 	{
-		rightModel.addAll(leftModel.data);
+		rightModel.addAll(leftModel.getData());
 		leftModel.clear();
 	} //}}}
 
@@ -303,12 +304,16 @@ public class PingPongList<E> extends JPanel
 	//{{{ MyListModel class
 	private static class MyListModel<E> extends AbstractListModel<E> implements Iterable<E>
 	{
-		private List<E> data;
+		private final List<E> data;
 
 		private MyListModel(List<E> data)
 		{
-			super();
 			this.data = data;
+		}
+
+		public List<E> getData()
+		{
+			return data;
 		}
 
 		@Override
@@ -324,6 +329,7 @@ public class PingPongList<E> extends JPanel
 		}
 
 		@Override
+		@Nonnull
 		public Iterator<E> iterator()
 		{
 			return data.iterator();
@@ -423,11 +429,7 @@ public class PingPongList<E> extends JPanel
 				targetList.setSelectedIndices(indices);
 				return true;
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				Log.log(Log.ERROR, this, e);
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				Log.log(Log.ERROR, this, e);
 			}
@@ -480,7 +482,8 @@ public class PingPongList<E> extends JPanel
 		}
 
 		@Override
-		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
+		@Nonnull
+		public Object getTransferData(DataFlavor flavor)
 		{
 			return data;
 		}
