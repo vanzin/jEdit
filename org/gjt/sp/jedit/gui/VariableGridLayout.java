@@ -73,7 +73,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	public static final int FIXED_NUM_ROWS = 1;
 	public static final int FIXED_NUM_COLUMNS = 2;
 
-	private static enum LayoutSize { MINIMUM, MAXIMUM, PREFERRED }
+	private enum LayoutSize { MINIMUM, MAXIMUM, PREFERRED }
 
 	/**
 	 * Creates a variable grid layout manager with the specified mode,
@@ -181,6 +181,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	/**
 	 * Not used in this class.
 	 */
+	@Override
 	public void addLayoutComponent(String name, Component component)
 	{
 	}
@@ -188,6 +189,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	/**
 	 * Not used in this class.
 	 */
+	@Override
 	public void addLayoutComponent(Component component, Object constraints)
 	{
 	}
@@ -195,6 +197,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	/**
 	 * Not used in this class.
 	 */
+	@Override
 	public void removeLayoutComponent(Component component)
 	{
 	}
@@ -202,6 +205,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	/**
 	 * Always returns 0.5.
 	 */
+	@Override
 	public float getLayoutAlignmentX(Container container)
 	{
 		return 0.5f;
@@ -210,26 +214,31 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 	/**
 	 * Always returns 0.5.
 	 */
+	@Override
 	public float getLayoutAlignmentY(Container container)
 	{
 		return 0.5f;
 	}
 
+	@Override
 	public Dimension preferredLayoutSize(Container parent)
 	{
 		return getLayoutSize(parent,LayoutSize.PREFERRED);
 	}
 
+	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
 		return getLayoutSize(parent,LayoutSize.MINIMUM);
 	}
 
+	@Override
 	public Dimension maximumLayoutSize(Container parent)
 	{
 		return getLayoutSize(parent,LayoutSize.MAXIMUM);
 	}
 
+	@Override
 	public void layoutContainer(Container parent)
 	{
 		synchronized (parent.getTreeLock())
@@ -381,6 +390,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 		} // synchronized
 	}
 
+	@Override
 	public void invalidateLayout(Container container)
 	{
 	}
@@ -494,14 +504,14 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 		int ncomponents = container.getComponentCount();
 		int old_nrows = nrows;
 		int old_ncols = ncols;
-		if (this.mode == FIXED_NUM_ROWS)
+		if (mode == FIXED_NUM_ROWS)
 		{
-			nrows = this.size;
+			nrows = size;
 			ncols = (ncomponents + nrows - 1) / nrows;
 		}
 		else
 		{
-			ncols = this.size;
+			ncols = size;
 			nrows = (ncomponents + ncols - 1) / ncols;
 		}
 		if (old_nrows != nrows)
@@ -524,9 +534,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 		}
 	}
 
-	private void redistributeSpace(int total_size, int free_size, boolean takeSizesIntoAccount,
-				       int nelements, int[] element_sizes,
-				       int[] minimum_element_sizes, int[] maximum_element_sizes)
+	private static void redistributeSpace(int total_size, int free_size, boolean takeSizesIntoAccount,
+					      int nelements, int[] element_sizes,
+					      int[] minimum_element_sizes, int[] maximum_element_sizes)
 	{
 		if (total_size != free_size)
 		{
@@ -619,24 +629,24 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 				double d = (double)free_size / (double)total_size;
 				for (int i = 0; i < nelements; i++)
 				{
-					element_sizes[i] = (int)(element_sizes[i] * d);
+					element_sizes[i] *= d;
 				}
 			}
 		}
 	}
 
-	private int mode;
-	private int size;
-	private int hgap;
-	private int vgap;
-	private boolean takeSizesIntoAccount;
-	private Insets distanceToBorders;
+	private final int mode;
+	private final int size;
+	private final int hgap;
+	private final int vgap;
+	private final boolean takeSizesIntoAccount;
+	private final Insets distanceToBorders;
 	private transient int nrows = -1;
 	private transient int ncols = -1;
-	private transient int[] minimum_row_heights = null;
-	private transient int[] minimum_col_widths = null;
-	private transient int[] row_heights = null;
-	private transient int[] col_widths = null;
-	private transient int[] maximum_row_heights = null;
-	private transient int[] maximum_col_widths = null;
+	private transient int[] minimum_row_heights;
+	private transient int[] minimum_col_widths;
+	private transient int[] row_heights;
+	private transient int[] col_widths;
+	private transient int[] maximum_row_heights;
+	private transient int[] maximum_col_widths;
 }
