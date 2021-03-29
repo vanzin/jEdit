@@ -132,11 +132,6 @@ public class HistoryText
 		int start = getInputStart();
 		String t = getText().substring(0,
 			text.getSelectionStart() - start);
-		if(t == null)
-		{
-			historyPrevious();
-			return;
-		}
 
 		for(int i = index + 1; i < historyModel.getSize(); i++)
 		{
@@ -168,11 +163,6 @@ public class HistoryText
 		int start = getInputStart();
 		String t = getText().substring(0,
 			text.getSelectionStart() - start);
-		if(t == null)
-		{
-			historyNext();
-			return;
-		}
 
 		for(int i = index - 1; i >= 0; i--)
 		{
@@ -298,13 +288,7 @@ public class HistoryText
 		};
 		JMenuItem caption = new JMenuItem(jEdit.getProperty(
 			"history.caption"));
-		caption.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e) 
-		  {
-		    new ListModelEditor().open(historyModel);
-		  }
-		});		
+		caption.addActionListener(e -> new ListModelEditor().open(historyModel));
  		popup.add(caption);
  		popup.addSeparator();
 
@@ -335,7 +319,7 @@ public class HistoryText
 	} //}}}
 
 	//{{{ Private members
-	private JTextComponent text;
+	private final JTextComponent text;
 	private HistoryModel historyModel;
 	private int index;
 	private String current;
@@ -346,6 +330,7 @@ public class HistoryText
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			int ind = Integer.parseInt(evt.getActionCommand());
