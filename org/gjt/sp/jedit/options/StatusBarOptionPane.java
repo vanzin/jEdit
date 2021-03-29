@@ -24,14 +24,24 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import javax.swing.border.*;
+import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.ServiceManager;
+import org.gjt.sp.jedit.gui.ColorWellButton;
+import org.gjt.sp.jedit.gui.RolloverButton;
+import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
+import org.gjt.sp.jedit.gui.statusbar.Widget;
+import org.gjt.sp.jedit.jEdit;
+
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.util.List;
 import java.util.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.util.GenericGUIUtilities;
-import org.gjt.sp.jedit.*;
+import java.util.stream.StreamSupport;
 //}}}
 
 /**
@@ -41,6 +51,9 @@ import org.gjt.sp.jedit.*;
  */
 public class StatusBarOptionPane extends AbstractOptionPane
 {
+
+	private WidgetTableModel widgetTableModel;
+
 	//{{{ StatusBarOptionPane constructor
 	public StatusBarOptionPane()
 	{
@@ -66,12 +79,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		checkboxPanel.add(new JLabel(jEdit.getProperty(
 			"options.status.caption")));
 
-		JPanel previewPanel = new JPanel();
-		previewStatusBar = new JLabel();
-		previewPanel.add(previewStatusBar);
 		JPanel north = new JPanel(new GridLayout(2,1));
 		north.add(checkboxPanel);
-		north.add(previewPanel);
 		add(north, BorderLayout.NORTH);
 		//}}}
 
@@ -132,72 +141,45 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		optionsPanel.addComponent(showCaretVirtual);
 		optionsPanel.addComponent(showCaretOffset);
 		optionsPanel.addComponent(showCaretBufferLength);
-
 		//}}}
 
-
 		//{{{ widgets panel
-		String statusbar = jEdit.getProperty("view.status");
-		StringTokenizer st = new StringTokenizer(statusbar);
-		listModel = new DefaultListModel<>();
-		while (st.hasMoreTokens())
-		{
-			String token = st.nextToken();
-			listModel.addElement(token);
-		}
-
-
-		list = new JList<>(listModel);
-		list.setCellRenderer(new WidgetListCellRenderer());
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(e -> updateButtons());
-
+		widgetTableModel = new WidgetTableModel();
+		widgetTable = new JTable(widgetTableModel);
+		widgetTable.setDefaultRenderer(WidgetTableModel.TableEntry.class, new WidgetCellRenderer());
+		widgetTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		widgetTable.setTableHeader(null);
+		widgetTable.getSelectionModel().addListSelectionListener(e -> updateButtons());
 		JPanel widgetsPanel = new JPanel(new BorderLayout());
-		widgetsPanel.add(new JScrollPane(list), BorderLayout.CENTER);
+		widgetsPanel.add(new JScrollPane(widgetTable), BorderLayout.CENTER);
 		//}}}
 
 		//{{{ Create buttons
 		JPanel buttons = new JPanel();
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		ActionListener actionHandler = new ActionHandler();
-		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
-		add.setToolTipText(jEdit.getProperty("options.status.add"));
-		add.addActionListener(actionHandler);
-		buttons.add(add);
-		buttons.add(Box.createHorizontalStrut(6));
-		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
-		remove.setToolTipText(jEdit.getProperty("options.status.remove"));
-		remove.addActionListener(actionHandler);
-		buttons.add(remove);
 		buttons.add(Box.createHorizontalStrut(6));
 		moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
 		moveUp.setToolTipText(jEdit.getProperty("options.status.moveUp"));
-		moveUp.addActionListener(actionHandler);
+		moveUp.addActionListener(e -> moveUp());
 		buttons.add(moveUp);
 		buttons.add(Box.createHorizontalStrut(6));
 		moveDown = new RolloverButton(GUIUtilities.loadIcon("ArrowD.png"));
 		moveDown.setToolTipText(jEdit.getProperty("options.status.moveDown"));
-		moveDown.addActionListener(actionHandler);
+		moveDown.addActionListener(e -> moveDown());
 		buttons.add(moveDown);
 		buttons.add(Box.createHorizontalStrut(6));
-		edit = new RolloverButton(GUIUtilities.loadIcon("ButtonProperties.png"));
-		edit.setToolTipText(jEdit.getProperty("options.status.edit"));
-		edit.addActionListener(actionHandler);
-		buttons.add(edit);
 		buttons.add(Box.createGlue());
 		//}}}
 
-		updateButtons();
 		widgetsPanel.add(buttons, BorderLayout.SOUTH);
-
 
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.addTab("Options",optionsPanel);
 		tabs.add("Widgets", widgetsPanel);
 
 		add(tabs, BorderLayout.CENTER);
-		updatePreview();
+		updateButtons();
 	} ///}}}
 
 	//{{{ _save() method
@@ -219,16 +201,11 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.plainview.visible",showStatusbarPlain
 			.isSelected());
 
-		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < listModel.getSize(); i++)
-		{
-			if(i != 0)
-				buf.append(' ');
-
-			String widgetName = listModel.elementAt(i);
-			buf.append(widgetName);
-		}
-		jEdit.setProperty("view.status",buf.toString());
+		String[] tokens = StreamSupport.stream(widgetTableModel.spliterator(), false)
+			.filter(WidgetTableModel.TableEntry::isSelected)
+			.map(WidgetTableModel.TableEntry::getWidget)
+			.toArray(String[]::new);
+		jEdit.setProperty("view.status", String.join(" ", tokens));
 
 		jEdit.setBooleanProperty("view.status.show-caret-linenumber", showCaretLineNumber.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-dot", showCaretDot.isSelected());
@@ -246,13 +223,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private ColorWellButton memBackgroundColor;
 	private JCheckBox showStatusbar;
 	private JCheckBox showStatusbarPlain;
-	private DefaultListModel<String> listModel;
-	private JLabel previewStatusBar;
-	private JList<String> list;
-	private RolloverButton add;
-	private RolloverButton remove;
+	private JTable widgetTable;
 	private RolloverButton moveUp, moveDown;
-	private RolloverButton edit;
 
 	private JCheckBox showCaretLineNumber;
 	private JCheckBox showCaretDot;
@@ -264,282 +236,189 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	//{{{ updateButtons() method
 	private void updateButtons()
 	{
-		int index = list.getSelectedIndex();
-		remove.setEnabled(index != -1 && listModel.getSize() != 0);
+		int index = widgetTable.getSelectedRow();
 		moveUp.setEnabled(index > 0);
-		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
-		edit.setEnabled(index != -1);
+		moveDown.setEnabled(index != -1 && index != widgetTable.getRowCount() - 1);
 	} //}}}
 
-	//{{{ updateButtons() method
-	/**
-	 * Update the preview
-	 */
-	private void updatePreview()
+	//{{{ moveUp() method
+	private void moveUp()
 	{
-		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < listModel.getSize(); i++)
-		{
-			if (i != 0)
-				buf.append(' ');
-			String widgetName = listModel.elementAt(i);
-			String sample = jEdit.getProperty("statusbar."+widgetName+".sample",widgetName);
-			buf.append(sample);
-		}
-		previewStatusBar.setText(buf.toString());
+		int index = widgetTable.getSelectedRow();
+		widgetTableModel.moveUp(index);
+		widgetTable.getSelectionModel().setSelectionInterval(index - 1, index - 1);
+	} //}}}
+
+	//{{{ moveDown() method
+	private void moveDown()
+	{
+		int index = widgetTable.getSelectedRow();
+		widgetTableModel.moveDown(index);
+		widgetTable.getSelectionModel().setSelectionInterval(index + 1, index + 1);
 	} //}}}
 
 	//}}}
 
 	//{{{ Inner classes
-
-	//{{{ ActionHandler class
-	private class ActionHandler implements ActionListener
+	private static class WidgetTableModel extends AbstractTableModel implements Iterable<WidgetTableModel.TableEntry>
 	{
-		@Override
-		public void actionPerformed(ActionEvent evt)
+		private final List<TableEntry> widgets;
+
+		WidgetTableModel()
 		{
-			Object source = evt.getSource();
-
-			if(source == add)
-			{
-				WidgetSelectionDialog dialog = new WidgetSelectionDialog(StatusBarOptionPane.this);
-				String value = dialog.getValue();
-				if (value == null || value.isEmpty())
-					return;
-
-				int index = list.getSelectedIndex();
-				if(index == -1)
-					index = listModel.getSize();
-				else
-					index++;
-
-				listModel.insertElementAt(value, index);
-				list.setSelectedIndex(index);
-				list.ensureIndexIsVisible(index);
-				updatePreview();
-			}
-			else if(source == remove)
-			{
-				int index = list.getSelectedIndex();
-				listModel.removeElementAt(index);
-				if(listModel.getSize() != 0)
-				{
-					if(listModel.getSize() == index)
-						list.setSelectedIndex(index-1);
-					else
-						list.setSelectedIndex(index);
-				}
-				updateButtons();
-				updatePreview();
-			}
-			else if(source == moveUp)
-			{
-				int index = list.getSelectedIndex();
-				Object selected = list.getSelectedValue();
-				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected.toString(), index-1);
-				list.setSelectedIndex(index-1);
-				list.ensureIndexIsVisible(index-1);
-				updatePreview();
-			}
-			else if(source == moveDown)
-			{
-				int index = list.getSelectedIndex();
-				Object selected = list.getSelectedValue();
-				listModel.removeElementAt(index);
-				listModel.insertElementAt(selected.toString(), index+1);
-				list.setSelectedIndex(index+1);
-				list.ensureIndexIsVisible(index+1);
-				updatePreview();
-			}
-			else if(source == edit)
-			{
-				Object selectedValue = list.getSelectedValue();
-				if (selectedValue == null)
-					return;
-				WidgetSelectionDialog dialog = new WidgetSelectionDialog(StatusBarOptionPane.this,
-											 String.valueOf(selectedValue));
-				String value = dialog.getValue();
-				if (value == null || value.isEmpty())
-					return;
-				int index = list.getSelectedIndex();
-				listModel.remove(index);
-				listModel.insertElementAt(value, index);
-				list.setSelectedIndex(index);
-				list.ensureIndexIsVisible(index);
-				updatePreview();
-			}
-		}
-	} //}}}
-
-	//{{{ WidgetListCellRenderer class
-	private static class WidgetListCellRenderer extends DefaultListCellRenderer
-	{
-		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index,
-							      boolean isSelected, boolean cellHasFocus)
-		{
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (value == null)
-				return this;
-			String widget = String.valueOf(value);
-			String label = jEdit.getProperty("statusbar."+widget+".label", widget);
-			setText(label);
-			return this;
-		}
-	} //}}}
-	//}}}
-
-	//{{{ WidgetSelectionDialog class
-	private class WidgetSelectionDialog extends EnhancedDialog
-	{
-		private final JTextField labelField;
-		private final JComboBox<String> widgetCombo;
-		private final JRadioButton widgetRadio;
-		private String value;
-
-		//{{{ WidgetSelectionDialog constructors
-		WidgetSelectionDialog(Component comp, String value)
-		{
-			super(GenericGUIUtilities.getParentDialog(comp), jEdit.getProperty("options.status.edit.title"), true);
-			ButtonGroup buttonGroup = new ButtonGroup();
-			JRadioButton labelRadio = new JRadioButton(jEdit.getProperty("options.status.edit.labelRadioButton"));
-			widgetRadio = new JRadioButton(jEdit.getProperty("options.status.edit.widgetRadioButton"));
-			buttonGroup.add(labelRadio);
-			buttonGroup.add(widgetRadio);
-
-			JLabel labelLabel = new JLabel(jEdit.getProperty("options.status.edit.labelLabel"));
-			labelField = new JTextField();
-
-			JLabel widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
-
 			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory");
 			Arrays.sort(allWidgets);
-			
-			boolean valueIsWidget = value != null && Arrays.binarySearch(allWidgets, value) >= 0;
-			
-			Vector<String> widgets = new Vector<>(allWidgets.length);
-			Collection<String> usedWidget = new HashSet<>(listModel.getSize());
-			for (int i = 0; i < listModel.getSize(); i++)
-			{
-				usedWidget.add(listModel.get(i));
-			}
-			for (String widget : allWidgets)
-			{
-				if (!usedWidget.contains(widget) || (valueIsWidget && widget.equals(value)))
-					widgets.add(widget);
-			}
-			widgetCombo = new JComboBox<>(widgets);
-			widgetCombo.setRenderer(new WidgetListCellRenderer());
-			labelRadio.addActionListener(e ->
-			{
-				labelField.setEnabled(true);
-				widgetCombo.setEnabled(false);
-				validate();
-			});
-			widgetRadio.addActionListener(e ->
-			{
-				labelField.setEnabled(false);
-				widgetCombo.setEnabled(true);
-				validate();
-			});
-			//{{{ south panel
-			JPanel southPanel = new JPanel();
-			southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
-			southPanel.setBorder(new EmptyBorder(12,0,0,0));
-			southPanel.add(Box.createGlue());
-			JButton ok = new JButton(jEdit.getProperty("common.ok"));
-			ok.addActionListener(e -> ok());
-			getRootPane().setDefaultButton(ok);
-			southPanel.add(ok);
-			southPanel.add(Box.createHorizontalStrut(6));
-			JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
-			cancel.addActionListener(e -> cancel());
-			southPanel.add(cancel);
-			southPanel.add(Box.createGlue());
-			//}}}
+			Collection<String> allWidgetsList = new ArrayList<>(Arrays.asList(allWidgets));
+			widgets = new ArrayList<>();
+			String statusbar = jEdit.getProperty("view.status");
+			String[] usedWidgets = statusbar.split(" ");
+			for (String usedWidget : usedWidgets)
+				if (allWidgetsList.remove(usedWidget))
+					widgets.add(new TableEntry(usedWidget, true));
 
-			labelField.setEnabled(false);
-			widgetRadio.setSelected(true);
-
-			JPanel content = new JPanel(new BorderLayout());
-			content.setBorder(new EmptyBorder(12,12,12,12));
-			setContentPane(content);
-			JPanel center = new JPanel();
-			center.setLayout(new BoxLayout(center,BoxLayout.Y_AXIS));
-
-			center.add(labelRadio);
-			JPanel p = new JPanel(new BorderLayout());
-			p.add(labelLabel, BorderLayout.WEST);
-			p.add(labelField);
-			center.add(p);
-			center.add(widgetRadio);
-			p = new JPanel(new BorderLayout());
-			p.add(widgetLabel, BorderLayout.WEST);
-			p.add(widgetCombo);
-			if (widgets.isEmpty())
-			{
-				labelRadio.setSelected(true);
-				widgetRadio.setEnabled(false);
-				widgetLabel.setEnabled(false);
-				widgetCombo.setEnabled(false);
-			}
-			center.add(p);
-
-			if (valueIsWidget)
-			{
-				widgetRadio.setSelected(true);
-				widgetCombo.setSelectedItem(value);
-			}
-			else
-			{
-				labelRadio.setSelected(true);
-				labelField.setText(value);
-				labelField.setEnabled(true);
-				widgetCombo.setEnabled(false);
-			}
-
-			getContentPane().add(center, BorderLayout.CENTER);
-			getContentPane().add(southPanel, BorderLayout.SOUTH);
-			pack();
-			setLocationRelativeTo(GenericGUIUtilities.getParentDialog(comp));
-			setVisible(true);
+			allWidgetsList
+				.stream()
+				.map(widget -> new TableEntry(widget, false))
+				.forEach(widgets::add);
 		}
 
-		WidgetSelectionDialog(Component comp)
-		{
-			this(comp, null);
-		} //}}}
-
-		//{{{ ok() method
 		@Override
-		public void ok()
+		@Nonnull
+		public Iterator<TableEntry> iterator()
 		{
-			if (widgetRadio.isSelected())
-			{
-				value = (String) widgetCombo.getSelectedItem();
-			}
-			else
-			{
-				value = labelField.getText().trim();
-			}
-			dispose();
-		} //}}}
+			return widgets.iterator();
+		}
 
-		//{{{ cancel() method
+		void moveUp(int index)
+		{
+			TableEntry entry = widgets.remove(index);
+			widgets.add(index -1, entry);
+			fireTableRowsUpdated(index - 1, index);
+		}
+
+		void moveDown(int index)
+		{
+			TableEntry entry = widgets.remove(index);
+			widgets.add(index + 1, entry);
+			fireTableRowsUpdated(index, index + 1);
+		}
+
 		@Override
-		public void cancel()
+		public int getRowCount()
 		{
-			value = null;
-			dispose();
-		} //}}}
+			return widgets.size();
+		}
 
-		//{{{ getValue() method
-		public String getValue()
+		@Override
+		public int getColumnCount()
 		{
-			return value;
-		} //}}}
-	} //}}}
+			return 3;
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex)
+		{
+			return columnIndex == 0;
+		}
+
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+		{
+			TableEntry tableEntry = widgets.get(rowIndex);
+			tableEntry.setSelected((boolean) aValue);
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex)
+		{
+			if (columnIndex == 0)
+				return Boolean.class;
+			if (columnIndex == 1)
+				return String.class;
+			return TableEntry.class;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex)
+		{
+			TableEntry tableEntry = widgets.get(rowIndex);
+			if (columnIndex == 0)
+				return tableEntry.isSelected();
+			if (columnIndex == 1)
+				return tableEntry.getWidget();
+			return tableEntry;
+		}
+
+		private static class TableEntry
+		{
+			private boolean selected;
+			private String widget;
+
+			private TableEntry(String widget, boolean selected)
+			{
+				this.widget = widget;
+				this.selected = selected;
+			}
+
+			public boolean isSelected()
+			{
+				return selected;
+			}
+
+			public void setSelected(boolean selected)
+			{
+				this.selected = selected;
+			}
+
+			public String getWidget()
+			{
+				return widget;
+			}
+
+			public void setWidget(String widget)
+			{
+				this.widget = widget;
+			}
+		}
+	}
+
+	private static class WidgetCellRenderer extends DefaultTableCellRenderer
+	{
+		private final Map<String, JComponent> widgetsSamples;
+
+		private WidgetCellRenderer()
+		{
+			widgetsSamples = new HashMap<>();
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		{
+
+			WidgetTableModel.TableEntry tableEntry = (WidgetTableModel.TableEntry) value;
+			String widgetName = tableEntry.getWidget();
+			JComponent widgetComponent = widgetsSamples.get(widgetName);
+			if (widgetComponent == null)
+			{
+				StatusWidgetFactory service = ServiceManager.getService(StatusWidgetFactory.class, widgetName);
+				if (service != null)
+				{
+					Widget widget = service.getWidget(jEdit.getActiveView());
+					widget.update();
+					widgetComponent = widget.getComponent();
+					widgetsSamples.put(widgetName, widgetComponent);
+				}
+				else
+				{
+					super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					String label = jEdit.getProperty("statusbar."+widgetName+".label", widgetName);
+					setText(label);
+					widgetComponent = this;
+				}
+			}
+			return widgetComponent;
+		}
+	}
+	//}}}
 }
 
