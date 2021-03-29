@@ -25,9 +25,9 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.gjt.sp.jedit.*;
@@ -40,7 +40,7 @@ public class TipOfTheDay extends EnhancedDialog
 	public TipOfTheDay(View view)
 	{
 		super(view,jEdit.getProperty("tip.title"),false);
-
+		random = new SecureRandom();
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -62,31 +62,29 @@ public class TipOfTheDay extends EnhancedDialog
 		scroller.setPreferredSize(new Dimension(250,250));
 		content.add(BorderLayout.CENTER,scroller);
 
-		ActionHandler actionHandler = new ActionHandler();
-
 		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		showNextTime = new JCheckBox(jEdit.getProperty("tip.show-next-time"),
 			jEdit.getBooleanProperty("tip.show"));
-		showNextTime.addActionListener(actionHandler);
+		showNextTime.addActionListener(e -> jEdit.setBooleanProperty("tip.show",showNextTime.isSelected()));
 		buttons.add(showNextTime);
 
 		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(Box.createGlue());
 
-		nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
-		nextTip.addActionListener(actionHandler);
+		JButton nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
+		nextTip.addActionListener(e -> nextTip());
 		buttons.add(nextTip);
 
 		buttons.add(Box.createHorizontalStrut(6));
 
-		close = new JButton(jEdit.getProperty("common.close"));
-		close.addActionListener(actionHandler);
+		JButton close = new JButton(jEdit.getProperty("common.close"));
+		close.addActionListener(e -> dispose());
 		buttons.add(close);
 		content.getRootPane().setDefaultButton(close);
 
 		Dimension dim = nextTip.getPreferredSize();
-		dim.width = Math.max(dim.width,close.getPreferredSize().width);
+		dim.width = Math.max(dim.width, close.getPreferredSize().width);
 		nextTip.setPreferredSize(dim);
 		close.setPreferredSize(dim);
 
@@ -99,12 +97,14 @@ public class TipOfTheDay extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
@@ -113,10 +113,10 @@ public class TipOfTheDay extends EnhancedDialog
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JCheckBox showNextTime;
-	private JButton nextTip, close;
-	private JEditorPane tipText;
+	private final JCheckBox showNextTime;
+	private final JEditorPane tipText;
 	private int currentTip = -1;
+	private final Random random;
 	//}}}
 
 	//{{{ nextTip() method
@@ -136,7 +136,7 @@ public class TipOfTheDay extends EnhancedDialog
 		// clicks 'Next Tip'
 		int tipToShow = currentTip;
 		while(tipToShow == currentTip || !tips[tipToShow].getName().endsWith(".html"))
-			tipToShow = (new Random().nextInt(Integer.MAX_VALUE)) % count;
+			tipToShow = (random.nextInt(Integer.MAX_VALUE)) % count;
 		try
 		{
 			tipText.setPage(tips[tipToShow].toURI().toURL());
@@ -148,22 +148,4 @@ public class TipOfTheDay extends EnhancedDialog
 	} //}}}
 
 	//}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == showNextTime)
-			{
-				jEdit.setBooleanProperty("tip.show",showNextTime
-					.isSelected());
-			}
-			else if(source == nextTip)
-				nextTip();
-			else if(source == close)
-				dispose();
-		}
-	} //}}}
 }
