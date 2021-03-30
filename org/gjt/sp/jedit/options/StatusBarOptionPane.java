@@ -41,6 +41,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 //}}}
 
@@ -201,11 +202,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.plainview.visible",showStatusbarPlain
 			.isSelected());
 
-		String[] tokens = StreamSupport.stream(widgetTableModel.spliterator(), false)
-			.filter(WidgetTableModel.TableEntry::isSelected)
-			.map(WidgetTableModel.TableEntry::getWidget)
-			.toArray(String[]::new);
-		jEdit.setProperty("view.status", String.join(" ", tokens));
+		saveWidgets("view.status-leading", WidgetTableModel.TableEntry::isSelectedLeading);
+		saveWidgets("view.status", WidgetTableModel.TableEntry::isSelectedTrailing);
 
 		jEdit.setBooleanProperty("view.status.show-caret-linenumber", showCaretLineNumber.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-dot", showCaretDot.isSelected());
@@ -213,6 +211,15 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.show-caret-offset", showCaretOffset.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-bufferlength", showCaretBufferLength.isSelected());
 	} //}}}
+
+	private void saveWidgets(String propertyName, Predicate<WidgetTableModel.TableEntry> filter)
+	{
+		String[] tokens = StreamSupport.stream(widgetTableModel.spliterator(), false)
+			.filter(filter)
+			.map(WidgetTableModel.TableEntry::getWidget)
+			.toArray(String[]::new);
+		jEdit.setProperty(propertyName, String.join(" ", tokens));
+	}
 
 	//{{{ Private members
 
@@ -266,19 +273,23 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 		WidgetTableModel()
 		{
-			String[] allWidgets = ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory");
+			String[] allWidgets = ServiceManager.getServiceNames(StatusWidgetFactory.class);
 			Arrays.sort(allWidgets);
 			Collection<String> allWidgetsList = new ArrayList<>(Arrays.asList(allWidgets));
 			widgets = new ArrayList<>();
-			String statusbar = jEdit.getProperty("view.status");
-			String[] usedWidgets = statusbar.split(" ");
-			for (String usedWidget : usedWidgets)
+			String leadingStatusBar = jEdit.getProperty("view.status-leading");
+			String trailingStatusBar = jEdit.getProperty("view.status");
+			String[] usedleadingWidgets = leadingStatusBar.split(" ");
+			for (String usedWidget : usedleadingWidgets)
 				if (allWidgetsList.remove(usedWidget))
-					widgets.add(new TableEntry(usedWidget, true));
-
+					widgets.add(new TableEntry(usedWidget, true, false));
+			String[] usedTrailingWidgets = trailingStatusBar.split(" ");
+			for (String usedWidget : usedTrailingWidgets)
+				if (allWidgetsList.remove(usedWidget))
+					widgets.add(new TableEntry(usedWidget, false, true));
 			allWidgetsList
 				.stream()
-				.map(widget -> new TableEntry(widget, false))
+				.map(widget -> new TableEntry(widget, false, false))
 				.forEach(widgets::add);
 		}
 
@@ -312,62 +323,96 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		@Override
 		public int getColumnCount()
 		{
-			return 3;
+			return 4;
 		}
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
-			return columnIndex == 0;
+			return columnIndex == 0 || columnIndex == 1;
 		}
 
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			TableEntry tableEntry = widgets.get(rowIndex);
-			tableEntry.setSelected((boolean) aValue);
+			if (columnIndex == 0)
+			{
+				tableEntry.setSelectedLeading((boolean) aValue);
+				tableEntry.setSelectedTrailing(false);
+			}
+			else if (columnIndex == 1)
+			{
+				tableEntry.setSelectedLeading(false);
+				tableEntry.setSelectedTrailing((boolean) aValue);
+			}
+			fireTableCellUpdated(rowIndex, 0);
+			fireTableCellUpdated(rowIndex, 1);
 		}
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex)
 		{
-			if (columnIndex == 0)
-				return Boolean.class;
-			if (columnIndex == 1)
-				return String.class;
-			return TableEntry.class;
+			switch (columnIndex)
+			{
+				case 0:
+				case 1:
+					return Boolean.class;
+				case 2:
+					return String.class;
+				default:
+					return TableEntry.class;
+			}
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			TableEntry tableEntry = widgets.get(rowIndex);
-			if (columnIndex == 0)
-				return tableEntry.isSelected();
-			if (columnIndex == 1)
-				return tableEntry.getWidget();
-			return tableEntry;
+			switch (columnIndex)
+			{
+				case 0:
+					return tableEntry.isSelectedLeading();
+				case 1:
+					return tableEntry.isSelectedTrailing();
+				case 2:
+					return tableEntry.getWidget();
+				default:
+					return tableEntry;
+			}
 		}
 
 		private static class TableEntry
 		{
-			private boolean selected;
+			private boolean selectedLeading;
+			private boolean selectedTrailing;
 			private String widget;
 
-			private TableEntry(String widget, boolean selected)
+			private TableEntry(String widget, boolean selectedLeading, boolean selectedTrailing)
 			{
 				this.widget = widget;
-				this.selected = selected;
+				this.selectedLeading = selectedLeading;
+				this.selectedTrailing = selectedTrailing;
 			}
 
-			public boolean isSelected()
+			public boolean isSelectedLeading()
 			{
-				return selected;
+				return selectedLeading;
 			}
 
-			public void setSelected(boolean selected)
+			public void setSelectedLeading(boolean selectedLeading)
 			{
-				this.selected = selected;
+				this.selectedLeading = selectedLeading;
+			}
+
+			public boolean isSelectedTrailing()
+			{
+				return selectedTrailing;
+			}
+
+			public void setSelectedTrailing(boolean selectedTrailing)
+			{
+				this.selectedTrailing = selectedTrailing;
 			}
 
 			public String getWidget()

@@ -26,5 +26,5 @@ package org.gjt.sp.jedit.gui.statusbar;
  */
 public enum StatusBarEventType
 {
-	Buffer, Misc
+	Buffer, Caret, Misc
 }

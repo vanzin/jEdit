@@ -13,6 +13,7 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ Miscellaneous
 
+- Status bar design updated with the ability to add widgets to the left and the right of the bar (Matthieu Casanova)
 
 }}}
 {{{ API Changes

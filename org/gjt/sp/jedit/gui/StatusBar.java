@@ -25,22 +25,26 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.annotation.Nullable;
-import javax.swing.border.*;
-import javax.swing.text.Segment;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.StringTokenizer;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.ServiceManager;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.gui.statusbar.StatusBarEventType;
 import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
 import org.gjt.sp.jedit.gui.statusbar.Widget;
-import org.gjt.sp.jedit.gui.statusbar.ToolTipLabel;
-import org.gjt.sp.util.*;
-import org.gjt.sp.jedit.gui.statusbar.StatusBarEventType;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Task;
+import org.gjt.sp.util.TaskAdapter;
+import org.gjt.sp.util.TaskManager;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.StringTokenizer;
 //}}}
 
 /** The status bar used to display various information to the user.
@@ -65,7 +69,8 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
-		widgets = new ArrayList<>();
+		leadingWidgets = new ArrayList<>();
+		trailingWidgets = new ArrayList<>();
 		setName("StatusBar");
 		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,
 			OperatingSystem.isMacOS() ? 18 : 0),
@@ -73,17 +78,12 @@ public class StatusBar extends JPanel
 
 		this.view = view;
 
+		leadingWidgetsBox = new Box(BoxLayout.X_AXIS);
+		trailingWidgetsBox = new Box(BoxLayout.X_AXIS);
 		panel = new JPanel(new BorderLayout());
-		box = new Box(BoxLayout.X_AXIS);
-		panel.add(BorderLayout.EAST,box);
+		panel.add(BorderLayout.WEST,leadingWidgetsBox);
+		panel.add(BorderLayout.EAST, trailingWidgetsBox);
 		add(BorderLayout.CENTER,panel);
-
-		MouseListener mouseHandler = new MouseHandler();
-
-		caretStatus = new ToolTipLabel();
-		caretStatus.setName("caretStatus");
-		caretStatus.setToolTipText(jEdit.getProperty("view.status.caret-tooltip"));
-		caretStatus.addMouseListener(mouseHandler);
 
 		message = new JLabel(" ");
 		setMessageComponent(message);
@@ -97,59 +97,47 @@ public class StatusBar extends JPanel
 		Color fg = jEdit.getColorProperty("view.status.foreground");
 		Color bg = jEdit.getColorProperty("view.status.background");
 
-		showCaretStatus = jEdit.getBooleanProperty("view.status.show-caret-status");
-
 		panel.setBackground(bg);
 		panel.setForeground(fg);
-		caretStatus.setBackground(bg);
-		caretStatus.setForeground(fg);
 		message.setBackground(bg);
 		message.setForeground(fg);
 
-		// retarded GTK look and feel!
-		Font font = new JLabel().getFont();
-		//UIManager.getFont("Label.font");
-		FontMetrics fm = getFontMetrics(font);
-
-		if (showCaretStatus)
+		String leadingStatus = jEdit.getProperty("view.status-leading");
+		if (!Objects.equals(currentLeadingStatus, leadingStatus))
 		{
-			panel.add(BorderLayout.WEST,caretStatus);
-
-			caretStatus.setFont(font);
-
-			Dimension dim = new Dimension(fm.stringWidth(caretTestStr),
-					fm.getHeight());
-			caretStatus.setPreferredSize(dim);
-			updateCaretStatus();
+			buildStatusBar(fg, bg, leadingStatus, leadingWidgetsBox, leadingWidgets);
+			currentLeadingStatus = leadingStatus;
 		}
-		else
-			panel.remove(caretStatus);
-
-		String statusBar = jEdit.getProperty("view.status");
-		if (!Objects.equals(currentBar, statusBar))
+		String trailingStatus = jEdit.getProperty("view.status");
+		if (!Objects.equals(currentTrailingStatus, trailingStatus))
 		{
-			box.removeAll();
-			StringTokenizer tokenizer = new StringTokenizer(statusBar);
-			while (tokenizer.hasMoreTokens())
-			{
-				String token = tokenizer.nextToken();
-				Widget widget = getWidget(token);
-				if (widget != null)
-				{
-					widgets.add(widget);
-					Component widgetComponent = widget.getComponent();
-					widgetComponent.setBackground(bg);
-					widgetComponent.setForeground(fg);
-					box.add(widgetComponent);
-					widget.update();
-					widget.propertiesChanged();
-				}
-			}
-			currentBar = statusBar;
+			buildStatusBar(fg, bg, trailingStatus, trailingWidgetsBox, trailingWidgets);
+			currentTrailingStatus = trailingStatus;
 		}
 		updateBufferStatus();
 		updateMiscStatus();
 	} //}}}
+
+	private void buildStatusBar(Color fg, Color bg, String leadingStatus, Box leadingWidgetsBox, Collection<Widget> leadingWidgets)
+	{
+		leadingWidgetsBox.removeAll();
+		StringTokenizer tokenizer = new StringTokenizer(leadingStatus);
+		while (tokenizer.hasMoreTokens())
+		{
+			String token = tokenizer.nextToken();
+			Widget widget = getWidget(token);
+			if (widget != null)
+			{
+				leadingWidgets.add(widget);
+				Component widgetComponent = widget.getComponent();
+				widgetComponent.setBackground(bg);
+				widgetComponent.setForeground(fg);
+				leadingWidgetsBox.add(widgetComponent);
+				widget.update();
+				widget.propertiesChanged();
+			}
+		}
+	}
 
 	//{{{ addNotify() method
 	@Override
@@ -297,90 +285,7 @@ public class StatusBar extends JPanel
 	/** Updates the status bar with information about the caret position, line number, etc */
 	public void updateCaretStatus()
 	{
-		if (showCaretStatus)
-		{
-			Buffer buffer = view.getBuffer();
-
-			if(!buffer.isLoaded() ||
-				/* can happen when switching buffers sometimes */
-				buffer != view.getTextArea().getBuffer())
-			{
-				caretStatus.setText(" ");
-				return;
-			}
-
-			JEditTextArea textArea = view.getTextArea();
-
-			int caretPosition = textArea.getCaretPosition();
-			int currLine = textArea.getCaretLine();
-
-			// there must be a better way of fixing this...
-			// the problem is that this method can sometimes
-			// be called as a result of a text area scroll
-			// event, in which case the caret position has
-			// not been updated yet.
-			if(currLine >= buffer.getLineCount())
-				return; // hopefully another caret update will come?
-
-			int start = textArea.getLineStartOffset(currLine);
-			int dot = caretPosition - start;
-
-			if(dot < 0)
-				return;
-
-			int bufferLength = buffer.getLength();
-
-			buffer.getText(start,dot,seg);
-			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
-				buffer.getTabSize());
-			// for GC
-			seg.array = null;
-			seg.count = 0;
-
-			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true))
-			{
-				buf.append(currLine + 1);
-				buf.append(',');
-			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-dot", true))
-			{
-				buf.append(dot + 1);
-			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true) &&
-				virtualPosition != dot)
-			{
-				buf.append('-');
-				buf.append(virtualPosition + 1);
-			}
-			if (buf.length() > 0)
-			{
-				buf.append(' ');
-			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true) &&
-				jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true))
-			{
-				buf.append('(');
-				buf.append(caretPosition);
-				buf.append('/');
-				buf.append(bufferLength);
-				buf.append(')');
-			}
-			else if (jEdit.getBooleanProperty("view.status.show-caret-offset", true))
-			{
-				buf.append('(');
-				buf.append(caretPosition);
-				buf.append(')');
-			}
-			else if (jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true))
-			{
-				buf.append('(');
-				buf.append(bufferLength);
-				buf.append(')');
-			}
-
-			caretStatus.setText(buf.toString());
-			buf.setLength(0);
-		}
+		updateEvent(StatusBarEventType.Caret);
 	} //}}}
 
 	//{{{ updateBufferStatus() method
@@ -397,58 +302,43 @@ public class StatusBar extends JPanel
 
 	public void updateEvent(StatusBarEventType statusBarEventType)
 	{
-		widgets
+		trailingWidgets
+			.stream()
+			.filter(widget -> widget.test(statusBarEventType))
+			.forEach(Widget::update);
+		leadingWidgets
 			.stream()
 			.filter(widget -> widget.test(statusBarEventType))
 			.forEach(Widget::update);
 	}
 
 	//{{{ Private members
-	private java.util.List<Widget> widgets;
-	private String currentBar;
+	private final java.util.List<Widget> leadingWidgets;
+	private final java.util.List<Widget> trailingWidgets;
+
+	private String currentLeadingStatus;
+	private String currentTrailingStatus;
 	private final TaskHandler taskHandler;
 	private final View view;
 	private final JPanel panel;
-	private final Box box;
-	private final ToolTipLabel caretStatus;
+	private final Box leadingWidgetsBox;
+	private final Box trailingWidgetsBox;
 	private Component messageComp;
 	private final JLabel message;
 
-	/* package-private for speed */ StringBuilder buf = new StringBuilder();
 	@Nullable
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
-
-	private final Segment seg = new Segment();
-
-	private boolean showCaretStatus;
 	//}}}
-
-	static final String caretTestStr = "9999,999-999 (99999999/99999999)";
 
 	//{{{ getWidget() method
 	private Widget getWidget(String name)
 	{
-		StatusWidgetFactory widgetFactory =
-		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory", name);
+		StatusWidgetFactory widgetFactory = ServiceManager.getService(StatusWidgetFactory.class, name);
 		if (widgetFactory == null)
 		{
 			return null;
 		}
 		return widgetFactory.getWidget(view);
-	} //}}}
-
-	//{{{ MouseHandler class
-	private class MouseHandler extends MouseAdapter
-	{
-		@Override
-		public void mouseClicked(MouseEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == caretStatus && evt.getClickCount() == 2)
-			{
-				view.getTextArea().showGoToLineDialog();
-			}
-		}
 	} //}}}
 }

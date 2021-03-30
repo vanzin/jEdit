@@ -159,6 +159,10 @@
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new TaskMonitorWidgetFactory();
 	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory" NAME="caret-status">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new CaretStatusWidgetFactory();
+	</SERVICE>
 	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 
