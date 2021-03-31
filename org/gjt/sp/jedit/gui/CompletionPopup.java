@@ -67,23 +67,23 @@ public class CompletionPopup extends JWindow
 		/**
 		 * Returns the number of candidates.
 		 */
-		public int getSize();
+		int getSize();
 
 		/**
 		 * Returns whether this completion is still valid.
 		 */
-		public boolean isValid();
+		boolean isValid();
 
 		/**
 		 * Do the completion.
 		 */
-		public void complete(int index);
+		void complete(int index);
 
 		/**
 		 * Returns a component to render a cell for the index
 		 * in the popup.
 		 */
-		public Component getCellRenderer(JList list, int index,
+		Component getCellRenderer(JList list, int index,
 			boolean isSelected, boolean cellHasFocus);
 
 		/**
@@ -91,7 +91,7 @@ public class CompletionPopup extends JWindow
 		 * selected in the popup, or null if no description is
 		 * available.
 		 */
-		public String getDescription(int index);
+		String getDescription(int index);
 	} //}}}
 
 	//{{{ CompletionPopup constructor
@@ -106,9 +106,9 @@ public class CompletionPopup extends JWindow
 	{
 		super(view);
 		this.view = view;
-		this.keyHandler = new KeyHandler();
-		this.candidates = null;
-		this.list = new JList();
+		keyHandler = new KeyHandler();
+		candidates = null;
+		list = new JList();
 
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setCellRenderer(new CellRenderer());
@@ -162,14 +162,7 @@ public class CompletionPopup extends JWindow
 			// "Frame does not receives focus after closing
 			// of the owned window"
 			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4810575
-			EventQueue.invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					view.getTextArea().requestFocus();
-				}
-			});
+			EventQueue.invokeLater(() -> view.getTextArea().requestFocus());
 		}
 	} //}}}
 
