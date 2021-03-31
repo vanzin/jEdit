@@ -26,11 +26,9 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import org.gjt.sp.jedit.OperatingSystem;
-import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.gui.statusbar.StatsBarWidgetPanel;
 import org.gjt.sp.jedit.gui.statusbar.StatusBarEventType;
-import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
-import org.gjt.sp.jedit.gui.statusbar.Widget;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskAdapter;
@@ -41,10 +39,6 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.StringTokenizer;
 //}}}
 
 /** The status bar used to display various information to the user.
@@ -69,8 +63,6 @@ public class StatusBar extends JPanel
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
-		leadingWidgets = new ArrayList<>();
-		trailingWidgets = new ArrayList<>();
 		setName("StatusBar");
 		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,
 			OperatingSystem.isMacOS() ? 18 : 0),
@@ -78,10 +70,10 @@ public class StatusBar extends JPanel
 
 		this.view = view;
 
-		leadingWidgetsBox = new Box(BoxLayout.X_AXIS);
-		trailingWidgetsBox = new Box(BoxLayout.X_AXIS);
+		leadingWidgetsBox = new StatsBarWidgetPanel("view.status-leading", view);
+		trailingWidgetsBox = new StatsBarWidgetPanel("view.status", view);
 		panel = new JPanel(new BorderLayout());
-		panel.add(BorderLayout.WEST,leadingWidgetsBox);
+		panel.add(BorderLayout.WEST, leadingWidgetsBox);
 		panel.add(BorderLayout.EAST, trailingWidgetsBox);
 		add(BorderLayout.CENTER,panel);
 
@@ -102,42 +94,12 @@ public class StatusBar extends JPanel
 		message.setBackground(bg);
 		message.setForeground(fg);
 
-		String leadingStatus = jEdit.getProperty("view.status-leading");
-		if (!Objects.equals(currentLeadingStatus, leadingStatus))
-		{
-			buildStatusBar(fg, bg, leadingStatus, leadingWidgetsBox, leadingWidgets);
-			currentLeadingStatus = leadingStatus;
-		}
-		String trailingStatus = jEdit.getProperty("view.status");
-		if (!Objects.equals(currentTrailingStatus, trailingStatus))
-		{
-			buildStatusBar(fg, bg, trailingStatus, trailingWidgetsBox, trailingWidgets);
-			currentTrailingStatus = trailingStatus;
-		}
+		leadingWidgetsBox.propertiesChanged();
+		trailingWidgetsBox.propertiesChanged();
+
 		updateBufferStatus();
 		updateMiscStatus();
 	} //}}}
-
-	private void buildStatusBar(Color fg, Color bg, String leadingStatus, Box leadingWidgetsBox, Collection<Widget> leadingWidgets)
-	{
-		leadingWidgetsBox.removeAll();
-		StringTokenizer tokenizer = new StringTokenizer(leadingStatus);
-		while (tokenizer.hasMoreTokens())
-		{
-			String token = tokenizer.nextToken();
-			Widget widget = getWidget(token);
-			if (widget != null)
-			{
-				leadingWidgets.add(widget);
-				Component widgetComponent = widget.getComponent();
-				widgetComponent.setBackground(bg);
-				widgetComponent.setForeground(fg);
-				leadingWidgetsBox.add(widgetComponent);
-				widget.update();
-				widget.propertiesChanged();
-			}
-		}
-	}
 
 	//{{{ addNotify() method
 	@Override
@@ -300,29 +262,24 @@ public class StatusBar extends JPanel
 		updateEvent(StatusBarEventType.Misc);
 	} //}}}
 
+	//{{{ updateEvent() method
+	/**
+	 * Update the widgets that are interested in the given event type
+	 * @param statusBarEventType the event type
+	 * @since jEdit 5.7pre1
+	 */
 	public void updateEvent(StatusBarEventType statusBarEventType)
 	{
-		trailingWidgets
-			.stream()
-			.filter(widget -> widget.test(statusBarEventType))
-			.forEach(Widget::update);
-		leadingWidgets
-			.stream()
-			.filter(widget -> widget.test(statusBarEventType))
-			.forEach(Widget::update);
-	}
+		leadingWidgetsBox.updateEvent(statusBarEventType);
+		trailingWidgetsBox.updateEvent(statusBarEventType);
+	} //}}}
 
 	//{{{ Private members
-	private final java.util.List<Widget> leadingWidgets;
-	private final java.util.List<Widget> trailingWidgets;
-
-	private String currentLeadingStatus;
-	private String currentTrailingStatus;
 	private final TaskHandler taskHandler;
 	private final View view;
 	private final JPanel panel;
-	private final Box leadingWidgetsBox;
-	private final Box trailingWidgetsBox;
+	private final StatsBarWidgetPanel leadingWidgetsBox;
+	private final StatsBarWidgetPanel trailingWidgetsBox;
 	private Component messageComp;
 	private final JLabel message;
 
@@ -330,15 +287,4 @@ public class StatusBar extends JPanel
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
 	//}}}
-
-	//{{{ getWidget() method
-	private Widget getWidget(String name)
-	{
-		StatusWidgetFactory widgetFactory = ServiceManager.getService(StatusWidgetFactory.class, name);
-		if (widgetFactory == null)
-		{
-			return null;
-		}
-		return widgetFactory.getWidget(view);
-	} //}}}
 }

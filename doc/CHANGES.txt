@@ -18,7 +18,11 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
-- New methods BufferSet.contains()
+- New method StatusBar.updateEvent() (Matthieu Casanova)
+
+- New method BufferSet.contains() (Matthieu Casanova)
+
+- Deprecated methods removed
     StandardUtilities.objectsEqual()
     TextArea.showPopupMenu()
     Mode.acceptFilename()
