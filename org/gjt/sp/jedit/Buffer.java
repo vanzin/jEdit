@@ -1197,6 +1197,17 @@ public class Buffer extends JEditBuffer
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.linesep-changed",new String[] {
 			jEdit.getProperty("lineSep." + status) }));
+		setLineSeparator(lineSep);
+	} //}}}
+
+	//{{{ getContextSensitiveProperty() method
+
+	/**
+	 * Set the line separator value
+	 * @param lineSep the line separator value (should be \r, \n or \r\n)
+	 */
+	public void setLineSeparator(String lineSep)
+	{
 		setProperty(LINESEP, lineSep);
 		setDirty(true);
 		propertiesChanged();

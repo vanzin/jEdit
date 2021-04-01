@@ -18,6 +18,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
+- New method Buffer.setLineSeparator() (Matthieu Casanova)
+
 - New method StatusBar.updateEvent() (Matthieu Casanova)
 
 - New method BufferSet.contains() (Matthieu Casanova)
