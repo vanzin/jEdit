@@ -3,7 +3,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008-2021 Matthieu Casanova
  * Portions Copyright (C) 2001, 2004 Slava Pestov
  * Portions copyright (C) 2001 Mike Dillon
  *
@@ -25,12 +25,17 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.jEdit;
+
+import javax.swing.*;
 //}}}
 
 /**
@@ -59,7 +64,44 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		@Override
 		protected void singleClick(MouseEvent e)
 		{
-			view.getBuffer().toggleLineSeparator(view);
+			EventQueue.invokeLater(() ->
+			{
+				JList<LineSepType> lineSeparatorList = new JList<>(new LineSepType[] {LineSepType.LF, LineSepType.CRLF, LineSepType.CR});
+				lineSeparatorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				Buffer buffer = view.getBuffer();
+				String property = buffer.getStringProperty(JEditBuffer.LINESEP);
+				LineSepType currentSeparator = LineSepType.fromSeparator(property);
+				lineSeparatorList.setSelectedValue(currentSeparator, true);
+
+				lineSeparatorList.setBorder(BorderFactory.createEtchedBorder());
+				lineSeparatorList.setVisibleRowCount(3);
+				JDialog window = new JDialog();
+				window.setUndecorated(true);
+				window.addWindowListener(new WindowAdapter()
+				{
+					@Override
+					public void windowDeactivated(WindowEvent e)
+					{
+						window.dispose();
+					}
+				});
+				lineSeparatorList.addListSelectionListener(e1 ->
+				{
+					if (!e1.getValueIsAdjusting())
+					{
+						LineSepType selectedValue = lineSeparatorList.getSelectedValue();
+						if (selectedValue != null)
+							buffer.setLineSeparator(selectedValue.getSeparator());
+						window.dispose();
+					}
+				});
+				window.getContentPane().add(lineSeparatorList);
+				window.pack();
+				window.setLocationRelativeTo(label);
+				window.setLocation(window.getX(), window.getY() - 20);
+				window.setVisible(true);
+				EventQueue.invokeLater(lineSeparatorList::requestFocus);
+			});
 		}
 
 		//{{{ update() method
@@ -68,12 +110,8 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		{
 			Buffer buffer = view.getBuffer();
 			String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
-			if("\n".equals(lineSep))
-				label.setText("CR");
-			else if("\r\n".equals(lineSep))
-				label.setText("CRLF");
-			else if("\r".equals(lineSep))
-				label.setText("LF");
+			LineSepType lineSepType = LineSepType.fromSeparator(lineSep);
+			label.setText(lineSepType.name());
 		} //}}}
 
 		@Override
@@ -83,4 +121,36 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		}
 	} //}}}
 
+	private enum LineSepType
+	{
+		LF("\n"),
+		CRLF("\r\n"),
+		CR("\r");
+
+		private final String separator;
+
+		LineSepType(String separator)
+		{
+			this.separator = separator;
+		}
+
+		public String getSeparator()
+		{
+			return separator;
+		}
+
+		public static LineSepType fromSeparator(String separator)
+		{
+			switch (separator)
+			{
+				case "\n":
+					return LF;
+				case "\r\n":
+					return CRLF;
+				case "\r":
+					return CR;
+			}
+			return LF;
+		}
+	}
 }
