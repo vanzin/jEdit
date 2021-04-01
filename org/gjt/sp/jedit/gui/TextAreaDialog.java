@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -99,7 +98,7 @@ public class TextAreaDialog extends EnhancedDialog
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
 		JButton ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(new ActionHandler());
+		ok.addActionListener(e -> dispose());
 		buttons.add(ok);
 		buttons.add(Box.createGlue());
 		content.add(BorderLayout.SOUTH,buttons);
@@ -112,24 +111,16 @@ public class TextAreaDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
-	public void ok()
+	@Override
+    public void ok()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ cancel() method
-	public void cancel()
+	@Override
+    public void cancel()
 	{
 		dispose();
-	} //}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		//{{{ actionPerformed() method
-		public void actionPerformed(ActionEvent evt)
-		{
-			dispose();
-		} //}}}
 	} //}}}
 }
