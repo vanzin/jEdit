@@ -25,11 +25,21 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Arrays;
+
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.jEdit;
+
+import javax.swing.*;
+
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
 //}}}
 
 /**
@@ -42,8 +52,7 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 	@Override
 	public Widget getWidget(View view)
 	{
-		Widget mode = new EncodingWidget(view);
-		return mode;
+		return new EncodingWidget(view);
 	} //}}}
 
 	//{{{ EncodingWidget class
@@ -53,6 +62,56 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 		{
 			super(view);
 			label.setToolTipText(jEdit.getProperty("view.status.encoding-tooltip"));
+		}
+
+		@Override
+		protected void singleClick(MouseEvent e)
+		{
+			EventQueue.invokeLater(() ->
+			{
+				String[] encodings = MiscUtilities.getEncodings(true);
+				Arrays.sort(encodings, CASE_INSENSITIVE_ORDER);
+				JList<String> list = new JList<>(encodings);
+				list.setVisibleRowCount(20);
+				list.setLayoutOrientation(JList.VERTICAL_WRAP);
+				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				Buffer buffer = view.getBuffer();
+				String currentEncoding = buffer.getStringProperty("encoding");
+				list.setSelectedValue(currentEncoding, true);
+				list.setBorder(BorderFactory.createEtchedBorder());
+				JDialog window = new JDialog();
+				window.setUndecorated(true);
+				window.addWindowListener(new WindowAdapter()
+				{
+					@Override
+					public void windowDeactivated(WindowEvent e)
+					{
+						window.dispose();
+					}
+				});
+				list.addListSelectionListener(e1 ->
+				{
+					if (!e1.getValueIsAdjusting())
+					{
+						String selectedValue = list.getSelectedValue();
+						if (selectedValue != null)
+						{
+							buffer.setStringProperty("encoding", selectedValue);
+							buffer.setDirty(true);
+							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+							update();
+						}
+						window.dispose();
+					}
+				});
+				window.getContentPane().add(new JScrollPane(list));
+				window.pack();
+				window.setLocationRelativeTo(label);
+				window.setLocation(window.getX(), window.getY() - 60);
+				window.setVisible(true);
+				list.ensureIndexIsVisible(list.getSelectedIndex());
+				EventQueue.invokeLater(list::requestFocus);
+			});
 		}
 
 		@Override
