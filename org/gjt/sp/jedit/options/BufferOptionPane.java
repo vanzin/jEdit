@@ -27,23 +27,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.gui.LineSepListCellRenderer;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
+import org.jedit.misc.LineSepType;
 
 public class BufferOptionPane extends AbstractOptionPane
 {
 	private JComboBox<String> encoding;
-	private JComboBox<String> lineSeparator;
+	private JComboBox<LineSepType> lineSeparator;
 	private JCheckBox gzipped;
 	private Mode[] modes;
 	private JComboBox<Mode> mode;
@@ -78,19 +79,14 @@ public class BufferOptionPane extends AbstractOptionPane
 		addSeparator("buffer-options.loading-saving");
 
 		//{{{ Line separator
-		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
-			jEdit.getProperty("lineSep.windows"),
-			jEdit.getProperty("lineSep.mac") };
-		lineSeparator = new JComboBox<>(lineSeps);
+		lineSeparator = new JComboBox<>(LineSepType.values());
+		lineSeparator.setRenderer(new LineSepListCellRenderer());
 		String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
 		if(lineSep == null)
 			lineSep = System.getProperty("line.separator");
-		if("\n".equals(lineSep))
-			lineSeparator.setSelectedIndex(0);
-		else if("\r\n".equals(lineSep))
-			lineSeparator.setSelectedIndex(1);
-		else if("\r".equals(lineSep))
-			lineSeparator.setSelectedIndex(2);
+
+		LineSepType currentLineSepType = LineSepType.fromSeparator(lineSep);
+		lineSeparator.setSelectedItem(currentLineSepType);
 		addComponent(jEdit.getProperty("buffer-options.lineSeparator"),
 			lineSeparator);
 		//}}}
@@ -234,24 +230,18 @@ public class BufferOptionPane extends AbstractOptionPane
 	@Override
 	protected void _save()
 	{
-		int index = lineSeparator.getSelectedIndex();
-		String lineSep;
-		if(index == 0)
-			lineSep = "\n";
-		else if(index == 1)
-			lineSep = "\r\n";
-		else if(index == 2)
-			lineSep = "\r";
-		else
-			throw new InternalError();
+		LineSepType newLineSep = (LineSepType) lineSeparator.getSelectedItem();
 
-		String oldLineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
-		if(oldLineSep == null)
-			oldLineSep = System.getProperty("line.separator");
-		if(!oldLineSep.equals(lineSep))
+		if (newLineSep != null)
 		{
-			buffer.setStringProperty(JEditBuffer.LINESEP, lineSep);
-			buffer.setDirty(true);
+			String oldLineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
+			if(oldLineSep == null)
+				oldLineSep = System.getProperty("line.separator");
+			if(!oldLineSep.equals(newLineSep.getSeparator()))
+			{
+				buffer.setStringProperty(JEditBuffer.LINESEP, newLineSep.getSeparator());
+				buffer.setDirty(true);
+			}
 		}
 
 		String encoding = (String)this.encoding.getSelectedItem();
@@ -311,7 +301,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		buffer.setBooleanProperty("locked", locked.isSelected()); // requires propertiesChanged() call afterwards
 
-		index = mode.getSelectedIndex();
+		int index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]); // NOTE: setMode() makes implicit call of propertiesChanged()
 		switch(checkModStatus.getSelectedIndex())
 		{

@@ -38,9 +38,9 @@ common.clearAll=全部清除
 common.selectAll=全部選取
 common.selectNone=全部清除
 
-lineSep.unix=Unix (\\n)
-lineSep.windows=DOS/Windows (\\r\\n)
-lineSep.mac=MacOS (\\r)
+lineSep.LF=Unix/MacOS (\\n)
+lineSep.CRLF=DOS/Windows (\\r\\n)
+lineSep.LF=MacOS (\\r)
 #}}}
 
 #{{{ Miscellaneous

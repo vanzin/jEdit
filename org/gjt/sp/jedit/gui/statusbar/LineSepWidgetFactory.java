@@ -33,7 +33,9 @@ import java.awt.event.WindowEvent;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.gui.LineSepListCellRenderer;
 import org.gjt.sp.jedit.jEdit;
+import org.jedit.misc.LineSepType;
 
 import javax.swing.*;
 //}}}
@@ -68,6 +70,7 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 			{
 				JList<LineSepType> lineSeparatorList = new JList<>(new LineSepType[] {LineSepType.LF, LineSepType.CRLF, LineSepType.CR});
 				lineSeparatorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				lineSeparatorList.setCellRenderer(new LineSepListCellRenderer());
 				Buffer buffer = view.getBuffer();
 				String property = buffer.getStringProperty(JEditBuffer.LINESEP);
 				LineSepType currentSeparator = LineSepType.fromSeparator(property);
@@ -121,36 +124,4 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		}
 	} //}}}
 
-	private enum LineSepType
-	{
-		LF("\n"),
-		CRLF("\r\n"),
-		CR("\r");
-
-		private final String separator;
-
-		LineSepType(String separator)
-		{
-			this.separator = separator;
-		}
-
-		public String getSeparator()
-		{
-			return separator;
-		}
-
-		public static LineSepType fromSeparator(String separator)
-		{
-			switch (separator)
-			{
-				case "\n":
-					return LF;
-				case "\r\n":
-					return CRLF;
-				case "\r":
-					return CR;
-			}
-			return LF;
-		}
-	}
 }
