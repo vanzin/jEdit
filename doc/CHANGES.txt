@@ -22,6 +22,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 
 - New method Buffer.setLineSeparator() (Matthieu Casanova)
 
+- New method Buffer.reloadWithEncoding() (Matthieu Casanova)
+
 - New method StatusBar.updateEvent() (Matthieu Casanova)
 
 - New method BufferSet.contains() (Matthieu Casanova)
@@ -60,6 +62,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ Editing
 
+- Status bar encoding widget allow to choose between updating the encoding or reloading
+  with a new encoding (Matthieu Casanova)
 
 }}}
 

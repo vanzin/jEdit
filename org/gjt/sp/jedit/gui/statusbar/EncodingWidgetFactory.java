@@ -34,7 +34,9 @@ import java.util.Arrays;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.BufferOptions;
+import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.jEdit;
 
 import javax.swing.*;
@@ -76,7 +78,7 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 				list.setLayoutOrientation(JList.VERTICAL_WRAP);
 				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				Buffer buffer = view.getBuffer();
-				String currentEncoding = buffer.getStringProperty("encoding");
+				String currentEncoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 				list.setSelectedValue(currentEncoding, true);
 				list.setBorder(BorderFactory.createEtchedBorder());
 				JDialog window = new JDialog();
@@ -96,10 +98,27 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 						String selectedValue = list.getSelectedValue();
 						if (selectedValue != null)
 						{
-							buffer.setStringProperty("encoding", selectedValue);
-							buffer.setDirty(true);
-							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
-							update();
+							if (!currentEncoding.equals(selectedValue))
+							{
+								EventQueue.invokeLater(() ->
+								{
+									int selectedOption = DialogChooser.openChooseWindow(view,
+										jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),
+										jEdit.getProperty("buffer.encoding.change", new String[]{selectedValue}));
+									switch (selectedOption)
+									{
+										case 0:
+											buffer.reloadWithEncoding(view, selectedValue);
+											break;
+										case 1:
+											buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+											buffer.setDirty(true);
+											update();
+											break;
+									}
+								});
+
+							}
 						}
 						window.dispose();
 					}

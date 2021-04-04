@@ -164,6 +164,21 @@ public class Buffer extends JEditBuffer
 		load(view,true);
 	} //}}}
 
+	//{{{ reload() method
+	/**
+	 * Reloads the buffer from disk with a new encoding,
+	 * asking for confirmation if the buffer has unsaved changes.
+	 * @param view The view
+	 * @param encoding the new encoding
+	 * @since jEdit 5.7pre1
+	 */
+	public void reloadWithEncoding(View view, String encoding)
+	{
+		setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+		setStringProperty(JEditBuffer.ENCODING, encoding);
+		reload(view);
+	} //}}}
+
 	//{{{ load() method
 	/**
 	 * Loads the buffer from disk.

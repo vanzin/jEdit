@@ -803,6 +803,8 @@ largeBufferDialog.message=The buffer is very large and jEdit may become unrespon
 largeBufferDialog.fullSyntax=Full syntax highlight
 largeBufferDialog.contextInsensitive=Context insensitive syntax highlight
 largeBufferDialog.defaultMode=Text edit mode
+buffer.encoding.reload=Reload using {0}
+buffer.encoding.change=Change to {0}
 #}}}
 
 #{{{ I/O error dialog box
