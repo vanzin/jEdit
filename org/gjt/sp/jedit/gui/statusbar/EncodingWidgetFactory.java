@@ -35,7 +35,6 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.jEdit;
 
@@ -131,12 +130,6 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 				list.ensureIndexIsVisible(list.getSelectedIndex());
 				EventQueue.invokeLater(list::requestFocus);
 			});
-		}
-
-		@Override
-		protected void doubleClick(MouseEvent e)
-		{
-			new BufferOptions(view,view.getBuffer());
 		}
 
 		@Override
