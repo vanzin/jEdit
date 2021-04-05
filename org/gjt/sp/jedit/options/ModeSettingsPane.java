@@ -25,12 +25,12 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 
-import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Objects;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -52,8 +52,12 @@ public class ModeSettingsPane extends AbstractOptionPane
 	protected void _init()
 	{
 		Mode[] modes = reloadModes();
-		mode = new JComboBox<String>(modeNames);
-		mode.addActionListener(new ActionHandler());
+		mode = new JComboBox<>(modeNames);
+		mode.addActionListener(e ->
+		{
+			saveMode();
+			selectMode();
+		});
 
 		captionBox = new Box(BoxLayout.X_AXIS);
 		addComponent(captionBox);
@@ -61,7 +65,11 @@ public class ModeSettingsPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.mode"),mode);
 
 		useDefaults = new JCheckBox(jEdit.getProperty("options.editing.useDefaults"));
-		useDefaults.addActionListener(new ActionHandler());
+		useDefaults.addActionListener(e ->
+		{
+			modeProps[mode.getSelectedIndex() - 1].useDefaults = useDefaults.isSelected();
+			updateEnabled();
+		});
 		addComponent(useDefaults);
 
 		addComponent(jEdit.getProperty("options.editing.noWordSep"),
@@ -72,7 +80,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 
 		String[] foldModes = FoldHandler.getFoldModes();
 		addComponent(jEdit.getProperty("options.editing.folding"),
-			folding = new JComboBox<String>(foldModes));
+			folding = new JComboBox<>(foldModes));
 
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
 			collapseFolds = new JTextField());
@@ -83,10 +91,10 @@ public class ModeSettingsPane extends AbstractOptionPane
 			"hard"
 		};
 		addComponent(jEdit.getProperty("options.editing.wrap"),
-			wrap = new JComboBox<String>(wrapModes));
+			wrap = new JComboBox<>(wrapModes));
 
 		String[] lineLens = { "0", "72", "76", "80" };
-		maxLineLen = new JComboBox<String>(lineLens);
+		maxLineLen = new JComboBox<>(lineLens);
 		maxLineLen.setToolTipText(jEdit.getProperty("options.editing.maxLineLen.tooltip"));
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"), maxLineLen);
 		maxLineLen.setEditable(true);
@@ -97,17 +105,17 @@ public class ModeSettingsPane extends AbstractOptionPane
 			"full"
 		};
 		addComponent(jEdit.getProperty("options.editing.autoIndent"),
-			autoIndent = new JComboBox<String>(indentModes));
+			autoIndent = new JComboBox<>(indentModes));
 
 
 		String[] tabSizes = { "2", "4", "8" };
 		addComponent(jEdit.getProperty("options.editing.tabSize"),
-			tabSize = new JComboBox<String>(tabSizes));
+			tabSize = new JComboBox<>(tabSizes));
 
 		tabSize.setEditable(true);
 
 		addComponent(jEdit.getProperty("options.editing.indentSize"),
-			indentSize = new JComboBox<String>(tabSizes));
+			indentSize = new JComboBox<>(tabSizes));
 		indentSize.setEditable(true);
 
 
@@ -136,7 +144,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 	private Mode[] reloadModes()
 	{
 		Mode[] modes = jEdit.getModes();
-		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
+		Arrays.sort(modes,new StandardUtilities.StringCompare<>(true));
 
 		global = new ModeProperties();
 		modeProps = new ModeProperties[modes.length];
@@ -215,7 +223,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 	//{{{ selectMode() method
 	private void selectMode()
 	{
-		int index = mode.getSelectedIndex() < 0 ? 0 : mode.getSelectedIndex();
+		int index = Math.max(mode.getSelectedIndex(), 0);
 		current = index == 0 ? global : modeProps[index - 1];
 		current.edited = true;
 		current.load();
@@ -281,26 +289,6 @@ public class ModeSettingsPane extends AbstractOptionPane
 
 	//}}}
 
-	//{{{ ActionHandler class
-	private class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == mode)
-			{
-				saveMode();
-				selectMode();
-			}
-			else if(source == useDefaults)
-			{
-				modeProps[mode.getSelectedIndex() - 1].useDefaults =
-					useDefaults.isSelected();
-				updateEnabled();
-			}
-		}
-	} //}}}
-
 	//{{{ ModeProperties class
 	private static class ModeProperties
 	{
@@ -358,7 +346,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 				camelCasedWords = mode.getBooleanProperty("camelCasedWords");
 				folding = mode.getProperty("folding").toString();
 				collapseFolds = mode.getProperty("collapseFolds").toString();
-				wrap = mode.getProperty("wrap").toString();
+				wrap = mode.getProperty(JEditBuffer.WRAP).toString();
 				maxLineLen = mode.getProperty("maxLineLen").toString();
 				tabSize = mode.getProperty("tabSize").toString();
 				indentSize = mode.getProperty("indentSize").toString();
