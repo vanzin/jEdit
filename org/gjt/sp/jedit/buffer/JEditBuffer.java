@@ -83,9 +83,13 @@ public class JEditBuffer
 	 * @since jEdit 3.2pre4
 	 */
 	public static final String ENCODING = "encoding";
+	/**
+	 * Wrap mode, the value must be one of {@link @WordWrap}
+	 * @since jEdit 5.7pre1
+	 */
+	public static final String WRAP = "wrap";
 
 	//{{{ JEditBuffer constructors
-
 	{
 		bufferListeners = new Vector<>();
 		lock = new ReentrantReadWriteLock();
@@ -124,7 +128,7 @@ public class JEditBuffer
 	 */
 	public JEditBuffer()
 	{
-		properties.put("wrap",new PropValue("none",false));
+		properties.put(WRAP,new PropValue("none",false));
 		properties.put("folding",new PropValue("none",false));
 		tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
@@ -1776,6 +1780,30 @@ loop:		for(int i = 0; i < seg.count; i++)
 				return re;
 			}
 		}
+	} //}}}
+
+	//{{{ getWordWrap() method
+	/**
+	 * Returns the current word wrap mode
+	 *
+	 * @return the current word wrap mode
+	 * @since jEdit 5.7pre1
+	 */
+	public WordWrap getWordWrap()
+	{
+		return WordWrap.valueOf(getStringProperty(WRAP));
+	} //}}}
+
+	//{{{ setWordWrap() method
+	/**
+	 * set word wrap
+	 *
+	 * @param wordWrap the new word wrap
+	 * @since jEdit 5.7pre1
+	 */
+	public void setWordWrap(WordWrap wordWrap)
+	{
+		setProperty(WRAP, wordWrap.name());
 	} //}}}
 
 	//{{{ getRuleSetAtOffset() method

@@ -1145,7 +1145,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public void toggleWordWrap(View view)
 	{
-		WordWrap wrap = WordWrap.valueOf(getStringProperty("wrap"));
+		WordWrap wrap = getWordWrap();
 		if(wrap == none)
 		{
 			String largeFileMode = getStringProperty("largefilemode");
@@ -1163,30 +1163,6 @@ public class Buffer extends JEditBuffer
 				wrap.name() }));
 		setWordWrap(wrap);
 		propertiesChanged();
-	} //}}}
-
-	//{{{ getWordWrap() method
-	/**
-	 * Returns the current word wrap mode
-	 *
-	 * @return the current word wrap mode
-	 * @since jEdit 5.7pre1
-	 */
-	public WordWrap getWordWrap()
-	{
-		return WordWrap.valueOf(getStringProperty("wrap"));
-	} //}}}
-
-	//{{{ setWordWrap() method
-	/**
-	 * set word wrap
-	 *
-	 * @param wordWrap the new word wrap
-	 * @since jEdit 5.7pre1
-	 */
-	public void setWordWrap(WordWrap wordWrap)
-	{
-		setProperty("wrap", wordWrap.name());
 	} //}}}
 
 	//{{{ toggleAutoIndent() method
