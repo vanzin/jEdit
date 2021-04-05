@@ -22,7 +22,11 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -34,12 +38,12 @@ public class DialogChooser
 	/**
 	 * Show an undecorated modal dialog presenting one button per choice.
 	 *
-	 * @param parent the pârent frame
+	 * @param parent the parent frame
 	 * @param choices the choices
 	 * @return the index of the selected choice
 	 * @since jEdit 5.7pre1
 	 */
-	public static int openChooseWindow(JFrame parent, String... choices)
+	public static int openChooserWindow(JFrame parent, String... choices)
 	{
 		JDialog dialog = new JDialog(parent);
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -63,5 +67,54 @@ public class DialogChooser
 		dialog.pack();
 		dialog.setVisible(true);
 		return atomicInteger.get();
+	}
+
+	/**
+	 * Show an undecorated dialog showing a list of items to choose.
+	 *
+	 * @param parent the parent component
+	 * @param initialValue the initial choosen value
+	 * @param listSelectionListener the callback to call when an item is choosen
+	 * @param choices the choices
+	 * @since jEdit 5.7pre1
+	 */
+	public static void openListChooserWindow(JComponent parent,
+						 Object initialValue,
+						 ListSelectionListener listSelectionListener,
+						 Object[] choices)
+	{
+		JList<?> list = new JList<>(choices);
+		list.setVisibleRowCount(20);
+		list.setLayoutOrientation(JList.VERTICAL_WRAP);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setSelectedValue(initialValue, true);
+		list.setBorder(BorderFactory.createEtchedBorder());
+		JDialog window = new JDialog();
+		window.setUndecorated(true);
+		window.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowDeactivated(WindowEvent e)
+			{
+				window.dispose();
+			}
+		});
+		list.addListSelectionListener(e1 ->
+		{
+			if (!e1.getValueIsAdjusting())
+			{
+				Object selectedValue = list.getSelectedValue();
+				if (selectedValue != null && !Objects.equals(selectedValue, initialValue))
+					listSelectionListener.valueChanged(e1);
+				window.dispose();
+			}
+		});
+		window.getContentPane().add(new JScrollPane(list));
+		window.pack();
+		window.setLocationRelativeTo(parent);
+		window.setLocation(window.getX(), window.getY() - 60);
+		window.setVisible(true);
+		list.ensureIndexIsVisible(list.getSelectedIndex());
+		EventQueue.invokeLater(list::requestFocus);
 	}
 }

@@ -27,8 +27,6 @@ package org.gjt.sp.jedit.gui.statusbar;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
 import org.gjt.sp.jedit.Buffer;
@@ -72,63 +70,30 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 			{
 				String[] encodings = MiscUtilities.getEncodings(true);
 				Arrays.sort(encodings, CASE_INSENSITIVE_ORDER);
-				JList<String> list = new JList<>(encodings);
-				list.setVisibleRowCount(20);
-				list.setLayoutOrientation(JList.VERTICAL_WRAP);
-				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				Buffer buffer = view.getBuffer();
 				String currentEncoding = buffer.getStringProperty(JEditBuffer.ENCODING);
-				list.setSelectedValue(currentEncoding, true);
-				list.setBorder(BorderFactory.createEtchedBorder());
-				JDialog window = new JDialog();
-				window.setUndecorated(true);
-				window.addWindowListener(new WindowAdapter()
-				{
-					@Override
-					public void windowDeactivated(WindowEvent e)
+				DialogChooser.openListChooserWindow(label,
+					currentEncoding,
+					listSelectionEvent -> EventQueue.invokeLater(() ->
 					{
-						window.dispose();
-					}
-				});
-				list.addListSelectionListener(e1 ->
-				{
-					if (!e1.getValueIsAdjusting())
-					{
+						JList<String> list = (JList<String>) listSelectionEvent.getSource();
 						String selectedValue = list.getSelectedValue();
-						if (selectedValue != null)
+						int selectedOption = DialogChooser.openChooserWindow(view,
+							jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),
+							jEdit.getProperty("buffer.encoding.change", new String[]{selectedValue}));
+						switch (selectedOption)
 						{
-							if (!currentEncoding.equals(selectedValue))
-							{
-								EventQueue.invokeLater(() ->
-								{
-									int selectedOption = DialogChooser.openChooseWindow(view,
-										jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),
-										jEdit.getProperty("buffer.encoding.change", new String[]{selectedValue}));
-									switch (selectedOption)
-									{
-										case 0:
-											buffer.reloadWithEncoding(view, selectedValue);
-											break;
-										case 1:
-											buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
-											buffer.setDirty(true);
-											update();
-											break;
-									}
-								});
-
-							}
+							case 0:
+								buffer.reloadWithEncoding(view, selectedValue);
+								break;
+							case 1:
+								buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+								buffer.setDirty(true);
+								update();
+								break;
 						}
-						window.dispose();
-					}
-				});
-				window.getContentPane().add(new JScrollPane(list));
-				window.pack();
-				window.setLocationRelativeTo(label);
-				window.setLocation(window.getX(), window.getY() - 60);
-				window.setVisible(true);
-				list.ensureIndexIsVisible(list.getSelectedIndex());
-				EventQueue.invokeLater(list::requestFocus);
+					}),
+					encodings);
 			});
 		}
 

@@ -18,7 +18,9 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
-- New method DialogChooser.openChooseWindow() showing a chooser dialog (Matthieu Casanova)
+- New method DialogChooser.openChooserWindow() showing a chooser dialog (Matthieu Casanova)
+
+- New method DialogChooser.openListChooserWindow() showing a chooser dialog list (Matthieu Casanova)
 
 - New method Buffer.setLineSeparator() (Matthieu Casanova)
 
