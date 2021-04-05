@@ -29,12 +29,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.DialogChooser;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.BufferUpdate;
 
 import javax.swing.*;
 
@@ -87,7 +85,7 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 						case 1:
 							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
 							buffer.setDirty(true);
-							update();
+							EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));
 							break;
 					}
 				}),

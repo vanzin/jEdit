@@ -25,11 +25,21 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.buffer.WordWrap;
+import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+
+import javax.swing.*;
+
+import static org.gjt.sp.jedit.buffer.WordWrap.none;
+import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
 
 /**
@@ -57,7 +67,19 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		@Override
 		protected void singleClick(MouseEvent e)
 		{
-			view.getBuffer().toggleWordWrap(view);
+			Buffer buffer = view.getBuffer();
+			WordWrap currentFoldingMode = WordWrap.valueOf(buffer.getStringProperty("wrap"));
+			DialogChooser.openListChooserWindow(label,
+				currentFoldingMode,
+				listSelectionEvent -> EventQueue.invokeLater(() ->
+				{
+					JList<WordWrap> list = (JList<WordWrap>) listSelectionEvent.getSource();
+					WordWrap selectedValue = list.getSelectedValue();
+					buffer.setWordWrap(selectedValue);
+					EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));
+
+				}),
+				WordWrap.values());
 		}
 
 		//{{{ update() method
@@ -65,16 +87,17 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		public void update()
 		{
 			Buffer buffer = view.getBuffer();
-			String wrap = buffer.getStringProperty("wrap");
-			if (largeBufferDeactivateWrap() && "soft".equals(wrap))
+			WordWrap wrap = buffer.getWordWrap();
+			if (largeBufferDeactivateWrap() && wrap == soft)
 			{
-				wrap = "none";
+				wrap = none;
 			}
 			label.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip",
 				new String[]{jEdit.getProperty("wrap." + wrap)}));
 			label.setText("Wrap: " + wrap);
 		} //}}}
 
+		//{{{ largeBufferDeactivateWrap() method
 		private boolean largeBufferDeactivateWrap()
 		{
 			Buffer buffer = view.getBuffer();

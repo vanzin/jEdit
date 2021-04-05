@@ -37,6 +37,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.BufferUndoListener;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
@@ -59,6 +60,10 @@ import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
+
+import static org.gjt.sp.jedit.buffer.WordWrap.hard;
+import static org.gjt.sp.jedit.buffer.WordWrap.none;
+import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
 
 /**
@@ -1140,24 +1145,48 @@ public class Buffer extends JEditBuffer
 	 */
 	public void toggleWordWrap(View view)
 	{
-		String wrap = getStringProperty("wrap");
-		if(wrap.equals("none"))
+		WordWrap wrap = WordWrap.valueOf(getStringProperty("wrap"));
+		if(wrap == none)
 		{
 			String largeFileMode = getStringProperty("largefilemode");
 			if ("limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode))
-				wrap = "hard";
+				wrap = hard;
 			else
-				wrap = "soft";
+				wrap = soft;
 		}
-		else if(wrap.equals("soft"))
-			wrap = "hard";
-		else if(wrap.equals("hard"))
-			wrap = "none";
+		else if(wrap == soft)
+			wrap = hard;
+		else if(wrap == hard)
+			wrap = none;
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.wrap-changed",new String[] {
-			wrap }));
-		setProperty("wrap",wrap);
+				wrap.name() }));
+		setWordWrap(wrap);
 		propertiesChanged();
+	} //}}}
+
+	//{{{ getWordWrap() method
+	/**
+	 * Returns the current word wrap mode
+	 *
+	 * @return the current word wrap mode
+	 * @since jEdit 5.7pre1
+	 */
+	public WordWrap getWordWrap()
+	{
+		return WordWrap.valueOf(getStringProperty("wrap"));
+	} //}}}
+
+	//{{{ setWordWrap() method
+	/**
+	 * set word wrap
+	 *
+	 * @param wordWrap the new word wrap
+	 * @since jEdit 5.7pre1
+	 */
+	public void setWordWrap(WordWrap wordWrap)
+	{
+		setProperty("wrap", wordWrap.name());
 	} //}}}
 
 	//{{{ toggleAutoIndent() method

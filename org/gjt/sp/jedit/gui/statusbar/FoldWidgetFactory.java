@@ -25,11 +25,18 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.MouseEvent;
+
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.gui.BufferOptions;
+import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+
+import javax.swing.*;
 //}}}
 
 /**
@@ -55,9 +62,21 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 		}
 
 		@Override
-		protected void doubleClick(MouseEvent e)
+		protected void singleClick(MouseEvent e)
 		{
-			new BufferOptions(view, view.getBuffer());
+			Buffer buffer = view.getBuffer();
+			String currentFoldingMode = buffer.getStringProperty("folding");
+			DialogChooser.openListChooserWindow(label,
+				currentFoldingMode,
+				listSelectionEvent -> EventQueue.invokeLater(() ->
+				{
+					JList<String> list = (JList<String>) listSelectionEvent.getSource();
+					String selectedValue = list.getSelectedValue();
+					buffer.setStringProperty("folding", selectedValue);
+					EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));
+
+				}),
+				FoldHandler.getFoldModes());
 		}
 
 		@Override
@@ -65,7 +84,7 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 		{
 			Buffer buffer = view.getBuffer();
 			if (buffer.isLoaded())
-				label.setText((String)view.getBuffer().getProperty("folding"));
+				label.setText("Fold: " + view.getBuffer().getProperty("folding"));
 		}
 
 		@Override
