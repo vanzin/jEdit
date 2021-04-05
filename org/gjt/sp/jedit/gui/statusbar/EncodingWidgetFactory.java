@@ -66,35 +66,32 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 		@Override
 		protected void singleClick(MouseEvent e)
 		{
-			EventQueue.invokeLater(() ->
-			{
-				String[] encodings = MiscUtilities.getEncodings(true);
-				Arrays.sort(encodings, CASE_INSENSITIVE_ORDER);
-				Buffer buffer = view.getBuffer();
-				String currentEncoding = buffer.getStringProperty(JEditBuffer.ENCODING);
-				DialogChooser.openListChooserWindow(label,
-					currentEncoding,
-					listSelectionEvent -> EventQueue.invokeLater(() ->
+			String[] encodings = MiscUtilities.getEncodings(true);
+			Arrays.sort(encodings, CASE_INSENSITIVE_ORDER);
+			Buffer buffer = view.getBuffer();
+			String currentEncoding = buffer.getStringProperty(JEditBuffer.ENCODING);
+			DialogChooser.openListChooserWindow(label,
+				currentEncoding,
+				listSelectionEvent -> EventQueue.invokeLater(() ->
+				{
+					JList<String> list = (JList<String>) listSelectionEvent.getSource();
+					String selectedValue = list.getSelectedValue();
+					int selectedOption = DialogChooser.openChooserWindow(view,
+						jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),
+						jEdit.getProperty("buffer.encoding.change", new String[]{selectedValue}));
+					switch (selectedOption)
 					{
-						JList<String> list = (JList<String>) listSelectionEvent.getSource();
-						String selectedValue = list.getSelectedValue();
-						int selectedOption = DialogChooser.openChooserWindow(view,
-							jEdit.getProperty("buffer.encoding.reload", new String[]{selectedValue}),
-							jEdit.getProperty("buffer.encoding.change", new String[]{selectedValue}));
-						switch (selectedOption)
-						{
-							case 0:
-								buffer.reloadWithEncoding(view, selectedValue);
-								break;
-							case 1:
-								buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
-								buffer.setDirty(true);
-								update();
-								break;
-						}
-					}),
-					encodings);
-			});
+						case 0:
+							buffer.reloadWithEncoding(view, selectedValue);
+							break;
+						case 1:
+							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+							buffer.setDirty(true);
+							update();
+							break;
+					}
+				}),
+				encodings);
 		}
 
 		@Override
