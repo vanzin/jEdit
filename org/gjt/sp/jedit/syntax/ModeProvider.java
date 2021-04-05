@@ -99,7 +99,7 @@ public class ModeProvider
 				{
 					// read in the catalog file
 					BufferedReader br = new BufferedReader(new FileReader(catalogFile));
-					String line = null;
+					String line;
 					while((line = br.readLine()) != null)
 					{
 						contents.append(line).append('\n');
@@ -225,7 +225,7 @@ public class ModeProvider
 			}
 			// next best is filepath match, there could be multiple matches,
 			// need to choose the best one
-			List<Mode> filepathMatch = new ArrayList<Mode>();
+			List<Mode> filepathMatch = new ArrayList<>();
 			for (Mode mode : acceptable)
 			{
 				if (mode.acceptFile(filepath, filename))
@@ -316,7 +316,7 @@ public class ModeProvider
 			{
 				// read in the catalog file
 				BufferedReader br = new BufferedReader(new FileReader(catalogFile));
-				String line = null;
+				String line;
 				StringBuilder contents = new StringBuilder();
 				while((line = br.readLine()) != null)
 				{
