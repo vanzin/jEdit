@@ -507,7 +507,7 @@ public class StandaloneTextArea extends TextArea
 			"noTabs",
 			"defaultMode",
 			"undoCount",
-			"wrap",
+			JEditBuffer.WRAP,
 			"maxLineLen",
 			"wordBreakChars",
 			"noWordSep",
