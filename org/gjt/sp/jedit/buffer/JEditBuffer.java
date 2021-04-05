@@ -46,6 +46,8 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
+
+import static org.gjt.sp.jedit.buffer.WordWrap.none;
 //}}}
 
 /**
@@ -128,7 +130,7 @@ public class JEditBuffer
 	 */
 	public JEditBuffer()
 	{
-		properties.put(WRAP,new PropValue("none",false));
+		setWordWrap(none);
 		properties.put("folding",new PropValue("none",false));
 		tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
