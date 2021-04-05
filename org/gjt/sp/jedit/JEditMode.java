@@ -48,8 +48,7 @@ class JEditMode extends Mode
 	{
 		if (initialized)
 		{
-			String prefix = "mode." + name + '.';
-			jEdit.setProperty(prefix + key, value.toString());
+			jEdit.setProperty("mode." + name + '.' + key, value.toString());
 		}
 		props.put(key,value);
 	} //}}}
@@ -64,8 +63,7 @@ class JEditMode extends Mode
 	{
 		if (initialized)
 		{
-			String prefix = "mode." + name + '.';
-			jEdit.unsetProperty(prefix + key);
+			jEdit.unsetProperty("mode." + name + '.' + key);
 		}
 		props.remove(key);
 	} //}}}
@@ -80,8 +78,7 @@ class JEditMode extends Mode
 	@Override
 	public Object getProperty(String key)
 	{
-		String prefix = "mode." + name + '.';
-		String property = jEdit.getProperty(prefix + key);
+		String property = jEdit.getProperty("mode." + name + '.' + key);
 		if(property != null)
 		{
 			Object value;
