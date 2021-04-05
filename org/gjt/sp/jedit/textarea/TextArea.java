@@ -48,6 +48,7 @@ import org.gjt.sp.jedit.JEditActionSet;
 import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
@@ -59,6 +60,9 @@ import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
+
+import static org.gjt.sp.jedit.buffer.WordWrap.hard;
+import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
 
 /** Abstract TextArea component.
@@ -4887,16 +4891,16 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			painter.getFontRenderContext()).getWidth() / charWidthSample.length();
 		charWidth = (int)Math.round(charWidthDouble);
 
-		String oldWrap = wrap;
-		wrap = buffer.getStringProperty("wrap");
-		hardWrap = "hard".equals(wrap);
+		WordWrap oldWrap = wrap;
+		wrap = buffer.getWordWrap();
+		hardWrap = wrap == hard;
 		String largeFileMode = buffer.getStringProperty("largefilemode");
-		softWrap = "soft".equals(wrap) && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
+		softWrap = wrap == soft && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen", 0));
 
-		boolean wrapSettingsChanged = !(wrap.equals(oldWrap)
+		boolean wrapSettingsChanged = !(oldWrap == wrap
 			&& oldWrapToWidth == wrapToWidth
 			&& oldWrapMargin == wrapMargin);
 
@@ -4961,7 +4965,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	int maxHorizontalScrollWidth;
 
-	String wrap;
+	WordWrap wrap;
 	boolean hardWrap;
 	boolean softWrap;
 	boolean wrapToWidth;
