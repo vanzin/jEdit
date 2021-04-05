@@ -59,7 +59,7 @@ public class Mode
 	public Mode(String name)
 	{
 		this.name = name;
-		this.ignoreWhitespace = true;
+		ignoreWhitespace = true;
 		props = new Hashtable<>();
 	} //}}}
 
@@ -310,7 +310,7 @@ public class Mode
 		if(filenameGlob == null)
 			return false;
 
-		if(fileName != null && fileName.equalsIgnoreCase(filenameGlob))	
+		if(filenameGlob.equalsIgnoreCase(fileName))
 			return true;
 
 		if (filePath != null) 
@@ -407,7 +407,7 @@ public class Mode
 	//{{{ initIndentRules() method
 	private void initIndentRules()
 	{
-		List<IndentRule> rules = new LinkedList<IndentRule>();
+		List<IndentRule> rules = new LinkedList<>();
 
 		String[] regexpProps = {
 			"indentNextLine",
