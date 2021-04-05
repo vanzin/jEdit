@@ -31,6 +31,7 @@ import java.util.Objects;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -85,13 +86,8 @@ public class ModeSettingsPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
 			collapseFolds = new JTextField());
 
-		String[] wrapModes = {
-			"none",
-			"soft",
-			"hard"
-		};
 		addComponent(jEdit.getProperty("options.editing.wrap"),
-			wrap = new JComboBox<>(wrapModes));
+			wrap = new JComboBox<>(WordWrap.values()));
 
 		String[] lineLens = { "0", "72", "76", "80" };
 		maxLineLen = new JComboBox<>(lineLens);
@@ -189,7 +185,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 	private JCheckBox camelCasedWords;
 	private JComboBox<String> folding;
 	private JTextField collapseFolds;
-	private JComboBox<String> wrap;
+	private JComboBox<WordWrap> wrap;
 	private JComboBox<String> maxLineLen;
 	private JComboBox<String> tabSize;
 	private JComboBox<String> indentSize;
@@ -210,7 +206,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 		current.camelCasedWords = camelCasedWords.isSelected();
 		current.folding = (String)folding.getSelectedItem();
 		current.collapseFolds = collapseFolds.getText();
-		current.wrap = (String)wrap.getSelectedItem();
+		current.wrap = (WordWrap) wrap.getSelectedItem();
 		current.maxLineLen = (String)maxLineLen.getSelectedItem();
 		current.tabSize = (String)tabSize.getSelectedItem();
 		current.indentSize = (String)indentSize.getSelectedItem();
@@ -304,7 +300,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 		boolean camelCasedWords;
 		String folding;
 		String collapseFolds;
-		String wrap;
+		WordWrap wrap;
 		String maxLineLen;
 		String tabSize;
 		String indentSize;
@@ -346,7 +342,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 				camelCasedWords = mode.getBooleanProperty("camelCasedWords");
 				folding = mode.getProperty("folding").toString();
 				collapseFolds = mode.getProperty("collapseFolds").toString();
-				wrap = mode.getProperty(JEditBuffer.WRAP).toString();
+				wrap = WordWrap.valueOf(mode.getProperty(JEditBuffer.WRAP).toString());
 				maxLineLen = mode.getProperty("maxLineLen").toString();
 				tabSize = mode.getProperty("tabSize").toString();
 				indentSize = mode.getProperty("indentSize").toString();
@@ -362,7 +358,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 				camelCasedWords = jEdit.getBooleanProperty("buffer.camelCasedWords");
 				folding = jEdit.getProperty("buffer.folding");
 				collapseFolds = jEdit.getProperty("buffer.collapseFolds");
-				wrap = jEdit.getProperty("buffer.wrap");
+				wrap = WordWrap.valueOf(jEdit.getProperty("buffer.wrap"));
 				maxLineLen = jEdit.getProperty("buffer.maxLineLen");
 				tabSize = jEdit.getProperty("buffer.tabSize");
 				indentSize = jEdit.getProperty("buffer.indentSize");
@@ -399,7 +395,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "camelCasedWords");
 					jEdit.resetProperty(prefix + "folding");
 					jEdit.resetProperty(prefix + "collapseFolds");
-					jEdit.resetProperty(prefix + "wrap");
+					jEdit.resetProperty(prefix + JEditBuffer.WRAP);
 					jEdit.resetProperty(prefix + "maxLineLen");
 					jEdit.resetProperty(prefix + "tabSize");
 					jEdit.resetProperty(prefix + "indentSize");
@@ -437,7 +433,7 @@ public class ModeSettingsPane extends AbstractOptionPane
 			jEdit.setBooleanProperty(prefix + "camelCasedWords",camelCasedWords);
 			jEdit.setProperty(prefix + "folding",folding);
 			jEdit.setProperty(prefix + "collapseFolds",collapseFolds);
-			jEdit.setProperty(prefix + "wrap",wrap);
+			jEdit.setProperty(prefix + "wrap", wrap.name());
 			jEdit.setProperty(prefix + "maxLineLen",maxLineLen);
 			jEdit.setProperty(prefix + "tabSize",tabSize);
 			jEdit.setProperty(prefix + "indentSize",indentSize);

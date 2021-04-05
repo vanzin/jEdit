@@ -68,7 +68,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		protected void singleClick(MouseEvent e)
 		{
 			Buffer buffer = view.getBuffer();
-			WordWrap currentFoldingMode = WordWrap.valueOf(buffer.getStringProperty("wrap"));
+			WordWrap currentFoldingMode = buffer.getWordWrap();
 			DialogChooser.openListChooserWindow(label,
 				currentFoldingMode,
 				listSelectionEvent -> EventQueue.invokeLater(() ->

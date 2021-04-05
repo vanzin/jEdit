@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.jedit.gui.LineSepListCellRenderer;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
@@ -49,7 +50,7 @@ public class BufferOptionPane extends AbstractOptionPane
 	private Mode[] modes;
 	private JComboBox<Mode> mode;
 	private JComboBox<String> folding;
-	private JComboBox<String> wrap;
+	private JComboBox<WordWrap> wrap;
 	private JComboBox<String> maxLineLen;
 	private JComboBox<String> tabSize;
 	private JComboBox<String> indentSize;
@@ -166,14 +167,8 @@ public class BufferOptionPane extends AbstractOptionPane
 		//}}}
 
 		//{{{ Wrap mode
-		String[] wrapModes = {
-			"none",
-			"soft",
-			"hard"
-		};
-
-		wrap = new JComboBox<>(wrapModes);
-		wrap.setSelectedItem(buffer.getStringProperty("wrap"));
+		wrap = new JComboBox<>(WordWrap.values());
+		wrap.setSelectedItem(buffer.getWordWrap());
 		addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap);
 		//}}}
@@ -266,7 +261,9 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		buffer.setStringProperty("folding",(String)folding.getSelectedItem());
 
-		buffer.setStringProperty("wrap",(String)wrap.getSelectedItem());
+		WordWrap selectedWordWrap = (WordWrap) wrap.getSelectedItem();
+		if (selectedWordWrap != null)
+			buffer.setWordWrap(selectedWordWrap);
 
 		try
 		{
@@ -337,8 +334,7 @@ public class BufferOptionPane extends AbstractOptionPane
 				Mode _mode = (Mode)mode.getSelectedItem();
 				folding.setSelectedItem(_mode.getProperty(
 					"folding"));
-				wrap.setSelectedItem(_mode.getProperty(
-					"wrap"));
+				wrap.setSelectedItem(WordWrap.valueOf((String) _mode.getProperty(JEditBuffer.WRAP)));
 				maxLineLen.setSelectedItem(_mode.getProperty(
 					"maxLineLen"));
 				tabSize.setSelectedItem(_mode.getProperty(
