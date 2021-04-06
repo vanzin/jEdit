@@ -73,6 +73,7 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 					JList<String> list = (JList<String>) listSelectionEvent.getSource();
 					String selectedValue = list.getSelectedValue();
 					buffer.setStringProperty("folding", selectedValue);
+					buffer.propertiesChanged();
 					EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));
 
 				}),
