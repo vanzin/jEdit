@@ -28,17 +28,13 @@ package org.gjt.sp.jedit.gui.statusbar;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.jedit.gui.DialogChooser;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 
 import javax.swing.*;
 
-import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
 import static org.gjt.sp.jedit.buffer.WordWrap.none;
 import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
@@ -102,8 +98,8 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		private boolean largeBufferDeactivateWrap()
 		{
 			Buffer buffer = view.getBuffer();
-			String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
-			return "limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode);
+			LargeFileMode largeFileMode = buffer.getLargeFileMode();
+			return largeFileMode.isLongBufferMode();
 		} //}}}
 
 		@Override

@@ -29,7 +29,7 @@ import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
 import static java.awt.RenderingHints.*;
-import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
+import static org.gjt.sp.jedit.LargeFileMode.full;
 
 import java.util.*;
 import java.util.List;
@@ -39,8 +39,7 @@ import javax.print.attribute.standard.PageRanges;
 
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.*;
-
+//}}}
 
 /**
  * A new buffer printable that does a lot more than the old one, like properly
@@ -201,8 +200,8 @@ class BufferPrintable1_7 implements Printable
 		pages = new HashMap<Integer, Range>();
 		
 		// check large file settings
-		String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
-		if (!"full".equals(largeFileMode))
+		LargeFileMode largeFileMode = buffer.getLargeFileMode();
+		if (largeFileMode != full)
 		{
 			int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
 			if (buffer.getLength() > largeBufferSize)

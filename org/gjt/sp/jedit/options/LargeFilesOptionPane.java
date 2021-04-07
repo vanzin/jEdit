@@ -25,11 +25,10 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 
-import java.awt.event.*;
-
 import org.gjt.sp.jedit.*;
 
 import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
+import static org.gjt.sp.jedit.LargeFileMode.*;
 //}}}
 
 /**
@@ -66,16 +65,16 @@ public class LargeFilesOptionPane extends AbstractOptionPane
 		addComponent(fullSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.full")));
 		addComponent(limitedSyntaxLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.limited")));
 		addComponent(noHighlightLargeFileMode = new JRadioButton(jEdit.getProperty("options.editing.largefilemode.option.nohighlight")));
-		String option = jEdit.getProperty(LARGE_MODE_FILE, "ask");
-		if ("full".equals(option))
+		LargeFileMode option = LargeFileMode.valueOf(jEdit.getProperty(LARGE_MODE_FILE, ask.name()));
+		if (option == full)
 		{
 			fullSyntaxLargeFileMode.setSelected(true);
 		}
-		else if ("limited".equals(option))
+		else if (option == limited)
 		{
 			limitedSyntaxLargeFileMode.setSelected(true);
 		}
-		else if ("nohighlight".equals(option))
+		else if (option == nohighlight)
 		{
 			noHighlightLargeFileMode.setSelected(true);
 		}
@@ -97,19 +96,19 @@ public class LargeFilesOptionPane extends AbstractOptionPane
 	{
 		if (fullSyntaxLargeFileMode.isSelected())
 		{
-			jEdit.setProperty(LARGE_MODE_FILE, "full");
+			jEdit.setProperty(LARGE_MODE_FILE, full.name());
 		}
 		else if (limitedSyntaxLargeFileMode.isSelected())
 		{
-			jEdit.setProperty(LARGE_MODE_FILE, "limited");
+			jEdit.setProperty(LARGE_MODE_FILE, limited.name());
 		}
 		else if (noHighlightLargeFileMode.isSelected())
 		{
-			jEdit.setProperty(LARGE_MODE_FILE, "nohighlight");
+			jEdit.setProperty(LARGE_MODE_FILE, nohighlight.name());
 		}
 		else
 		{
-			jEdit.setProperty(LARGE_MODE_FILE, "ask");
+			jEdit.setProperty(LARGE_MODE_FILE, ask.name());
 		}
 	} //}}}
 

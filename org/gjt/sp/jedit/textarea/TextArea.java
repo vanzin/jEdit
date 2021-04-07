@@ -41,12 +41,7 @@ import javax.swing.plaf.LayerUI;
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 
-import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.IPropertyManager;
-import org.gjt.sp.jedit.JEditActionContext;
-import org.gjt.sp.jedit.JEditActionSet;
-import org.gjt.sp.jedit.JEditBeanShellAction;
-import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.WordWrap;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
@@ -61,7 +56,6 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
 
-import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
 import static org.gjt.sp.jedit.buffer.WordWrap.hard;
 import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
@@ -4895,8 +4889,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		WordWrap oldWrap = wrap;
 		wrap = buffer.getWordWrap();
 		hardWrap = wrap == hard;
-		String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
-		softWrap = wrap == soft && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
+		LargeFileMode largeFileMode = buffer.getLargeFileMode();
+		softWrap = wrap == soft && !largeFileMode.isLongBufferMode();
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen", 0));

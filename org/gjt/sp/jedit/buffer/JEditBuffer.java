@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.LargeFileMode;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.IndentAction;
@@ -47,6 +48,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
+import static org.gjt.sp.jedit.LargeFileMode.ask;
 import static org.gjt.sp.jedit.buffer.WordWrap.none;
 //}}}
 
@@ -90,6 +92,11 @@ public class JEditBuffer
 	 * @since jEdit 5.7pre1
 	 */
 	public static final String WRAP = "wrap";
+	/**
+	 * This property contains the large file mode option for this buffer.
+	 * @since jEdit 5.7pre1
+	 */
+	public static final String LARGE_MODE_FILE = "largefilemode";
 
 	//{{{ JEditBuffer constructors
 	{
@@ -1807,6 +1814,42 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		setProperty(WRAP, wordWrap.name());
 	} //}}}
+
+
+	/**
+	 * Returns the LargeFileMode option
+	 *
+	 * @return the option value, never null (if invalid or null {@link LargeFileMode#ask} is returned
+	 * @since jEdit 5.7pre1
+	 */
+	public LargeFileMode getLargeFileMode()
+	{
+		String largeFileMode = getStringProperty(LARGE_MODE_FILE);
+		if (largeFileMode == null)
+			return ask;
+		try
+		{
+			return LargeFileMode.valueOf(largeFileMode);
+		}
+		catch (IllegalArgumentException e)
+		{
+			return ask;
+		}
+	}
+
+	/**
+	 * Set the large file mode option
+	 *
+	 * @param largeFileMode the large file mode
+	 * @since jEdit 5.7pre1
+	 */
+	public void setLargeFileMode(LargeFileMode largeFileMode)
+	{
+		if (largeFileMode == null)
+			unsetProperty(LARGE_MODE_FILE);
+		else
+			setProperty(LARGE_MODE_FILE, largeFileMode.name());
+	}
 
 	//{{{ getRuleSetAtOffset() method
 	/**
