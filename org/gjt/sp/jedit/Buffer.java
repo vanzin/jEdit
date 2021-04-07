@@ -141,6 +141,11 @@ public class Buffer extends JEditBuffer
 	 * @since jEdit 4.0pre4
 	 */
 	public static final String GZIPPED = "gzipped";
+	/**
+	 * This property contains the large file mode option for this buffer.
+	 * @since jEdit 5.7pre1
+	 */
+	public static final String LARGE_MODE_FILE = "largefilemode";
 	//}}}
 
 	//{{{ Input/output methods
@@ -1092,7 +1097,7 @@ public class Buffer extends JEditBuffer
 	{
 		super.propertiesChanged();
 		longLineLimit = jEdit.getIntegerProperty("longLineLimit", 4000);
-		String largefilemode = getStringProperty("largefilemode");
+		String largefilemode = getStringProperty(LARGE_MODE_FILE);
 		longBufferMode = "limited".equals(largefilemode) || "nohighlight".equals(largefilemode);
 		if (!autoreloadOverridden)
 		{
@@ -1148,7 +1153,7 @@ public class Buffer extends JEditBuffer
 		WordWrap wrap = getWordWrap();
 		if(wrap == none)
 		{
-			String largeFileMode = getStringProperty("largefilemode");
+			String largeFileMode = getStringProperty(LARGE_MODE_FILE);
 			if ("limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode))
 				wrap = hard;
 			else
@@ -1296,7 +1301,7 @@ public class Buffer extends JEditBuffer
 			{
 				mode.loadIfNecessary();
 				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
-				String largeFileMode = jEdit.getProperty("largefilemode", "ask");
+				String largeFileMode = jEdit.getProperty(LARGE_MODE_FILE, "ask");
 
 				if ("ask".equals(largeFileMode))
 				{
@@ -1320,15 +1325,15 @@ public class Buffer extends JEditBuffer
 						switch (i)
 						{
 							case 0:
-								setProperty("largefilemode", "full");
+								setProperty(LARGE_MODE_FILE, "full");
 								setMode(mode);
 								return;
 							case 1:
-								setProperty("largefilemode", "limited");
+								setProperty(LARGE_MODE_FILE, "limited");
 								setMode(mode, true);
 								return;
 							case 2:
-								setProperty("largefilemode", "nohighlight");
+								setProperty(LARGE_MODE_FILE, "nohighlight");
 								mode =  getDefaultMode();
 								setMode(mode);
 								return;
@@ -1337,17 +1342,17 @@ public class Buffer extends JEditBuffer
 				}
 				else if ("full".equals(largeFileMode))
 				{
-					setProperty("largefilemode", "full");
+					setProperty(LARGE_MODE_FILE, "full");
 					setMode(mode);
 				}
 				else if ("limited".equals(largeFileMode))
 				{
-					setProperty("largefilemode", "limited");
+					setProperty(LARGE_MODE_FILE, "limited");
 					setMode(mode, true);
 				}
 				else if ("nohighlight".equals(largeFileMode))
 				{
-					setProperty("largefilemode", "nohighlight");
+					setProperty(LARGE_MODE_FILE, "nohighlight");
 					mode =  getDefaultMode();
 					setMode(mode);
 				}

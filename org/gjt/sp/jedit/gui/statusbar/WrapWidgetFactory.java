@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 
 import javax.swing.*;
 
+import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
 import static org.gjt.sp.jedit.buffer.WordWrap.none;
 import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
@@ -101,7 +102,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		private boolean largeBufferDeactivateWrap()
 		{
 			Buffer buffer = view.getBuffer();
-			String largeFileMode = buffer.getStringProperty("largefilemode");
+			String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
 			return "limited".equals(largeFileMode) || "nohighlight".equals(largeFileMode);
 		} //}}}
 

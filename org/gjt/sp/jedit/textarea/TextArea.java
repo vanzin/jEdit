@@ -61,6 +61,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
 
+import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
 import static org.gjt.sp.jedit.buffer.WordWrap.hard;
 import static org.gjt.sp.jedit.buffer.WordWrap.soft;
 //}}}
@@ -4894,7 +4895,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		WordWrap oldWrap = wrap;
 		wrap = buffer.getWordWrap();
 		hardWrap = wrap == hard;
-		String largeFileMode = buffer.getStringProperty("largefilemode");
+		String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
 		softWrap = wrap == soft && !"limited".equals(largeFileMode) && !"nohighlight".equals(largeFileMode);
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;

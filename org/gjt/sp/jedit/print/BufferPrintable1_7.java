@@ -29,6 +29,8 @@ import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
 import static java.awt.RenderingHints.*;
+import static org.gjt.sp.jedit.Buffer.LARGE_MODE_FILE;
+
 import java.util.*;
 import java.util.List;
 import javax.print.attribute.standard.Chromaticity;
@@ -199,7 +201,7 @@ class BufferPrintable1_7 implements Printable
 		pages = new HashMap<Integer, Range>();
 		
 		// check large file settings
-		String largeFileMode = buffer.getStringProperty("largefilemode");
+		String largeFileMode = buffer.getStringProperty(LARGE_MODE_FILE);
 		if (!"full".equals(largeFileMode))
 		{
 			int largeBufferSize = jEdit.getIntegerProperty("largeBufferSize", 4000000);
