@@ -88,7 +88,7 @@ public class JEditBuffer
 	 */
 	public static final String ENCODING = "encoding";
 	/**
-	 * Wrap mode, the value must be one of {@link @WordWrap}
+	 * Wrap mode, the value must be one of {@link org.gjt.sp.jedit.buffer.WordWrap}
 	 * @since jEdit 5.7pre1
 	 */
 	public static final String WRAP = "wrap";
