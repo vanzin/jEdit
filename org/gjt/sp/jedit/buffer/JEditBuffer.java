@@ -1897,16 +1897,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		ParserRuleSet rules = getRuleSetAtOffset(offset);
 
-		Object value = null;
-
 		Map<String, String> rulesetProps = rules.getProperties();
-		if(rulesetProps != null)
-			value = rulesetProps.get(name);
-
-		if(value == null)
-			return null;
-		else
-			return String.valueOf(value);
+		return rulesetProps != null ? rulesetProps.get(name) : null;
 	} //}}}
 
 	//{{{ getMode() method

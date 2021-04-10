@@ -1249,18 +1249,16 @@ public class Buffer extends JEditBuffer
 	@Override
 	public String getContextSensitiveProperty(int offset, String name)
 	{
-		Object value = super.getContextSensitiveProperty(offset,name);
+		String parentValue = super.getContextSensitiveProperty(offset,name);
+		if (parentValue != null)
+			return parentValue;
+
+		ParserRuleSet rules = getRuleSetAtOffset(offset);
+
+		Object value = jEdit.getMode(rules.getModeName()).getProperty(name);
 
 		if(value == null)
-		{
-			ParserRuleSet rules = getRuleSetAtOffset(offset);
-
-			value = jEdit.getMode(rules.getModeName())
-				.getProperty(name);
-
-			if(value == null)
-				value = mode.getProperty(name);
-		}
+			value = mode.getProperty(name);
 
 		if(value == null)
 			return null;
