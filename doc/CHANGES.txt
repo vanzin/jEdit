@@ -66,6 +66,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ Editing
 
+- New edit mode for Dockerfile (Matthieu Casanova)
+
 - Status bar encoding widget allow to choose between updating the encoding or reloading
   with a new encoding (Matthieu Casanova)
 
