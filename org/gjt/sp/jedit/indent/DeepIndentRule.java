@@ -119,7 +119,7 @@ public class DeepIndentRule implements IndentRule
 	 * Returns the length of the string as if it were indented with
 	 * spaces instead of tabs.
 	 */
-	private int getIndent(CharSequence line, int tabSize)
+	private static int getIndent(CharSequence line, int tabSize)
 	{
 		int cnt = 0;
 		for (int i = 0;  i < line.length(); i++)

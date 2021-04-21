@@ -105,7 +105,7 @@ public class RegexpIndentRule implements IndentRule
 	{
 		StringBuilder result;
 
-		public TokenFilter(int originalLength)
+		TokenFilter(int originalLength)
 		{
 			result = new StringBuilder(originalLength);
 		}

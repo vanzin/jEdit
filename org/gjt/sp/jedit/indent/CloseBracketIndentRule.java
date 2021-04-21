@@ -107,7 +107,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		private CharSequence openBracketLineText;
 		private int extraIndent;
 
-		public AlignBracket(JEditBuffer buffer, int line, int offset)
+		AlignBracket(JEditBuffer buffer, int line, int offset)
 		{
 
 			int openBracketIndex = TextUtilities.findMatchingBracket(buffer, line, offset);
