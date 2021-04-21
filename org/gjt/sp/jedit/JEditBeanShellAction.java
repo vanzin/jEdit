@@ -62,6 +62,7 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 	} //}}}
 
 	//{{{ invoke() method
+	@Override
 	public void invoke(TextArea textArea)
 	{
 		try
@@ -164,14 +165,14 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 	} //}}}
 
 	//{{{ Private members
-	private boolean noRepeat;
-	private boolean noRecord;
-	private boolean noRememberLast;
-	private String code;
+	private final boolean noRepeat;
+	private final boolean noRecord;
+	private final boolean noRememberLast;
+	private final String code;
 	private String isSelected;
 	private BshMethod cachedCode;
 	private BshMethod cachedIsSelected;
-	private String sanitizedName;
+	private final String sanitizedName;
 	private static final BeanShellFacade<TextArea> bsh = new MyBeanShellFacade();
 	//}}}
 	

@@ -32,6 +32,8 @@ import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 
+import static org.gjt.sp.util.StandardUtilities.EMPTY_STRING_ARRAY;
+
 /**
  * A set of actions, either loaded from an XML file, or constructed at runtime
  * by a plugin. <p>
@@ -152,7 +154,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 */
 	protected JEditActionSet()
 	{
-		actions = new HashMap<String, JEditAbstractEditAction>();
+		actions = new HashMap<>();
 		loaded = true;
 	} //}}}
 	
@@ -287,7 +289,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 */
 	public String[] getCacheableActionNames()
 	{
-		LinkedList<String> retVal = new LinkedList<String>();
+		LinkedList<String> retVal = new LinkedList<>();
 		for (Object obj : actions.values())
 		{
 			if (obj == placeholder)
@@ -300,7 +302,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 			else if (obj instanceof JEditBeanShellAction)
 				retVal.add(((JEditBeanShellAction) obj).getName());
 		}
-		return retVal.toArray(new String[retVal.size()]);
+		return retVal.toArray(EMPTY_STRING_ARRAY);
 	} //}}}
 	
 	//{{{ getArray() method
@@ -486,7 +488,9 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	protected boolean loaded;
 
 	// TODO: to complete the conversion to generics, this really needs to be an E
-	protected static final JEditAbstractEditAction placeholder = new JEditAbstractEditAction("__PLACEHOLDER__"){
+	protected static final JEditAbstractEditAction placeholder = new JEditAbstractEditAction("__PLACEHOLDER__")
+	{
+		@Override
 		public void invoke(Object arg) {}
 	};
 
