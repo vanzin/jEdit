@@ -84,7 +84,7 @@ public class DialogChooser
 						 Object[] choices)
 	{
 		JList<?> list = new JList<>(choices);
-		list.setVisibleRowCount(Math.min(20, choices.length));
+		list.setVisibleRowCount(Math.min(30, choices.length));
 		list.setLayoutOrientation(JList.VERTICAL_WRAP);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedValue(initialValue, true);
