@@ -25,12 +25,14 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.BufferOptions;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.DialogChooser;
+
+import javax.swing.*;
 //}}}
 
 /**
@@ -56,7 +58,23 @@ public class ModeWidgetFactory implements StatusWidgetFactory
 		}
 
 		@Override
-		protected void doubleClick(MouseEvent e)
+		protected void singleClick(MouseEvent e)
+		{
+			Mode[] modes = jEdit.getModes();
+			Buffer buffer = view.getBuffer();
+			Mode currentMode = buffer.getMode();
+			DialogChooser.openListChooserWindow(label,
+				currentMode,
+				listSelectionEvent -> EventQueue.invokeLater(() ->
+				{
+					JList<Mode> list = (JList<Mode>) listSelectionEvent.getSource();
+					buffer.setMode(list.getSelectedValue());
+				}),
+				modes);
+		}
+
+		@Override
+		protected void rightClick(MouseEvent e)
 		{
 			new BufferOptions(view, view.getBuffer());
 		}

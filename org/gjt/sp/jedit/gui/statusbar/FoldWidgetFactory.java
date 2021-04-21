@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.BufferUpdate;
@@ -78,6 +79,12 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 
 				}),
 				FoldHandler.getFoldModes());
+		}
+
+		@Override
+		protected void rightClick(MouseEvent e)
+		{
+			new BufferOptions(view, view.getBuffer());
 		}
 
 		@Override

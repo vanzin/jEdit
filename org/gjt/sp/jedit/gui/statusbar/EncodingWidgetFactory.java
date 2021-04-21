@@ -31,6 +31,7 @@ import java.util.Arrays;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.gui.BufferOptions;
 import org.gjt.sp.jedit.gui.DialogChooser;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 
@@ -90,6 +91,12 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 					}
 				}),
 				encodings);
+		}
+
+		@Override
+		protected void rightClick(MouseEvent e)
+		{
+			new BufferOptions(view, view.getBuffer());
 		}
 
 		@Override
