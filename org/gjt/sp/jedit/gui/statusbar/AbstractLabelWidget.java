@@ -23,6 +23,7 @@ package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.util.GenericGUIUtilities;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -46,7 +47,9 @@ abstract class AbstractLabelWidget implements Widget
 			@Override
 			public void mouseClicked(MouseEvent evt)
 			{
-				if (evt.getClickCount() == 1)
+				if (GenericGUIUtilities.isRightButton(evt))
+					rightClick(evt);
+				else if (evt.getClickCount() == 1)
 					singleClick(evt);
 				else if (evt.getClickCount() == 2)
 					doubleClick(evt);
@@ -65,6 +68,10 @@ abstract class AbstractLabelWidget implements Widget
 	}
 
 	protected void doubleClick(MouseEvent e)
+	{
+	}
+
+	protected void rightClick(MouseEvent e)
 	{
 	}
 }
