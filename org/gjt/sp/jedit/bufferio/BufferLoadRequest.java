@@ -212,32 +212,21 @@ public class BufferLoadRequest extends BufferIORequest
 	{
 		long length = getContentLength();
 
-		BufferedInputStream markedStream
-			= AutoDetection.getMarkedStream(getNakedStream());
+		BufferedInputStream markedStream = AutoDetection.getMarkedStream(getNakedStream());
 		try
 		{
-			boolean gzipped;
 			// encodingProviders is consist of given
 			// encodings as String or contents-aware
 			// detectors as EncodingDetector.
 			List<EncodingDetector> encodingProviders = getEncodingDetectors();
 
 			boolean autodetect = buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT);
-			if(autodetect)
-			{
-				gzipped = AutoDetection.isGzipped(markedStream);
-				markedStream.reset();
-			}
-			else
-			{
-				gzipped = buffer.getBooleanProperty(Buffer.GZIPPED);
-			}
+			boolean gzipped = isGzipped(markedStream, autodetect);
 
 			if(gzipped)
 			{
 				Log.log(Log.DEBUG, this, path + ": Stream is gzipped.");
-				markedStream = AutoDetection.getMarkedStream(
-					new GZIPInputStream(markedStream));
+				markedStream = AutoDetection.getMarkedStream(new GZIPInputStream(markedStream));
 			}
 
 			Collection<String> failedEncodings = new HashSet<>();
@@ -247,8 +236,7 @@ public class BufferLoadRequest extends BufferIORequest
 				markedStream = rewindContentsStream(markedStream, gzipped);
 				String encoding = encodingProvider.detectEncoding(new BufferedInputStream(markedStream));
 
-				if(encoding == null || encoding.length() <= 0
-					|| failedEncodings.contains(encoding))
+				if(encoding == null || encoding.length() <= 0 || failedEncodings.contains(encoding))
 				{
 					continue;
 				}
@@ -256,8 +244,7 @@ public class BufferLoadRequest extends BufferIORequest
 				markedStream = rewindContentsStream(markedStream, gzipped);
 				try
 				{
-					read(EncodingServer.getTextReader(markedStream, encoding)
-						, length, false);
+					read(EncodingServer.getTextReader(markedStream, encoding), length, false);
 					if(autodetect)
 					{
 						// Store the successful properties.
@@ -273,8 +260,7 @@ public class BufferLoadRequest extends BufferIORequest
 				{
 					encodingError = e;
 				}
-				Log.log(Log.NOTICE, this, path + ": " + encoding
-					+ ": " + encodingError);
+				Log.log(Log.NOTICE, this, path + ": " + encoding + ": " + encodingError);
 				failedEncodings.add(encoding);
 			}
 			// All possible detectors and encodings failed.
@@ -289,10 +275,8 @@ public class BufferLoadRequest extends BufferIORequest
 			}
 			VFSManager.error(view,path,"ioerror.encoding-error",pp,Log.NOTICE);
 			markedStream = rewindContentsStream(markedStream, gzipped);
-			read(EncodingServer.getEncoding(
-				buffer.getStringProperty(JEditBuffer.ENCODING)
-				).getPermissiveTextReader(markedStream)
-				, length, false);
+			Encoding encoding = EncodingServer.getEncoding(buffer.getStringProperty(JEditBuffer.ENCODING));
+			read(encoding.getPermissiveTextReader(markedStream), length, false);
 			if(autodetect && gzipped)
 			{
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
@@ -302,6 +286,28 @@ public class BufferLoadRequest extends BufferIORequest
 		{
 			markedStream.close();
 		}
+	} //}}}
+
+	//{{{ isGzipped() method
+	/**
+	 * Decide by settings or detection if the stream is gzipped
+	 * @param markedStream the stream to check
+	 * @param autodetect should we autodetect or not
+	 * @return true if the stream is gzipped
+	 * @throws IOException an exception if autodetect fails
+	 */
+	private boolean isGzipped(BufferedInputStream markedStream, boolean autodetect) throws IOException
+	{
+		boolean gzipped;
+		if(autodetect)
+		{
+			gzipped = AutoDetection.isGzipped(markedStream);
+			markedStream.reset();
+		}
+		else
+			gzipped = buffer.getBooleanProperty(Buffer.GZIPPED);
+
+		return gzipped;
 	} //}}}
 
 	//{{{ getEncodingDetectors() method
@@ -333,12 +339,10 @@ public class BufferLoadRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ readMarkers() method
-	private static void readMarkers(Buffer buffer, InputStream _in)
-		throws IOException, InterruptedException
+	private static void readMarkers(Buffer buffer, InputStream _in) throws IOException, InterruptedException
 	{
 		// For `reload' command
 		buffer.removeAllMarkers();
-
 
 		try (BufferedReader in = new BufferedReader(new InputStreamReader(_in)))
 		{
