@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
-import java.io.Closeable;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -47,13 +46,13 @@ public class BufferInsertRequest extends BufferIORequest
 	 * @param vfs The VFS
 	 * @param path The path
 	 */
-	public BufferInsertRequest(View view, Buffer buffer,
-		Object session, VFS vfs, String path)
+	public BufferInsertRequest(View view, Buffer buffer, Object session, VFS vfs, String path)
 	{
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
 	//{{{ run() method
+	@Override
 	public void _run()
 	{
 		InputStream in = null;
@@ -67,29 +66,17 @@ public class BufferInsertRequest extends BufferIORequest
 
 			VFSFile entry = vfs._getFile(
 				session,path,view);
-			long length;
-			if(entry != null)
-				length = entry.getLength();
-			else
-				length = 0L;
+			long length = entry != null ? entry.getLength() : 0L;
 
 			in = vfs._createInputStream(session,path,false,view);
 			if(in == null)
 				return;
 
-			final SegmentBuffer seg = read(
-				autodetect(in),length,true);
+			final SegmentBuffer seg = read(autodetect(in),length,true);
 
 			/* we don't do this in Buffer.insert() so that
 			   we can insert multiple files at once */
-			AwtRunnableQueue.INSTANCE.runAfterIoTasks(new Runnable()
-			{
-				public void run()
-				{
-					view.getTextArea().setSelectedText(
-						seg.toString());
-				}
-			});
+			AwtRunnableQueue.INSTANCE.runAfterIoTasks(() -> view.getTextArea().setSelectedText(seg.toString()));
 		}
 		catch(InterruptedException e)
 		{
@@ -106,7 +93,7 @@ public class BufferInsertRequest extends BufferIORequest
 		}
 		finally
 		{
-			IOUtilities.closeQuietly((Closeable)in);
+			IOUtilities.closeQuietly(in);
 			endSessionQuietly();
 		}
 	} //}}}
