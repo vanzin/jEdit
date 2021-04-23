@@ -52,8 +52,7 @@ public class BufferLoadRequest extends BufferIORequest
 	 * @param path The path
 	 * @param untitled is the buffer untitled
 	 */
-	public BufferLoadRequest(View view, Buffer buffer,
-		Object session, VFS vfs, String path, boolean untitled)
+	public BufferLoadRequest(View view, Buffer buffer, Object session, VFS vfs, String path, boolean untitled)
 	{
 		super(view,buffer,session,vfs,path);
 		this.untitled = untitled;
@@ -174,8 +173,7 @@ public class BufferLoadRequest extends BufferIORequest
 		}
 		catch(IOException e)
 		{
-			Log.log(Log.NOTICE, this
-				, path + ": Reopening to rewind the stream");
+			Log.log(Log.NOTICE, this, path + ": Reopening to rewind the stream");
 			// Reopen the stream because the mark has been
 			// invalidated while previous reading.
 			markedStream.close();
@@ -186,8 +184,7 @@ public class BufferLoadRequest extends BufferIORequest
 				{
 					in = new GZIPInputStream(in);
 				}
-				BufferedInputStream result
-					= AutoDetection.getMarkedStream(in);
+				BufferedInputStream result = AutoDetection.getMarkedStream(in);
 				in = null;
 				return result;
 			}
@@ -241,6 +238,7 @@ public class BufferLoadRequest extends BufferIORequest
 					continue;
 				}
 
+				// this encoding might be the good one
 				markedStream = rewindContentsStream(markedStream, gzipped);
 				try
 				{
@@ -260,13 +258,17 @@ public class BufferLoadRequest extends BufferIORequest
 				{
 					encodingError = e;
 				}
+
+				// if we are here, then loading with the detected encoding failed, we will continue the loop
 				Log.log(Log.NOTICE, this, path + ": " + encoding + ": " + encodingError);
 				failedEncodings.add(encoding);
 			}
-			// All possible detectors and encodings failed.
+
+			// All possible detectors and encodings failed, encodingError cannot be null.
 			Object[] pp = { String.join(",", failedEncodings), "" };
 			if(failedEncodings.size() < 2)
 			{
+				assert  encodingError != null;
 				pp[1] = encodingError.toString();
 			}
 			else
