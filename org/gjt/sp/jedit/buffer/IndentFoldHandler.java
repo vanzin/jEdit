@@ -42,7 +42,7 @@ public class IndentFoldHandler extends FoldHandler
 
 	// Returns the width of leading whitespace in the given segment
 	// if it contains non-whitespace characters, or (-1) otherwise.
-	private int getLeadingWhitespaceWidth(Segment seg, int tabSize)
+	private static int getLeadingWhitespaceWidth(Segment seg, int tabSize)
 	{
 		int offset = seg.offset;
 		int count = seg.count;
@@ -89,7 +89,7 @@ public class IndentFoldHandler extends FoldHandler
 			buffer.getLineText(index,seg);
 			int whitespace = getLeadingWhitespaceWidth(seg,tabSize);
 			if(whitespace >= 0)	// Non-whitespace found on line
-				return (whitespace > prevLevel) ? whitespace : prevLevel;
+				return Math.max(whitespace, prevLevel);
 			if(index == 0)
 				return 0;
 			if(index == lineIndex)
@@ -116,7 +116,7 @@ public class IndentFoldHandler extends FoldHandler
 	public List<Integer> getPrecedingFoldLevels(JEditBuffer buffer,
 		int lineIndex, Segment seg, int lineFoldLevel)
 	{
-		List<Integer> precedingFoldLevels = new ArrayList<Integer>();
+		List<Integer> precedingFoldLevels = new ArrayList<>();
 		int tabSize = buffer.getTabSize();
 		int whitespace = 0;
 		int index;
@@ -134,5 +134,4 @@ public class IndentFoldHandler extends FoldHandler
 		return precedingFoldLevels;
 	}
 	//}}}
-
 }

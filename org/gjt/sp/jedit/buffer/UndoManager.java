@@ -379,23 +379,21 @@ public class UndoManager
 
 	//{{{ getCompressedReplaceFromReplaceReplace() method
 	// a CompressedReplace Edit is one to many Replace Edit compressed via offsets
-	private CompressedReplace getCompressedReplaceFromReplaceReplace(Edit lastElement, Edit newElement)
+	private static CompressedReplace getCompressedReplaceFromReplaceReplace(Edit lastElement, Edit newElement)
 	{
-
 		if(newElement instanceof Replace)
 		{
-			CompressedReplace rep = null;
 			// try to pack the next Replace into the CompressedReplace
 			if(lastElement instanceof CompressedReplace)
 			{
-				rep = (CompressedReplace) lastElement;
+				CompressedReplace rep = (CompressedReplace) lastElement;
 				return rep.add((Replace) newElement);
 			}
 	
 			// try to create a compressed Replace
 			if(lastElement instanceof Replace)
 			{
-				rep = new CompressedReplace((Replace)lastElement);
+				CompressedReplace rep = new CompressedReplace((Replace)lastElement);
 				return rep.add((Replace) newElement);
 			}
 		}
@@ -562,7 +560,7 @@ public class UndoManager
 		//{{{ add() method
 		CompressedReplace add(Replace rep)
 		{
-			if(this.strInsert.equals(rep.strInsert) && this.strRemove.equals(rep.strRemove))
+			if(strInsert.equals(rep.strInsert) && strRemove.equals(rep.strRemove))
 			{
 				offsets.add(rep.offset);
 				return this;
@@ -660,7 +658,7 @@ public class UndoManager
 			// try to compress a sequence of Replace and Replace into a "CompressedReplace"
 			if(last.prev != null)
 			{
-				Edit rep = mgr.getCompressedReplaceFromReplaceReplace(last.prev, last);
+				Edit rep = UndoManager.getCompressedReplaceFromReplaceReplace(last.prev, last);
 				if(rep != null)
 					exchangeLastElement(rep);
 			}
@@ -668,7 +666,7 @@ public class UndoManager
 			// try to compress a sequence of CompressedReplace and Replace into a "CompressedReplace"
 			if(last.prev != null)
 			{
-				Edit rep = mgr.getCompressedReplaceFromReplaceReplace(last.prev, last);
+				Edit rep = UndoManager.getCompressedReplaceFromReplaceReplace(last.prev, last);
 				if(rep != null)
 					exchangeLastElement(rep);
 			}
