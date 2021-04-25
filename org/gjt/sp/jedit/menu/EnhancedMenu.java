@@ -30,6 +30,7 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.*;
+import org.jedit.util.CleanerService;
 //}}}
 
 public class EnhancedMenu extends JMenu implements MenuListener
@@ -92,6 +93,8 @@ public class EnhancedMenu extends JMenu implements MenuListener
 
 		if(providerCode != null)
 			EditBus.addToBus(ebStub);
+
+		CleanerService.instance.register(this, () -> EditBus.removeFromBus(ebStub));
 	} //}}}
 
 	//{{{ menuSelected() method
@@ -148,23 +151,12 @@ public class EnhancedMenu extends JMenu implements MenuListener
 	protected DynamicMenuProvider provider;
 
 	protected EditBusStub ebStub;
-
-	//{{{ finalize() method
-	// TODO: 'finalize' is deprecated as of Java 9
-	@Override
-	@SuppressWarnings("deprecation")
-	protected void finalize()
-	{
-		if(ebStub != null)
-			EditBus.removeFromBus(ebStub);
-	} //}}}
-
 	//}}}
 
 	//{{{ EditBusStub class
 	/* EnhancedMenu has a reference to EditBusStub, but not the other
 	 * way around. So when the EnhancedMenu is being garbage collected
-	 * its finalize() method removes the EditBusStub from the edit bus. */
+	 * the Cleaner service removes the EditBusStub from the edit bus. */
 	public static class EditBusStub
 	{
 		String name;

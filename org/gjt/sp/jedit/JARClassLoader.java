@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.gjt.sp.util.Log;
+import org.jedit.util.CleanerService;
 
 import java.util.jar.Manifest;
 import java.util.jar.JarFile;
@@ -70,6 +71,7 @@ public class JARClassLoader extends ClassLoader
 		// for debugging
 		id = INDEX++;
 		live++;
+		CleanerService.instance.register(this, () -> live--);
 	} //}}}
 
 	//{{{ loadClass() method
@@ -298,15 +300,6 @@ public class JARClassLoader extends ClassLoader
 
 		URL resource = getResource(name);
 		return new SingleElementEnumeration(resource);
-	} //}}}
-
-	//{{{ finalize() method
-	// TODO: 'finalize' is deprecated as of Java 9
-	@Override
-	@SuppressWarnings("deprecation")
-	protected void finalize()
-	{
-		live--;
 	} //}}}
 
 	//{{{ Package-private members
