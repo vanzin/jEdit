@@ -18,6 +18,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
+- New service org.jedit.util.CleanerService replacing use of finalize() (Matthieu Casanova)
+
 - New methods JEditBuffer.getWordWrap() and JeditBuffer.setWordWrap() (Matthieu Casanova)
 
 - New method DialogChooser.openChooserWindow() showing a chooser dialog (Matthieu Casanova)

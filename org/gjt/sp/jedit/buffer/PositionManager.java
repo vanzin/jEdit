@@ -25,9 +25,9 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import javax.annotation.Nonnull;
 import javax.swing.text.Position;
-import java.lang.ref.Cleaner;
 import java.util.*;
 import org.gjt.sp.util.Log;
+import org.jedit.util.CleanerService;
 //}}}
 
 /**
@@ -48,7 +48,6 @@ class PositionManager
 	PositionManager(JEditBuffer buffer)
 	{
 		this.buffer = buffer;
-		cleaner = Cleaner.create();
 	} //}}}
 	
 	//{{{ createPosition() method
@@ -71,7 +70,7 @@ class PositionManager
 			existing.ref();
 		}
 		PosBottomHalf finalExisting = existing;
-		cleaner.register(posTopHalf, () -> unref(finalExisting));
+		CleanerService.instance.register(posTopHalf, () -> unref(finalExisting));
 		return posTopHalf;
 	} //}}}
 
@@ -123,7 +122,6 @@ class PositionManager
 	boolean iteration;
 
 	//{{{ Private members
-	private final Cleaner cleaner;
 	private final JEditBuffer buffer;
 	private final SortedMap<PosBottomHalf, PosBottomHalf> positions = new TreeMap<>();
 	//}}}
