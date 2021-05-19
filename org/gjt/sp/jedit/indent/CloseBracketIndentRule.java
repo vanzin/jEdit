@@ -125,12 +125,11 @@ public class CloseBracketIndentRule extends BracketIndentRule
 				openBracketLine = buffer.getLineOfOffset(openBracketIndex);
 				openBracketColumn = openBracketIndex - buffer.getLineStartOffset(openBracketLine);
 				openBracketLineText = buffer.getLineSegment(openBracketLine);
+				if (aligned)
+					findUnalignedBracket(buffer);
+				else
+					findAlignedBracket(buffer);
 			}
-
-			if (aligned)
-				findUnalignedBracket(buffer);
-			else
-				findAlignedBracket(buffer);
 		}
 
 		/**
