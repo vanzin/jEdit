@@ -115,6 +115,19 @@ public class SyntaxUtilities
 		return mask.substring(0, mask.length() - colString.length()).concat(colString);
 	} //}}}
 
+	
+	//{{{ parseColor() method
+	/**
+ 	 * parseColor in GUIUtilities was deprecated and now removed, but several plugins
+ 	 * were using that method. This method signature matches that used in GUIUtilities,
+ 	 * which makes it easier to fix the plugins.
+ 	 * @since jEdit 5.7pre1
+ 	 */
+	public static Color parseColor(String name)
+	{
+		return parseColor(name, Color.black);	
+	} //}}}
+	
 	//{{{ parseColor() method
 	/**
 	 * @since jEdit 4.3pre13
