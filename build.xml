@@ -340,6 +340,7 @@
 				<include name="org/gjt/sp/jedit/buffer/LineManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/PositionManager.java"/>
 				<include name="org/gjt/sp/jedit/buffer/UndoManager.java"/>
+				<include name="org/gjt/sp/jedit/buffer/WordWrap.java"/>
 
 				<include name="org/gjt/sp/jedit/bufferio/IoTask.java"/>
 
@@ -416,6 +417,7 @@
 				<include name="org/gjt/sp/jedit/JEditActionSet.java"/>
 				<include name="org/gjt/sp/jedit/JEditActionContext.java"/>
 				<include name="org/gjt/sp/jedit/JEditBeanShellAction.java"/>
+				<include name="org/gjt/sp/jedit/LargeFileMode.java"/>
 				<include name="org/gjt/sp/jedit/Mode.java"/>
 				<include name="org/gjt/sp/jedit/OperatingSystem.java"/>
 				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
@@ -440,6 +442,8 @@
 				<include name="org/gjt/sp/util/ThreadUtilities.java"/>
 				<include name="org/gjt/sp/util/SyntaxUtilities.java"/>
 				<include name="org/gjt/sp/util/XMLUtilities.java"/>
+
+				<include name="org/jedit/util/CleanerService.java"/>
 			</fileset>
 		</copy>
 
