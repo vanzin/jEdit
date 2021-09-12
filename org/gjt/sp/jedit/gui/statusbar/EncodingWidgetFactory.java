@@ -84,9 +84,10 @@ public class EncodingWidgetFactory implements StatusWidgetFactory
 							buffer.reloadWithEncoding(view, selectedValue);
 							break;
 						case 1:
-							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
+							buffer.setStringProperty(JEditBuffer.ENCODING, selectedValue);
 							buffer.setDirty(true);
-							EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.PROPERTIES_CHANGED));
+							buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT, false);
+							EditBus.send(new BufferUpdate(buffer, null, BufferUpdate.PROPERTIES_CHANGED));
 							break;
 					}
 				}),
