@@ -159,7 +159,7 @@ class PropertyManager
 		 */
 		if(value == null)
 		{
-			if(prop == null || prop.length() == 0)
+			if(prop == null || prop.isEmpty())
 				user.remove(name);
 			else
 				user.setProperty(name,"");
@@ -197,10 +197,10 @@ class PropertyManager
 
 	//{{{ Private members
 	private final Properties system = new Properties();
-	private final List<Properties> plugins = new LinkedList<Properties>();
+	private final List<Properties> plugins = new LinkedList<>();
 	private final Properties site = new Properties();
 	private final Properties localization = new Properties();
-	private final List<Properties> pluginLocalizations = new LinkedList<Properties>();
+	private final List<Properties> pluginLocalizations = new LinkedList<>();
 	private final Properties user = new Properties();
 
 	//{{{ getDefaultProperty() method
