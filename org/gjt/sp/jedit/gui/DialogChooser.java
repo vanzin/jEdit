@@ -89,7 +89,7 @@ public class DialogChooser
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedValue(initialValue, true);
 		list.setBorder(BorderFactory.createEtchedBorder());
-		JDialog window = new JDialog();
+		JDialog window = new JDialog((Frame)SwingUtilities.getRoot(parent));
 		window.setUndecorated(true);
 		window.addWindowListener(new WindowAdapter()
 		{

@@ -78,7 +78,7 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 
 				lineSeparatorList.setBorder(BorderFactory.createEtchedBorder());
 				lineSeparatorList.setVisibleRowCount(3);
-				JDialog window = new JDialog();
+				JDialog window = new JDialog(view);
 				window.setUndecorated(true);
 				window.addWindowListener(new WindowAdapter()
 				{
