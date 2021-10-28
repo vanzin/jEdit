@@ -10,6 +10,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 
 - VFSManager.canReadFile() was returning true only for directories (#4102 - Matthieu Casanova)
 
+- Allow user to choose filename when printing to pdf (partial fix for #4115 - Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
