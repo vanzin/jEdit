@@ -289,9 +289,15 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                     JOptionPane.showMessageDialog( PrinterDialog.this, jEdit.getProperty( "print-error.message", new String[] {e.getMessage()} ), jEdit.getProperty( "print-error.title" ), JOptionPane.ERROR_MESSAGE );
                     return;
                 }
+                
+                PrintService p = getPrintService();
+                
+                // this feels like a hack, but various google searches show this is how people are
+                // determining if the printer is a virtual pdf printer
+                boolean isPDF = p.toString().toLowerCase().indexOf("pdf") > 0;
 
                 // if printing to a file, get the filename to use
-                if ( !pageSetupOnly && getPrintService() instanceof StreamPrintService )
+                if ( !pageSetupOnly && (p instanceof StreamPrintService || isPDF) )
                 {
 
                     // create default filename
@@ -303,7 +309,7 @@ public class PrinterDialog extends JDialog implements ListSelectionListener
                     }
 
 
-                    filename = new StringBuilder( filename ).append( ".ps" ).toString();
+                    filename = new StringBuilder( filename ).append( isPDF ? ".pdf" : ".ps" ).toString();
 
                     File initialFile = new File( System.getProperty( "user.home" ), filename );
 
