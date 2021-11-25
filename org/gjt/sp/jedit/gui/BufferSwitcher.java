@@ -172,7 +172,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 						return a.getPath().toLowerCase().compareTo(b.getPath().toLowerCase());
 				});
 			}
-			setModel(new DefaultComboBoxModel<Buffer>(buffers));
+			setModel(new DefaultComboBoxModel<>(buffers));
 			// FIXME: editPane.getBuffer() returns wrong buffer (old buffer) after last non-untitled buffer close.
 			// When the only non-untitled (last) buffer is closed a new untitled buffer is added to BufferSet
 			// directly from BufferSetManager (@see BufferSetManager.bufferRemoved() and BufferSetManager.addBuffer())
@@ -190,7 +190,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 	public void handlePropertiesChanged(PropertiesChanged msg)
 	{
 		updateBufferList();
-	} 
+	}
 
 	static class BufferCellRenderer extends DefaultListCellRenderer
 	{
@@ -202,7 +202,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
 			Buffer buffer = (Buffer)value;
-			
+
 			if(buffer == null)
 			{
 				setIcon(null);
@@ -216,14 +216,14 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			return this;
 		}
 	}
-	
-	private void addDnD() 
+
+	private void addDnD()
 	{
 		ComboBoxUI ui = getUI();
 		if (ui instanceof BasicComboBoxUI)
 		{
 			Accessible acc = ui.getAccessibleChild(null, 0);
-			if (acc instanceof BasicComboPopup) 
+			if (acc instanceof BasicComboPopup)
 			{
 				JList list = ((BasicComboPopup)acc).getList();
 				list.setDragEnabled(true);
@@ -232,7 +232,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			}
 		}
 	}
-	
+
 	private static class ComboBoxTransferHandler extends TransferHandler
 	{
 		private final JComboBox<?> comboBox;
@@ -257,13 +257,13 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			return false;
 		}
 	}
-	
+
 	private class BufferSwitcherTransferable implements Transferable
 	{
 		private final DataFlavor[] supportedDataFlavor = { BufferSwitcher.BufferDataFlavor };
 		private final Buffer buffer;
 		private final JComponent source;
-		
+
 		BufferSwitcherTransferable(Buffer buffer, JComponent source)
 		{
 			this.buffer = buffer;
@@ -291,29 +291,29 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			return new BufferTransferableData(buffer, source);
 		}
 	}
-	
+
 	private class BufferTransferableData
 	{
 		private final Buffer buffer;
 		private final JComponent source;
-		
+
 		BufferTransferableData(Buffer buffer, JComponent source)
 		{
 			this.buffer = buffer;
 			this.source = source;
 		}
-		
+
 		public Buffer getBuffer()
 		{
 			return buffer;
 		}
-		
+
 		public JComponent getSource()
 		{
 			return source;
 		}
 	}
-	
+
 	private class BufferSwitcherTransferHandler extends TransferHandler
 	{
 		@Override
@@ -338,11 +338,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				return false;
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				return false;
 			}
@@ -378,7 +374,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 			{
 				return false;
 			}
-			
+
 			Transferable t = support.getTransferable();
 			BufferTransferableData data;
 			try
@@ -386,11 +382,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				data = (BufferTransferableData) t
 						.getTransferData(BufferSwitcher.BufferDataFlavor);
 			}
-			catch (UnsupportedFlavorException e)
-			{
-				return false;
-			}
-			catch (IOException e)
+			catch (UnsupportedFlavorException | IOException e)
 			{
 				return false;
 			}
@@ -433,11 +425,7 @@ public class BufferSwitcher extends JComboBox<Buffer>
 					data = (BufferTransferableData) t
 							.getTransferData(BufferSwitcher.BufferDataFlavor);
 				}
-				catch (UnsupportedFlavorException e)
-				{
-					return;
-				}
-				catch (IOException e)
+				catch (UnsupportedFlavorException | IOException e)
 				{
 					return;
 				}
