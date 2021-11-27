@@ -95,8 +95,6 @@ public class BufferSwitcher extends JComboBox<Buffer>
 				setSelectedItem(itemSelectedBefore);
 			}
 		});
-		EditBus.addToBus(this);
-
 
 		addItemListener(evt ->
 		{

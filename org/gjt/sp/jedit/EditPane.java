@@ -1043,6 +1043,7 @@ public class EditPane extends JPanel implements BufferSetListener
 			if(bufferSwitcher == null)
 			{
 				bufferSwitcher = new BufferSwitcher(this);
+				EditBus.addToBus(bufferSwitcher);
 				add(BorderLayout.NORTH,bufferSwitcher);
 				bufferSwitcher.updateBufferList();
 				revalidate();
@@ -1050,6 +1051,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		}
 		else if(bufferSwitcher != null)
 		{
+			EditBus.removeFromBus(bufferSwitcher);
 			remove(bufferSwitcher);
 			revalidate();
 			bufferSwitcher = null;
