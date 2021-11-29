@@ -1754,7 +1754,6 @@ forward_scan:	do
 	 */
 	public void selectNone()
 	{
-		invalidateSelectedLines();
 		setSelection((Selection)null);
 	} //}}}
 
