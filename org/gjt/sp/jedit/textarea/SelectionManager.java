@@ -150,6 +150,15 @@ class SelectionManager
 
 	//{{{ setSelection() method
 	/**
+	 * Clear the selection
+	 */
+	void clearSelection()
+	{
+		selection.clear();
+	} //}}}
+
+	//{{{ setSelection() method
+	/**
 	 * Sets the selection. Nested and overlapping selections are merged
 	 * where possible.
 	 */

@@ -395,7 +395,12 @@ public abstract class TextArea extends JPanel
 				//setFirstLine(0);
 
 				if(!this.buffer.isLoading())
-					selectNone();
+				{
+					if (this.buffer.isClosed())
+						selectionManager.clearSelection();
+					else
+						selectNone();
+				}
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
 
@@ -5065,7 +5070,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				// cannot use selectNone() because the finishCaretUpdate method will reopen the fold
 				invalidateSelectedLines();
-				selectionManager.setSelection((Selection) null);
+				selectionManager.clearSelection();
 			}
 			moveCaretPosition(buffer.getLineStartOffset(line)
 				+ chunkCache.xToSubregionOffset(line,0,x,true));
