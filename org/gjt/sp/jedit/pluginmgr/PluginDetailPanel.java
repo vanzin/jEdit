@@ -31,10 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.PluginJAR;
@@ -66,7 +63,7 @@ class PluginDetailPanel extends JPanel
 		title = new JLabel();
 		add(title, BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(pluginDetail);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scroll);
 	} //}}}
 
@@ -105,13 +102,12 @@ class PluginDetailPanel extends JPanel
 				pluginJar.init();
 				entry.plugin = pluginJar.getPlugin();
 				String clazz = pluginJar.getPlugin().getClassName();
-				
-				StringBuilder sb = new StringBuilder(256);
-				sb.append("<b>").append(jEdit.getProperty("install-plugin.info.version", "Version")).append("</b>: ").append(jEdit.getProperty("plugin."+clazz+".version", ""));
-				sb.append("<br><b>").append(jEdit.getProperty("install-plugin.info.author", "Author")).append("</b>: ").append(jEdit.getProperty("plugin."+clazz+".author", ""));
-				sb.append("<br><br>").append(jEdit.getProperty("plugin."+clazz+".description", ""));
-				sb.append(getDepends(entry));
-				pluginDetail.setText(sb.toString());
+
+				String sb = "<b>" + jEdit.getProperty("install-plugin.info.version", "Version") + "</b>: " + jEdit.getProperty("plugin." + clazz + ".version", "") +
+					"<br><b>" + jEdit.getProperty("install-plugin.info.author", "Author") + "</b>: " + jEdit.getProperty("plugin." + clazz + ".author", "") +
+					"<br><br>" + jEdit.getProperty("plugin." + clazz + ".description", "") +
+					getDepends(entry);
+				pluginDetail.setText(sb);
 				
 				pluginJar.uninit(false);
 			}
@@ -129,7 +125,7 @@ class PluginDetailPanel extends JPanel
 		if (dependencies != null && !dependencies.isEmpty()) 
 		{
 			builder.append("<br><br><b>").append(jEdit.getProperty("install-plugins.info.depends", "Depends on")).append("</b>:");
-			List<String> depends = new ArrayList<String>(dependencies);
+			List<String> depends = new ArrayList<>(dependencies);
 			Collections.sort(depends);
 			int i = 0;
 			for (String dep : depends) 
