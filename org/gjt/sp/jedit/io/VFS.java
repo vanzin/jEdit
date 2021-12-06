@@ -490,6 +490,26 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
+		try
+		{
+			VFSFile vfsFile = _getFile(session, path, view);
+			if (vfsFile == null)
+			{
+				VFSManager.error(view,path,"ioerror.read-error", new String[] {"Unable to open file"});
+				return false;
+			}
+			if (vfsFile.getLength() > Integer.MAX_VALUE)
+			{
+				VFSManager.error(view,path,"ioerror.file-too-big", null);
+				return false;
+			}
+		}
+		catch (IOException e)
+		{
+			VFSManager.error(view,path,"ioerror.read-error", new String[] {e.toString()});
+			return false;
+		}
+
 		if((getCapabilities() & WRITE_CAP) == 0)
 			buffer.setReadOnly(true);
 

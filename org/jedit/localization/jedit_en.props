@@ -825,6 +825,7 @@ ioerror.encoding-error=The file could not be loaded correctly (some data might b
 ioerror.write-encoding-error=Failed to encode the character\n\
 	{3} at column {2} in line {1} with the encoding "{0}".
 ioerror.read-error=Cannot load: {0}
+ioerror.file-too-big=Cannot load, file is too big (2GB limit)
 ioerror.write-error=Cannot save: {0}
 ioerror.unsupported-encoding-error={0} charset is not supported by your JVM
 ioerror.open-directory=Cannot open directory as a buffer.
