@@ -24,10 +24,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.LargeFileMode;
-import org.gjt.sp.jedit.Mode;
-import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.syntax.*;
@@ -1560,6 +1557,18 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
+	//{{{ isClosed() method
+	public boolean isClosed()
+	{
+		return closed;
+	} //}}}
+
+	//{{{ close() method
+	public void close()
+	{
+		closed = true;
+	} //}}}
+
 	//{{{ hasProperty() method
 	/**
 	 * @return true if the buffer local property exists.
@@ -2828,6 +2837,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Private members
 	private final List<Listener> bufferListeners;
+	private boolean closed;
 	private final ReentrantReadWriteLock lock;
 	private final ContentManager contentMgr;
 	private final LineManager lineMgr;

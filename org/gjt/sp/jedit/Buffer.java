@@ -894,6 +894,7 @@ public class Buffer extends JEditBuffer
 	 * {@link org.gjt.sp.jedit.jEdit#closeBuffer(View,Buffer)}.
 	 * This method is thread-safe.
 	 */
+	@Override
 	public boolean isClosed()
 	{
 		return getFlag(CLOSED);
@@ -1800,6 +1801,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ close() method
+	@Override
 	public void close()
 	{
 		close(false);
@@ -1813,6 +1815,7 @@ public class Buffer extends JEditBuffer
 	 */
 	void close(boolean doNotSave)
 	{
+		super.close();
 		setFlag(CLOSED,true);
                 boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 
