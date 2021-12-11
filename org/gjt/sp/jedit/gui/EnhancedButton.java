@@ -63,6 +63,7 @@ public class EnhancedButton extends RolloverButton
 	} //}}}
 
 	//{{{ isFocusable() method
+	@Override
 	public boolean isFocusable()
 	{
 		return false;
