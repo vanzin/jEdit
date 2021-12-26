@@ -174,6 +174,18 @@ public class JEditBuffer
 		this.loading = loading;
 	} //}}}
 
+	//{{{ isElasticTabstopsOn() method
+	public boolean isElasticTabstopsOn()
+	{
+		return elasticTabstopsOn;
+	} //}}}
+
+	//{{{ setElasticTabstopsOn() method
+	public void setElasticTabstopsOn(boolean elasticTabstopsOn)
+	{
+		this.elasticTabstopsOn = elasticTabstopsOn;
+	} //}}}
+
 	//{{{ isPerformingIO() method
 	/**
 	 * @return true if the buffer is currently performing I/O.

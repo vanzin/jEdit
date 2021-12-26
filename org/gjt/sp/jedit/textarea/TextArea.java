@@ -4562,7 +4562,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer.isLoading())
 			return;
 		buffer.indentUsingElasticTabstops();
-		buffer.elasticTabstopsOn = true;
+		buffer.setElasticTabstopsOn(true);
 	} //}}}
 
 	//{{{ shiftIndentLeft() method
@@ -4864,7 +4864,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(buffer.getBooleanProperty("elasticTabstops"))
 		{
 			//call this only if it was previously off
-			if(!buffer.elasticTabstopsOn)
+			if(!buffer.isElasticTabstopsOn())
 			{
 				turnOnElasticTabstops();
 			}
@@ -4875,7 +4875,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			buffer.elasticTabstopsOn = false;
+			buffer.setElasticTabstopsOn(false);
 		}
 
 		int _tabSize = buffer.getTabSize();
