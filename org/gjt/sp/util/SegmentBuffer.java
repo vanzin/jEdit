@@ -35,19 +35,56 @@ public class SegmentBuffer extends Segment
 		ensureCapacity(capacity);
 	} //}}}
 
-	//{{{ append() method
+	//{{{ append() methods
 	public void append(char ch)
 	{
 		ensureCapacity(count + 1);
 		array[offset + count] = ch;
 		count++;
-	} //}}}
+	}
 
-	//{{{ append() method
+	/**
+	 * @param text the text to append
+	 * @since jEdit 5.7pre1
+	 */
+	public void append(char[] text)
+	{
+		append(text, 0, text.length);
+	}
+
 	public void append(char[] text, int off, int len)
 	{
 		ensureCapacity(count + len);
 		System.arraycopy(text,off,array,count,len);
+		count += len;
+	} //}}}
+
+	//{{{ insert() methods
+	/**
+	 * Insert some text
+	 * @param index the position where the text will be inserted
+	 * @param str the text to insert
+	 * @since jEdit 5.7pre1
+	 */
+	public void insert(int index, char[] str)
+	{
+		insert(index, str, 0, str.length);
+	}
+
+	/**
+	 * Insert some text
+	 * @param index the position where the text will be inserted
+	 * @param str the text to insert
+	 * @param offset the start position in the inserted array
+	 * @param len the length to be copied
+	 * @since jEdit 5.7pre1
+	 */
+	public void insert(int index, char[] str, int offset, int len)
+	{
+		ensureCapacity(count + len);
+		// insert gap
+		System.arraycopy(array, index, array, index + len, count - index);
+		System.arraycopy(str, offset, array, index, len);
 		count += len;
 	} //}}}
 

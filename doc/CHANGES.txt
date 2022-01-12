@@ -20,6 +20,8 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this r
 }}}
 {{{ API Changes
 
+- Added new methods in SegmentBuffer for append and insert text (Matthieu Casanova)
+
 - New service org.jedit.util.CleanerService replacing use of finalize() (Matthieu Casanova)
 
 - New methods JEditBuffer.getWordWrap() and JeditBuffer.setWordWrap() (Matthieu Casanova)
