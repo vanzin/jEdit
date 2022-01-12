@@ -56,4 +56,12 @@ public class SegmentBufferTest
 		assertEquals(charArray.length + 1, segmentBuffer.count);
 		assertEquals('a' + inputString, segmentBuffer.toString());
 	}
+
+	@Test
+	public void testInsert()
+	{
+		segmentBuffer.append("hello world".toCharArray());
+		segmentBuffer.insert(5, "test".toCharArray());
+		assertEquals("hellotest world", segmentBuffer.toString());
+	}
 }
