@@ -832,6 +832,8 @@ largeBufferDialog.message=Die Datei ist sehr groß und jEdit könnte wegen der S
 largeBufferDialog.fullSyntax=Vollständige Syntaxhervorhebung
 largeBufferDialog.contextInsensitive=Kontext-unabhängige Syntaxhervorhebung
 largeBufferDialog.defaultMode=Keine Syntaxhervorhebung (Bearbeitungsmodus 'text')
+buffer.encoding.reload=Erneut Laden mit {0}
+buffer.encoding.change=Ändern nach {0}
 #}}}
 
 #{{{ I/O error dialog box
@@ -852,6 +854,7 @@ ioerror.encoding-error=Die Datei konnte nicht korrekt (ohne eventuellen Datenver
 ioerror.write-encoding-error=Fehler beim Kodieren des Zeichens\n\
   {3} in Spalte {2} der Zeile {1} mit der Zeichenkodierung "{0}".
 ioerror.read-error=Laden nicht möglich: {0}
+ioerror.file-too-big=Laden nicht möglich, Datei ist zu groß (maximal 2GB)
 ioerror.write-error=Speichern nicht möglich: {0}
 ioerror.unsupported-encoding-error={0} Zeichensatz wird durch die aktive JVM nicht unterstützt
 ioerror.open-directory=Öffnen eines Verzeichnisses als Datei nicht möglich.
