@@ -338,7 +338,7 @@ void pluginTextDialog( View view, Buffer buffer )
         {
             ret.append( "\n    Required plugins: \n" );
             for (dep : pluginDeps)
-                ret.append(dep.className).append(' ').append(dep.version);
+                ret.append("\t\t").append(dep.className).append(' ').append(dep.version).append('\n');
         }
         if( optionalDeps.size() > 0 )
         {
