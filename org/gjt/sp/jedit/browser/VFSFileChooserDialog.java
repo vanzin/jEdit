@@ -166,7 +166,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				bufferDir,filename.substring(2));
 		}
 
-		int[] type = { -1 };
 		filename = MiscUtilities.expandVariables(filename);
 		String path = MiscUtilities.constructPath(browser.getDirectory(),filename);
 		VFS vfs = VFSManager.getVFSForPath(path);
@@ -174,6 +173,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(session == null)
 			return;
 
+		int[] type = { -1 };
 		ThreadUtilities.runInBackground(new GetFileTypeRequest(
 			vfs,session,path,type));
 		AwtRunnableQueue.INSTANCE.runAfterIoTasks(() ->
@@ -262,7 +262,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	private VFSFileNameField filenameField;
 	private String filename;
 	private JButton ok;
-	private JButton cancel;
 	private boolean isOK;
 	private TaskListener ioTaskHandler;
 	//}}}
@@ -282,12 +281,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			return jEdit.getProperty("vfs.browser.title.open");
 		case VFSBrowser.SAVE_DIALOG:
 			return jEdit.getProperty("vfs.browser.title.save");
-		case VFSBrowser.BROWSER:
-			return jEdit.getProperty("vfs.browser.title");
-		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
-			return jEdit.getProperty("vfs.browser.title");
 		case VFSBrowser.BROWSER_DIALOG:
 			return jEdit.getProperty("vfs.browser.title.dialog");
+		case VFSBrowser.BROWSER:
+		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
 		default:
 			return jEdit.getProperty("vfs.browser.title");
 		}
@@ -371,7 +368,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 
 		ok.addActionListener(e -> ok());
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		JButton cancel = new JButton(jEdit.getProperty("common.cancel"));
 		cancel.setName("cancel");
 		cancel.addActionListener(e -> cancel());
 		GenericGUIUtilities.makeSameSize(ok, cancel);
@@ -413,8 +410,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	@Nonnull
 	private String[] getSelectedFiles(int type1, int type2)
 	{
-		List<String> l = new ArrayList<>();
 		VFSFile[] selectedFiles = browser.getSelectedFiles();
+		List<String> l = new ArrayList<>(selectedFiles.length);
 		for (VFSFile file : selectedFiles)
 		{
 			if (file.getType() == type1 || file.getType() == type2)
