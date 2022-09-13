@@ -357,7 +357,7 @@ public class Gutter extends JComponent implements SwingConstants
 		int digits;
 		for (digits = 0; count > 0; digits++)
 			count /= 10;
-		return (digits < minDigits) ? minDigits : digits;
+		return Math.max(digits, minDigits);
 	} //}}}
 
 	//{{{ setBuffer() method

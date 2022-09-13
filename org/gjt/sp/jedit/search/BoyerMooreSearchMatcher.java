@@ -87,10 +87,9 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 			int _end = returnValue.end;
 			if (wholeWord)
 			{
-				CharSequence subText;
 				while (!isWholeWord(text, returnValue.start, returnValue.end))
 				{
-					subText = text.subSequence(returnValue.end, text.length());
+					CharSequence subText = text.subSequence(returnValue.end, text.length());
 					Match match = nextMatch(subText, start, end, firstTime, reverse);
 					// match == returnValue or null
 					if (match == null)
@@ -157,11 +156,6 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		//	? offset + pattern.length - 1
 		//	: length - pattern.length;
 
-		char ch;
-
-		int bad_char;
-		int good_suffix;
-
 		// the search works by starting the anchor (first character
 		// of the pattern) at the initial offset. as long as the
 		// anchor is far enough from the enough of the text for the
@@ -180,7 +174,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 
 			for (pos = pattern_end; pos >= 0; --pos)
 			{
-				ch = text.charAt(pos + anchor);
+				char ch = text.charAt(pos + anchor);
 				if(ignoreCase)
 					ch = Character.toUpperCase(ch);
 
@@ -191,14 +185,14 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 					// character mismatch, determine how many characters to skip
 
 					// heuristic #1
-					bad_char = pos - skip[getSkipIndex(ch)];
+					int bad_char = pos - skip[getSkipIndex(ch)];
 
 					// heuristic #2
-					good_suffix = suffix[pos];
+					int good_suffix = suffix[pos];
 
 					// skip the greater of the two distances provided by the
 					// heuristics
-					int skip_index = (bad_char > good_suffix) ? bad_char : good_suffix;
+					int skip_index = Math.max(bad_char, good_suffix);
 					anchor += skip_index;
 
 					// go back to the while loop

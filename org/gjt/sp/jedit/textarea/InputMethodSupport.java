@@ -298,11 +298,7 @@ class InputMethodSupport
 				: composedCaretX;
 			int visible_x = insertion_x + composed_visible_x;
 			int painter_width = owner.getPainter().getWidth();
-			int adjustment = 0;
-			if(visible_x < 0)
-			{
-				adjustment = visible_x;
-			}
+			int adjustment = Math.min(visible_x, 0);
 			if(visible_x >= painter_width)
 			{
 				adjustment = visible_x - (painter_width - 1);
