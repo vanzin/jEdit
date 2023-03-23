@@ -20,6 +20,7 @@
 
 package org.gjt.sp.jedit.io;
 
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -57,10 +58,19 @@ public class RegexEncodingDetector implements EncodingDetector
 		this.replacement = replacement;
 	}
 
+    /**
+     * Detects the encoding of the given sample.
+     * The sample input stream must not be closed in this method
+     * @param sample the sample input stream
+     * @return the detected encoding or null if the encoding cannot be detected
+     * @throws IOException if an I/O error occurs
+     */
 	@Override
+    @Nullable
 	public String detectEncoding(InputStream sample) throws IOException
 	{
-		InputStreamReader reader = new InputStreamReader(sample);
+        @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
+        InputStreamReader reader = new InputStreamReader(sample);
 		final int bufferSize = 1024;
 		char[] buffer = new char[bufferSize];
 		int readSize = reader.read(buffer, 0, bufferSize);
@@ -103,8 +113,7 @@ public class RegexEncodingDetector implements EncodingDetector
 		int found_end = found.end();
 		int source_length = found_end - found_start;
 		int length_before_match = found_start - appendPosition;
-		StringBuffer replaced = new StringBuffer(
-				length_before_match + (source_length * 2));
+		var replaced = new StringBuilder(length_before_match + (source_length * 2));
 		found.appendReplacement(replaced, replacement);
 		return replaced.substring(length_before_match);
 	}
